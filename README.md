@@ -1,105 +1,84 @@
-php-webdriver -- WebDriver bindings for PHP
+passbolt selenium testsuite
 ===========================================
 
-##  DESCRIPTION
+This project is the functional testsuite of Passbolt. It is based on Selenium, PhpUnit and Facebook php-webdriver
 
-This WebDriver client aims to be as close as possible to bindings in other languages. The concepts are very similar to the Java, .NET, Python and Ruby bindings for WebDriver.
+Checkout http://www.passbolt.com for more information
+
+
+## About Facebook php-webdriver
+
+This WebDriver client is a driver developped by Facebook. It aims to be as close as possible to bindings in other languages.
+The concepts are very similar to the Java, .NET, Python and Ruby bindings for WebDriver.
 
 Looking for documentation about php-webdriver? See http://facebook.github.io/php-webdriver/
 
-The PHP client was rewritten from scratch. Using the old version? Check out Adam Goucher's fork of it at https://github.com/Element-34/php-webdriver
+##  More information
 
-Any complaint, question, idea? You can post it on the user group https://www.facebook.com/groups/phpwebdriver/.
+Check out the Selenium docs and wiki at http://docs.seleniumhq.org/docs/ and https://code.google.com/p/selenium/wiki
 
-##  GETTING THE CODE
+Learn how to integrate it with PHPUnit [Blogpost](http://codeception.com/11-12-2013/working-with-phpunit-and-selenium-webdriver.html) | [Demo Project](https://github.com/DavertMik/php-webdriver-demo)
+
+
+How to get started
+===========================================
+
+##  GET THE CODE
 
 ### Github
-    git clone git@github.com:facebook/php-webdriver.git
 
-### Packagist
-Add the dependency. https://packagist.org/packages/facebook/webdriver
+    git clone git@github.com:passbolt/passbolt_selenium.git
 
-    {
-      "require": {
-        "facebook/webdriver": "dev-master"
-      }
-    }
-    
-Download the composer.phar
+### Bitbucket
 
-    curl -sS https://getcomposer.org/installer | php
+    git clone git@bitbucket.org:passbolt/passbolt_selenium.git
 
-Install the library.
+##  CONFIG
 
-    php composer.phar install
-        
-   
+Clone or rename config.php.default to
 
-##  GETTING STARTED
+##  SELENIUM
 
-*   All you need as the server for this client is the selenium-server-standalone-#.jar file provided here: http://selenium-release.storage.googleapis.com/index.html
+*   Download the selenium-server-standalone-#.jar file provided here:
+
+				http://selenium-release.storage.googleapis.com/index.html
 
 *   Download and run that file, replacing # with the current server version.
 
         java -jar selenium-server-standalone-#.jar
+
+*   You can also run it on a remote host, you will need to set it up as a grid/node by running two instances
+
+        java -jar selenium-server-standalone-#.jar -role grid
+        java -jar selenium-server-standalone-#.jar -role node
 
 *   Then when you create a session, be sure to pass the url to where your server is running.
 
         // This would be the url of the host running the server-standalone.jar
         $host = 'http://localhost:4444/wd/hub'; // this is the default
 
-*   Launch Firefox
 
-        $driver = RemoteWebDriver::create($host, DesiredCapabilities::firefox());
-        
-*   Launch Chrome
+## PHPUNIT (Using brew or similar)
 
-        $driver = RemoteWebDriver::create($host, DesiredCapabilities::chrome());
+*  Get phpunit using your package manager for example
 
-*   You can also customize the desired capabilities. 
+    brew phpunit
 
-        $desired_capabilities = DesiredCapabilities::firefox();
-        $desired_capabilities->setJavascriptEnabled(false);
-        RemoteWebDriver::create($host, $desired_capabilities);
+*   To run unit tests then simply run:
 
-*   See https://code.google.com/p/selenium/wiki/DesiredCapabilities for more details.
+    phpunit -c ./tests
 
-## RUN UNIT TESTS
 
-To run unit tests simply run:
+## PHPUNIT (Using composer)
+
+*   If you don't want to use your local package manager (brew, apt-get, etc.) you can download the composer.phar
+
+    curl -sS https://getcomposer.org/installer | php
+
+*   Install the library.
+
+    php composer.phar install
+
+*   To run unit tests then simply run:
 
     ./vendor/bin/phpunit -c ./tests
-
-Note: For the functional test suite, a running selenium server is required.
-
-## MORE INFORMATION
-
-Check out the Selenium docs and wiki at http://docs.seleniumhq.org/docs/ and https://code.google.com/p/selenium/wiki
-
-Learn how to integrate it with PHPUnit [Blogpost](http://codeception.com/11-12-2013/working-with-phpunit-and-selenium-webdriver.html) | [Demo Project](https://github.com/DavertMik/php-webdriver-demo)
-
-## SUPPORT
-
-We have a great community willing to try and help you!
-
-Currently we offer support in two manners:
-
-### Via our Facebook Group
-
-If you have questions or are an active contributor consider joining our facebook group and contributing to the communal discussion and support
-
-https://www.facebook.com/groups/phpwebdriver/
-
-### Via Github
-
-If you're reading this you've already found our Github repository. If you have a question, feel free to submit it as an issue and our staff will do their best to help you as soon as possible.
-
-## CONTRIBUTING
-
-We love to have your help to make php-webdriver better. Feel free to 
-
-*   open an [issue](https://github.com/facebook/php-webdriver/issues) if you run into any problem. 
-*   fork the project and submit [pull request](https://github.com/facebook/php-webdriver/pulls). Before the pull requests can be accepted, a [Contributors Licensing Agreement](http://developers.facebook.com/opensource/cla) must be signed. 
-
-When you are going to contribute, please keep in mind that this webdriver client aims to be as close as possible to other languages Java/Ruby/Python/C#.
-FYI, here is the overview of [the official Java API](http://selenium.googlecode.com/svn/trunk/docs/api/java/index.html?overview-summary.html)

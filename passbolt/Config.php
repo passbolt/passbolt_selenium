@@ -1,0 +1,102 @@
+<?php
+/**
+ * Test Suite Config
+ * A singleton utility class to help access config value
+ * Works pretty much like Cakephp Configure class
+ *
+ * @copyright 	(c) 2015-present Bolt Software Pvt. Ltd.
+ * @licence			GPLv3 onwards www.gnu.org/licenses/gpl-3.0.en.html
+ */
+class Config {
+
+	protected static $_default_path = '/../config/config.php';
+	protected static $_path;	 // the config file path
+	protected static $_config; // the config object
+
+	/**
+	 * Bootstrap the singleton and read the config from file
+	 *
+	 * @var path to config file
+	 * @throws Exception config object not found if $config is not set in config file
+	 * @throws Exception config file not found if $path is leading nowhere
+	 */
+	private static function bootstrap($path = null) {
+		if(!isset($path)) {
+			$path = ROOT . self::$_default_path;
+		}
+		self::$_path = $path;
+
+		if (is_file(self::$_path)) {
+			include self::$_path;
+			if(!isset($config)) {
+				throw new Exception('ERROR The config object was not found in '. self::$_path);
+			} else {
+				self::$_config = $config;
+			}
+		} else {
+			throw new Exception('ERROR The config file not found at' . self::$_path);
+		}
+
+	}
+
+	/**
+	 * Read a configuration value
+	 *
+	 * @return array
+	 */
+	public static function read($path) {
+		return Hash::get(self::$_config,$path);
+	}
+
+	/**
+	 * Returns the config path if set
+	 *
+	 * @return path.
+	 */
+	public static function getConfigPath() {
+		return self::$_path;
+	}
+
+	/**
+	 * Returns the Singleton instance of this class.
+	 *
+	 * @var path to config file
+	 * @staticvar Singleton $instance The Singleton instances of this class
+	 * @return Singleton The Singleton instance.
+	 */
+	public static function get($path = null) {
+		static $instance = null;
+		if (null === $instance) {
+			$instance = new static();
+			$instance::bootstrap($path);
+		}
+		return $instance;
+	}
+
+	/**
+	 * Protected constructor to prevent creating a new instance of the
+	 * Singleton via the `new` operator from outside of this class.
+	 */
+	protected function __construct() {
+	}
+
+	/**
+	 * Private clone method to prevent cloning of the instance of the
+	 * Singleton instance.
+	 *
+	 * @return void
+	 */
+	private function __clone()
+	{
+	}
+
+	/**
+	 * Private unserialize method to prevent unserializing of the Singleton
+	 * instance.
+	 *
+	 * @return void
+	 */
+	private function __wakeup()
+	{
+	}
+}

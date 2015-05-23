@@ -14,15 +14,25 @@
 // limitations under the License.
 
 class BaseTest extends WebDriverTestCase {
-  
-  public function testGetTitle() {
+	/**
+	 * Get the URL of the test html.
+	 *
+	 * @param $path
+	 * @return string
+	 */
+	protected function getTestPath($path) {
+		$p = Config::read('testsuite.url') . DS . 'data/html' . DS . $path;
+		return $p;
+	}
+
+	public function testGetTitle() {
     $this->driver->get($this->getTestPath('index.html'));
     self::assertEquals(
       'php-webdriver test page',
       $this->driver->getTitle()
     );
   }
-  
+
   public function testGetText() {
     $this->driver->get($this->getTestPath('index.html'));
     self::assertEquals(
@@ -94,4 +104,6 @@ class BaseTest extends WebDriverTestCase {
       $this->driver->findElement(WebDriverBy::tagName('input'))->getAttribute('value')
     );
   }
+
+
 }

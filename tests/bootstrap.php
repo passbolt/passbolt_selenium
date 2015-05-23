@@ -1,4 +1,4 @@
 <?php
+define('ROOT', dirname(__FILE__));
 
-require_once __DIR__ . '/../lib/__init__.php';
-require_once __DIR__ . '/functional/WebDriverTestCase.php';
+require_once ROOT . '/../passbolt/__init__.php';
