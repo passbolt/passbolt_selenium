@@ -9,7 +9,7 @@
  */
 class Config {
 
-	protected static $_default_path = '/../config/config.php';
+	protected static $_default_path = '/config/config.php';
 	protected static $_path;	 // the config file path
 	protected static $_config; // the config object
 

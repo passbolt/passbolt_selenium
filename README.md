@@ -82,3 +82,13 @@ Clone or rename config.php.default to
 *   To run unit tests then simply run:
 
     ./vendor/bin/phpunit -c ./tests
+
+## PASSBOLT Plugin
+
+*   Get the plugin by downloading the latest build from the repository
+
+    https://github.com/passbolt/passbolt_ff/blob/develop/passbolt-firefox-addon.xpi?raw=true
+
+*   Or if you are developing you can create a simlink to your addon project
+
+		ln -s ../passbolt_ff/passbolt-firefox-addon.xpi passbolt-firefox-addon-dev.xpi

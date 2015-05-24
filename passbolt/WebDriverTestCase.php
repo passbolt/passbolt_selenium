@@ -56,7 +56,7 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
 					foreach($this->_browser['extensions'] as $i => $ext_path) {
 
 						if (!is_file($ext_path)) {
-							$this->_error('ERROR The extension file was not found.');
+							$this->_error('ERROR The extension file was not found: ' . $ext_path);
 						}
 						$profile->addExtension($ext_path);
 					}
@@ -87,7 +87,7 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
 		$browser = getenv('BROWSER');
 
 		// Sanity checks
-		if(!isset($browser)) {
+		if(empty($browser)) {
 			$browser = Config::read('browsers.default');
 		}
 		if(!isset($browser)) {

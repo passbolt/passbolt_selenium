@@ -15,10 +15,10 @@ $config = array (
 	'browsers' => array (
 		'default' => 'firefox_with_passbolt_extension',
 		'firefox_with_passbolt_extension' => array(
-			'name' => 'Firefox with Passbolt extensions',
+			'name' => 'Firefox with Passbolt extension',
 			'type' => 'firefox',
 			'extensions' => array(
-				'passbolt-firefox-addon-latest.xpi'
+				'data/extensions/passbolt-firefox-addon.xpi'
 			)
 		),
 		'firefox_vanilla' => array(

@@ -5,10 +5,12 @@
  * @copyright 	(c) 2015-present Bolt Software Pvt. Ltd.
  * @licence			GPLv3 onwards www.gnu.org/licenses/gpl-3.0.en.html
  */
-define('DS', DIRECTORY_SEPARATOR);
-define('ROOT', dirname(__FILE__));
+if(!defined ('ROOT')) {
+	echo 'Boostrap missing... exiting.'."\n";
+	die;
+}
 
-require_once ROOT . '/../lib/__init__.php';
+require_once ROOT . '/lib/__init__.php';
 
 require_once('String.php');
 require_once('Hash.php');

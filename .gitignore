@@ -11,3 +11,6 @@ vendor
 
 # reports
 reports/
+
+# plugins
+*.xpi
