@@ -10,4 +10,4 @@ vendor
 .idea
 
 # reports
-reports/*
+reports/
