@@ -11,13 +11,16 @@
         processIsolation            = "false"
         stopOnFailure               = "false"
         syntaxCheck                 = "false"
-        bootstrap                   = "bootstrap.php" >
+        bootstrap                   = "../bootstrap.php" >
 
     <testsuites>
         <testsuite name="Facebook PHP-Webdriver Functional Testsuite">
             <directory>./base</directory>
         </testsuite>
-
     </testsuites>
+
+    <logging>
+        <log type="junit" target="../../reports/ALL/junit.xml" logIncompleteSkipped="false"/>
+    </logging>
 
 </phpunit>
