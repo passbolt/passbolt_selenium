@@ -8,3 +8,6 @@ vendor
 *~
 *.swp
 .idea
+
+# reports
+reports/*
