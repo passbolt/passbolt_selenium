@@ -10,6 +10,8 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
 
   public $driver; 			// @var RemoteWebDriver $driver
 	protected $_browser;
+	protected $_verbose;
+  protected $_log;
 
 	/**
 	 * This function is executed before a test is run
@@ -17,17 +19,23 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
 	 */
   protected function setUp() {
 
+		$this->_setVerbose();
 		$this->_setBrowserConfig();
 		$this->_checkSeleniumConfig();
 
 		$capabilities = $this->_getCapabilities();
-		$this->driver = RemoteWebDriver::create(Config::read('selenium.url'), $capabilities, 5000);
+		$this->driver = RemoteWebDriver::create(Config::read('selenium.url'), $capabilities);
   }
 
 	/**
 	 * This function is executed after a test is run
 	 */
   protected function tearDown() {
+		if(isset($this->_log) && !empty($this->_log)) {
+			echo "\n\n"
+				. "=== Webdriver Test Case Log ===" . "\n"
+				. $this->_log;
+		}
 		if(isset($this->driver)) {
     	$this->driver->quit();
 		}
@@ -35,7 +43,6 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
 
 	/**
 	 * Get desired capabilities from config
-	 *
 	 * @return DesiredCapabilities|null
 	 * @throws error browser type not supported
 	 */
@@ -54,7 +61,6 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
 
 				if (isset($this->_browser['extensions'])) {
 					foreach($this->_browser['extensions'] as $i => $ext_path) {
-
 						if (!is_file($ext_path)) {
 							$this->_error('ERROR The extension file was not found: ' . $ext_path);
 						}
@@ -79,7 +85,6 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
 
 	/**
 	 * Check and get the browser config
-	 *
 	 * @throws error No browser defined
 	 * @throws error No browser config found
 	 */
@@ -102,7 +107,6 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
 
 	/**
 	 * Check selenium config
-	 *
 	 * @throws error No selenium config
 	 */
 	private function _checkSeleniumConfig() {
@@ -115,12 +119,71 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
 	/**
 	 * We need a special method to handle configuration error that stops execution
 	 * since exceptions are catched in a phpunit context
-	 *
 	 * @param $msg
 	 */
 	private function _error($msg) {
 		echo $msg . "\n";
 		$this->tearDown();
 		exit;
+	}
+
+	/**
+	 * Set verbose from config
+	 */
+	private function _setVerbose() {
+		$this->_verbose = getenv('VERBOSE');
+
+		// Default is false
+		if(empty($this->_verbose)) {
+			$this->_verbose = 0;
+		}
+	}
+
+	/**
+	 * Log a message if verbose is set
+	 * @param $msg
+	 */
+	public function log($msg) {
+		if($this->_verbose) {
+			$this->_log .= $msg . "\n";
+		}
+	}
+
+	/**
+	 * Input some text in an element
+	 * @param $id
+	 * @param $txt
+	 */
+	public function inputText($id, $txt) {
+		$input = $this->driver->findElement(WebDriverBy::id($id));
+		$input->click();
+		$this->driver->getKeyboard()->sendKeys($txt);
+	}
+
+	/**
+	 * Press enter on keyboard
+	 */
+	public function pressEnter() {
+		$this->driver->getKeyboard()->pressKey(WebDriverKeys::ENTER);
+	}
+
+	/**
+	 * Find an element by a CSS selector
+	 * @param $css
+	 * @return mixed
+	 * @throws NoSuchElementException
+	 */
+	public function findByCss($css) {
+		return $this->driver->findElement(WebDriverBy::cssSelector($css));
+	}
+
+	/**
+	 * Find an element by ID
+	 * @param $id
+	 * @return mixed
+	 * @throws NoSuchElementException
+	 */
+	public function findById($id) {
+		return $this->driver->findElement(WebDriverBy::id($id));
 	}
 }

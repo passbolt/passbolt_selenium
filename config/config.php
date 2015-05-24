@@ -6,7 +6,10 @@ $config = array (
 	),
 	// the url of your passbolt app
 	'passbolt' => array (
-		'url' => 'http://192.168.0.102/passbolt'
+		'url' => 'http://192.168.0.102/passbolt',
+		'registration' => array(
+			'public' => TRUE
+		)
 	),
 	// the base url of your selenium server
 	'selenium' => array (

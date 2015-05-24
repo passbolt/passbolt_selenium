@@ -15,6 +15,7 @@
 
     <php>
         <env name="BROWSER" value="firefox_vanilla"/>
+        <env name="VERBOSE" value="1"/>
     </php>
 
     <testsuites>
