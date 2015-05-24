@@ -3,7 +3,7 @@ passbolt selenium testsuite
 
 This project is the functional testsuite of Passbolt. It is based on Selenium, PhpUnit and Facebook php-webdriver
 
-Checkout http://www.passbolt.com for more information
+Checkout [passbolt.com](http://www.passbolt.com) for more information
 
 
 ## About Facebook php-webdriver
@@ -11,11 +11,11 @@ Checkout http://www.passbolt.com for more information
 This WebDriver client is a driver developped by Facebook. It aims to be as close as possible to bindings in other languages.
 The concepts are very similar to the Java, .NET, Python and Ruby bindings for WebDriver.
 
-Looking for documentation about php-webdriver? See http://facebook.github.io/php-webdriver/
+Looking for documentation about php-webdriver? See the official [repository](http://facebook.github.io/php-webdriver/)
 
 ##  More information
 
-Check out the Selenium docs and wiki at http://docs.seleniumhq.org/docs/ and https://code.google.com/p/selenium/wiki
+Check out the Selenium [docs and wiki](http://docs.seleniumhq.org/docs/ and https://code.google.com/p/selenium/wiki)
 
 Learn how to integrate it with PHPUnit [Blogpost](http://codeception.com/11-12-2013/working-with-phpunit-and-selenium-webdriver.html) | [Demo Project](https://github.com/DavertMik/php-webdriver-demo)
 
@@ -57,6 +57,8 @@ Clone or rename config.php.default to
         // This would be the url of the host running the server-standalone.jar
         $host = 'http://localhost:4444/wd/hub'; // this is the default
 
+*   Make sure you have firefox installed on your selenium host!
+
 
 ## PHPUNIT (Using brew or similar)
 
@@ -83,12 +85,14 @@ Clone or rename config.php.default to
 
     ./vendor/bin/phpunit -c ./tests
 
+
 ## PASSBOLT Plugin
 
-*   Get the plugin by downloading the latest build from the repository
+*   Get the plugin by downloading the latest build from the repository and put it in data/extensions
 
     https://github.com/passbolt/passbolt_ff/blob/develop/passbolt-firefox-addon.xpi?raw=true
 
 *   Or if you are developing you can create a simlink to your addon project
 
-		ln -s ../passbolt_ff/passbolt-firefox-addon.xpi passbolt-firefox-addon-dev.xpi
+		cd data/extensions
+		ln -s ../../../passbolt_ff/passbolt-firefox-addon.xpi .
