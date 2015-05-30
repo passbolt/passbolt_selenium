@@ -6,7 +6,18 @@
  * @copyright 	(c) 2015-present Bolt Software Pvt. Ltd.
  * @licence			GPLv3 onwards www.gnu.org/licenses/gpl-3.0.en.html
  */
+
+require_once __DIR__ . '/PassboltServer.php';
+
 class PassboltTestCase extends WebDriverTestCase {
+
+	// PassboltServer.
+	protected $PassboltServer = null;
+
+	protected function setUp() {
+		parent::setUp();
+		$this->PassboltServer = new PassboltServer(Config::read('passbolt.url'));
+	}
 
 	/**
 	 * Goto a given url
@@ -75,6 +86,5 @@ class PassboltTestCase extends WebDriverTestCase {
 		}
 		$this->assertTrue(true);
 	}
-
 
 }
