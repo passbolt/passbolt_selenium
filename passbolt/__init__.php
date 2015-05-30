@@ -18,3 +18,4 @@ require_once('Config.php');
 Config::get();
 
 require_once('WebDriverTestCase.php');
+require_once('PassboltTestCase.php');

@@ -15,3 +15,6 @@ reports/
 # plugins
 *.xpi
 node_modules/
+
+# config
+config/config.php

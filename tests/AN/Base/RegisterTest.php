@@ -6,11 +6,11 @@
  * @copyright 	(c) 2015-present Bolt Software Pvt. Ltd.
  * @licence			GPLv3 onwards www.gnu.org/licenses/gpl-3.0.en.html
  */
-class RegisterTest extends WebDriverTestCase {
+class RegisterTest extends PassboltTestCase {
 
 	/**
 	 * Scenario: I can see the registration form on the registration page
-	 * Given	I am on the registration page
+	 * Given	I am an anonymous user with no plugin on the registration page
 	 * Then 	I can see I am on the right page by looking at the title
 	 * And 		I can see the registration form
 	 * And 		I can see the firstname field
@@ -20,12 +20,8 @@ class RegisterTest extends WebDriverTestCase {
 	 * And 		I can see the username field
 	 */
 	public function testCanSeeTheForm() {
-		$url = Config::read('passbolt.url') . DS . 'register';
-		$this->driver->get($url);
-
-		$title = $this->driver->getTitle();
-		$this->assertContains('Passbolt',$title);
-		$this->assertContains('Register',$title);
+		$this->getUrl('register');
+		$this->assertTitleContain('Register');
 
 		try {
 			$this->findById('UserRegisterForm');
@@ -56,7 +52,6 @@ class RegisterTest extends WebDriverTestCase {
 			$this->fail('There is no submit button in the registration form');
 		}
 
-		$this->assertTrue(true);
 	}
 
 	/**
@@ -72,13 +67,12 @@ class RegisterTest extends WebDriverTestCase {
 	 * @depends testCanSeeTheForm
 	 */
 	public function testCannotRegisterWithEmptyName() {
-		$url = Config::read('passbolt.url') . DS . 'register';
-		$this->driver->get($url);
+		$this->getUrl('register');
 
 		$this->inputText('UserUsername','test+'.time().'@passbolt.com');
 		$this->pressEnter();
 
-		$this->assertEquals($url, $this->driver->getCurrentURL());
+		$this->assertCurrentUrl('register');
 
 	}
 
@@ -96,15 +90,14 @@ class RegisterTest extends WebDriverTestCase {
 	 * @depends testCannotRegisterWithEmptyName
 	 */
 	public function testCannotRegisterWithWrongEmail() {
-		$url = Config::read('passbolt.url') . DS . 'register';
-		$this->driver->get($url);
+		$this->getUrl('register');
 
 		$this->inputText('ProfileFirstName','TestFirstname');
 		$this->inputText('ProfileLastName','TestLastname');
 		$this->inputText('UserUsername','test*passbolt.com');
 		$this->pressEnter();
 
-		$this->assertEquals($url, $this->driver->getCurrentURL());
+		$this->assertCurrentUrl('register');
 		try {
 			$this->findByCss('#UserRegisterForm .error-message');
 		} catch (NoSuchElementException $e) {
@@ -126,19 +119,14 @@ class RegisterTest extends WebDriverTestCase {
 	 * @depends testCannotRegisterWithWrongEmail
 	 */
 	public function testCanRegister() {
-		$url = Config::read('passbolt.url') . DS . 'register';
-		$this->driver->get($url);
-
-		$title = $this->driver->getTitle();
-		$this->assertContains('Passbolt',$title);
-		$this->assertContains('Register',$title);
+		$this->getUrl('register');
 
 		$this->inputText('ProfileFirstName','TestFirstname');
 		$this->inputText('ProfileLastName','TestLastname');
 		$this->inputText('UserUsername','test+'.time().'@passbolt.com');
 		$this->pressEnter();
 
-		$this->assertEquals($url . DS . 'thankyou', $this->driver->getCurrentURL());
+		$this->assertCurrentUrl('register' . DS . 'thankyou');
 
 	}
 

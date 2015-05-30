@@ -186,4 +186,14 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
 	public function findById($id) {
 		return $this->driver->findElement(WebDriverBy::id($id));
 	}
+
+	/**
+	 * Check if the given title is contain in the one of the page
+	 * @param $title
+	 */
+	public function assertTitleContain($title) {
+		$t = $this->driver->getTitle();
+		$this->assertContains($title,$t);
+	}
+
 }

@@ -6,7 +6,17 @@ $config = array (
 	),
 	// the url of your passbolt app
 	'passbolt' => array (
-		'url' => 'http://localhost/passbolt'
+		'url' => 'http://localhost/passbolt',
+		'registration' => array(
+			'public' => TRUE
+		),
+		'users' => array (
+			'default' => array (
+				'name' => 'User b Test',
+				'username' => 'test@passbolt.com',
+				'password' => 'password'
+			)
+		)
 	),
 	// the base url of your selenium server
 	'selenium' => array (
@@ -15,7 +25,7 @@ $config = array (
 	'browsers' => array (
 		'default' => 'firefox_with_passbolt_extension',
 		'firefox_with_passbolt_extension' => array(
-			'name' => 'Firefox with Passbolt extensions',
+			'name' => 'Firefox with Passbolt extension',
 			'type' => 'firefox',
 			'extensions' => array(
 				'data/extensions/passbolt-firefox-addon.xpi'

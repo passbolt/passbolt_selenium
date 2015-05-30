@@ -20,7 +20,9 @@
 
     <testsuites>
         <testsuite name="Anonymous User with firefox">
-            <directory>./base</directory>
+            <file>./base/ConfigTest.php</file>
+            <file>./base/LoginTest.php</file>
+            <file>./base/RegisterTest.php</file>
         </testsuite>
     </testsuites>
 

@@ -1,6 +1,6 @@
 <?php
 
-class ConfigTest extends WebDriverTestCase {
+class ConfigTest extends PassboltTestCase {
 
 	public function testGetTitle() {
 		$this->driver->get(Config::read('passbolt.url'));
