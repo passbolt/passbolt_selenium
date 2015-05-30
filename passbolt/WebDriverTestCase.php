@@ -178,6 +178,20 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
 	}
 
 	/**
+	 * Click on an element defined by a css selector.
+	 * This prevents opening the url in another tab in case of target="_blank"
+	 * @param $text
+	 *
+	 * @return mixed
+	 * @throws NoSuchElementException
+	 */
+	public function followLink($text) {
+		$linkElement = $this->findLinkByText($text);
+		$url = $linkElement->getAttribute('href');
+		$this->driver->get($url);
+	}
+
+	/**
 	 * Find an element by ID
 	 * @param $id
 	 * @return mixed
@@ -188,12 +202,72 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
 	}
 
 	/**
+	 * Find a link by its text
+	 * @param $text
+	 * @return mixed
+	 * @throws NoSuchElementException
+	 */
+	public function findLinkByText($text) {
+		return $this->driver->findElement(WebDriverBy::linkText($text));
+	}
+
+	/**
 	 * Check if the given title is contain in the one of the page
 	 * @param $title
 	 */
 	public function assertTitleContain($title) {
 		$t = $this->driver->getTitle();
 		$this->assertContains($title,$t);
+	}
+
+	/**
+	 * Check if the current url match the regexp given in parameter
+	 * @param $regexp
+	 */
+	public function assertUrlMatch($regexp) {
+		$url = $this->driver->getCurrentURL();
+		$match = preg_match($regexp, $url);
+		$this->assertTrue($match >= 1, sprintf("Failed asserting that url %s matches with %s", $url, $match));
+	}
+
+	/**
+	 * Check if the page contains the given text
+	 * @param $text
+	 */
+	public function assertPageContainsText($text) {
+		$source = $this->driver->getPageSource();
+		$strippedSource = strip_tags($source);
+		$contains = strpos($strippedSource, $text) !== false;
+		$this->assertTrue($contains, sprintf("Failed asserting that page contains '%s'", $text));
+	}
+
+	/**
+	 * Assert if the page contains the given element
+	 * @param $cssSelector
+	 */
+	public function assertPageContainsElement($cssSelector) {
+		try {
+			$this->findByCss($cssSelector);
+		} catch (NoSuchElementException $e) {
+			$this->fail(sprintf("Failed asserting that the page contains the element %s", $cssSelector));
+		}
+	}
+
+	/**
+	 * Assert if a given element contains a given text
+	 * @param $cssSelector
+	 * @param $needle
+	 */
+	public function assertElementContainsText($cssSelector, $needle) {
+		$elt = null;
+		try {
+			$elt = $this->findByCss($cssSelector);
+		} catch (NoSuchElementException $e) {
+			$this->fail(sprintf("Could not locate element %s", $cssSelector));
+		}
+		$eltText = $elt->getText();
+		$contains = strpos($eltText, $needle) !== false;
+		$this->assertTrue($contains, sprintf("Failed asserting that element %s contains '%s'", $cssSelector, $needle));
 	}
 
 }
