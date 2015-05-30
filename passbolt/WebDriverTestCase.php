@@ -161,6 +161,15 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
 	}
 
 	/**
+	 * Check the checkbox with given id
+	 * @param $id
+	 */
+	public function checkCheckbox($id) {
+		$input = $this->driver->findElement(WebDriverBy::id($id));
+		$input->click();
+	}
+
+	/**
 	 * Press enter on keyboard
 	 */
 	public function pressEnter() {
@@ -178,7 +187,7 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
 	}
 
 	/**
-	 * Click on an element defined by a css selector.
+	 * Follow a link url defined by a css selector. (Doesn't click on it).
 	 * This prevents opening the url in another tab in case of target="_blank"
 	 * @param $text
 	 *
@@ -189,6 +198,19 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
 		$linkElement = $this->findLinkByText($text);
 		$url = $linkElement->getAttribute('href');
 		$this->driver->get($url);
+	}
+
+	/**
+	 * Click on an element defined by a css selector.
+	 * This prevents opening the url in another tab in case of target="_blank"
+	 * @param $text
+	 *
+	 * @return mixed
+	 * @throws NoSuchElementException
+	 */
+	public function clickLink($text) {
+		$linkElement = $this->findLinkByText($text);
+		$linkElement->click();
 	}
 
 	/**
@@ -227,7 +249,7 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
 	public function assertUrlMatch($regexp) {
 		$url = $this->driver->getCurrentURL();
 		$match = preg_match($regexp, $url);
-		$this->assertTrue($match >= 1, sprintf("Failed asserting that url %s matches with %s", $url, $match));
+		$this->assertTrue($match >= 1, sprintf("Failed asserting that url %s matches with %s", $url, $regexp));
 	}
 
 	/**
@@ -266,8 +288,45 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
 			$this->fail(sprintf("Could not locate element %s", $cssSelector));
 		}
 		$eltText = $elt->getText();
+		echo $eltText;
 		$contains = strpos($eltText, $needle) !== false;
 		$this->assertTrue($contains, sprintf("Failed asserting that element %s contains '%s'", $cssSelector, $needle));
+	}
+
+	/**
+	 * Assert if an element has a given class name
+	 * @param $cssSelector
+	 * @param $className
+	 */
+	public function assertElementHasClass($cssSelector, $className) {
+		$elt = null;
+		try {
+			$elt = $this->findByCss($cssSelector);
+		} catch (NoSuchElementException $e) {
+			$this->fail(sprintf("Could not locate element %s", $cssSelector));
+		}
+		$eltClasses = $elt->getAttribute('class');
+		$eltClasses = explode(' ', $eltClasses);
+		$contains = in_array($className, $eltClasses);
+		$this->assertTrue($contains, sprintf("Failed asserting that element %s has class '%s'", $cssSelector, $className));
+	}
+
+	/**
+	 * Assert if an element has a given class name
+	 * @param $cssSelector
+	 * @param $className
+	 */
+	public function assertElementHasNotClass($cssSelector, $className) {
+		$elt = null;
+		try {
+			$elt = $this->findByCss($cssSelector);
+		} catch (NoSuchElementException $e) {
+			$this->fail(sprintf("Could not locate element %s", $cssSelector));
+		}
+		$eltClasses = $elt->getAttribute('class');
+		$eltClasses = explode(' ', $eltClasses);
+		$contains = in_array($className, $eltClasses);
+		$this->assertFalse($contains, sprintf("Failed asserting that element %s has not the class '%s'", $cssSelector, $className));
 	}
 
 }
