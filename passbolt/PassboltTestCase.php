@@ -8,6 +8,14 @@
  */
 class PassboltTestCase extends WebDriverTestCase {
 
+	// PassboltServer.
+	protected $PassboltServer = null;
+
+	protected function setUp() {
+		parent::setUp();
+		$this->PassboltServer = new PassboltServer(Config::read('passbolt.url'));
+	}
+
 	/**
 	 * Goto a given url
 	 * @param $url
@@ -15,15 +23,6 @@ class PassboltTestCase extends WebDriverTestCase {
 	public function getUrl($url=null) {
 		$url = Config::read('passbolt.url') . DS . $url;
 		$this->driver->get($url);
-	}
-
-	/**
-	 * Check if the given title is contain in the one of the page
-	 * @param $title
-	 */
-	public function assertTitleContain($title) {
-		$t = $this->driver->getTitle();
-		$this->assertContains($title,$t);
 	}
 
 	/**

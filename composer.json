@@ -10,8 +10,12 @@
     "forum": "https://www.facebook.com/groups/phpwebdriver/",
     "source": "https://github.com/facebook/php-webdriver"
   },
+  "config": {
+    "vendor-dir": "passbolt/vendor"
+  },
   "require": {
-    "php": ">=5.3.19"
+    "php": ">=5.3.19",
+    "nategood/httpful": "*"
   },
   "require-dev": {
     "phpunit/phpunit": "3.7.*",
