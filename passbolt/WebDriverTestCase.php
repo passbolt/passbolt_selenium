@@ -37,7 +37,10 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
 				. $this->_log;
 		}
 		if(isset($this->driver)) {
-    	$this->driver->quit();
+			$quit = getenv('QUIT');
+			if(!isset($quit) || $quit) {
+    		$this->driver->quit();
+			}
 		}
   }
 
@@ -196,4 +199,17 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
 		$this->assertContains($title,$t);
 	}
 
+	/**
+	 * Click on an element defined by its Id
+	 * @param $id
+	 */
+	public function click($id) {
+		try {
+			$e = $this->driver->findElement(WebDriverBy::id($id));
+			$e->click();
+		} catch (NoSuchElementException $e) {
+			$this->fail('Cannot click on not found element: ' . $id);
+		}
+
+	}
 }

@@ -19,7 +19,7 @@
     </php>
 
     <testsuites>
-        <testsuite name="Anonymous User with firefox">
+        <testsuite>
             <file>./base/ConfigTest.php</file>
             <file>./base/LoginTest.php</file>
             <file>./base/RegisterTest.php</file>

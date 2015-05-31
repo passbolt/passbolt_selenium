@@ -18,7 +18,7 @@
     </php>
 
     <testsuites>
-        <testsuite name="Anonymous user with plugin and no config with firefox">
+        <testsuite name="Logged in user with firefox">
             <directory>./base</directory>
         </testsuite>
     </testsuites>

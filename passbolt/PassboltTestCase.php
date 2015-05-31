@@ -57,11 +57,11 @@ class PassboltTestCase extends WebDriverTestCase {
 	 */
 	public function assertNoPlugin() {
 		try {
-			$this->findByCSS('html.no-passboltplugin');
+			$e = $this->findByCSS('html.no-passboltplugin');
+			$this->assertTrue(count($e) === 1);
 		} catch (NoSuchElementException $e) {
 			$this->fail('A passbolt plugin was found');
 		}
-		$this->assertTrue(true);
 	}
 
 	/**
@@ -69,12 +69,22 @@ class PassboltTestCase extends WebDriverTestCase {
 	 */
 	public function assertPlugin() {
 		try {
-			$this->findByCSS('html.passboltplugin');
+			$e = $this->findByCSS('html.passboltplugin');
+			$this->assertTrue(count($e) === 1);
 		} catch (NoSuchElementException $e) {
 			$this->fail('A passbolt plugin was not found');
 		}
-		$this->assertTrue(true);
 	}
 
-
+	/**
+	 * Check that there is a plugin
+	 */
+	public function assertNoPluginConfig() {
+		try {
+			$e = $this->findByCSS('html.passboltplugin.no-passboltconfig');
+			$this->assertTrue(count($e) === 0);
+		} catch (NoSuchElementException $e) {
+			$this->assertTrue(true);
+		}
+	}
 }

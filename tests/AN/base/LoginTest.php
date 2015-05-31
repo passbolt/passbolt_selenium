@@ -10,7 +10,7 @@ class LoginTest extends PassboltTestCase {
 
 	/**
 	 * Scenario: I can see an error message telling me I need a plugin
-	 * Given I am an anonymous user with no plugin on the login page
+	 * Given 	I am an anonymous user with no plugin on the login page
 	 * When 	The page is loaded
 	 * Then 	I can see the title of the page contain 'Login'
 	 * Then 	I can see the error message telling me an add-on is required
