@@ -36,7 +36,6 @@ class Config {
 		} else {
 			throw new Exception('ERROR The config file not found at' . self::$_path);
 		}
-
 	}
 
 	/**

@@ -6,9 +6,6 @@
  * @copyright 	(c) 2015-present Bolt Software Pvt. Ltd.
  * @licence			GPLv3 onwards www.gnu.org/licenses/gpl-3.0.en.html
  */
-
-require_once __DIR__ . '/PassboltServer.php';
-
 class PassboltTestCase extends WebDriverTestCase {
 
 	// PassboltServer.
@@ -26,15 +23,6 @@ class PassboltTestCase extends WebDriverTestCase {
 	public function getUrl($url=null) {
 		$url = Config::read('passbolt.url') . DS . $url;
 		$this->driver->get($url);
-	}
-
-	/**
-	 * Check if the given title is contain in the one of the page
-	 * @param $title
-	 */
-	public function assertTitleContain($title) {
-		$t = $this->driver->getTitle();
-		$this->assertContains($title,$t);
 	}
 
 	/**
@@ -68,11 +56,11 @@ class PassboltTestCase extends WebDriverTestCase {
 	 */
 	public function assertNoPlugin() {
 		try {
-			$this->findByCSS('html.no-passboltplugin');
+			$e = $this->findByCSS('html.no-passboltplugin');
+			$this->assertTrue(count($e) === 1);
 		} catch (NoSuchElementException $e) {
 			$this->fail('A passbolt plugin was found');
 		}
-		$this->assertTrue(true);
 	}
 
 	/**
@@ -80,11 +68,22 @@ class PassboltTestCase extends WebDriverTestCase {
 	 */
 	public function assertPlugin() {
 		try {
-			$this->findByCSS('html.passboltplugin');
+			$e = $this->findByCSS('html.passboltplugin');
+			$this->assertTrue(count($e) === 1);
 		} catch (NoSuchElementException $e) {
 			$this->fail('A passbolt plugin was not found');
 		}
-		$this->assertTrue(true);
 	}
 
+	/**
+	 * Check that there is a plugin
+	 */
+	public function assertNoPluginConfig() {
+		try {
+			$e = $this->findByCSS('html.passboltplugin.no-passboltconfig');
+			$this->assertTrue(count($e) === 0);
+		} catch (NoSuchElementException $e) {
+			$this->assertTrue(true);
+		}
+	}
 }

@@ -13,16 +13,17 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
 	protected $_verbose;
   protected $_log;
 
+	/********************************************************************************
+	 * Pre/Post Tests Execution Callback
+	 ********************************************************************************/
 	/**
 	 * This function is executed before a test is run
 	 * It setup the capabilities and browser driver
 	 */
   protected function setUp() {
-
 		$this->_setVerbose();
 		$this->_setBrowserConfig();
 		$this->_checkSeleniumConfig();
-
 		$capabilities = $this->_getCapabilities();
 		$this->driver = RemoteWebDriver::create(Config::read('selenium.url'), $capabilities);
   }
@@ -37,10 +38,18 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
 				. $this->_log;
 		}
 		if(isset($this->driver)) {
-    	$this->driver->quit();
+			$quit = getenv('QUIT');
+			if($quit === '0') {
+				return;
+			} else {
+				$this->driver->quit();
+			}
 		}
   }
 
+	/********************************************************************************
+	 * Protected methods
+	 ********************************************************************************/
 	/**
 	 * Get desired capabilities from config
 	 * @return DesiredCapabilities|null
@@ -139,6 +148,9 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
 		}
 	}
 
+	/********************************************************************************
+	 * Debug HELPERS
+	 ********************************************************************************/
 	/**
 	 * Log a message if verbose is set
 	 * @param $msg
@@ -149,6 +161,10 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
 		}
 	}
 
+
+	/********************************************************************************
+	 * Driver HELPERS
+	 ********************************************************************************/
 	/**
 	 * Input some text in an element
 	 * @param $id
@@ -187,6 +203,26 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
 	}
 
 	/**
+	 * Find an element by ID
+	 * @param $id
+	 * @return mixed
+	 * @throws NoSuchElementException
+	 */
+	public function findById($id) {
+		return $this->driver->findElement(WebDriverBy::id($id));
+	}
+
+	/**
+	 * Find a link by its text
+	 * @param $text
+	 * @return mixed
+	 * @throws NoSuchElementException
+	 */
+	public function findLinkByText($text) {
+		return $this->driver->findElement(WebDriverBy::linkText($text));
+	}
+
+	/**
 	 * Follow a link url defined by a css selector. (Doesn't click on it).
 	 * This prevents opening the url in another tab in case of target="_blank"
 	 * @param $text
@@ -213,26 +249,23 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
 		$linkElement->click();
 	}
 
+
 	/**
-	 * Find an element by ID
+	 * Click on an element defined by its Id
 	 * @param $id
-	 * @return mixed
-	 * @throws NoSuchElementException
 	 */
-	public function findById($id) {
-		return $this->driver->findElement(WebDriverBy::id($id));
+	public function click($id) {
+		try {
+			$e = $this->driver->findElement(WebDriverBy::id($id));
+			$e->click();
+		} catch (NoSuchElementException $e) {
+			$this->fail('Cannot click on not found element: ' . $id);
+		}
 	}
 
-	/**
-	 * Find a link by its text
-	 * @param $text
-	 * @return mixed
-	 * @throws NoSuchElementException
-	 */
-	public function findLinkByText($text) {
-		return $this->driver->findElement(WebDriverBy::linkText($text));
-	}
-
+	/********************************************************************************
+	 * ASSERT HELPERS
+	 ********************************************************************************/
 	/**
 	 * Check if the given title is contain in the one of the page
 	 * @param $title
@@ -288,7 +321,6 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
 			$this->fail(sprintf("Could not locate element %s", $cssSelector));
 		}
 		$eltText = $elt->getText();
-		echo $eltText;
 		$contains = strpos($eltText, $needle) !== false;
 		$this->assertTrue($contains, sprintf("Failed asserting that element %s contains '%s'", $cssSelector, $needle));
 	}

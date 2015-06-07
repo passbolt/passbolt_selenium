@@ -10,12 +10,17 @@ if(!defined ('ROOT')) {
 	die;
 }
 
-require_once ROOT . '/lib/__init__.php';
-
+// Utility clases
 require_once('String.php');
 require_once('Hash.php');
 require_once('Config.php');
 Config::get();
 
+// Vendor dependencies.
+require_once(ROOT . '/lib/__init__.php');
+require_once('vendor/autoload.php');
+
+// Test case redefinition
 require_once('WebDriverTestCase.php');
+require_once('PassboltServer.php');
 require_once('PassboltTestCase.php');

@@ -21,7 +21,8 @@ module.exports = function(grunt) {
 				command: [
 					'<%= config.phpunit %> -c tests/ALL',
 					'<%= config.phpunit %> -c tests/AN',
-					'<%= config.phpunit %> -c tests/AP'
+					'<%= config.phpunit %> -c tests/AP',
+					'<%= config.phpunit %> -c tests/LU'
 				].join(';')
 			}
 		}

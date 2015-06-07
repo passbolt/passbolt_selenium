@@ -37,12 +37,12 @@ class SetupTest extends PassboltSetupTestCase {
 		// Get last email.
 		$this->getUrl('seleniumTests/showLastEmail/' . urlencode('johndoe@passbolt.com'));
 		// Follow the link in the email.
-		$this->followLink("get started");
+		$this->followLink('get started');
 		$this->assertUrlMatch('/\/setup\/install\/[a-z0-9\-]{36}\/[a-z0-9]{32}/');
-		$this->assertPageContainsText("Welcome to passbolt! Let's take 5 min to setup your system.");
-		$this->assertElementContainsText("div.plugin-check-wrapper .plugin-check.error", "An add-on is required to use Passbolt.");
+		$this->assertPageContainsText('Welcome to passbolt! Let\'s take 5 min to setup your system.');
+		$this->assertElementContainsText('div.plugin-check-wrapper .plugin-check.error', 'An add-on is required to use Passbolt.');
 		// Assert that second element in menu is disabled.
-		$this->assertPageContainsElement("div.navigation ul li:nth-child(2).disabled");
+		$this->assertPageContainsElement('div.navigation ul li:nth-child(2).disabled');
 	}
 
 	/**
@@ -57,6 +57,6 @@ class SetupTest extends PassboltSetupTestCase {
 		}
 		// Access url with wrong user id and token.
 		$this->getUrl('setup/install/5569df1d-7bec-4c0c-a09d-55e2c0a895dc/d45c0bf1e00fb8db60af1e8b5482f9f3');
-		$this->assertPageContainsText("Token not found");
+		$this->assertPageContainsText('Token not found');
 	}
 }
