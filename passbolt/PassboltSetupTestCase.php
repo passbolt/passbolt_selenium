@@ -12,10 +12,29 @@
 class PassboltSetupTestCase extends PassboltTestCase {
 
 	/**
-	 * Assert that the title should be as given.
+	 * Assert that the title equals the one given.
 	 * @param $title
 	 */
-	public function assertTitleShouldBe($title) {
+	public function assertTitleEquals($title) {
+		$elt = $this->findById('js_step_title');
+		$this->assertEquals($elt->getText(), $title);
+	}
+
+	/**
+	 * Assert if the given menu is selected.
+	 * @param $text
+	 */
+	public function assertMenuIsSelected($text) {
+		$elt = $this->driver->findElement(
+			WebDriverBy::xpath(
+				"//div[@id = 'js_menu']//a[text()='$text']/.."
+			)
+		);
+		$this->assertElementHasClass(
+			$elt,
+			'selected'
+		);
 
 	}
+
 }
