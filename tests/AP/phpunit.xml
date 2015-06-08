@@ -19,7 +19,8 @@
 
     <testsuites>
         <testsuite name="Anonymous user with plugin and no config with firefox">
-            <directory>./base</directory>
+            <file>./base/ConfigTest.php</file>
+            <file>./base/SetupTest.php</file>
         </testsuite>
     </testsuites>
 

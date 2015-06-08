@@ -177,6 +177,14 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
 	}
 
 	/**
+	 * Empty input element.
+	 * @param $id
+	 */
+	public function emptyInput($id) {
+		$this->driver->executeScript("document.getElementById('$id').value = ''", array());
+	}
+
+	/**
 	 * Check the checkbox with given id
 	 * @param $id
 	 */
@@ -263,6 +271,40 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
 		}
 	}
 
+
+	/**
+	 * Wait until I see.
+	 * @param      $cssSelector
+	 * @param null $regexp
+	 * @param int timeout timeout in seconds
+	 *
+	 * @throws Exception
+	 */
+	public function waitUntilISee($cssSelector, $regexp = null, $timeout = 10) {
+		$ex = null;
+		for ($i = 0; $i < $timeout * 10; $i++) {
+			try {
+				$elt = $this->findByCss($cssSelector);
+				if ($elt) {
+					if (is_null($regexp)) {
+						return true;
+					}
+					else {
+						if (preg_match($regexp, $elt->getText())) {
+							return true;
+						}
+					}
+				}
+			}
+			catch (Exception $e) {
+				$ex = $e;
+			}
+			usleep(100000); // Sleep 1/10 seconds
+		}
+		$backtrace = debug_backtrace();
+		throw new Exception( "Timeout thrown by " . $backtrace[1]['class'] . "::" . $backtrace[1]['function'] . "()\n . element: $cssSelector ($regexp)");
+	}
+
 	/********************************************************************************
 	 * ASSERT HELPERS
 	 ********************************************************************************/
@@ -310,55 +352,48 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
 
 	/**
 	 * Assert if a given element contains a given text
-	 * @param $cssSelector
+	 * @param $elt
 	 * @param $needle
 	 */
-	public function assertElementContainsText($cssSelector, $needle) {
-		$elt = null;
-		try {
-			$elt = $this->findByCss($cssSelector);
-		} catch (NoSuchElementException $e) {
-			$this->fail(sprintf("Could not locate element %s", $cssSelector));
-		}
+	public function assertElementContainsText($elt, $needle) {
 		$eltText = $elt->getText();
 		$contains = strpos($eltText, $needle) !== false;
-		$this->assertTrue($contains, sprintf("Failed asserting that element %s contains '%s'", $cssSelector, $needle));
+		$this->assertTrue($contains, sprintf("Failed asserting that element contains '%s'", $needle));
 	}
 
 	/**
 	 * Assert if an element has a given class name
-	 * @param $cssSelector
+	 * @param $elt
 	 * @param $className
 	 */
-	public function assertElementHasClass($cssSelector, $className) {
-		$elt = null;
-		try {
-			$elt = $this->findByCss($cssSelector);
-		} catch (NoSuchElementException $e) {
-			$this->fail(sprintf("Could not locate element %s", $cssSelector));
-		}
+	public function assertElementHasClass($elt, $className) {
 		$eltClasses = $elt->getAttribute('class');
 		$eltClasses = explode(' ', $eltClasses);
 		$contains = in_array($className, $eltClasses);
-		$this->assertTrue($contains, sprintf("Failed asserting that element %s has class '%s'", $cssSelector, $className));
+		$this->assertTrue($contains, sprintf("Failed asserting that element has class '%s'", $className));
+	}
+
+	/**
+	 * Assert that an element's attribute is equal to the one given.
+	 * @param $elt
+	 * @param $attribute
+	 * @param $text
+	 */
+	public function assertElementAttributeEquals($elt, $attribute, $value) {
+		$attr = $elt->getAttribute($attribute);
+		$this->assertEquals($attr, $value, sprintf("Failed asserting that element attribute %s equals %s", $attribute, $value));
 	}
 
 	/**
 	 * Assert if an element has a given class name
-	 * @param $cssSelector
+	 * @param $elt
 	 * @param $className
 	 */
-	public function assertElementHasNotClass($cssSelector, $className) {
-		$elt = null;
-		try {
-			$elt = $this->findByCss($cssSelector);
-		} catch (NoSuchElementException $e) {
-			$this->fail(sprintf("Could not locate element %s", $cssSelector));
-		}
+	public function assertElementHasNotClass($elt, $className) {
 		$eltClasses = $elt->getAttribute('class');
 		$eltClasses = explode(' ', $eltClasses);
 		$contains = in_array($className, $eltClasses);
-		$this->assertFalse($contains, sprintf("Failed asserting that element %s has not the class '%s'", $cssSelector, $className));
+		$this->assertFalse($contains, sprintf("Failed asserting that element has not the class '%s'", $className));
 	}
 
 }

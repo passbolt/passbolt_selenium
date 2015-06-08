@@ -24,3 +24,4 @@ require_once('vendor/autoload.php');
 require_once('WebDriverTestCase.php');
 require_once('PassboltServer.php');
 require_once('PassboltTestCase.php');
+require_once('PassboltSetupTestCase.php');
