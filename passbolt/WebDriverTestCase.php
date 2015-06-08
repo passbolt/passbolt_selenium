@@ -177,6 +177,14 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
 	}
 
 	/**
+	 * Empty input element.
+	 * @param $id
+	 */
+	public function emptyInput($id) {
+		$this->driver->executeScript("document.getElementById('$id').value = ''", array());
+	}
+
+	/**
 	 * Check the checkbox with given id
 	 * @param $id
 	 */
@@ -272,7 +280,7 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
 	 *
 	 * @throws Exception
 	 */
-	public function waitUntilISee($cssSelector, $regexp = null, $timeout = 5) {
+	public function waitUntilISee($cssSelector, $regexp = null, $timeout = 10) {
 		$ex = null;
 		for ($i = 0; $i < $timeout * 10; $i++) {
 			try {
