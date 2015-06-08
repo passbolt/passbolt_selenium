@@ -49,7 +49,7 @@ Clone or rename config.php.default to
 
 *   You can also run it on a remote host, you will need to set it up as a grid/node by running two instances
 
-        java -jar selenium-server-standalone-#.jar -role grid
+        java -jar selenium-server-standalone-#.jar -role hub
         java -jar selenium-server-standalone-#.jar -role node
 
 *   Then when you create a session, be sure to pass the url to where your server is running.
