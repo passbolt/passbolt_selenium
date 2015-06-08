@@ -9,6 +9,22 @@
 class SetupTest extends PassboltSetupTestCase {
 
 	/**
+	 * go To Setup page.
+	 * @throws Exception
+	 */
+	private function __goToSetup($username) {
+		// Get last email.
+		$this->getUrl('seleniumTests/showLastEmail/' . urlencode($username));
+		// Remember setup url. (We will use it later).
+		$linkElement = $this->findLinkByText('get started');
+		$setupUrl = $linkElement->getAttribute('href');
+		// Go to url remembered above.
+		$this->driver->get($setupUrl);
+		// Wait until I see the first page of setup.
+		$this->waitUntilISee('#js_step_content h3', '/Plugin check/i');
+	}
+
+	/**
 	 * Scenario:  I can see the setup page with instructions to install the plugin
 	 * Given      I am an anonymous user with no plugin on the registration page
 	 * And        I follow the registration process and click on submit
@@ -49,16 +65,52 @@ class SetupTest extends PassboltSetupTestCase {
 		$this->assertEquals(Config::read('passbolt.url'), $domain);
 	}
 
+	/**
+	 * Scenario :   I go through the setup and I make sure the next / cancel buttons and menu items are working properly.
+	 * Given        I am an anonymous user with the plugin on the first page of the setup
+	 * Then         the menu "1. get the plugin" should be selected
+	 * When         I check the domain validation checkbox
+	 * And          I click on the link "Next"
+	 * Then         I should see a page with a title "Create a new key"
+	 * And          the menu "2. Define your keys" should be selected
+	 * When         I click on the link "Cancel"
+	 * Then         I should be back on the 1st step.
+	 * When         I check the domain validation checkbox.
+	 * And          I click "Next"
+	 * And          I click "Next" again
+	 * Then         I should be at the step 3
+	 * And          I should see a page with title "Now let's setup your master password"
+	 * And          The menu "3. Set a master password" should be selected
+	 * When         I click "Cancel"
+	 * Then         I should be back at step 2
+	 * And          the menu "2. Define your keys should be selected"
+	 * When         I click "Next"
+	 * Then         I should be back at step 3
+	 * When         I fill up a master password in the password field
+	 * And          I click "Next"
+	 * Then         I should reach a page saying that the secret and public key is generating
+	 * And          I should wait until the key is generated
+	 * And          the menu "3. Set a master password" should be selected
+	 * When         I click "Cancel"
+	 * Then         I should be back to the previous step
+	 * When         I fill up a master password in the password field
+	 * And          I click "Next"
+	 * Then         I should be back to the key generation page
+	 * And          I should wait till the key is generated
+	 * When         I click "Next"
+	 * Then         I should reach the next step
+	 * And          I should see "Set a security token" as the title
+	 * When         I click "Next"
+	 * Then         I should reach the final step where I have to set the application password
+	 * And          The "Login !" menu should be selected
+	 * When         I click "Cancel"
+	 * Then         I should be back to the previous step with the security token
+	 *
+	 * @throws Exception
+	 */
 	public function testCancelAndMenuSelection() {
-		// Get last email.
-		$this->getUrl('seleniumTests/showLastEmail/' . urlencode('johndoe@passbolt.com'));
-		// Remember setup url. (We will use it later).
-		$linkElement = $this->findLinkByText('get started');
-		$setupUrl = $linkElement->getAttribute('href');
-		// Go to url remembered above.
-		$this->driver->get($setupUrl);
-
-		$this->waitUntilISee('#js_step_content h3', '/Plugin check/i');
+		// Go to Setup page.
+		$this->__goToSetup('johndoe@passbolt.com');
 		// Assert menu is selected.
 		$this->assertMenuIsSelected('1. Get the plugin');
 		// Check box domain check.
@@ -153,14 +205,62 @@ class SetupTest extends PassboltSetupTestCase {
 		$this->assertMenuIsSelected('4. Set a security token');
 	}
 
+	/**
+	 * Scenario :   As an AP I go through the Setup and I make sure that every step is working properly
+	 * Given        I am an anonymous user with the plugin on the first page of the setup
+	 * Then         the button Cancel should not be visible
+	 * And          The button Next should be disabled
+	 * When         I check the domain validation checkbox
+	 * Then         the button Next should be enabled
+	 * When         I click "Next"
+	 * Then         I should see that the button "Next" is processing
+	 * And          I should see the step 2 : create a new key
+	 * And          I should see "John Doe" in the field Owner name
+	 * And          I should see "johndoe@passbolt.com" in the field email
+	 * And          I should see that the field email is disabled
+	 * When         I click "Next"
+	 * Then         I should reach the step 3
+	 * And          I should see the title "Now let's setup your master password"
+	 * When         I fill up "johndoemasterpassword" for the master password
+	 * Then         I should see the password strength updated to "fair"
+	 * And          I should see the password strength progress bar reflecting the fair strength
+	 * And          I should not see the password in clear
+	 * When         I click on the "show password" button (with a eye icon)
+	 * Then         I should see the password in clear
+	 * When         I click "Next"
+	 * Then         I should see a page generating my key set
+	 * And          I should see that the "Next" button is processing
+	 * And          I should wait till the generation is over
+	 * When         I click "Next"
+	 * Then         I should reach the next step "Security Token"
+	 * And          I should see that colors and text tokens have been selected by default
+	 * When         I click "Next"
+	 * Then         I should reach the next step to set the first password
+	 * And          I should see that the Name field is disabled
+	 * And          I should see that the Name field contains "John Doe"
+	 * And          I should see that the Email field is disabled
+	 * And          I should see that the Email field contains "johndoe@passbolt.com"
+	 * And          I should see that the url field is disabled
+	 * And          I should see that the "Next" button is disabled
+	 * When         I fill up a password for the password field
+	 * Then         I should see that the strength of the password is updated to fair
+	 * And          I should see the strength progress bar reflecting the fair status
+	 * And          I should not see the password in clear
+	 * When         I click on the password generation button
+	 * Then         A different password should appear in the password field
+	 * When         I click on show password button
+	 * Then         I should see the generated password
+	 * And          I should see the "show password button" pressed
+	 * When         I click again on the show password button
+	 * Then         I should not see the password in clear anymore
+	 * And          I should see that the button Next is enabled
+	 *
+	 * @throws Exception
+	 *
+	 */
 	public function testCanFollowSetupWithDefaultSteps() {
-		// Get last email.
-		$this->getUrl('seleniumTests/showLastEmail/' . urlencode('johndoe@passbolt.com'));
-		// Remember setup url. (We will use it later).
-		$linkElement = $this->findLinkByText('get started');
-		$setupUrl = $linkElement->getAttribute('href');
-		// Go to url remembered above.
-		$this->driver->get($setupUrl);
+		// Go to setup page.
+		$this->__goToSetup('johndoe@passbolt.com');
 
 		// Test that button cancel is hidden.
 		$this->assertElementHasClass(
@@ -192,7 +292,6 @@ class SetupTest extends PassboltSetupTestCase {
 		$this->waitUntilISee('#js_step_content h3', '/Create a new key/i');
 		// Test that the text corresponding to key section is set.
 		$this->assertTitleEquals( "Create a new key or import an existing one!" );
-
 
 		/////////////////////////////////////////////////////////
 		///////////   Enter Key information ////////////////////
