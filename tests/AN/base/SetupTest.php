@@ -33,16 +33,21 @@ class SetupTest extends PassboltSetupTestCase {
 		$this->inputText('UserUsername','johndoe@passbolt.com');
 		$this->pressEnter();
 		$this->assertCurrentUrl('register' . DS . 'thankyou');
-
 		// Get last email.
 		$this->getUrl('seleniumTests/showLastEmail/' . urlencode('johndoe@passbolt.com'));
 		// Follow the link in the email.
 		$this->followLink('get started');
+		// Wait until I am sure that the page is loaded.
+		$this->waitUntilISee('.plugin-check-wrapper', '/Plugin check/');
+		// Assert that url matches or regular expression
 		$this->assertUrlMatch('/\/setup\/install\/[a-z0-9\-]{36}\/[a-z0-9]{32}/');
-		$this->assertPageContainsText('Welcome to passbolt! Let\'s take 5 min to setup your system.');
-		$this->assertElementContainsText('div.plugin-check-wrapper .plugin-check.error', 'An add-on is required to use Passbolt.');
-		// Assert that second element in menu is disabled.
-		$this->assertPageContainsElement('div.navigation ul li:nth-child(2).disabled');
+		// Assert that title equals what it should.
+		$this->assertTitleEquals('Welcome to passbolt! Let\'s take 5 min to setup your system.');
+		// Assert that there is a warning message regarding plugin.
+		$this->assertElementContainsText(
+			$this->findByCss('div.plugin-check-wrapper .plugin-check.error'),
+			'An add-on is required to use Passbolt.'
+		);
 	}
 
 	/**
