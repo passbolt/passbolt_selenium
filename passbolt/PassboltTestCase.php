@@ -86,4 +86,31 @@ class PassboltTestCase extends WebDriverTestCase {
 			$this->assertTrue(true);
 		}
 	}
+
+	/**
+	 * Wait until all the currently operations have been completed.
+	 * @param int timeout timeout in seconds
+	 * @return bool
+	 *
+	 * @throws Exception
+	 */
+	public function waitCompletion($timeout = 10) {
+		$ex = null;
+
+		for ($i = 0; $i < $timeout * 10; $i++) {
+			try {
+				$elt = $this->findByCss('html.loaded');
+				if(count($elt)) {
+					return true;
+				}
+			}
+			catch (Exception $e) {
+				$ex = $e;
+			}
+			usleep(100000); // Sleep 1/10 seconds
+		}
+
+		$backtrace = debug_backtrace();
+		throw new Exception( "Timeout thrown by " . $backtrace[1]['class'] . "::" . $backtrace[1]['function'] . "()\n .");
+	}
 }

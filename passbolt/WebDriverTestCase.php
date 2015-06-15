@@ -245,7 +245,7 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
 	}
 
 	/**
-	 * Click on an element defined by a css selector.
+	 * Click on a link element defined by a text.
 	 * This prevents opening the url in another tab in case of target="_blank"
 	 * @param $text
 	 *
@@ -257,6 +257,18 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
 		$linkElement->click();
 	}
 
+	/**
+	 * Click on an element defined by a css selector.
+	 * This prevents opening the url in another tab in case of target="_blank"
+	 * @param $cssSelector
+	 *
+	 * @return mixed
+	 * @throws NoSuchElementException
+	 */
+	public function clickElement($cssSelector) {
+		$elt = $this->findByCss($cssSelector);
+		$elt->click();
+	}
 
 	/**
 	 * Click on an element defined by its Id
