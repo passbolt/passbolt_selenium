@@ -211,6 +211,16 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
 	}
 
 	/**
+	 * Find an element by a XPath selector
+	 * @param $xpath
+	 * @return mixed
+	 * @throws NoSuchElementException
+	 */
+	public function findByXpath($xpath) {
+		return $this->driver->findElement(WebDriverBy::xpath($xpath));
+	}
+
+	/**
 	 * Find an element by ID
 	 * @param $id
 	 * @return mixed
@@ -371,6 +381,17 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
 		$eltText = $elt->getText();
 		$contains = strpos($eltText, $needle) !== false;
 		$this->assertTrue($contains, sprintf("Failed asserting that element contains '%s'", $needle));
+	}
+
+	/**
+	 * Assert if a given element does not contain a given text
+	 * @param $elt
+	 * @param $needle
+	 */
+	public function assertElementNotContainText($elt, $needle) {
+		$eltText = $elt->getText();
+		$contains = strpos($eltText, $needle) !== false;
+		$this->assertFalse($contains, sprintf("Failed asserting that element does not contain '%s'", $needle));
 	}
 
 	/**

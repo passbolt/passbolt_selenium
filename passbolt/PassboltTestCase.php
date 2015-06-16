@@ -88,6 +88,18 @@ class PassboltTestCase extends WebDriverTestCase {
 	}
 
 	/**
+	 * Check that the breadcumb contains the given crumbs
+	 */
+	public function assertBreadcrumb($crumbs) {
+		for ($i=0; $i< count($crumbs); $i++) {
+			$this->assertElementContainsText(
+				$this->findByCss('#js_wsp_pwd_breadcrumb'),
+				$crumbs[$i]
+			);
+		}
+	}
+
+	/**
 	 * Wait until all the currently operations have been completed.
 	 * @param int timeout timeout in seconds
 	 * @return bool
@@ -113,4 +125,5 @@ class PassboltTestCase extends WebDriverTestCase {
 		$backtrace = debug_backtrace();
 		throw new Exception( "Timeout thrown by " . $backtrace[1]['class'] . "::" . $backtrace[1]['function'] . "()\n .");
 	}
+
 }
