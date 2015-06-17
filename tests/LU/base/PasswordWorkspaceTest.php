@@ -8,7 +8,7 @@
  * - As a user I should be able to use the navigation filters
  * - As a user I should be able to view my password details
  * - As a user I should be able to fav/unfav
- * - As a user I should be able to search by keywords
+ * - As a user I should be able to search a password by keywords
  *
  * @copyright    (c) 2015-present Bolt Software Pvt. Ltd.
  * @licence            GPLv3 onwards www.gnu.org/licenses/gpl-3.0.en.html
@@ -30,19 +30,15 @@ class PasswordWorkspaceTest extends PassboltTestCase
 	 * And			I should see the workspace secondary menu
 	 * And 			I should see the workspace filters shortcuts
 	 * And          I should see a grid and its columns
+	 * And			I should see the breadcrumb with the following:
+	 * 				| All items
 	 */
 	public function testWorkspace()
 	{
 		// I am logged in as Cedric Alfonsi, and I go to the password workspace
-		$this->getUrl('login');
-		$this->inputText('UserUsername', 'cedric@passbolt.com');
-		$this->inputText('UserPassword', 'password');
-		$this->pressEnter();
+		$this->loginAs('cedric@passbolt.com');
 
-		// I wait the current operation has been completed.
-		$this->waitCompletion();
-
-		// I should the workspace primary menu.
+		// I should see the workspace primary menu
 		$buttons = ['create', 'edit', 'delete', 'share', 'more'];
 		for ($i = 0; $i < count($buttons); $i++) {
 			$this->assertElementContainsText(
@@ -51,11 +47,11 @@ class PasswordWorkspaceTest extends PassboltTestCase
 			);
 		}
 
-		// I should the workspace filters.
+		// I should see the workspace filters shortcuts
 		$filters = ['All items', 'Favorite', 'Recently modified', 'Shared with me', 'Items I own'];
 		for ($i = 0; $i < count($filters); $i++) {
 			$this->assertElementContainsText(
-				$this->findByCss('#js_wsp_pwd_rs_shortcuts'),
+				$this->findByCss('#js_wsp_pwd_filter_shortcuts'),
 				$filters[$i]
 			);
 		}
@@ -69,7 +65,9 @@ class PasswordWorkspaceTest extends PassboltTestCase
 			);
 		}
 
-		$this->assertTrue(true);
+		// I should see the breadcrumb with the following:
+		// 	| All items
+		$this->assertBreadcrumb('password', ['All items']);
 	}
 
 	/**
@@ -80,26 +78,19 @@ class PasswordWorkspaceTest extends PassboltTestCase
 	public function testBrowsePasswords()
 	{
 		// I am logged in as Cedric Alfonsi, and I go to the password workspace
-		$this->getUrl('login');
-		$this->inputText('UserUsername', 'cedric@passbolt.com');
-		$this->inputText('UserPassword', 'password');
-		$this->pressEnter();
-
-		// I wait the current operation has been completed.
-		$this->waitCompletion();
+		$this->loginAs('cedric@passbolt.com');
 
 		// I should see rows representing my passwords
 		$passwords = ['shared resource', 'salesforce account', 'tetris license', 'facebook account'];
+		$browserElement = $this->findByCss('#js_wsp_pwd_browser .tableview-content');
 		for ($i = 0; $i < count($passwords); $i++) {
 			$this->assertElementContainsText(
-				$this->findByCss('#js_wsp_pwd_browser .tableview-content'),
+				$browserElement,
 				$passwords[$i]
 			);
 		}
 
 		// @todo Test de rows details
-
-		$this->assertTrue(true);
 	}
 
 	/**
@@ -129,13 +120,7 @@ class PasswordWorkspaceTest extends PassboltTestCase
 	public function testFilterPasswords()
 	{
 		// I am logged in as Cedric Alfonsi, and I go to the password workspace
-		$this->getUrl('login');
-		$this->inputText('UserUsername', 'cedric@passbolt.com');
-		$this->inputText('UserPassword', 'password');
-		$this->pressEnter();
-
-		// I wait the current operation has been completed.
-		$this->waitCompletion();
+		$this->loginAs('cedric@passbolt.com');
 
 		// I click on the favorite filter
 		$this->clickLink("Favorite");
@@ -145,17 +130,17 @@ class PasswordWorkspaceTest extends PassboltTestCase
 		// I should see the breadcrumb with the following:
 		// 	| All items
 		//	| Search : Favorite
-		$this->assertBreadcrumb(['All items', 'Favorite']);
+		$this->assertBreadcrumb('password', ['All items', 'Favorite']);
 
 		// I click on the recently modified filter
 		$this->clickLink("Recently modified");
 		$this->waitCompletion();
-		// I should see my passwords ordered my modification date
+		// I should see my passwords ordered by modification date
 		// @todo Test with a case where the modified date are different
 		// I should see the breadcrumb with the following:
 		// 	| All items
-		//	| Search : Favorite
-		$this->assertBreadcrumb(['All items', 'Recently modified']);
+		//	| Search : Recently modified
+		$this->assertBreadcrumb('password', ['All items', 'Recently modified']);
 
 		// I click on the shared with me filter
 		$this->clickLink("Shared with me");
@@ -171,7 +156,7 @@ class PasswordWorkspaceTest extends PassboltTestCase
 		// I should see the breadcrumb with the following:
 		// 	| All items
 		//	| Search : Shared with me
-		$this->assertBreadcrumb(['All items', 'Shared with me']);
+		$this->assertBreadcrumb('password', ['All items', 'Shared with me']);
 
 		// I click on the items I own filter
 		$this->clickLink("Items I own");
@@ -180,10 +165,8 @@ class PasswordWorkspaceTest extends PassboltTestCase
 		// @todo Test with a case which owns some passwords
 		// I should see the breadcrumb with the following:
 		// 	| All items
-		//	| Search : Shared with me
-		$this->assertBreadcrumb(['All items', 'Items I own']);
-
-		$this->assertTrue(true);
+		//	| Search : Items I own
+		$this->assertBreadcrumb('password', ['All items', 'Items I own']);
 	}
 
 	/**
@@ -196,13 +179,7 @@ class PasswordWorkspaceTest extends PassboltTestCase
 	public function testPasswordDetails()
 	{
 		// I am logged in as Cedric Alfonsi, and I go to the password workspace
-		$this->getUrl('login');
-		$this->inputText('UserUsername', 'cedric@passbolt.com');
-		$this->inputText('UserPassword', 'password');
-		$this->pressEnter();
-
-		// I wait the current operation has been completed.
-		$this->waitCompletion();
+		$this->loginAs('cedric@passbolt.com');
 
 		// I click on a password
 		$this->clickElement("#js_wsp_pwd_browser .tableview-content div[title='shared resource']");
@@ -272,13 +249,7 @@ class PasswordWorkspaceTest extends PassboltTestCase
 		$xpathUnfavSelector = "//tr[*/div[contains(.,'" . $passwordTitle . "')]]//i[contains(@class, unfav)]";
 
 		// I am logged in as Cedric Alfonsi, and I go to the password workspace
-		$this->getUrl('login');
-		$this->inputText('UserUsername', 'cedric@passbolt.com');
-		$this->inputText('UserPassword', 'password');
-		$this->pressEnter();
-
-		// I wait the current operation has been completed.
-		$this->waitCompletion();
+		$this->loginAs('cedric@passbolt.com');
 
 		// I click on the favorite star located before the password (the password shouldn't be a favorite)
 		$favElt = $this->findByXpath($xpathFavSelector);
@@ -327,7 +298,7 @@ class PasswordWorkspaceTest extends PassboltTestCase
 	}
 
 	/**
-	 * Scenario :   As a user I should be able to search by keywords
+	 * Scenario :   As a user I should be able to search a password by keywords
 	 * Given        I am logged in as Cedric Alfonsi, and I go to the password workspace
 	 * When			I fill the "app search" field with "tetris license"
 	 * And			I click "search"
@@ -343,13 +314,7 @@ class PasswordWorkspaceTest extends PassboltTestCase
 		$breadcrumb = ['All items', 'Search : tetris license'];
 
 		// I am logged in as Cedric Alfonsi, and I go to the password workspace
-		$this->getUrl('login');
-		$this->inputText('UserUsername', 'cedric@passbolt.com');
-		$this->inputText('UserPassword', 'password');
-		$this->pressEnter();
-
-		// I wait the current operation has been completed.
-		$this->waitCompletion();
+		$this->loginAs('cedric@passbolt.com');
 
 		// I fill the "app search" field with "tetris license"
 		$this->inputText('js_app_filter_keywords', $searchPwd);
@@ -371,7 +336,7 @@ class PasswordWorkspaceTest extends PassboltTestCase
 		// I should see the breadcrumb with the following:
 		// 	| All items
 		//	| Search : tetris license
-		$this->assertBreadcrumb($breadcrumb);
+		$this->assertBreadcrumb('password', $breadcrumb);
 	}
 
 }

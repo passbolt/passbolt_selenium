@@ -26,6 +26,21 @@ class PassboltTestCase extends WebDriverTestCase {
 	}
 
 	/**
+	 * Goto workspace
+	 * @param $name
+	 */
+	public function gotoWorkspace($name) {
+		$linkCssSelector = '';
+		switch ($name) {
+			default:
+				$linkCssSelector = '#js_app_nav_left_' . $name . '_wsp_link a';
+				break;
+		}
+		$this->clickElement($linkCssSelector);
+		$this->waitCompletion();
+	}
+
+	/**
 	 * Check if the current url match the one given in parameter
 	 * @param $url
 	 */
@@ -89,11 +104,16 @@ class PassboltTestCase extends WebDriverTestCase {
 
 	/**
 	 * Check that the breadcumb contains the given crumbs
+	 * @param $wspName The workspace name
+	 * @param $crumbs The crumbs to check
 	 */
-	public function assertBreadcrumb($crumbs) {
+	public function assertBreadcrumb($wspName, $crumbs) {
+		// Find the breadcrumb element.
+		$breadcrumbElement = $this->findById('js_wsp_' . $wspName . '_breadcrumb');
+		// Check that the breadcrumb element contains the given crumbs.
 		for ($i=0; $i< count($crumbs); $i++) {
 			$this->assertElementContainsText(
-				$this->findByCss('#js_wsp_pwd_breadcrumb'),
+				$breadcrumbElement,
 				$crumbs[$i]
 			);
 		}
@@ -124,6 +144,19 @@ class PassboltTestCase extends WebDriverTestCase {
 
 		$backtrace = debug_backtrace();
 		throw new Exception( "Timeout thrown by " . $backtrace[1]['class'] . "::" . $backtrace[1]['function'] . "()\n .");
+	}
+
+	/**
+	 * Login on the application with the given user.
+	 *
+	 * @param $email
+	 */
+	public function loginAs($email) {
+		$this->getUrl('login');
+		$this->inputText('UserUsername', $email);
+		$this->inputText('UserPassword', 'password');
+		$this->pressEnter();
+		$this->waitCompletion();
 	}
 
 }
