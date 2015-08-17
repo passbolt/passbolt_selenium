@@ -14,6 +14,7 @@ class PassboltTestCase extends WebDriverTestCase {
 	protected function setUp() {
 		parent::setUp();
 		$this->PassboltServer = new PassboltServer(Config::read('passbolt.url'));
+		$this->driver->manage()->window()->maximize();
 	}
 
 	/**

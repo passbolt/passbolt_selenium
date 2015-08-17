@@ -20,12 +20,12 @@ class PasswordWorkspaceTest extends PassboltTestCase
 	{
 		parent::setUp();
 		// Reset passbolt installation with dummies.
-		//$this->PassboltServer->resetDatabase(1);
+		$this->PassboltServer->resetDatabase(1);
 	}
 
 	/**
 	 * Scenario :   As a user I should be able to see the passwords workspace
-	 * Given        I am logged in as Cedric Alfonsi, and I go to the password workspace
+	 * Given        I am logged in as Carol, and I go to the password workspace
 	 * Then			I should see the workspace primary menu
 	 * And			I should see the workspace secondary menu
 	 * And 			I should see the workspace filters shortcuts
@@ -35,8 +35,8 @@ class PasswordWorkspaceTest extends PassboltTestCase
 	 */
 	public function testWorkspace()
 	{
-		// I am logged in as Cedric Alfonsi, and I go to the password workspace
-		$this->loginAs('cedric@passbolt.com');
+		// I am logged in as Carol, and I go to the password workspace
+		$this->loginAs('carol@passbolt.com');
 
 		// I should see the workspace primary menu
 		$buttons = ['create', 'edit', 'delete', 'share', 'more'];
@@ -72,16 +72,16 @@ class PasswordWorkspaceTest extends PassboltTestCase
 
 	/**
 	 * Scenario :   As a user I should be able to see my passwords
-	 * Given        I am logged in as Cedric Alfonsi, and I go to the password workspace
+	 * Given        I am logged in as Carol, and I go to the password workspace
 	 * Then         I should see rows representing my passwords
 	 */
 	public function testBrowsePasswords()
 	{
-		// I am logged in as Cedric Alfonsi, and I go to the password workspace
-		$this->loginAs('cedric@passbolt.com');
+		// I am logged in as Carol, and I go to the password workspace
+		$this->loginAs('ada@passbolt.com');
 
 		// I should see rows representing my passwords
-		$passwords = ['shared resource', 'salesforce account', 'tetris license', 'facebook account'];
+		$passwords = ['shared resource', 'op1-pwd1', 'op1-pwd2'];
 		$browserElement = $this->findByCss('#js_wsp_pwd_browser .tableview-content');
 		for ($i = 0; $i < count($passwords); $i++) {
 			$this->assertElementContainsText(
@@ -95,7 +95,7 @@ class PasswordWorkspaceTest extends PassboltTestCase
 
 	/**
 	 * Scenario :   As a user I should be able to filter my passwords
-	 * Given        I am logged in as Cedric Alfonsi, and I go to the password workspace
+	 * Given        I am logged in as Ada, and I go to the password workspace
 	 * When			I click on the favorite filter
 	 * Then			I should only see my favorite passwords
 	 * And			I should see the breadcrumb with the following:
@@ -119,8 +119,8 @@ class PasswordWorkspaceTest extends PassboltTestCase
 	 */
 	public function testFilterPasswords()
 	{
-		// I am logged in as Cedric Alfonsi, and I go to the password workspace
-		$this->loginAs('cedric@passbolt.com');
+		// I am logged in as Ada, and I go to the password workspace
+		$this->loginAs('ada@passbolt.com');
 
 		// I click on the favorite filter
 		$this->clickLink("Favorite");
@@ -146,7 +146,7 @@ class PasswordWorkspaceTest extends PassboltTestCase
 		$this->clickLink("Shared with me");
 		$this->waitCompletion();
 		// I should only see the passwords that have been share with me
-		$passwords = ['shared resource', 'salesforce account', 'tetris license', 'facebook account'];
+		$passwords = ['shared resource', 'op1-pwd1', 'op1-pwd2'];
 		for ($i = 0; $i < count($passwords); $i++) {
 			$this->assertElementContainsText(
 				$this->findByCss('#js_wsp_pwd_browser .tableview-content'),
@@ -171,15 +171,15 @@ class PasswordWorkspaceTest extends PassboltTestCase
 
 	/**
 	 * Scenario :   As a user I should be able to view my password details
-	 * Given        I am logged in as Cedric Alfonsi, and I go to the password workspace
+	 * Given        I am logged in as Ada, and I go to the password workspace
 	 * When			I click on a password
 	 * Then 		I should see a secondary side bar appearing
 	 * And			I should the details of the selected password
 	 */
 	public function testPasswordDetails()
 	{
-		// I am logged in as Cedric Alfonsi, and I go to the password workspace
-		$this->loginAs('cedric@passbolt.com');
+		// I am logged in as Ada, and I go to the password workspace
+		$this->loginAs('ada@passbolt.com');
 
 		// I click on a password
 		$this->clickElement("#js_wsp_pwd_browser .tableview-content div[title='shared resource']");
@@ -192,9 +192,9 @@ class PasswordWorkspaceTest extends PassboltTestCase
 		$pwdDetails = [
 			'username' 		=> 'admin',
 			'url' 			=> 'http://shared.resource.net/',
-			'modified' 		=> '2 years ago',
+			'modified' 		=> '3 years ago',
 			'created-by' 	=> 'anonymous@passbolt.com',
-			'modified-by' 	=> 'anonymous@passbolt.com',
+			'modified-by' 	=> 'root@passbolt.com',
 		];
 		// I should see the password's username
 		$cssSelector = '#js_pwd_details .detailed-information li.username';
@@ -230,7 +230,7 @@ class PasswordWorkspaceTest extends PassboltTestCase
 
 	/**
 	 * Scenario :   As a user I should be able to fav/unfav
-	 * Given        I am logged in as Cedric Alfonsi, and I go to the password workspace
+	 * Given        I am logged in as Ada, and I go to the password workspace
 	 * When			I click on the favorite star located before the password (the password shouldn't be a favorite)
 	 * Then 		I should see the star becoming red
 	 * And			I should see a confirmation of my action in the notification area
@@ -244,12 +244,12 @@ class PasswordWorkspaceTest extends PassboltTestCase
 	 */
 	public function testFavorite()
 	{
-		$passwordTitle = 'tetris license';
+		$passwordTitle = 'shared resource';
 		$xpathFavSelector = "//tr[*/div[contains(.,'" . $passwordTitle . "')]]//i[contains(@class, fav)]";
 		$xpathUnfavSelector = "//tr[*/div[contains(.,'" . $passwordTitle . "')]]//i[contains(@class, unfav)]";
 
-		// I am logged in as Cedric Alfonsi, and I go to the password workspace
-		$this->loginAs('cedric@passbolt.com');
+		// I am logged in as Carol, and I go to the password workspace
+		$this->loginAs('ada@passbolt.com');
 
 		// I click on the favorite star located before the password (the password shouldn't be a favorite)
 		$favElt = $this->findByXpath($xpathFavSelector);
@@ -299,24 +299,24 @@ class PasswordWorkspaceTest extends PassboltTestCase
 
 	/**
 	 * Scenario :   As a user I should be able to search a password by keywords
-	 * Given        I am logged in as Cedric Alfonsi, and I go to the password workspace
-	 * When			I fill the "app search" field with "tetris license"
+	 * Given        I am logged in as Ada, and I go to the password workspace
+	 * When			I fill the "app search" field with "shared resource"
 	 * And			I click "search"
 	 * Then 		I should see the view filtered with my search
 	 * And			I should see the breadcrumb with the following:
 	 *					| All items
-	 *					| Search : tetris license
+	 *					| Search : shared resource
 	 */
 	public function testSearchByKeywords()
 	{
-		$searchPwd = 'tetris license';
-		$hiddenPwd = ['shared resource', 'salesforce account', 'facebook account'];
-		$breadcrumb = ['All items', 'Search : tetris license'];
+		$searchPwd = 'shared resource';
+		$hiddenPwd = ['op1-pwd1', 'op1-pwd2'];
+		$breadcrumb = ['All items', 'Search : shared'];
 
-		// I am logged in as Cedric Alfonsi, and I go to the password workspace
-		$this->loginAs('cedric@passbolt.com');
+		// I am logged in as Ada, and I go to the password workspace
+		$this->loginAs('ada@passbolt.com');
 
-		// I fill the "app search" field with "tetris license"
+		// I fill the "app search" field with "shared resource"
 		$this->inputText('js_app_filter_keywords', $searchPwd);
 		$this->clickElement("#js_app_filter_form button[value='search']");
 		$this->waitCompletion();
@@ -335,7 +335,7 @@ class PasswordWorkspaceTest extends PassboltTestCase
 
 		// I should see the breadcrumb with the following:
 		// 	| All items
-		//	| Search : tetris license
+		//	| Search : shared resource
 		$this->assertBreadcrumb('password', $breadcrumb);
 	}
 

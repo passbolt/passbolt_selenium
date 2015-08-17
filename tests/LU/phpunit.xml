@@ -15,7 +15,7 @@
 
     <php>
         <env name="BROWSER" value="firefox_with_passbolt_extension"/>
-        <!--env name="QUIT" value="0" /-->
+        <env name="QUIT" value="1" />
     </php>
 
     <testsuites>
@@ -25,7 +25,7 @@
     </testsuites>
 
     <logging>
-        <log type="junit" target="../../reports/AN/junit.xml" logIncompleteSkipped="false"/>
+        <log type="junit" target="../../reports/LU/junit.xml" logIncompleteSkipped="false"/>
     </logging>
 
 </phpunit>

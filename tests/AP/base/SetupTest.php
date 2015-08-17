@@ -96,6 +96,10 @@ GFq/vw==
 		$setupUrl = $linkElement->getAttribute('href');
 		// Go to url remembered above.
 		$this->driver->get($setupUrl);
+
+		// Test that the plugin confirmation message is displayed.
+		$this->waitUntilISee('div.plugin-check-wrapper .plugin-check.success', '/Firefox plugin is installed and up to date/i');
+
 	}
 
 	/**
@@ -123,11 +127,10 @@ GFq/vw==
 		$this->followLink("get started");
 		// Test that the url is the plugin one.
 		$this->assertUrlMatch('/resource:\/\/passbolt-firefox-addon-at-passbolt-dot-com\/passbolt-firefox-addon\/data\/setup.html/');
+
 		// Test that the plugin confirmation message is displayed.
-		$this->assertElementContainsText(
-			$this->findByCss("div.plugin-check-wrapper .plugin-check.success"),
-			"Nice one! Firefox plugin is installed and up to date. You are good to go!"
-		);
+		$this->waitUntilISee('div.plugin-check-wrapper .plugin-check.success', '/Firefox plugin is installed and up to date/i');
+
 		// Test that the domain in the url check textbox is the same as the one configured.
 		$domain = $this->findById("js_setup_domain")->getAttribute('value');
 		$this->assertEquals(Config::read('passbolt.url'), $domain);
@@ -682,6 +685,7 @@ GFq/vw==
 		$this->__goToSetup('johndoe@passbolt.com');
 		// Test step domain verification.
 		$this->__testStepDomainVerification();
+
 		// Click Next.
 		$this->clickLink("Next");
 		// Test that button Next is disabled.
@@ -713,13 +717,15 @@ GFq/vw==
 		// Do not remove the line below. Without it the test gets stuck without a reason.
 		sleep(5);
 		// Check we are logged in.
+		$this->assertCurrentUrl('');
+		$this->waitCompletion();
 		$this->waitUntilISee('#js_app_controller.ready');
-			// Check that the name is ok.
+		// Check that the name is ok.
 		$this->assertElementContainsText(
 			$this->findByCss('.header .user.profile .details .name'),
 			'John Doe'
 		);
-			// Check that the email is ok.
+		// Check that the email is ok.
 		$this->assertElementContainsText(
 			$this->findByCss('.header .user.profile .details .email'),
 			'johndoe@passbolt.com'
@@ -781,6 +787,8 @@ GFq/vw==
 		$this->clickLink("Next");
 		// Do not remove line below. Prevents the test to get stuck.
 		sleep(5);
+		$this->assertCurrentUrl('');
+		$this->waitCompletion();
 		// Check we are logged in.
 		$this->waitUntilISee('#container.page.password', null, 20);
 		// Check that the name is ok.
@@ -803,7 +811,14 @@ GFq/vw==
 	 * @throws Exception
 	 */
 	public function testSetupNotAccessibleAfterAccountValidation() {
-		$this->__goToSetup('johndoe@passbolt.com');
+		// Get last email.
+		$this->getUrl('seleniumTests/showLastEmail/' . urlencode('johndoe@passbolt.com'));
+		// Remember setup url. (We will use it later).
+		$linkElement = $this->findLinkByText('get started');
+		$setupUrl = $linkElement->getAttribute('href');
+		// Go to url remembered above.
+		$this->driver->get($setupUrl);
+
 		$this->waitUntilISee('h2', '/Token not found/');
 	}
 

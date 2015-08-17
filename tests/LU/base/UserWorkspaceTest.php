@@ -10,7 +10,7 @@
  * - As a user I should be able to search a user by keywords
  *
  * @copyright    (c) 2015-present Bolt Software Pvt. Ltd.
- * @licence            GPLv3 onwards www.gnu.org/licenses/gpl-3.0.en.html
+ * @licence      GPLv3 onwards www.gnu.org/licenses/gpl-3.0.en.html
  */
 class UserWorkspaceTest extends PassboltTestCase
 {
@@ -19,12 +19,12 @@ class UserWorkspaceTest extends PassboltTestCase
 	{
 		parent::setUp();
 		// Reset passbolt installation with dummies.
-		//$this->PassboltServer->resetDatabase(1);
+		$this->PassboltServer->resetDatabase(1);
 	}
 
 	/**
 	 * Scenario :   As a user I should be able to see the user workspace
-	 * Given        I am logged in as Cedric Alfonsi, and I go to the user workspace
+	 * Given        I am logged in as Carol Shaw, and I go to the user workspace
 	 * Then			I should not see the workspace primary menu
 	 * And			I should see the workspace secondary menu
 	 * And 			I should see the workspace filters shortcuts
@@ -34,8 +34,8 @@ class UserWorkspaceTest extends PassboltTestCase
 	 */
 	public function testWorkspace()
 	{
-		// I am logged in as Cedric Alfonsi, and I go to the user workspace
-		$this->loginAs('cedric@passbolt.com');
+		// I am logged in as Carol Shaw, and I go to the user workspace
+		$this->loginAs('carol@passbolt.com');
 		$this->gotoWorkspace('user');
 
 		// I should not see the workspace primary menu
@@ -72,32 +72,30 @@ class UserWorkspaceTest extends PassboltTestCase
 
 	/**
 	 * Scenario :   As a user I should be able to see the users using the app
-	 * Given        I am logged in as Cedric Alfonsi, and I go to the user workspace
+	 * Given        I am logged in as Carol Shaw, and I go to the user workspace
 	 * Then         I should see rows representing the users
 	 */
 	public function testBrowseUsers()
 	{
-		// I am logged in as Cedric Alfonsi, and I go to the user workspace
-		$this->loginAs('cedric@passbolt.com');
+		// I am logged in as Carol Shaw, and I go to the user workspace
+		$this->loginAs('carol@passbolt.com');
 		$this->gotoWorkspace('user');
 
 		// I should see rows representing the users
 		$users = [
-			'Cédric Alfonsi',
-			'Jean René Bergamotte',
-			'Remy Bertot',
-			'Userone Company A',
-			'Myriam Djerouni',
-			'Aurelie Gherards',
-			'Ismail Guennouni',
-			'Admin Istrator',
-			'User Lambda',
-			'Frank Leboeuf',
-			'Great Manager',
-			'Kevin Muller',
-			'User Test',
-			'User b Test',
-			'Darth Vader',
+			'Ada Lovelace',
+			'Betty Holberton',
+			'Carol Shaw',
+			'Dame Steve Shirley',
+			'Edith Clarke',
+			'Frances Allen',
+			'Grace Hopper',
+			'Hedy Lamarr',
+			'Irene Greif',
+			'Jean Bartik',
+			'Kathleen Antonelli',
+			'Lynn Jolitz',
+			'Marlyn Wescoff'
 		];
 		$browserElement = $this->findByCss('#js_wsp_users_browser .tableview-content');
 		for ($i = 0; $i < count($users); $i++) {
@@ -112,7 +110,7 @@ class UserWorkspaceTest extends PassboltTestCase
 
 	/**
 	 * Scenario :   As a user I should be able to filter the users
-	 * Given        I am logged in as Cedric Alfonsi, and I go to the user workspace
+	 * Given        I am logged in as Carol Shaw, and I go to the user workspace
 	 * When			I click on the recently modified filter
 	 * Then			I should see the users ordered my modification date
 	 * And			I should see the breadcrumb with the following:
@@ -121,8 +119,8 @@ class UserWorkspaceTest extends PassboltTestCase
 	 */
 	public function testFilterUsers()
 	{
-		// I am logged in as Cedric Alfonsi, and I go to the user workspace
-		$this->loginAs('cedric@passbolt.com');
+		// I am logged in as Carol, and I go to the user workspace
+		$this->loginAs('carol@passbolt.com');
 		$this->gotoWorkspace('user');
 
 		// I click on the recently modified filter
@@ -138,64 +136,35 @@ class UserWorkspaceTest extends PassboltTestCase
 
 	/**
 	 * Scenario :   As a user I should be able to view the user details
-	 * Given        I am logged in as Cedric Alfonsi, and I go to the user workspace
+	 * Given        I am logged in as Carol, and I go to the user workspace
 	 * When			I click on a user
 	 * Then 		I should see a secondary side bar appearing
 	 * And			I should the details of the selected user
 	 */
 	public function testUsersDetails()
 	{
-		// I am logged in as Cedric Alfonsi, and I go to the user workspace
-		$this->loginAs('cedric@passbolt.com');
+		// I am logged in as Carol, and I go to the user workspace
+		$this->loginAs('carol@passbolt.com');
 		$this->gotoWorkspace('user');
 
 		// I click on a user
-		$this->clickElement("#js_wsp_users_browser .tableview-content div[title='User Test']");
+		$this->clickElement("#js_wsp_users_browser .tableview-content div[title='Betty Holberton']");
 		$this->waitCompletion();
 
 		// I should see a secondary side bar appearing
 		$this->assertPageContainsElement('#js_user_details');
 
-		// I should the details of the selected user
+		// I should see the details of the selected user
 		$userDetails = [
 			'role' 			=> 'User',
-			'modified' 		=> '6 days ago',
-			'keyid' 		=> '5FD2D92C',
+			'modified' 		=> 'ago',
+			'keyid' 		=> 'E61D7009',
 			'type'		 	=> 'RSA',
-			'created'		=> '2014-11-19 19:33:51',
-			'expires'		=> '2018-11-19 19:33:51',
-			'key'			=> '-----BEGIN PGP PUBLIC KEY BLOCK-----
-Version: GnuPG/MacGPG2 v2.0.22 (Darwin)
-Comment: GPGTools - https://gpgtools.org
-
-mQENBFRso0cBCAC+J/b4LoML0L9/xlIs3/TZKC9CSVTQ2xljs3hdawvGi/+p210M
-doXev6optgaDPj0q61HaCR1XhrCa7gK9jEC54M91LwrRzm5nBT9Fez/wezXn2I0v
-56RIAn42k3OcDwWUDdPenzZS+/4/efJPyb/XO7sZMiD+OjjpXwNNu9ezqSvNZ1uo
-/VcMHBTkQ0NqETO5Yt5KX9JkrKP2Q0BR2BVHGHp7K/PJiWnN+T8dTFr6RsiZsVWs
-dD/5IPSkNAsi8E8fguuWecQtMftled/36QjlaXYgZ/U1kVi2mDUebd6oxTvB85fm
-pCvIekFRNqs6TAd4de+pDBsbYY+vsE1tCsxvABEBAAG0JFBhc3Nib2x0IFBHUCA8
-cGFzc2JvbHRAcGFzc2JvbHQuY29tPokBPQQTAQoAJwUCVGyjRwIbAwUJB4YfgAUL
-CQgHAwUVCgkICwUWAgMBAAIeAQIXgAAKCRBPgZQCX9LZLAk6CACop+n6hgaCrFWU
-m5EaT2+XBBw9rEbcISCH8Zeh2Xk1RmLOiTLSYRka8qnUcEBbSq8EOoJsfNdWEK8d
-QwhearHZjRCUjrQMPsMwwKhKrkG7RR7VI+hN+7H7Joyq3UDE7S+55vvWd7hSZbPl
-buhPWBirviN1Lovk2tZbI7ClW1+Cx9uK3lad1LywlPsxkCKbRfDcWrnLFKk1UnYi
-229ZXCYjuJbzfPRWx039nVVt6IoOZnLCil5G9d5AFt5Ro7WFdormTsfP+EehLI7q
-szrEVD2ZQgn+rSF8P97DLABDa28+JfTsnivVQn5cyLR6x+XTJp96SSprm5nY0C3+
-ybog/dDFuQENBFRso0cBCAC50ryBhhesYxrJEPDvlK8R0E8zCxv7I6fXXgORNyAW
-PAsZBUsaQizTUsP9VpO6Y0gOPGxvcGP9xSc+01n1stM9S7/+utCfm8yD4UtP9Ric
-mkq/T/w/l9iLFypo6al47HW28mQlMvbUWSkMoK9JXRpB2c2VPmN8UXVQX4cQ++ad
-YQNnRgSo3n+VdvIKgSW3rkcQIriGX3P79cciqAA/NzkivNyZSQaVBLJioO+kDkYu
-Q+oIstvEusmHIon0Ltggi8B6LM5vAQpBRwQ9dfUgAbpQpfzm8VUkCGmsUr5hnOO3
-tmaWOTKZcpXiF5+rW2NrqiAhRhm44s+JipmTE++u/6X9ABEBAAGJASUEGAEKAA8F
-AlRso0cCGwwFCQeGH4AACgkQT4GUAl/S2Sx2LQgAoXOxfA5pOCm9UP2f2pQA7hyv
-DEppROxkBLVcnZdpVFw4yrVQh/IWHSxcX0rcrTPlBjjFpTos+ACOZ5EKSRCHjIqF
-biraG5/2YjKa5cqc7z/W9bSuhmWizPBpXlQk6MohG6jXlw7OyVosisbHGobFa5CW
-hF+Kc8tb0mvk9vmqn/eDYnGYcSftapyGB3lq7w4qtKzlvn2g2FlnxJCdnrG3zGtO
-Kqusl1GcnrNFuDDtDwZS1G+3T8Y8ZH8tRnTwrSeO3I7hw/cdzCEDg4isqFw371vz
-UghWsISL244Umc6ZmTufAs+7/6sNNzFAb5SzwVmpLla1x3jth4bwLcJTGFq/vw==
-=GG/Z
------END PGP PUBLIC KEY BLOCK-----'
+			'created'		=> '/[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}/',
+			'expires'		=> '/[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}/',
 		];
+		$userDetails['key'] = file_get_contents(GPG_FIXTURES . DS . 'betty_public.key' );
+
 		// I should see the user's role
 		$cssSelector = '#js_user_details .detailed-information li.role';
 		$this->assertElementContainsText(
@@ -242,7 +211,7 @@ UghWsISL244Umc6ZmTufAs+7/6sNNzFAb5SzwVmpLla1x3jth4bwLcJTGFq/vw==
 
 	/**
 	 * Scenario :   As a user I should be able to search a user by keywords
-	 * Given        I am logged in as Cedric Alfonsi, and I go to the user workspace
+	 * Given        I am logged in as Carol, and I go to the user workspace
 	 * When			I fill the "app search" field with "User Test"
 	 * And			I click "search"
 	 * Then 		I should see the view filtered with my search
@@ -252,28 +221,25 @@ UghWsISL244Umc6ZmTufAs+7/6sNNzFAb5SzwVmpLla1x3jth4bwLcJTGFq/vw==
 	 */
 	public function testSearchByKeywords()
 	{
-		$searchUser = 'Test';
+		$searchUser = 'Ada';
 		$hiddenUsers = [
-			'Cédric Alfonsi',
-//			'Jean René Bergamotte',
-			'Remy Bertot',
-			'Userone Company A',
-			'Myriam Djerouni',
-			'Aurelie Gherards',
-			'Ismail Guennouni',
-			'Admin Istrator',
-			'User Lambda',
-			'Frank Leboeuf',
-			'Great Manager',
-			'Kevin Muller',
-//			'User Test',
-//			'User b Test',
-			'Darth Vader',
+			'Betty Holbderton',
+			'Carol Shaw',
+			'Dame Steve Shirley',
+			'Edith Clarke',
+			'Frances Allen',
+			'Grace Hopper',
+			'Hedy Lamarr',
+			'Irene Greif',
+			'Jean Bartik',
+			'Kathleen Antonelli',
+			'Lynn Jolitz',
+			'Marlyn Wescoff'
 		];
 		$breadcrumb = ['All users', 'Search : ' . $searchUser];
 
-		// I am logged in as Cedric Alfonsi, and I go to the user workspace
-		$this->loginAs('cedric@passbolt.com');
+		// I am logged in as Carol, and I go to the user workspace
+		$this->loginAs('carol@passbolt.com');
 		$this->gotoWorkspace('user');
 
 		// I fill the "app search" field with "tetris license"

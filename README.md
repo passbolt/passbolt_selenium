@@ -68,8 +68,16 @@ Clone or rename config.php.default to
 
 *   To run unit tests then simply run:
 
-    phpunit -c ./tests
+    phpunit -c ./tests/USERROLE
 
+    where User role is
+    - AN : user without plugin
+    - AP : user with plugin
+    - LU : user with configured plugin and user account
+
+* You can also run all tests
+
+    $ ./run_all_test.sh
 
 ## PHPUNIT (Using composer)
 
@@ -96,3 +104,14 @@ Clone or rename config.php.default to
 
 		cd data/extensions
 		ln -s ../../../passbolt_ff/passbolt-firefox-addon.xpi .
+
+## PASSBOLT Fixtures
+
+*   Place the GPG keys in data/fixtures/gpg from
+
+https://github.com/passbolt/passbolt/tree/develop/app/Config/gpg
+
+*   Or if you are developing you can create a simlink to your passbolt project
+
+    cd data/fixtures
+    ln -s ../../../passbolt/app/Config/gpg/ .

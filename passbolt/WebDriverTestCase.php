@@ -379,8 +379,13 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
 	 */
 	public function assertElementContainsText($elt, $needle) {
 		$eltText = $elt->getText();
-		$contains = strpos($eltText, $needle) !== false;
-		$this->assertTrue($contains, sprintf("Failed asserting that element contains '%s'", $needle));
+		if(preg_match('/^\/.+\/[a-z]*$/i', $needle)) {
+			$contains = preg_match($needle, $eltText) != false;
+		} else {
+			$contains = strpos($eltText, $needle) !== false;
+		}
+		$this->assertTrue($contains,
+			sprintf("Failed asserting that element contains '%s' '%s' found instead", $needle, $eltText));
 	}
 
 	/**
