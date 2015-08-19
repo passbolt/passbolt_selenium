@@ -717,7 +717,6 @@ GFq/vw==
 		// Do not remove the line below. Without it the test gets stuck without a reason.
 		sleep(5);
 		// Check we are logged in.
-		$this->assertCurrentUrl('');
 		$this->waitCompletion();
 		$this->waitUntilISee('#js_app_controller.ready');
 		// Check that the name is ok.
@@ -787,7 +786,7 @@ GFq/vw==
 		$this->clickLink("Next");
 		// Do not remove line below. Prevents the test to get stuck.
 		sleep(5);
-		$this->assertCurrentUrl('');
+
 		$this->waitCompletion();
 		// Check we are logged in.
 		$this->waitUntilISee('#container.page.password', null, 20);
