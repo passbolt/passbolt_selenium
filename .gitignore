@@ -13,6 +13,7 @@ vendor
 reports/
 
 # plugins
+data/extensions/
 *.xpi
 node_modules/
 

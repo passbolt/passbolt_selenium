@@ -8,6 +8,9 @@ class DebugTest extends PassboltTestCase {
 		$this->assertNoPluginConfig();
 
 		$this->getUrl('debug');
+
+		sleep(2); // plugin need some time to trigger a page change
+
 		try {
 			$this->findByCss('.page.debug.plugin');
 		} catch (NoSuchElementException $e) {

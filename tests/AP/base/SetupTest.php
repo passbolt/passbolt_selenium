@@ -126,7 +126,7 @@ GFq/vw==
 		// Follow the link in the email.
 		$this->followLink("get started");
 		// Test that the url is the plugin one.
-		$this->assertUrlMatch('/resource:\/\/passbolt-firefox-addon-at-passbolt-dot-com\/passbolt-firefox-addon\/data\/setup.html/');
+		$this->assertUrlMatch('/resource:\/\/passbolt-firefox-addon-at-passbolt-dot-com\/data\/setup.html/');
 
 		// Test that the plugin confirmation message is displayed.
 		$this->waitUntilISee('div.plugin-check-wrapper .plugin-check.success', '/Firefox plugin is installed and up to date/i');
