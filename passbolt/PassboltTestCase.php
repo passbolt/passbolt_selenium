@@ -160,4 +160,24 @@ class PassboltTestCase extends WebDriverTestCase {
 		$this->waitCompletion();
 	}
 
+	/**
+	 * Use the debug screen to set the values set by the setup
+	 * @param $user
+	 */
+	public function setClientConfig($config) {
+		$this->getUrl('debug');
+		sleep(2); // plugin need some time to trigger a page change
+
+		$this->inputText('ProfileFirstName',$config['FirstName']);
+		$this->inputText('ProfileLastName',$config['LastName']);
+		$this->inputText('UserUsername',$config['Username']);
+		$this->inputText('securityTokenCode',$config['TokenCode']);
+		$this->inputText('securityTokenColor',$config['TokenColor']);
+		$this->inputText('securityTokenTextColor',$config['TokenTextColor']);
+		$this->click('js_save_conf');
+
+		$key = file_get_contents(GPG_FIXTURES . DS . $config['PrivateKey'] );
+		$this->inputText('keyAscii',$key);
+		$this->click('saveKey');
+	}
 }

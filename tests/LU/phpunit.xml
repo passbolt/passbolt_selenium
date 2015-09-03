@@ -20,8 +20,8 @@
 
     <testsuites>
         <testsuite name="Logged in user with firefox">
-            <directory>./base</directory>
-            <!--file>./base/DebugTest.php</file-->
+            <!--directory>./base</directory-->
+            <file>./base/CreatePasswordTest.php</file>
         </testsuite>
     </testsuites>
 

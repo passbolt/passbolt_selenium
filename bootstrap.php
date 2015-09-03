@@ -8,8 +8,8 @@
  */
 define('ROOT', dirname(__FILE__));
 define('DS', DIRECTORY_SEPARATOR);
-define('DATA', ROOT . DS . 'data');
-define('FIXTURES', DATA . DS . 'fixtures');
-define('GPG_FIXTURES', FIXTURES . DS . 'gpg');
+define('DATA', ROOT . DS . 'data' . DS);
+define('FIXTURES', DATA . 'fixtures' . DS);
+define('GPG_FIXTURES', FIXTURES . 'gpg');
 
 require_once ROOT . '/passbolt/__init__.php';

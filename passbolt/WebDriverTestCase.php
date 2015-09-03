@@ -293,6 +293,15 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
 		}
 	}
 
+	/**
+	 * Tell if an element is visible
+	 * @param $selector
+	 * @return boolean
+	 */
+	public function isVisible($selector) {
+		$element = $this->findByCss($selector);
+		return ($element->isDisplayed());
+	}
 
 	/**
 	 * Wait until I see.
