@@ -98,7 +98,7 @@ GFq/vw==
 		$this->driver->get($setupUrl);
 
 		// Test that the plugin confirmation message is displayed.
-		$this->waitUntilISee('div.plugin-check-wrapper .plugin-check.success', '/Firefox plugin is installed and up to date/i');
+		$this->waitUntilISee('.plugin-check-wrapper .plugin-check.success', '/Firefox plugin is installed and up to date/i');
 
 	}
 
@@ -114,7 +114,7 @@ GFq/vw==
 	 */
 	public function testCanSeeSetupPageWithFirstPluginSection() {
 		// Reset passbolt installation.
-		$reset = $this->PassboltServer->resetDatabase();
+		$reset = $this->PassboltServer->resetDatabase(1);
 		if (!$reset) {
 			$this->fail('Could not reset installation');
 		}
@@ -129,7 +129,7 @@ GFq/vw==
 		$this->assertUrlMatch('/resource:\/\/passbolt-firefox-addon-at-passbolt-dot-com\/data\/setup.html/');
 
 		// Test that the plugin confirmation message is displayed.
-		$this->waitUntilISee('div.plugin-check-wrapper .plugin-check.success', '/Firefox plugin is installed and up to date/i');
+		$this->waitUntilISee('.plugin-check.success', '/Firefox plugin is installed and up to date/i');
 
 		// Test that the domain in the url check textbox is the same as the one configured.
 		$domain = $this->findById("js_setup_domain")->getAttribute('value');
@@ -308,7 +308,7 @@ GFq/vw==
 		$this->waitUntilISee('#js_step_title', '/Let\'s make sure you imported the right key/i');
 		// Assert that there is a warning message
 		$this->assertElementHasClass(
-			$this->findByCss('#js_step_content div.message'),
+			$this->findByCss('#js_step_content .message'),
 			'warning'
 		);
 		$this->assertElementContainsText(
@@ -351,12 +351,12 @@ GFq/vw==
 		$this->waitUntilISee('#js_setup_submit_step.enabled', null, 20);
 		$this->waitUntilISee('#js_step_title', '/Success! Your secret key is ready./i');
 		$this->assertElementHasClass(
-			$this->findByCss('div.plugin-check-wrapper div.message'),
+			$this->findByCss('.plugin-check-wrapper .message'),
 			'success'
 		);
 		// Test that download button is available.
 		$this->assertElementContainsText(
-			$this->findByCss('div.plugin-check-wrapper #js_backup_key_download'),
+			$this->findByCss('.plugin-check-wrapper #js_backup_key_download'),
 			'download'
 		);
 		$this->assertElementHasClass(
@@ -744,7 +744,7 @@ GFq/vw==
 	 */
 	public function testFollowSetupWithImportKey() {
 		// Reset passbolt installation.
-		$reset = $this->PassboltServer->resetDatabase();
+		$reset = $this->PassboltServer->resetDatabase(1);
 		if (!$reset) {
 			$this->fail('Could not reset installation');
 		}

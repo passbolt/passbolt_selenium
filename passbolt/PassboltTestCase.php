@@ -124,7 +124,6 @@ class PassboltTestCase extends WebDriverTestCase {
 	 * Wait until all the currently operations have been completed.
 	 * @param int timeout timeout in seconds
 	 * @return bool
-	 *
 	 * @throws Exception
 	 */
 	public function waitCompletion($timeout = 10) {
@@ -149,7 +148,6 @@ class PassboltTestCase extends WebDriverTestCase {
 
 	/**
 	 * Login on the application with the given user.
-	 *
 	 * @param $email
 	 */
 	public function loginAs($email) {
@@ -162,11 +160,11 @@ class PassboltTestCase extends WebDriverTestCase {
 
 	/**
 	 * Use the debug screen to set the values set by the setup
-	 * @param $user
+	 * @param $config user config (see fixtures)
 	 */
 	public function setClientConfig($config) {
 		$this->getUrl('debug');
-		sleep(2); // plugin need some time to trigger a page change
+		sleep(1); // plugin need some time to trigger a page change
 
 		$this->inputText('ProfileFirstName',$config['FirstName']);
 		$this->inputText('ProfileLastName',$config['LastName']);
@@ -180,4 +178,49 @@ class PassboltTestCase extends WebDriverTestCase {
 		$this->inputText('keyAscii',$key);
 		$this->click('saveKey');
 	}
+
+	/**
+	 * Go to the password workspace and click on teh create password button
+	 */
+	public function gotoCreatePassword() {
+		if(!$this->isVisible('.page.password')) {
+			$this->getUrl('');
+			$this->waitUntilISee('.page.password');
+			$this->waitUntilISee('#js_wk_menu_creation_button');
+		}
+		$this->click('#js_wk_menu_creation_button');
+		$this->assertTrue($this->isVisible('.create-password-dialog'));
+	}
+
+	/**
+	 * Input a given string in the secret field
+	 * @param string $secret
+	 */
+	public function inputSecret($secret) {
+		$this->goIntoSecretIframe();
+		$this->inputText('js_secret', $secret);
+		$this->goOutSecretIframe();
+	}
+
+	/**
+	 * Put the focus inside the secret iframe
+	 */
+	public function goIntoSecretIframe() {
+		$this->driver->switchTo()->frame('passbolt-iframe-secret-edition');
+	}
+
+	/**
+	 * Put the focus back to the normal context
+	 */
+	public function goOutOfIframe() {
+		$this->driver->switchTo()->defaultContent();
+	}
+
+	/**
+	 * Dig into the master password iframe
+	 */
+	public function goIntoMasterPasswordIframe() {
+		$this->driver->switchTo()->frame('passbolt-iframe-master-password');
+	}
+
 }

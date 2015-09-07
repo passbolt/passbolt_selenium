@@ -13,6 +13,7 @@ if(!defined ('ROOT')) {
 // Utility clases
 require_once('String.php');
 require_once('Hash.php');
+require_once('Color.php');
 require_once('Config.php');
 Config::get();
 
@@ -28,3 +29,5 @@ require_once('PassboltSetupTestCase.php');
 
 // Fixtures classes
 require_once(FIXTURES . 'Users.php');
+require_once(FIXTURES . 'Resources.php');
+require_once(FIXTURES . 'SystemDefaults.php');

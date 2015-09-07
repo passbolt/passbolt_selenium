@@ -13,6 +13,7 @@ class User {
                     'FirstName' => 'Ada',
                     'LastName' => 'Lovelace',
                     'Username' => 'ada@passbolt.com',
+                    'MasterPassword' => 'ada@passbolt.com',
                     'TokenCode' => 'ADA',
                     'PrivateKey' => 'ada_private.key'
                 ));
@@ -22,6 +23,7 @@ class User {
                     'FirstName' => 'Betty',
                     'LastName' => 'Holberton',
                     'Username' => 'betty@passbolt.com',
+                    'MasterPassword' => 'betty@passbolt.com',
                     'TokenCode' => 'BET',
                     'PrivateKey' => 'betty_private.key'
                 ));
@@ -31,6 +33,7 @@ class User {
                     'FirstName' => 'Carol',
                     'LastName' => 'Shaw',
                     'Username' => 'carol@passbolt.com',
+                    'MasterPassword' => 'carol@passbolt.com',
                     'TokenCode' => 'CAR',
                     'PrivateKey' => 'carol_private.key'
                 ));

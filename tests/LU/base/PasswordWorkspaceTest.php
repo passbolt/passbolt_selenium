@@ -145,7 +145,7 @@ class PasswordWorkspaceTest extends PassboltTestCase
 		// I click on the shared with me filter
 		$this->clickLink("Shared with me");
 		$this->waitCompletion();
-		// I should only see the passwords that have been share with me
+		// I should only see the passwords that have been shared with me
 		$passwords = ['shared resource', 'op1-pwd1', 'op1-pwd2'];
 		for ($i = 0; $i < count($passwords); $i++) {
 			$this->assertElementContainsText(

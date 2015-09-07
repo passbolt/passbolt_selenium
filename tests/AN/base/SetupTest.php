@@ -21,7 +21,7 @@ class SetupTest extends PassboltSetupTestCase {
 	 */
 	public function testCanSeeSetupPage() {
 		// Reset passbolt installation.
-		$reset = $this->PassboltServer->resetDatabase();
+		$reset = $this->PassboltServer->resetDatabase(1);
 		if (!$reset) {
 			$this->fail('Could not reset installation');
 		}
@@ -45,7 +45,7 @@ class SetupTest extends PassboltSetupTestCase {
 		$this->assertTitleEquals('Welcome to passbolt! Let\'s take 5 min to setup your system.');
 		// Assert that there is a warning message regarding plugin.
 		$this->assertElementContainsText(
-			$this->findByCss('div.plugin-check-wrapper .plugin-check.error'),
+			$this->findByCss('.plugin-check-wrapper .plugin-check.error'),
 			'An add-on is required to use Passbolt.'
 		);
 	}
@@ -56,7 +56,7 @@ class SetupTest extends PassboltSetupTestCase {
 	 * Then         I should reach an error page with text "Token not found"
 	 */
 	public function testCannotSeeSetupPageWithInvalidInformation() {
-		$reset = $this->PassboltServer->resetDatabase();
+		$reset = $this->PassboltServer->resetDatabase(1);
 		if (!$reset) {
 			$this->fail('Could not reset installation');
 		}
