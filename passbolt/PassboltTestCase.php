@@ -199,7 +199,7 @@ class PassboltTestCase extends WebDriverTestCase {
 	public function inputSecret($secret) {
 		$this->goIntoSecretIframe();
 		$this->inputText('js_secret', $secret);
-		$this->goOutSecretIframe();
+		$this->goOutOfIframe();
 	}
 
 	/**
