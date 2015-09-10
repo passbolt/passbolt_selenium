@@ -138,7 +138,7 @@ class PasswordCopyToClipboardTest extends PassboltTestCase
         $this->rightClick($resource[0]['id']);
 
         // When I click on the 'Copy URI' in the contextual menu
-        $this->clickLink('Copy URL');
+        $this->clickLink('Copy URI');
 
         // Then I can see a success message saying the URI was copied to clipboard
         $this->isVisible('.notification-container .message.success');
