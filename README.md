@@ -6,6 +6,10 @@ This project is the functional testsuite of Passbolt. It is based on Selenium, P
 Checkout [passbolt.com](http://www.passbolt.com) for more information
 
 
+## License
+GPL v3 License, see [License](license.md). Unless mentioned otherwise in the individual source files.
+
+
 ## About Facebook php-webdriver
 
 This WebDriver client is a driver developped by Facebook. It aims to be as close as possible to bindings in other languages.
