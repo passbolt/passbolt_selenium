@@ -158,9 +158,13 @@ class PassboltTestCase extends WebDriverTestCase {
 		$this->waitCompletion();
 	}
 
+	public function logout() {
+		$this->getUrl('logout');
+	}
+
 	/**
 	 * Use the debug screen to set the values set by the setup
-	 * @param $config user config (see fixtures)
+	 * @param $config array user config (see fixtures)
 	 */
 	public function setClientConfig($config) {
 		$this->getUrl('debug');

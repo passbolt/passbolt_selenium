@@ -1,6 +1,10 @@
 <?php
 class User {
 
+    /**
+     * @param $name
+     * @return array
+     */
     static function get($name) {
         $conf = array(
             'TokenColor' => '#ff3a3a',

@@ -24,6 +24,7 @@ class Resource {
     }
 
     /**
+     * Get many resources for a given username
      * @param $username
      * @return array
      */
@@ -51,14 +52,30 @@ class Resource {
     }
 
     /**
-     * @param $username
-     * @param $permission
+     * Get one resource for a given permission
+     * @param $r array resources
+     * @param $permission string read|share|admin|deny
      * @return mixed
      */
     static function _getByPermission($r, $permission) {
         foreach ($r as $i => $resource ) {
             if ($resource['permission'] == $permission) {
                 return $resource;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Get one resource by it's UUID
+     * @param $r array resources
+     * @param $id
+     * @return mixed
+     */
+    static function _getById($r, $id) {
+        foreach ($r as $i => $rid) {
+            if ($r[$i]['id'] = $id) {
+                return $r[$i];
             }
         }
         return false;
@@ -77,11 +94,16 @@ class Resource {
         }
         $r = self::_getByUsername($conditions['user']);
 
-        // filter by permission if needed
-        if (!isset($conditions['permission']) && $r!==false) {
-            $r = $r[0];
-        } elseif ($r!==false) {
-            $r = self::_getByPermission($r,$conditions['permission']);
+        // filter by id if needed
+        if (isset($conditions['id'])) {
+            $r = self::_getById($r, $conditions['id']);
+        } else {
+            // filter by permission if needed
+            if (!isset($conditions['permission']) && $r!==false) {
+                $r = $r[0];
+            } elseif ($r!==false) {
+                $r = self::_getByPermission($r, $conditions['permission']);
+            }
         }
 
         if ($r === false) {
