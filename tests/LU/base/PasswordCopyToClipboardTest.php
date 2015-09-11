@@ -8,6 +8,13 @@
  * As a user I can copy the URI of one resource to clipboard with a right click
  * As a user I can copy the username of one resource to clipboard with a right click
  *
+ *
+ * @TODO Missing scenarios
+ * As a user I should see errors when entering the wrong master key while trying to copy my password to clipboard
+ * I can close the master password dialog using cancel or escape or the close button
+ * Using more > copy to clipboard button
+ * I can open the url of a resource in a new tab
+ *
  * @copyright    (c) 2015-present Bolt Software Pvt. Ltd.
  * @licence      GPLv3 onwards www.gnu.org/licenses/gpl-3.0.en.html
  */
@@ -28,14 +35,14 @@ class PasswordCopyToClipboardTest extends PassboltTestCase
     function testCopyContextualMenu() {
         // Given I am Betty
         $user = User::get('betty');
-        $resource = Resource::get('betty');
+        $resource = Resource::get(array('user' => 'betty'));
         $this->setClientConfig($user);
 
         // And I am logged in on the password workspace
         $this->loginAs($user['Username']);
 
         // When I right click on the first password in the list
-        $this->rightClick($resource[0]['id']);
+        $this->rightClick($resource['id']);
 
         // Then I can see the contextual menu
         $e = $this->findById('js_contextual_menu');
@@ -69,7 +76,7 @@ class PasswordCopyToClipboardTest extends PassboltTestCase
     public function testCopyPasswordToClipboard() {
         // Given I am Betty
         $user = User::get('betty');
-        $resource = Resource::get('betty');
+        $resource = Resource::get(array('user' => 'betty'));
         $this->setClientConfig($user);
 
         // And the database is in a clean state
@@ -79,10 +86,10 @@ class PasswordCopyToClipboardTest extends PassboltTestCase
         $this->loginAs($user['Username']);
 
         // When I select the first password in the list
-        $this->click('multiple_select_checkbox_' . $resource[0]['id']);
+        $this->click('multiple_select_checkbox_' . $resource['id']);
 
         // And I right click
-        $this->rightClick($resource[0]['id']);
+        $this->rightClick($resource['id']);
 
         // Then I can see the contextual menu
         $this->assertTrue($this->isVisible('js_contextual_menu'));
@@ -111,7 +118,7 @@ class PasswordCopyToClipboardTest extends PassboltTestCase
         $action->sendKeys($e, array(WebDriverKeys::CONTROL,'v'))->perform();
 
         // Then I can see it is the right one
-        $this->assertTrue($e->getAttribute('value') == $resource[0]['password']);
+        $this->assertTrue($e->getAttribute('value') == $resource['password']);
     }
 
     /**
@@ -128,14 +135,14 @@ class PasswordCopyToClipboardTest extends PassboltTestCase
     function testCopyURIToClipboard () {
         // Given I am Betty
         $user = User::get('betty');
-        $resource = Resource::get('betty');
+        $resource = Resource::get(array('user' => 'betty'));
         $this->setClientConfig($user);
 
         // And I am logged in on the password workspace
         $this->loginAs($user['Username']);
 
         // When I right click on the first password in the list
-        $this->rightClick($resource[0]['id']);
+        $this->rightClick($resource['id']);
 
         // When I click on the 'Copy URI' in the contextual menu
         $this->clickLink('Copy URI');
@@ -151,7 +158,7 @@ class PasswordCopyToClipboardTest extends PassboltTestCase
         $action->sendKeys($e, array(WebDriverKeys::CONTROL,'v'))->perform();
 
         // Then I can see it is the right one
-        $this->assertTrue($e->getAttribute('value') == $resource[0]['uri']);
+        $this->assertTrue($e->getAttribute('value') == $resource['uri']);
     }
 
     /**
@@ -168,14 +175,14 @@ class PasswordCopyToClipboardTest extends PassboltTestCase
     function testCopyUsernameToClipboard() {
         // Given I am Betty
         $user = User::get('betty');
-        $resource = Resource::get('betty');
+        $resource = Resource::get(array('user' => 'betty'));
         $this->setClientConfig($user);
 
         // And I am logged in on the password workspace
         $this->loginAs($user['Username']);
 
         // When I right click on the first password in the list
-        $this->rightClick($resource[0]['id']);
+        $this->rightClick($resource['id']);
 
         // When I click on the link 'copy URI' in the contextual menu
         $this->clickLink('Copy username');
@@ -191,12 +198,7 @@ class PasswordCopyToClipboardTest extends PassboltTestCase
         $action->sendKeys($e, array(WebDriverKeys::CONTROL,'v'))->perform();
 
         // Then I can see it is the right one
-        $this->assertTrue($e->getAttribute('value') == $resource[0]['username']);
+        $this->assertTrue($e->getAttribute('value') == $resource['username']);
     }
 
-    // @TODO
-    // As a user I should see errors when entering the wrong master key while trying to copy my password to clipboard
-    // I can close the master password dialog using cancel or escape or the close button
-    // Using more > copy to clipboard button
-    // I can open the url of a resource in a new tab
 }

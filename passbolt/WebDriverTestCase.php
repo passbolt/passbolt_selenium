@@ -342,21 +342,25 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
 
     /**
      * Tell if an element is not visible or not present
-     * @param $selector
+     * @param $id
      * @return boolean
      */
-    public function isNotVisible($selector) {
+    public function isNotVisible($id) {
         try {
-            $element = $this->findByCss($selector);
-            return (!$element->isDisplayed());
-        } catch (NoSuchElementException $e){
-            return true; //couldnt find it means not visible too
+            $element = $this->driver->findElement(WebDriverBy::id($id));
+        } catch (NoSuchElementException $e) {
+            try {
+                $element = $this->driver->findElement(WebDriverBy::cssSelector($id));
+            } catch (exception $e) {
+               return true; // not found == not visible
+            }
         }
+        return (!$element->isDisplayed());
     }
 
     /**
      * Wait until I see.
-     * @param            $cssSelector
+     * @param $cssSelector
      * @param null $regexp
      * @param int timeout timeout in seconds
      * @return bool if element is found

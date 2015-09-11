@@ -223,4 +223,15 @@ class PassboltTestCase extends WebDriverTestCase {
 		$this->driver->switchTo()->frame('passbolt-iframe-master-password');
 	}
 
+	/**
+	 * Check if a success notification is displayed
+	 * @param null $msg optional
+	 */
+	public function assertNotificationSuccess($msg = null) {
+		$this->waitUntilISee('.notification-container .message');
+		$this->assertTrue($this->isVisible('.notification-container .message.success'));
+		if (isset($msg)) {
+			$this->assertElementContainsText('.notification-container .message.success',$msg);
+		}
+	}
 }
