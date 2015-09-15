@@ -92,13 +92,13 @@ class PasswordCopyToClipboardTest extends PassboltTestCase
         $this->rightClick($resource['id']);
 
         // Then I can see the contextual menu
-        $this->assertTrue($this->isVisible('js_contextual_menu'));
+        $this->assertVisible('js_contextual_menu');
 
         // When I click on the link 'copy password'
         $this->clickLink('Copy password');
 
         // Then I can see the master key dialog
-        $this->assertTrue($this->isVisible('passbolt-iframe-master-password'));
+        $this->assertVisible('passbolt-iframe-master-password');
         $this->goIntoMasterPasswordIframe();
 
         // When I enter my master password

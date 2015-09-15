@@ -1,11 +1,11 @@
 <?php
 /**
- * Feature :  As a user I should be able to delete passwords
+ * Feature :  As a user I can delete passwords
  *
  * Scenarios
- * As a user I should be able delete a password using a right click
- * As a user I should be able delete a password using the button in the action bar
- * As user B I should be able to see a password that user A shared with me and deleted.
+ * As a user I can delete a password using a right click
+ * As a user I can delete a password using the button in the action bar
+ * As user B I can see a password that user A shared with me and deleted.
  * As a user I should not be able to delete a password when I have read access
  *
  * @copyright    (c) 2015-present Bolt Software Pvt. Ltd.
@@ -14,7 +14,7 @@
 class PasswordDeleteTest extends PassboltTestCase
 {
     /**
-     * Scenario: As a user I should be able delete a password using a right click
+     * Scenario: As a user I can delete a password using a right click
      *
      * And      I am Ada
      * And      the database is in the default state
@@ -50,7 +50,7 @@ class PasswordDeleteTest extends PassboltTestCase
     }
 
     /**
-     * Scenario: As a user I should be able delete a password using the button in the action bar
+     * Scenario: As a user I can delete a password using the button in the action bar
      *
      * And      I am Ada
      * And      the database is in the default state
@@ -86,7 +86,7 @@ class PasswordDeleteTest extends PassboltTestCase
     }
 
     /**
-     * Scenario: As a user B I should be able to see a password that user A shared with me and deleted.
+     * Scenario: As a user B I can see a password that user A shared with me and deleted.
      *
      * Given    I am Betty
      * And      the database is in the default state
@@ -117,7 +117,7 @@ class PasswordDeleteTest extends PassboltTestCase
 
         // Then I can see a password shared with ada in the list
         $resource = Resource::get(array('user' => 'ada', 'id' => '50d77ffb-d254-49e4-ac86-1b63d7a10fce'));
-        $this->assertTrue($this->isVisible($resource['id']));
+        $this->assertVisible($resource['id']);
 
         // When I logout
         $this->logout();
@@ -130,7 +130,7 @@ class PasswordDeleteTest extends PassboltTestCase
         $this->loginAs($userA['Username']);
 
         // When I click on the password shared with betty
-        $this->assertTrue($this->isVisible($resource['id']));
+        $this->assertVisible($resource['id']);
         $this->click($resource['id']);
 
         // And I click on the delete button
@@ -140,7 +140,7 @@ class PasswordDeleteTest extends PassboltTestCase
         $this->assertNotificationSuccess('successfully deleted');
 
         // And I should not see the password in the list anymore
-        $this->assertTrue($this->isNotVisible($resource['id']));
+        $this->assertNotVisible($resource['id']);
 
         // When I logout
         $this->logout();
@@ -152,7 +152,7 @@ class PasswordDeleteTest extends PassboltTestCase
         $this->loginAs($userB['Username']);
 
         // And I should not see the password deleted by ada in the list anymore
-        $this->assertTrue($this->isNotVisible($resource['id']));
+        $this->assertNotVisible($resource['id']);
     }
 
     /**
@@ -185,13 +185,13 @@ class PasswordDeleteTest extends PassboltTestCase
         $resource = Resource::get(array('user' => 'betty', 'permission' => 'read'));
 
         // Then I should see that the delete button is disabled
-        $this->assertTrue($this->isVisible('#js_wk_menu_deletion_button.disabled'));
+        $this->assertVisible('#js_wk_menu_deletion_button.disabled');
 
         // When I click on the delete button
         $this->click('js_wk_menu_deletion_button');
 
         // Then I can still see the password in the list
-        $this->assertTrue($this->isVisible($resource['id']));
+        $this->assertVisible($resource['id']);
 
         // When I right click on the password I have view right
         $this->rightClick($resource['id']);
@@ -204,6 +204,6 @@ class PasswordDeleteTest extends PassboltTestCase
         $this->clickLink('Delete');
 
         // Then I can still see the password in the list
-        $this->assertTrue($this->isVisible($resource['id']));
+        $this->assertVisible($resource['id']);
     }
 }

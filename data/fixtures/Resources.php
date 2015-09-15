@@ -10,14 +10,18 @@ class Resource {
                 'username' => 'admin',
                 'name' => 'dp1-pwd1',
                 'password' => 'sunshine',
-                'uri' => 'http://drupal.project1.net/'
+                'uri' => 'http://drupal.project1.net/',
+                'complexity' => 'very weak',
+                'description' => 'dp1-pwd1 description'
             ),
             1 => array (
                 'id' => '50d77ffb-d290-49e4-ac86-1b63d7a10fce',
                 'name' => 'dp2-pwd1',
                 'username' => 'admin',
                 'password' => 'princess',
-                'uri' => 'http://drupal.project1.net/'
+                'uri' => 'http://drupal.project1.net/',
+                'complexity' => 'very weak',
+                'description' => 'dp2-pwd1 description'
             )
         );
         return $r;

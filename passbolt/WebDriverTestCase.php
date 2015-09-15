@@ -429,6 +429,7 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
      * @param $cssSelector
      */
     public function assertPageContainsElement($cssSelector) {
+        // todo find by id first
         try {
             $this->findByCss($cssSelector);
         } catch (NoSuchElementException $e) {
@@ -501,4 +502,36 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
         $this->assertFalse($contains, sprintf("Failed asserting that element has not the class '%s'", $className));
     }
 
+    /**
+     * Assert if an element identified via its id is visible
+     * @param $id
+     */
+    public function assertVisible($id) {
+        $this->assertTrue($this->isVisible($id));
+    }
+
+    /**
+     * Assert if an element identified by its id is not visible or not present
+     * @param $id
+     */
+    public function assertNotVisible($id) {
+        $this->assertTrue($this->isNotVisible($id));
+    }
+
+    /**
+     * @param $id string id or css path
+     * @param $value
+     */
+    public function assertInputValue($id, $value) {
+        try {
+            $el = $this->findById($id);
+        } catch(exception $e) {
+            try {
+                $el = $this->findByCss($id);
+            } catch (exception $e) {
+                $this->fail('Can not assert input value of not found element' . $id );
+            }
+        }
+        $this->assertTrue($el->getAttribute('value') == $value);
+    }
 }

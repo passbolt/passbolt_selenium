@@ -193,7 +193,7 @@ class PassboltTestCase extends WebDriverTestCase {
 			$this->waitUntilISee('#js_wk_menu_creation_button');
 		}
 		$this->click('#js_wk_menu_creation_button');
-		$this->assertTrue($this->isVisible('.create-password-dialog'));
+		$this->assertVisible('.create-password-dialog');
 	}
 
 	/**
@@ -233,9 +233,45 @@ class PassboltTestCase extends WebDriverTestCase {
 	 */
 	public function assertNotificationSuccess($msg = null) {
 		$this->waitUntilISee('.notification-container .message');
-		$this->assertTrue($this->isVisible('.notification-container .message.success'));
+		$this->assertVisible('.notification-container .message.success');
 		if (isset($msg)) {
 			$this->assertElementContainsText('.notification-container .message.success',$msg);
 		}
+	}
+
+	/**
+	 * Try to open the a password edit dialog
+	 * You must be on the password workspace
+	 * @param $id uuid
+	 */
+	public function assertEditPasswordDialog($id) {
+		$this->rightClick($id);
+		$this->click('js_wk_menu_edition_button');
+		$this->waitCompletion();
+		$this->assertVisible('.edit-password-dialog');
+	}
+
+	/**
+	 * Assert if a security token match user parameters
+	 * @param $user array see fixtures
+	 */
+	public function assertSecurityToken($user) {
+		$this->assertVisible('.security-token');
+		$t = $this->findByCss('.security-token');
+		$this->assertElementContainsText($t, $user['TokenCode']);
+		$this->assertEquals(Color::toHex($t->getCssValue("background-color")), $user['TokenColor']);
+		$this->assertEquals(Color::toHex($t->getCssValue("color")), $user['TokenTextColor']);
+	}
+
+	/**
+	 * Check if the complexity indicators match a given strength (creation/edition context)
+	 * @param $strength string
+	 */
+	public function assertComplexity($strength) {
+		$class = str_replace(' ','_',$strength);
+		$this->assertVisible('#js_secret_strength .progress-bar.'.$class);
+		$this->assertVisible('#js_secret_strength .complexity-text');
+		$this->assertElementContainsText('#js_secret_strength .complexity-text', 'complexity: '.$strength);
+
 	}
 }
