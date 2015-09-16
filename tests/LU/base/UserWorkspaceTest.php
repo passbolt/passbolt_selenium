@@ -18,12 +18,13 @@ class UserWorkspaceTest extends PassboltTestCase
 	protected function setUp()
 	{
 		parent::setUp();
-		// Reset passbolt installation with dummies.
+		// Reset passbolt installation with dummies between each tests
 		$this->PassboltServer->resetDatabase(1);
 	}
 
 	/**
 	 * Scenario :   As a user I should be able to see the user workspace
+	 *
 	 * Given        I am logged in as Carol Shaw, and I go to the user workspace
 	 * Then			I should not see the workspace primary menu
 	 * And			I should see the workspace secondary menu
@@ -110,6 +111,7 @@ class UserWorkspaceTest extends PassboltTestCase
 
 	/**
 	 * Scenario :   As a user I should be able to filter the users
+	 *
 	 * Given        I am logged in as Carol Shaw, and I go to the user workspace
 	 * When			I click on the recently modified filter
 	 * Then			I should see the users ordered my modification date
@@ -136,6 +138,7 @@ class UserWorkspaceTest extends PassboltTestCase
 
 	/**
 	 * Scenario :   As a user I should be able to view the user details
+	 *
 	 * Given        I am logged in as Carol, and I go to the user workspace
 	 * When			I click on a user
 	 * Then 		I should see a secondary side bar appearing
@@ -148,7 +151,7 @@ class UserWorkspaceTest extends PassboltTestCase
 		$this->gotoWorkspace('user');
 
 		// I click on a user
-		$this->clickElement("#js_wsp_users_browser .tableview-content div[title='Betty Holberton']");
+		$this->click("#js_wsp_users_browser .tableview-content div[title='Betty Holberton']");
 		$this->waitCompletion();
 
 		// I should see a secondary side bar appearing
@@ -211,6 +214,7 @@ class UserWorkspaceTest extends PassboltTestCase
 
 	/**
 	 * Scenario :   As a user I should be able to search a user by keywords
+	 *
 	 * Given        I am logged in as Carol, and I go to the user workspace
 	 * When			I fill the "app search" field with "User Test"
 	 * And			I click "search"
@@ -244,7 +248,7 @@ class UserWorkspaceTest extends PassboltTestCase
 
 		// I fill the "app search" field with "tetris license"
 		$this->inputText('js_app_filter_keywords', $searchUser);
-		$this->clickElement("#js_app_filter_form button[value='search']");
+		$this->click("#js_app_filter_form button[value='search']");
 		$this->waitCompletion();
 
 		// I should see the view filtered with my search

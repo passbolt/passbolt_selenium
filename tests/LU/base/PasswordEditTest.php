@@ -8,13 +8,17 @@
  * As a user I can open close the edit password dialog
  * As a user I can see the edit password dialog content
  * As a user I can edit the name of a password I have own
+ * As a user I can see the current password complexity when editing a password
  *
  * TODO:
+ * As a user I can edit the description of a password I have own
+ * As a user I can edit the uri of a password I have own
+ * As a user I can edit the password of a password I have own
  * As a user I can see error messages when editing a password with wrong inputs
  * As a user I can generate a password automatically
  * As a user I can view my password in clear text
  * As a user I can not edit a password I have only read access to
- * As a user I can see the current password complexity when editing a password
+ * As user B I can see the changes are reflected when user A is editing a password we share
  *
  * @copyright    (c) 2015-present Bolt Software Pvt. Ltd.
  * @licence      GPLv3 onwards www.gnu.org/licenses/gpl-3.0.en.html
@@ -124,7 +128,7 @@ class PasswordEditTest extends PassboltTestCase
 
         // And I am editing a password I own
         $resource = Resource::get(array('user' => 'ada', 'permission' => 'admin'));
-        $this->assertEditPasswordDialog($resource['id']);
+        $this->gotoEditPassword($resource['id']);
 
         // When I click on the cancel button
         $this->click('.edit-password-dialog .js-dialog-cancel');
@@ -133,7 +137,7 @@ class PasswordEditTest extends PassboltTestCase
         $this->assertTrue($this->isNotVisible('.edit-password-dialog'));
 
         // When I reopen the edit password dialog
-        $this->assertEditPasswordDialog($resource['id']);
+        $this->gotoEditPassword($resource['id']);
 
         // And I click on the close dialog button (in the top right corner)
         $this->click('.edit-password-dialog .dialog-close');
@@ -142,7 +146,7 @@ class PasswordEditTest extends PassboltTestCase
         $this->assertTrue($this->isNotVisible('.edit-password-dialog'));
 
         // When I reopen the edit password dialog
-        $this->assertEditPasswordDialog($resource['id']);
+        $this->gotoEditPassword($resource['id']);
 
         // And I press the escape button
         $this->pressEscape();
@@ -199,7 +203,7 @@ class PasswordEditTest extends PassboltTestCase
 
         // And I am editing a password I own
         $resource = Resource::get(array('user' => 'ada', 'permission' => 'admin'));
-        $this->assertEditPasswordDialog($resource['id']);
+        $this->gotoEditPassword($resource['id']);
 
         // Then I should see the edit password dialog
         $this->assertVisible('.edit-password-dialog');
@@ -302,6 +306,7 @@ class PasswordEditTest extends PassboltTestCase
 
     /**
      * Scenario: As a user I can edit the name of a password I have own
+     * Regression: PASSBOLT-1038
      *
      * Given    I am Ada
      * And      the database is in the default state
@@ -331,15 +336,12 @@ class PasswordEditTest extends PassboltTestCase
 
         // And I am editing a password I own
         $resource = Resource::get(array('user' => 'ada', 'permission' => 'admin'));
-        $this->assertEditPasswordDialog($resource['id']);
+        $this->gotoEditPassword($resource['id']);
 
         // When I click on name input text field
         $this->click('js_field_name');
 
         // And I empty the name input text field value
-        $this->findById('js_field_name')->clear();
-        $this->assertInputValue('js_field_name','');
-
         // And I enter a new value
         $newname = 'New password name';
         $this->inputText('js_field_name',$newname);
@@ -368,39 +370,60 @@ class PasswordEditTest extends PassboltTestCase
     }
 
     /**
-     * Scenario: As a user I can see error messages when editing a password with wrong inputs
-     */
-    public function testEditPasswordValidationErrors() {
-
-    }
-
-    /**
-     * Scenario: As a user I can generate a password automatically
-     */
-    public function testEditPasswordGenerateAuto() {
-
-    }
-
-    /**
-     * Scenario: As a user I can view my password in clear text
-     */
-    public function testEditPasswordViewInClear() {
-
-    }
-
-    /**
-     * Scenario: As a user I can not edit a password I have only read access to
-     */
-    public function testCannotEditPasswordWithReadAccess() {
-
-    }
-
-    /**
      * Scenario: As a user I can see the current password complexity when editing a password
+     * Regression: PASSBOLT-1039
+     *
+     * Given    I am Ada
+     * And      the database is in the default state
+     * And      I am logged in on the password workspace
+     * When     I create a password with very strong complexity
+     * And      I edit the password I just created
+     * Then     I can see the complexity is set to very strong in the edit password screen
      */
     public function testEditPasswordComplexityCheck() {
-        // I create a password with very strong complexity
-        // I edit the password
-        // I can see the complexity is set to very strong in the edit password screen
+        // Given I am Ada
+        $user = User::get('ada');
+        $this->setClientConfig($user);
+
+        // And the database is in the default state
+        $this->PassboltServer->resetDatabase(1);
+
+        // And I am logged in on the password workspace
+        $this->loginAs($user['Username']);
+
+        // When I create a password with very strong complexity
+        $password = array(
+            'name'       => 'strongcomplexity',
+            'complexity' => 'very strong',
+            'username'   => 'supastrong',
+            'password'   => 'YVhI[[gbPNt5,o{SwA:S&P]@(gdl'
+        );
+        $this->createPassword($password);
+
+        // When I edit the password I just created
+        $elt = $this->driver->findElement(WebDriverBy::xpath("//*[contains(text(),'".$password['name']."')]"));
+        $elt->click();
+        $this->click('js_wk_menu_edition_button');
+
+        // Then I can see the complexity is set to very strong in the edit password screen
+        $this->assertVisible('.edit-password-dialog');
+        $this->assertComplexity('very strong');
     }
+
+    /**
+     * Scenario: As a user I can edit the description of a password I have own
+     */
+    public function testEditPasswordDescription() {
+
+    }
+
+/* TODO
+* As a user I can edit the uri of a password I have own
+* As a user I can edit the password of a password I have own
+* As a user I can see error messages when editing a password with wrong inputs
+* As a user I can generate a password automatically
+* As a user I can view my password in clear text
+* As a user I can not edit a password I have only read access to
+* As user B I can see the changes are reflected when user A is editing a password we share
+*/
 }

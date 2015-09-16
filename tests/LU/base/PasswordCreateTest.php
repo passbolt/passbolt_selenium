@@ -260,7 +260,7 @@ class PasswordCreateTest extends PassboltTestCase
         $this->inputText('js_field_description', '&');
 
         // And I click save
-        $this->clickElement('.create-password-dialog input[type=submit]');
+        $this->click('.create-password-dialog input[type=submit]');
 
         // Then I should see an error message saying that the name contain invalid characters
         $this->assertVisible('#js_field_name_feedback.error.message');
@@ -334,7 +334,7 @@ class PasswordCreateTest extends PassboltTestCase
         $this->inputText('js_field_description', 'localhost ftp test account');
 
         // When I click on the save button
-        $this->clickElement('.create-password-dialog input[type=submit]');
+        $this->click('.create-password-dialog input[type=submit]');
 
         // I should see a notice message that the operation was a success
         $this->waitUntilISee('.notification-container', '/The resource was successfully saved/i');

@@ -181,7 +181,7 @@ class PasswordWorkspaceTest extends PassboltTestCase
         $this->loginAs('ada@passbolt.com');
 
         // I click on a password
-        $this->clickElement("#js_wsp_pwd_browser .tableview-content div[title='shared resource']");
+        $this->click("#js_wsp_pwd_browser .tableview-content div[title='shared resource']");
         $this->waitCompletion();
 
         // I should see a secondary side bar appearing
@@ -317,7 +317,7 @@ class PasswordWorkspaceTest extends PassboltTestCase
 
         // I fill the "app search" field with "shared resource"
         $this->inputText('js_app_filter_keywords', $searchPwd);
-        $this->clickElement("#js_app_filter_form button[value='search']");
+        $this->click("#js_app_filter_form button[value='search']");
         $this->waitCompletion();
 
         // I should see the view filtered with my search

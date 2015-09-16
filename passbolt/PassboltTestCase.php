@@ -11,12 +11,18 @@ class PassboltTestCase extends WebDriverTestCase {
 	// PassboltServer.
 	protected $PassboltServer = null;
 
+	/**
+	 * Executed before every tests
+	 */
 	protected function setUp() {
 		parent::setUp();
 		$this->PassboltServer = new PassboltServer(Config::read('passbolt.url'));
 		$this->driver->manage()->window()->maximize();
 	}
 
+	/********************************************************************************
+	 * Passbolt Application Helpers
+	 ********************************************************************************/
 	/**
 	 * Goto a given url
 	 * @param $url
@@ -37,10 +43,177 @@ class PassboltTestCase extends WebDriverTestCase {
 				$linkCssSelector = '#js_app_nav_left_' . $name . '_wsp_link a';
 				break;
 		}
-		$this->clickElement($linkCssSelector);
+		$this->click($linkCssSelector);
 		$this->waitCompletion();
 	}
 
+	/**
+	 * Wait until all the currently operations have been completed.
+	 * @param int timeout timeout in seconds
+	 * @return bool
+	 * @throws Exception
+	 */
+	public function waitCompletion($timeout = 10) {
+		$ex = null;
+
+		for ($i = 0; $i < $timeout * 10; $i++) {
+			try {
+				$elt = $this->findByCss('html.loaded');
+				if(count($elt)) {
+					return true;
+				}
+			}
+			catch (Exception $e) {
+				$ex = $e;
+			}
+			usleep(100000); // Sleep 1/10 seconds
+		}
+
+		$backtrace = debug_backtrace();
+		throw new Exception( "Timeout thrown by " . $backtrace[1]['class'] . "::" . $backtrace[1]['function'] . "()\n .");
+	}
+
+	/**
+	 * Login on the application with the given user.
+	 * @param $email
+	 */
+	public function loginAs($email) {
+		$this->getUrl('login');
+		$this->inputText('UserUsername', $email);
+		$this->inputText('UserPassword', 'password');
+		$this->pressEnter();
+		$this->waitCompletion();
+	}
+
+	public function logout() {
+		$this->getUrl('logout');
+	}
+
+	/**
+	 * Use the debug screen to set the values set by the setup
+	 * @param $config array user config (see fixtures)
+	 */
+	public function setClientConfig($config) {
+		$this->getUrl('debug');
+		sleep(1); // plugin need some time to trigger a page change
+
+		$this->inputText('ProfileFirstName',$config['FirstName']);
+		$this->inputText('ProfileLastName',$config['LastName']);
+		$this->inputText('UserUsername',$config['Username']);
+		$this->inputText('securityTokenCode',$config['TokenCode']);
+		$this->inputText('securityTokenColor',$config['TokenColor']);
+		$this->inputText('securityTokenTextColor',$config['TokenTextColor']);
+		$this->click('js_save_conf');
+
+		$key = file_get_contents(GPG_FIXTURES . DS . $config['PrivateKey'] );
+		$this->inputText('keyAscii',$key);
+		$this->click('saveKey');
+	}
+
+	/**
+	 * Go to the password workspace and click on the create password button
+	 */
+	public function gotoCreatePassword() {
+		if(!$this->isVisible('.page.password')) {
+			$this->getUrl('');
+			$this->waitUntilISee('.page.password');
+			$this->waitUntilISee('#js_wk_menu_creation_button');
+		}
+		$this->click('#js_wk_menu_creation_button');
+		$this->assertVisible('.create-password-dialog');
+	}
+
+	/**
+	 * Goto the edit password dialog for a given resource id
+	 * @param $id string
+	 * @throws Exception
+	 */
+	public function gotoEditPassword($id) {
+		if(!$this->isVisible('.page.password')) {
+			$this->getUrl('');
+			$this->waitUntilISee('.page.password');
+			$this->waitUntilISee('#js_wk_menu_edition_button');
+		}
+		$this->click($id);
+		$this->click('js_wk_menu_edition_button');
+		$this->waitCompletion();
+		$this->assertVisible('.edit-password-dialog');
+	}
+
+	/**
+	 * Input a given string in the secret field
+	 * @param string $secret
+	 */
+	public function inputSecret($secret) {
+		$this->goIntoSecretIframe();
+		$this->inputText('js_secret', $secret);
+		$this->goOutOfIframe();
+	}
+
+	/**
+	 * Put the focus inside the secret iframe
+	 */
+	public function goIntoSecretIframe() {
+		$this->driver->switchTo()->frame('passbolt-iframe-secret-edition');
+	}
+
+	/**
+	 * Put the focus back to the normal context
+	 */
+	public function goOutOfIframe() {
+		$this->driver->switchTo()->defaultContent();
+	}
+
+	/**
+	 * Dig into the master password iframe
+	 */
+	public function goIntoMasterPasswordIframe() {
+		$this->driver->switchTo()->frame('passbolt-iframe-master-password');
+	}
+
+	/**
+	 * Helper to create a password
+	 */
+	public function createPassword($password) {
+		$this->gotoCreatePassword();
+		$this->inputText('js_field_name', $password['name']);
+		$this->inputText('js_field_username', $password['username']);
+		if (isset($password['uri'])) {
+			$this->inputText('js_field_uri', $password['uri']);
+		}
+		$this->inputSecret($password['password']);
+		if (isset($password['description'])) {
+			$this->inputText('js_field_description', $password['description']);
+		}
+		$this->click('.create-password-dialog input[type=submit]');
+		$this->waitUntilISee('.notification-container', '/successfully saved/i');
+	}
+
+	public function editPassword($password) {
+		$this->gotoCreatePassword($password['id']);
+
+		if (isset($password['name'])) {
+			$this->inputText('js_field_name', $password['name']);
+		}
+		if (isset($password['username'])) {
+			$this->inputText('js_field_username', $password['username']);
+		}
+		if (isset($password['uri'])) {
+			$this->inputText('js_field_uri', $password['uri']);
+		}
+		if (isset($password['uri'])) {
+			$this->inputSecret($password['password']);
+		}
+		if (isset($password['description'])) {
+			$this->inputText('js_field_description', $password['description']);
+		}
+		$this->click('.edit-password-dialog input[type=submit]');
+		$this->waitUntilISee('.notification-container', '/successfully saved/i');
+	}
+
+	/********************************************************************************
+	 * Passbolt Application Asserts
+	 ********************************************************************************/
 	/**
 	 * Check if the current url match the one given in parameter
 	 * @param $url
@@ -121,113 +294,6 @@ class PassboltTestCase extends WebDriverTestCase {
 	}
 
 	/**
-	 * Wait until all the currently operations have been completed.
-	 * @param int timeout timeout in seconds
-	 * @return bool
-	 * @throws Exception
-	 */
-	public function waitCompletion($timeout = 10) {
-		$ex = null;
-
-		for ($i = 0; $i < $timeout * 10; $i++) {
-			try {
-				$elt = $this->findByCss('html.loaded');
-				if(count($elt)) {
-					return true;
-				}
-			}
-			catch (Exception $e) {
-				$ex = $e;
-			}
-			usleep(100000); // Sleep 1/10 seconds
-		}
-
-		$backtrace = debug_backtrace();
-		throw new Exception( "Timeout thrown by " . $backtrace[1]['class'] . "::" . $backtrace[1]['function'] . "()\n .");
-	}
-
-	/**
-	 * Login on the application with the given user.
-	 * @param $email
-	 */
-	public function loginAs($email) {
-		$this->getUrl('login');
-		$this->inputText('UserUsername', $email);
-		$this->inputText('UserPassword', 'password');
-		$this->pressEnter();
-		$this->waitCompletion();
-	}
-
-	public function logout() {
-		$this->getUrl('logout');
-	}
-
-	/**
-	 * Use the debug screen to set the values set by the setup
-	 * @param $config array user config (see fixtures)
-	 */
-	public function setClientConfig($config) {
-		$this->getUrl('debug');
-		sleep(1); // plugin need some time to trigger a page change
-
-		$this->inputText('ProfileFirstName',$config['FirstName']);
-		$this->inputText('ProfileLastName',$config['LastName']);
-		$this->inputText('UserUsername',$config['Username']);
-		$this->inputText('securityTokenCode',$config['TokenCode']);
-		$this->inputText('securityTokenColor',$config['TokenColor']);
-		$this->inputText('securityTokenTextColor',$config['TokenTextColor']);
-		$this->click('js_save_conf');
-
-		$key = file_get_contents(GPG_FIXTURES . DS . $config['PrivateKey'] );
-		$this->inputText('keyAscii',$key);
-		$this->click('saveKey');
-	}
-
-	/**
-	 * Go to the password workspace and click on teh create password button
-	 */
-	public function gotoCreatePassword() {
-		if(!$this->isVisible('.page.password')) {
-			$this->getUrl('');
-			$this->waitUntilISee('.page.password');
-			$this->waitUntilISee('#js_wk_menu_creation_button');
-		}
-		$this->click('#js_wk_menu_creation_button');
-		$this->assertVisible('.create-password-dialog');
-	}
-
-	/**
-	 * Input a given string in the secret field
-	 * @param string $secret
-	 */
-	public function inputSecret($secret) {
-		$this->goIntoSecretIframe();
-		$this->inputText('js_secret', $secret);
-		$this->goOutOfIframe();
-	}
-
-	/**
-	 * Put the focus inside the secret iframe
-	 */
-	public function goIntoSecretIframe() {
-		$this->driver->switchTo()->frame('passbolt-iframe-secret-edition');
-	}
-
-	/**
-	 * Put the focus back to the normal context
-	 */
-	public function goOutOfIframe() {
-		$this->driver->switchTo()->defaultContent();
-	}
-
-	/**
-	 * Dig into the master password iframe
-	 */
-	public function goIntoMasterPasswordIframe() {
-		$this->driver->switchTo()->frame('passbolt-iframe-master-password');
-	}
-
-	/**
 	 * Check if a success notification is displayed
 	 * @param null $msg optional
 	 */
@@ -237,18 +303,6 @@ class PassboltTestCase extends WebDriverTestCase {
 		if (isset($msg)) {
 			$this->assertElementContainsText('.notification-container .message.success',$msg);
 		}
-	}
-
-	/**
-	 * Try to open the a password edit dialog
-	 * You must be on the password workspace
-	 * @param $id uuid
-	 */
-	public function assertEditPasswordDialog($id) {
-		$this->rightClick($id);
-		$this->click('js_wk_menu_edition_button');
-		$this->waitCompletion();
-		$this->assertVisible('.edit-password-dialog');
 	}
 
 	/**
@@ -272,6 +326,5 @@ class PassboltTestCase extends WebDriverTestCase {
 		$this->assertVisible('#js_secret_strength .progress-bar.'.$class);
 		$this->assertVisible('#js_secret_strength .complexity-text');
 		$this->assertElementContainsText('#js_secret_strength .complexity-text', 'complexity: '.$strength);
-
 	}
 }

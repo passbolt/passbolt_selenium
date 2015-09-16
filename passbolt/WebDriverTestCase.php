@@ -161,18 +161,21 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
         }
     }
 
-
     /********************************************************************************
      * Driver HELPERS
      ********************************************************************************/
     /**
      * Input some text in an element
-     * @param $id
-     * @param $txt
+     * @param $id string an element id or selector
+     * @param $txt the text to be typed on keyboard
+     * @param $append boolean true if you want to keep the current value intact
      */
-    public function inputText($id, $txt) {
-        $input = $this->driver->findElement(WebDriverBy::id($id));
+    public function inputText($id, $txt, $append=false) {
+        $input = $this->find($id);
         $input->click();
+        if(!$append) {
+            $input->clear();
+        }
         $this->driver->getKeyboard()->sendKeys($txt);
     }
 
@@ -197,6 +200,23 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
      */
     public function pressEnter() {
         $this->driver->getKeyboard()->pressKey(WebDriverKeys::ENTER);
+    }
+
+    /**
+     * A generic find, try by id, then css
+     * @param $id string id or css
+     */
+    public function find($id) {
+        try {
+            $element = $this->driver->findElement(WebDriverBy::id($id));
+        } catch (NoSuchElementException $e) {
+            try {
+                $element = $this->driver->findElement(WebDriverBy::cssSelector($id));
+            } catch (NoSuchElementException $e) {
+                $this->fail('Cannot find element: ' . $id);
+            }
+        }
+        return $element;
     }
 
     /**
@@ -267,33 +287,11 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
     }
 
     /**
-     * Click on an element defined by a css selector.
-     * This prevents opening the url in another tab in case of target="_blank"
-     * @param $cssSelector
-     *
-     * @return mixed
-     * @throws NoSuchElementException
-     */
-    public function clickElement($cssSelector) {
-        $elt = $this->findByCss($cssSelector);
-        $elt->click();
-    }
-
-    /**
      * Click on an element defined by its Id
      * @param $id string
      */
     public function click($id) {
-        try {
-            $element = $this->driver->findElement(WebDriverBy::id($id));
-            $element->click();
-        } catch (NoSuchElementException $e) {
-            try {
-                $this->clickElement($id);
-            } catch (NoSuchElementException $e) {
-                $this->fail('Cannot click on not found element: ' . $id);
-            }
-        }
+        $this->find($id)->click();
     }
 
     /**
@@ -302,15 +300,7 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
      */
     public function rightClick($id) {
         $action = new WebDriverActions($this->driver);
-        try {
-            $element = $this->driver->findElement(WebDriverBy::id($id));
-        } catch (NoSuchElementException $e) {
-            try {
-                $element = $this->driver->findElement(WebDriverBy::cssSelector($id));
-            } catch (NoSuchElementException $e) {
-                $this->fail('Cannot right click on not found element: ' . $id);
-            }
-        }
+        $element = $this->find($id);
         $action->contextClick($element)->perform();
     }
 
@@ -320,15 +310,7 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
      * @return boolean
      */
     public function isVisible($id) {
-        try {
-            $element = $this->driver->findElement(WebDriverBy::id($id));
-        } catch (NoSuchElementException $e) {
-            try {
-                $element = $this->driver->findElement(WebDriverBy::cssSelector($id));
-            } catch (NoSuchElementException $e) {
-                $this->fail('Cannot check visibility of not found element: ' . $id);
-            }
-        }
+        $element = $this->find($id);
         return ($element->isDisplayed());
     }
 
@@ -375,7 +357,7 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
                 }
             }
             catch (Exception $e) {
-                $ex = $e;
+                // We do nothing
             }
             usleep(100000); // Sleep 1/10 seconds
         }
@@ -475,7 +457,7 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
      * Assert that an element's attribute is equal to the one given.
      * @param $elt
      * @param $attribute
-     * @param $text
+     * @param $value
      */
     public function assertElementAttributeEquals($elt, $attribute, $value) {
         $attr = $elt->getAttribute($attribute);
@@ -515,15 +497,7 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
      * @param $value
      */
     public function assertInputValue($id, $value) {
-        try {
-            $el = $this->findById($id);
-        } catch(exception $e) {
-            try {
-                $el = $this->findByCss($id);
-            } catch (exception $e) {
-                $this->fail('Can not assert input value of not found element' . $id );
-            }
-        }
+        $el = $this->find($id);
         $this->assertTrue($el->getAttribute('value') == $value);
     }
 }
