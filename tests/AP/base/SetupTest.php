@@ -299,7 +299,7 @@ GFq/vw==
 			'The key selected has an invalid format.'
 		);
 		// Emtpy value.
-		$this->emptyInput('js_setup_import_key_text');
+		$this->findById('js_setup_import_key_text')->clear();
 		// Paste a correct key.
 		$this->inputText('js_setup_import_key_text', $this->defaultPrivateKey);
 		// Click Next

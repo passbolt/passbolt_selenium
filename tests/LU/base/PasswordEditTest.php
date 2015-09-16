@@ -6,14 +6,15 @@
  * As a user I can edit a password using the edit button in the action bar
  * As a user I can edit a password using the right click contextual menu
  * As a user I can open close the edit password dialog
- *
  * As a user I can see the edit password dialog content
- * As a user I can edit a password I have ownership of
- * As a user I can view a password I just edited on my list of passwords
+ * As a user I can edit the name of a password I have own
+ *
+ * TODO:
  * As a user I can see error messages when editing a password with wrong inputs
  * As a user I can generate a password automatically
  * As a user I can view my password in clear text
  * As a user I can not edit a password I have only read access to
+ * As a user I can see the current password complexity when editing a password
  *
  * @copyright    (c) 2015-present Bolt Software Pvt. Ltd.
  * @licence      GPLv3 onwards www.gnu.org/licenses/gpl-3.0.en.html
@@ -190,6 +191,9 @@ class PasswordEditTest extends PassboltTestCase
         $user = User::get('ada');
         $this->setClientConfig($user);
 
+        // And the database is in the default state
+        $this->PassboltServer->resetDatabase(1);
+
         // And I am logged in on the password workspace
         $this->loginAs($user['Username']);
 
@@ -297,16 +301,69 @@ class PasswordEditTest extends PassboltTestCase
     }
 
     /**
-     * Scenario: As a user I can edit a password I have ownership of
+     * Scenario: As a user I can edit the name of a password I have own
+     *
+     * Given    I am Ada
+     * And      the database is in the default state
+     * And      I am logged in on the password workspace
+     * And      I am editing a password I own
+     * When     I click on name input text field
+     * And      I empty the name input text field value
+     * And      I enter a new value
+     * And      I click save
+     * Then     I can see that the password name have changed in the overview
+     * When     I click on the password
+     * Then     I can see the sidebar
+     * And      I can see the new name value in the sidebar
+     * When     I click edit button
+     * Then     I can see the new name in the edit password dialog
      */
-    public function testEditPasswordIOwn() {
+    public function testEditPasswordName() {
+        // Given I am Ada
+        $user = User::get('ada');
+        $this->setClientConfig($user);
 
-    }
+        // And the database is in the default state
+        $this->PassboltServer->resetDatabase(1);
 
-    /**
-     * Scenario: As a user I can view a password I just edited on my list of passwords
-     */
-    public function testViewEditedPassword() {
+        // And I am logged in on the password workspace
+        $this->loginAs($user['Username']);
+
+        // And I am editing a password I own
+        $resource = Resource::get(array('user' => 'ada', 'permission' => 'admin'));
+        $this->assertEditPasswordDialog($resource['id']);
+
+        // When I click on name input text field
+        $this->click('js_field_name');
+
+        // And I empty the name input text field value
+        $this->findById('js_field_name')->clear();
+        $this->assertInputValue('js_field_name','');
+
+        // And I enter a new value
+        $newname = 'New password name';
+        $this->inputText('js_field_name',$newname);
+
+        // And I click save
+        $this->click('.edit-password-dialog input[type=submit]');
+
+        // Then I can see that the password name have changed in the overview
+        $this->assertElementContainsText('#js_wsp_pwd_browser .tableview-content', $newname);
+
+        // When I click on the password
+        $this->click($resource['id']);
+
+        // Then I can see the sidebar
+        $this->assertVisible('#js_pwd_details.panel.aside');
+
+        // And  I can see the new name value in the sidebar
+        $this->assertElementContainsText('#js_pwd_details h3', $newname);
+
+        // When I click edit button
+        $this->click('js_wk_menu_edition_button');
+
+        // Then I can see the new name in the edit password dialog
+        $this->assertInputValue('js_field_name', $newname);
 
     }
 
