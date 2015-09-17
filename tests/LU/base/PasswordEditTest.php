@@ -370,6 +370,43 @@ class PasswordEditTest extends PassboltTestCase
     }
 
     /**
+     * Scenario: As a user I can edit the description of a password I have own
+     */
+    public function testEditPasswordDescription() {
+        // Given I am Ada
+        $user = User::get('ada');
+        $this->setClientConfig($user);
+
+        // And the database is in the default state
+        $this->PassboltServer->resetDatabase(1);
+
+        // And I am logged in on the password workspace
+        $this->loginAs($user['Username']);
+
+        // And I am editing the description of a password I own
+        $resource = Resource::get(array(
+            'user' => 'ada',
+            'permission' => 'admin'
+        ));
+        $r['id'] = $resource['id'];
+        $r['description'] = 'this is a new description';
+        $this->editPassword($r);
+
+        // When I click on the password
+        $this->click($r['id']);
+
+        // Then I can see the new description in the sidebar
+        $this->assertElementContainsText('#js_rs_details_description .description_content', $r['description']);
+
+        // When I click edit button
+        $this->click('js_wk_menu_edition_button');
+
+        // Then I can see the new description in the edit password dialog
+        $this->assertInputValue('js_field_description', $r['description']);
+
+    }
+
+    /**
      * Scenario: As a user I can see the current password complexity when editing a password
      * Regression: PASSBOLT-1039
      *
@@ -410,12 +447,7 @@ class PasswordEditTest extends PassboltTestCase
         $this->assertComplexity('very strong');
     }
 
-    /**
-     * Scenario: As a user I can edit the description of a password I have own
-     */
-    public function testEditPasswordDescription() {
 
-    }
 
 /* TODO
 * As a user I can edit the uri of a password I have own

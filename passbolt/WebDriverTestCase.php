@@ -291,7 +291,8 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
      * @param $id string
      */
     public function click($id) {
-        $this->find($id)->click();
+        $elt = $this->find($id);
+        $elt->click();
     }
 
     /**
@@ -334,17 +335,16 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
 
     /**
      * Wait until I see.
-     * @param $cssSelector
+     * @param $id string
      * @param null $regexp
      * @param int timeout timeout in seconds
      * @return bool if element is found
      * @throws Exception if element is not found after a given timeout
      */
-    public function waitUntilISee($cssSelector, $regexp = null, $timeout = 10) {
-        $ex = null;
+    public function waitUntilISee($id, $regexp = null, $timeout = 10) {
         for ($i = 0; $i < $timeout * 10; $i++) {
             try {
-                $elt = $this->findByCss($cssSelector);
+                $elt = $this->find($id);
                 if ($elt) {
                     if (is_null($regexp)) {
                         return true;
@@ -362,7 +362,7 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
             usleep(100000); // Sleep 1/10 seconds
         }
         $backtrace = debug_backtrace();
-        throw new Exception( "Timeout thrown by " . $backtrace[1]['class'] . "::" . $backtrace[1]['function'] . "()\n . element: $cssSelector ($regexp)");
+        throw new Exception( "Timeout thrown by " . $backtrace[1]['class'] . "::" . $backtrace[1]['function'] . "()\n . element: $id ($regexp)");
     }
 
     /********************************************************************************

@@ -189,8 +189,13 @@ class PassboltTestCase extends WebDriverTestCase {
 		$this->waitUntilISee('.notification-container', '/successfully saved/i');
 	}
 
+	/**
+	 * Edit a password helper
+	 * @param $password
+	 * @throws Exception
+	 */
 	public function editPassword($password) {
-		$this->gotoCreatePassword($password['id']);
+		$this->gotoEditPassword($password['id']);
 
 		if (isset($password['name'])) {
 			$this->inputText('js_field_name', $password['name']);
@@ -201,12 +206,13 @@ class PassboltTestCase extends WebDriverTestCase {
 		if (isset($password['uri'])) {
 			$this->inputText('js_field_uri', $password['uri']);
 		}
-		if (isset($password['uri'])) {
+		if (isset($password['password'])) {
 			$this->inputSecret($password['password']);
 		}
 		if (isset($password['description'])) {
 			$this->inputText('js_field_description', $password['description']);
 		}
+
 		$this->click('.edit-password-dialog input[type=submit]');
 		$this->waitUntilISee('.notification-container', '/successfully saved/i');
 	}
