@@ -301,7 +301,8 @@ class PasswordCreateTest extends PassboltTestCase
      * And      I enter 'localhost ftp test account' as the description
      * And      I enter 'ftp-password-test' as password
      * And      I click on the save button
-     * Then     I should see a notice message that the operation was a success
+     * Then     I should see a dialog telling me encryption is in progress
+     * And      I should see a notice message that the operation was a success
      * And      I should see the password I created in my password list
      */
     public function testCreatePasswordAndView() {
@@ -335,6 +336,9 @@ class PasswordCreateTest extends PassboltTestCase
 
         // When I click on the save button
         $this->click('.create-password-dialog input[type=submit]');
+
+        // Then I should see a dialog telling me encryption is in progress
+        $this->assertVisible('passbolt-iframe-progress-dialog');
 
         // I should see a notice message that the operation was a success
         $this->waitUntilISee('.notification-container', '/The resource was successfully saved/i');

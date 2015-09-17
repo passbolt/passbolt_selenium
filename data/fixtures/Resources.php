@@ -89,12 +89,13 @@ class Resource {
      * Return one resource based on the given conditions
      * @param array $conditions
      * @return array $resource
+     * @throws exception
      */
-    function get($conditions) {
+    static function get($conditions) {
 
         // a user must always be specified
         if (!isset($conditions['user'])) {
-            return $this->fail('a user must be specified to get access to a resource fixture');
+            throw new Exception('a user must be specified to get access to a resource fixture');
         }
         $r = self::_getByUsername($conditions['user']);
 
@@ -111,7 +112,7 @@ class Resource {
         }
 
         if ($r === false) {
-            return $this->fail('a resource fixture could not be found for these conditions, consider adding one');
+            throw new Exception('a resource fixture could not be found for these conditions, consider adding one');
         }
         return $r;
     }

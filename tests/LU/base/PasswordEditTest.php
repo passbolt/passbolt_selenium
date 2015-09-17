@@ -446,16 +446,4 @@ class PasswordEditTest extends PassboltTestCase
         $this->assertVisible('.edit-password-dialog');
         $this->assertComplexity('very strong');
     }
-
-
-
-/* TODO
-* As a user I can edit the uri of a password I have own
-* As a user I can edit the password of a password I have own
-* As a user I can see error messages when editing a password with wrong inputs
-* As a user I can generate a password automatically
-* As a user I can view my password in clear text
-* As a user I can not edit a password I have only read access to
-* As user B I can see the changes are reflected when user A is editing a password we share
-*/
 }

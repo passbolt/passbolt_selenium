@@ -317,10 +317,21 @@ class PassboltTestCase extends WebDriverTestCase {
 	 */
 	public function assertSecurityToken($user) {
 		$this->assertVisible('.security-token');
+
+		// check base color
 		$t = $this->findByCss('.security-token');
 		$this->assertElementContainsText($t, $user['TokenCode']);
 		$this->assertEquals(Color::toHex($t->getCssValue("background-color")), $user['TokenColor']);
 		$this->assertEquals(Color::toHex($t->getCssValue("color")), $user['TokenTextColor']);
+
+		// check color switch when input is selected
+		$this->click('js_master_password');
+		$t = $this->findByCss('.security-token');
+		$this->assertEquals(Color::toHex($t->getCssValue("background-color")), $user['TokenTextColor']);
+		$this->assertEquals(Color::toHex($t->getCssValue("color")), $user['TokenColor']);
+
+		// back to normal
+		$this->click('.security-token');
 	}
 
 	/**
@@ -332,5 +343,27 @@ class PassboltTestCase extends WebDriverTestCase {
 		$this->assertVisible('#js_secret_strength .progress-bar.'.$class);
 		$this->assertVisible('#js_secret_strength .complexity-text');
 		$this->assertElementContainsText('#js_secret_strength .complexity-text', 'complexity: '.$strength);
+	}
+
+	/**
+	 * Check if the master password dialog is working as expected
+	 */
+	public function assertMasterPasswordDialog($user) {
+		// Given I can see the iframe
+		$this->assertVisible('passbolt-iframe-master-password');
+		// When I can go into the iframe
+		$this->goIntoMasterPasswordIframe();
+		// Then I can see the security token is valid
+		$this->assertSecurityToken($user);
+		// Then I can see the title
+		$this->assertElementContainsText('.master-password.dialog','Please enter your master password');
+		// Then I can see the close dialog button
+		$this->assertVisible('a.dialog-close');
+		// Then I can see the OK button
+		$this->assertVisible('master-password-submit');
+		// Then I can see the cancel button
+		$this->assertVisible('a.js-dialog-close.cancel');
+		// Then I go out of the iframe
+		$this->goOutOfIframe();
 	}
 }

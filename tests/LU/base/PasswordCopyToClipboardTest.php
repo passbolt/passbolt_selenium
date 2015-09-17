@@ -8,12 +8,16 @@
  * As a user I can copy the URI of one resource to clipboard with a right click
  * As a user I can copy the username of one resource to clipboard with a right click
  *
- *
  * @TODO Missing scenarios
- * As a user I should see errors when entering the wrong master key while trying to copy my password to clipboard
- * I can close the master password dialog using cancel or escape or the close button
- * Using more > copy to clipboard button
- * I can open the url of a resource in a new tab
+ * As a user I can copy my password to clipboard using the action bar button
+ * As a user I can copy my password to clipboard by clicking on the password preview
+ *
+ * @TODO more MASTER KEY TESTS
+ * As a user I can cancel and close the master password dialog
+ * As a user I should see errors when entering the wrong master key
+ *
+ * @TODO Move somewhere else
+ * As a user I can open the url of a resource in a new tab
  *
  * @copyright    (c) 2015-present Bolt Software Pvt. Ltd.
  * @licence      GPLv3 onwards www.gnu.org/licenses/gpl-3.0.en.html
@@ -32,7 +36,7 @@ class PasswordCopyToClipboardTest extends PassboltTestCase
      * And      I can see next option is 'Copy password' and is enabled
      * And      I can see next option is 'Copy URI' and is enabled
      */
-    function testCopyContextualMenu() {
+    function testCopyContextualMenuView() {
         // Given I am Betty
         $user = User::get('betty');
         $resource = Resource::get(array('user' => 'betty'));
@@ -58,7 +62,7 @@ class PasswordCopyToClipboardTest extends PassboltTestCase
     }
 
     /**
-     * Scenario : As a user I can copy a password to clipboard
+     * Scenario : As a user I can copy a password to clipboard using a right click
      *
      * Given    I am Betty
      * And      The database is in a clean state
@@ -73,7 +77,7 @@ class PasswordCopyToClipboardTest extends PassboltTestCase
      * When     I copy paste the password in search input field
      * Then     I can see it is the right one
      */
-    public function testCopyPasswordToClipboard() {
+    public function testCopyPasswordToClipboardViaContextualMenu() {
         // Given I am Betty
         $user = User::get('betty');
         $resource = Resource::get(array('user' => 'betty'));
@@ -98,11 +102,12 @@ class PasswordCopyToClipboardTest extends PassboltTestCase
         $this->clickLink('Copy password');
 
         // Then I can see the master key dialog
-        $this->assertVisible('passbolt-iframe-master-password');
-        $this->goIntoMasterPasswordIframe();
+        $this->assertMasterPasswordDialog($user);
 
         // When I enter my master password
+        $this->goIntoMasterPasswordIframe();
         $this->inputText('js_master_password', $user['MasterPassword']);
+
         // And click on save
         $this->click('master-password-submit');
         $this->goOutOfIframe();
@@ -122,7 +127,7 @@ class PasswordCopyToClipboardTest extends PassboltTestCase
     }
 
     /**
-     * Scenario : As a user I can copy the URI of one resource to clipboard
+     * Scenario : As a user I can copy the URI of one resource to clipboard with a right click
      *
      * Given    I am Betty
      * And      I am logged in on the password workspace
@@ -132,7 +137,7 @@ class PasswordCopyToClipboardTest extends PassboltTestCase
      * When     I click in the search input field and paste the clipboard content
      * Then     I can see it is the right URI
      */
-    function testCopyURIToClipboard () {
+    function testCopyURIToClipboardViaContextualMenu () {
         // Given I am Betty
         $user = User::get('betty');
         $resource = Resource::get(array('user' => 'betty'));
@@ -162,7 +167,7 @@ class PasswordCopyToClipboardTest extends PassboltTestCase
     }
 
     /**
-     * Scenario : As a user I can copy the username of one resource to clipboard
+     * Scenario : As a user I can copy the username of one resource to clipboard with a right click
      *
      * Given    I am Betty
      * And      I am logged in on the password workspace
@@ -172,7 +177,7 @@ class PasswordCopyToClipboardTest extends PassboltTestCase
      * When     I click in the search input field and paste the clipboard content
      * Then     I can see it is the right username
      */
-    function testCopyUsernameToClipboard() {
+    function testCopyUsernameToClipboardViaContextualMenu() {
         // Given I am Betty
         $user = User::get('betty');
         $resource = Resource::get(array('user' => 'betty'));
@@ -197,8 +202,8 @@ class PasswordCopyToClipboardTest extends PassboltTestCase
         $action = new WebDriverActions($this->driver);
         $action->sendKeys($e, array(WebDriverKeys::CONTROL,'v'))->perform();
 
-        // Then I can see it is the right one
+        // Then I can see it is the right username
         $this->assertTrue($e->getAttribute('value') == $resource['username']);
-    }
 
+    }
 }
