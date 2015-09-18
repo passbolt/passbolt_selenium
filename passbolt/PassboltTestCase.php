@@ -314,6 +314,7 @@ class PassboltTestCase extends WebDriverTestCase {
 	/**
 	 * Assert if a security token match user parameters
 	 * @param $user array see fixtures
+	 * @param $context where is the security token (master or else)
 	 */
 	public function assertSecurityToken($user, $context = null)
 	{

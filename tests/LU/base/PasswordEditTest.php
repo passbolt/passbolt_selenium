@@ -107,6 +107,7 @@ class PasswordEditTest extends PassboltTestCase
      * Scenario: As a user I can open close the edit password dialog
      *
      * Given    I am Ada
+     * And      the database is in the default state
      * And      I am logged in on the password workspace
      * And      I am editing a password I own
      * When     I click on the cancel button
@@ -123,6 +124,9 @@ class PasswordEditTest extends PassboltTestCase
         $user = User::get('ada');
         $this->setClientConfig($user);
 
+        // And the database is in the default state
+        $this->PassboltServer->resetDatabase(1);
+
         // And I am logged in on the password workspace
         $this->loginAs($user['Username']);
 
@@ -134,7 +138,7 @@ class PasswordEditTest extends PassboltTestCase
         $this->click('.edit-password-dialog .js-dialog-cancel');
 
         // Then I do not see the edit password dialog
-        $this->assertTrue($this->isNotVisible('.edit-password-dialog'));
+        $this->assertNotVisible('.edit-password-dialog');
 
         // When I reopen the edit password dialog
         $this->gotoEditPassword($resource['id']);
@@ -143,7 +147,7 @@ class PasswordEditTest extends PassboltTestCase
         $this->click('.edit-password-dialog .dialog-close');
 
         // Then I do not see the edit password dialog
-        $this->assertTrue($this->isNotVisible('.edit-password-dialog'));
+        $this->assertNotVisible('.edit-password-dialog');
 
         // When I reopen the edit password dialog
         $this->gotoEditPassword($resource['id']);

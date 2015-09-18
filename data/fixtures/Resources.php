@@ -116,4 +116,19 @@ class Resource {
         }
         return $r;
     }
+
+    /**
+     * Get All the resources for a given user
+     * @param $conditions array
+     * @return array
+     * @throws Exception missing user
+     */
+    static function getAll($conditions) {
+        // a user must always be specified
+        if (!isset($conditions['user'])) {
+            throw new Exception('a user must be specified to get access to a resource fixture');
+        }
+        $r = self::_getByUsername($conditions['user']);
+        return $r;
+    }
 }
