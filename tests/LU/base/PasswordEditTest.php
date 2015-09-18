@@ -375,6 +375,15 @@ class PasswordEditTest extends PassboltTestCase
 
     /**
      * Scenario: As a user I can edit the description of a password I have own
+     *
+     * Given    I am Ada
+     * And      the database is in the default state
+     * And      I am logged in on the password workspace
+     * And      I am editing the description of a password I own
+     * When     I click on the password
+     * Then     I can see the new description in the sidebar
+     * When     I click edit button
+     * Then     I can see the new description in the edit password dialog
      */
     public function testEditPasswordDescription() {
         // Given I am Ada

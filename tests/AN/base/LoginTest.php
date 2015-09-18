@@ -31,7 +31,7 @@ class LoginTest extends PassboltTestCase {
 
 	/**
 	 * Scenario: I can see a login form on the login page
-	 * Given I am an anonymous user with no plugin on the login page
+	 * Given 	I am an anonymous user with no plugin on the login page
 	 * When		When the page is loaded
 	 * Then 	I can see login form
 	 * And		I can see the username field
@@ -90,5 +90,18 @@ class LoginTest extends PassboltTestCase {
 		$this->pressEnter();
 
 		$this->assertCurrentUrl('login');
+		$this->assertCurrentRole('guest');
+	}
+
+	/**
+	 * Scenario: I should not see warnings if I accept cookies and javascript is enabled
+	 * Given 	I am an anonymous user with no plugin on the login page
+	 * Then	 	I should not see a cookie warning
+	 * Then  	I should not see a javascript warning
+	 */
+	public function testNoCookieBanner() {
+		$this->getUrl('login');
+		$this->assertNotVisible('.message.error.no-js');
+		$this->assertNotVisible('.message.error.no-cookies');
 	}
 }
