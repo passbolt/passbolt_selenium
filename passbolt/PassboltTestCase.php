@@ -315,7 +315,8 @@ class PassboltTestCase extends WebDriverTestCase {
 	 * Assert if a security token match user parameters
 	 * @param $user array see fixtures
 	 */
-	public function assertSecurityToken($user) {
+	public function assertSecurityToken($user, $context = null)
+	{
 		$this->assertVisible('.security-token');
 
 		// check base color
@@ -325,7 +326,11 @@ class PassboltTestCase extends WebDriverTestCase {
 		$this->assertEquals(Color::toHex($t->getCssValue("color")), $user['TokenTextColor']);
 
 		// check color switch when input is selected
-		$this->click('js_master_password');
+		if (isset($context) && $context == 'master') {
+			$this->click('js_master_password');
+		} else {
+			$this->click('js_secret');
+		}
 		$t = $this->findByCss('.security-token');
 		$this->assertEquals(Color::toHex($t->getCssValue("background-color")), $user['TokenTextColor']);
 		$this->assertEquals(Color::toHex($t->getCssValue("color")), $user['TokenColor']);
@@ -354,7 +359,7 @@ class PassboltTestCase extends WebDriverTestCase {
 		// When I can go into the iframe
 		$this->goIntoMasterPasswordIframe();
 		// Then I can see the security token is valid
-		$this->assertSecurityToken($user);
+		$this->assertSecurityToken($user, 'master');
 		// Then I can see the title
 		$this->assertElementContainsText('.master-password.dialog','Please enter your master password');
 		// Then I can see the close dialog button
