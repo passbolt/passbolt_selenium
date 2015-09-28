@@ -19,7 +19,7 @@ class UserWorkspaceTest extends PassboltTestCase
 	{
 		parent::setUp();
 		// Reset passbolt installation with dummies between each tests
-		$this->PassboltServer->resetDatabase(1);
+		$this->PassboltServer->resetDatabase();
 	}
 
 	/**

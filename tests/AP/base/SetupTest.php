@@ -114,7 +114,7 @@ GFq/vw==
 	 */
 	public function testCanSeeSetupPageWithFirstPluginSection() {
 		// Reset passbolt installation.
-		$reset = $this->PassboltServer->resetDatabase(1);
+		$reset = $this->PassboltServer->resetDatabase();
 		if (!$reset) {
 			$this->fail('Could not reset installation');
 		}
@@ -744,7 +744,7 @@ GFq/vw==
 	 */
 	public function testFollowSetupWithImportKey() {
 		// Reset passbolt installation.
-		$reset = $this->PassboltServer->resetDatabase(1);
+		$reset = $this->PassboltServer->resetDatabase();
 		if (!$reset) {
 			$this->fail('Could not reset installation');
 		}

@@ -19,7 +19,7 @@ class PasswordWorkspaceTest extends PassboltTestCase
     {
         parent::setUp();
         // Reset passbolt installation with dummies.
-        $this->PassboltServer->resetDatabase(1);
+        $this->PassboltServer->resetDatabase();
     }
 
     /**

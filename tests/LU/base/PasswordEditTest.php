@@ -43,7 +43,7 @@ class PasswordEditTest extends PassboltTestCase
         $this->setClientConfig($user);
 
         // And the database is in the default state
-        $this->PassboltServer->resetDatabase(1);
+        $this->PassboltServer->resetDatabase();
 
         // And I am logged in on the password workspace
         $this->loginAs($user['Username']);
@@ -53,7 +53,7 @@ class PasswordEditTest extends PassboltTestCase
         $this->assertVisible('#js_wk_menu_edition_button.disabled');
 
         // When I click on a password I own
-        $resource = Resource::get(array('user' => 'ada', 'permission' => 'admin'));
+        $resource = Resource::get(array('user' => 'ada', 'permission' => 'owner'));
         $this->click($resource['id']);
 
         // Then I should see the edit button is enabled
@@ -87,7 +87,7 @@ class PasswordEditTest extends PassboltTestCase
         $this->loginAs($user['Username']);
 
         // When I right click on a password I own
-        $resource = Resource::get(array('user' => 'ada', 'permission' => 'admin'));
+        $resource = Resource::get(array('user' => 'ada', 'permission' => 'owner'));
         $this->rightClick($resource['id']);
 
         // Then I can see the contextual menu
@@ -122,16 +122,17 @@ class PasswordEditTest extends PassboltTestCase
     public function testEditPasswordDialogOpenClose() {
         // Given I am Ada
         $user = User::get('ada');
-        $this->setClientConfig($user);
+        //$this->setClientConfig($user);
 
         // And the database is in the default state
-        $this->PassboltServer->resetDatabase(1);
+        //$this->PassboltServer->resetDatabase();
 
         // And I am logged in on the password workspace
         $this->loginAs($user['Username']);
 
         // And I am editing a password I own
-        $resource = Resource::get(array('user' => 'ada', 'permission' => 'admin'));
+        $resource = Resource::get(array('user' => 'ada', 'permission' => 'owner'));
+
         $this->gotoEditPassword($resource['id']);
 
         // When I click on the cancel button
@@ -141,7 +142,9 @@ class PasswordEditTest extends PassboltTestCase
         $this->assertNotVisible('.edit-password-dialog');
 
         // When I reopen the edit password dialog
-        $this->gotoEditPassword($resource['id']);
+        $this->click('js_wk_menu_edition_button');
+        $this->waitCompletion();
+        $this->assertVisible('.edit-password-dialog');
 
         // And I click on the close dialog button (in the top right corner)
         $this->click('.edit-password-dialog .dialog-close');
@@ -150,7 +153,9 @@ class PasswordEditTest extends PassboltTestCase
         $this->assertNotVisible('.edit-password-dialog');
 
         // When I reopen the edit password dialog
-        $this->gotoEditPassword($resource['id']);
+        $this->click('js_wk_menu_edition_button');
+        $this->waitCompletion();
+        $this->assertVisible('.edit-password-dialog');
 
         // And I press the escape button
         $this->pressEscape();
@@ -200,13 +205,13 @@ class PasswordEditTest extends PassboltTestCase
         $this->setClientConfig($user);
 
         // And the database is in the default state
-        $this->PassboltServer->resetDatabase(1);
+        $this->PassboltServer->resetDatabase();
 
         // And I am logged in on the password workspace
         $this->loginAs($user['Username']);
 
         // And I am editing a password I own
-        $resource = Resource::get(array('user' => 'ada', 'permission' => 'admin'));
+        $resource = Resource::get(array('user' => 'ada', 'permission' => 'owner'));
         $this->gotoEditPassword($resource['id']);
 
         // Then I should see the edit password dialog
@@ -321,8 +326,10 @@ class PasswordEditTest extends PassboltTestCase
      * And      I enter a new value
      * And      I click save
      * Then     I can see that the password name have changed in the overview
+
      * When     I click on the password
      * Then     I can see the sidebar
+
      * And      I can see the new name value in the sidebar
      * When     I click edit button
      * Then     I can see the new name in the edit password dialog
@@ -333,13 +340,13 @@ class PasswordEditTest extends PassboltTestCase
         $this->setClientConfig($user);
 
         // And the database is in the default state
-        $this->PassboltServer->resetDatabase(1);
+        $this->PassboltServer->resetDatabase();
 
         // And I am logged in on the password workspace
         $this->loginAs($user['Username']);
 
         // And I am editing a password I own
-        $resource = Resource::get(array('user' => 'ada', 'permission' => 'admin'));
+        $resource = Resource::get(array('user' => 'ada', 'permission' => 'owner'));
         $this->gotoEditPassword($resource['id']);
 
         // When I click on name input text field
@@ -352,18 +359,19 @@ class PasswordEditTest extends PassboltTestCase
 
         // And I click save
         $this->click('.edit-password-dialog input[type=submit]');
+        $this->assertNotificationSuccess('The resource was successfully updated', 2);
 
         // Then I can see that the password name have changed in the overview
         $this->assertElementContainsText('#js_wsp_pwd_browser .tableview-content', $newname);
 
         // When I click on the password
-        $this->click($resource['id']);
+        //$this->click($resource['id']);
 
         // Then I can see the sidebar
         $this->assertVisible('#js_pwd_details.panel.aside');
 
         // And  I can see the new name value in the sidebar
-        $this->assertElementContainsText('#js_pwd_details h3', $newname);
+        $this->assertElementContainsText('js_pwd_details', $newname);
 
         // When I click edit button
         $this->click('js_wk_menu_edition_button');
@@ -391,7 +399,7 @@ class PasswordEditTest extends PassboltTestCase
         $this->setClientConfig($user);
 
         // And the database is in the default state
-        $this->PassboltServer->resetDatabase(1);
+        $this->PassboltServer->resetDatabase();
 
         // And I am logged in on the password workspace
         $this->loginAs($user['Username']);
@@ -399,7 +407,7 @@ class PasswordEditTest extends PassboltTestCase
         // And I am editing the description of a password I own
         $resource = Resource::get(array(
             'user' => 'ada',
-            'permission' => 'admin'
+            'permission' => 'owner'
         ));
         $r['id'] = $resource['id'];
         $r['description'] = 'this is a new description';
@@ -436,7 +444,7 @@ class PasswordEditTest extends PassboltTestCase
         $this->setClientConfig($user);
 
         // And the database is in the default state
-        $this->PassboltServer->resetDatabase(1);
+        $this->PassboltServer->resetDatabase();
 
         // And I am logged in on the password workspace
         $this->loginAs($user['Username']);

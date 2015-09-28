@@ -4,25 +4,50 @@ class Resource {
      * @return array
      */
     static function _get() {
-        $r = array(
-            0 => array(
-                'id' => '50d77ffb-d254-49e4-ac86-1b63d7a10fce',
-                'username' => 'admin',
-                'name' => 'dp1-pwd1',
-                'password' => 'sunshine',
-                'uri' => 'http://drupal.project1.net/',
-                'complexity' => 'very weak',
-                'description' => 'dp1-pwd1 description'
-            ),
-            1 => array (
-                'id' => '50d77ffb-d290-49e4-ac86-1b63d7a10fce',
-                'name' => 'dp2-pwd1',
-                'username' => 'admin',
-                'password' => 'princess',
-                'uri' => 'http://drupal.project1.net/',
-                'complexity' => 'very weak',
-                'description' => 'dp2-pwd1 description'
-            )
+        $r[] = array(
+            'id' => Uuid::get('resource.id.apache'),
+            'username' => 'www-data',
+            'name' => 'apache',
+            'password' => '_upjvh-p@wAHP18D}OmY05M',
+            'uri' => 'http://www.apache.org/',
+            'complexity' => 'very strong',
+            'description' => 'Apache is the world\'s most used web server software.'
+        );
+        $r[] = array(
+            'id' => Uuid::get('resource.id.april'),
+            'username' => 'support',
+            'name' => 'april',
+            'password' => 'z"(-1s]3&Itdno:vPt',
+            'uri' => 'https://www.april.org/',
+            'complexity' => 'strong',
+            'description' => 'L\'association pionnière du logiciel libre en France'
+        );
+        $r[] = array(
+            'id' => Uuid::get('resource.id.bower'),
+            'username' => 'bower',
+            'name' => 'bower',
+            'password' => 'CL]m]x(o{sA#QW',
+            'uri' => 'bower.io',
+            'complexity' => 'fair',
+            'description' => 'A package manager for the web!'
+        );
+        $r[] = array(
+            'id' => Uuid::get('resource.id.centos'),
+            'username' => 'centos',
+            'name' => 'root',
+            'password' => 'this_23-04',
+            'uri' => 'centos.org',
+            'complexity' => 'very weak',
+            'description' => 'The CentOS Linux distribution is a platform derived from Red Hat Enterprise Linux (RHEL).'
+        );
+        $r[] = array(
+            'id' => Uuid::get('resource.id.canjs'),
+            'username' => 'yeswecan',
+            'name' => 'Canjs',
+            'password' => 'princess',
+            'uri' => 'canjs.com',
+            'complexity' => 'very weak',
+            'description' => 'CanJS is a JavaScript library that makes developing complex applications simple and fast.'
         );
         return $r;
     }
@@ -35,20 +60,38 @@ class Resource {
     static function _getByUsername($username) {
         $r = self::_get();
         switch ($username) {
-            case 'betty' :
-                $r[0] = array_merge($r[0], array(
-                    'permission' => 'read'
-                ));
-                $r[1] = array_merge($r[1], array(
-                    'permission' => 'read'
-                ));
-                break;
             case 'ada' :
                 $r[0] = array_merge($r[0], array(
-                    'permission' => 'admin'
+                    'permission' => 'owner'
                 ));
                 $r[1] = array_merge($r[1], array(
-                    'permission' => 'admin'
+                    'permission' => 'deny'
+                ));
+                $r[2] = array_merge($r[2], array(
+                    'permission' => 'read'
+                ));
+                $r[3] = array_merge($r[3], array(
+                    'permission' => 'read'
+                ));
+                $r[4] = array_merge($r[4], array(
+                    'permission' => 'update'
+                ));
+                break;
+            case 'betty' :
+                $r[0] = array_merge($r[0], array(
+                    'permission' => 'update'
+                ));
+                $r[1] = array_merge($r[1], array(
+                    'permission' => 'owner'
+                ));
+                $r[2] = array_merge($r[2], array(
+                    'permission' => 'deny'
+                ));
+                $r[3] = array_merge($r[3], array(
+                    'permission' => 'read'
+                ));
+                $r[4] = array_merge($r[4], array(
+                    'permission' => 'read'
                 ));
                 break;
         }

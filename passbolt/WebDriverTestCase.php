@@ -418,7 +418,7 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
      */
     public function assertElementContainsText($elt, $needle) {
         if(!is_object($elt)) {
-            $elt =$this->findByCss($elt);
+            $elt = $this->find($elt);
         }
         $eltText = $elt->getText();
         if(preg_match('/^\/.+\/[a-z]*$/i', $needle)) {

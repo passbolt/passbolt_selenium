@@ -13,7 +13,7 @@ class PASSBOLT1040 extends PassboltTestCase
         $this->setClientConfig($user);
 
         // And the database is in the default state
-        $this->PassboltServer->resetDatabase(1);
+        $this->PassboltServer->resetDatabase();
 
         // And I am logged in on the password workspace
         $this->loginAs($user['Username']);
@@ -21,7 +21,7 @@ class PASSBOLT1040 extends PassboltTestCase
         // And I am editing the name, description, uri, username of a password I own
         $resource = Resource::get(array(
             'user' => 'ada',
-            'permission' => 'admin'
+            'permission' => 'owner'
         ));
         $r['id'] = $resource['id'];
         $r['description'] = 'this is a new description';

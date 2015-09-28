@@ -34,7 +34,7 @@ class PassboltServer {
 	 * Reset passbolt installation
 	 * @return bool
 	 */
-	public function resetDatabase($dummy = 1) {
+	public function resetDatabase($dummy = 'seleniumtests') {
 		$response = \Httpful\Request::get($this->url . '/seleniumTests/resetInstance/' . $dummy)
 	                   ->send();
 		return preg_match('/created/', $response->body);

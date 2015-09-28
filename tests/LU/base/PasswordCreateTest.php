@@ -52,7 +52,7 @@ class PasswordCreateTest extends PassboltTestCase
         $this->setClientConfig($user);
 
         // And the database is in a clean state
-        $this->PassboltServer->resetDatabase(1);
+        $this->PassboltServer->resetDatabase();
 
         // I am logged in as Carol, and I go to the user workspace
         $this->loginAs($user['Username']);
@@ -311,7 +311,7 @@ class PasswordCreateTest extends PassboltTestCase
         $this->setClientConfig($user);
 
         // And the database is in a clean state
-        $this->PassboltServer->resetDatabase(1);
+        $this->PassboltServer->resetDatabase();
 
         // And I am logged in
         $this->loginAs($user['Username']);
@@ -368,7 +368,7 @@ class PasswordCreateTest extends PassboltTestCase
         $this->setClientConfig($user);
 
         // And the database is in a clean state
-        $this->PassboltServer->resetDatabase(1);
+        $this->PassboltServer->resetDatabase();
 
         // And I am logged in
         $this->loginAs($user['Username']);

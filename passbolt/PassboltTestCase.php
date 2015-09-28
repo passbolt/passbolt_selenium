@@ -302,12 +302,20 @@ class PassboltTestCase extends WebDriverTestCase {
 	/**
 	 * Check if a success notification is displayed
 	 * @param null $msg optional
+	 * @param int $attempt number of notifications to check in a row
 	 */
 	public function assertNotificationSuccess($msg = null) {
 		$this->waitUntilISee('.notification-container .message');
 		$this->assertVisible('.notification-container .message.success');
 		if (isset($msg)) {
-			$this->assertElementContainsText('.notification-container .message.success',$msg);
+			$text = $this->find('.notification-container .message.success')->getText();
+			$contain = false;
+			if(preg_match('/^\/.+\/[a-z]*$/i', $msg)) {
+				$contain = preg_match($msg, $text) != false;
+			} else {
+				$contain = strpos($text, $msg) !== false;
+			}
+			$this->assertTrue($contain !== false, 'fail to find the success notification message ' . $msg);
 		}
 	}
 

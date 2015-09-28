@@ -19,7 +19,7 @@ class PasswordDeleteTest extends PassboltTestCase
      * And      I am Ada
      * And      the database is in the default state
      * And      I am logged in on the password workspace
-     * When     I right click on a password I have admin right on
+     * When     I right click on a password I have update right on
      * Then     I select the delete option in the contextual menu
      * Then     I should see a success notification message saying the password is deleted
      * And      I should not see the password in the list anymore
@@ -30,13 +30,13 @@ class PasswordDeleteTest extends PassboltTestCase
         $this->setClientConfig($user);
 
         // And the database is in the default state
-        $this->PassboltServer->resetDatabase(1);
+        $this->PassboltServer->resetDatabase();
 
         // And I am logged in on the password workspace
         $this->loginAs($user['Username']);
 
-        // When I click a password I have admin right on
-        $resource = Resource::get(array('user' => 'ada', 'permission' => 'admin'));
+        // When I click a password I have update right on
+        $resource = Resource::get(array('user' => 'ada', 'permission' => 'update'));
         $this->rightClick($resource['id']);
 
         // Then I select the delete option in the contextual menu
@@ -55,7 +55,7 @@ class PasswordDeleteTest extends PassboltTestCase
      * And      I am Ada
      * And      the database is in the default state
      * And      I am logged in on the password workspace
-     * When     I click a password I have admin right on
+     * When     I click a password I have update right on
      * And      I click on the delete button
      * Then     I should see a success notification message saying the password is deleted
      * And      I should not see the password in the list anymore
@@ -66,13 +66,13 @@ class PasswordDeleteTest extends PassboltTestCase
         $this->setClientConfig($user);
 
         // And the database is in the default state
-        $this->PassboltServer->resetDatabase(1);
+        $this->PassboltServer->resetDatabase();
 
         // And I am logged in on the password workspace
         $this->loginAs($user['Username']);
 
-        // When I click a password I have admin right on
-        $resource = Resource::get(array('user' => 'ada', 'permission' => 'admin'));
+        // When I click a password I have update right on
+        $resource = Resource::get(array('user' => 'ada', 'permission' => 'update'));
         $this->click($resource['id']);
 
         // And I click on the delete button
@@ -110,7 +110,7 @@ class PasswordDeleteTest extends PassboltTestCase
         $this->setClientConfig($userB);
 
         // And the database is in the default state
-        $this->PassboltServer->resetDatabase(1);
+        $this->PassboltServer->resetDatabase();
 
         // And I am logged in on the password workspace
         $this->loginAs($userB['Username']);
@@ -176,7 +176,7 @@ class PasswordDeleteTest extends PassboltTestCase
         $this->setClientConfig($user);
 
         // And the database is in the default state
-        $this->PassboltServer->resetDatabase(1);
+        $this->PassboltServer->resetDatabase();
 
         // And I am logged in on the password workspace
         $this->loginAs($user['Username']);

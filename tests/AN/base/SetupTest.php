@@ -21,7 +21,7 @@ class SetupTest extends PassboltSetupTestCase {
 	 */
 	public function testCanSeeSetupPage() {
 		// Reset passbolt installation.
-		$reset = $this->PassboltServer->resetDatabase(1);
+		$reset = $this->PassboltServer->resetDatabase();
 		if (!$reset) {
 			$this->fail('Could not reset installation');
 		}
@@ -56,7 +56,7 @@ class SetupTest extends PassboltSetupTestCase {
 	 * Then         I should reach an error page with text "Token not found"
 	 */
 	public function testCannotSeeSetupPageWithInvalidInformation() {
-		$reset = $this->PassboltServer->resetDatabase(1);
+		$reset = $this->PassboltServer->resetDatabase();
 		if (!$reset) {
 			$this->fail('Could not reset installation');
 		}

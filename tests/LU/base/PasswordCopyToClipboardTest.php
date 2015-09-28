@@ -84,7 +84,7 @@ class PasswordCopyToClipboardTest extends PassboltTestCase
         $this->setClientConfig($user);
 
         // And the database is in a clean state
-        $this->PassboltServer->resetDatabase(1);
+        $this->PassboltServer->resetDatabase();
 
         // And I am logged on the password workspace
         $this->loginAs($user['Username']);

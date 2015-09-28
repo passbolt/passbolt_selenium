@@ -24,7 +24,7 @@ class PASSBOLT1041 extends PassboltTestCase
         $this->setClientConfig($user);
 
         // And the database is in the default state
-        $this->PassboltServer->resetDatabase(1);
+        $this->PassboltServer->resetDatabase();
 
         // And I am logged in on the password workspace
         $this->loginAs($user['Username']);

@@ -14,6 +14,7 @@ if(!defined ('ROOT')) {
 require_once('String.php');
 require_once('Hash.php');
 require_once('Color.php');
+require_once('Uuid.php');
 require_once('Config.php');
 Config::get();
 
