@@ -326,10 +326,6 @@ class PasswordEditTest extends PassboltTestCase
      * And      I enter a new value
      * And      I click save
      * Then     I can see that the password name have changed in the overview
-
-     * When     I click on the password
-     * Then     I can see the sidebar
-
      * And      I can see the new name value in the sidebar
      * When     I click edit button
      * Then     I can see the new name in the edit password dialog
@@ -359,18 +355,13 @@ class PasswordEditTest extends PassboltTestCase
 
         // And I click save
         $this->click('.edit-password-dialog input[type=submit]');
-        $this->assertNotificationSuccess('The resource was successfully updated', 2);
+        $this->assertNotification('app_resources_edit_success');
 
         // Then I can see that the password name have changed in the overview
         $this->assertElementContainsText('#js_wsp_pwd_browser .tableview-content', $newname);
 
-        // When I click on the password
-        //$this->click($resource['id']);
-
-        // Then I can see the sidebar
-        $this->assertVisible('#js_pwd_details.panel.aside');
-
         // And  I can see the new name value in the sidebar
+        $this->assertVisible('#js_pwd_details.panel.aside');
         $this->assertElementContainsText('js_pwd_details', $newname);
 
         // When I click edit button

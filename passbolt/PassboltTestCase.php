@@ -300,22 +300,24 @@ class PassboltTestCase extends WebDriverTestCase {
 	}
 
 	/**
-	 * Check if a success notification is displayed
-	 * @param null $msg optional
-	 * @param int $attempt number of notifications to check in a row
+	 * Check if a notification is displayed
+	 * @see in passbolt/app/webroot/js/app/config/notification.json for notification uuid seed
+	 * 		example: Uuid::get('app_resources_index_success') is how to create the id from the seed
+	 * @param $notificationId
+	 * @param string $msg
 	 */
-	public function assertNotificationSuccess($msg = null) {
-		$this->waitUntilISee('.notification-container .message');
-		$this->assertVisible('.notification-container .message.success');
+	public function assertNotification($notificationId, $msg = null) {
+		$notificationId = 'notification_' . Uuid::get($notificationId);
+		$this->waitUntilISee($notificationId);
+		$text = $this->find($notificationId)->getText();
 		if (isset($msg)) {
-			$text = $this->find('.notification-container .message.success')->getText();
 			$contain = false;
 			if(preg_match('/^\/.+\/[a-z]*$/i', $msg)) {
 				$contain = preg_match($msg, $text) != false;
 			} else {
 				$contain = strpos($text, $msg) !== false;
 			}
-			$this->assertTrue($contain !== false, 'fail to find the success notification message ' . $msg);
+			$this->assertTrue(($contain !== false), 'fail to find the notification message ' . $msg);
 		}
 	}
 

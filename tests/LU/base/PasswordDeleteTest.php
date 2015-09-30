@@ -43,7 +43,7 @@ class PasswordDeleteTest extends PassboltTestCase
         $this->clickLink('Delete');
 
         // Then I should see a success notification message saying the password is deleted
-        $this->assertNotificationSuccess('successfully deleted');
+        $this->assertNotification('app_resources_delete_success');
 
         // And I should not see the password in the list anymore
         $this->assertTrue($this->isNotVisible($resource['id']));
@@ -79,7 +79,7 @@ class PasswordDeleteTest extends PassboltTestCase
         $this->click('js_wk_menu_deletion_button');
 
         // Then I should see a success notification message saying the password is deleted
-        $this->assertNotificationSuccess('successfully deleted');
+        $this->assertNotification('app_resources_delete_success');
 
         // And I should not see the password in the list anymore
         $this->assertTrue($this->isNotVisible($resource['id']));
@@ -137,7 +137,7 @@ class PasswordDeleteTest extends PassboltTestCase
         $this->click('js_wk_menu_deletion_button');
 
         // Then I should see a success notification message saying the password is deleted
-        $this->assertNotificationSuccess('successfully deleted');
+        $this->assertNotification('app_resources_delete_success');
 
         // And I should not see the password in the list anymore
         $this->assertNotVisible($resource['id']);
