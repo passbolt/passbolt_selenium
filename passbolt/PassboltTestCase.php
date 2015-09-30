@@ -10,6 +10,7 @@ class PassboltTestCase extends WebDriverTestCase {
 
 	// PassboltServer.
 	protected $PassboltServer = null;
+	protected $resetDatabase = false;
 
 	/**
 	 * Executed before every tests
@@ -18,6 +19,9 @@ class PassboltTestCase extends WebDriverTestCase {
 		parent::setUp();
 		$this->PassboltServer = new PassboltServer(Config::read('passbolt.url'));
 		$this->driver->manage()->window()->maximize();
+		if ($this->resetDatabase) {
+			$this->PassboltServer->resetDatabase();
+		}
 	}
 
 	/********************************************************************************
@@ -134,6 +138,7 @@ class PassboltTestCase extends WebDriverTestCase {
 			$this->waitUntilISee('.page.password');
 			$this->waitUntilISee('#js_wk_menu_edition_button');
 		}
+		$this->click('footer'); // we click somewhere in case the password is already active
 		$this->click($id);
 		$this->click('js_wk_menu_edition_button');
 		$this->waitCompletion();
@@ -141,7 +146,7 @@ class PassboltTestCase extends WebDriverTestCase {
 	}
 
 	/**
-	 * Input a given string in the secret field
+	 * Input a given string in the secret field (create only)
 	 * @param string $secret
 	 */
 	public function inputSecret($secret) {
@@ -212,9 +217,31 @@ class PassboltTestCase extends WebDriverTestCase {
 		if (isset($password['description'])) {
 			$this->inputText('js_field_description', $password['description']);
 		}
-
 		$this->click('.edit-password-dialog input[type=submit]');
-		$this->waitUntilISee('.notification-container', '/successfully saved/i');
+		$this->assertNotification('app_resources_edit_success');
+	}
+
+	/**
+	 * Enter the password in the master password iframe
+	 * @param $pwd
+	 */
+	public function enterMasterPassword($pwd) {
+		$this->goIntoMasterPasswordIframe();
+		$this->inputText('js_master_password', $pwd);
+		$this->click('master-password-submit');
+		$this->goOutOfIframe();
+	}
+
+	/**
+	 * Copy a password to clipboard
+	 * @param $resource
+	 * @param $user
+	 */
+	public function copyToClipboard($resource, $user) {
+		$this->rightClick($resource['id']);
+		$this->clickLink('Copy password');
+		$this->assertMasterPasswordDialog($user);
+		$this->enterMasterPassword($user['MasterPassword']);
 	}
 
 	/********************************************************************************
@@ -279,6 +306,18 @@ class PassboltTestCase extends WebDriverTestCase {
 			$this->assertTrue(count($e) === 0);
 		} catch (NoSuchElementException $e) {
 			$this->assertTrue(true);
+		}
+	}
+
+	/**
+	 * Check that there is a plugin with a config set
+	 */
+	public function assertPluginConfig() {
+		try {
+			$e = $this->findByCSS('html.passboltplugin-config');
+			$this->assertTrue((isset($e)));
+		} catch (NoSuchElementException $e) {
+			$this->fail('Passbolt plugin config html header not found');
 		}
 	}
 
@@ -365,8 +404,10 @@ class PassboltTestCase extends WebDriverTestCase {
 	 * Check if the master password dialog is working as expected
 	 */
 	public function assertMasterPasswordDialog($user) {
+		// Get out of the previous iframe in case we are in one
+		$this->goOutOfIframe();
 		// Given I can see the iframe
-		$this->assertVisible('passbolt-iframe-master-password');
+		$this->waitUntilISee('passbolt-iframe-master-password');
 		// When I can go into the iframe
 		$this->goIntoMasterPasswordIframe();
 		// Then I can see the security token is valid
@@ -381,5 +422,19 @@ class PassboltTestCase extends WebDriverTestCase {
 		$this->assertVisible('a.js-dialog-close.cancel');
 		// Then I go out of the iframe
 		$this->goOutOfIframe();
+	}
+
+	/**
+	 * Assert that the content content of the clipboard match what is given
+	 * @param $content
+	 */
+	public function assertClipboard($content) {
+		// trick: we copy the content in the search field
+		// and check its content match the content given
+		$e = $this->findById('js_app_filter_keywords');
+		$e->click();
+		$action = new WebDriverActions($this->driver);
+		$action->sendKeys($e, array(WebDriverKeys::CONTROL,'v'))->perform();
+		$this->assertTrue($e->getAttribute('value') == $content);
 	}
 }

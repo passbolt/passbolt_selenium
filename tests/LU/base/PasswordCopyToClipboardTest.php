@@ -65,26 +65,21 @@ class PasswordCopyToClipboardTest extends PassboltTestCase
      * Scenario : As a user I can copy a password to clipboard using a right click
      *
      * Given    I am Betty
-     * And      The database is in a clean state
      * And      I am logged in on the password workspace
      * When     I select the first password in the list
      * And      I right click
      * Then     I can see the contextual menu
      * When     I click on the link 'copy password'
      * Then     I can see the master key dialog
-     * When     I enter my master password
+     * When     I enter my master password and click submit
      * Then     I can see a success message saying the password was 'copied to clipboard'
-     * When     I copy paste the password in search input field
-     * Then     I can see it is the right one
+     * And      The content of the clipboard is valid
      */
     public function testCopyPasswordToClipboardViaContextualMenu() {
         // Given I am Betty
         $user = User::get('betty');
         $resource = Resource::get(array('user' => 'betty'));
         $this->setClientConfig($user);
-
-        // And the database is in a clean state
-        $this->PassboltServer->resetDatabase();
 
         // And I am logged on the password workspace
         $this->loginAs($user['Username']);
@@ -104,26 +99,14 @@ class PasswordCopyToClipboardTest extends PassboltTestCase
         // Then I can see the master key dialog
         $this->assertMasterPasswordDialog($user);
 
-        // When I enter my master password
-        $this->goIntoMasterPasswordIframe();
-        $this->inputText('js_master_password', $user['MasterPassword']);
-
-        // And click on save
-        $this->click('master-password-submit');
-        $this->goOutOfIframe();
+        // When I enter my master password and click submit
+        $this->enterMasterPassword($user['MasterPassword']);
 
         // Then I can see a success message telling me the password was copied to clipboard
-        $this->isVisible('.notification-container .message.success');
-        $this->assertElementContainsText('.notification-container .message.success','copied to clipboard');
+        $this->assertNotification('plugin_secret_copy_success');
 
-        // When I copy paste the password in search input field
-        $e = $this->findById('js_app_filter_keywords');
-        $e->click();
-        $action = new WebDriverActions($this->driver);
-        $action->sendKeys($e, array(WebDriverKeys::CONTROL,'v'))->perform();
-
-        // Then I can see it is the right one
-        $this->assertTrue($e->getAttribute('value') == $resource['password']);
+        // And the content of the clipboard is valid
+        $this->assertClipboard($resource['password']);
     }
 
     /**
@@ -134,8 +117,7 @@ class PasswordCopyToClipboardTest extends PassboltTestCase
      * When     I right click on the first password in the list
      * And      I click on the 'Copy URI' in the contextual menu
      * Then     I can see a success message saying the URI was copied to clipboard
-     * When     I click in the search input field and paste the clipboard content
-     * Then     I can see it is the right URI
+     * And      The content of the clipboard is valid
      */
     function testCopyURIToClipboardViaContextualMenu () {
         // Given I am Betty
@@ -152,18 +134,11 @@ class PasswordCopyToClipboardTest extends PassboltTestCase
         // When I click on the 'Copy URI' in the contextual menu
         $this->clickLink('Copy URI');
 
-        // Then I can see a success message saying the URI was copied to clipboard
-        $this->isVisible('.notification-container .message.success');
-        $this->assertElementContainsText('.notification-container .message.success','copied to clipboard');
+        // Then I can see a success message saying the uri was copied to clipboard
+        $this->assertNotification('plugin_clipboard_copy_success');
 
-        // When I click in the search input field and paste the clipboard content
-        $e = $this->findById('js_app_filter_keywords');
-        $e->click();
-        $action = new WebDriverActions($this->driver);
-        $action->sendKeys($e, array(WebDriverKeys::CONTROL,'v'))->perform();
-
-        // Then I can see it is the right one
-        $this->assertTrue($e->getAttribute('value') == $resource['uri']);
+        // And the content of the clipboard is valid
+        $this->assertClipboard($resource['uri']);
     }
 
     /**
@@ -174,8 +149,7 @@ class PasswordCopyToClipboardTest extends PassboltTestCase
      * When     I right click on the first password in the list
      * And      I click on the 'Copy username' in the contextual menu
      * Then     I can see a success message saying the username was copied to clipboard
-     * When     I click in the search input field and paste the clipboard content
-     * Then     I can see it is the right username
+     * And      The content of the clipboard is valid
      */
     function testCopyUsernameToClipboardViaContextualMenu() {
         // Given I am Betty
@@ -193,17 +167,9 @@ class PasswordCopyToClipboardTest extends PassboltTestCase
         $this->clickLink('Copy username');
 
         // Then I can see a success message saying the username was copied to clipboard
-        $this->isVisible('.notification-container .message.success');
-        $this->assertElementContainsText('.notification-container .message.success','copied to clipboard');
+        $this->assertNotification('plugin_clipboard_copy_success');
 
-        // When I click in the search input field and paste the clipboard content
-        $e = $this->findById('js_app_filter_keywords');
-        $e->click();
-        $action = new WebDriverActions($this->driver);
-        $action->sendKeys($e, array(WebDriverKeys::CONTROL,'v'))->perform();
-
-        // Then I can see it is the right username
-        $this->assertTrue($e->getAttribute('value') == $resource['username']);
-
+        // And the content of the clipboard is valid
+        $this->assertClipboard($resource['username']);
     }
 }

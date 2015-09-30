@@ -13,11 +13,12 @@
  */
 class PasswordDeleteTest extends PassboltTestCase
 {
+    protected $resetDatabase = true;
+
     /**
      * Scenario: As a user I can delete a password using a right click
      *
      * And      I am Ada
-     * And      the database is in the default state
      * And      I am logged in on the password workspace
      * When     I right click on a password I have update right on
      * Then     I select the delete option in the contextual menu
@@ -28,9 +29,6 @@ class PasswordDeleteTest extends PassboltTestCase
         // And I am Ada
         $user = User::get('ada');
         $this->setClientConfig($user);
-
-        // And the database is in the default state
-        $this->PassboltServer->resetDatabase();
 
         // And I am logged in on the password workspace
         $this->loginAs($user['Username']);
@@ -53,7 +51,6 @@ class PasswordDeleteTest extends PassboltTestCase
      * Scenario: As a user I can delete a password using the button in the action bar
      *
      * And      I am Ada
-     * And      the database is in the default state
      * And      I am logged in on the password workspace
      * When     I click a password I have update right on
      * And      I click on the delete button
@@ -64,9 +61,6 @@ class PasswordDeleteTest extends PassboltTestCase
         // And I am Ada
         $user = User::get('ada');
         $this->setClientConfig($user);
-
-        // And the database is in the default state
-        $this->PassboltServer->resetDatabase();
 
         // And I am logged in on the password workspace
         $this->loginAs($user['Username']);
@@ -89,7 +83,6 @@ class PasswordDeleteTest extends PassboltTestCase
      * Scenario: As a user B I can see a password that user A shared with me and deleted.
      *
      * Given    I am Betty
-     * And      the database is in the default state
      * And      I am logged in on the password worskpace
      * Then     I can see a password shared with ada in the list
      * When     I logout
@@ -108,9 +101,6 @@ class PasswordDeleteTest extends PassboltTestCase
         // Given I am Betty
         $userB = User::get('betty');
         $this->setClientConfig($userB);
-
-        // And the database is in the default state
-        $this->PassboltServer->resetDatabase();
 
         // And I am logged in on the password workspace
         $this->loginAs($userB['Username']);
@@ -159,7 +149,6 @@ class PasswordDeleteTest extends PassboltTestCase
      * Scenario: As a user I should not be able to delete a password when I have read access
      *
      * Given    I am Betty
-     * And      the database is in the default state
      * And      I am logged in on the password workspace
      * When     I click on a password I have view right
      * Then     I should see that the delete button is disabled
@@ -174,9 +163,6 @@ class PasswordDeleteTest extends PassboltTestCase
         // Given I am Betty
         $user = User::get('betty');
         $this->setClientConfig($user);
-
-        // And the database is in the default state
-        $this->PassboltServer->resetDatabase();
 
         // And I am logged in on the password workspace
         $this->loginAs($user['Username']);

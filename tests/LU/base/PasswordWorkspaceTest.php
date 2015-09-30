@@ -14,13 +14,7 @@
  */
 class PasswordWorkspaceTest extends PassboltTestCase
 {
-
-    protected function setUp()
-    {
-        parent::setUp();
-        // Reset passbolt installation with dummies.
-        $this->PassboltServer->resetDatabase();
-    }
+    protected $resetDatabase = true;
 
     /**
      * Scenario :   As a user I should be able to see the passwords workspace

@@ -7,8 +7,8 @@
  * As a user I can open close the password dialog
  * As a user I can see error messages when creating a password with wrong inputs
  * As a user I can view a password I just created on my list of passwords
- * As a user I can generate a password automatically
- * As a user I can view my password in clear text
+ * As a user I can generate a random password automatically
+ * As a user I can view the password I am creating in clear text
  *
  * @copyright    (c) 2015-present Bolt Software Pvt. Ltd.
  * @licence      GPLv3 onwards www.gnu.org/licenses/gpl-3.0.en.html
@@ -16,11 +16,12 @@
 class PasswordCreateTest extends PassboltTestCase
 {
 
+    protected $resetDatabase = true;
+
     /**
      * Scenario :   As a user I can view the create password dialog
      *
      * Given        I am Carol
-     * And          The database is in a clean state
      * And          I am logged in as Carol
      * And          I am on password workspace
      * Then			I should see the create password button
@@ -50,9 +51,6 @@ class PasswordCreateTest extends PassboltTestCase
         // Given I am Carol
         $user = User::get('carol');
         $this->setClientConfig($user);
-
-        // And the database is in a clean state
-        $this->PassboltServer->resetDatabase();
 
         // I am logged in as Carol, and I go to the user workspace
         $this->loginAs($user['Username']);
@@ -292,7 +290,6 @@ class PasswordCreateTest extends PassboltTestCase
      * Scenario: As a user I can view a password I just created on my list of passwords
      *
      * Given    I am Carol
-     * And      the database is in a clean state
      * And      I am logged in
      * And      I am on the create password dialog
      * When     I enter 'localhost ftp' as the name
@@ -309,9 +306,6 @@ class PasswordCreateTest extends PassboltTestCase
         // Given I am Carol
         $user = User::get('carol');
         $this->setClientConfig($user);
-
-        // And the database is in a clean state
-        $this->PassboltServer->resetDatabase();
 
         // And I am logged in
         $this->loginAs($user['Username']);
@@ -353,7 +347,7 @@ class PasswordCreateTest extends PassboltTestCase
     }
 
     /**
-     * Scenario: As a user I can generate a password automatically
+     * Scenario: As a user I can generate a random password automatically
      *
      * Given    I am carol
      * And      I am logged in
@@ -366,9 +360,6 @@ class PasswordCreateTest extends PassboltTestCase
         // Given I am Carol
         $user = User::get('carol');
         $this->setClientConfig($user);
-
-        // And the database is in a clean state
-        $this->PassboltServer->resetDatabase();
 
         // And I am logged in
         $this->loginAs($user['Username']);
@@ -393,7 +384,7 @@ class PasswordCreateTest extends PassboltTestCase
     }
 
     /**
-     * Scenario: As a user I can view my password in clear text
+     * Scenario: As a user I can view the password I am creating in clear text
      *
      * Given I am carol
      * And I am logged in

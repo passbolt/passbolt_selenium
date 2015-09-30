@@ -7,6 +7,10 @@
  */
 class PASSBOLT1040 extends PassboltTestCase
 {
+    /**
+     * Scenario: As a user editing my password encryption should not happen if do not edit the secret
+     * @throws Exception
+     */
     public function testNoEncryptionOnResourceNameEdit() {
         // Given I am Ada
         $user = User::get('ada');
@@ -35,8 +39,10 @@ class PASSBOLT1040 extends PassboltTestCase
         $this->inputText('js_field_uri', $r['uri']);
         $this->inputText('js_field_description', $r['description']);
 
+        // And I click the submit button
         $this->click('.edit-password-dialog input[type=submit]');
 
+        // Then I should not see the encryption in progress dialog
         try {
             $this->waitUntilISee('passbolt-iframe-progress-dialog',null,3);
         } catch(exception $e){};
