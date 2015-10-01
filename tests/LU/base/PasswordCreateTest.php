@@ -57,7 +57,7 @@ class PasswordCreateTest extends PassboltTestCase
 
         // then I should see the create password button
         $this->assertElementContainsText(
-            $this->findByCss('#js_wsp_primary_menu_wrapper ul'), 'create'
+            $this->findByCss('js_wsp_primary_menu_wrapper'), 'create'
         );
 
         // When I click on create button
@@ -231,13 +231,13 @@ class PasswordCreateTest extends PassboltTestCase
         // Then I should see an error message saying that the name is required
         $this->assertVisible('#js_field_name_feedback.error.message');
         $this->assertElementContainsText(
-            $this->findByCss('#js_field_name_feedback'), 'is required'
+            $this->find('js_field_name_feedback'), 'is required'
         );
 
         // Then I should see an error message saying that the username is required
         $this->assertVisible('#js_field_username_feedback.error.message');
         $this->assertElementContainsText(
-            $this->findByCss('#js_field_username_feedback'), 'is required'
+            $this->find('js_field_username_feedback'), 'is required'
         );
 
         // @TODO PASSBOLT-1023 it should pass if we remove this
@@ -263,25 +263,25 @@ class PasswordCreateTest extends PassboltTestCase
         // Then I should see an error message saying that the name contain invalid characters
         $this->assertVisible('#js_field_name_feedback.error.message');
         $this->assertElementContainsText(
-            $this->findByCss('#js_field_name_feedback'), 'should only contain alphabets, numbers'
+            $this->find('js_field_name_feedback'), 'should only contain alphabets, numbers'
         );
 
         // Then I should see an error message saying that the username contain invalid characters
         $this->assertVisible('#js_field_username_feedback.error.message');
         $this->assertElementContainsText(
-            $this->findByCss('#js_field_username_feedback'), 'should only contain alphabets, numbers'
+            $this->find('js_field_username_feedback'), 'should only contain alphabets, numbers'
         );
 
         // Then I should see an error message saying that the url is not valid
         $this->assertVisible('#js_field_uri_feedback.error.message');
         $this->assertElementContainsText(
-            $this->findByCss('#js_field_uri_feedback'), 'The format of the uri is not valid'
+            $this->find('js_field_uri_feedback'), 'The format of the uri is not valid'
         );
 
         // Then I should see an error message saying that the description contain invalid characters
         $this->assertVisible('#js_field_description_feedback.error.message');
         $this->assertElementContainsText(
-            $this->findByCss('#js_field_description_feedback'), 'should only contain alphabets, numbers'
+            $this->find('js_field_description_feedback'), 'should only contain alphabets, numbers'
         );
 
     }
@@ -339,10 +339,10 @@ class PasswordCreateTest extends PassboltTestCase
 
         // I should see the password I created in my password list
         $this->assertElementContainsText(
-            $this->findByCss('#js_wsp_pwd_browser'), 'ftp://passbolt.com'
+            $this->find('js_wsp_pwd_browser'), 'ftp://passbolt.com'
         );
         $this->assertElementContainsText(
-            $this->findByCss('#js_wsp_pwd_browser'), 'localhost ftp'
+            $this->find('js_wsp_pwd_browser'), 'localhost ftp'
         );
     }
 
@@ -352,7 +352,7 @@ class PasswordCreateTest extends PassboltTestCase
      * Given    I am carol
      * And      I am logged in
      * And      I am on the create password dialog
-     * When     I click on the password generation button
+     * When     I click the button to generate a new random password automatically
      * Then     I should see the secret field populated
      * And      I should see that the password complexity is set to fair
      */
@@ -367,7 +367,7 @@ class PasswordCreateTest extends PassboltTestCase
         // And I am on the create password dialog
         $this->gotoCreatePassword();
 
-        // When I click on the password generation button
+        // When I click the button to generate a new random password automatically
         $this->goIntoSecretIframe();
         $this->click('js_secret_generate');
 
@@ -377,10 +377,7 @@ class PasswordCreateTest extends PassboltTestCase
 
         // And I should see that the password complexity is set to fair
         $this->assertTrue(strlen($s) == SystemDefaults::$AUTO_PASSWORD_LENGTH);
-        $this->assertElementContainsText(
-            $this->findByCss('#js_secret_strength .complexity-text'),
-            SystemDefaults::$AUTO_PASSWORD_STRENGTH
-        );
+        $this->assertComplexity(SystemDefaults::$AUTO_PASSWORD_STRENGTH);
     }
 
     /**
@@ -412,21 +409,21 @@ class PasswordCreateTest extends PassboltTestCase
 
         // Then I should not see the input field with the password in clear text
         $this->goIntoSecretIframe();
-        $this->assertTrue($this->isNotVisible('#js_secret_clear'));
+        $this->assertTrue($this->isNotVisible('js_secret_clear'));
 
         // When I click on the view password
         $this->click('js_secret_view');
 
         // Then I should see the input field with the password in clear text
-        $this->assertNotVisible('#js_secret');
-        $this->assertVisible('#js_secret_clear');
+        $this->assertNotVisible('js_secret');
+        $this->assertVisible('js_secret_clear');
         $this->assertTrue($this->findById('js_secret_clear')->getAttribute('value') == 'ftp-password-test');
 
         // When I click on the view password
         $this->click('js_secret_view');
 
         // Then I should not see the input field with the password in clear text
-        $this->assertNotVisible('#js_secret_clear');
+        $this->assertNotVisible('js_secret_clear');
     }
 
 }

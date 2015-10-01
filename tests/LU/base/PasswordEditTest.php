@@ -587,14 +587,50 @@ class PasswordEditTest extends PassboltTestCase
      * And      I am editing a password I own
      * When     I click the button to generate a new random password automatically
      * Then     I see the master password dialog
-     * When     I enter the master password in the input field
-     * And      I press the submit button
-     * When     I click the button to view my password in clear text
-     * Then     I can see the password in clear text
-     * Then     I can see the password is random
-     * And      I can see the password complexity is at least fair
+     * When     I enter the master password in the input field and press the submit button
+     * Then     I can see the secret field populated
+     * And      I can see the secret is different than the previous one
+     * And      I can see that the password complexity is set to fair
      */
     public function testEditPasswordGenerateRandom() {
+        // Given I am Ada
+        $user = User::get('ada');
+        $this->setClientConfig($user);
+
+        // And I am logged in on the password workspace
+        $this->loginAs($user['Username']);
+
+        // And I am editing a password I own
+        $r1 = Resource::get(array(
+            'user' => 'ada',
+            'permission' => 'owner'
+        ));
+        $this->gotoEditPassword($r1['id']);
+
+        // When I click the button to generate a new random password automatically
+        $this->goIntoSecretIframe();
+        $this->click('js_secret_generate');
+
+        // Then I see the master password dialog
+        $this->assertMasterPasswordDialog($user);
+
+        // When I enter the master password in the input field
+        $this->enterMasterPassword($user['MasterPassword']);
+
+        // Then I should see the secret field populated
+        $this->goIntoSecretIframe();
+        $s = $this->findById('js_secret')->getAttribute('value');
+        $this->assertNotEmpty($s);
+
+        // When I press the same button to hide my password again
+        $this->click('js_secret_view');
+
+        // And I can see the secret is different than the previous one
+        $this->assertTrue(($s != $r1['password']));
+
+        // And I should see that the password complexity is set to fair
+        $this->assertTrue(strlen($s) == SystemDefaults::$AUTO_PASSWORD_LENGTH);
+        $this->assertComplexity(SystemDefaults::$AUTO_PASSWORD_STRENGTH);
 
     }
 
