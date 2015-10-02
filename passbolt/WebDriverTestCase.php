@@ -481,7 +481,10 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
      * @param $id
      */
     public function assertVisible($id) {
-        $this->assertTrue($this->isVisible($id));
+        $this->assertTrue(
+            $this->isVisible($id),
+            'Failed to assert that the element ' . $id .' is visible'
+        );
     }
 
     /**
@@ -489,7 +492,10 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
      * @param $id
      */
     public function assertNotVisible($id) {
-        $this->assertTrue($this->isNotVisible($id));
+        $this->assertTrue(
+            $this->isNotVisible($id),
+            'Failed to assert that the element ' . $id .' is not visible'
+        );
     }
 
     /**
@@ -498,6 +504,18 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
      */
     public function assertInputValue($id, $value) {
         $el = $this->find($id);
-        $this->assertTrue($el->getAttribute('value') == $value);
+        $this->assertTrue(
+            ($el->getAttribute('value') == $value),
+            'Failed to assert that the input: '.$id .', match value: '. $value
+        );
+    }
+
+    /**
+     * Assert if an input is disabled
+     * @param $id
+     */
+    public function assertDisabled($id) {
+        $a = $this->find($id)->getAttribute('disabled');
+        $this->assertTrue(($a === 'true'), 'Failed to assert the element '.$id . 'is disabled');
     }
 }

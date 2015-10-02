@@ -24,27 +24,27 @@ class PasswordCreateTest extends PassboltTestCase
      * Given        I am Carol
      * And          I am logged in as Carol
      * And          I am on password workspace
-     * Then			I should see the create password button
+     * Then			I see the create password button
      * When         I click on create button
-     * Then         I should see the create password dialog
-     * And          I should see the title is set to "create password"
-     * And          I should see the name input and label is marked as mandatory
-     * And          I should see the url text input and label
-     * And          I should see the username text input and label marked as mandatory
-     * And          I should see the password iframe
-     * And          I should see the iframe label
+     * Then         I see the create password dialog
+     * And          I see the title is set to "create password"
+     * And          I see the name input and label is marked as mandatory
+     * And          I see the url text input and label
+     * And          I see the username text input and label marked as mandatory
+     * And          I see the password iframe
+     * And          I see the iframe label
      * When         I switch to the password iframe
-     * And          I should see the password input
-     * And          I should see the security token
-     * And          I should see the view password button
-     * And          I should see the generate password button
-     * And          I should see the complexity meter
-     * And          I should see the complexity textual indicator
+     * And          I see the password input
+     * And          I see the security token
+     * And          I see the view password button
+     * And          I see the generate password button
+     * And          I see the complexity meter
+     * And          I see the complexity textual indicator
      * When         I switch back out of the password iframe
-     * And          I should see the description textarea and label
-     * And          I should see the save button
-     * And          I should see the cancel button
-     * And          I should see the close dialog button
+     * And          I see the description textarea and label
+     * And          I see the save button
+     * And          I see the cancel button
+     * And          I see the close dialog button
      */
     public function testCreatePasswordDialogExist()
     {
@@ -55,7 +55,7 @@ class PasswordCreateTest extends PassboltTestCase
         // I am logged in as Carol, and I go to the user workspace
         $this->loginAs($user['Username']);
 
-        // then I should see the create password button
+        // then I see the create password button
         $this->assertElementContainsText(
             $this->findByCss('js_wsp_primary_menu_wrapper'), 'create'
         );
@@ -63,65 +63,65 @@ class PasswordCreateTest extends PassboltTestCase
         // When I click on create button
         $this->click('js_wk_menu_creation_button');
 
-        // Then I should see the create password dialog
+        // Then I see the create password dialog
         $this->assertVisible('.create-password-dialog');
 
-        // And I should see the title is set to "create password"
+        // And I see the title is set to "create password"
         $this->assertElementContainsText(
             $this->findByCss('.dialog'), 'Create Password'
         );
 
-        // And I should see the name text input and label is marked as mandatory
+        // And I see the name text input and label is marked as mandatory
         $this->assertVisible('.create-password-dialog input[type=text]#js_field_name.required');
         $this->assertVisible('.create-password-dialog label[for=js_field_name]');
 
-        // And I should see the url text input and label
+        // And I see the url text input and label
         $this->assertVisible('.create-password-dialog input[type=text]#js_field_uri');
         $this->assertVisible('.create-password-dialog label[for=js_field_uri]');
 
-        // And I should see the username field marked as mandatory
+        // And I see the username field marked as mandatory
         $this->assertVisible('.create-password-dialog input[type=text]#js_field_username.required');
         $this->assertVisible('.create-password-dialog label[for=js_field_username]');
 
-        // And I should see the password iframe
+        // And I see the password iframe
         $this->assertVisible('.create-password-dialog #passbolt-iframe-secret-edition');
 
-        // And I should see the iframe label
+        // And I see the iframe label
         $this->assertVisible('.create-password-dialog label[for=js_field_secret_data_0]');
 
         // When I switch to the password iframe
         $this->goIntoSecretIframe();
 
-        // And I should see the input field
+        // And I see the input field
         $this->assertVisible('input[type=password]#js_secret');
 
-        // And I should see the security token
+        // And I see the security token
         $this->assertSecurityToken($user);
 
-        // And I should see the view password button
+        // And I see the view password button
         $this->assertVisible('#js_secret_view.button');
 
-        // And I should see the generate password button
+        // And I see the generate password button
         $this->assertVisible('#js_secret_generate.button');
 
-        // And I should see the complexity meter
-        // And I should see the complexity textual indicator
+        // And I see the complexity meter
+        // And I see the complexity textual indicator
         $this->assertComplexity('very weak');
 
         // When I switch back out of the password iframe
         $this->goOutOfIframe();
 
-        // And I should see the description field
+        // And I see the description field
         $this->assertVisible('.create-password-dialog textarea#js_field_description');
         $this->assertVisible('.create-password-dialog label[for=js_field_description]');
 
-        // And I should see the save button
+        // And I see the save button
         $this->assertVisible('input[type=submit].button.primary');
 
-        // And I should see the cancel button
+        // And I see the cancel button
         $this->assertVisible('.create-password-dialog a.cancel');
 
-        // And I should see the close dialog button
+        // And I see the close dialog button
         $this->assertVisible('.create-password-dialog a.dialog-close');
     }
 
@@ -132,15 +132,15 @@ class PasswordCreateTest extends PassboltTestCase
      * And      I am logged in
      * And      I am on the password workspace
      * When     I click on the create password button
-     * Then     I should see the create password dialog
+     * Then     I see the create password dialog
      * When     I click on the cancel button
      * Then     I should not see the create password dialog
      * When     I click on the create password button
-     * Then     I should see the create password dialog
+     * Then     I see the create password dialog
      * When     I click on the close dialog button
      * Then     I should not see the create password dialog
      * When     I click on the create password button
-     * Then     I should see the create password dialog
+     * Then     I see the create password dialog
      * When     I press the keyboard escape key
      * Then     I should not see the create password dialog
      */
@@ -155,7 +155,7 @@ class PasswordCreateTest extends PassboltTestCase
         // When I click on the create password button
         $this->click('js_wk_menu_creation_button');
 
-        // Then I should see the create password dialog
+        // Then I see the create password dialog
         $this->assertVisible('.create-password-dialog');
 
         // When I click on the cancel button
@@ -168,7 +168,7 @@ class PasswordCreateTest extends PassboltTestCase
         // When I click on the create password button
         $this->click('js_wk_menu_creation_button');
 
-        // Then I should see the create password dialog
+        // Then I see the create password dialog
         $this->assertVisible('.create-password-dialog');
 
         // When I click on the close dialog button
@@ -181,7 +181,7 @@ class PasswordCreateTest extends PassboltTestCase
         // When I click on the create password button
         $this->click('js_wk_menu_creation_button');
 
-        // Then I should see the create password dialog
+        // Then I see the create password dialog
         $this->assertVisible('.create-password-dialog');
 
         // When I click on the escape key
@@ -199,17 +199,17 @@ class PasswordCreateTest extends PassboltTestCase
      * And      I am logged in
      * And      I am on the create password dialog
      * When     I press the enter key on the keyboard
-     * Then     I should see an error message saying that the name is required
-     * Then     I should see an error message saying that the username is required
+     * Then     I see an error message saying that the name is required
+     * Then     I see an error message saying that the username is required
      * When     I enter '&' as a name
      * And      I enter '&' as a username
      * And      I enter '&' as a url
      * And      I enter '&' as a description
      * And      I click on the save button
-     * Then     I should see an error message saying that the name contain invalid characters
-     * Then     I should see an error message saying that the username contain invalid characters
-     * Then     I should see an error message saying that the url is not valid
-     * Then     I should see an error message saying that the description contain invalid characters
+     * Then     I see an error message saying that the name contain invalid characters
+     * Then     I see an error message saying that the username contain invalid characters
+     * Then     I see an error message saying that the url is not valid
+     * Then     I see an error message saying that the description contain invalid characters
      */
     public function testCreatePasswordErrorMessages() {
         // Given I am Carol
@@ -223,18 +223,18 @@ class PasswordCreateTest extends PassboltTestCase
         $this->gotoCreatePassword();
 
         // When I click on the name input field
-        $this->click('#js_field_name');
+        $this->click('js_field_name');
 
         // And I press enter
         $this->pressEnter();
 
-        // Then I should see an error message saying that the name is required
+        // Then I see an error message saying that the name is required
         $this->assertVisible('#js_field_name_feedback.error.message');
         $this->assertElementContainsText(
             $this->find('js_field_name_feedback'), 'is required'
         );
 
-        // Then I should see an error message saying that the username is required
+        // Then I see an error message saying that the username is required
         $this->assertVisible('#js_field_username_feedback.error.message');
         $this->assertElementContainsText(
             $this->find('js_field_username_feedback'), 'is required'
@@ -260,25 +260,25 @@ class PasswordCreateTest extends PassboltTestCase
         // And I click save
         $this->click('.create-password-dialog input[type=submit]');
 
-        // Then I should see an error message saying that the name contain invalid characters
+        // Then I see an error message saying that the name contain invalid characters
         $this->assertVisible('#js_field_name_feedback.error.message');
         $this->assertElementContainsText(
             $this->find('js_field_name_feedback'), 'should only contain alphabets, numbers'
         );
 
-        // Then I should see an error message saying that the username contain invalid characters
+        // Then I see an error message saying that the username contain invalid characters
         $this->assertVisible('#js_field_username_feedback.error.message');
         $this->assertElementContainsText(
             $this->find('js_field_username_feedback'), 'should only contain alphabets, numbers'
         );
 
-        // Then I should see an error message saying that the url is not valid
+        // Then I see an error message saying that the url is not valid
         $this->assertVisible('#js_field_uri_feedback.error.message');
         $this->assertElementContainsText(
             $this->find('js_field_uri_feedback'), 'The format of the uri is not valid'
         );
 
-        // Then I should see an error message saying that the description contain invalid characters
+        // Then I see an error message saying that the description contain invalid characters
         $this->assertVisible('#js_field_description_feedback.error.message');
         $this->assertElementContainsText(
             $this->find('js_field_description_feedback'), 'should only contain alphabets, numbers'
@@ -298,9 +298,9 @@ class PasswordCreateTest extends PassboltTestCase
      * And      I enter 'localhost ftp test account' as the description
      * And      I enter 'ftp-password-test' as password
      * And      I click on the save button
-     * Then     I should see a dialog telling me encryption is in progress
-     * And      I should see a notice message that the operation was a success
-     * And      I should see the password I created in my password list
+     * Then     I see a dialog telling me encryption is in progress
+     * And      I see a notice message that the operation was a success
+     * And      I see the password I created in my password list
      */
     public function testCreatePasswordAndView() {
         // Given I am Carol
@@ -331,13 +331,13 @@ class PasswordCreateTest extends PassboltTestCase
         // When I click on the save button
         $this->click('.create-password-dialog input[type=submit]');
 
-        // Then I should see a dialog telling me encryption is in progress
+        // Then I see a dialog telling me encryption is in progress
         $this->assertVisible('passbolt-iframe-progress-dialog');
 
-        // I should see a notice message that the operation was a success
+        // I see a notice message that the operation was a success
         $this->waitUntilISee('.notification-container', '/The resource was successfully saved/i');
 
-        // I should see the password I created in my password list
+        // I see the password I created in my password list
         $this->assertElementContainsText(
             $this->find('js_wsp_pwd_browser'), 'ftp://passbolt.com'
         );
@@ -353,8 +353,8 @@ class PasswordCreateTest extends PassboltTestCase
      * And      I am logged in
      * And      I am on the create password dialog
      * When     I click the button to generate a new random password automatically
-     * Then     I should see the secret field populated
-     * And      I should see that the password complexity is set to fair
+     * Then     I see the secret field populated
+     * And      I see that the password complexity is set to fair
      */
     public function testCreatePasswordGenerateButton() {
         // Given I am Carol
@@ -371,11 +371,11 @@ class PasswordCreateTest extends PassboltTestCase
         $this->goIntoSecretIframe();
         $this->click('js_secret_generate');
 
-        // Then I should see the secret field populated
+        // Then I see the secret field populated
         $s = $this->findById('js_secret')->getAttribute('value');
         $this->assertNotEmpty($s);
 
-        // And I should see that the password complexity is set to fair
+        // And I see that the password complexity is set to fair
         $this->assertTrue(strlen($s) == SystemDefaults::$AUTO_PASSWORD_LENGTH);
         $this->assertComplexity(SystemDefaults::$AUTO_PASSWORD_STRENGTH);
     }
@@ -389,7 +389,7 @@ class PasswordCreateTest extends PassboltTestCase
      * When I enter a password value
      * Then I should not see the input field with the password in clear text
      * When I click on the show password
-     * Then I should see the input field with the password in clear text
+     * Then I see the input field with the password in clear text
      * When I click on the show password
      * Then I should not see the input field with the password in clear text
      */
@@ -414,7 +414,7 @@ class PasswordCreateTest extends PassboltTestCase
         // When I click on the view password
         $this->click('js_secret_view');
 
-        // Then I should see the input field with the password in clear text
+        // Then I see the input field with the password in clear text
         $this->assertNotVisible('js_secret');
         $this->assertVisible('js_secret_clear');
         $this->assertTrue($this->findById('js_secret_clear')->getAttribute('value') == 'ftp-password-test');

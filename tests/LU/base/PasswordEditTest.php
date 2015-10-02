@@ -11,12 +11,9 @@
  * As a user I can edit the description of a password I have own
  * As a user I can edit the uri of a password I have own
  * As a user I can see the current password complexity when editing a password
- *
- * TODO:
  * As a user I can edit the secret of a password I have own
  * As a user editing my password I can use the button to view my secret in clear text
  * As a user editing my password I can generate a new random password automatically
- *
  * As a user I can not edit a password I have only read access to
  * As user B I can see the changes are reflected when user A is editing a password we share
  * As a user I can see error messages when editing a password with wrong inputs
@@ -646,7 +643,32 @@ class PasswordEditTest extends PassboltTestCase
      * And      I can see the edit option is disabled
      */
     public function testEditPasswordNoRightNoEdit() {
+        // Given I am Ada
+        $user = User::get('ada');
+        $this->setClientConfig($user);
 
+        // And I am logged in on the password workspace
+        $this->loginAs($user['Username']);
+
+        // And I click on a password I cannot edit
+        $r = Resource::get(array(
+            'user' => 'ada',
+            'permission' => 'read'
+        ));
+        $this->click($r['id']);
+
+        // Then I can see the edit button is not active
+        $this->assertDisabled('js_wk_menu_edition_button');
+
+        // When I right click on a password I cannot edit
+        $this->rightClick($r['id']);
+
+        // Then I can see the contextual menu
+        $this->findById('js_contextual_menu');
+
+        // And I can see the edit option is disabled
+        $this->clickLink('Edit');
+        $this->assertNotVisible('.edit-password-dialog');
     }
 
     /**
@@ -662,6 +684,147 @@ class PasswordEditTest extends PassboltTestCase
      * Then     I can see the new password
      */
     public function testEditPasswordUserAEditUserBCanSee() {
+        // Given I am Ada
+        $user = User::get('ada');
+        $this->setClientConfig($user);
+
+        // And I am logged in on the password workspace
+        $this->loginAs($user['Username']);
+
+        // And I edit a password that I share with betty
+        $r1 = Resource::get(array(
+            'user' => 'betty',
+            'permission' => 'update'
+        ));
+        $r2 = array(
+            'id' => $r1['id'],
+            'password' => 'our_brand_new_password'
+        );
+        $this->editPassword($r2);
+
+        // And I logout
+        $this->getUrl('logout');
+
+        // And I am Betty
+        $user = User::get('betty');
+        $this->setClientConfig($user);
+
+        // And I am logged in on the password workspace
+        $this->loginAs($user['Username']);
+
+        // And I copy the password Ada edited to clipboard
+        $this->copyToClipboard($r1, $user);
+
+        // Then I can see the new password
+        $this->assertClipboard($r2['password']);
+    }
+
+    /**
+     * Scenario: As a user I can see error messages when editing a password with wrong inputs
+     *
+     * Given    I am Ada
+     * And      I am logged in on the password workspace
+     * And      I edit a password I own
+     * When     I click on the name input field
+     * And      I empty the name input field
+     * And      I empty the username input field
+     * And      I press enter
+     * Then     I see an error message saying that the name is required
+     * Then     I see an error message saying that the username is required
+     * When     I enter & as a name
+     * And      I enter & as a username
+     * And      I enter & as a url
+     * And      I enter & as a description
+     * And      I click save
+     * Then     I see an error message saying that the name contain invalid characters
+     * Then     I see an error message saying that the username contain invalid characters
+     * Then     I see an error message saying that the url is not valid
+     * Then     I see an error message saying that the description contain invalid characters
+     */
+    public function testEditPasswordMessages() {
+        // Given I am Ada
+        $user = User::get('ada');
+        $this->setClientConfig($user);
+
+        // And I am logged in on the password workspace
+        $this->loginAs($user['Username']);
+
+        // And I edit a password I own
+        $r1 = Resource::get(array(
+            'user' => 'ada',
+            'permission' => 'owner'
+        ));
+        $this->gotoEditPassword($r1['id']);
+
+        // When I click on the name input field
+        $this->click('js_field_name');
+
+        // And I empty the name input field
+        $this->find('js_field_name')->clear();
+
+        // And I empty the username input field
+        $this->find('js_field_username')->clear();
+
+        // And I press enter
+        $this->pressEnter();
+
+        // Then I see an error message saying that the name is required
+        $this->assertVisible('#js_field_name_feedback.error.message');
+        $this->assertElementContainsText(
+            $this->find('js_field_name_feedback'), 'is required'
+        );
+
+        // Then I see an error message saying that the username is required
+        $this->assertVisible('#js_field_username_feedback.error.message');
+        $this->assertElementContainsText(
+            $this->find('js_field_username_feedback'), 'is required'
+        );
+
+        // @TODO PASSBOLT-1023 it should pass if we remove this
+        $this->pressEscape();
+        $this->click('#js_wk_menu_creation_button');
+        // @TODO PASSBOLT-1023 ends
+
+        // When I enter & as a name
+        $this->inputText('js_field_name', '&');
+
+        // And I enter & as a username
+        $this->inputText('js_field_username', '&');
+
+        // And I enter & as a url
+        $this->inputText('js_field_uri', '&');
+
+        // And I enter & as a description
+        $this->inputText('js_field_description', '&');
+
+        // And I click save
+        $this->click('.create-password-dialog input[type=submit]');
+
+        // Then I see an error message saying that the name contain invalid characters
+        $this->assertVisible('#js_field_name_feedback.error.message');
+        $this->assertElementContainsText(
+            $this->find('js_field_name_feedback'), 'should only contain alphabets, numbers'
+        );
+
+        // Then I see an error message saying that the username contain invalid characters
+        $this->assertVisible('#js_field_username_feedback.error.message');
+        $this->assertElementContainsText(
+            $this->find('js_field_username_feedback'), 'should only contain alphabets, numbers'
+        );
+
+        // Then I see an error message saying that the url is not valid
+        $this->assertVisible('#js_field_uri_feedback.error.message');
+        $this->assertElementContainsText(
+            $this->find('js_field_uri_feedback'), 'The format of the uri is not valid'
+        );
+
+        // Then I see an error message saying that the description contain invalid characters
+        $this->assertVisible('#js_field_description_feedback.error.message');
+        $this->assertElementContainsText(
+            $this->find('js_field_description_feedback'), 'should only contain alphabets, numbers'
+        );
 
     }
 }
+
+
