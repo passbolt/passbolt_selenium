@@ -10,7 +10,6 @@
  *
  * @TODO Missing scenarios
  * As a user I can copy my password to clipboard using the action bar button
- * As a user I can copy my password to clipboard by clicking on the password preview
  *
  * @TODO more MASTER KEY TESTS
  * As a user I can cancel and close the master password dialog
@@ -24,6 +23,7 @@
  */
 class PasswordCopyToClipboardTest extends PassboltTestCase
 {
+    protected $resetDatabase = true;
 
     /**
      * Scenario : As a user I can see the list of copy options when clicking right on a password
@@ -171,5 +171,67 @@ class PasswordCopyToClipboardTest extends PassboltTestCase
 
         // And the content of the clipboard is valid
         $this->assertClipboard($resource['username']);
+    }
+
+    /**
+     * Scenario: As a user I can copy my password to clipboard by clicking on the password preview in the table view
+     *
+     * Given    I am Ada
+     * And      I am logged in on the password workspace
+     * When     I click on a password link of the first row of the table view
+     * And      I enter my master password
+     * Then     the password is copied to clipboard
+     */
+    public function testCopyPasswordToClipboardViaGridSecretCopy() {
+        // Given I am Ada
+        $user = User::get('ada');
+        $resource = Resource::get(array('user' => 'ada'));
+        $this->setClientConfig($user);
+
+        // And I am logged in on the password workspace
+        $this->loginAs($user['Username']);
+
+        // When I click on a password link of the first row of the table view
+        $this->click('grid_secret_copy_' . $resource['id']);
+
+        // And I enter my master password
+        $this->enterMasterPassword($user['MasterPassword']);
+
+        // Then the password is copied to clipboard
+        $this->assertClipboard($resource['password']);
+
+    }
+
+    /**
+     * Scenario: As a user I can copy my password to clipboard by clicking on the password preview in the sidebar
+     *
+     * Given    I am Ada
+     * And      I am logged in on the password workspace
+     * When     I click on the resource row in the grid
+     * And      I click on a the copy secret password link in the sidebar
+     * And      I enter my master password
+     * Then     the password is copied to clipboard
+     */
+    public function testCopyPasswordToClipboardViaSidebarSecretCopy() {
+        // Given I am Ada
+        $user = User::get('ada');
+        $resource = Resource::get(array('user' => 'ada'));
+        $this->setClientConfig($user);
+
+        // And I am logged in on the password workspace
+        $this->loginAs($user['Username']);
+
+        // When I click on the resource row in the grid
+        $this->click($resource['id']);
+
+        // And I click on a the copy secret password link in the sidebar
+        $this->click('sidebar_secret_copy_' . $resource['id']);
+
+        // And I enter my master password
+        $this->enterMasterPassword($user['MasterPassword']);
+
+        // Then the password is copied to clipboard
+        $this->assertClipboard($resource['password']);
+
     }
 }
