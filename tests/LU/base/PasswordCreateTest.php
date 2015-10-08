@@ -57,7 +57,7 @@ class PasswordCreateTest extends PassboltTestCase
 
         // then I see the create password button
         $this->assertElementContainsText(
-            $this->findByCss('js_wsp_primary_menu_wrapper'), 'create'
+            $this->find('js_wsp_primary_menu_wrapper'), 'create'
         );
 
         // When I click on create button

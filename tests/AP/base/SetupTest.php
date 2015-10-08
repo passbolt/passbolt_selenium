@@ -4,7 +4,7 @@
  * As an anonymous user, I need to be able to see the setup page with an invitation to install the plugin.
  *
  * @copyright 	(c) 2015-present Bolt Software Pvt. Ltd.
- * @licence			GPLv3 onwards www.gnu.org/licenses/gpl-3.0.en.html
+ * @licence		GPLv3 onwards www.gnu.org/licenses/gpl-3.0.en.html
  */
 class SetupTest extends PassboltSetupTestCase {
 
@@ -149,12 +149,12 @@ GFq/vw==
 	private function __testStepDomainVerification() {
 		// Test that button cancel is hidden.
 		$this->assertElementHasClass(
-			$this->findByCss('#js_setup_cancel_step'),
+			$this->find('js_setup_cancel_step'),
 			'hidden'
 		);
 		// Test that button Next is disabled.
 		$this->assertElementHasClass(
-			$this->findByCss('#js_setup_submit_step'),
+			$this->find('js_setup_submit_step'),
 			'disabled'
 		);
 		// Test that the domain in the url check textbox is the same as the one configured.
@@ -184,7 +184,7 @@ GFq/vw==
 		// Wait
 		$this->waitUntilISee('#js_step_content h3', '/Create a new key/i');
 		// Test that the text corresponding to key section is set.
-		$this->assertTitleEquals( "Create a new key or import an existing one!" );
+		$this->assertTitleEquals( 'Create a new key or import an existing one!' );
 
 		// Test that field owner name is set to John Doe.
 		$this->assertElementAttributeEquals(
@@ -237,13 +237,13 @@ GFq/vw==
 		);
 		// Test that password in clear is hidden.
 		$this->assertElementHasClass(
-			$this->findById('js_field_password_clear'),
+			$this->find('js_field_password_clear'),
 			'hidden'
 		);
 		// Test that clicking on the view button shows the password in clear.
-		$this->findById('js_show_pwd_button')->click();
+		$this->find('js_show_pwd_button')->click();
 		$this->assertElementHasNotClass(
-			$this->findById('js_field_password_clear'),
+			$this->find('js_field_password_clear'),
 			'hidden'
 		);
 	}
@@ -271,7 +271,7 @@ GFq/vw==
 		$this->waitUntilISee('#js_setup_import_key_text');
 		// Test that button next is disabled by default.
 		$this->assertElementHasClass(
-			$this->findById('js_setup_submit_step'),
+			$this->find('js_setup_submit_step'),
 			'disabled'
 		);
 		// Enter an invalid key.
@@ -283,29 +283,29 @@ GFq/vw==
 		);
 		// Test that button next is disabled by default.
 		$this->assertElementHasClass(
-			$this->findById('js_setup_submit_step'),
+			$this->find('js_setup_submit_step'),
 			'enabled'
 		);
 		// Click Next
 		$this->clickLink('Next');
 		// Find element.
 		$this->assertElementHasNotClass(
-			$this->findById('KeyErrorMessage'),
+			$this->find('KeyErrorMessage'),
 			'hidden'
 		);
 		// Assert that error message contains the right text.
 		$this->assertElementContainsText(
-			$this->findById('KeyErrorMessage'),
+			$this->find('KeyErrorMessage'),
 			'The key selected has an invalid format.'
 		);
 		// Emtpy value.
-		$this->findById('js_setup_import_key_text')->clear();
+		$this->find('js_setup_import_key_text')->clear();
 		// Paste a correct key.
 		$this->inputText('js_setup_import_key_text', $this->defaultPrivateKey);
 		// Click Next
 		$this->clickLink('Next');
 		// Wait
-		$this->waitUntilISee('#js_step_title', '/Let\'s make sure you imported the right key/i');
+		$this->waitUntilISee('js_step_title', '/Let\'s make sure you imported the right key/i');
 		// Assert that there is a warning message
 		$this->assertElementHasClass(
 			$this->findByCss('#js_step_content .message'),
@@ -344,7 +344,7 @@ GFq/vw==
 		$this->waitUntilISee('#js_step_content h3', '/Generating the secret and public key/i');
 		$this->assertTitleEquals('Give us a second while we crunch them numbers!');
 		$this->assertElementHasClass(
-			$this->findById('js_setup_submit_step'),
+			$this->find('js_setup_submit_step'),
 			'processing'
 		);
 
@@ -360,7 +360,7 @@ GFq/vw==
 			'download'
 		);
 		$this->assertElementHasClass(
-			$this->findById('js_setup_submit_step'),
+			$this->find('js_setup_submit_step'),
 			'enabled'
 		);
 	}
@@ -379,15 +379,15 @@ GFq/vw==
 		$this->assertTitleEquals('We need a visual cue to protect us from the bad guys..');
 		// Test that default values are filled by default..
 		$this->assertTrue(
-			$this->findById('js_security_token_text')->getAttribute('value') != '',
+			$this->find('js_security_token_text')->getAttribute('value') != '',
 			'The token text should not be empty by default'
 		);
 		$this->assertTrue(
-			$this->findById('js_security_token_background')->getAttribute('value') != '',
+			$this->find('js_security_token_background')->getAttribute('value') != '',
 			'The token background should not be empty by default'
 		);
 		$this->assertTrue(
-			$this->findById('js_security_token_color')->getAttribute('value') != '',
+			$this->find('js_security_token_color')->getAttribute('value') != '',
 			'The token color should not be empty by default'
 		);
 	}
@@ -420,35 +420,35 @@ GFq/vw==
 		$this->assertTitleEquals('Alright sparky, let\'s create your first password!');
 		// Test that Name field is disabled and filled up.
 		$this->assertElementAttributeEquals(
-			$this->findById('PasswordName'),
+			$this->find('PasswordName'),
 			'disabled',
 			'true'
 		);
 		$this->assertElementAttributeEquals(
-			$this->findById('PasswordName'),
+			$this->find('PasswordName'),
 			'value',
 			'John Doe'
 		);
 		// Test that username field is disabled and filled up.
 		$this->assertElementAttributeEquals(
-			$this->findById('PasswordUsername'),
+			$this->find('PasswordUsername'),
 			'value',
 			'johndoe@passbolt.com'
 		);
 		$this->assertElementAttributeEquals(
-			$this->findById('PasswordUsername'),
+			$this->find('PasswordUsername'),
 			'disabled',
 			'true'
 		);
 		// Test that url field is disabled.
 		$this->assertElementAttributeEquals(
-			$this->findById('PasswordURL'),
+			$this->find('PasswordURL'),
 			'disabled',
 			'true'
 		);
 		// Test that button Next is disabled.
 		$this->assertElementHasClass(
-			$this->findById('js_setup_submit_step'),
+			$this->find('js_setup_submit_step'),
 			'disabled'
 		);
 
@@ -467,41 +467,41 @@ GFq/vw==
 		);
 		// Test that password in clear is hidden.
 		$this->assertElementHasClass(
-			$this->findById('js_setup_password_clear'),
+			$this->find('js_setup_password_clear'),
 			'hidden'
 		);
 		// Test that generate password button works.
-		$this->findById('js_gen_pwd_button')->click();
+		$this->find('js_gen_pwd_button')->click();
 		$this->assertTrue (
-			$this->findById('js_setup_password')->getAttribute('value') != '',
+			$this->find('js_setup_password')->getAttribute('value') != '',
 			'After password generation the password field should not be empty'
 		);
 		$this->assertTrue (
-			$this->findById('js_setup_password')->getAttribute('value') != $initialPassword,
+			$this->find('js_setup_password')->getAttribute('value') != $initialPassword,
 			'After password generation the password field should be different than the initial password'
 		);
 		// Test that clicking on the view button shows the password in clear.
-		$this->findById('js_show_pwd_button')->click();
+		$this->find('js_show_pwd_button')->click();
 		// Test that show password button has the class selected.
 		$this->assertElementHasClass(
-			$this->findById('js_show_pwd_button'),
+			$this->find('js_show_pwd_button'),
 			'selected'
 		);
 		// Test that the clear password is visible.
 		$this->assertElementHasNotClass(
-			$this->findById('js_setup_password_clear'),
+			$this->find('js_setup_password_clear'),
 			'hidden'
 		);
 		// Hide password again.
-		$this->findById('js_show_pwd_button')->click();
+		$this->find('js_show_pwd_button')->click();
 		// Test that the clear password is back to hidden state.
 		$this->assertElementHasClass(
-			$this->findById('js_setup_password_clear'),
+			$this->find('js_setup_password_clear'),
 			'hidden'
 		);
 		// Test that button Next is enabled.
 		$this->assertElementHasClass(
-			$this->findById('js_setup_submit_step'),
+			$this->find('js_setup_submit_step'),
 			'enabled'
 		);
 	}
@@ -779,7 +779,7 @@ GFq/vw==
 		$this->inputText('js_setup_password', $initialPassword);
 		// Test that button Next is enabled.
 		$this->assertElementHasClass(
-			$this->findById('js_setup_submit_step'),
+			$this->find('js_setup_submit_step'),
 			'enabled'
 		);
 		// Click Next.
@@ -789,7 +789,7 @@ GFq/vw==
 
 		$this->waitCompletion();
 		// Check we are logged in.
-		$this->waitUntilISee('#container.page.password', null, 20);
+		$this->waitUntilISee('.page.password', null, 20);
 		// Check that the name is ok.
 		$this->assertElementContainsText(
 			$this->findByCss('.header .user.profile .details .name'),
