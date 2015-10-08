@@ -3,11 +3,15 @@
  * Feature : Setup
  * As an anonymous user, I need to be able to see the setup page with an invitation to install the plugin.
  *
- * @copyright 	(c) 2015-present Bolt Software Pvt. Ltd.
- * @licence		GPLv3 onwards www.gnu.org/licenses/gpl-3.0.en.html
+ * @TODO : Test a scenario where the key is not compatible with GPG on server side.
+ * @TODO : Test scenario with a key that has matching information (same name and email).
+ * @TODO : Test a scenario where the name of the user has to be altered.
+ * @copyright (c) 2015-present Bolt Software Pvt. Ltd.
+ * @licence GPLv3 onwards www.gnu.org/licenses/gpl-3.0.en.html
  */
 class SetupTest extends PassboltSetupTestCase {
 
+	// @TODO move to fixtures
 	private $defaultPrivateKey = '-----BEGIN PGP PRIVATE KEY BLOCK-----
 Version: GnuPG/MacGPG2 v2.0.22 (Darwin)
 Comment: GPGTools - https://gpgtools.org
@@ -69,31 +73,17 @@ GFq/vw==
 -----END PGP PRIVATE KEY BLOCK-----';
 
 	/**
-	 * Register a user using the registration form.
-	 * @param $firstname
-	 * @param $lastname
-	 * @param $username
-	 */
-	private function __registerUser($firstname, $lastname, $username) {
-		// Register user.
-		$this->getUrl('register');
-		$this->inputText('ProfileFirstName', $firstname);
-		$this->inputText('ProfileLastName', $lastname);
-		$this->inputText('UserUsername', $username);
-		$this->pressEnter();
-		$this->assertCurrentUrl('register' . DS . 'thankyou');
-	}
-
-	/**
 	 * go To Setup page.
 	 * @throws Exception
 	 */
 	private function __goToSetup($username) {
 		// Get last email.
 		$this->getUrl('seleniumTests/showLastEmail/' . urlencode($username));
+
 		// Remember setup url. (We will use it later).
 		$linkElement = $this->findLinkByText('get started');
 		$setupUrl = $linkElement->getAttribute('href');
+
 		// Go to url remembered above.
 		$this->driver->get($setupUrl);
 
@@ -101,41 +91,6 @@ GFq/vw==
 		$this->waitUntilISee('.plugin-check-wrapper .plugin-check.success', '/Firefox plugin is installed and up to date/i');
 
 	}
-
-	/**
-	 * Scenario:  I can see the setup page with instructions to install the plugin
-	 * Given      I am an anonymous user with no plugin on the registration page
-	 * And        I follow the registration process and click on submit
-	 * And        I click on the link get started in the email I received
-	 * Then       I should reach the setup page
-	 * And        the url should look like resource://passbolt-firefox-addon-at-passbolt-dot-com/passbolt-firefox-addon/data/setup.html
-	 * And        I should see the text "Nice one! Firefox plugin is installed and up to date. You are good to go!"
-	 * And        I should see that the domain in the url check textbox is the same as the one configured.
-	 */
-	public function testCanSeeSetupPageWithFirstPluginSection() {
-		// Reset passbolt installation.
-		$reset = $this->PassboltServer->resetDatabase();
-		if (!$reset) {
-			$this->fail('Could not reset installation');
-		}
-		// Register John Doe as a user.
-		$this->__registerUser('John', 'Doe', 'johndoe@passbolt.com');
-		// We check below that we can read the invitation email and click on the link get started.
-		// Get last email.
-		$this->getUrl('seleniumTests/showLastEmail/' . urlencode('johndoe@passbolt.com'));
-		// Follow the link in the email.
-		$this->followLink("get started");
-		// Test that the url is the plugin one.
-		$this->assertUrlMatch('/resource:\/\/passbolt-firefox-addon-at-passbolt-dot-com\/data\/setup.html/');
-
-		// Test that the plugin confirmation message is displayed.
-		$this->waitUntilISee('.plugin-check.success', '/Firefox plugin is installed and up to date/i');
-
-		// Test that the domain in the url check textbox is the same as the one configured.
-		$domain = $this->findById("js_setup_domain")->getAttribute('value');
-		$this->assertEquals(Config::read('passbolt.url'), $domain);
-	}
-
 
 	/**
 	 * Scenario :   As an AP I should be able to use the domain verification step of the setup
@@ -185,7 +140,6 @@ GFq/vw==
 		$this->waitUntilISee('#js_step_content h3', '/Create a new key/i');
 		// Test that the text corresponding to key section is set.
 		$this->assertTitleEquals( 'Create a new key or import an existing one!' );
-
 		// Test that field owner name is set to John Doe.
 		$this->assertElementAttributeEquals(
 			$this->findById('OwnerName'),
@@ -341,8 +295,8 @@ GFq/vw==
 	 * @throws Exception
 	 */
 	private function __testStepGenerateAndDownloadKey() {
-		$this->waitUntilISee('#js_step_content h3', '/Generating the secret and public key/i');
 		$this->assertTitleEquals('Give us a second while we crunch them numbers!');
+		$this->waitUntilISee('#js_step_content h3', '/Generating the secret and public key/i');
 		$this->assertElementHasClass(
 			$this->find('js_setup_submit_step'),
 			'processing'
@@ -507,6 +461,39 @@ GFq/vw==
 	}
 
 	/**
+	 * Scenario:  I can see the setup page with instructions to install the plugin
+	 * Given      I am an anonymous user with no plugin on the registration page
+	 * And        I follow the registration process and click on submit
+	 * And        I click on the link get started in the email I received
+	 * Then       I should reach the setup page
+	 * And        the url should look like resource://passbolt-firefox-addon-at-passbolt-dot-com/passbolt-firefox-addon/data/setup.html
+	 * And        I should see the text "Nice one! Firefox plugin is installed and up to date. You are good to go!"
+	 * And        I should see that the domain in the url check textbox is the same as the one configured.
+	 */
+	public function testCanSeeSetupPageWithFirstPluginSection() {
+		// Register John Doe as a user.
+		$this->registerUser('John', 'Doe', 'johndoe@passbolt.com');
+
+		// We check below that we can read the invitation email and click on the link get started.
+		// Get last email.
+		$this->getUrl('seleniumTests/showLastEmail/' . urlencode('johndoe@passbolt.com'));
+		// Follow the link in the email.
+		$this->followLink("get started");
+		// Test that the url is the plugin one.
+		$this->assertUrlMatch('/resource:\/\/passbolt-firefox-addon-at-passbolt-dot-com\/data\/setup.html/');
+
+		// Test that the plugin confirmation message is displayed.
+		$this->waitUntilISee('.plugin-check.success', '/Firefox plugin is installed and up to date/i');
+
+		// Test that the domain in the url check textbox is the same as the one configured.
+		$domain = $this->findById("js_setup_domain")->getAttribute('value');
+		$this->assertEquals(Config::read('passbolt.url'), $domain);
+
+		// Since content was edited, we reset the database
+		$this->resetDatabase();
+	}
+
+	/**
 	 * Scenario :   I go through the setup and I make sure the navigation buttons and menu items are working properly.
 	 * Given        I am an anonymous user with the plugin on the first page of the setup
 	 * Then         the menu "1. get the plugin" should be selected
@@ -554,6 +541,9 @@ GFq/vw==
 	 * @throws Exception
 	 */
 	public function testNavigation() {
+		// Register John Doe as a user.
+		$this->registerUser('John', 'Doe', 'johndoe@passbolt.com');
+
 		// Go to Setup page.
 		$this->__goToSetup('johndoe@passbolt.com');
         // Wait until I see the first page of setup.
@@ -658,6 +648,9 @@ GFq/vw==
 		$this->waitUntilISee('#js_step_content h3', '/Set a security token/i');
 		// Assert menu is selected.
 		$this->assertMenuIsSelected('4. Set a security token');
+
+		// Since content was edited, we reset the database
+		$this->resetDatabase();
 	}
 
 
@@ -681,6 +674,9 @@ GFq/vw==
 	 * @throws Exception
 	 */
 	public function testCanFollowSetupWithDefaultSteps() {
+		// Register John Doe as a user.
+		$this->registerUser('John', 'Doe', 'johndoe@passbolt.com');
+
 		// Go to setup page.
 		$this->__goToSetup('johndoe@passbolt.com');
 		// Test step domain verification.
@@ -690,7 +686,7 @@ GFq/vw==
 		$this->clickLink("Next");
 		// Test that button Next is disabled.
 		$this->assertElementHasClass(
-			$this->findByCss('#js_setup_submit_step'),
+			$this->find('js_setup_submit_step'),
 			'processing'
 		);
 		// test step that prepares key creation.
@@ -729,6 +725,9 @@ GFq/vw==
 			$this->findByCss('.header .user.profile .details .email'),
 			'johndoe@passbolt.com'
 		);
+
+		// Since content was edited, we reset the database
+		$this->resetDatabase();
 	}
 
 	/**
@@ -743,13 +742,9 @@ GFq/vw==
 	 * @throws Exception
 	 */
 	public function testFollowSetupWithImportKey() {
-		// Reset passbolt installation.
-		$reset = $this->PassboltServer->resetDatabase();
-		if (!$reset) {
-			$this->fail('Could not reset installation');
-		}
 		// Register John Doe as a user.
-		$this->__registerUser('John', 'Doe', 'johndoe@passbolt.com');
+		$this->registerUser('John', 'Doe', 'johndoe@passbolt.com');
+
 		// Go to setup page.
 		$this->__goToSetup('johndoe@passbolt.com');
 		// Wait
@@ -800,6 +795,10 @@ GFq/vw==
 			$this->findByCss('.header .user.profile .details .email'),
 			'johndoe@passbolt.com'
 		);
+
+		// @TODO not atomic: needed for the next step
+		// Since content was edited, we reset the database
+		// $this->resetDatabase();
 	}
 
 	/**
@@ -819,10 +818,10 @@ GFq/vw==
 		$this->driver->get($setupUrl);
 
 		$this->waitUntilISee('h2', '/Token not found/');
+
+		// @TODO not atomic: needed for the next step
+		// delayed see previous todo
+		$this->resetDatabase();
 	}
 
-
-	// TODO : Test a scenario where the key is not compatible with GPG on server side.
-	// TODO : Test scenario with a key that has matching information (same name and email).
-	// TODO : Test a scenario where the name of the user has to be altered.
 }

@@ -13,7 +13,6 @@
  */
 class PasswordDeleteTest extends PassboltTestCase
 {
-    protected $resetDatabase = true;
 
     /**
      * Scenario: As a user I can delete a password using a right click
@@ -45,6 +44,9 @@ class PasswordDeleteTest extends PassboltTestCase
 
         // And I should not see the password in the list anymore
         $this->assertTrue($this->isNotVisible($resource['id']));
+
+        // Since content was edited, we reset the database
+        $this->resetDatabase();
     }
 
     /**
@@ -77,6 +79,9 @@ class PasswordDeleteTest extends PassboltTestCase
 
         // And I should not see the password in the list anymore
         $this->assertTrue($this->isNotVisible($resource['id']));
+
+        // Since content was edited, we reset the database
+        $this->resetDatabase();
     }
 
     /**
@@ -106,7 +111,7 @@ class PasswordDeleteTest extends PassboltTestCase
         $this->loginAs($userB['Username']);
 
         // Then I can see a password shared with ada in the list
-        $resource = Resource::get(array('user' => 'ada', 'id' => '50d77ffb-d254-49e4-ac86-1b63d7a10fce'));
+        $resource = Resource::get(array('user' => 'ada', 'id' => Uuid::get('resource.id.apache')));
         $this->assertVisible($resource['id']);
 
         // When I logout
@@ -143,6 +148,9 @@ class PasswordDeleteTest extends PassboltTestCase
 
         // And I should not see the password deleted by ada in the list anymore
         $this->assertNotVisible($resource['id']);
+
+        // Since content was edited, we reset the database
+        $this->resetDatabase();
     }
 
     /**

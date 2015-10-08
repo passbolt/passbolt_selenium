@@ -12,6 +12,8 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
     protected $_browser;
     protected $_verbose;
     protected $_log;
+    protected $_quit;
+    protected $_failing;
 
     /********************************************************************************
      * Pre/Post Tests Execution Callback
@@ -21,6 +23,8 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
      * It setup the capabilities and browser driver
      */
     protected function setUp() {
+        $this->_quit = getenv('QUIT');
+        $this->_failing = null;
         $this->_setVerbose();
         $this->_setBrowserConfig();
         $this->_checkSeleniumConfig();
@@ -32,19 +36,27 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
      * This function is executed after a test is run
      */
     protected function tearDown() {
+
         if(isset($this->_log) && !empty($this->_log)) {
             echo "\n\n"
                 . "=== Webdriver Test Case Log ===" . "\n"
                 . $this->_log;
         }
         if(isset($this->driver)) {
-            $quit = getenv('QUIT');
-            if($quit === '0') {
+            if($this->_quit === '0') {
                 return;
-            } else {
+            } else if($this->_quit === '1') {
+                $this->driver->quit();
+            } else if($this->_quit === '2' && isset($this->_failing) && !$this->_failing) {
                 $this->driver->quit();
             }
         }
+
+    }
+
+    protected function assertPostConditions() {
+        $this->_failing = false;
+        parent::assertPostConditions();
     }
 
     /********************************************************************************

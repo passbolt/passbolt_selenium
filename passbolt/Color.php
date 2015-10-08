@@ -2,6 +2,9 @@
 /**
  * Class Color
  * Helper class for color conversion
+ *
+ * @copyright (c) 2015-present Bolt Software Pvt. Ltd.
+ * @licence GPLv3 onwards www.gnu.org/licenses/gpl-3.0.en.html
  */
 class Color {
     /**

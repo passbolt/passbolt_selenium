@@ -14,7 +14,6 @@
  */
 class PasswordWorkspaceTest extends PassboltTestCase
 {
-    protected $resetDatabase = true;
 
     /**
      * Scenario :   As a user I should be able to see the passwords workspace
@@ -26,8 +25,7 @@ class PasswordWorkspaceTest extends PassboltTestCase
      * And          I should see the breadcrumb with the following:
      *                 | All items
      */
-    public function testWorkspace()
-    {
+    public function testWorkspace() {
         // I am logged in as Carol, and I go to the password workspace
         $this->loginAs('carol@passbolt.com');
 
@@ -110,8 +108,7 @@ class PasswordWorkspaceTest extends PassboltTestCase
      *                    | All items
      *                    | Items I own
      */
-    public function testFilterPasswords()
-    {
+    public function testFilterPasswords() {
         // I am logged in as Ada, and I go to the password workspace
         $this->loginAs('ada@passbolt.com');
 
@@ -169,8 +166,7 @@ class PasswordWorkspaceTest extends PassboltTestCase
      * Then         I should see a secondary side bar appearing
      * And          I should the details of the selected password
      */
-    public function testPasswordDetails()
-    {
+    public function testPasswordDetails() {
         // I am logged in as Ada, and I go to the password workspace
         $this->loginAs('ada@passbolt.com');
 
@@ -235,8 +231,7 @@ class PasswordWorkspaceTest extends PassboltTestCase
      * When         I click on the favorite filter
      * Then         I shouldn't see anymore the password in my list of favorite passwords
      */
-    public function testFavorite()
-    {
+    public function testFavorite() {
         $passwordTitle = 'shared resource';
         $xpathFavSelector = "//tr[*/div[contains(.,'" . $passwordTitle . "')]]//i[contains(@class, fav)]";
         $xpathUnfavSelector = "//tr[*/div[contains(.,'" . $passwordTitle . "')]]//i[contains(@class, unfav)]";
@@ -288,6 +283,9 @@ class PasswordWorkspaceTest extends PassboltTestCase
             $this->findByCss('#js_wsp_pwd_browser .tableview-content'),
             $passwordTitle
         );
+
+        // Since content was edited, we reset the database
+        $this->resetDatabase();
     }
 
     /**

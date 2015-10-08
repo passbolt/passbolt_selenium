@@ -23,7 +23,6 @@
  */
 class PasswordCopyToClipboardTest extends PassboltTestCase
 {
-    protected $resetDatabase = true;
 
     /**
      * Scenario : As a user I can see the list of copy options when clicking right on a password

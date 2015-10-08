@@ -16,8 +16,6 @@
 class PasswordCreateTest extends PassboltTestCase
 {
 
-    protected $resetDatabase = true;
-
     /**
      * Scenario :   As a user I can view the create password dialog
      *
@@ -335,7 +333,7 @@ class PasswordCreateTest extends PassboltTestCase
         $this->assertVisible('passbolt-iframe-progress-dialog');
 
         // I see a notice message that the operation was a success
-        $this->waitUntilISee('.notification-container', '/The resource was successfully saved/i');
+        $this->assertNotification('app_resources_add_success');
 
         // I see the password I created in my password list
         $this->assertElementContainsText(
@@ -344,6 +342,9 @@ class PasswordCreateTest extends PassboltTestCase
         $this->assertElementContainsText(
             $this->find('js_wsp_pwd_browser'), 'localhost ftp'
         );
+
+        // Since content was edited, we reset the database
+        $this->resetDatabase();
     }
 
     /**

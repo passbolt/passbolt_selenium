@@ -3,8 +3,8 @@
  * Feature : Login
  * As an anonymous user without the plugin I should not be able to login
  *
- * @copyright 	(c) 2015-present Bolt Software Pvt. Ltd.
- * @licence			GPLv3 onwards www.gnu.org/licenses/gpl-3.0.en.html
+ * @copyright (c) 2015-present Bolt Software Pvt. Ltd.
+ * @licence GPLv3 onwards www.gnu.org/licenses/gpl-3.0.en.html
  */
 class LoginTest extends PassboltTestCase {
 

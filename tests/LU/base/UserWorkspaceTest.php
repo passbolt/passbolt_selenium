@@ -12,10 +12,7 @@
  * @copyright    (c) 2015-present Bolt Software Pvt. Ltd.
  * @licence      GPLv3 onwards www.gnu.org/licenses/gpl-3.0.en.html
  */
-class UserWorkspaceTest extends PassboltTestCase
-{
-	protected $resetDatabase = true;
-
+class UserWorkspaceTest extends PassboltTestCase {
 	/**
 	 * Scenario :   As a user I should be able to see the user workspace
 	 *
@@ -27,8 +24,7 @@ class UserWorkspaceTest extends PassboltTestCase
 	 * And			I should see the breadcrumb with the following:
 	 * 				| All users
 	 */
-	public function testWorkspace()
-	{
+	public function testWorkspace() {
 		// I am logged in as Carol Shaw, and I go to the user workspace
 		$this->loginAs('carol@passbolt.com');
 		$this->gotoWorkspace('user');
@@ -113,8 +109,7 @@ class UserWorkspaceTest extends PassboltTestCase
 	 *					| All items
 	 *					| Recently modified
 	 */
-	public function testFilterUsers()
-	{
+	public function testFilterUsers() {
 		// I am logged in as Carol, and I go to the user workspace
 		$this->loginAs('carol@passbolt.com');
 		$this->gotoWorkspace('user');
@@ -138,8 +133,7 @@ class UserWorkspaceTest extends PassboltTestCase
 	 * Then 		I should see a secondary side bar appearing
 	 * And			I should the details of the selected user
 	 */
-	public function testUsersDetails()
-	{
+	public function testUsersDetails() {
 		// I am logged in as Carol, and I go to the user workspace
 		$this->loginAs('carol@passbolt.com');
 		$this->gotoWorkspace('user');
@@ -217,8 +211,7 @@ class UserWorkspaceTest extends PassboltTestCase
 	 *					| All users
 	 *					| Search : User Test
 	 */
-	public function testSearchByKeywords()
-	{
+	public function testSearchByKeywords() {
 		$searchUser = 'Ada';
 		$hiddenUsers = [
 			'Betty Holbderton',

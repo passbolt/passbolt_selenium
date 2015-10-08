@@ -3,25 +3,45 @@
  * Passbolt Test Case
  * The base class for test cases related to passbolt.
  *
- * @copyright 	(c) 2015-present Bolt Software Pvt. Ltd.
- * @licence			GPLv3 onwards www.gnu.org/licenses/gpl-3.0.en.html
+ * @copyright (c) 2015-present Bolt Software Pvt. Ltd.
+ * @licence GPLv3 onwards www.gnu.org/licenses/gpl-3.0.en.html
  */
 class PassboltTestCase extends WebDriverTestCase {
 
-	// PassboltServer.
-	protected $PassboltServer = null;
+	// indicate if the database should be reset at the end of the test
 	protected $resetDatabase = false;
+
+	/**
+	 * Called before the first test of the test case class is run
+	 */
+	public static function setUpBeforeClass() {
+		PassboltServer::resetDatabase(Config::read('passbolt.url'));
+	}
 
 	/**
 	 * Executed before every tests
 	 */
 	protected function setUp() {
 		parent::setUp();
-		$this->PassboltServer = new PassboltServer(Config::read('passbolt.url'));
 		$this->driver->manage()->window()->maximize();
+
+	}
+
+	/**
+	 * Executed after every tests
+	 */
+	protected function tearDown() {
+		parent::tearDown();
 		if ($this->resetDatabase) {
-			$this->PassboltServer->resetDatabase();
+			PassboltServer::resetDatabase(Config::read('passbolt.url'));
 		}
+	}
+
+	/**
+	 * Mark the database to be reset at the end of the test
+	 */
+	public function resetDatabase() {
+		$this->resetDatabase = true;
 	}
 
 	/********************************************************************************
@@ -75,6 +95,22 @@ class PassboltTestCase extends WebDriverTestCase {
 
 		$backtrace = debug_backtrace();
 		throw new Exception( "Timeout thrown by " . $backtrace[1]['class'] . "::" . $backtrace[1]['function'] . "()\n .");
+	}
+
+	/**
+	 * Register a user using the registration form.
+	 * @param $firstname
+	 * @param $lastname
+	 * @param $username
+	 */
+	public function registerUser($firstname, $lastname, $username) {
+		// Register user.
+		$this->getUrl('register');
+		$this->inputText('ProfileFirstName', $firstname);
+		$this->inputText('ProfileLastName', $lastname);
+		$this->inputText('UserUsername', $username);
+		$this->pressEnter();
+		$this->assertCurrentUrl('register' . DS . 'thankyou');
 	}
 
 	/**

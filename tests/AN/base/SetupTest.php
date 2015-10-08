@@ -20,12 +20,6 @@ class SetupTest extends PassboltSetupTestCase {
 	 * And        I should see that the second menu item on the left is deactivated
 	 */
 	public function testCanSeeSetupPage() {
-		// Reset passbolt installation.
-		$reset = $this->PassboltServer->resetDatabase();
-		if (!$reset) {
-			$this->fail('Could not reset installation');
-		}
-
 		// Register John Doe as a user.
 		$this->getUrl('register');
 		$this->inputText('ProfileFirstName','John');
@@ -48,6 +42,9 @@ class SetupTest extends PassboltSetupTestCase {
 			$this->findByCss('.plugin-check-wrapper .plugin-check.error'),
 			'An add-on is required to use Passbolt.'
 		);
+
+		// Since content was edited, we reset the database
+		$this->resetDatabase();
 	}
 
 	/**
@@ -56,10 +53,6 @@ class SetupTest extends PassboltSetupTestCase {
 	 * Then         I should reach an error page with text "Token not found"
 	 */
 	public function testCannotSeeSetupPageWithInvalidInformation() {
-		$reset = $this->PassboltServer->resetDatabase();
-		if (!$reset) {
-			$this->fail('Could not reset installation');
-		}
 		// Access url with wrong user id and token.
 		$this->getUrl('setup/install/5569df1d-7bec-4c0c-a09d-55e2c0a895dc/d45c0bf1e00fb8db60af1e8b5482f9f3');
 		$this->assertPageContainsText('Token not found');

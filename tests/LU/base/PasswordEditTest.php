@@ -23,7 +23,6 @@
  */
 class PasswordEditTest extends PassboltTestCase
 {
-    protected $resetDatabase = true;
 
     /**
      * Scenario: As a user I can edit a password using the edit button in the action bar
@@ -40,9 +39,6 @@ class PasswordEditTest extends PassboltTestCase
         // Given I am Ada
         $user = User::get('ada');
         $this->setClientConfig($user);
-
-        // And the database is in the default state
-        $this->PassboltServer->resetDatabase();
 
         // And I am logged in on the password workspace
         $this->loginAs($user['Username']);
@@ -360,6 +356,8 @@ class PasswordEditTest extends PassboltTestCase
         // Then I can see the new name in the edit password dialog
         $this->assertInputValue('js_field_name', $newname);
 
+        // Since content was edited, we reset the database
+        $this->resetDatabase();
     }
 
     /**
@@ -399,6 +397,9 @@ class PasswordEditTest extends PassboltTestCase
 
         // Then I can see the new description in the edit password dialog
         $this->assertInputValue('js_field_description', $r['description']);
+
+        // Since content was edited, we reset the database
+        $this->resetDatabase();
     }
 
     /**
@@ -441,6 +442,9 @@ class PasswordEditTest extends PassboltTestCase
 
         // Then I can see the new uri in the edit password dialog
         $this->assertInputValue('js_field_uri', $r['uri']);
+
+        // Since content was edited, we reset the database
+        $this->resetDatabase();
     }
 
     /**
@@ -510,6 +514,9 @@ class PasswordEditTest extends PassboltTestCase
 
         // Then I can see that password have been updated
         $this->assertClipboard($r2['password']);
+
+        // Since content was edited, we reset the database
+        $this->resetDatabase();
     }
 
     /**
@@ -717,6 +724,9 @@ class PasswordEditTest extends PassboltTestCase
 
         // Then I can see the new password
         $this->assertClipboard($r2['password']);
+
+        // Since content was edited, we reset the database
+        $this->resetDatabase();
     }
 
     /**
@@ -741,7 +751,7 @@ class PasswordEditTest extends PassboltTestCase
      * Then     I see an error message saying that the url is not valid
      * Then     I see an error message saying that the description contain invalid characters
      */
-    public function testEditPasswordMessages() {
+    public function testEditPasswordErrorMessages() {
         // Given I am Ada
         $user = User::get('ada');
         $this->setClientConfig($user);
@@ -823,7 +833,6 @@ class PasswordEditTest extends PassboltTestCase
         $this->assertElementContainsText(
             $this->find('js_field_description_feedback'), 'should only contain alphabets, numbers'
         );
-
     }
 }
 
