@@ -85,7 +85,7 @@ class PasswordDeleteTest extends PassboltTestCase
     }
 
     /**
-     * Scenario: As a user B I can see a password that user A shared with me and deleted.
+     * Scenario: As a user A I can see a password that user B shared with me and deleted.
      *
      * Given    I am Betty
      * And      I am logged in on the password worskpace
@@ -103,12 +103,12 @@ class PasswordDeleteTest extends PassboltTestCase
      * Then     I cannot see the password in the list anymore
      */
     public function testDeletePasswordShared() {
-        // Given I am Betty
-        $userB = User::get('betty');
-        $this->setClientConfig($userB);
+        // Given I am Ada
+        $userA = User::get('ada');
+        $this->setClientConfig($userA);
 
         // And I am logged in on the password workspace
-        $this->loginAs($userB['Username']);
+        $this->loginAs($userA['Username']);
 
         // Then I can see a password shared with ada in the list
         $resource = Resource::get(array('user' => 'ada', 'id' => Uuid::get('resource.id.apache')));
@@ -117,14 +117,14 @@ class PasswordDeleteTest extends PassboltTestCase
         // When I logout
         $this->logout();
 
-        // And I am Ada
-        $userA = User::get('ada');
+        // And I am Betty
+        $userB = User::get('betty');
         $this->setClientConfig($userA);
 
         // And I am logged in on the password workspace
-        $this->loginAs($userA['Username']);
+        $this->loginAs($userB['Username']);
 
-        // When I click on the password shared with betty
+        // When I click on the password shared with Ada
         $this->assertVisible($resource['id']);
         $this->click($resource['id']);
 

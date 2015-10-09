@@ -16,7 +16,7 @@ class UserWorkspaceTest extends PassboltTestCase {
 	/**
 	 * Scenario :   As a user I should be able to see the user workspace
 	 *
-	 * Given        I am logged in as Carol Shaw, and I go to the user workspace
+	 * Given        I am logged in as Ada, and I go to the user workspace
 	 * Then			I should not see the workspace primary menu
 	 * And			I should see the workspace secondary menu
 	 * And 			I should see the workspace filters shortcuts
@@ -25,8 +25,12 @@ class UserWorkspaceTest extends PassboltTestCase {
 	 * 				| All users
 	 */
 	public function testWorkspace() {
-		// I am logged in as Carol Shaw, and I go to the user workspace
-		$this->loginAs('carol@passbolt.com');
+		// Given I am Ada
+		$user = User::get('ada');
+		$this->setClientConfig($user);
+
+		// And I am logged in on the user workspace
+		$this->loginAs($user['Username']);
 		$this->gotoWorkspace('user');
 
 		// I should not see the workspace primary menu
@@ -63,13 +67,17 @@ class UserWorkspaceTest extends PassboltTestCase {
 
 	/**
 	 * Scenario :   As a user I should be able to see the users using the app
-	 * Given        I am logged in as Carol Shaw, and I go to the user workspace
+	 * Given        I am logged in as Ada, and I go to the user workspace
 	 * Then         I should see rows representing the users
 	 */
 	public function testBrowseUsers()
 	{
-		// I am logged in as Carol Shaw, and I go to the user workspace
-		$this->loginAs('carol@passbolt.com');
+		// Given I am Ada
+		$user = User::get('ada');
+		$this->setClientConfig($user);
+
+		// And I am logged in on the user workspace
+		$this->loginAs($user['Username']);
 		$this->gotoWorkspace('user');
 
 		// I should see rows representing the users
@@ -102,7 +110,7 @@ class UserWorkspaceTest extends PassboltTestCase {
 	/**
 	 * Scenario :   As a user I should be able to filter the users
 	 *
-	 * Given        I am logged in as Carol Shaw, and I go to the user workspace
+	 * Given        I am logged in as Ada, and I go to the user workspace
 	 * When			I click on the recently modified filter
 	 * Then			I should see the users ordered my modification date
 	 * And			I should see the breadcrumb with the following:
@@ -110,8 +118,12 @@ class UserWorkspaceTest extends PassboltTestCase {
 	 *					| Recently modified
 	 */
 	public function testFilterUsers() {
-		// I am logged in as Carol, and I go to the user workspace
-		$this->loginAs('carol@passbolt.com');
+		// Given I am Ada
+		$user = User::get('ada');
+		$this->setClientConfig($user);
+
+		// And I am logged in on the user workspace
+		$this->loginAs($user['Username']);
 		$this->gotoWorkspace('user');
 
 		// I click on the recently modified filter
@@ -128,14 +140,18 @@ class UserWorkspaceTest extends PassboltTestCase {
 	/**
 	 * Scenario :   As a user I should be able to view the user details
 	 *
-	 * Given        I am logged in as Carol, and I go to the user workspace
+	 * Given        I am logged in as Ada, and I go to the user workspace
 	 * When			I click on a user
 	 * Then 		I should see a secondary side bar appearing
 	 * And			I should the details of the selected user
 	 */
 	public function testUsersDetails() {
-		// I am logged in as Carol, and I go to the user workspace
-		$this->loginAs('carol@passbolt.com');
+		// Given I am Ada
+		$user = User::get('ada');
+		$this->setClientConfig($user);
+
+		// And I am logged in on the user workspace
+		$this->loginAs($user['Username']);
 		$this->gotoWorkspace('user');
 
 		// I click on a user
@@ -203,7 +219,7 @@ class UserWorkspaceTest extends PassboltTestCase {
 	/**
 	 * Scenario :   As a user I should be able to search a user by keywords
 	 *
-	 * Given        I am logged in as Carol, and I go to the user workspace
+	 * Given        I am logged in as Ada, and I go to the user workspace
 	 * When			I fill the "app search" field with "User Test"
 	 * And			I click "search"
 	 * Then 		I should see the view filtered with my search
@@ -212,7 +228,7 @@ class UserWorkspaceTest extends PassboltTestCase {
 	 *					| Search : User Test
 	 */
 	public function testSearchByKeywords() {
-		$searchUser = 'Ada';
+		$searchUser = 'Betty';
 		$hiddenUsers = [
 			'Betty Holbderton',
 			'Carol Shaw',
@@ -229,8 +245,12 @@ class UserWorkspaceTest extends PassboltTestCase {
 		];
 		$breadcrumb = ['All users', 'Search : ' . $searchUser];
 
-		// I am logged in as Carol, and I go to the user workspace
-		$this->loginAs('carol@passbolt.com');
+		// Given I am Ada
+		$user = User::get('ada');
+		$this->setClientConfig($user);
+
+		// And I am logged in on the user workspace
+		$this->loginAs($user['Username']);
 		$this->gotoWorkspace('user');
 
 		// I fill the "app search" field with "tetris license"

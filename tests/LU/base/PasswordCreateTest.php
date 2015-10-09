@@ -19,8 +19,8 @@ class PasswordCreateTest extends PassboltTestCase
     /**
      * Scenario :   As a user I can view the create password dialog
      *
-     * Given        I am Carol
-     * And          I am logged in as Carol
+     * Given        I am Ada
+     * And          I am logged in as Ada
      * And          I am on password workspace
      * Then			I see the create password button
      * When         I click on create button
@@ -46,8 +46,8 @@ class PasswordCreateTest extends PassboltTestCase
      */
     public function testCreatePasswordDialogExist()
     {
-        // Given I am Carol
-        $user = User::get('carol');
+        // Given I am Ada
+        $user = User::get('ada');
         $this->setClientConfig($user);
 
         // I am logged in as Carol, and I go to the user workspace
@@ -126,7 +126,7 @@ class PasswordCreateTest extends PassboltTestCase
     /**
      * Scenario: As a user I can open close the create password dialog
      *
-     * Given    I am Carol
+     * Given    I am Ada
      * And      I am logged in
      * And      I am on the password workspace
      * When     I click on the create password button
@@ -143,8 +143,8 @@ class PasswordCreateTest extends PassboltTestCase
      * Then     I should not see the create password dialog
      */
     public function testCreatePasswordDialogOpenClose() {
-        // Given that I am Carol
-        $user = User::get('carol');
+        // Given that I am Ada
+        $user = User::get('ada');
         $this->setClientConfig($user);
 
         // And I am logged in and on the password workspace
@@ -193,7 +193,7 @@ class PasswordCreateTest extends PassboltTestCase
     /**
      * Scenario: As a user I can see error messages when creating a password with wrong inputs
      *
-     * Given    I am Carol
+     * Given    I am Ada
      * And      I am logged in
      * And      I am on the create password dialog
      * When     I press the enter key on the keyboard
@@ -210,8 +210,8 @@ class PasswordCreateTest extends PassboltTestCase
      * Then     I see an error message saying that the description contain invalid characters
      */
     public function testCreatePasswordErrorMessages() {
-        // Given I am Carol
-        $user = User::get('carol');
+        // Given I am Ada
+        $user = User::get('ada');
         $this->setClientConfig($user);
 
         // And I am logged in
@@ -287,7 +287,7 @@ class PasswordCreateTest extends PassboltTestCase
     /**
      * Scenario: As a user I can view a password I just created on my list of passwords
      *
-     * Given    I am Carol
+     * Given    I am Ada
      * And      I am logged in
      * And      I am on the create password dialog
      * When     I enter 'localhost ftp' as the name
@@ -301,8 +301,8 @@ class PasswordCreateTest extends PassboltTestCase
      * And      I see the password I created in my password list
      */
     public function testCreatePasswordAndView() {
-        // Given I am Carol
-        $user = User::get('carol');
+        // Given I am Ada
+        $user = User::get('ada');
         $this->setClientConfig($user);
 
         // And I am logged in
@@ -350,7 +350,7 @@ class PasswordCreateTest extends PassboltTestCase
     /**
      * Scenario: As a user I can generate a random password automatically
      *
-     * Given    I am carol
+     * Given    I am Ada
      * And      I am logged in
      * And      I am on the create password dialog
      * When     I click the button to generate a new random password automatically
@@ -358,8 +358,8 @@ class PasswordCreateTest extends PassboltTestCase
      * And      I see that the password complexity is set to fair
      */
     public function testCreatePasswordGenerateButton() {
-        // Given I am Carol
-        $user = User::get('carol');
+        // Given I am Ada
+        $user = User::get('ada');
         $this->setClientConfig($user);
 
         // And I am logged in
@@ -395,8 +395,8 @@ class PasswordCreateTest extends PassboltTestCase
      * Then I should not see the input field with the password in clear text
      */
     public function testCreatePasswordViewButton() {
-        // Given I am Carol
-        $user = User::get('carol');
+        // Given I am Ada
+        $user = User::get('ada');
         $this->setClientConfig($user);
 
         // And I am logged in

@@ -145,8 +145,11 @@ class PassboltTestCase extends WebDriverTestCase {
 		$this->inputText('securityTokenTextColor',$config['TokenTextColor']);
 		$this->click('js_save_conf');
 
-		$key = file_get_contents(GPG_FIXTURES . DS . $config['PrivateKey'] );
-		$this->inputText('keyAscii',$key);
+		// PASSBOLT-1084 trick to speed up the test execution
+		if($config['Username'] != 'ada@passbolt.com') {
+			$key = file_get_contents(GPG_FIXTURES . DS . $config['PrivateKey'] );
+			$this->inputText('keyAscii', $key);
+		}
 		$this->click('saveKey');
 	}
 

@@ -27,7 +27,7 @@ class PasswordCopyToClipboardTest extends PassboltTestCase
     /**
      * Scenario : As a user I can see the list of copy options when clicking right on a password
      *
-     * Given    I am Betty
+     * Given    I am Ada
      * And      I am logged in on the password workspace
      * When     I right click on the first password in the list
      * Then     I can see the contextual menu
@@ -36,9 +36,9 @@ class PasswordCopyToClipboardTest extends PassboltTestCase
      * And      I can see next option is 'Copy URI' and is enabled
      */
     function testCopyContextualMenuView() {
-        // Given I am Betty
-        $user = User::get('betty');
-        $resource = Resource::get(array('user' => 'betty'));
+        // Given I am Ada
+        $user = User::get('ada');
+        $resource = Resource::get(array('user' => 'ada'));
         $this->setClientConfig($user);
 
         // And I am logged in on the password workspace
@@ -63,7 +63,7 @@ class PasswordCopyToClipboardTest extends PassboltTestCase
     /**
      * Scenario : As a user I can copy a password to clipboard using a right click
      *
-     * Given    I am Betty
+     * Given    I am Ada
      * And      I am logged in on the password workspace
      * When     I select the first password in the list
      * And      I right click
@@ -75,9 +75,9 @@ class PasswordCopyToClipboardTest extends PassboltTestCase
      * And      The content of the clipboard is valid
      */
     public function testCopyPasswordToClipboardViaContextualMenu() {
-        // Given I am Betty
-        $user = User::get('betty');
-        $resource = Resource::get(array('user' => 'betty'));
+        // Given I am Ada
+        $user = User::get('ada');
+        $resource = Resource::get(array('user' => 'ada'));
         $this->setClientConfig($user);
 
         // And I am logged on the password workspace
@@ -111,7 +111,7 @@ class PasswordCopyToClipboardTest extends PassboltTestCase
     /**
      * Scenario : As a user I can copy the URI of one resource to clipboard with a right click
      *
-     * Given    I am Betty
+     * Given    I am Ada
      * And      I am logged in on the password workspace
      * When     I right click on the first password in the list
      * And      I click on the 'Copy URI' in the contextual menu
@@ -119,9 +119,9 @@ class PasswordCopyToClipboardTest extends PassboltTestCase
      * And      The content of the clipboard is valid
      */
     function testCopyURIToClipboardViaContextualMenu () {
-        // Given I am Betty
-        $user = User::get('betty');
-        $resource = Resource::get(array('user' => 'betty'));
+        // Given I am Ada
+        $user = User::get('ada');
+        $resource = Resource::get(array('user' => 'ada'));
         $this->setClientConfig($user);
 
         // And I am logged in on the password workspace
@@ -143,7 +143,7 @@ class PasswordCopyToClipboardTest extends PassboltTestCase
     /**
      * Scenario : As a user I can copy the username of one resource to clipboard with a right click
      *
-     * Given    I am Betty
+     * Given    I am Ada
      * And      I am logged in on the password workspace
      * When     I right click on the first password in the list
      * And      I click on the 'Copy username' in the contextual menu
@@ -151,9 +151,9 @@ class PasswordCopyToClipboardTest extends PassboltTestCase
      * And      The content of the clipboard is valid
      */
     function testCopyUsernameToClipboardViaContextualMenu() {
-        // Given I am Betty
-        $user = User::get('betty');
-        $resource = Resource::get(array('user' => 'betty'));
+        // Given I am Ada
+        $user = User::get('ada');
+        $resource = Resource::get(array('user' => 'ada'));
         $this->setClientConfig($user);
 
         // And I am logged in on the password workspace
