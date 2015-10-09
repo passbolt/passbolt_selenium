@@ -238,11 +238,6 @@ class PasswordCreateTest extends PassboltTestCase
             $this->find('js_field_username_feedback'), 'is required'
         );
 
-        // @TODO PASSBOLT-1023 it should pass if we remove this
-        $this->pressEscape();
-        $this->click('#js_wk_menu_creation_button');
-        // @TODO PASSBOLT-1023 ends
-
         // When I enter & as a name
         $this->inputText('js_field_name', '&');
 
