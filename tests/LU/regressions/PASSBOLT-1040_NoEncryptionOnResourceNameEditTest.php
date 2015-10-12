@@ -16,9 +16,6 @@ class PASSBOLT1040 extends PassboltTestCase
         $user = User::get('ada');
         $this->setClientConfig($user);
 
-        // And the database is in the default state
-        $this->PassboltServer->resetDatabase();
-
         // And I am logged in on the password workspace
         $this->loginAs($user['Username']);
 
@@ -42,11 +39,15 @@ class PASSBOLT1040 extends PassboltTestCase
         // And I click the submit button
         $this->click('.edit-password-dialog input[type=submit]');
 
-        // Then I should not see the encryption in progress dialog
-        try {
-            $this->waitUntilISee('passbolt-iframe-progress-dialog',null,3);
-        } catch(exception $e){};
-        $this->assertNotVisible('passbolt-iframe-progress-dialog');
+	    // For one second, every 1/10 seconds, check that the popup is not visible.
+	    for ($i = 0; $i < 10; $i++) {
+		    $this->assertNotVisible('passbolt-iframe-progress-dialog');
+		    usleep(100000);
+	    }
 
+	    // Then I should see a success notification message saying the password is updated.
+	    $this->assertNotification('app_resources_edit_success');
+	    // And the database is in the default state
+	    $this->resetDatabase();
     }
 }
