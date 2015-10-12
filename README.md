@@ -6,22 +6,9 @@ This project is the functional testsuite of Passbolt. It is based on Selenium, P
 Checkout [passbolt.com](http://www.passbolt.com) for more information
 
 
-## License
-GPL v3 License, see [License](license.md). Unless mentioned otherwise in the individual source files.
-
-
-## About Facebook php-webdriver
-
-This WebDriver client is a driver developped by Facebook. It aims to be as close as possible to bindings in other languages.
-The concepts are very similar to the Java, .NET, Python and Ruby bindings for WebDriver.
-
-Looking for documentation about php-webdriver? See the official [repository](http://facebook.github.io/php-webdriver/)
-
-##  More information
-
-Check out the Selenium [docs and wiki](http://docs.seleniumhq.org/docs/ and https://code.google.com/p/selenium/wiki)
-
-Learn how to integrate it with PHPUnit [Blogpost](http://codeception.com/11-12-2013/working-with-phpunit-and-selenium-webdriver.html) | [Demo Project](https://github.com/DavertMik/php-webdriver-demo)
+## License and copyright
+Unless it is mentioned otherwise in the individual source files the code is copyright 2015-onward Passbolt.com
+and distrubed under GPL v3 License, see [License](license.md)
 
 
 How to get started
@@ -45,21 +32,21 @@ Clone or rename config.php.default to
 
 *   Download the selenium-server-standalone-#.jar file provided here:
 
-				http://selenium-release.storage.googleapis.com/index.html
+    http://selenium-release.storage.googleapis.com/index.html
 
 *   Download and run that file, replacing # with the current server version.
 
-        java -jar selenium-server-standalone-#.jar
+    java -jar selenium-server-standalone-#.jar
 
 *   You can also run it on a remote host, you will need to set it up as a grid/node by running two instances
 
-        java -jar selenium-server-standalone-#.jar -role hub
-        java -jar selenium-server-standalone-#.jar -role node
+    java -jar selenium-server-standalone-#.jar -role hub
+    java -jar selenium-server-standalone-#.jar -role node
 
 *   Then when you create a session, be sure to pass the url to where your server is running.
 
-        // This would be the url of the host running the server-standalone.jar
-        $host = 'http://localhost:4444/wd/hub'; // this is the default
+    // This would be the url of the host running the server-standalone.jar
+    $host = 'http://localhost:4444/wd/hub'; // this is the default
 
 *   Make sure you have firefox installed on your selenium host!
 
@@ -82,6 +69,11 @@ Clone or rename config.php.default to
 * You can also run all tests
 
     $ ./run_all_test.sh
+
+* You can also run the tests matching a given pattern (matching class or function name), for example:
+
+    $ phpunit -c ./tests/LU --filter PasswordDeleteTest
+
 
 ## PHPUNIT (Using composer)
 
@@ -119,3 +111,21 @@ https://github.com/passbolt/passbolt/tree/develop/app/Config/gpg
 
     cd data/fixtures
     ln -s ../../../passbolt/app/Config/gpg/ .
+
+
+About Facebook php-webdriver
+===========================================
+
+This WebDriver client is a driver developped by Facebook. It aims to be as close as possible to bindings in other languages.
+The concepts are very similar to the Java, .NET, Python and Ruby bindings for WebDriver.
+
+Looking for documentation about php-webdriver?
+- [API](http://facebook.github.io/php-webdriver/)
+- [Repository](https://github.com/facebook/php-webdriver)
+
+
+##  More information
+
+Check out the Selenium [docs and wiki](http://docs.seleniumhq.org/docs/ and https://code.google.com/p/selenium/wiki)
+
+Learn how to integrate it with PHPUnit [Blogpost](http://codeception.com/11-12-2013/working-with-phpunit-and-selenium-webdriver.html) | [Demo Project](https://github.com/DavertMik/php-webdriver-demo)
