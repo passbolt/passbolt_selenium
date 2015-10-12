@@ -55,7 +55,8 @@ class PasswordDeleteTest extends PassboltTestCase
      * And      I am Ada
      * And      I am logged in on the password workspace
      * When     I click a password I have update right on
-     * And      I click on the delete button
+	 * And		I click on the more button
+	 * And 		I click on the delete link
      * Then     I should see a success notification message saying the password is deleted
      * And      I should not see the password in the list anymore
      */
@@ -71,8 +72,11 @@ class PasswordDeleteTest extends PassboltTestCase
         $resource = Resource::get(array('user' => 'ada', 'permission' => 'update'));
         $this->click($resource['id']);
 
-        // And I click on the delete button
-        $this->click('js_wk_menu_deletion_button');
+        // And I click on the more button
+		$this->click('js_wk_menu_more_button');
+
+		// When I click on the delete link
+		$this->clickLink('delete');
 
         // Then I should see a success notification message saying the password is deleted
         $this->assertNotification('app_resources_delete_success');
@@ -94,7 +98,8 @@ class PasswordDeleteTest extends PassboltTestCase
      * And      I am Ada
      * And      I am logged in on the password workspace
      * When     I click on the password shared with betty
-     * And      I click on the delete button
+	 * And		I click on the more button
+	 * And 		I click on the delete link
      * Then     I should see a success notification message saying the password is deleted
      * And      I should not see the password deleted by ada in the list anymore
      * When     I logout
@@ -128,8 +133,11 @@ class PasswordDeleteTest extends PassboltTestCase
         $this->assertVisible($resource['id']);
         $this->click($resource['id']);
 
-        // And I click on the delete button
-        $this->click('js_wk_menu_deletion_button');
+		// And I click on the more button
+		$this->click('js_wk_menu_more_button');
+
+		// When I click on the delete link
+		$this->clickLink('delete');
 
         // Then I should see a success notification message saying the password is deleted
         $this->assertNotification('app_resources_delete_success');
@@ -159,8 +167,9 @@ class PasswordDeleteTest extends PassboltTestCase
      * Given    I am Betty
      * And      I am logged in on the password workspace
      * When     I click on a password I have view right
+	 * And		I click on the more button
      * Then     I should see that the delete button is disabled
-     * When     I click on the delete button
+	 * And 		I click on the delete link
      * Then     I can still see the password in the list
      * When     I right click on the password I have view right
      * Then     I should see the delete option is disabled in the contextual dialog
@@ -177,12 +186,16 @@ class PasswordDeleteTest extends PassboltTestCase
 
         // I click on a password I have view right
         $resource = Resource::get(array('user' => 'betty', 'permission' => 'read'));
+		$this->click($resource['id']);
 
-        // Then I should see that the delete button is disabled
-        $this->assertVisible('#js_wk_menu_deletion_button.disabled');
+		// And I click on the more button
+		$this->click('js_wk_menu_more_button');
 
-        // When I click on the delete button
-        $this->click('js_wk_menu_deletion_button');
+		// Then I should see that the delete button is disabled
+		$this->assertVisible('#js_wk_menu_delete_action.disabled');
+
+		// When I click on the delete link
+		$this->clickLink('delete');
 
         // Then I can still see the password in the list
         $this->assertVisible($resource['id']);
