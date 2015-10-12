@@ -160,9 +160,9 @@ class PassboltTestCase extends WebDriverTestCase {
 		if(!$this->isVisible('.page.password')) {
 			$this->getUrl('');
 			$this->waitUntilISee('.page.password');
-			$this->waitUntilISee('#js_wk_menu_creation_button');
+			$this->waitUntilISee('#js_wsp_create_button');
 		}
-		$this->click('#js_wk_menu_creation_button');
+		$this->click('#js_wsp_create_button');
 		$this->assertVisible('.create-password-dialog');
 	}
 

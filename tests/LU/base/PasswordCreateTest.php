@@ -55,11 +55,11 @@ class PasswordCreateTest extends PassboltTestCase
 
         // then I see the create password button
         $this->assertElementContainsText(
-            $this->find('js_wsp_primary_menu_wrapper'), 'create'
+            $this->find('.main-action-wrapper'), 'create'
         );
 
         // When I click on create button
-        $this->click('js_wk_menu_creation_button');
+        $this->click('js_wsp_create_button');
 
         // Then I see the create password dialog
         $this->assertVisible('.create-password-dialog');
@@ -151,7 +151,7 @@ class PasswordCreateTest extends PassboltTestCase
         $this->loginAs($user['Username']);
 
         // When I click on the create password button
-        $this->click('js_wk_menu_creation_button');
+        $this->click('js_wsp_create_button');
 
         // Then I see the create password dialog
         $this->assertVisible('.create-password-dialog');
@@ -164,7 +164,7 @@ class PasswordCreateTest extends PassboltTestCase
 
         // -- WITH X BUTTON --
         // When I click on the create password button
-        $this->click('js_wk_menu_creation_button');
+        $this->click('js_wsp_create_button');
 
         // Then I see the create password dialog
         $this->assertVisible('.create-password-dialog');
@@ -177,7 +177,7 @@ class PasswordCreateTest extends PassboltTestCase
 
         // -- WITH ESCAPE --
         // When I click on the create password button
-        $this->click('js_wk_menu_creation_button');
+        $this->click('js_wsp_create_button');
 
         // Then I see the create password dialog
         $this->assertVisible('.create-password-dialog');
