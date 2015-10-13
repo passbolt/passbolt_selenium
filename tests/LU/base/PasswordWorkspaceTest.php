@@ -34,7 +34,7 @@ class PasswordWorkspaceTest extends PassboltTestCase
         $this->loginAs($user['Username']);
 
         // I should see the workspace primary menu
-        $buttons = ['create', 'edit', 'delete', 'share', 'more'];
+        $buttons = ['copy', 'edit', 'share', 'more'];
         for ($i = 0; $i < count($buttons); $i++) {
             $this->assertElementContainsText(
                 $this->findByCss('#js_wsp_primary_menu_wrapper ul'),
