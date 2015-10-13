@@ -24,6 +24,46 @@
 class PasswordCopyToClipboardTest extends PassboltTestCase
 {
 
+	/**
+	 * Scenario : As a user I can copy a password using the button in the action bar
+	 *
+	 * Given    I am Ada
+	 * And      I am logged in on the password workspace
+	 * When     I click a password
+	 * When     I click on the copy button in the action bar
+	 * Then     I can see the master key dialog
+	 * When     I enter my master password and click submit
+	 * Then     I can see a success message saying the password was 'copied to clipboard'
+	 * And      The content of the clipboard is valid
+	 */
+	function testCopyPasswordButton() {
+		// Given I am Ada
+		$user = User::get('ada');
+		$resource = Resource::get(array('user' => 'ada'));
+		$this->setClientConfig($user);
+
+		// And I am logged in on the password workspace
+		$this->loginAs($user['Username']);
+
+		// When I click on the first password in the list
+		$this->click($resource['id']);
+
+		// When I click on the link 'copy password'
+		$this->click(js_wk_menu_secretcopy_button);
+
+		// Then I can see the master key dialog
+		$this->assertMasterPasswordDialog($user);
+
+		// When I enter my master password and click submit
+		$this->enterMasterPassword($user['MasterPassword']);
+
+		// Then I can see a success message telling me the password was copied to clipboard
+		$this->assertNotification('plugin_secret_copy_success');
+
+		// And the content of the clipboard is valid
+		$this->assertClipboard($resource['password']);
+	}
+
     /**
      * Scenario : As a user I can see the list of copy options when clicking right on a password
      *
