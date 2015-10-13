@@ -240,6 +240,8 @@ class PasswordWorkspaceTest extends PassboltTestCase
      * And          I should see a confirmation of my action in the notification area
      * When         I click on the favorite filter
      * Then         I should see the password I just added to my favorites in the list of passwords
+     * When         I click on the all Items filter
+     * Then         I should see the password in the list
      * When         I click on the favorite red star located before the password (the password has to be a favorite)
      * Then         I should see the star becoming white
      * And          I should see a confirmation of my action in the notification area
@@ -247,7 +249,7 @@ class PasswordWorkspaceTest extends PassboltTestCase
      * Then         I shouldn't see anymore the password in my list of favorite passwords
      */
     public function testFavorite() {
-        $passwordTitle = 'shared resource';
+        $passwordTitle = 'apache';
         $xpathFavSelector = "//tr[*/div[contains(.,'" . $passwordTitle . "')]]//i[contains(@class, fav)]";
         $xpathUnfavSelector = "//tr[*/div[contains(.,'" . $passwordTitle . "')]]//i[contains(@class, unfav)]";
 
@@ -268,7 +270,7 @@ class PasswordWorkspaceTest extends PassboltTestCase
         $unfavElt = $this->findByXpath($xpathUnfavSelector);
 
         // I should see a confirmation of my action in the notification area
-        $this->assertPageContainsText('This record was successfully starred!');
+	    $this->assertNotification('app_favorites_add_success');
 
         // I click on the favorite filter
         $this->clickLink("Favorite");
@@ -280,22 +282,21 @@ class PasswordWorkspaceTest extends PassboltTestCase
             $passwordTitle
         );
 
-        // I click on the favorite red star located before the password (the password has to be a favorite)
+	    // Back to All items.
+	    $this->clickLink("All items");
+
+        // Back to favorite filI click on the favorite red star located before the password (the password has to be a favorite)
         $unfavElt = $this->findByXpath($xpathUnfavSelector);
         $unfavElt->click();
-        $this->waitCompletion();
 
         // I should see the star becoming white
         // The following operation should throw an exception if the element is not found
         $favElt = $this->findByXpath($xpathFavSelector);
+	    // I should see a confirmation of my action in the notification area
+	    $this->assertNotification('app_favorites_delete_success');
 
-        // I should see a confirmation of my action in the notification area
-        // @todo Cannot perform this assert because of the time we want a message to stay in the notification area.
-        // $this->assertPageContainsText('This record was removed from your starred item list');
-
-        // I click on the favorite filter
-        $this->clickLink("Favorite");
-        $this->waitCompletion();
+	    $this->clickLink("Favorite");
+	    sleep(1);
 
         // I shouldn't see anymore the password in my list of favorite passwords
         $this->assertElementNotContainText(
