@@ -49,7 +49,7 @@ class PasswordCopyToClipboardTest extends PassboltTestCase
 		$this->click($resource['id']);
 
 		// When I click on the link 'copy password'
-		$this->click(js_wk_menu_secretcopy_button);
+		$this->click('js_wk_menu_secretcopy_button');
 
 		// Then I can see the master key dialog
 		$this->assertMasterPasswordDialog($user);
