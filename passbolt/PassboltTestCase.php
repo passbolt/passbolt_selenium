@@ -230,7 +230,7 @@ class PassboltTestCase extends WebDriverTestCase {
 			$this->inputText('js_field_description', $password['description']);
 		}
 		$this->click('.create-password-dialog input[type=submit]');
-		$this->waitUntilISee('.notification-container', '/successfully saved/i');
+		$this->assertNotification('app_resources_add_success');
 	}
 
 	/**
