@@ -208,6 +208,8 @@ class PasswordCreateTest extends PassboltTestCase
      * Then     I see an error message saying that the username contain invalid characters
      * Then     I see an error message saying that the url is not valid
      * Then     I see an error message saying that the description contain invalid characters
+     * When     I enter 'aa' as a url
+     * Then     I see an error message saying that the length should be between x and x characters
      */
     public function testCreatePasswordErrorMessages() {
         // Given I am Ada
@@ -268,7 +270,7 @@ class PasswordCreateTest extends PassboltTestCase
         // Then I see an error message saying that the url is not valid
         $this->assertVisible('#js_field_uri_feedback.error.message');
         $this->assertElementContainsText(
-            $this->find('js_field_uri_feedback'), 'The format of the uri is not valid'
+            $this->find('js_field_uri_feedback'), 'should only contain alphabets, numbers'
         );
 
         // Then I see an error message saying that the description contain invalid characters
@@ -277,6 +279,12 @@ class PasswordCreateTest extends PassboltTestCase
             $this->find('js_field_description_feedback'), 'should only contain alphabets, numbers'
         );
 
+	    // And I enter aa as a url
+	    $this->inputText('js_field_uri', 'aa');
+	    $this->assertVisible('#js_field_uri_feedback.error.message');
+	    $this->assertElementContainsText(
+		    $this->find('js_field_uri_feedback'), 'URI should be between'
+	    );
     }
 
     /**
