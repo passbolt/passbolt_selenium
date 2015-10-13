@@ -24,7 +24,7 @@ class PASSBOLT1041 extends PassboltTestCase
         $this->setClientConfig($user);
 
         // And the database is in the default state
-        $this->PassboltServer->resetDatabase();
+        $this->resetDatabase();
 
         // And I am logged in on the password workspace
         $this->loginAs($user['Username']);
@@ -40,7 +40,6 @@ class PASSBOLT1041 extends PassboltTestCase
 
         // Then I cannot see the contextual menu
         $this->assertNotVisible('js_contextual_menu');
-
     }
 
     /**
