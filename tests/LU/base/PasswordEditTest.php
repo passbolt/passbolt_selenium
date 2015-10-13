@@ -347,7 +347,7 @@ class PasswordEditTest extends PassboltTestCase
         $this->assertElementContainsText('#js_wsp_pwd_browser .tableview-content', $newname);
 
         // And I can see the new name value in the sidebar
-        $this->assertVisible('js_pwd_details.panel.aside');
+        $this->assertVisible('#js_pwd_details.panel.aside');
         $this->assertElementContainsText('js_pwd_details', $newname);
 
         // When I click edit button

@@ -178,7 +178,9 @@ class PassboltTestCase extends WebDriverTestCase {
 			$this->waitUntilISee('#js_wk_menu_edition_button');
 		}
 		$this->click('footer'); // we click somewhere in case the password is already active
-		$this->click($id);
+		$xpathSelector = "//div[contains(@class, 'tableview-content')]//tr[contains(@id, '$id')]//input[contains(@type, 'checkbox')]";
+		$checkbox = $this->findByXpath($xpathSelector);
+		$checkbox->click($id);
 		$this->click('js_wk_menu_edition_button');
 		$this->waitCompletion();
 		$this->assertVisible('.edit-password-dialog');
