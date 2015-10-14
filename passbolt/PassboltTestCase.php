@@ -264,7 +264,7 @@ class PassboltTestCase extends WebDriverTestCase {
 	 * @param $password
 	 * @throws Exception
 	 */
-	public function editPassword($password) {
+	public function editPassword($password, $user = []) {
 		$this->gotoEditPassword($password['id']);
 
 		if (isset($password['name'])) {
@@ -277,6 +277,14 @@ class PassboltTestCase extends WebDriverTestCase {
 			$this->inputText('js_field_uri', $password['uri']);
 		}
 		if (isset($password['password'])) {
+			if (empty($user)) {
+				throw new Exception("a user must be provided to the function in order to update the secret");
+			}
+			$this->goIntoSecretIframe();
+			$this->click('js_secret');
+			$this->goOutOfIframe();
+			$this->assertMasterPasswordDialog($user);
+			$this->enterMasterPassword($user['MasterPassword']);
 			$this->inputSecret($password['password']);
 		}
 		if (isset($password['description'])) {
