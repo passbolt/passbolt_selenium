@@ -49,7 +49,7 @@ class PasswordEditTest extends PassboltTestCase
 
         // When I click on a password I own
         $resource = Resource::get(array('user' => 'ada', 'permission' => 'owner'));
-        $this->click($resource['id']);
+        $this->clickPassword($resource['id']);
 
         // Then I can see the edit button is enabled
         $this->assertNotVisible('#js_wk_menu_edition_button.disabled');
@@ -83,7 +83,7 @@ class PasswordEditTest extends PassboltTestCase
 
         // When I right click on a password I own
         $resource = Resource::get(array('user' => 'ada', 'permission' => 'owner'));
-        $this->rightClick($resource['id']);
+        $this->rightClickPassword($resource['id']);
 
         // Then I can see the contextual menu
         $this->assertVisible('js_contextual_menu');
@@ -662,13 +662,13 @@ class PasswordEditTest extends PassboltTestCase
             'user' => 'ada',
             'permission' => 'read'
         ));
-        $this->click($r['id']);
+        $this->clickPassword($r['id']);
 
         // Then I can see the edit button is not active
         $this->assertDisabled('js_wk_menu_edition_button');
 
         // When I right click on a password I cannot edit
-        $this->rightClick($r['id']);
+        $this->rightClickPassword($r['id']);
 
         // Then I can see the contextual menu
         $this->findById('js_contextual_menu');

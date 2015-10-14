@@ -46,7 +46,7 @@ class PasswordCopyToClipboardTest extends PassboltTestCase
 		$this->loginAs($user['Username']);
 
 		// When I click on the first password in the list
-		$this->click($resource['id']);
+		$this->clickPassword($resource['id']);
 
 		// When I click on the link 'copy password'
 		$this->click('js_wk_menu_secretcopy_button');
@@ -85,7 +85,7 @@ class PasswordCopyToClipboardTest extends PassboltTestCase
         $this->loginAs($user['Username']);
 
         // When I right click on the first password in the list
-        $this->rightClick($resource['id']);
+        $this->rightClickPassword($resource['id']);
 
         // Then I can see the contextual menu
         $e = $this->findById('js_contextual_menu');
@@ -127,7 +127,7 @@ class PasswordCopyToClipboardTest extends PassboltTestCase
         $this->click('multiple_select_checkbox_' . $resource['id']);
 
         // And I right click
-        $this->rightClick($resource['id']);
+        $this->rightClickPassword($resource['id']);
 
         // Then I can see the contextual menu
         $this->assertVisible('js_contextual_menu');
@@ -168,7 +168,7 @@ class PasswordCopyToClipboardTest extends PassboltTestCase
         $this->loginAs($user['Username']);
 
         // When I right click on the first password in the list
-        $this->rightClick($resource['id']);
+        $this->rightClickPassword($resource['id']);
 
         // When I click on the 'Copy URI' in the contextual menu
         $this->clickLink('Copy URI');
@@ -200,7 +200,7 @@ class PasswordCopyToClipboardTest extends PassboltTestCase
         $this->loginAs($user['Username']);
 
         // When I right click on the first password in the list
-        $this->rightClick($resource['id']);
+        $this->rightClickPassword($resource['id']);
 
         // When I click on the link 'copy URI' in the contextual menu
         $this->clickLink('Copy username');
@@ -261,7 +261,7 @@ class PasswordCopyToClipboardTest extends PassboltTestCase
         $this->loginAs($user['Username']);
 
         // When I click on the resource row in the grid
-        $this->click($resource['id']);
+        $this->clickPassword($resource['id']);
 
         // And I click on a the copy secret password link in the sidebar
         $this->click('sidebar_secret_copy_' . $resource['id']);

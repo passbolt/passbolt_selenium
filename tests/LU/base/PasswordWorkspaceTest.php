@@ -84,7 +84,7 @@ class PasswordWorkspaceTest extends PassboltTestCase
         $this->assertVisible('#js_wsp_pwd_browser .tableview-content');
         for ($i = 0; $i < count($passwords); $i++) {
             // @TODO
-            $this->assertVisible('#js_wsp_pwd_browser .tableview-content tr#'.$passwords[$i]['id'],
+            $this->assertVisible('#js_wsp_pwd_browser .tableview-content tr#resource_'.$passwords[$i]['id'],
                 'could not find password:' . $passwords[$i]['name']);
         }
 

@@ -30,7 +30,7 @@ class PASSBOLT1041 extends PassboltTestCase
         $this->loginAs($user['Username']);
 
         // And I right click on an item I own
-        $this->rightClick($resource['id']);
+        $this->rightClickPassword($resource['id']);
 
         // Then I can see the contextual menu
         $this->assertVisible('js_contextual_menu');

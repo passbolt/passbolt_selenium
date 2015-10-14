@@ -167,6 +167,32 @@ class PassboltTestCase extends WebDriverTestCase {
 	}
 
 	/**
+	 * Click on a password inside the password workspace.
+	 * @param string $id id of the password
+	 *
+	 * @throws Exception
+	 */
+	public function clickPassword($id) {
+		if(!$this->isVisible('.page.password')) {
+			throw new Exception("click password requires to be on the password workspace");
+		}
+		$this->click('#resource_' . $id . ' .cell_name');
+	}
+
+	/**
+	 * Right click on a password with a given id.
+	 * @param string $id
+	 *
+	 * @throws Exception
+	 */
+	public function rightClickPassword($id) {
+		if(!$this->isVisible('.page.password')) {
+			throw new Exception("right click password requires to be on the password workspace");
+		}
+		$this->rightClick('#resource_' . $id . ' .cell_name');
+	}
+
+	/**
 	 * Goto the edit password dialog for a given resource id
 	 * @param $id string
 	 * @throws Exception
@@ -178,9 +204,7 @@ class PassboltTestCase extends WebDriverTestCase {
 			$this->waitUntilISee('#js_wk_menu_edition_button');
 		}
 		$this->click('footer'); // we click somewhere in case the password is already active
-		$xpathSelector = "//div[contains(@class, 'tableview-content')]//tr[contains(@id, '$id')]//input[contains(@type, 'checkbox')]";
-		$checkbox = $this->findByXpath($xpathSelector);
-		$checkbox->click($id);
+		$this->clickPassword($id);
 		$this->click('js_wk_menu_edition_button');
 		$this->waitCompletion();
 		$this->assertVisible('.edit-password-dialog');
@@ -279,7 +303,9 @@ class PassboltTestCase extends WebDriverTestCase {
 	 * @param $user
 	 */
 	public function copyToClipboard($resource, $user) {
-		$this->rightClick($resource['id']);
+		$this->rightClickPassword($resource['id']);
+		// Without the line below, the click doesn't seem to be propagated.
+		sleep(2);
 		$this->clickLink('Copy password');
 		$this->assertMasterPasswordDialog($user);
 		$this->enterMasterPassword($user['MasterPassword']);
