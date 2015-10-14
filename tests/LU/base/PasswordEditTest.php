@@ -597,6 +597,7 @@ class PasswordEditTest extends PassboltTestCase
      * And      I can see that the password complexity is set to fair
      */
     public function testEditPasswordGenerateRandom() {
+	    // TODO : fix corresponding feature in plugin. #PASSBOLT-1060
         // Given I am Ada
         $user = User::get('ada');
         $this->setClientConfig($user);
@@ -707,7 +708,7 @@ class PasswordEditTest extends PassboltTestCase
             'id' => $r1['id'],
             'password' => 'our_brand_new_password'
         );
-        $this->editPassword($r2);
+        $this->editPassword($r2, $user);
 
         // And I logout
         $this->getUrl('logout');
