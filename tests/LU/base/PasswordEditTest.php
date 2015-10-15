@@ -589,11 +589,15 @@ class PasswordEditTest extends PassboltTestCase
      * Given    I am Ada
      * And      I am logged in on the password workspace
      * And      I am editing a password I own
-     * When     I click the button to generate a new random password automatically
+	 * And      I can see the generate button is not active
+     * When     I click on the secret password field
      * Then     I see the master password dialog
-     * When     I enter the master password in the input field and press the submit button
-     * Then     I can see the secret field populated
-     * And      I can see the secret is different than the previous one
+     * And      I enter the master password in the input field and press the submit button
+     * And      I can see the secret field populated
+     * And      I can see the generate button is now active
+     * When     I click the button the generate a new random password button
+     * And      I click the button to view my password in clear text
+     * Then     I can see the secret is different than the previous one
      * And      I can see that the password complexity is set to fair
      */
     public function testEditPasswordGenerateRandom() {
@@ -611,10 +615,13 @@ class PasswordEditTest extends PassboltTestCase
             'permission' => 'owner'
         ));
         $this->gotoEditPassword($r1['id']);
+	    $this->goIntoSecretIframe();
 
-        // When I click the button to generate a new random password automatically
-        $this->goIntoSecretIframe();
-        $this->click('js_secret_generate');
+		// And I can see the generate button is not active
+	    $this->assertDisabled('js_secret_generate');
+
+	    // When I click on the secret password field
+	    $this->click('js_secret');
 
         // Then I see the master password dialog
         $this->assertMasterPasswordDialog($user);
@@ -624,13 +631,17 @@ class PasswordEditTest extends PassboltTestCase
 
         // Then I should see the secret field populated
         $this->goIntoSecretIframe();
-        $s = $this->findById('js_secret')->getAttribute('value');
-        $this->assertNotEmpty($s);
+	    $s = $this->findById('js_secret')->getAttribute('value');
+	    $this->assertNotEmpty($s);
 
-        // When I press the same button to hide my password again
+	    // When I click the button to generate a new random password automatically
+	    $this->click('js_secret_generate');
+	    $s = $this->findById('js_secret')->getAttribute('value');
+
+        // And I click the button to view my password in clear text
         $this->click('js_secret_view');
 
-        // And I can see the secret is different than the previous one
+        // Then I can see the secret is different than the previous one
         $this->assertTrue(($s != $r1['password']));
 
         // And I should see that the password complexity is set to fair
