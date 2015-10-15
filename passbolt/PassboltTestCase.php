@@ -319,6 +319,25 @@ class PassboltTestCase extends WebDriverTestCase {
 		$this->enterMasterPassword($user['MasterPassword']);
 	}
 
+
+	/**
+	 * Empty a field like a user would do it.
+	 * Click on the field, go at the end of the text, and backspace to remove the whole text.
+	 * @param $id
+	 */
+	public function emptyFieldLikeAUser($id) {
+		$field = $this->find($id);
+		$val = $field->getAttribute('value');
+		$sizeStr = strlen($val);
+		$field->click();
+		for ($i = 0; $i < $sizeStr; $i++) {
+			$this->driver->getKeyboard()->pressKey(WebDriverKeys::ARROW_RIGHT);
+		}
+		for ($i = 0; $i < $sizeStr; $i++) {
+			$this->driver->getKeyboard()->pressKey(WebDriverKeys::BACKSPACE);
+		}
+	}
+
 	/********************************************************************************
 	 * Passbolt Application Asserts
 	 ********************************************************************************/

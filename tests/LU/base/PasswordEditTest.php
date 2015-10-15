@@ -767,14 +767,11 @@ class PasswordEditTest extends PassboltTestCase
         ));
         $this->gotoEditPassword($r1['id']);
 
-        // When I click on the name input field
-        $this->click('js_field_name');
-
         // And I empty the name input field
-        $this->find('js_field_name')->clear();
+	    $this->emptyFieldLikeAUser('js_field_name');
 
         // And I empty the username input field
-        $this->find('js_field_username')->clear();
+	    $this->emptyFieldLikeAUser('js_field_username');
 
         // And I press enter
         $this->pressEnter();
@@ -804,7 +801,7 @@ class PasswordEditTest extends PassboltTestCase
         $this->inputText('js_field_description', '&');
 
         // And I click save
-        $this->click('.create-password-dialog input[type=submit]');
+        $this->click('.edit-password-dialog input[type=submit]');
 
         // Then I see an error message saying that the name contain invalid characters
         $this->assertVisible('#js_field_name_feedback.error.message');
@@ -821,7 +818,7 @@ class PasswordEditTest extends PassboltTestCase
         // Then I see an error message saying that the url is not valid
         $this->assertVisible('#js_field_uri_feedback.error.message');
         $this->assertElementContainsText(
-            $this->find('js_field_uri_feedback'), 'The format of the uri is not valid'
+            $this->find('js_field_uri_feedback'), 'should only contain alphabets, numbers'
         );
 
         // Then I see an error message saying that the description contain invalid characters
