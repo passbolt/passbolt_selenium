@@ -70,8 +70,7 @@ class PasswordWorkspaceTest extends PassboltTestCase
      * Given        I am logged in as Ada, and I go to the password workspace
      * Then         I should see rows representing my passwords
      */
-    public function testBrowsePasswords()
-    {
+    public function testBrowsePasswords() {
         // Given I am Ada
         $user = User::get('ada');
         $this->setClientConfig($user);
@@ -80,12 +79,11 @@ class PasswordWorkspaceTest extends PassboltTestCase
         $this->loginAs($user['Username']);
 
         // I should see rows representing my passwords
-        $passwords = Resource::getAll(array('user' => $user['Username']));
+        $passwords = Resource::getAll(array('user' => $user['Username'], 'return_deny' => false));
         $this->assertVisible('#js_wsp_pwd_browser .tableview-content');
-        for ($i = 0; $i < count($passwords); $i++) {
-            // @TODO
-            $this->assertVisible('#js_wsp_pwd_browser .tableview-content tr#resource_'.$passwords[$i]['id'],
-                'could not find password:' . $passwords[$i]['name']);
+        foreach ($passwords as $password) {
+            $this->assertVisible('#js_wsp_pwd_browser .tableview-content tr#resource_'.$password['id'],
+                'could not find password:' . $password['name']);
         }
 
         // @todo Test de rows details
@@ -147,7 +145,20 @@ class PasswordWorkspaceTest extends PassboltTestCase
         $this->clickLink("Shared with me");
         $this->waitCompletion();
         // I should only see the passwords that have been shared with me
-        $passwords = ['shared resource', 'op1-pwd1', 'op1-pwd2'];
+        $passwords = [
+	        'Inkscape',
+	        'free software foundation europe',
+	        'bower',
+	        'ftp',
+	        'Docker',
+	        'Canjs',
+	        'Debian',
+	        'centos',
+	        'framasoft',
+	        'Gnupg',
+	        'composer',
+	        'Git',
+        ];
         for ($i = 0; $i < count($passwords); $i++) {
             $this->assertElementContainsText(
                 $this->findByCss('#js_wsp_pwd_browser .tableview-content'),

@@ -60,7 +60,7 @@ class Resource {
     static function _getByUsername($username) {
         $r = self::_get();
         switch ($username) {
-            case 'ada' :
+            case 'ada@passbolt.com' :
                 $r[0] = array_merge($r[0], array(
                     'permission' => 'owner'
                 ));
@@ -77,7 +77,7 @@ class Resource {
                     'permission' => 'update'
                 ));
                 break;
-            case 'betty' :
+            case 'betty@passbolt.com' :
                 $r[0] = array_merge($r[0], array(
                     'permission' => 'update'
                 ));
@@ -171,7 +171,14 @@ class Resource {
         if (!isset($conditions['user'])) {
             throw new Exception('a user must be specified to get access to a resource fixture');
         }
-        $r = self::_getByUsername($conditions['user']);
+	    $r = self::_getByUsername($conditions['user']);
+	    if (isset($conditions['return_deny']) && $conditions['return_deny'] == false) {
+			foreach($r as $k => $resource) {
+				if (isset($resource['permission']) && $resource['permission'] == 'deny') {
+					unset($r[$k]);
+				}
+			}
+	    }
         return $r;
     }
 }
