@@ -64,7 +64,6 @@ class Resource {
                 $r[0] = array_merge($r[0], array(
                     'permission' => 'owner'
                 ));
-				var_dump($r[0]);
                 $r[1] = array_merge($r[1], array(
                     'permission' => 'deny'
                 ));

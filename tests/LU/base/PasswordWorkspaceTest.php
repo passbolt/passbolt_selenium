@@ -145,7 +145,20 @@ class PasswordWorkspaceTest extends PassboltTestCase
         $this->clickLink("Shared with me");
         $this->waitCompletion();
         // I should only see the passwords that have been shared with me
-        $passwords = ['shared resource', 'op1-pwd1', 'op1-pwd2'];
+        $passwords = [
+	        'Inkscape',
+	        'free software foundation europe',
+	        'bower',
+	        'ftp',
+	        'Docker',
+	        'Canjs',
+	        'Debian',
+	        'centos',
+	        'framasoft',
+	        'Gnupg',
+	        'composer',
+	        'Git',
+        ];
         for ($i = 0; $i < count($passwords); $i++) {
             $this->assertElementContainsText(
                 $this->findByCss('#js_wsp_pwd_browser .tableview-content'),
