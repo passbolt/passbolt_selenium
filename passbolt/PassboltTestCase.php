@@ -137,6 +137,7 @@ class PassboltTestCase extends WebDriverTestCase {
 		$this->getUrl('debug');
 		sleep(1); // plugin need some time to trigger a page change
 
+		$this->inputText('baseUrl', Config::read('passbolt.url'));
 		$this->inputText('ProfileFirstName',$config['FirstName']);
 		$this->inputText('ProfileLastName',$config['LastName']);
 		$this->inputText('UserUsername',$config['Username']);
