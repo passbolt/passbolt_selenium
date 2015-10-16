@@ -197,7 +197,7 @@ class PasswordWorkspaceTest extends PassboltTestCase
         $this->loginAs($user['Username']);
 
         // I click on a password
-        $this->click("#js_wsp_pwd_browser .tableview-content div[title='shared resource']");
+        $this->click("#js_wsp_pwd_browser .tableview-content div[title='Inkscape']");
         $this->waitCompletion();
 
         // I should see a secondary side bar appearing
@@ -205,11 +205,11 @@ class PasswordWorkspaceTest extends PassboltTestCase
 
         // I should the details of the selected password
         $pwdDetails = [
-            'username'         => 'admin',
-            'url'             => 'http://shared.resource.net/',
-            'modified'         => '3 years ago',
-            'created-by'     => 'anonymous@passbolt.com',
-            'modified-by'     => 'root@passbolt.com',
+            'username'         => 'vector',
+            'url'             => 'https://inkscape.org/',
+            'modified'         => '3 days ago',
+            'created-by'     => 'edith@passbolt.com',
+            'modified-by'     => 'anonymous@passbolt.com',
         ];
         // I should see the password's username
         $cssSelector = '#js_pwd_details .detailed-information li.username';
@@ -218,7 +218,7 @@ class PasswordWorkspaceTest extends PassboltTestCase
             $pwdDetails['username']
         );
         // I should see the password's url
-        $cssSelector = '#js_pwd_details .detailed-information li.url';
+        $cssSelector = '#js_pwd_details .detailed-information li.uri';
         $this->assertElementContainsText(
             $this->findByCss($cssSelector),
             $pwdDetails['url']
