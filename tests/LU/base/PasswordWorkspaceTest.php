@@ -331,8 +331,21 @@ class PasswordWorkspaceTest extends PassboltTestCase
      */
     public function testSearchByKeywords()
     {
-        $searchPwd = 'shared resource';
-        $hiddenPwd = ['op1-pwd1', 'op1-pwd2'];
+        $searchPwd = 'Enlightenment';
+        $hiddenPwd = [
+	        'Inkscape',
+	        'free software foundation europe',
+	        'bower',
+	        'ftp',
+	        'Docker',
+	        'Canjs',
+	        'Debian',
+	        'centos',
+	        'framasoft',
+	        'Gnupg',
+	        'composer',
+	        'Git',
+        ];;
         $breadcrumb = ['All items', 'Search : shared'];
 
         // Given I am Ada
