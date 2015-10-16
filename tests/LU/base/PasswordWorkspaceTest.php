@@ -345,8 +345,8 @@ class PasswordWorkspaceTest extends PassboltTestCase
 	        'Gnupg',
 	        'composer',
 	        'Git',
-        ];;
-        $breadcrumb = ['All items', 'Search : shared'];
+        ];
+        $breadcrumb = ['All items', 'Search : ' . $searchPwd];
 
         // Given I am Ada
         $user = User::get('ada');
