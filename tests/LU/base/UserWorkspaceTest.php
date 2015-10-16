@@ -93,7 +93,7 @@ class UserWorkspaceTest extends PassboltTestCase {
 			'Irene Greif',
 			'Jean Bartik',
 			'Kathleen Antonelli',
-			'Lynn Jolitz',
+			'Lynne Jolitz',
 			'Marlyn Wescoff'
 		];
 		$browserElement = $this->findByCss('#js_wsp_users_browser .tableview-content');
