@@ -79,7 +79,7 @@ class PasswordWorkspaceTest extends PassboltTestCase
         $this->loginAs($user['Username']);
 
         // I should see rows representing my passwords
-        $passwords = Resource::getAll(array('user' => $user['Username'], 'return_deny' => false));
+        $passwords = Resource::getAll(array('user' => $user['name'], 'return_deny' => false));
         $this->assertVisible('#js_wsp_pwd_browser .tableview-content');
         foreach ($passwords as $password) {
             $this->assertVisible('#js_wsp_pwd_browser .tableview-content tr#resource_'.$password['id'],

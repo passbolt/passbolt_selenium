@@ -14,6 +14,7 @@ class User {
             default:
             case 'ada':
                 return array_merge($conf,array(
+	                'name' => 'ada',
                     'FirstName' => 'Ada',
                     'LastName' => 'Lovelace',
                     'Username' => 'ada@passbolt.com',
@@ -24,6 +25,7 @@ class User {
                 break;
             case 'betty':
                 return array_merge($conf,array(
+	                'name' => 'betty',
                     'FirstName' => 'Betty',
                     'LastName' => 'Holberton',
                     'Username' => 'betty@passbolt.com',
@@ -34,6 +36,7 @@ class User {
                 break;
             case 'carol':
                 return array_merge($conf,array(
+	                'name' => 'carol',
                     'FirstName' => 'Carol',
                     'LastName' => 'Shaw',
                     'Username' => 'carol@passbolt.com',

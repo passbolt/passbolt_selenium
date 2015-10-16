@@ -60,7 +60,7 @@ class Resource {
     static function _getByUsername($username) {
         $r = self::_get();
         switch ($username) {
-            case 'ada@passbolt.com' :
+			case 'ada' :
                 $r[0] = array_merge($r[0], array(
                     'permission' => 'owner'
                 ));
@@ -77,7 +77,7 @@ class Resource {
                     'permission' => 'update'
                 ));
                 break;
-            case 'betty@passbolt.com' :
+			case 'betty' :
                 $r[0] = array_merge($r[0], array(
                     'permission' => 'update'
                 ));
@@ -147,7 +147,7 @@ class Resource {
             $r = self::_getById($r, $conditions['id']);
         } else {
             // filter by permission if needed
-            if (!isset($conditions['permission']) && $r!==false) {
+            if (!isset($conditions['permission']) && $r !== false) {
                 $r = $r[0];
             } elseif ($r!==false) {
                 $r = self::_getByPermission($r, $conditions['permission']);
