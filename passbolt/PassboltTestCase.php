@@ -93,8 +93,9 @@ class PassboltTestCase extends WebDriverTestCase {
 			usleep(100000); // Sleep 1/10 seconds
 		}
 
-		$backtrace = debug_backtrace();
-		throw new Exception( "Timeout thrown by " . $backtrace[1]['class'] . "::" . $backtrace[1]['function'] . "()\n .");
+		//$backtrace = debug_backtrace();
+		//throw new Exception( "Timeout thrown by " . $backtrace[1]['class'] . "::" . $backtrace[1]['function'] . "()\n .");
+		$this->fail('html.loaded could not be found in time');
 	}
 
 	/**

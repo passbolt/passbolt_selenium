@@ -296,7 +296,8 @@ GFq/vw==
 	 */
 	private function __testStepGenerateAndDownloadKey() {
 		$this->assertTitleEquals('Give us a second while we crunch them numbers!');
-		$this->waitUntilISee('#js_step_content h3', '/Generating the secret and public key/i');
+		$this->assertElementContainsText('#js_step_content h3', '/Generating the secret and public key/i');
+
 		$this->assertElementHasClass(
 			$this->find('js_setup_submit_step'),
 			'processing'
@@ -677,41 +678,10 @@ GFq/vw==
 		// Register John Doe as a user.
 		$this->registerUser('John', 'Doe', 'johndoe@passbolt.com');
 
-		// Go to setup page.
+		// Go to setup page and register
 		$this->__goToSetup('johndoe@passbolt.com');
-		// Test step domain verification.
-		$this->__testStepDomainVerification();
+		$this->__register();
 
-		// Click Next.
-		$this->clickLink("Next");
-		// Test that button Next is disabled.
-		$this->assertElementHasClass(
-			$this->find('js_setup_submit_step'),
-			'processing'
-		);
-		// test step that prepares key creation.
-		$this->__testStepPrepareCreateKey();
-		// Fill comment.
-		$this->clickLink("Next");
-		// Test enter master password step.
-		$this->__testStepEnterMasterPassword();
-		// Next.
-		$this->clickLink("Next");
-		// Test step generate and download key.
-		$this->__testStepGenerateAndDownloadKey();
-		// We cannot test that it is possible to download the key physically due to driver limitations.
-		// Click Next.
-		$this->clickLink("Next");
-		// Test security token step.
-		$this->__testStepSecurityToken();
-		// Click Next.
-		$this->clickLink("Next");
-		// Test enter application password step.
-		$this->__testStepEnterApplicationPassword();
-		// Click Next.
-		$this->clickLink("Next");
-		// Do not remove the line below. Without it the test gets stuck without a reason.
-		sleep(5);
 		// Check we are logged in.
 		$this->waitCompletion();
 		$this->waitUntilISee('#js_app_controller.ready');
@@ -743,10 +713,10 @@ GFq/vw==
 	 */
 	public function testFollowSetupWithImportKey() {
 		// Register John Doe as a user.
-		$this->registerUser('John', 'Doe', 'johndoe@passbolt.com');
+		$this->registerUser('John', 'Doe III', 'johndoe3@passbolt.com');
 
 		// Go to setup page.
-		$this->__goToSetup('johndoe@passbolt.com');
+		$this->__goToSetup('johndoe3@passbolt.com');
 		// Wait
 		$this->waitUntilISee('#js_step_content h3', '/Plugin check/i');
 		// Check box domain check.
@@ -788,17 +758,16 @@ GFq/vw==
 		// Check that the name is ok.
 		$this->assertElementContainsText(
 			$this->findByCss('.header .user.profile .details .name'),
-			'John Doe'
+			'John Doe III'
 		);
 		// Check that the email is ok.
 		$this->assertElementContainsText(
 			$this->findByCss('.header .user.profile .details .email'),
-			'johndoe@passbolt.com'
+			'johndoe3@passbolt.com'
 		);
 
-		// @TODO not atomic: needed for the next step
 		// Since content was edited, we reset the database
-		// $this->resetDatabase();
+		$this->resetDatabase();
 	}
 
 	/**
@@ -809,19 +778,67 @@ GFq/vw==
 	 * @throws Exception
 	 */
 	public function testSetupNotAccessibleAfterAccountValidation() {
+		// Register John Doe as a user.
+		$this->registerUser('John', 'Doe', 'johndoe@passbolt.com');
+
 		// Get last email.
 		$this->getUrl('seleniumTests/showLastEmail/' . urlencode('johndoe@passbolt.com'));
 		// Remember setup url. (We will use it later).
 		$linkElement = $this->findLinkByText('get started');
 		$setupUrl = $linkElement->getAttribute('href');
+
+		// Go to setup page.
+		$this->__goToSetup('johndoe@passbolt.com');
+		$this->__register();
+
 		// Go to url remembered above.
 		$this->driver->get($setupUrl);
-
 		$this->waitUntilISee('h2', '/Token not found/');
 
-		// @TODO not atomic: needed for the next step
-		// delayed see previous todo
+		// Since content was edited, we reset the database
 		$this->resetDatabase();
 	}
 
+	/**
+	 * Register steps
+	 * @throws Exception
+	 */
+	public function __register() {
+		// Test step domain verification.
+		$this->__testStepDomainVerification();
+
+		// Click Next.
+		$this->clickLink("Next");
+		// Test that button Next is disabled.
+		$this->assertElementHasClass(
+			$this->find('js_setup_submit_step'),
+			'processing'
+		);
+		// test step that prepares key creation.
+		$this->__testStepPrepareCreateKey();
+		// Fill comment.
+		$this->clickLink("Next");
+		// Test enter master password step.
+		$this->__testStepEnterMasterPassword();
+		// Next.
+		$this->clickLink("Next");
+		// Test step generate and download key.
+		$this->__testStepGenerateAndDownloadKey();
+		// We cannot test that it is possible to download the key physically due to driver limitations.
+		// Click Next.
+		$this->clickLink("Next");
+		// Test security token step.
+		$this->__testStepSecurityToken();
+		// Click Next.
+		$this->clickLink("Next");
+		// Test enter application password step.
+		$this->__testStepEnterApplicationPassword();
+		// Click Next.
+		$this->clickLink("Next");
+		// Do not remove the line below. Without it the test gets stuck without a reason.
+		sleep(5);
+		// Check we are logged in.
+		$this->waitCompletion();
+		$this->waitUntilISee('#js_app_controller.ready');
+	}
 }

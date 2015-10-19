@@ -9,13 +9,13 @@
         convertNoticesToExceptions  = "true"
         convertWarningsToExceptions = "true"
         processIsolation            = "false"
-        stopOnFailure               = "true"
+        stopOnFailure               = "false"
         syntaxCheck                 = "false"
         bootstrap                   = "../../bootstrap.php" >
 
     <php>
         <env name="BROWSER" value="firefox_vanilla"/>
-        <env name="QUIT" value="2" comment="only on errors" />
+        <env name="QUIT" value="2" />
     </php>
 
     <testsuites>
