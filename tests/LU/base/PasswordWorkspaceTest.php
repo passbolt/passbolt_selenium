@@ -207,7 +207,7 @@ class PasswordWorkspaceTest extends PassboltTestCase
         $pwdDetails = [
             'username'         => 'vector',
             'url'             => 'https://inkscape.org/',
-            'modified'         => '3 days ago',
+            'modified'         => '/[0-9]{1,2} days ago/',
             'created-by'     => 'edith@passbolt.com',
             'modified-by'     => 'anonymous@passbolt.com',
         ];
