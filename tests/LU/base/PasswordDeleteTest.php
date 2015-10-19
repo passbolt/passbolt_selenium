@@ -39,6 +39,12 @@ class PasswordDeleteTest extends PassboltTestCase
         // Then I select the delete option in the contextual menu
         $this->clickLink('Delete');
 
+	    // Assert that the confirmation dialog is displayed.
+	    $this->assertConfirmationDialog('Do you really want to delete password ?');
+
+	    // Click ok in confirmation dialog.
+	    $this->confirmActionInConfirmationDialog();
+
         // Then I should see a success notification message saying the password is deleted
         $this->assertNotification('app_resources_delete_success');
 
@@ -77,6 +83,12 @@ class PasswordDeleteTest extends PassboltTestCase
 
 		// When I click on the delete link
 		$this->clickLink('delete');
+
+	    // Assert that the confirmation dialog is displayed.
+	    $this->assertConfirmationDialog('Do you really want to delete password ?');
+
+	    // Click ok in confirmation dialog.
+	    $this->confirmActionInConfirmationDialog();
 
         // Then I should see a success notification message saying the password is deleted
         $this->assertNotification('app_resources_delete_success');
@@ -138,6 +150,12 @@ class PasswordDeleteTest extends PassboltTestCase
 
 		// When I click on the delete link
 		$this->clickLink('delete');
+
+	    // Assert that the confirmation dialog is displayed.
+	    $this->assertConfirmationDialog('Do you really want to delete password ?');
+
+	    // Click ok in confirmation dialog.
+	    $this->confirmActionInConfirmationDialog();
 
         // Then I should see a success notification message saying the password is deleted
         $this->assertNotification('app_resources_delete_success');

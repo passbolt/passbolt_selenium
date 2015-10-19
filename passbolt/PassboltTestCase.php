@@ -339,6 +339,15 @@ class PassboltTestCase extends WebDriverTestCase {
 		}
 	}
 
+	/**
+	 * Click on the ok button in the confirm dialog.
+	 */
+	public function confirmActionInConfirmationDialog() {
+		$button = $this->find('confirm-button');
+		$button->click();
+
+	}
+
 	/********************************************************************************
 	 * Passbolt Application Asserts
 	 ********************************************************************************/
@@ -517,6 +526,25 @@ class PassboltTestCase extends WebDriverTestCase {
 		$this->assertVisible('a.js-dialog-close.cancel');
 		// Then I go out of the iframe
 		$this->goOutOfIframe();
+	}
+
+	/**
+	 * Check if confirmation dialog is displayed as it should.
+	 * @param string $title
+	 */
+	public function assertConfirmationDialog($title = '') {
+		// Assert I can see the confirm dialog.
+		$this->waitUntilISee('.dialog.confirm');
+		// Then I can see the close dialog button
+		$this->assertVisible('.dialog.confirm a.dialog-close');
+		// Then I can see the cancel link.
+		$this->assertVisible('.dialog.confirm a.cancel');
+		// Then I can see the Ok button.
+		$this->assertVisible('.dialog.confirm input#confirm-button');
+		if ($title !== '') {
+			// Then I can see the title
+			$this->assertElementContainsText('.dialog.confirm', $title);
+		}
 	}
 
 	/**
