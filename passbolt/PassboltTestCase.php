@@ -190,7 +190,19 @@ class PassboltTestCase extends WebDriverTestCase {
 		if(!$this->isVisible('.page.password')) {
 			throw new Exception("right click password requires to be on the password workspace");
 		}
-		$this->rightClick('#resource_' . $id . ' .cell_name');
+		$eltSelector = '#resource_' . $id . ' .cell_name';
+		//$this->rightClick('#resource_' . $id . ' .cell_name');
+		// Instead of rightClick function, we execute a script.
+		// This is because passbolt opens a contextual menu on the mousedown event
+		// and not on the contextMenu event. (and the primitive mouseDown doesn't exist in the webDriver).
+		$this->driver->executeScript("
+			jQuery('$eltSelector').trigger({
+				type:'mousedown',
+				which:3
+			});
+		");
+		// Without this little interval, the menu doesn't have time to open.
+		sleep(1);
 	}
 
 	/**
