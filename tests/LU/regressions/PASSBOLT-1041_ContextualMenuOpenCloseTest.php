@@ -36,7 +36,7 @@ class PASSBOLT1041 extends PassboltTestCase
         $this->assertVisible('js_contextual_menu');
 
         // When I click on the edit link
-        $this->clickLink('Edit');
+        $this->click('#js_password_browser_menu_edit a');
 
         // Then I cannot see the contextual menu
         $this->assertNotVisible('js_contextual_menu');

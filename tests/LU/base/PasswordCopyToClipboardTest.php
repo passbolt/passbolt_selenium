@@ -133,7 +133,7 @@ class PasswordCopyToClipboardTest extends PassboltTestCase
         $this->assertVisible('js_contextual_menu');
 
         // When I click on the link 'copy password'
-        $this->clickLink('Copy password');
+        $this->click('#js_password_browser_menu_copy_password a');
 
         // Then I can see the master key dialog
         $this->assertMasterPasswordDialog($user);
@@ -171,7 +171,7 @@ class PasswordCopyToClipboardTest extends PassboltTestCase
         $this->rightClickPassword($resource['id']);
 
         // When I click on the 'Copy URI' in the contextual menu
-        $this->clickLink('Copy URI');
+        $this->click('#js_password_browser_menu_copy_uri a');
 
         // Then I can see a success message saying the uri was copied to clipboard
         $this->assertNotification('plugin_clipboard_copy_success');
@@ -203,7 +203,7 @@ class PasswordCopyToClipboardTest extends PassboltTestCase
         $this->rightClickPassword($resource['id']);
 
         // When I click on the link 'copy URI' in the contextual menu
-        $this->clickLink('Copy username');
+        $this->click('#js_password_browser_menu_copy_username a');
 
         // Then I can see a success message saying the username was copied to clipboard
         $this->assertNotification('plugin_clipboard_copy_success');

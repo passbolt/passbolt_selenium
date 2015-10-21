@@ -92,10 +92,10 @@ class PasswordEditTest extends PassboltTestCase
         // @TODO PASSBOLT-1028
 
         // When I click on the edit link in the contextual menu
-        $this->clickLink('Edit');
+        $this->click('#js_password_browser_menu_edit a');
 
         // Then I can see the edit password dialog
-        $this->assertVisible('.edit-password-dialog');
+	    $this->assertVisible('.edit-password-dialog');
     }
 
     /**
@@ -686,7 +686,7 @@ class PasswordEditTest extends PassboltTestCase
         $this->findById('js_contextual_menu');
 
         // And I can see the edit option is disabled
-        $this->clickLink('Edit');
+	    $this->click('#js_password_browser_menu_edit a');
         $this->assertNotVisible('.edit-password-dialog');
     }
 
