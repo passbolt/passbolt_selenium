@@ -203,7 +203,7 @@ class PassboltTestCase extends WebDriverTestCase {
 			});
 		");
 		// Without this little interval, the menu doesn't have time to open.
-		sleep(1);
+		$this->waitUntilISee('#js_contextual_menu.ready');
 	}
 
 	/**

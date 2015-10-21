@@ -37,7 +37,7 @@ class PasswordDeleteTest extends PassboltTestCase
         $this->rightClickPassword($resource['id']);
 
         // Then I select the delete option in the contextual menu
-        $this->clickLink('Delete');
+        $this->click('#js_password_browser_menu_delete a');
 
 	    // Assert that the confirmation dialog is displayed.
 	    $this->assertConfirmationDialog('Do you really want to delete password ?');
@@ -226,7 +226,7 @@ class PasswordDeleteTest extends PassboltTestCase
         //$this->assertElementContainsText($this->findByCss('#js_contextual_menu .disabled'),'delete');
 
         // When I click on the delete option in the contextual dialog
-        $this->clickLink('Delete');
+        $this->click('#js_password_browser_menu_delete a');
 
         // Then I can still see the password in the list
         $this->assertVisible('resource_' . $resource['id']);
