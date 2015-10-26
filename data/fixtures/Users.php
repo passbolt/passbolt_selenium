@@ -45,6 +45,17 @@ class User {
                     'PrivateKey' => 'carol_private.key'
                 ));
                 break;
+	        case 'admin':
+		        return array_merge($conf,array(
+			        'name' => 'admin',
+			        'FirstName' => 'Admin',
+			        'LastName' => 'User',
+			        'Username' => 'admin@passbolt.com',
+			        'MasterPassword' => 'admin@passbolt.com',
+			        'TokenCode' => 'ADM',
+			        'PrivateKey' => 'admin_private.key'
+		        ));
+		        break;
         }
     }
 }

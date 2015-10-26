@@ -117,15 +117,19 @@ class PassboltTestCase extends WebDriverTestCase {
 	/**
 	 * Login on the application with the given user.
 	 * @param $email
+	 * @param $password
 	 */
-	public function loginAs($email) {
+	public function loginAs($email, $password = 'password') {
 		$this->getUrl('login');
 		$this->inputText('UserUsername', $email);
-		$this->inputText('UserPassword', 'password');
+		$this->inputText('UserPassword', $password);
 		$this->pressEnter();
 		$this->waitCompletion();
 	}
 
+	/**
+	 * Logout user.
+	 */
 	public function logout() {
 		$this->getUrl('logout');
 	}
@@ -153,6 +157,51 @@ class PassboltTestCase extends WebDriverTestCase {
 			$this->inputText('keyAscii', $key);
 		}
 		$this->click('saveKey');
+	}
+
+	/**
+	 * Complete the setup with the data given in parameter
+	 * @param $data
+	 *  - username
+	 *  - masterpassword
+	 *  - password
+	 *
+	 * @throws Exception
+	 */
+	public function completeSetupWithKeyGeneration($data) {
+		// Check that we are on the setup page.
+		$this->assertPageContainsText('Plugin check');
+		// Check box domain check.
+		$this->checkCheckbox('js_setup_domain_check');
+		// Click Next.
+		$this->clickLink("Next");
+		// Wait
+		$this->waitUntilISee('#js_step_content h3', '/Create a new key/i');
+		// Fill master key.
+		$this->inputText('KeyComment', 'This is a comment for john doe key');
+		// Click Next.
+		$this->clickLink("Next");
+		// Check that we are now on the master password page
+		$this->waitUntilISee('#js_step_title', '/Now let\'s setup your master password!/i');
+		// Fill master key.
+		$this->inputText('js_field_password', $data['masterpassword']);
+		// Click Next.
+		$this->clickLink("Next");
+		// Wait until we see the title Master password.
+		$this->waitUntilISee('#js_step_title', '/Success! Your secret key is ready./i');
+		// Press Next.
+		$this->clickLink("Next");
+		// Wait.
+		$this->waitUntilISee('#js_step_content h3', '/Set a security token/i');
+		// Press Next.
+		$this->clickLink("Next");
+		// Fill up password.
+		$this->inputText('js_setup_password', $data['password']);
+		// Press Next.
+		$this->clickLink("Next");
+		// Check we are logged in.
+		$this->waitCompletion();
+		$this->waitUntilISee('#js_app_controller.ready');
 	}
 
 	/**
@@ -331,6 +380,35 @@ class PassboltTestCase extends WebDriverTestCase {
 		$this->clickLink('Copy password');
 		$this->assertMasterPasswordDialog($user);
 		$this->enterMasterPassword($user['MasterPassword']);
+	}
+
+	/**
+	 * Go to the user workspace and click on the create user button
+	 */
+	public function gotoCreateUser() {
+		if(!$this->isVisible('.page.people')) {
+			$this->getUrl('');
+			$this->waitUntilISee('.page.people');
+			$this->waitUntilISee('#js_user_wk_menu_creation_button');
+		}
+		$this->click('#js_user_wk_menu_creation_button');
+		$this->assertVisible('.create-user-dialog');
+	}
+
+	/**
+	 * Helper to create a user
+	 */
+	public function createUser($user) {
+		$this->gotoCreateUser();
+		$this->inputText('js_field_first_name', $user['first_name']);
+		$this->inputText('js_field_last_name', $user['last_name']);
+		$this->inputText('js_field_username', $user['username']);
+		if (isset($user['admin']) && $user['admin'] === true) {
+			// Check box admin
+			$this->checkCheckbox('#js_field_role_id input[type=checkbox]');
+		}
+		$this->click('.create-user-dialog input[type=submit]');
+		$this->assertNotification('app_users_add_success');
 	}
 
 

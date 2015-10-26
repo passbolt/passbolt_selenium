@@ -3,11 +3,8 @@
  * Feature : As a user I can comment on a password
  *
  * - As a user I should be able to ad comments
- * - As a user I should be able to browse my passwords
- * - As a user I should be able to use the navigation filters
- * - As a user I should be able to view my password details
- * - As a user I should be able to fav/unfav
- * - As a user I should be able to search a password by keywords
+ * - As a user I should see error messages if the content entered is not alright
+ * - As a user I should be able to delete a comment
  *
  * @copyright    (c) 2015-present Bolt Software Pvt. Ltd.
  * @licence      GPLv3 onwards www.gnu.org/licenses/gpl-3.0.en.html

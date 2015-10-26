@@ -203,7 +203,7 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
      * @param $id
      */
     public function checkCheckbox($id) {
-        $input = $this->driver->findElement(WebDriverBy::id($id));
+        $input = $this->find($id);
         $input->click();
     }
 
