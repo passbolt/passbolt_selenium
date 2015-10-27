@@ -3,13 +3,14 @@
  * Feature :  As a user I can create passwords
  *
  * Scenarios :
- * As a user I can view the create user dialog
- * As a user I can open close the create user dialog
- * As a admin I can see error messages when creating a user with wrong inputs
- * As a user I can view a user I just created on my list of users
- * After creating a user, the given user can complete the setup and login with the chosen password
- * After creating a non admin user, the given user shouldn't have access to the admin functionalities
- * After creating an admin user, the given user shouldn have access to the admin functionalities
+ *  - As a user I can view the create user dialog
+ *  - As a user I can open close the create user dialog
+ *  - As a admin I can see error messages when creating a user with wrong inputs
+ *  - As a user I can view a user I just created on my list of users
+ *  - After creating a user, the given user can complete the setup and login with the chosen password
+ *  - After creating a non admin user, the given user shouldn't have access to the admin functionalities
+ *  - After creating an admin user, the given user shouldn have access to the admin functionalities
+ *  - As admin I can see a user I have just created, but a normal user can't until the created user has completed the setup
  *
  * @copyright    (c) 2015-present Bolt Software Pvt. Ltd.
  * @licence      GPLv3 onwards www.gnu.org/licenses/gpl-3.0.en.html
@@ -176,7 +177,7 @@ class UserCreateTest extends PassboltTestCase {
 	 * When     I enter 'aa' as a first name
 	 * And      I enter 'aa' as a last name
 	 * Then     I see an error message saying that the length of first name should be between x and x characters
-	 * And      I see an error message saying that the length of first name should be between x and x characters
+	 * And      I see an error message saying that the length of last name should be between x and x characters
 	 */
 	public function testCreateUserErrorMessages() {
 		// Given that I am Ada
@@ -270,10 +271,29 @@ class UserCreateTest extends PassboltTestCase {
 	 * And      I am on the create user dialog
 	 * When     I enter 'firstnametest' as the first name
 	 * And      I enter 'lastnametest' as the last name
+	 * And      I enter 'ada@passbolt.com' as the username
+	 * And      I click on the save button
+	 * And      I see a notice message that the username is already taken
+	 */
+	public function testCreateUserUsernameExist() {
+		// TODO #PASSBOLT-1121
+	}
+
+	/**
+	 * Scenario: As a user I can view a user I just created on my list of users
+	 *
+	 * Given    I am Admin
+	 * And      I am logged in
+	 * And      I am on the create user dialog
+	 * When     I enter 'firstnametest' as the first name
+	 * And      I enter 'lastnametest' as the last name
 	 * And      I enter 'usernametest@passbolt.com' as the username
 	 * And      I click on the save button
 	 * And      I see a notice message that the operation was a success
 	 * And      I see the user I created in my user list
+	 * When     I refresh the page
+	 * And      I go to user workspace
+	 * Then     I should still see the user I created in my user list
 	 */
 	public function testCreateUserAndView() {
 		// Given I am Ada
@@ -303,6 +323,23 @@ class UserCreateTest extends PassboltTestCase {
 
 		// I see a notice message that the operation was a success
 		$this->assertNotification('app_users_add_success');
+
+		// I see the password I created in my password list
+		$this->assertElementContainsText(
+			$this->find('js_passbolt_people_workspace_controller'), 'firstnametest'
+		);
+		$this->assertElementContainsText(
+			$this->find('js_passbolt_people_workspace_controller'), 'lastnametest'
+		);
+		$this->assertElementContainsText(
+			$this->find('js_passbolt_people_workspace_controller'), 'usernametest'
+		);
+
+		// refresh pages
+		$this->refresh();
+
+		// Go to user workspace
+		$this->gotoWorkspace('user');
 
 		// I see the password I created in my password list
 		$this->assertElementContainsText(
@@ -442,7 +479,7 @@ class UserCreateTest extends PassboltTestCase {
 	}
 
 	/**
-	 * Scenario :   After creating an admin user, the given user shouldn have access to the admin functionalities
+	 * Scenario :   After creating an admin user, the given user should have access to the admin functionalities
 	 * Given        I am admin
 	 * And          I am logged in
 	 * When         I go to user workspace
@@ -496,13 +533,131 @@ class UserCreateTest extends PassboltTestCase {
 		// Go to user workspace
 		$this->gotoWorkspace('user');
 
-		// Observe that create button is not visible
+		// Observe that create button is visible
 		$this->assertVisible('js_user_wk_menu_creation_button');
 
-		// Observe that edit button is not visible
+		// Observe that edit button is visible
 		$this->assertVisible('js_user_wk_menu_edition_button');
 
-		// Observe that delete button is not visible
+		// Observe that delete button is visible
 		$this->assertVisible('js_user_wk_menu_deletion_button');
+	}
+
+	/**
+	 * Scenario: As admin I can see a user I have just created, but a normal user can't until the created user has completed the setup
+	 *
+	 * Given    I am Admin
+	 * And      I am logged in
+	 * And      I am on the create user dialog
+	 * When     I enter 'firstnametest' as the first name
+	 * And      I enter 'lastnametest' as the last name
+	 * And      I enter 'usernametest@passbolt.com' as the username
+	 * And      I click on the save button
+	 * And      I see a notice message that the operation was a success
+	 * And      I see the user I created in my user list
+	 * When     I logout
+	 * And      I login again as a normal user (Ada)
+	 * And      I go to user workspace
+	 * Then     I should not see the new user in the users list
+	 * When     I complete the setup as the new created user
+	 * And      I log out after being logged in at the end of setup
+	 * Then     I should be logged out
+	 * When     I log in again as normal user (Ada)
+	 * And      I go to user workspace
+	 * Then     I should see the new user in the users list
+	 */
+	public function testCreateUserAdminCanViewNotUserUntilFirstLogin() {
+		// Given I am Admin
+		$user = User::get('admin');
+		$this->setClientConfig($user);
+
+		// And I am logged in
+		$this->loginAs($user['Username']);
+
+		// Go to user workspace
+		$this->gotoWorkspace('user');
+
+		// Create user
+		$newUser = [
+			'first_name' => 'firstnametest',
+			'last_name'  => 'lastnametest',
+			'username'   => 'usernametest@passbolt.com',
+			'admin'      => false
+		];
+		$this->createUser($newUser);
+
+		// I see the user I created in my users list
+		$this->assertElementContainsText(
+			$this->find('js_passbolt_people_workspace_controller'), $newUser['first_name']
+		);
+		$this->assertElementContainsText(
+			$this->find('js_passbolt_people_workspace_controller'), $newUser['last_name']
+		);
+		$this->assertElementContainsText(
+			$this->find('js_passbolt_people_workspace_controller'), $newUser['username']
+		);
+
+		$this->logout();
+
+		// Given I am Ada
+		$user = User::get('ada');
+		$this->setClientConfig($user);
+
+		// And I am logged in
+		$this->loginAs($user['Username']);
+
+		// Go to user workspace
+		$this->gotoWorkspace('user');
+
+		// I see the password I created in my password list
+		$this->assertElementNotContainText(
+			$this->find('js_passbolt_people_workspace_controller'), $newUser['first_name']
+		);
+		$this->assertElementNotContainText(
+			$this->find('js_passbolt_people_workspace_controller'), $newUser['last_name']
+		);
+		$this->assertElementNotContainText(
+			$this->find('js_passbolt_people_workspace_controller'), $newUser['username']
+		);
+
+		// Logout
+		$this->logout();
+
+		// As new user, access the email sent after accoun creation
+		$this->getUrl('seleniumTests/showLastEmail/' . urlencode($newUser['username']));
+		// Follow the link in the email.
+		$this->followLink('get started');
+		// Wait until I am sure that the page is loaded.
+		$this->waitUntilISee('.plugin-check-wrapper', '/Plugin check/');
+		// Go to login page. we don't need to complete the setup since we just want to check the login.
+		$this->completeSetupWithKeyGeneration([
+			'username' => $newUser['username'],
+			'password' => 'password',
+			'masterpassword' => 'masterpassword'
+		]);
+		// Logout
+		$this->logout();
+
+		// Given I am Ada
+		$user = User::get('ada');
+		// And I am logged in
+		$this->loginAs($user['Username']);
+
+		// Go to user workspace
+		$this->gotoWorkspace('user');
+
+		// I can now see the user that was created
+		$this->assertElementContainsText(
+			$this->find('js_passbolt_people_workspace_controller'), $newUser['first_name']
+		);
+		$this->assertElementContainsText(
+			$this->find('js_passbolt_people_workspace_controller'), $newUser['last_name']
+		);
+		$this->assertElementContainsText(
+			$this->find('js_passbolt_people_workspace_controller'), $newUser['username']
+		);
+
+		// Since content was edited, we reset the database
+		$this->resetDatabase();
 	}
 }

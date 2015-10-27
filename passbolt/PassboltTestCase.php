@@ -135,6 +135,14 @@ class PassboltTestCase extends WebDriverTestCase {
 	}
 
 	/**
+	 * Refresh page.
+	 */
+	public function refresh() {
+		$this->driver->execute(DriverCommand::REFRESH);
+		$this->waitCompletion();
+	}
+
+	/**
 	 * Use the debug screen to set the values set by the setup
 	 * @param $config array user config (see fixtures)
 	 */
@@ -405,12 +413,105 @@ class PassboltTestCase extends WebDriverTestCase {
 		$this->inputText('js_field_username', $user['username']);
 		if (isset($user['admin']) && $user['admin'] === true) {
 			// Check box admin
-			$this->checkCheckbox('#js_field_role_id input[type=checkbox]');
+			$this->checkCheckbox('#js_field_role_id .role-admin input[type=checkbox]');
 		}
 		$this->click('.create-user-dialog input[type=submit]');
 		$this->assertNotification('app_users_add_success');
 	}
 
+	/**
+	 * Click on a user in the user workspace
+	 * @param array $user
+	 *   user array containing either id, or first name and last name or directly a uuid
+	 */
+	public function clickUser($user) {
+		if(!$this->isVisible('.page.people')) {
+			throw new Exception("click user requires to be on the user workspace");
+		}
+		// if user is not an array, then it is a uuid.
+		if (!is_array($user)) {
+			$user = ['id' => $user];
+		}
+		if (isset($user['first_name']) && isset($user['last_name'])) {
+			$elt = $this->find('.tableview-content div[title="' . $user['first_name'] . ' ' . $user['last_name'] . '"]');
+			$elt->click();
+		}
+		else {
+			$this->click('#user_' . $user['id'] . ' .cell_name');
+		}
+	}
+
+	/**
+	 * Right click on a user with a given id.
+	 * @param string $id
+	 *
+	 * @throws Exception
+	 */
+	public function rightClickUser($id) {
+		if(!$this->isVisible('.page.people')) {
+			throw new Exception("right click user requires to be on the user workspace");
+		}
+		$eltSelector = '#user_' . $id . ' .cell_name';
+		$this->driver->executeScript("
+			jQuery('$eltSelector').trigger({
+				type:'mousedown',
+				which:3
+			});
+		");
+		// Without this little interval, the menu doesn't have time to open.
+		$this->waitUntilISee('#js_contextual_menu.ready');
+	}
+
+	/**
+	 * Goto the edit user dialog for a given user id
+	 * @param $id string
+	 * @throws Exception
+	 */
+	public function gotoEditUser($id) {
+		if(!$this->isVisible('.page.people')) {
+			$this->getUrl('');
+			$this->gotoWorkspace('user');
+			$this->waitUntilISee('.page.people');
+			$this->waitUntilISee('#js_user_wk_menu_edition_button');
+		}
+		$this->click('footer'); // we click somewhere in case the password is already active
+		$this->clickUser($id);
+		$this->click('js_user_wk_menu_edition_button');
+		$this->waitCompletion();
+		$this->assertVisible('.edit-user-dialog');
+	}
+
+	/**
+	 * Edit a user helper
+	 * @param $user
+	 * @throws Exception
+	 */
+	public function editUser($user) {
+		$this->gotoEditUser($user);
+
+		if (isset($user['first_name'])) {
+			$this->inputText('js_field_first_name', $user['first_name']);
+		}
+		if (isset($user['last_name'])) {
+			$this->inputText('js_field_last_name', $user['last_name']);
+		}
+		if (isset($user['admin'])) {
+			// Get current state of admin
+			$el = null;
+			try {
+				$el = $this->find('#js_field_role_id .role-admin input[type=checkbox][checked=checked]');
+			}
+			catch(Exception $e) {}
+			// if el was found, admin checkbox is already checked.
+			$isAdmin = ($el == null ? false : true);
+			if ($isAdmin != $user['admin']) {
+				$this->checkCheckbox('#js_field_role_id .role-admin input[type=checkbox]');
+			}
+		}
+
+		$this->click('.edit-user-dialog input[type=submit]');
+		$this->assertNotification('app_users_edit_success');
+	}
 
 	/**
 	 * Empty a field like a user would do it.
