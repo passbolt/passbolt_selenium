@@ -282,6 +282,26 @@ class PassboltTestCase extends WebDriverTestCase {
 	}
 
 	/**
+	 * Goto the share password dialog for a given resource id
+	 * @param $id string
+	 * @throws Exception
+	 */
+	public function gotoSharePassword($id) {
+		if(!$this->isVisible('.page.password')) {
+			$this->getUrl('');
+			$this->waitUntilISee('.page.password');
+			$this->waitUntilISee('#js_wk_menu_sharing_button');
+		}
+		if(!$this->isVisible('.share-password-dialog')) {
+			$this->click( 'footer' ); // we click somewhere in case the password is already active
+			$this->clickPassword( $id );
+			$this->click( 'js_wk_menu_sharing_button' );
+			$this->waitCompletion();
+			$this->assertVisible( '.share-password-dialog' );
+		}
+	}
+
+	/**
 	 * Input a given string in the secret field (create only)
 	 * @param string $secret
 	 */
@@ -363,6 +383,129 @@ class PassboltTestCase extends WebDriverTestCase {
 		}
 		$this->click('.edit-password-dialog input[type=submit]');
 		$this->assertNotification('app_resources_edit_success');
+	}
+
+	/**
+	 * Share a password helper
+	 * @param $password
+	 * @param $username
+	 * @param $permissionType
+	 * @param $user
+	 * @throws Exception
+	 */
+	public function sharePassword($password, $username, $permissionType, $user) {
+		$this->gotoSharePassword($password['id']);
+
+		// I enter the username I want to share the password with in the autocomplete field
+		$this->inputText('js_perm_create_form_aro_auto_cplt', $username);
+
+		// I wait until I see the automplete field resolved
+		$this->waitUntilISee('.share-password-dialog .autocomplete-content', '/' . $username . '/i');
+
+		// I click on the username link the autocomplete field retrieved.
+		$this->clickLink($username);
+
+		// I select the permission I want to grant to the user
+		$this->selectOption('js_perm_create_form_type', $permissionType);
+
+		// I add the permission
+		$this->click('js_perm_create_form_add_btn');
+
+		// I can see that temporary changes are waiting to be saved
+		$this->assertElementContainsText(
+			$this->findByCss('.share-password-dialog #js_permissions_changes'),
+			'You need to save to apply the changes'
+		);
+
+		// When I click on the save button
+		$this->click('js_rs_share_save');
+
+		// Then I see the master password dialog
+		$this->assertMasterPasswordDialog($user);
+
+		// When I enter the master password and click submit
+		$this->enterMasterPassword($user['MasterPassword']);
+
+		// Then I see a dialog telling me encryption is in progress
+		$this->waitUntilISee('passbolt-iframe-progress-dialog');
+		$this->waitCompletion();
+
+		// And I see a notice message that the operation was a success
+		$this->assertNotification('app_share_update_success');
+	}
+
+	/**
+	 * Edit a password permission helper
+	 * @param $password
+	 * @param $username
+	 * @param $permissionType
+	 * @param $user
+	 * @throws Exception
+	 */
+	public function editPermission($password, $username, $permissionType, $user) {
+		$this->gotoSharePassword($password['id']);
+
+		// I can see the user has a direct permission
+		$this->assertElementContainsText(
+			$this->findByCss('#js_permissions_list'),
+			$username
+		);
+
+		// Find the permission row element
+		$rowElement = $this->findByXpath('//*[@id="js_permissions_list"]//*[.="' . $username . '"]//ancestor::li[1]');
+
+		// I change the permission
+		$select = new WebDriverSelect($rowElement->findElement(WebDriverBy::cssSelector('.js_share_rs_perm_type')));
+		$select->selectByVisibleText($permissionType);
+
+		// I can see that temporary changes are waiting to be saved
+		$this->assertElementContainsText(
+			$this->findByCss('.share-password-dialog #js_permissions_changes'),
+			'You need to save to apply the changes'
+		);
+
+		// When I click on the save button
+		$this->click('js_rs_share_save');
+		$this->waitCompletion();
+
+		// And I see a notice message that the operation was a success
+		$this->assertNotification('app_share_update_success');
+	}
+
+	/**
+	 * Delete a password permission helper
+	 * @param $password
+	 * @param $username
+	 * @throws Exception
+	 */
+	public function deletePermission($password, $username) {
+		$this->gotoSharePassword($password['id']);
+
+		// I can see the user has a direct permission
+		$this->assertElementContainsText(
+			$this->findByCss('#js_permissions_list'),
+			$username
+		);
+
+		// Find the permission row element
+		$rowElement = $this->findByXpath('//*[@id="js_permissions_list"]//*[.="' . $username . '"]//ancestor::li[1]');
+
+		// I delete the permission
+		$deleteButton = $rowElement->findElement(WebDriverBy::cssSelector('.js_perm_delete'));
+		$deleteButton->click();
+
+		// I can see that temporary changes are waiting to be saved
+		$this->assertElementContainsText(
+			$this->findByCss('.share-password-dialog #js_permissions_changes'),
+			'You need to save to apply the changes'
+		);
+
+		// When I click on the save button
+		$this->click('js_rs_share_save');
+		$this->waitCompletion();
+
+		// And I see a notice message that the operation was a success
+		$this->assertNotification('app_share_update_success');
 	}
 
 	/**
@@ -751,5 +894,28 @@ class PassboltTestCase extends WebDriverTestCase {
 		$action = new WebDriverActions($this->driver);
 		$action->sendKeys($e, array(WebDriverKeys::CONTROL,'v'))->perform();
 		$this->assertTrue($e->getAttribute('value') == $content);
+	}
+
+	/**
+	 * Assert that the password has a specific permission for a target user
+	 * @param $password
+	 * @param $username
+	 * @param $permissionType
+	 */
+	public function assertPermission($password, $username, $permissionType) {
+		$this->gotoSharePassword($password['id']);
+
+		// I can see the user has a direct permission
+		$this->assertElementContainsText(
+			$this->findByCss('#js_permissions_list'),
+			$username
+		);
+
+		// Find the permission row element
+		$rowElement = $this->findByXpath('//*[@id="js_permissions_list"]//*[.="' . $username . '"]//ancestor::li[1]');
+
+		// I can see the permission is as expected
+		$select = new WebDriverSelect($rowElement->findElement(WebDriverBy::cssSelector('.js_share_rs_perm_type')));
+		$this->assertEquals($permissionType, $select->getFirstSelectedOption()->getText());
 	}
 }

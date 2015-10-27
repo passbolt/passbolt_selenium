@@ -40,15 +40,24 @@ class Resource {
             'complexity' => 'very weak',
             'description' => 'The CentOS Linux distribution is a platform derived from Red Hat Enterprise Linux (RHEL).'
         );
-        $r[] = array(
-            'id' => Uuid::get('resource.id.canjs'),
-            'username' => 'yeswecan',
-            'name' => 'Canjs',
-            'password' => 'princess',
-            'uri' => 'canjs.com',
-            'complexity' => 'very weak',
-            'description' => 'CanJS is a JavaScript library that makes developing complex applications simple and fast.'
-        );
+	    $r[] = array(
+		    'id' => Uuid::get('resource.id.canjs'),
+		    'username' => 'yeswecan',
+		    'name' => 'Canjs',
+		    'password' => 'princess',
+		    'uri' => 'canjs.com',
+		    'complexity' => 'very weak',
+		    'description' => 'CanJS is a JavaScript library that makes developing complex applications simple and fast.'
+	    );
+	    $r[] = array(
+		    'id' => Uuid::get('resource.id.gnupg'),
+		    'username' => 'gpg',
+		    'name' => 'Gnupg',
+		    'password' => 'iamgod',
+		    'uri' => 'gnupg.org',
+		    'complexity' => 'very weak',
+		    'description' => 'GnuPG is a complete and free implementation of the OpenPGP standard as defined by RFC4880',
+	    );
         return $r;
     }
 
@@ -73,9 +82,12 @@ class Resource {
                 $r[3] = array_merge($r[3], array(
                     'permission' => 'read'
                 ));
-                $r[4] = array_merge($r[4], array(
-                    'permission' => 'update'
-                ));
+				$r[4] = array_merge($r[4], array(
+					'permission' => 'update'
+				));
+				$r[5] = array_merge($r[5], array(
+					'permission' => 'read'
+				));
                 break;
 			case 'betty' :
                 $r[0] = array_merge($r[0], array(
@@ -90,9 +102,12 @@ class Resource {
                 $r[3] = array_merge($r[3], array(
                     'permission' => 'read'
                 ));
-                $r[4] = array_merge($r[4], array(
-                    'permission' => 'read'
-                ));
+				$r[4] = array_merge($r[4], array(
+					'permission' => 'read'
+				));
+				$r[5] = array_merge($r[5], array(
+					'permission' => 'deny'
+				));
                 break;
         }
         return $r;
@@ -121,7 +136,7 @@ class Resource {
      */
     static function _getById($r, $id) {
         foreach ($r as $i => $rid) {
-            if ($r[$i]['id'] = $id) {
+            if ($r[$i]['id'] == $id) {
                 return $r[$i];
             }
         }
