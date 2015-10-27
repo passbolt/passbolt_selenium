@@ -6,7 +6,10 @@
  * As a user I can see the share dialog using the share button in the action bar
  * As a user I can see the share dialog using the right click contextual menu
  * As a user I cannot access the share dialog from the action bar or the contextual menu if I have only read or update access to
+ * As a user I can view the permissions for a password I own
  * As a user I can share a password with other users
+ * As a user I edit the permissions of a password I own
+ * As a user I delete a permission of a password I own
  *
  * @copyright    (c) 2015-present Bolt Software Pvt. Ltd.
  * @licence      GPLv3 onwards www.gnu.org/licenses/gpl-3.0.en.html
@@ -154,26 +157,53 @@ class PasswordShareTest extends PassboltTestCase
 	}
 
 	/**
+	 * Scenario: As a user I can view the permissions for a password I own
+	 *
+	 * Given    I am Ada
+	 * And      I am logged in on the password workspace
+	 * When     I go to the sharing dialog of the apache password
+	 * Then     I can see that Ada is owner
+	 * And      I can see that Betty can update
+	 * And      I can see that Carol can read
+	 * And      I can see that Dame can read
+	 */
+	public function testViewPasswordPermissions() {
+		// Given I am Ada
+		$user = User::get('ada');
+		$this->setClientConfig($user);
+
+		// And I am logged in on the password workspace
+		$this->loginAs($user['Username']);
+
+		// When I go to the sharing dialog of a password I own
+		$resource = Resource::get(array(
+			'user' => 'ada',
+			'id' => Uuid::get('resource.id.apache')
+		));
+		$this->gotoSharePassword(Uuid::get('resource.id.apache'));
+
+		// Then I can see that Ada is owner
+		$this->assertPermission($resource, 'ada@passbolt.com', 'is owner');
+
+		// And I can see that Betty can update
+		$this->assertPermission($resource, 'betty@passbolt.com', 'can update');
+
+		// And I can see that Carol can read
+		$this->assertPermission($resource, 'carol@passbolt.com', 'can read');
+
+		// And I can see that Dame can read
+		$this->assertPermission($resource, 'dame@passbolt.com', 'can read');
+	}
+
+	/**
 	 * Scenario: As a user I can share a password with other users
 	 *
 	 * Given    I am Carol
 	 * And      I am logged in on the password workspace
-	 * When     I click on a password I own
-	 * And      I click on the share button
-	 * Then     I can not see Betty in the list of people the password is shared with
-	 * When     I enter 'betty' as username
-	 * And      I wait until I see the automplete list resolved
-	 * And      I click on 'betty@passbolt.com'
-	 * And      I select the option 'can read' as permission
-	 * And      I click on the Add button
-	 * Then     I can see that temporary changes are waiting to be saved
-	 * When     I click on the save button
-	 * Then     I see the master password dialog
-	 * When     I enter the master password and click submit
-	 * Then     I see a dialog telling me encryption is in progress
-	 * And      I see a notice message that the operation was a success
-	 * And      I can see Betty in the list of people the password is shared with
-	 * 
+	 * When     I go to the sharing dialog of a password I own
+	 * Then     I can see Betty has no right on the password
+	 * When     I give read access to betty for a password I own
+	 * Then     I can see Betty has read access on the password
 	 * When     I logout
 	 * And      I am Betty
 	 * And      I am logged in on the password workspace
@@ -192,64 +222,24 @@ class PasswordShareTest extends PassboltTestCase
 		// And I am logged in on the password workspace
 		$this->loginAs($user['Username']);
 
-		// When I click on a password I own
+		// When I go to the sharing dialog of a password I own
 		$resource = Resource::get(array(
 			'user' => 'betty',
 			'id' => Uuid::get('resource.id.gnupg')
 		));
-		$this->clickPassword($resource['id']);
+		$this->gotoSharePassword(Uuid::get('resource.id.gnupg'));
 
-		// And I click on the share button
-		$this->click('js_wk_menu_sharing_button');
-
-		// Then I can not see Betty in the list of people the password is shared with
+		// Then I can see Betty has no right on the password
 		$this->assertElementNotContainText(
 			$this->findByCss('#js_permissions_list'),
 			'betty@passbolt.com'
 		);
 
-		// When I enter 'betty' as username
-		$this->inputText('js_perm_create_form_aro_auto_cplt', 'betty');
+		// When I give read access to betty for a password I own
+		$this->sharePassword($resource, 'betty@passbolt.com', 'can read', $user);
 
-		// And I wait until I see the automplete list resolved
-		$this->waitUntilISee('.share-password-dialog .autocomplete-content', '/betty@passbolt.com/i');
-
-		// And I click on 'betty@passbolt.com'
-		$this->clickLink('betty@passbolt.com');
-
-		// And I select the option 'can read' as permission
-		$this->selectOption('js_perm_create_form_type', 'can read');
-
-		// And I click on the Add button
-		$this->click('js_perm_create_form_add_btn');
-
-		// Then I can see that temporary changes are waiting to be saved
-		$this->assertElementContainsText(
-			$this->findByCss('.share-password-dialog #js_permissions_changes'),
-			'You need to save to apply the changes'
-		);
-
-		// When I click on the save button
-		$this->click('js_rs_share_save');
-
-		// Then I see the master password dialog
-		$this->assertMasterPasswordDialog($user);
-
-		// When I enter the master password and click submit
-		$this->enterMasterPassword($user['MasterPassword']);
-
-		// Then I see a dialog telling me encryption is in progress
-		$this->waitUntilISee('passbolt-iframe-progress-dialog');
-		$this->waitCompletion();
-
-		// And I see a notice message that the operation was a success
-		$this->assertNotification('app_share_update_success');
-
-		// And I can see Betty in the list of people the password is shared with
-		$this->assertElementContainsText(
-			$this->findByCss('#js_permissions_list'),
-			'betty@passbolt.com'
-		);
+		// Then I can see Betty has read access on the password
+		$this->assertPermission($resource, 'betty@passbolt.com', 'can read');
 
 		// When I logout
 		$this->logout();
@@ -278,6 +268,88 @@ class PasswordShareTest extends PassboltTestCase
 
 		// And the content of the clipboard is valid
 		$this->assertClipboard($resource['password']);
+
+		// Since content was edited, we reset the database
+		$this->resetDatabase();
+	}
+
+	/**
+	 * Scenario: As a user I edit the permissions of a password I own
+	 *
+	 * Given    I am Carol
+	 * And      I am logged in on the password workspace
+	 * When     I go to the sharing dialog of a password I own
+	 * Then     I can see Betty has update right on the password
+	 * When     I change the permission of Betty to read access only
+	 * Then     I can see Betty has read access on the password
+	 */
+	public function testEditPasswordPermission() {
+		// Given I am Ada
+		$user = User::get('ada');
+		$this->setClientConfig($user);
+
+		// And I am logged in on the password workspace
+		$this->loginAs($user['Username']);
+
+		// When I go to the sharing dialog of a password I own
+		$resource = Resource::get(array(
+			'user' => 'betty',
+			'id' => Uuid::get('resource.id.apache')
+		));
+		$this->gotoSharePassword(Uuid::get('resource.id.apache'));
+
+		// Then I can see Betty has update right on the password
+		$this->assertPermission($resource, 'betty@passbolt.com', 'can update');
+
+		// When I change the permission of Betty to read access only
+		$this->editPermission($resource, 'betty@passbolt.com', 'can read', $user);
+
+		// Then I can see Betty has read access on the password
+		$this->assertPermission($resource, 'betty@passbolt.com', 'can read');
+
+		// Since content was edited, we reset the database
+		$this->resetDatabase();
+	}
+
+	/**
+	 * Scenario: As a user I delete the permission of a password I own
+	 *
+	 * Given    I am Carol
+	 * And      I am logged in on the password workspace
+	 * When     I go to the sharing dialog of a password I own
+	 * Then     I can see Betty has update right on the password
+	 * When     I delete the permission of Betty
+	 * Then     I can see Betty has no right anymore
+	 */
+	public function testDeletePasswordPermission() {
+		// Given I am Ada
+		$user = User::get('ada');
+		$this->setClientConfig($user);
+
+		// And I am logged in on the password workspace
+		$this->loginAs($user['Username']);
+
+		// When I go to the sharing dialog of a password I own
+		$resource = Resource::get(array(
+			'user' => 'betty',
+			'id' => Uuid::get('resource.id.apache')
+		));
+		$this->gotoSharePassword(Uuid::get('resource.id.apache'));
+
+		// Then I can see Betty has update right on the password
+		$this->assertPermission($resource, 'betty@passbolt.com', 'can update');
+
+		// When I delete the permission of Betty
+		$this->deletePermission($resource, 'betty@passbolt.com');
+
+		// Then I can see Betty has no right anymore
+		$this->assertElementNotContainText(
+			$this->findByCss('#js_permissions_list'),
+			'betty@passbolt.com'
+		);
+
+		// Since content was edited, we reset the database
+		$this->resetDatabase();
 	}
 
 }

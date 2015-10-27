@@ -323,8 +323,13 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
      * @return boolean
      */
     public function isVisible($id) {
-        $element = $this->find($id);
-        return ($element->isDisplayed());
+		$element = null;
+	    try {
+		    $element = $this->find($id);
+	    } catch (Exception $e) {
+
+	    }
+        return (!is_null($element) && $element->isDisplayed());
     }
 
     /**
