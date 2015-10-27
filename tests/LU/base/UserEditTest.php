@@ -509,6 +509,20 @@ class UserEditTest extends PassboltTestCase {
 	}
 
 	/**
+	 * // TODO : #PASSBOLT-1125
+	 * Scenario :   As a admin I shouldn't be able to edit my own role
+	 * Given        I am logged in as admin in the user workspace
+	 * When         I click on my own name in the users list
+	 * And          I click on the edit button
+	 * Then         I should see a field first name
+	 * And          I should see a field last name
+	 * And          I should not see a checkbox role
+	 */
+	public function testEditUserOwnAdminRole() {
+		// TODO : #PASSBOLT-1125
+	}
+
+	/**
 	 * Scenario: As user B I can see the changes are reflected when user A has edited a user I can see
 	 *
 	 * Given    I am Admin
