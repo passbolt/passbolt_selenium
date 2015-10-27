@@ -205,10 +205,10 @@ class PasswordWorkspaceTest extends PassboltTestCase
 
         // I should the details of the selected password
         $pwdDetails = [
-            'username'         => 'vector',
+            'username'        => 'vector',
             'url'             => 'https://inkscape.org/',
-            'modified'         => '/[0-9]{1,2} (days|hours|years) ago/',
-            'created-by'     => 'edith@passbolt.com',
+            'modified'        => '/[0-9]{1,2} (days|hours|years) ago/',
+            'created-by'      => 'edith@passbolt.com',
             'modified-by'     => 'anonymous@passbolt.com',
         ];
         // I should see the password's username

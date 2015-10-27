@@ -138,21 +138,30 @@ class PassboltTestCase extends WebDriverTestCase {
 		$this->getUrl('debug');
 		sleep(1); // plugin need some time to trigger a page change
 
-		$this->inputText('baseUrl', Config::read('passbolt.url'));
+		$this->inputText('UserId',$config['id']);
 		$this->inputText('ProfileFirstName',$config['FirstName']);
 		$this->inputText('ProfileLastName',$config['LastName']);
 		$this->inputText('UserUsername',$config['Username']);
 		$this->inputText('securityTokenCode',$config['TokenCode']);
 		$this->inputText('securityTokenColor',$config['TokenColor']);
 		$this->inputText('securityTokenTextColor',$config['TokenTextColor']);
+		$this->inputText('baseUrl', Config::read('passbolt.url'));
 		$this->click('js_save_conf');
 
 		// PASSBOLT-1084 trick to speed up the test execution
 		if($config['Username'] != 'ada@passbolt.com') {
 			$key = file_get_contents(GPG_FIXTURES . DS . $config['PrivateKey'] );
-			$this->inputText('keyAscii', $key);
+			$this->inputText('myKeyAscii', $key);
 		}
 		$this->click('saveKey');
+
+		// @TODO allow changing server key from fixtures
+		$this->click('saveServerKey');
+
+		$this->assertVisible('.my.key-import.feedback .message.success');
+		$this->assertVisible('.server.key-import.feedback .message.success');
+		$this->assertVisible('.user.settings.feedback .message.success');
+
 	}
 
 	/**
