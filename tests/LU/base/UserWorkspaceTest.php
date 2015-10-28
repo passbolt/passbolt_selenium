@@ -8,6 +8,8 @@
  * - As a user I should be able to use the navigation filters
  * - As a user I should be able to view the user details
  * - As a user I should be able to search a user by keywords
+ * - As an admin user, I should have admin rights inside the user workspace
+ * - As a non admin user, I should not have admin rights inside the user workspace
  *
  * @copyright    (c) 2015-present Bolt Software Pvt. Ltd.
  * @licence      GPLv3 onwards www.gnu.org/licenses/gpl-3.0.en.html
@@ -275,6 +277,109 @@ class UserWorkspaceTest extends PassboltTestCase {
 		// 	| All users
 		//	| Search : User Test
 		$this->assertBreadcrumb('users', $breadcrumb);
+	}
+
+	/**
+	 * Scenario :   As an admin user, I should have admin rights inside the user workspace
+	 * Given        I am logged in as admin on the user workspace
+	 * Then         I should see the create button
+	 * And          I should see the edit button
+	 * And          I should see the delete button
+	 * when         I right click on a user in the users list
+	 * Then         I should see a contextual menu
+	 * And          I should see the option Copy public key inside contextual menu
+	 * And          I should see the option Copy email address inside contextual menu
+	 * And          I should see the option Edit inside contextual menu
+	 * And          I should see the option Delete inside contextual menu
+	 */
+	public function testAdminUserHasAdminRights() {
+		// Given I am Admin
+		$user = User::get('admin');
+
+		// And I am logged in on the user workspace
+		$this->loginAs($user['Username']);
+		$this->gotoWorkspace('user');
+
+		// Then I should not see the create button
+		$this->assertVisible('js_user_wk_menu_creation_button');
+
+		// And I should not see the edit button
+		$this->assertVisible('js_user_wk_menu_edition_button');
+
+		// And I should not see the delete button
+		$this->assertVisible('js_user_wk_menu_deletion_button');
+
+		// Right click on a user
+		$betty = User::get(array('user' => 'betty'));
+		$this->rightClickUser($user['id']);
+
+		// Then I can see the contextual menu
+		$this->assertVisible('js_contextual_menu');
+
+		// And I should see the option Copy public key
+		$contextualMenu = $this->find('#js_contextual_menu');
+		$this->assertElementContainsText($contextualMenu, 'Copy public key');
+
+		// And I should see the option Copy email address
+		$this->assertElementContainsText($contextualMenu, 'Copy email address');
+
+		// And I should not see the option Edit
+		$this->assertElementContainsText($contextualMenu, 'Edit');
+
+		// And I should not see the option Delete
+		$this->assertElementContainsText($contextualMenu, 'Delete');
+	}
+
+
+	/**
+	 * Scenario :   As a non admin user, I should not have admin rights inside the user workspace
+	 * Given        I am logged in as ada on the user workspace
+	 * Then         I should not see the create button
+	 * And          I should not see the edit button
+	 * And          I should not see the delete button
+	 * when         I right click on a user in the users list
+	 * Then         I should see a contextual menu
+	 * And          I should see the option Copy public key inside contextual menu
+	 * And          I should see the option Copy email address inside contextual menu
+	 * And          I should not see the option Edit inside contextual menu
+	 * And          I should not see the option Delete inside contextual menu
+	 */
+	public function testNonAdminUserHasNotAdminRights() {
+		// Given I am Ada
+		$user = User::get('ada');
+
+		// And I am logged in on the user workspace
+		$this->loginAs($user['Username']);
+		$this->gotoWorkspace('user');
+
+		// Then I should not see the create button
+		$this->assertNotVisible('js_user_wk_menu_creation_button');
+
+		// And I should not see the edit button
+		$this->assertNotVisible('js_user_wk_menu_edition_button');
+
+		// And I should not see the delete button
+		$this->assertNotVisible('js_user_wk_menu_deletion_button');
+
+		// Right click on a user
+		$betty = User::get(array('user' => 'betty'));
+		$this->rightClickUser($user['id']);
+
+		// Then I can see the contextual menu
+		$this->assertVisible('js_contextual_menu');
+
+		// And I should see the option Copy public key
+		$contextualMenu = $this->find('#js_contextual_menu');
+		$this->assertElementContainsText($contextualMenu, 'Copy public key');
+
+		// And I should see the option Copy email address
+		$this->assertElementContainsText($contextualMenu, 'Copy email address');
+
+		// And I should not see the option Edit
+		$this->assertElementNotContainText($contextualMenu, 'Edit');
+
+		// And I should not see the option Delete
+		$this->assertElementNotContainText($contextualMenu, 'Delete');
 	}
 
 }
