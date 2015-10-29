@@ -33,7 +33,7 @@ class LoginTest extends PassboltTestCase {
         $this->inputText('js_master_password', $user['MasterPassword']);
 
         $this->click('loginSubmit');
-
+         sleep(10);
     }
 
 }
