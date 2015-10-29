@@ -15,7 +15,7 @@
 
     <php>
         <env name="BROWSER" value="firefox_with_passbolt_extension"/>
-        <env name="QUIT" value="2" />
+        <env name="QUIT" value="0" />
     </php>
 
     <testsuites>

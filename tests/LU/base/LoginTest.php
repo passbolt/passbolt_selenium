@@ -8,12 +8,32 @@
 class LoginTest extends PassboltTestCase {
 
     public function testLogin() {
-        // Given I am Ada
+        $this->getUrl('login');
+        $this->assertVisible('.plugin-check.firefox.warning');
+
         $user = User::get('ada');
         $this->setClientConfig($user);
 
         $this->getUrl('login');
-        $this->assertVisible('.plugin-check.firefox.success');
+
+        $this->waitUntilISee('.plugin-check.firefox.success');
+        $this->waitUntilISee('.plugin-check.gpg.success');
+
+        $this->assertVisible('passbolt-iframe-login-form');
+        $this->goIntoLoginIframe();
+
+        $this->assertVisible('.login-form.master-password');
+        $this->assertInputValue('UserUsername', $user['Username']);
+
+
+        $this->inputText('js_master_password', 'somethingwrong');
+        $this->click('loginSubmit');
+
+        $this->waitUntilISee('#loginMessage.error');
+        $this->inputText('js_master_password', $user['MasterPassword']);
+
+        $this->click('loginSubmit');
+
     }
 
 }

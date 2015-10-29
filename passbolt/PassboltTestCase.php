@@ -258,6 +258,13 @@ class PassboltTestCase extends WebDriverTestCase {
 	}
 
 	/**
+	 * Go into the login form iframe
+	 */
+	public function goIntoLoginIframe() {
+		$this->driver->switchTo()->frame('passbolt-iframe-login-form');
+	}
+
+	/**
 	 * Dig into the master password iframe
 	 */
 	public function goIntoMasterPasswordIframe() {
@@ -504,7 +511,10 @@ class PassboltTestCase extends WebDriverTestCase {
 		// check color switch when input is selected
 		if (isset($context) && $context == 'master') {
 			$this->click('js_master_password');
-		} else {
+		} else if ($context == 'login') {
+			$this->click('js_master_password');
+		}
+		else {
 			$this->click('js_secret');
 		}
 		$t = $this->findByCss('.security-token');
