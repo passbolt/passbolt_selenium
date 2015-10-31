@@ -25,7 +25,6 @@ class LoginTest extends PassboltTestCase {
         $this->assertVisible('.login-form.master-password');
         $this->assertInputValue('UserUsername', $user['Username']);
 
-
         $this->inputText('js_master_password', 'somethingwrong');
         $this->click('loginSubmit');
 
@@ -33,7 +32,13 @@ class LoginTest extends PassboltTestCase {
         $this->inputText('js_master_password', $user['MasterPassword']);
 
         $this->click('loginSubmit');
-         sleep(10);
+        $this->assertElementContainsText('loginMessage','Please wait');
+        $this->waitCompletion();
+        $this->assertElementContainsText('loginMessage','You are now logged in!');
+
+        // wait for redirection trigger
+        sleep(1);
+        $this->waitCompletion();
     }
 
 }

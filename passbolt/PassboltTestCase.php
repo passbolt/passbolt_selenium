@@ -126,6 +126,9 @@ class PassboltTestCase extends WebDriverTestCase {
 		$this->waitCompletion();
 	}
 
+	/**
+	 * Logout
+	 */
 	public function logout() {
 		$this->getUrl('logout');
 	}
