@@ -117,17 +117,29 @@ class PassboltTestCase extends WebDriverTestCase {
 	/**
 	 * Login on the application with the given user.
 	 * @param $email
+	 * @param $password
 	 */
-	public function loginAs($email) {
+	public function loginAs($email, $password = 'password') {
 		$this->getUrl('login');
 		$this->inputText('UserUsername', $email);
-		$this->inputText('UserPassword', 'password');
+		$this->inputText('UserPassword', $password);
 		$this->pressEnter();
 		$this->waitCompletion();
 	}
 
+	/**
+	 * Logout user.
+	 */
 	public function logout() {
 		$this->getUrl('logout');
+	}
+
+	/**
+	 * Refresh page.
+	 */
+	public function refresh() {
+		$this->driver->execute(DriverCommand::REFRESH);
+		$this->waitCompletion();
 	}
 
 	/**
@@ -153,6 +165,51 @@ class PassboltTestCase extends WebDriverTestCase {
 			$this->inputText('keyAscii', $key);
 		}
 		$this->click('saveKey');
+	}
+
+	/**
+	 * Complete the setup with the data given in parameter
+	 * @param $data
+	 *  - username
+	 *  - masterpassword
+	 *  - password
+	 *
+	 * @throws Exception
+	 */
+	public function completeSetupWithKeyGeneration($data) {
+		// Check that we are on the setup page.
+		$this->assertPageContainsText('Plugin check');
+		// Check box domain check.
+		$this->checkCheckbox('js_setup_domain_check');
+		// Click Next.
+		$this->clickLink("Next");
+		// Wait
+		$this->waitUntilISee('#js_step_content h3', '/Create a new key/i');
+		// Fill master key.
+		$this->inputText('KeyComment', 'This is a comment for john doe key');
+		// Click Next.
+		$this->clickLink("Next");
+		// Check that we are now on the master password page
+		$this->waitUntilISee('#js_step_title', '/Now let\'s setup your master password!/i');
+		// Fill master key.
+		$this->inputText('js_field_password', $data['masterpassword']);
+		// Click Next.
+		$this->clickLink("Next");
+		// Wait until we see the title Master password.
+		$this->waitUntilISee('#js_step_title', '/Success! Your secret key is ready./i');
+		// Press Next.
+		$this->clickLink("Next");
+		// Wait.
+		$this->waitUntilISee('#js_step_content h3', '/Set a security token/i');
+		// Press Next.
+		$this->clickLink("Next");
+		// Fill up password.
+		$this->inputText('js_setup_password', $data['password']);
+		// Press Next.
+		$this->clickLink("Next");
+		// Check we are logged in.
+		$this->waitCompletion();
+		$this->waitUntilISee('#js_app_controller.ready');
 	}
 
 	/**
@@ -222,6 +279,26 @@ class PassboltTestCase extends WebDriverTestCase {
 		$this->click('js_wk_menu_edition_button');
 		$this->waitCompletion();
 		$this->assertVisible('.edit-password-dialog');
+	}
+
+	/**
+	 * Goto the share password dialog for a given resource id
+	 * @param $id string
+	 * @throws Exception
+	 */
+	public function gotoSharePassword($id) {
+		if(!$this->isVisible('.page.password')) {
+			$this->getUrl('');
+			$this->waitUntilISee('.page.password');
+			$this->waitUntilISee('#js_wk_menu_sharing_button');
+		}
+		if(!$this->isVisible('.share-password-dialog')) {
+			$this->click( 'footer' ); // we click somewhere in case the password is already active
+			$this->clickPassword( $id );
+			$this->click( 'js_wk_menu_sharing_button' );
+			$this->waitCompletion();
+			$this->assertVisible( '.share-password-dialog' );
+		}
 	}
 
 	/**
@@ -309,6 +386,129 @@ class PassboltTestCase extends WebDriverTestCase {
 	}
 
 	/**
+	 * Share a password helper
+	 * @param $password
+	 * @param $username
+	 * @param $permissionType
+	 * @param $user
+	 * @throws Exception
+	 */
+	public function sharePassword($password, $username, $permissionType, $user) {
+		$this->gotoSharePassword($password['id']);
+
+		// I enter the username I want to share the password with in the autocomplete field
+		$this->inputText('js_perm_create_form_aro_auto_cplt', $username);
+
+		// I wait until I see the automplete field resolved
+		$this->waitUntilISee('.share-password-dialog .autocomplete-content', '/' . $username . '/i');
+
+		// I click on the username link the autocomplete field retrieved.
+		$this->clickLink($username);
+
+		// I select the permission I want to grant to the user
+		$this->selectOption('js_perm_create_form_type', $permissionType);
+
+		// I add the permission
+		$this->click('js_perm_create_form_add_btn');
+
+		// I can see that temporary changes are waiting to be saved
+		$this->assertElementContainsText(
+			$this->findByCss('.share-password-dialog #js_permissions_changes'),
+			'You need to save to apply the changes'
+		);
+
+		// When I click on the save button
+		$this->click('js_rs_share_save');
+
+		// Then I see the master password dialog
+		$this->assertMasterPasswordDialog($user);
+
+		// When I enter the master password and click submit
+		$this->enterMasterPassword($user['MasterPassword']);
+
+		// Then I see a dialog telling me encryption is in progress
+		$this->waitUntilISee('passbolt-iframe-progress-dialog');
+		$this->waitCompletion();
+
+		// And I see a notice message that the operation was a success
+		$this->assertNotification('app_share_update_success');
+	}
+
+	/**
+	 * Edit a password permission helper
+	 * @param $password
+	 * @param $username
+	 * @param $permissionType
+	 * @param $user
+	 * @throws Exception
+	 */
+	public function editPermission($password, $username, $permissionType, $user) {
+		$this->gotoSharePassword($password['id']);
+
+		// I can see the user has a direct permission
+		$this->assertElementContainsText(
+			$this->findByCss('#js_permissions_list'),
+			$username
+		);
+
+		// Find the permission row element
+		$rowElement = $this->findByXpath('//*[@id="js_permissions_list"]//*[.="' . $username . '"]//ancestor::li[1]');
+
+		// I change the permission
+		$select = new WebDriverSelect($rowElement->findElement(WebDriverBy::cssSelector('.js_share_rs_perm_type')));
+		$select->selectByVisibleText($permissionType);
+
+		// I can see that temporary changes are waiting to be saved
+		$this->assertElementContainsText(
+			$this->findByCss('.share-password-dialog #js_permissions_changes'),
+			'You need to save to apply the changes'
+		);
+
+		// When I click on the save button
+		$this->click('js_rs_share_save');
+		$this->waitCompletion();
+
+		// And I see a notice message that the operation was a success
+		$this->assertNotification('app_share_update_success');
+	}
+
+	/**
+	 * Delete a password permission helper
+	 * @param $password
+	 * @param $username
+	 * @throws Exception
+	 */
+	public function deletePermission($password, $username) {
+		$this->gotoSharePassword($password['id']);
+
+		// I can see the user has a direct permission
+		$this->assertElementContainsText(
+			$this->findByCss('#js_permissions_list'),
+			$username
+		);
+
+		// Find the permission row element
+		$rowElement = $this->findByXpath('//*[@id="js_permissions_list"]//*[.="' . $username . '"]//ancestor::li[1]');
+
+		// I delete the permission
+		$deleteButton = $rowElement->findElement(WebDriverBy::cssSelector('.js_perm_delete'));
+		$deleteButton->click();
+
+		// I can see that temporary changes are waiting to be saved
+		$this->assertElementContainsText(
+			$this->findByCss('.share-password-dialog #js_permissions_changes'),
+			'You need to save to apply the changes'
+		);
+
+		// When I click on the save button
+		$this->click('js_rs_share_save');
+		$this->waitCompletion();
+
+		// And I see a notice message that the operation was a success
+		$this->assertNotification('app_share_update_success');
+	}
+
+	/**
 	 * Enter the password in the master password iframe
 	 * @param $pwd
 	 */
@@ -333,6 +533,128 @@ class PassboltTestCase extends WebDriverTestCase {
 		$this->enterMasterPassword($user['MasterPassword']);
 	}
 
+	/**
+	 * Go to the user workspace and click on the create user button
+	 */
+	public function gotoCreateUser() {
+		if(!$this->isVisible('.page.people')) {
+			$this->getUrl('');
+			$this->waitUntilISee('.page.people');
+			$this->waitUntilISee('#js_user_wk_menu_creation_button');
+		}
+		$this->click('#js_user_wk_menu_creation_button');
+		$this->assertVisible('.create-user-dialog');
+	}
+
+	/**
+	 * Helper to create a user
+	 */
+	public function createUser($user) {
+		$this->gotoCreateUser();
+		$this->inputText('js_field_first_name', $user['first_name']);
+		$this->inputText('js_field_last_name', $user['last_name']);
+		$this->inputText('js_field_username', $user['username']);
+		if (isset($user['admin']) && $user['admin'] === true) {
+			// Check box admin
+			$this->checkCheckbox('#js_field_role_id .role-admin input[type=checkbox]');
+		}
+		$this->click('.create-user-dialog input[type=submit]');
+		$this->assertNotification('app_users_add_success');
+	}
+
+	/**
+	 * Click on a user in the user workspace
+	 * @param array $user
+	 *   user array containing either id, or first name and last name or directly a uuid
+	 */
+	public function clickUser($user) {
+		if(!$this->isVisible('.page.people')) {
+			throw new Exception("click user requires to be on the user workspace");
+		}
+		// if user is not an array, then it is a uuid.
+		if (!is_array($user)) {
+			$user = ['id' => $user];
+		}
+		if (isset($user['first_name']) && isset($user['last_name'])) {
+			$elt = $this->find('.tableview-content div[title="' . $user['first_name'] . ' ' . $user['last_name'] . '"]');
+			$elt->click();
+		}
+		else {
+			$this->click('#user_' . $user['id'] . ' .cell_name');
+		}
+	}
+
+	/**
+	 * Right click on a user with a given id.
+	 * @param string $id
+	 *
+	 * @throws Exception
+	 */
+	public function rightClickUser($id) {
+		if(!$this->isVisible('.page.people')) {
+			throw new Exception("right click user requires to be on the user workspace");
+		}
+		$eltSelector = '#user_' . $id . ' .cell_name';
+		$this->driver->executeScript("
+			jQuery('$eltSelector').trigger({
+				type:'mousedown',
+				which:3
+			});
+		");
+		// Without this little interval, the menu doesn't have time to open.
+		$this->waitUntilISee('#js_contextual_menu.ready');
+	}
+
+	/**
+	 * Goto the edit user dialog for a given user id
+	 * @param $id string
+	 * @throws Exception
+	 */
+	public function gotoEditUser($id) {
+		if(!$this->isVisible('.page.people')) {
+			$this->getUrl('');
+			$this->gotoWorkspace('user');
+			$this->waitUntilISee('.page.people');
+			$this->waitUntilISee('#js_user_wk_menu_edition_button');
+		}
+		$this->click('footer'); // we click somewhere in case the password is already active
+		$this->clickUser($id);
+		$this->click('js_user_wk_menu_edition_button');
+		$this->waitCompletion();
+		$this->assertVisible('.edit-user-dialog');
+	}
+
+	/**
+	 * Edit a user helper
+	 * @param $user
+	 * @throws Exception
+	 */
+	public function editUser($user) {
+		$this->gotoEditUser($user);
+
+		if (isset($user['first_name'])) {
+			$this->inputText('js_field_first_name', $user['first_name']);
+		}
+		if (isset($user['last_name'])) {
+			$this->inputText('js_field_last_name', $user['last_name']);
+		}
+		if (isset($user['admin'])) {
+			// Get current state of admin
+			$el = null;
+			try {
+				$el = $this->find('#js_field_role_id .role-admin input[type=checkbox][checked=checked]');
+			}
+			catch(Exception $e) {}
+			// if el was found, admin checkbox is already checked.
+			$isAdmin = ($el == null ? false : true);
+			if ($isAdmin != $user['admin']) {
+				$this->checkCheckbox('#js_field_role_id .role-admin input[type=checkbox]');
+			}
+		}
+
+		$this->click('.edit-user-dialog input[type=submit]');
+		$this->assertNotification('app_users_edit_success');
+	}
 
 	/**
 	 * Empty a field like a user would do it.
@@ -572,5 +894,28 @@ class PassboltTestCase extends WebDriverTestCase {
 		$action = new WebDriverActions($this->driver);
 		$action->sendKeys($e, array(WebDriverKeys::CONTROL,'v'))->perform();
 		$this->assertTrue($e->getAttribute('value') == $content);
+	}
+
+	/**
+	 * Assert that the password has a specific permission for a target user
+	 * @param $password
+	 * @param $username
+	 * @param $permissionType
+	 */
+	public function assertPermission($password, $username, $permissionType) {
+		$this->gotoSharePassword($password['id']);
+
+		// I can see the user has a direct permission
+		$this->assertElementContainsText(
+			$this->findByCss('#js_permissions_list'),
+			$username
+		);
+
+		// Find the permission row element
+		$rowElement = $this->findByXpath('//*[@id="js_permissions_list"]//*[.="' . $username . '"]//ancestor::li[1]');
+
+		// I can see the permission is as expected
+		$select = new WebDriverSelect($rowElement->findElement(WebDriverBy::cssSelector('.js_share_rs_perm_type')));
+		$this->assertEquals($permissionType, $select->getFirstSelectedOption()->getText());
 	}
 }

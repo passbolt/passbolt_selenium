@@ -130,14 +130,4 @@ class RegisterTest extends PassboltTestCase {
 
     }
 
-    /**
-     * Scenario: If I try to access the thank you page directly I am redirected to register
-     * Given I access the /register/thankyou page
-     * Then I should be redirected to /register.
-     */
-    public function testCannotSeeThankYouPageDirectly() {
-        $this->getUrl('register/thankyou');
-        $this->assertTitleContain('Register');
-        $this->assertUrlMatch('/register$/');
-    }
 }

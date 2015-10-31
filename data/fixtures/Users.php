@@ -14,6 +14,7 @@ class User {
             default:
             case 'ada':
                 return array_merge($conf,array(
+	                'id' => Uuid::get('user.id.ada'),
 	                'name' => 'ada',
                     'FirstName' => 'Ada',
                     'LastName' => 'Lovelace',
@@ -25,6 +26,7 @@ class User {
                 break;
             case 'betty':
                 return array_merge($conf,array(
+	                'id' => Uuid::get('user.id.betty'),
 	                'name' => 'betty',
                     'FirstName' => 'Betty',
                     'LastName' => 'Holberton',
@@ -36,6 +38,7 @@ class User {
                 break;
             case 'carol':
                 return array_merge($conf,array(
+	                'id' => Uuid::get('user.id.carol'),
 	                'name' => 'carol',
                     'FirstName' => 'Carol',
                     'LastName' => 'Shaw',
@@ -45,6 +48,18 @@ class User {
                     'PrivateKey' => 'carol_private.key'
                 ));
                 break;
+	        case 'admin':
+		        return array_merge($conf,array(
+			        'id' => Uuid::get('user.id.admin'),
+			        'name' => 'admin',
+			        'FirstName' => 'Admin',
+			        'LastName' => 'User',
+			        'Username' => 'admin@passbolt.com',
+			        'MasterPassword' => 'admin@passbolt.com',
+			        'TokenCode' => 'ADM',
+			        'PrivateKey' => 'admin_private.key'
+		        ));
+		        break;
         }
     }
 }
