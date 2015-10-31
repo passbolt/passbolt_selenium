@@ -43,7 +43,7 @@ class PasswordCopyToClipboardTest extends PassboltTestCase
 		$this->setClientConfig($user);
 
 		// And I am logged in on the password workspace
-		$this->loginAs($user['Username']);
+		$this->loginAs($user);
 
 		// When I click on the first password in the list
 		$this->clickPassword($resource['id']);
@@ -82,7 +82,7 @@ class PasswordCopyToClipboardTest extends PassboltTestCase
         $this->setClientConfig($user);
 
         // And I am logged in on the password workspace
-        $this->loginAs($user['Username']);
+        $this->loginAs($user);
 
         // When I right click on the first password in the list
         $this->rightClickPassword($resource['id']);
@@ -121,7 +121,7 @@ class PasswordCopyToClipboardTest extends PassboltTestCase
         $this->setClientConfig($user);
 
         // And I am logged on the password workspace
-        $this->loginAs($user['Username']);
+        $this->loginAs($user);
 
         // When I select the first password in the list
         $this->click('multiple_select_checkbox_' . $resource['id']);
@@ -165,7 +165,7 @@ class PasswordCopyToClipboardTest extends PassboltTestCase
         $this->setClientConfig($user);
 
         // And I am logged in on the password workspace
-        $this->loginAs($user['Username']);
+        $this->loginAs($user);
 
         // When I right click on the first password in the list
         $this->rightClickPassword($resource['id']);
@@ -197,7 +197,7 @@ class PasswordCopyToClipboardTest extends PassboltTestCase
         $this->setClientConfig($user);
 
         // And I am logged in on the password workspace
-        $this->loginAs($user['Username']);
+        $this->loginAs($user);
 
         // When I right click on the first password in the list
         $this->rightClickPassword($resource['id']);
@@ -228,7 +228,7 @@ class PasswordCopyToClipboardTest extends PassboltTestCase
         $this->setClientConfig($user);
 
         // And I am logged in on the password workspace
-        $this->loginAs($user['Username']);
+        $this->loginAs($user);
 
         // When I click on a password link of the first row of the table view
         $this->click('grid_secret_copy_' . $resource['id']);
@@ -258,7 +258,7 @@ class PasswordCopyToClipboardTest extends PassboltTestCase
         $this->setClientConfig($user);
 
         // And I am logged in on the password workspace
-        $this->loginAs($user['Username']);
+        $this->loginAs($user);
 
         // When I click on the resource row in the grid
         $this->clickPassword($resource['id']);

@@ -24,7 +24,7 @@ class PASSBOLT1103 extends PassboltTestCase {
 		$user = User::get('ada');
 
 		// And I am logged in on the password workspace
-		$this->loginAs($user['Username']);
+		$this->loginAs($user);
 
 		// When I right click on a password I own
 		$resource = Resource::get(array('user' => 'ada', 'permission' => 'owner'));

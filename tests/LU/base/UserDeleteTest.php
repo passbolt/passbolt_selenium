@@ -30,7 +30,7 @@ class UserDeleteTest extends PassboltTestCase {
 		$this->setClientConfig($user);
 
 		// And I am logged in on the user workspace
-		$this->loginAs($user['Username']);
+		$this->loginAs($user);
 
 		// Go to user workspace
 		$this->gotoWorkspace('user');
@@ -85,7 +85,7 @@ class UserDeleteTest extends PassboltTestCase {
 		$this->setClientConfig($user);
 
 		// And I am logged in on the user workspace
-		$this->loginAs($user['Username']);
+		$this->loginAs($user);
 
 		// Go to user workspace
 		$this->gotoWorkspace('user');

@@ -41,7 +41,7 @@ class PasswordCommentTest extends PassboltTestCase {
 		$this->setClientConfig($user);
 
 		// And I am logged in on the password workspace
-		$this->loginAs($user['Username']);
+		$this->loginAs($user);
 
 		// Make sure the password field is not visible
 		$this->assertNotVisible($this->commentFormSelector);
@@ -89,7 +89,6 @@ class PasswordCommentTest extends PassboltTestCase {
 		$this->assertElementContainsText($commentsList, $comments[0]);
 	}
 
-
 	/**
 	 * Scenario :   As a user I should see error messages if the content entered is not alright
 	 * Given        I am Ada
@@ -109,7 +108,7 @@ class PasswordCommentTest extends PassboltTestCase {
 		$this->setClientConfig($user);
 
 		// And I am logged in on the password workspace
-		$this->loginAs($user['Username']);
+		$this->loginAs($user);
 
 		// When I click on a password I own
 		$resource = Resource::get(array('user' => 'ada', 'permission' => 'owner'));
@@ -155,7 +154,7 @@ class PasswordCommentTest extends PassboltTestCase {
 		$this->setClientConfig($user);
 
 		// And I am logged in on the password workspace
-		$this->loginAs($user['Username']);
+		$this->loginAs($user);
 
 		// When I click on a password I own
 		$resource = Resource::get(array('user' => 'ada', 'permission' => 'owner'));

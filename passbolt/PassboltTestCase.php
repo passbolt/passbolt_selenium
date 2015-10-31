@@ -116,14 +116,20 @@ class PassboltTestCase extends WebDriverTestCase {
 
 	/**
 	 * Login on the application with the given user.
-	 * @param $email
-	 * @param $password
+	 * @param user
 	 */
-	public function loginAs($email, $password = 'password') {
+	public function loginAs($user) {
 		$this->getUrl('login');
-		$this->inputText('UserUsername', $email);
-		$this->inputText('UserPassword', $password);
-		$this->pressEnter();
+		$this->waitUntilISee('.plugin-check.firefox.success');
+		$this->waitUntilISee('.plugin-check.gpg.success');
+		$this->goIntoLoginIframe();
+		$this->assertInputValue('UserUsername', $user['Username']);
+		$this->inputText('js_master_password', $user['MasterPassword']);
+		$this->click('loginSubmit');
+		$this->waitCompletion();
+
+		// wait for redirection trigger
+		sleep(1);
 		$this->waitCompletion();
 	}
 
@@ -150,21 +156,30 @@ class PassboltTestCase extends WebDriverTestCase {
 		$this->getUrl('debug');
 		sleep(1); // plugin need some time to trigger a page change
 
-		$this->inputText('baseUrl', Config::read('passbolt.url'));
+		$this->inputText('UserId',$config['id']);
 		$this->inputText('ProfileFirstName',$config['FirstName']);
 		$this->inputText('ProfileLastName',$config['LastName']);
 		$this->inputText('UserUsername',$config['Username']);
 		$this->inputText('securityTokenCode',$config['TokenCode']);
 		$this->inputText('securityTokenColor',$config['TokenColor']);
 		$this->inputText('securityTokenTextColor',$config['TokenTextColor']);
+		$this->inputText('baseUrl', Config::read('passbolt.url'));
 		$this->click('js_save_conf');
 
 		// PASSBOLT-1084 trick to speed up the test execution
 		if($config['Username'] != 'ada@passbolt.com') {
 			$key = file_get_contents(GPG_FIXTURES . DS . $config['PrivateKey'] );
-			$this->inputText('keyAscii', $key);
+			$this->inputText('myKeyAscii', $key);
 		}
 		$this->click('saveKey');
+
+		// @TODO allow changing server key from fixtures
+		$this->click('saveServerKey');
+
+		$this->assertVisible('.my.key-import.feedback .message.success');
+		$this->assertVisible('.server.key-import.feedback .message.success');
+		$this->assertVisible('.user.settings.feedback .message.success');
+
 	}
 
 	/**
@@ -323,6 +338,13 @@ class PassboltTestCase extends WebDriverTestCase {
 	 */
 	public function goOutOfIframe() {
 		$this->driver->switchTo()->defaultContent();
+	}
+
+	/**
+	 * Go into the login form iframe
+	 */
+	public function goIntoLoginIframe() {
+		$this->driver->switchTo()->frame('passbolt-iframe-login-form');
 	}
 
 	/**
@@ -564,8 +586,8 @@ class PassboltTestCase extends WebDriverTestCase {
 
 	/**
 	 * Click on a user in the user workspace
-	 * @param array $user
-	 *   user array containing either id, or first name and last name or directly a uuid
+	 * @param array $user array containing either id, or first name and last name or directly a uuid
+	 * @throws Exception if not on the right workspace
 	 */
 	public function clickUser($user) {
 		if(!$this->isVisible('.page.people')) {
@@ -817,7 +839,10 @@ class PassboltTestCase extends WebDriverTestCase {
 		// check color switch when input is selected
 		if (isset($context) && $context == 'master') {
 			$this->click('js_master_password');
-		} else {
+		} else if ($context == 'login') {
+			$this->click('js_master_password');
+		}
+		else {
 			$this->click('js_secret');
 		}
 		$t = $this->findByCss('.security-token');

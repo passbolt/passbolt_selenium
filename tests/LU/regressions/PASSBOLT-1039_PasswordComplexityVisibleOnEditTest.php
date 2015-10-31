@@ -23,7 +23,7 @@ class PASSBOLT1039 extends PassboltTestCase
         $this->setClientConfig($user);
 
         // And I am logged in on the password workspace
-        $this->loginAs($user['Username']);
+        $this->loginAs($user);
 
         // When I create a password with very strong complexity
         $password = array(
