@@ -31,7 +31,7 @@ class PasswordWorkspaceTest extends PassboltTestCase
         $this->setClientConfig($user);
 
         // And I am logged in on the password workspace
-        $this->loginAs($user['Username']);
+        $this->loginAs($user);
 
         // I should see the workspace primary menu
         $buttons = ['copy', 'edit', 'share', 'more'];
@@ -76,7 +76,7 @@ class PasswordWorkspaceTest extends PassboltTestCase
         $this->setClientConfig($user);
 
         // And I am logged in on the password workspace
-        $this->loginAs($user['Username']);
+        $this->loginAs($user);
 
         // I should see rows representing my passwords
         $passwords = Resource::getAll(array('user' => $user['name'], 'return_deny' => false));
@@ -119,7 +119,7 @@ class PasswordWorkspaceTest extends PassboltTestCase
         $this->setClientConfig($user);
 
         // And I am logged in on the password workspace
-        $this->loginAs($user['Username']);
+        $this->loginAs($user);
 
         // I click on the favorite filter
         $this->clickLink("Favorite");
@@ -194,7 +194,7 @@ class PasswordWorkspaceTest extends PassboltTestCase
         $this->setClientConfig($user);
 
         // And I am logged in on the password workspace
-        $this->loginAs($user['Username']);
+        $this->loginAs($user);
 
         // I click on a password
         $this->click("#js_wsp_pwd_browser .tableview-content div[title='Inkscape']");
@@ -269,7 +269,7 @@ class PasswordWorkspaceTest extends PassboltTestCase
         $this->setClientConfig($user);
 
         // And I am logged in on the password workspace
-        $this->loginAs($user['Username']);
+        $this->loginAs($user);
 
         // I click on the favorite star located before the password (the password shouldn't be a favorite)
         $favElt = $this->findByXpath($xpathFavSelector);
@@ -353,7 +353,7 @@ class PasswordWorkspaceTest extends PassboltTestCase
         $this->setClientConfig($user);
 
         // And I am logged in on the password workspace
-        $this->loginAs($user['Username']);
+        $this->loginAs($user);
 
         // I fill the "app search" field with "shared resource"
         $this->inputText('js_app_filter_keywords', $searchPwd);

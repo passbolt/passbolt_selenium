@@ -118,11 +118,19 @@ class PassboltTestCase extends WebDriverTestCase {
 	 * Login on the application with the given user.
 	 * @param $email
 	 */
-	public function loginAs($email) {
+	public function loginAs($user) {
 		$this->getUrl('login');
-		$this->inputText('UserUsername', $email);
-		$this->inputText('UserPassword', 'password');
-		$this->pressEnter();
+		$this->waitUntilISee('.plugin-check.firefox.success');
+		$this->waitUntilISee('.plugin-check.gpg.success');
+		$this->goIntoLoginIframe();
+		$this->assertInputValue('UserUsername', $user['Username']);
+		$this->inputText('js_master_password', $user['MasterPassword']);
+		$this->click('loginSubmit');
+		$this->waitCompletion();
+		$this->assertElementContainsText('loginMessage','You are now logged in!');
+
+		// wait for redirection trigger
+		sleep(1);
 		$this->waitCompletion();
 	}
 

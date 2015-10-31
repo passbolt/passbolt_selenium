@@ -51,7 +51,7 @@ class PasswordCreateTest extends PassboltTestCase
         $this->setClientConfig($user);
 
         // I am logged in as Carol, and I go to the user workspace
-        $this->loginAs($user['Username']);
+        $this->loginAs($user);
 
         // then I see the create password button
         $this->assertElementContainsText(
@@ -148,7 +148,7 @@ class PasswordCreateTest extends PassboltTestCase
         $this->setClientConfig($user);
 
         // And I am logged in and on the password workspace
-        $this->loginAs($user['Username']);
+        $this->loginAs($user);
 
         // When I click on the create password button
         $this->click('js_wsp_create_button');
@@ -217,7 +217,7 @@ class PasswordCreateTest extends PassboltTestCase
         $this->setClientConfig($user);
 
         // And I am logged in
-        $this->loginAs($user['Username']);
+        $this->loginAs($user);
 
         // And I am on the create password dialog
         $this->gotoCreatePassword();
@@ -309,7 +309,7 @@ class PasswordCreateTest extends PassboltTestCase
         $this->setClientConfig($user);
 
         // And I am logged in
-        $this->loginAs($user['Username']);
+        $this->loginAs($user);
 
         // And I am on the create password dialog
         $this->gotoCreatePassword();
@@ -366,7 +366,7 @@ class PasswordCreateTest extends PassboltTestCase
         $this->setClientConfig($user);
 
         // And I am logged in
-        $this->loginAs($user['Username']);
+        $this->loginAs($user);
 
         // And I am on the create password dialog
         $this->gotoCreatePassword();
@@ -403,7 +403,7 @@ class PasswordCreateTest extends PassboltTestCase
         $this->setClientConfig($user);
 
         // And I am logged in
-        $this->loginAs($user['Username']);
+        $this->loginAs($user);
 
         // And I am on the create password dialog
         $this->gotoCreatePassword();
