@@ -1,0 +1,49 @@
+<?php
+/**
+ * Passbolt Selenium Config
+ *
+ * @copyright (c) 2015-present Bolt Software Pvt. Ltd.
+ * @licence GPLv3 onwards www.gnu.org/licenses/gpl-3.0.en.html
+ */
+$config = array (
+	// the base url to use to access this app
+	'testsuite' => array(
+		'url' => 'http://52.11.203.62/passbolt_selenium'
+	),
+	// the url of your passbolt app
+	'passbolt' => array (
+		'url' => 'http://52.11.203.62:8081',
+		'registration' => array(
+			'public' => TRUE
+		),
+		'users' => array (
+			'default' => array (
+				'name' => 'User b Test',
+				'username' => 'test@passbolt.com',
+				'password' => 'password'
+			)
+		)
+	),
+	// the base url of your selenium server
+	'selenium' => array (
+		'url' => 'http://52.11.203.62:4444/wd/hub'
+	),
+	'browsers' => array (
+		'default' => 'firefox_with_passbolt_extension',
+		'firefox_with_passbolt_extension' => array(
+			'name' => 'Firefox with Passbolt extension',
+			'type' => 'firefox',
+			'extensions' => array(
+				'data/extensions/passbolt-firefox-addon.xpi'
+			)
+		),
+		'firefox_vanilla' => array(
+			'name' => 'Firefox with no extensions',
+			'type' => 'firefox'
+		),
+		'chrome_vanilla' => array(
+			'name' => 'Chrome with no extensions',
+			'type' => 'Chrome'
+		)
+	)
+);
