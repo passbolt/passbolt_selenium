@@ -33,10 +33,12 @@ class LoginTest extends PassboltTestCase {
 	 * Scenario: I can see a login form on the login page
 	 * Given 	I am an anonymous user with no plugin on the login page
 	 * When		When the page is loaded
-	 * Then 	I can see login form
-	 * And		I can see the username field
-	 * And		I can see the password field
-	 * And 		I can see the submit button
+	 * Then 	I can see a box on the right
+	 * And		I can see a link download the plugin
+	 * And		I cannot see an iframe inside the box
+	 * And      I cannot see a username field (inside the iframe)
+	 * And      I cannot see a password field (inside the iframe)
+	 * And 		I cannot see a login button
 	 */
 	/**
 	 * @depends testCanSeeErrorMsg
@@ -44,54 +46,42 @@ class LoginTest extends PassboltTestCase {
 	public function testCanSeeLoginForm() {
 		$this->getUrl('login');
 
+		$loginForm = null;
+
 		try {
-			$this->findById('UserLoginForm');
+			$loginForm = $this->findByCss('.login.form');
 		} catch (NoSuchElementException $e) {
 			$this->fail('User login form was not found');
 		}
 
-		try {
-			$this->findById('UserUsername');
-		} catch (NoSuchElementException $e) {
-			$this->fail('Username text field not found on login form');
-		}
+		// I should see a link Download the plugin.
+		$this->assertElementContainsText(
+			$loginForm,
+			'Download the plugin'
+		);
 
+		$loginIframe = null;
 		try {
-			$this->findById('UserPassword');
+			$this->findById('passbolt-iframe-login-form');
 		} catch (NoSuchElementException $e) {
-			$this->fail('Password text field not found on login form');
-		}
 
-		try {
-			$this->findByCSS('#UserLoginForm input[type=submit]');
-		} catch (NoSuchElementException $e) {
-			$this->fail('There is no submit button in the registration form');
 		}
+		// I should not see an Iframe in the login box.
+		$this->assertEquals($loginIframe, null);
 
+		// And I should not see a username field.
+		$this->assertElementNotContainText(
+			$loginForm,
+			'Username'
+		);
+
+		// And I should not see a password field.
+		$this->assertElementNotContainText(
+			$loginForm,
+			'Master password'
+		);
 	}
 
-	/**
-	 * Scenario: I cannot login because I don't have the plugin
-	 * Given I am an anonymous user with no plugin on the login page
-	 * When	 I insert valid credentials
-	 *﻿ And	 I press enter
-	 * Then	 I should still be on the login page
-	 * And	 My role should be guest
-	 */
-	/**
-	 * @depends testCanSeeLoginForm
-	 */
-	public function testCantLogin() {
-		$this->getUrl('login');
-
-		$u = Config::read('passbolt.users.default');
-		$this->inputText('UserUsername',$u['username']);
-		$this->inputText('UserPassword',$u['password']);
-		$this->pressEnter();
-
-		$this->assertCurrentUrl('login');
-		$this->assertCurrentRole('guest');
-	}
 
 	/**
 	 * Scenario: I should not see warnings if I accept cookies and javascript is enabled

@@ -302,6 +302,13 @@ class PassboltTestCase extends WebDriverTestCase {
 	}
 
 	/**
+	 * Put the focus inside the login iframe
+	 */
+	public function goIntoLoginIframe() {
+		$this->driver->switchTo()->frame('passbolt-iframe-login-form');
+	}
+
+	/**
 	 * Input a given string in the secret field (create only)
 	 * @param string $secret
 	 */
