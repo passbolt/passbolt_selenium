@@ -41,7 +41,7 @@ class PasswordEditTest extends PassboltTestCase
         $this->setClientConfig($user);
 
         // And I am logged in on the password workspace
-        $this->loginAs($user['Username']);
+        $this->loginAs($user);
 
         // Then I can see the edit password button is disabled
         $this->assertVisible('js_wk_menu_edition_button');
@@ -79,7 +79,7 @@ class PasswordEditTest extends PassboltTestCase
         $this->setClientConfig($user);
 
         // And I am logged in on the password workspace
-        $this->loginAs($user['Username']);
+        $this->loginAs($user);
 
         // When I right click on a password I own
         $resource = Resource::get(array('user' => 'ada', 'permission' => 'owner'));
@@ -119,7 +119,7 @@ class PasswordEditTest extends PassboltTestCase
         $this->setClientConfig($user);
 
         // And I am logged in on the password workspace
-        $this->loginAs($user['Username']);
+        $this->loginAs($user);
 
         // And I am editing a password I own
         $resource = Resource::get(array('user' => 'ada', 'permission' => 'owner'));
@@ -195,7 +195,7 @@ class PasswordEditTest extends PassboltTestCase
         $this->setClientConfig($user);
 
         // And I am logged in on the password workspace
-        $this->loginAs($user['Username']);
+        $this->loginAs($user);
 
         // And I am editing a password I own
         $resource = Resource::get(array('user' => 'ada', 'permission' => 'owner'));
@@ -323,7 +323,7 @@ class PasswordEditTest extends PassboltTestCase
         $this->setClientConfig($user);
 
         // And I am logged in on the password workspace
-        $this->loginAs($user['Username']);
+        $this->loginAs($user);
 
         // And I am editing a password I own
         $resource = Resource::get(array('user' => 'ada', 'permission' => 'owner'));
@@ -377,7 +377,7 @@ class PasswordEditTest extends PassboltTestCase
         $this->setClientConfig($user);
 
         // And I am logged in on the password workspace
-        $this->loginAs($user['Username']);
+        $this->loginAs($user);
 
         // And I am editing the description of a password I own
         // Then I can see a success notification
@@ -419,7 +419,7 @@ class PasswordEditTest extends PassboltTestCase
         $this->setClientConfig($user);
 
         // And I am logged in on the password workspace
-        $this->loginAs($user['Username']);
+        $this->loginAs($user);
 
         // And I am editing the uri of a password I own
         // Then I can see a success notification
@@ -470,7 +470,7 @@ class PasswordEditTest extends PassboltTestCase
         $this->setClientConfig($user);
 
         // And I am logged in on the password workspace
-        $this->loginAs($user['Username']);
+        $this->loginAs($user);
 
         // And I am editing a password I own
         $r1 = Resource::get(array(
@@ -542,7 +542,7 @@ class PasswordEditTest extends PassboltTestCase
         $this->setClientConfig($user);
 
         // And I am logged in on the password workspace
-        $this->loginAs($user['Username']);
+        $this->loginAs($user);
 
         // And I am editing a password I own
         $r1 = Resource::get(array(
@@ -607,7 +607,7 @@ class PasswordEditTest extends PassboltTestCase
         $this->setClientConfig($user);
 
         // And I am logged in on the password workspace
-        $this->loginAs($user['Username']);
+        $this->loginAs($user);
 
         // And I am editing a password I own
         $r1 = Resource::get(array(
@@ -667,7 +667,7 @@ class PasswordEditTest extends PassboltTestCase
         $this->setClientConfig($user);
 
         // And I am logged in on the password workspace
-        $this->loginAs($user['Username']);
+        $this->loginAs($user);
 
         // And I click on a password I cannot edit
         $r = Resource::get(array(
@@ -708,7 +708,7 @@ class PasswordEditTest extends PassboltTestCase
         $this->setClientConfig($user);
 
         // And I am logged in on the password workspace
-        $this->loginAs($user['Username']);
+        $this->loginAs($user);
 
         // And I edit a password that I share with betty
         $r1 = Resource::get(array(
@@ -729,7 +729,7 @@ class PasswordEditTest extends PassboltTestCase
         $this->setClientConfig($user);
 
         // And I am logged in on the password workspace
-        $this->loginAs($user['Username']);
+        $this->loginAs($user);
 
         // And I copy the password Ada edited to clipboard
         $this->copyToClipboard($r1, $user);
@@ -769,7 +769,7 @@ class PasswordEditTest extends PassboltTestCase
         $this->setClientConfig($user);
 
         // And I am logged in on the password workspace
-        $this->loginAs($user['Username']);
+        $this->loginAs($user);
 
         // And I edit a password I own
         $r1 = Resource::get(array(

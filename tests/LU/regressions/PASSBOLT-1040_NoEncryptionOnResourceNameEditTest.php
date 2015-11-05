@@ -17,7 +17,7 @@ class PASSBOLT1040 extends PassboltTestCase
         $this->setClientConfig($user);
 
         // And I am logged in on the password workspace
-        $this->loginAs($user['Username']);
+        $this->loginAs($user);
 
         // And I am editing the name, description, uri, username of a password I own
         $resource = Resource::get(array(

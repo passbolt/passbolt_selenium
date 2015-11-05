@@ -34,7 +34,7 @@ class PasswordShareTest extends PassboltTestCase
 		$this->setClientConfig($user);
 
 		// And I am logged in on the password workspace
-		$this->loginAs($user['Username']);
+		$this->loginAs($user);
 
 		// Then I can see the share password button is disabled
 		$this->assertVisible('js_wk_menu_sharing_button');
@@ -72,7 +72,7 @@ class PasswordShareTest extends PassboltTestCase
 		$this->setClientConfig($user);
 
 		// And I am logged in on the password workspace
-		$this->loginAs($user['Username']);
+		$this->loginAs($user);
 
 		// When I right click on a password I own
 		$resource = Resource::get(array('user' => 'ada', 'permission' => 'owner'));
@@ -113,7 +113,7 @@ class PasswordShareTest extends PassboltTestCase
 		$this->setClientConfig($user);
 
 		// And I am logged in on the password workspace
-		$this->loginAs($user['Username']);
+		$this->loginAs($user);
 
 		// When I click on a password I have only read access to
 		$r = Resource::get(array(
@@ -173,7 +173,7 @@ class PasswordShareTest extends PassboltTestCase
 		$this->setClientConfig($user);
 
 		// And I am logged in on the password workspace
-		$this->loginAs($user['Username']);
+		$this->loginAs($user);
 
 		// When I go to the sharing dialog of a password I own
 		$resource = Resource::get(array(
@@ -220,7 +220,7 @@ class PasswordShareTest extends PassboltTestCase
 		$this->setClientConfig($user);
 
 		// And I am logged in on the password workspace
-		$this->loginAs($user['Username']);
+		$this->loginAs($user);
 
 		// When I go to the sharing dialog of a password I own
 		$resource = Resource::get(array(
@@ -249,7 +249,7 @@ class PasswordShareTest extends PassboltTestCase
 		$this->setClientConfig($user);
 
 		// And I am logged in on the password workspace
-		$this->loginAs($user['Username']);
+		$this->loginAs($user);
 
 		// And I click on a password shared with me
 		$this->clickPassword($resource['id']);
@@ -289,7 +289,7 @@ class PasswordShareTest extends PassboltTestCase
 		$this->setClientConfig($user);
 
 		// And I am logged in on the password workspace
-		$this->loginAs($user['Username']);
+		$this->loginAs($user);
 
 		// When I go to the sharing dialog of a password I own
 		$resource = Resource::get(array(
@@ -327,7 +327,7 @@ class PasswordShareTest extends PassboltTestCase
 		$this->setClientConfig($user);
 
 		// And I am logged in on the password workspace
-		$this->loginAs($user['Username']);
+		$this->loginAs($user);
 
 		// When I go to the sharing dialog of a password I own
 		$resource = Resource::get(array(

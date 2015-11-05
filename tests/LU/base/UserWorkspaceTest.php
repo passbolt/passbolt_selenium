@@ -32,7 +32,7 @@ class UserWorkspaceTest extends PassboltTestCase {
 		$this->setClientConfig($user);
 
 		// And I am logged in on the user workspace
-		$this->loginAs($user['Username']);
+		$this->loginAs($user);
 		$this->gotoWorkspace('user');
 
 		// I should not see the workspace primary menu
@@ -79,7 +79,7 @@ class UserWorkspaceTest extends PassboltTestCase {
 		$this->setClientConfig($user);
 
 		// And I am logged in on the user workspace
-		$this->loginAs($user['Username']);
+		$this->loginAs($user);
 		$this->gotoWorkspace('user');
 
 		// I should see rows representing the users
@@ -125,7 +125,7 @@ class UserWorkspaceTest extends PassboltTestCase {
 		$this->setClientConfig($user);
 
 		// And I am logged in on the user workspace
-		$this->loginAs($user['Username']);
+		$this->loginAs($user);
 		$this->gotoWorkspace('user');
 
 		// I click on the recently modified filter
@@ -153,7 +153,7 @@ class UserWorkspaceTest extends PassboltTestCase {
 		$this->setClientConfig($user);
 
 		// And I am logged in on the user workspace
-		$this->loginAs($user['Username']);
+		$this->loginAs($user);
 		$this->gotoWorkspace('user');
 
 		// I click on a user
@@ -252,7 +252,7 @@ class UserWorkspaceTest extends PassboltTestCase {
 		$this->setClientConfig($user);
 
 		// And I am logged in on the user workspace
-		$this->loginAs($user['Username']);
+		$this->loginAs($user);
 		$this->gotoWorkspace('user');
 
 		// I fill the "app search" field with "tetris license"
@@ -297,7 +297,7 @@ class UserWorkspaceTest extends PassboltTestCase {
 		$user = User::get('admin');
 
 		// And I am logged in on the user workspace
-		$this->loginAs($user['Username']);
+		$this->loginAs($user);
 		$this->gotoWorkspace('user');
 
 		// Then I should not see the create button
@@ -349,7 +349,7 @@ class UserWorkspaceTest extends PassboltTestCase {
 		$user = User::get('ada');
 
 		// And I am logged in on the user workspace
-		$this->loginAs($user['Username']);
+		$this->loginAs($user);
 		$this->gotoWorkspace('user');
 
 		// Then I should not see the create button

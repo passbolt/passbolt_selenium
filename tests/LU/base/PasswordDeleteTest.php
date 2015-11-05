@@ -30,7 +30,7 @@ class PasswordDeleteTest extends PassboltTestCase
         $this->setClientConfig($user);
 
         // And I am logged in on the password workspace
-        $this->loginAs($user['Username']);
+        $this->loginAs($user);
 
         // When I click a password I have update right on
         $resource = Resource::get(array('user' => 'ada', 'permission' => 'update'));
@@ -72,7 +72,7 @@ class PasswordDeleteTest extends PassboltTestCase
         $this->setClientConfig($user);
 
         // And I am logged in on the password workspace
-        $this->loginAs($user['Username']);
+        $this->loginAs($user);
 
         // When I click a password I have update right on
         $resource = Resource::get(array('user' => 'ada', 'permission' => 'update'));
@@ -200,7 +200,7 @@ class PasswordDeleteTest extends PassboltTestCase
         $this->setClientConfig($user);
 
         // And I am logged in on the password workspace
-        $this->loginAs($user['Username']);
+        $this->loginAs($user);
 
         // I click on a password I have view right
         $resource = Resource::get(array('user' => 'betty', 'permission' => 'read'));
