@@ -37,7 +37,7 @@ class UserEditTest extends PassboltTestCase {
 		$this->setClientConfig($user);
 
 		// And I am logged in on the user workspace
-		$this->loginAs($user['Username']);
+		$this->loginAs($user);
 
 		// Go to user workspace
 		$this->gotoWorkspace('user');
@@ -78,7 +78,7 @@ class UserEditTest extends PassboltTestCase {
 		$this->setClientConfig($user);
 
 		// And I am logged in on the user workspace
-		$this->loginAs($user['Username']);
+		$this->loginAs($user);
 
 		$this->gotoWorkspace('user');
 
@@ -118,7 +118,7 @@ class UserEditTest extends PassboltTestCase {
 		$this->setClientConfig($user);
 
 		// And I am logged in on the user workspace
-		$this->loginAs($user['Username']);
+		$this->loginAs($user);
 		$this->gotoWorkspace('user');
 
 		// And I am editing a user
@@ -539,7 +539,7 @@ class UserEditTest extends PassboltTestCase {
 		$this->setClientConfig($user);
 
 		// And I am logged in on the user workspace
-		$this->loginAs($user['Username']);
+		$this->loginAs($user);
 
 		// And I go to user workspace
 		$this->gotoWorkspace( 'user' );
@@ -560,7 +560,7 @@ class UserEditTest extends PassboltTestCase {
 		$this->setClientConfig($user);
 
 		// And I am logged in on the user workspace
-		$this->loginAs($user['Username']);
+		$this->loginAs($user);
 
 		// And I go to user workspace
 		$this->gotoWorkspace( 'user' );
@@ -599,7 +599,7 @@ class UserEditTest extends PassboltTestCase {
 		$this->setClientConfig($user);
 
 		// And I am logged in on the user workspace
-		$this->loginAs($user['Username']);
+		$this->loginAs($user);
 
 		// And I go to user workspace
 		$this->gotoWorkspace( 'user' );

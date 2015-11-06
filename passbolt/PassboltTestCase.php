@@ -120,19 +120,20 @@ class PassboltTestCase extends WebDriverTestCase {
 
 	/**
 	 * Login on the application with the given user.
-	 * @param $email
-	 * @param $password
+	 * @param user
 	 */
-	public function loginAs($email, $password = 'password') {
+	public function loginAs($user) {
 		$this->getUrl('login');
+		$this->waitUntilISee('.plugin-check.firefox.success');
+		$this->waitUntilISee('.plugin-check.gpg.success');
 		$this->goIntoLoginIframe();
-		// Assert username is correct.
-		$usernameField = $this->findById('UserUsername');
-		$this->assertEquals($usernameField->attr('value'), $email);
+		$this->assertInputValue('UserUsername', $user['Username']);
+		$this->inputText('js_master_password', $user['MasterPassword']);
+		$this->click('loginSubmit');
+		$this->waitCompletion();
 
-		$this->inputText('UserUsername', $email);
-		$this->inputText('UserPassword', $password);
-		$this->pressEnter();
+		// wait for redirection trigger
+		sleep(1);
 		$this->waitCompletion();
 	}
 
@@ -596,8 +597,8 @@ class PassboltTestCase extends WebDriverTestCase {
 
 	/**
 	 * Click on a user in the user workspace
-	 * @param array $user
-	 *   user array containing either id, or first name and last name or directly a uuid
+	 * @param array $user array containing either id, or first name and last name or directly a uuid
+	 * @throws Exception if not on the right workspace
 	 */
 	public function clickUser($user) {
 		if(!$this->isVisible('.page.people')) {
@@ -849,7 +850,10 @@ class PassboltTestCase extends WebDriverTestCase {
 		// check color switch when input is selected
 		if (isset($context) && $context == 'master') {
 			$this->click('js_master_password');
-		} else {
+		} else if ($context == 'login') {
+			$this->click('js_master_password');
+		}
+		else {
 			$this->click('js_secret');
 		}
 		$t = $this->findByCss('.security-token');

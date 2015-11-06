@@ -15,13 +15,12 @@
 
     <php>
         <env name="BROWSER" value="firefox_with_passbolt_extension"/>
-        <env name="QUIT" value="2" />
+        <env name="QUIT" value="1" />
     </php>
 
     <testsuites>
         <testsuite name="Anonymous user with plugin and no config with firefox">
-            <file>./base/ConfigTest.php</file>
-            <file>./base/SetupTest.php</file>
+            <directory>./base</directory>
         </testsuite>
     </testsuites>
 

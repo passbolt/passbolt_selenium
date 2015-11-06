@@ -27,7 +27,7 @@ class PASSBOLT1041 extends PassboltTestCase
         $this->resetDatabase();
 
         // And I am logged in on the password workspace
-        $this->loginAs($user['Username']);
+        $this->loginAs($user);
 
         // And I right click on an item I own
         $this->rightClickPassword($resource['id']);
