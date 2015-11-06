@@ -13,6 +13,9 @@ $config = array (
 	// the url of your passbolt app
 	'passbolt' => array (
 		'url' => 'http://localhost/passbolt',
+		'server_key' => array(
+            'fingerprint' => '2FC8945833C51946E937F9FED47B0811573EE67E',
+        ),
 		'registration' => array(
 			'public' => TRUE
 		),

@@ -115,6 +115,79 @@ GFq/vw==
 		// Test that the domain in the url check textbox is the same as the one configured.
 		$domain = $this->findById("js_setup_domain")->getAttribute('value');
 		$this->assertEquals(Config::read('passbolt.url'), $domain);
+
+		// Give it time to load the server key.
+		sleep(2);
+
+		// Test that the server key fingerprint is correct.
+		$serverKey = $this->findById("js_setup_key_fingerprint")->getAttribute('value');
+		$this->assertEquals(Config::read('passbolt.server_key.fingerprint'), $serverKey);
+
+		// Click on more to read information about the key.
+		$this->clickLink('More');
+
+		// Assert that the dialog window is opened.
+		$this->assertVisible('dialog-server-key-info');
+
+		// I should see the title "Please verify the server key"
+		$this->assertElementContainsText(
+			$this->findByCss('.dialog-header'),
+			'Please verify the server key'
+		);
+
+		// I should see the Owner name
+		$this->assertElementContainsText(
+			$this->findByCss('.dialog-wrapper .owner-name'),
+			'Passbolt Server Test Key'
+		);
+
+		// I should see the Owner email
+		$this->assertElementContainsText(
+			$this->findByCss('.dialog-wrapper .owner-email'),
+			'no-reply@passbolt.com'
+		);
+
+		// I should see the key id
+		$this->assertElementContainsText(
+			$this->findByCss('.dialog-wrapper .keyid'),
+			'573EE67E'
+		);
+
+		// I should see the key fingerprint
+		$this->assertElementContainsText(
+			$this->findByCss('.dialog-wrapper .fingerprint'),
+			$serverKey
+		);
+
+		// I should see the length
+		$this->assertElementContainsText(
+			$this->findByCss('.dialog-wrapper .length'),
+			'4096'
+		);
+
+		// I should see the algorithm
+		$this->assertElementContainsText(
+			$this->findByCss('.dialog-wrapper .algorithm'),
+			'RSA'
+		);
+
+		// If I click ok.
+		$this->findById('key-info-ok')
+			->click();
+
+		// Then I should not see the dialog anymore.
+		$this->assertNotVisible('dialog-server-key-info');
+
+		// If I open the dialog again.
+		$this->clickLink('More');
+
+		// And I click the close icon in the dialog.
+		$this->findByCss('.dialog-wrapper a.dialog-close')
+		     ->click();
+
+		// Then I should not see the dialog anymore.
+		$this->assertNotVisible('dialog-server-key-info');
+
 		// Check box domain check.
 		$this->checkCheckbox('js_setup_domain_check');
 		// Test that button Next is disabled.
@@ -122,6 +195,7 @@ GFq/vw==
 			$this->findById('js_setup_submit_step'),
 			'disabled'
 		);
+
 	}
 
 	/**
@@ -348,117 +422,32 @@ GFq/vw==
 	}
 
 	/**
-	 * Scenario :   As an AP using the setup, I should be able to choose my password to access the application
-	 * Given        I am at the last step where I have to enter my first password
-	 * Then         I should see that the Name field is disabled
-	 * And          I should see that the Name field contains "John Doe"
-	 * And          I should see that the Email field is disabled
-	 * And          I should see that the Email field contains "johndoe@passbolt.com"
-	 * And          I should see that the url field is disabled
-	 * And          I should see that the "Next" button is disabled
-	 * When         I fill up a password for the password field
-	 * Then         I should see that the strength of the password is updated to fair
-	 * And          I should see the strength progress bar reflecting the fair status
-	 * And          I should not see the password in clear
-	 * When         I click on the password generation button
-	 * Then         A different password should appear in the password field
-	 * When         I click on show password button
-	 * Then         I should see the generated password
-	 * And          I should see the "show password button" pressed
-	 * When         I click again on the show password button
-	 * Then         I should not see the password in clear anymore
-	 * And          I should see that the button Next is enabled
+	 * Scenario :   As an AP using the setup, I should be redirected to the login page at the end of the setup.
+	 * Given        I am at the last step
+	 * Then         I should see a message telling me that I am being redirected.
+	 * And          I should see the login form after I am redirected.
+	 * And          I should be able to log in
 	 * @throws Exception
 	 */
-	private function __testStepEnterApplicationPassword() {
-		$this->waitUntilISee('#js_step_content h3', '/This is your password to login in the application itself/i');
-		$this->assertTitleEquals('Alright sparky, let\'s create your first password!');
-		// Test that Name field is disabled and filled up.
-		$this->assertElementAttributeEquals(
-			$this->find('PasswordName'),
-			'disabled',
-			'true'
-		);
-		$this->assertElementAttributeEquals(
-			$this->find('PasswordName'),
-			'value',
-			'John Doe'
-		);
-		// Test that username field is disabled and filled up.
-		$this->assertElementAttributeEquals(
-			$this->find('PasswordUsername'),
-			'value',
-			'johndoe@passbolt.com'
-		);
-		$this->assertElementAttributeEquals(
-			$this->find('PasswordUsername'),
-			'disabled',
-			'true'
-		);
-		// Test that url field is disabled.
-		$this->assertElementAttributeEquals(
-			$this->find('PasswordURL'),
-			'disabled',
-			'true'
-		);
-		// Test that button Next is disabled.
-		$this->assertElementHasClass(
-			$this->find('js_setup_submit_step'),
-			'disabled'
-		);
+	private function __testStepLoginRedirection() {
+		$this->waitUntilISee('#js_step_content h3', '/Please wait... you are being redirected to the login page/i');
+		$this->assertTitleEquals('Alright sparky, it\'s time to log in!');
 
-		// Fill up password.
-		$initialPassword = 'passwordtoapplication';
-		$this->inputText('js_setup_password', $initialPassword);
-		// Test that complexity has been updated.
-		$this->assertElementContainsText(
-			$this->findByCss('#js_user_pwd_strength .complexity-text strong'),
-			'fair'
-		);
-		// Test that progress bar contains class fair.
-		$this->assertElementHasClass(
-			$this->findByCss('#js_user_pwd_strength .progress .progress-bar'),
-			'fair'
-		);
-		// Test that password in clear is hidden.
-		$this->assertElementHasClass(
-			$this->find('js_setup_password_clear'),
-			'hidden'
-		);
-		// Test that generate password button works.
-		$this->find('js_gen_pwd_button')->click();
-		$this->assertTrue (
-			$this->find('js_setup_password')->getAttribute('value') != '',
-			'After password generation the password field should not be empty'
-		);
-		$this->assertTrue (
-			$this->find('js_setup_password')->getAttribute('value') != $initialPassword,
-			'After password generation the password field should be different than the initial password'
-		);
-		// Test that clicking on the view button shows the password in clear.
-		$this->find('js_show_pwd_button')->click();
-		// Test that show password button has the class selected.
-		$this->assertElementHasClass(
-			$this->find('js_show_pwd_button'),
-			'selected'
-		);
-		// Test that the clear password is visible.
-		$this->assertElementHasNotClass(
-			$this->find('js_setup_password_clear'),
-			'hidden'
-		);
-		// Hide password again.
-		$this->find('js_show_pwd_button')->click();
-		// Test that the clear password is back to hidden state.
-		$this->assertElementHasClass(
-			$this->find('js_setup_password_clear'),
-			'hidden'
-		);
 		// Test that button Next is enabled.
 		$this->assertElementHasClass(
 			$this->find('js_setup_submit_step'),
-			'enabled'
+			'processing'
 		);
+
+
+		// TODO : PASSBOLT-1151 reactivate this part of the test
+		//$this->waitUntilISee('Welcome back!');
+
+//		try{
+//			$this->findByCss('.users.login.form');
+//		} catch(Exception $e) {
+//			$this->fail('At the end of setup there should have been a redirection to the login page');
+//		}
 	}
 
 	/**
@@ -534,10 +523,8 @@ GFq/vw==
 	 * Then         I should reach the next step
 	 * And          I should see "Set a security token" as the title
 	 * When         I click "Next"
-	 * Then         I should reach the final step where I have to set the application password
+	 * Then         I should reach the final step where I am being redirected
 	 * And          The "Login !" menu should be selected
-	 * When         I click "Cancel"
-	 * Then         I should be back to the previous step with the security token
 	 *
 	 * @throws Exception
 	 */
@@ -640,16 +627,9 @@ GFq/vw==
 		// Press Next.
 		$this->clickLink("Next");
 		// Test that we are at the final step.
-		$this->waitUntilISee('#js_step_content h3', '/This is your password to login in the application itself/i');
+		$this->waitUntilISee('#js_step_content h3', '/Please wait... you are being redirected to the login page/i');
 		// Assert menu is selected.
 		$this->assertMenuIsSelected('5. Login !');
-		// Test that Cancel button is working.
-		$this->clickLink('Cancel');
-		// Wait.
-		$this->waitUntilISee('#js_step_content h3', '/Set a security token/i');
-		// Assert menu is selected.
-		$this->assertMenuIsSelected('4. Set a security token');
-
 		// Since content was edited, we reset the database
 		$this->resetDatabase();
 	}
@@ -682,19 +662,20 @@ GFq/vw==
 		$this->__goToSetup('johndoe@passbolt.com');
 		$this->__register();
 
-		// Check we are logged in.
-		$this->waitCompletion();
-		$this->waitUntilISee('#js_app_controller.ready');
-		// Check that the name is ok.
-		$this->assertElementContainsText(
-			$this->findByCss('.header .user.profile .details .name'),
-			'John Doe'
-		);
-		// Check that the email is ok.
-		$this->assertElementContainsText(
-			$this->findByCss('.header .user.profile .details .email'),
-			'johndoe@passbolt.com'
-		);
+		// TODO #PASSBOLT-1151
+//		// Check we are logged in.
+//		$this->waitCompletion();
+//		$this->waitUntilISee('#js_app_controller.ready');
+//		// Check that the name is ok.
+//		$this->assertElementContainsText(
+//			$this->findByCss('.header .user.profile .details .name'),
+//			'John Doe'
+//		);
+//		// Check that the email is ok.
+//		$this->assertElementContainsText(
+//			$this->findByCss('.header .user.profile .details .email'),
+//			'johndoe@passbolt.com'
+//		);
 
 		// Since content was edited, we reset the database
 		$this->resetDatabase();
@@ -738,33 +719,25 @@ GFq/vw==
 		// Click Next.
 		$this->clickLink("Next");
 		// Wait until sees next step.
-		$this->waitUntilISee('#js_step_content h3', '/This is your password to login in the application itself/i');
-		// Fill up password.
-		$initialPassword = 'ILovePassbolt!';
-		$this->inputText('js_setup_password', $initialPassword);
-		// Test that button Next is enabled.
-		$this->assertElementHasClass(
-			$this->find('js_setup_submit_step'),
-			'enabled'
-		);
-		// Click Next.
-		$this->clickLink("Next");
-		// Do not remove line below. Prevents the test to get stuck.
-		sleep(5);
+		$this->waitUntilISee('#js_step_content h3', '/Please wait... you are being redirected to the login page/i');
 
-		$this->waitCompletion();
-		// Check we are logged in.
-		$this->waitUntilISee('.page.password', null, 20);
-		// Check that the name is ok.
-		$this->assertElementContainsText(
-			$this->findByCss('.header .user.profile .details .name'),
-			'John Doe III'
-		);
-		// Check that the email is ok.
-		$this->assertElementContainsText(
-			$this->findByCss('.header .user.profile .details .email'),
-			'johndoe3@passbolt.com'
-		);
+		// TODO : #PASSBOLT-1151
+//		// Do not remove line below. Prevents the test to get stuck.
+//		sleep(5);
+//
+//		$this->waitCompletion();
+//		// Check we are logged in.
+//		$this->waitUntilISee('.page.password', null, 20);
+//		// Check that the name is ok.
+//		$this->assertElementContainsText(
+//			$this->findByCss('.header .user.profile .details .name'),
+//			'John Doe III'
+//		);
+//		// Check that the email is ok.
+//		$this->assertElementContainsText(
+//			$this->findByCss('.header .user.profile .details .email'),
+//			'johndoe3@passbolt.com'
+//		);
 
 		// Since content was edited, we reset the database
 		$this->resetDatabase();
@@ -832,13 +805,11 @@ GFq/vw==
 		// Click Next.
 		$this->clickLink("Next");
 		// Test enter application password step.
-		$this->__testStepEnterApplicationPassword();
-		// Click Next.
-		$this->clickLink("Next");
-		// Do not remove the line below. Without it the test gets stuck without a reason.
-		sleep(5);
-		// Check we are logged in.
-		$this->waitCompletion();
-		$this->waitUntilISee('#js_app_controller.ready');
+		$this->__testStepLoginRedirection();
+
+		// TODO : #PASSBOLT-1151
+		// Check we are in the log in page.
+		//$this->waitCompletion();
+		//$this->waitUntilISee('#js_app_controller.ready');
 	}
 }
