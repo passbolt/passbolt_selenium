@@ -52,7 +52,11 @@ class PassboltTestCase extends WebDriverTestCase {
 	 * @param $url
 	 */
 	public function getUrl($url=null) {
-		$url = Config::read('passbolt.url') . DS . $url;
+		if ($url == 'debug') {
+			$url = 'resource://passbolt-firefox-addon-at-passbolt-dot-com/data/config-debug.html';
+		} else {
+			$url = Config::read('passbolt.url') . DS . $url;
+		}
 		$this->driver->get($url);
 	}
 
@@ -121,6 +125,11 @@ class PassboltTestCase extends WebDriverTestCase {
 	 */
 	public function loginAs($email, $password = 'password') {
 		$this->getUrl('login');
+		$this->goIntoLoginIframe();
+		// Assert username is correct.
+		$usernameField = $this->findById('UserUsername');
+		$this->assertEquals($usernameField->attr('value'), $email);
+
 		$this->inputText('UserUsername', $email);
 		$this->inputText('UserPassword', $password);
 		$this->pressEnter();
@@ -151,6 +160,7 @@ class PassboltTestCase extends WebDriverTestCase {
 		sleep(1); // plugin need some time to trigger a page change
 
 		$this->inputText('baseUrl', Config::read('passbolt.url'));
+		$this->inputText('UserId',$config['id']);
 		$this->inputText('ProfileFirstName',$config['FirstName']);
 		$this->inputText('ProfileLastName',$config['LastName']);
 		$this->inputText('UserUsername',$config['Username']);
@@ -159,12 +169,27 @@ class PassboltTestCase extends WebDriverTestCase {
 		$this->inputText('securityTokenTextColor',$config['TokenTextColor']);
 		$this->click('js_save_conf');
 
+		// Assert it has been saved.
+		$this->assertElementContainsText(
+			$this->findbyCss('.user.settings.feedback'),
+			'User and settings have been saved!'
+		);
+
+		// Set the keys.
+
 		// PASSBOLT-1084 trick to speed up the test execution
 		if($config['Username'] != 'ada@passbolt.com') {
 			$key = file_get_contents(GPG_FIXTURES . DS . $config['PrivateKey'] );
-			$this->inputText('keyAscii', $key);
+			$this->inputText('myKeyAscii', $key);
 		}
 		$this->click('saveKey');
+		// Assert it has been saved.
+		$this->waitUntilISee('.my.key-import.feedback', '/The key has been imported succesfully/');
+
+		$key = file_get_contents(Config::read('passbolt.server_key.path'));
+		$this->inputText('serverKeyAscii', $key);
+		$this->click('saveServerKey');
+		$this->waitUntilISee('.server.key-import.feedback', '/The key has been imported successfully/');
 	}
 
 	/**
