@@ -30,6 +30,8 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
         $this->_checkSeleniumConfig();
         $capabilities = $this->_getCapabilities();
         $this->driver = RemoteWebDriver::create(Config::read('selenium.url'), $capabilities);
+	    // Redirect it immediately on an empty page, so we avoid the default home page.
+	    $this->driver->get('');
     }
 
     /**

@@ -426,7 +426,6 @@ GFq/vw==
 	 * Given        I am at the last step
 	 * Then         I should see a message telling me that I am being redirected.
 	 * And          I should see the login form after I am redirected.
-	 * And          I should be able to log in
 	 * @throws Exception
 	 */
 	private function __testStepLoginRedirection() {
@@ -439,15 +438,14 @@ GFq/vw==
 			'processing'
 		);
 
+		// I should be on the login page.
+		$this->waitUntilISee('.information h2', '/Welcome back!/');
 
-		// TODO : PASSBOLT-1151 reactivate this part of the test
-		//$this->waitUntilISee('Welcome back!');
-
-//		try{
-//			$this->findByCss('.users.login.form');
-//		} catch(Exception $e) {
-//			$this->fail('At the end of setup there should have been a redirection to the login page');
-//		}
+		try{
+			$this->findByCss('.users.login.form');
+		} catch(Exception $e) {
+			$this->fail('At the end of setup there should have been a redirection to the login page');
+		}
 	}
 
 	/**
@@ -662,20 +660,23 @@ GFq/vw==
 		$this->__goToSetup('johndoe@passbolt.com');
 		$this->__register();
 
-		// TODO #PASSBOLT-1151
-//		// Check we are logged in.
-//		$this->waitCompletion();
-//		$this->waitUntilISee('#js_app_controller.ready');
-//		// Check that the name is ok.
-//		$this->assertElementContainsText(
-//			$this->findByCss('.header .user.profile .details .name'),
-//			'John Doe'
-//		);
-//		// Check that the email is ok.
-//		$this->assertElementContainsText(
-//			$this->findByCss('.header .user.profile .details .email'),
-//			'johndoe@passbolt.com'
-//		);
+		$this->loginAs([
+			'Username' => 'johndoe@passbolt.com',
+			'MasterPassword' => 'johndoemasterpassword'
+		]);
+		// Check we are logged in.
+		$this->waitCompletion();
+		$this->waitUntilISee('#js_app_controller.ready');
+		// Check that the name is ok.
+		$this->assertElementContainsText(
+			$this->findByCss('.header .user.profile .details .name'),
+			'John Doe'
+		);
+		// Check that the email is ok.
+		$this->assertElementContainsText(
+			$this->findByCss('.header .user.profile .details .email'),
+			'johndoe@passbolt.com'
+		);
 
 		// Since content was edited, we reset the database
 		$this->resetDatabase();
@@ -700,6 +701,8 @@ GFq/vw==
 		$this->__goToSetup('johndoe3@passbolt.com');
 		// Wait
 		$this->waitUntilISee('#js_step_content h3', '/Plugin check/i');
+		// Wait for the server key to be retrieved.
+		sleep(2);
 		// Check box domain check.
 		$this->checkCheckbox('js_setup_domain_check');
 		// Click Next.
@@ -720,24 +723,28 @@ GFq/vw==
 		$this->clickLink("Next");
 		// Wait until sees next step.
 		$this->waitUntilISee('#js_step_content h3', '/Please wait... you are being redirected to the login page/i');
+		// Wait until I reach the login page
+		$this->waitUntilISee('.information h2', '/Welcome back!/');
 
-		// TODO : #PASSBOLT-1151
-//		// Do not remove line below. Prevents the test to get stuck.
-//		sleep(5);
-//
-//		$this->waitCompletion();
-//		// Check we are logged in.
-//		$this->waitUntilISee('.page.password', null, 20);
-//		// Check that the name is ok.
-//		$this->assertElementContainsText(
-//			$this->findByCss('.header .user.profile .details .name'),
-//			'John Doe III'
-//		);
-//		// Check that the email is ok.
-//		$this->assertElementContainsText(
-//			$this->findByCss('.header .user.profile .details .email'),
-//			'johndoe3@passbolt.com'
-//		);
+		// Login as john doe
+		$this->loginAs([
+			'Username' => 'johndoe3@passbolt.com',
+			'MasterPassword' => 'johndoemasterpassword'
+		]);
+
+		$this->waitCompletion();
+		// Check we are logged in.
+		$this->waitUntilISee('.page.password', null, 20);
+		// Check that the name is ok.
+		$this->assertElementContainsText(
+			$this->findByCss('.header .user.profile .details .name'),
+			'John Doe III'
+		);
+		// Check that the email is ok.
+		$this->assertElementContainsText(
+			$this->findByCss('.header .user.profile .details .email'),
+			'johndoe3@passbolt.com'
+		);
 
 		// Since content was edited, we reset the database
 		$this->resetDatabase();
@@ -806,10 +813,5 @@ GFq/vw==
 		$this->clickLink("Next");
 		// Test enter application password step.
 		$this->__testStepLoginRedirection();
-
-		// TODO : #PASSBOLT-1151
-		// Check we are in the log in page.
-		//$this->waitCompletion();
-		//$this->waitUntilISee('#js_app_controller.ready');
 	}
 }
