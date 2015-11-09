@@ -33,7 +33,7 @@ class PasswordCommentTest extends PassboltTestCase {
 	public function testCommentAdd() {
 		$comments = [
 			'this is a comment',
-			'reply to ths first comment',
+			'reply to the first comment',
 		];
 
 		// Given I am Ada
@@ -51,7 +51,7 @@ class PasswordCommentTest extends PassboltTestCase {
 		$this->clickPassword($resource['id']);
 
 		// Make sure password field is visible
-		$this->assertVisible($this->commentFormSelector);
+		$this->waitUntilISee($this->commentFormSelector);
 
 		// Fill up a first comment
 		$this->inputText('js_field_comment_content', $comments[0]);
@@ -69,8 +69,7 @@ class PasswordCommentTest extends PassboltTestCase {
 		$this->assertVisible('#js_rs_details_comments_list');
 
 		// Check whether the comments list contain the new comment.
-		$commentsList = $this->find('#js_rs_details_comments_list');
-		$this->assertElementContainsText($commentsList, $comments[0]);
+		$this->waitUntilISee('#js_rs_details_comments_list', '/' . $comments[0] . '/');
 
 		// Click on the + icon to add a new comment
 		$this->assertVisible('#js_rs_details_comments a.section-action');
@@ -84,9 +83,13 @@ class PasswordCommentTest extends PassboltTestCase {
 		$this->click('#js_rs_details_comments a.comment-submit');
 
 		// Check that the 2 comments are visible.
-		$commentsList = $this->find('#js_rs_details_comments_list');
-		$this->assertElementContainsText($commentsList, $comments[1]);
-		$this->assertElementContainsText($commentsList, $comments[0]);
+		$this->waitUntilISee('#js_rs_details_comments_list', '/' . $comments[1] . '/');
+		$this->assertElementContainsText(
+			$this->find('#js_rs_details_comments_list'),
+			$comments[0]
+		);
+
+		$this->resetDatabase();
 	}
 
 	/**
@@ -115,7 +118,7 @@ class PasswordCommentTest extends PassboltTestCase {
 		$this->clickPassword($resource['id']);
 
 		// Make sure password field is visible
-		$this->assertVisible($this->commentFormSelector);
+		$this->waitUntilISee($this->commentFormSelector);
 
 		// Click on submit.
 		$this->click('#js_rs_details_comments a.comment-submit');
@@ -161,7 +164,7 @@ class PasswordCommentTest extends PassboltTestCase {
 		$this->clickPassword($resource['id']);
 
 		// Make sure password field is visible
-		$this->assertVisible($this->commentFormSelector);
+		$this->waitUntilISee($this->commentFormSelector);
 
 		// Fill up a first comment
 		$this->inputText('js_field_comment_content', 'this is a test comment');
@@ -170,10 +173,7 @@ class PasswordCommentTest extends PassboltTestCase {
 		$this->click('#js_rs_details_comments a.comment-submit');
 
 		// Check whether the comments list contain the new comment.
-		$this->assertElementContainsText(
-			$this->find('#js_rs_details_comments_list'),
-			'this is a test comment'
-		);
+		$this->waitUntilISee('#js_rs_details_comments_list', '/this is a test comment/');
 		$this->assertNotVisible($this->commentFormSelector);
 
 		// Delete comment.
@@ -202,5 +202,7 @@ class PasswordCommentTest extends PassboltTestCase {
 			'this is a test comment'
 		);
 		$this->assertVisible($this->commentFormSelector);
+
+		$this->resetDatabase();
 	}
 }
