@@ -123,6 +123,12 @@ class PassboltTestCase extends WebDriverTestCase {
 	 * @param user
 	 */
 	public function loginAs($user) {
+		if (!is_array($user)) {
+			$user = [
+				'Username' => $user,
+				'MasterPassword' => $user
+			];
+		}
 		$this->getUrl('login');
 		$this->waitUntilISee('.plugin-check.firefox.success');
 		$this->waitUntilISee('.plugin-check.gpg.success');
@@ -187,8 +193,8 @@ class PassboltTestCase extends WebDriverTestCase {
 		// Assert it has been saved.
 		$this->waitUntilISee('.my.key-import.feedback', '/The key has been imported succesfully/');
 
-		$key = file_get_contents(Config::read('passbolt.server_key.path'));
-		$this->inputText('serverKeyAscii', $key);
+//		$key = file_get_contents(Config::read('passbolt.server_key.path'));
+//		$this->inputText('serverKeyAscii', $key);
 		$this->click('saveServerKey');
 		$this->waitUntilISee('.server.key-import.feedback', '/The key has been imported successfully/');
 	}
@@ -198,13 +204,14 @@ class PassboltTestCase extends WebDriverTestCase {
 	 * @param $data
 	 *  - username
 	 *  - masterpassword
-	 *  - password
 	 *
 	 * @throws Exception
 	 */
 	public function completeSetupWithKeyGeneration($data) {
 		// Check that we are on the setup page.
 		$this->assertPageContainsText('Plugin check');
+		// Wait for the checkbox to appear.
+		$this->waitUntilISee('#js_setup_domain_check');
 		// Check box domain check.
 		$this->checkCheckbox('js_setup_domain_check');
 		// Click Next.
@@ -230,12 +237,49 @@ class PassboltTestCase extends WebDriverTestCase {
 		// Press Next.
 		$this->clickLink("Next");
 		// Fill up password.
-		$this->inputText('js_setup_password', $data['password']);
+		$this->waitUntilISee('#js_step_content h3', '/you are being redirected/i');
+		// Wait until I see the login page.
+		$this->waitUntilISee('.information h2', '/Welcome back!/i');
+	}
+
+	/**
+	 * Complete the setup with key import
+	 * @param $data
+	 *  - private_key
+	 *
+	 * @throws Exception
+	 */
+	public function completeSetupWithKeyImport($data) {
+		// Check that we are on the setup page.
+		$this->assertPageContainsText('Plugin check');
+		// Wait for the checkbox to appear.
+		$this->waitUntilISee('#js_setup_domain_check');
+		// Check box domain check.
+		$this->checkCheckbox('js_setup_domain_check');
+		// Click Next.
+		$this->clickLink("Next");
+		// Wait
+		$this->waitUntilISee('#js_step_content h3', '/Create a new key/i');
+		// Click on import.
+		$this->clickLink('import');
+		// Wait until section is displayed.
+		$this->waitUntilISee('#js_step_title', '/Import an existing key or create a new one!/i');
+		// Enter key in the field.
+		$this->inputText('js_setup_import_key_text', $data['private_key']);
+		// Click Next
+		$this->clickLink('Next');
+		// Wait until the key is imported
+		$this->waitUntilISee('#js_step_title', '/Let\'s make sure you imported the right key/i');
 		// Press Next.
 		$this->clickLink("Next");
-		// Check we are logged in.
-		$this->waitCompletion();
-		$this->waitUntilISee('#js_app_controller.ready');
+		// Wait.
+		$this->waitUntilISee('#js_step_content h3', '/Set a security token/i');
+		// Press Next.
+		$this->clickLink("Next");
+		// Fill up password.
+		$this->waitUntilISee('#js_step_content h3', '/you are being redirected/i');
+		// Wait until I see the login page.
+		$this->waitUntilISee('.information h2', '/Welcome back!/i');
 	}
 
 	/**

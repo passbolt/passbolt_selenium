@@ -364,7 +364,7 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
         for ($i = 0; $i < $timeout * 10; $i++) {
             try {
                 $elt = $this->find($id);
-                if ($elt) {
+                if ($elt && $elt->isDisplayed()) {
                     if (is_null($regexp)) {
                         return true;
                     }

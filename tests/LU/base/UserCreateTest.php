@@ -386,30 +386,28 @@ class UserCreateTest extends PassboltTestCase {
 		// Go to user workspace
 		$this->gotoWorkspace('user');
 
+		// Create a user
 		$this->createUser([
-			'first_name' => 'normaluser',
-			'last_name'  => 'normaluser',
-			'username'   => 'normaluser@passbolt.com'
+			'first_name' => 'John',
+			'last_name'  => 'Doe',
+			'username'   => 'johndoe@passbolt.com'
 		]);
 
 		$this->logout();
 
 		// As AN, access the email sent after accoun creation
-		$this->getUrl('seleniumTests/showLastEmail/' . urlencode('normaluser@passbolt.com'));
+		$this->getUrl('seleniumTests/showLastEmail/' . urlencode('johndoe@passbolt.com'));
 		// Follow the link in the email.
 		$this->followLink('get started');
 		// Wait until I am sure that the page is loaded.
 		$this->waitUntilISee('.plugin-check-wrapper', '/Plugin check/');
 		// Go to login page. we don't need to complete the setup since we just want to check the login.
-		$this->completeSetupWithKeyGeneration([
-			'username' => 'normaluser@passbolt.com',
-			'password' => 'password',
-			'masterpassword' => 'masterpassword'
+		$this->completeSetupWithKeyImport([
+			'private_key'=>file_get_contents(Gpgkey::get(['name' => 'johndoe'])['filepath'])
 		]);
-		$this->logout();
-		$this->loginAs('normaluser@passbolt.com');
+		$this->loginAs('johndoe@passbolt.com');
 		$this->assertElementContainsText(
-			$this->find('js_app_profile_dropdown'), 'normaluser@passbolt.com'
+			$this->find('js_app_profile_dropdown'), 'johndoe@passbolt.com'
 		);
 		$this->resetDatabase();
 	}
@@ -446,24 +444,27 @@ class UserCreateTest extends PassboltTestCase {
 		$this->gotoWorkspace('user');
 
 		$this->createUser([
-			'first_name' => 'normaluser',
-			'last_name'  => 'normaluser',
-			'username'   => 'normaluser@passbolt.com'
+			'first_name' => 'John',
+			'last_name'  => 'Doe',
+			'username'   => 'johndoe@passbolt.com'
 		]);
 
 		$this->logout();
 		// As AN, access the email sent after accoun creation
-		$this->getUrl('seleniumTests/showLastEmail/' . urlencode('normaluser@passbolt.com'));
+		$this->getUrl('seleniumTests/showLastEmail/' . urlencode('johndoe@passbolt.com'));
 		// Follow the link in the email.
 		$this->followLink('get started');
 		// Wait until I am sure that the page is loaded.
 		$this->waitUntilISee('.plugin-check-wrapper', '/Plugin check/');
 		// Go to login page. we don't need to complete the setup since we just want to check the login.
-		$this->completeSetupWithKeyGeneration([
-			'username' => 'normaluser@passbolt.com',
-			'password' => 'password',
-			'masterpassword' => 'masterpassword'
+		$this->completeSetupWithKeyImport([
+			'private_key'=>file_get_contents(Gpgkey::get(['name' => 'johndoe'])['filepath'])
 		]);
+
+		$this->loginAs('johndoe@passbolt.com');
+		$this->assertElementContainsText(
+			$this->find('js_app_profile_dropdown'), 'johndoe@passbolt.com'
+		);
 
 		// Go to user workspace
 		$this->gotoWorkspace('user');
@@ -510,25 +511,31 @@ class UserCreateTest extends PassboltTestCase {
 		$this->gotoWorkspace('user');
 
 		$this->createUser([
-			'first_name' => 'adminuser',
-			'last_name'  => 'adminuser',
-			'username'   => 'adminuser@passbolt.com',
+			'first_name' => 'John',
+			'last_name'  => 'Doe',
+			'username'   => 'johndoe@passbolt.com',
 			'admin'      => true
 		]);
 
 		$this->logout();
 		// As AN, access the email sent after accoun creation
-		$this->getUrl('seleniumTests/showLastEmail/' . urlencode('adminuser@passbolt.com'));
+		$this->getUrl('seleniumTests/showLastEmail/' . urlencode('johndoe@passbolt.com'));
 		// Follow the link in the email.
 		$this->followLink('get started');
 		// Wait until I am sure that the page is loaded.
 		$this->waitUntilISee('.plugin-check-wrapper', '/Plugin check/');
 		// Go to login page. we don't need to complete the setup since we just want to check the login.
-		$this->completeSetupWithKeyGeneration([
-			'username' => 'adminuser@passbolt.com',
-			'password' => 'password',
-			'masterpassword' => 'masterpassword'
+		$this->completeSetupWithKeyImport([
+			'private_key'=>file_get_contents(Gpgkey::get(['name' => 'johndoe'])['filepath'])
 		]);
+
+		// Log in.
+		$this->loginAs('johndoe@passbolt.com');
+
+		// Assert user is logged in.
+		$this->assertElementContainsText(
+			$this->find('js_app_profile_dropdown'), 'johndoe@passbolt.com'
+		);
 
 		// Go to user workspace
 		$this->gotoWorkspace('user');
@@ -600,7 +607,7 @@ class UserCreateTest extends PassboltTestCase {
 		$this->logout();
 
 		// Given I am Ada
-		$user = User::get('ada');
+		$user = User::get('betty');
 		$this->setClientConfig($user);
 
 		// And I am logged in
@@ -609,7 +616,7 @@ class UserCreateTest extends PassboltTestCase {
 		// Go to user workspace
 		$this->gotoWorkspace('user');
 
-		// I see the password I created in my password list
+		// I don't see the user that has been created by admin
 		$this->assertElementNotContainText(
 			$this->find('js_passbolt_people_workspace_controller'), $newUser['first_name']
 		);
@@ -635,11 +642,11 @@ class UserCreateTest extends PassboltTestCase {
 			'password' => 'password',
 			'masterpassword' => 'masterpassword'
 		]);
-		// Logout
-		$this->logout();
 
 		// Given I am Ada
-		$user = User::get('ada');
+		$user = User::get('betty');
+		// And plugin is configured to use Ada
+		$this->setClientConfig($user);
 		// And I am logged in
 		$this->loginAs($user);
 
