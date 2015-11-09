@@ -11,5 +11,7 @@ define('DS', DIRECTORY_SEPARATOR);
 define('DATA', ROOT . DS . 'data' . DS);
 define('FIXTURES', DATA . 'fixtures' . DS);
 define('GPG_FIXTURES', FIXTURES . 'gpg');
+define('GPG_DUMMY', FIXTURES . 'gpg-dummy');
+define('GPG_SERVER', FIXTURES . 'gpg-server');
 
 require_once ROOT . '/passbolt/__init__.php';

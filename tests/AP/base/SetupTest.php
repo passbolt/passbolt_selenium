@@ -11,66 +11,94 @@
  */
 class SetupTest extends PassboltSetupTestCase {
 
-	// @TODO move to fixtures
-	private $defaultPrivateKey = '-----BEGIN PGP PRIVATE KEY BLOCK-----
-Version: GnuPG/MacGPG2 v2.0.22 (Darwin)
-Comment: GPGTools - https://gpgtools.org
+	public $sections = [
+		'domain_check' => [
+			'title'     => 'Welcome to passbolt! Let\'s take 5 min to setup your system.',
+			'subtitle'  => 'Plugin check',
+			'menu_item' => '1. Get the plugin'
+		],
+		'generate_key_form' => [
+			'title'     => 'Create a new key or import an existing one!',
+			'subtitle'  => 'Create a new key',
+			'menu_item' => '2. Define your keys'
 
-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
-GFq/vw==
-=YcG9
------END PGP PRIVATE KEY BLOCK-----';
+		],
+		'generate_key_master_password' => [
+			'title' => 'Now let\'s setup your master password!',
+			'subtitle'  => 'Create a new key',
+			'menu_item' => '3. Set a master password'
+		],
+		'generate_key_progress' => [
+			'title' => 'Give us a second while we crunch them numbers!',
+			'subtitle' => 'Generating the secret and public key',
+			'menu_item' => '3. Set a master password'
+		],
+		'generate_key_done' => [
+			'title' => 'Success! Your secret key is ready.',
+			'subtitle' => 'Let\'s make a backup',
+			'menu_item' => '3. Set a master password'
+		],
+		'import_key_form' => [
+			'title' => 'Import an existing key or create a new one!',
+			'subtitle' => 'Copy paste your public and private key below, or select it from a file.',
+			'menu_item' => '2. Import your key'
+		],
+		'import_key_done' => [
+			'title' => 'Let\'s make sure you imported the right key',
+			'subtitle' => 'Information for public and secret key',
+			'menu_item' => '2. Import your key'
+		],
+		'security_token' => [
+			'title' => 'We need a visual cue to protect us from the bad guys..',
+			'subtitle' => 'Set a security token',
+			'menu_item' => '4. Set a security token'
+		],
+		'login_redirect' => [
+			'title' => 'Alright sparky, it\'s time to log in!',
+			'subtitle' => 'Please wait... you are being redirected to the login page',
+			'menu_item' => '5. Login !'
+		],
+
+	];
+
+	/**
+	 * Wait until the requested section appears.
+	 * @param $sectionName
+	 *
+	 * @throws Exception
+	 */
+	private function __waitForSection($sectionName) {
+		$timeout = 10;
+		if ($sectionName == 'generate_key_done') {
+			$timeout = 30;
+		}
+		$this->waitUntilISee('#js_step_title', '/' . $this->__getSectionInfo($sectionName, 'title') . '/i', $timeout);
+		$this->waitUntilISee('#js_step_content h3', '/' . $this->__getSectionInfo($sectionName, 'subtitle') . '/i', $timeout);
+	}
+
+	/**
+	 * Get a section info as
+	 * @param        $sectionName
+	 *   name of the section
+	 *
+	 * @param string $info
+	 *   information requested. (title, subtitle, etc..)
+	 *
+	 * @return mixed
+	 * @throws Exception
+	 */
+	private function __getSectionInfo($sectionName, $info = '') {
+		if (!isset($this->sections[$sectionName])) {
+			throw new Exception('The section name provided doesnt exist');
+		}
+		if ($info != '') {
+			if (!isset($this->sections[$sectionName][$info])) {
+				throw new Exception('The info requested doesnt exist in that section');
+			}
+			return $this->sections[$sectionName][$info];
+		}
+		return $this->sections[$sectionName];
+	}
 
 	/**
 	 * go To Setup page.
@@ -211,9 +239,9 @@ GFq/vw==
 	 */
 	private function __testStepPrepareCreateKey() {
 		// Wait
-		$this->waitUntilISee('#js_step_content h3', '/Create a new key/i');
+		$this->__waitForSection('generate_key_form');
 		// Test that the text corresponding to key section is set.
-		$this->assertTitleEquals( 'Create a new key or import an existing one!' );
+		$this->assertTitleEquals( $this->__getSectionInfo('generate_key_form', 'title') );
 		// Test that field owner name is set to John Doe.
 		$this->assertElementAttributeEquals(
 			$this->findById('OwnerName'),
@@ -249,7 +277,8 @@ GFq/vw==
 	 * @throws Exception
 	 */
 	private function __testStepEnterMasterPassword() {
-		$this->waitUntilISee('#js_step_title', '/Now let\'s setup your master password!/i');
+		// Wait until section appears.
+		$this->__waitForSection('generate_key_master_password');
 
 		// Fill master key.
 		$this->inputText('js_field_password', 'johndoemasterpassword');
@@ -294,9 +323,14 @@ GFq/vw==
 	 *
 	 * @throws Exception
 	 */
-	private function __testStepImportKey() {
-		// I should see a text field to import my key.
-		$this->waitUntilISee('#js_setup_import_key_text');
+	private function __testStepImportKey($key = []) {
+		// Get the Gpgkey.
+		if (empty($key)) {
+			$this->fail('The function should be provided a key as argument');
+		}
+
+		// Wait until section appears.
+		$this->__waitForSection('import_key_form');
 		// Test that button next is disabled by default.
 		$this->assertElementHasClass(
 			$this->find('js_setup_submit_step'),
@@ -329,31 +363,35 @@ GFq/vw==
 		// Emtpy value.
 		$this->find('js_setup_import_key_text')->clear();
 		// Paste a correct key.
-		$this->inputText('js_setup_import_key_text', $this->defaultPrivateKey);
+		$keyData = file_get_contents($key['filepath']);
+		$this->inputText('js_setup_import_key_text', $keyData);
 		// Click Next
 		$this->clickLink('Next');
-		// Wait
-		$this->waitUntilISee('js_step_title', '/Let\'s make sure you imported the right key/i');
-		// Assert that there is a warning message
-		$this->assertElementHasClass(
-			$this->findByCss('#js_step_content .message'),
-			'warning'
+
+		// Wait until section appears.
+		$this->__waitForSection('import_key_done');
+
+		// I should see a success message.
+		$this->assertElementContainsText(
+			$this->findByCss('.message.success'),
+			'Success'
+		);
+
+		$this->assertElementContainsText(
+			$this->findByCss('#js_step_content .table-info .owner_name'),
+			$key['owner_name']
 		);
 		$this->assertElementContainsText(
-			$this->findByCss('#js_step_content .table-info'),
-			'Passbolt PGP'
+			$this->findByCss('#js_step_content .table-info .owner_email'),
+			$key['owner_email']
 		);
 		$this->assertElementContainsText(
-			$this->findByCss('#js_step_content .table-info'),
-			'passbolt@passbolt.com'
+			$this->findByCss('#js_step_content .table-info .keyid'),
+			$key['keyid']
 		);
 		$this->assertElementContainsText(
-			$this->findByCss('#js_step_content .table-info'),
-			'4f8194025fd2d92c'
-		);
-		$this->assertElementContainsText(
-			$this->findByCss('#js_step_content .table-info'),
-			'120f87dde5a438de89826d464f8194025fd2d92c'
+			$this->findByCss('#js_step_content .table-info .fingerprint'),
+			$key['fingerprint']
 		);
 	}
 
@@ -369,16 +407,18 @@ GFq/vw==
 	 * @throws Exception
 	 */
 	private function __testStepGenerateAndDownloadKey() {
-		$this->assertTitleEquals('Give us a second while we crunch them numbers!');
-		$this->assertElementContainsText('#js_step_content h3', '/Generating the secret and public key/i');
-
 		$this->assertElementHasClass(
 			$this->find('js_setup_submit_step'),
 			'processing'
 		);
+		// Wait until section appears.
+		$this->__waitForSection('generate_key_progress');
 
 		$this->waitUntilISee('#js_setup_submit_step.enabled', null, 20);
-		$this->waitUntilISee('#js_step_title', '/Success! Your secret key is ready./i');
+
+		// Wait till the key is generated.
+		$this->__waitForSection('generate_key_done');
+
 		$this->assertElementHasClass(
 			$this->findByCss('.plugin-check-wrapper .message'),
 			'success'
@@ -403,9 +443,12 @@ GFq/vw==
 	 * @throws Exception
 	 */
 	private function __testStepSecurityToken() {
-		$this->waitUntilISee('#js_step_content h3', '/Set a security token/i');
+		// Wait for section
+		$this->__waitForSection('security_token');
 
-		$this->assertTitleEquals('We need a visual cue to protect us from the bad guys..');
+		// I should see the title.
+		$this->assertTitleEquals($this->__getSectionInfo('security_token', 'title'));
+
 		// Test that default values are filled by default..
 		$this->assertTrue(
 			$this->find('js_security_token_text')->getAttribute('value') != '',
@@ -429,8 +472,11 @@ GFq/vw==
 	 * @throws Exception
 	 */
 	private function __testStepLoginRedirection() {
-		$this->waitUntilISee('#js_step_content h3', '/Please wait... you are being redirected to the login page/i');
-		$this->assertTitleEquals('Alright sparky, it\'s time to log in!');
+		// Wait for section.
+		$this->__waitForSection('login_redirect');
+
+		// I should see the subtitle.
+		$this->assertTitleEquals($this->__getSectionInfo('login_redirect', 'title'));
 
 		// Test that button Next is enabled.
 		$this->assertElementHasClass(
@@ -533,101 +579,101 @@ GFq/vw==
 		// Go to Setup page.
 		$this->__goToSetup('johndoe@passbolt.com');
         // Wait until I see the first page of setup.
-		$this->waitUntilISee('#js_step_content h3', '/Plugin check/i');
+		$this->__waitForSection('domain_check');
 		// Assert menu is selected.
-		$this->assertMenuIsSelected('1. Get the plugin');
+		$this->assertMenuIsSelected($this->__getSectionInfo('domain_check', 'menu_item'));
+		sleep(2);
 		// Check box domain check.
 		$this->checkCheckbox('js_setup_domain_check');
 		// Click Next.
 		$this->clickLink("Next");
 		// Wait
-		$this->waitUntilISee('#js_step_content h3', '/Create a new key/i');
+		$this->__waitForSection('generate_key_form');
 		// Assert menu is selected.
-		$this->assertMenuIsSelected('2. Define your keys');
+		$this->assertMenuIsSelected($this->__getSectionInfo('generate_key_form', 'menu_item'));
 		// Test that Cancel button is working.
 		$this->clickLink('Cancel');
 		// Test that we are back at step 1.
-		$this->waitUntilISee('#js_step_content h3', '/Plugin check/i');
+		$this->__waitForSection('domain_check');
 		// Assert menu is selected.
-		$this->assertMenuIsSelected('1. Get the plugin');
+		$this->assertMenuIsSelected($this->__getSectionInfo('domain_check', 'menu_item'));
+		sleep(2);
 		// Check box domain check.
 		$this->checkCheckbox('js_setup_domain_check');
 		// Click Next.
 		$this->clickLink("Next");
 		// Wait
-		$this->waitUntilISee('#js_step_title', '/Create a new key or import an existing one!/i');
+		$this->__waitForSection('generate_key_form');
 		// Click on import.
 		$this->clickLink('import');
 		// Wait
-		$this->waitUntilISee('#js_step_title', '/Import an existing key or create a new one!/i');
+		$this->__waitForSection('import_key_form');
 		// Click on create.
 		$this->clickLink('create');
 		// Wait
-		$this->waitUntilISee('#js_step_title', '/Create a new key or import an existing one!/i');
-		// Wait
-		$this->waitUntilISee('#js_step_title', '/Create a new key/i');
+		$this->__waitForSection('generate_key_form');
 		// Click Next.
 		$this->clickLink("Next");
 		// Wait until we see the title Master password.
-		$this->waitUntilISee('#js_step_title', '/Now let\'s setup your master password!/i');
+		$this->__waitForSection('generate_key_master_password');
 		// Assert menu is selected.
-		$this->assertMenuIsSelected('3. Set a master password');
+		$this->assertMenuIsSelected($this->__getSectionInfo('generate_key_master_password', 'menu_item'));
 		// Test that Cancel button is working.
 		$this->clickLink('Cancel');
 		// Wait
 		$this->waitUntilISee('#js_step_title', '/Create a new key/i');
 		// Assert menu is selected.
-		$this->assertMenuIsSelected('2. Define your keys');
+		$this->assertMenuIsSelected($this->__getSectionInfo('generate_key_form', 'menu_item'));
 		// Click Next.
 		$this->clickLink("Next");
 		// Wait until we see the title Master password.
-		$this->waitUntilISee('#js_step_title', '/Now let\'s setup your master password!/i');
+		$this->__waitForSection('generate_key_master_password');
 		// Fill master key.
 		$this->inputText('js_field_password', 'johndoemasterpassword');
 		// Press Next.
 		$this->clickLink("Next");
 		// Wait to reach the page.
-		$this->waitUntilISee('#js_step_content h3', '/Generating the secret and public key/i');
+		$this->__waitForSection('generate_key_progress');
 		// Wait until the key is generated.
-		$this->waitUntilISee('#js_step_title', '/Success! Your secret key is ready./i', 20);
+		$this->__waitForSection('generate_key_done');
 		// Assert menu is selected.
-		$this->assertMenuIsSelected('3. Set a master password');
+		$this->assertMenuIsSelected($this->__getSectionInfo('generate_key_done', 'menu_item'));
 		// The key is generated, we can click Next.
 		$this->clickLink("Cancel");
 		// Wait until we see the title Master password.
-		$this->waitUntilISee('#js_step_title', '/Now let\'s setup your master password!/i');
+		$this->__waitForSection('generate_key_master_password');
 		// Assert menu is selected.
-		$this->assertMenuIsSelected('3. Set a master password');
+		$this->assertMenuIsSelected($this->__getSectionInfo('generate_key_master_password', 'menu_item'));
 		// Fill master key.
 		$this->inputText('js_field_password', 'johndoemasterpassword');
 		// Press Next.
 		$this->clickLink("Next");
 		// Wait to reach the page.
-		$this->waitUntilISee('#js_step_content h3', '/Generating the secret and public key/i');
+		$this->__waitForSection('generate_key_progress');
 		// Wait until we see the title Master password.
-		$this->waitUntilISee('#js_step_title', '/Success! Your secret key is ready./i');
+		$this->__waitForSection('generate_key_done');
 		// Assert menu is selected.
-		$this->assertMenuIsSelected('3. Set a master password');
+		$this->assertMenuIsSelected($this->__getSectionInfo('generate_key_done', 'menu_item'));
 		// Press Next.
 		$this->clickLink("Next");
 		// Wait.
-		$this->waitUntilISee('#js_step_content h3', '/Set a security token/i');
+		$this->__waitForSection('security_token');
 		// Assert menu is selected.
-		$this->assertMenuIsSelected('4. Set a security token');
+		$this->assertMenuIsSelected($this->__getSectionInfo('security_token', 'menu_item'));
 		// Test that Cancel button is working.
 		$this->clickLink('Cancel');
 		// Wait until we see the title Your secret key is ready.
-		$this->waitUntilISee('#js_step_title', '/Success! Your secret key is ready./i');
+		$this->__waitForSection('generate_key_done');
 		// Press Next.
 		$this->clickLink("Next");
 		// Wait.
-		$this->waitUntilISee('#js_step_content h3', '/Set a security token/i');
+		$this->__waitForSection('security_token');
 		// Press Next.
 		$this->clickLink("Next");
 		// Test that we are at the final step.
-		$this->waitUntilISee('#js_step_content h3', '/Please wait... you are being redirected to the login page/i');
+		$this->__waitForSection('login_redirect');
 		// Assert menu is selected.
-		$this->assertMenuIsSelected('5. Login !');
+		$this->assertMenuIsSelected($this->__getSectionInfo('login_redirect', 'menu_item'));
 		// Since content was edited, we reset the database
 		$this->resetDatabase();
 	}
@@ -694,13 +740,15 @@ GFq/vw==
 	 * @throws Exception
 	 */
 	public function testFollowSetupWithImportKey() {
+		$key = Gpgkey::get(['name' => 'johndoe']);
+
 		// Register John Doe as a user.
-		$this->registerUser('John', 'Doe III', 'johndoe3@passbolt.com');
+		$this->registerUser('John', 'Doe', $key['owner_email']);
 
 		// Go to setup page.
-		$this->__goToSetup('johndoe3@passbolt.com');
+		$this->__goToSetup($key['owner_email']);
 		// Wait
-		$this->waitUntilISee('#js_step_content h3', '/Plugin check/i');
+		$this->__waitForSection('domain_check');
 		// Wait for the server key to be retrieved.
 		sleep(2);
 		// Check box domain check.
@@ -708,28 +756,28 @@ GFq/vw==
 		// Click Next.
 		$this->clickLink("Next");
 		// Wait
-		$this->waitUntilISee('#js_step_title', '/Create a new key or import an existing one!/i');
+		$this->__waitForSection('generate_key_form');
 		// Click on import.
 		$this->clickLink('import');
 		// Wait
-		$this->waitUntilISee('#js_step_title', '/Import an existing key or create a new one!/i');
+		$this->__waitForSection('import_key_form');
 		// Test step import key.
-		$this->__testStepImportKey();
+		$this->__testStepImportKey($key);
 		// Click Next
 		$this->clickLink('Next');
 		// Wait until next step.
-		$this->waitUntilISee('#js_step_content h3', '/Set a security token/i');
+		$this->__waitForSection('security_token');
 		// Click Next.
 		$this->clickLink("Next");
 		// Wait until sees next step.
-		$this->waitUntilISee('#js_step_content h3', '/Please wait... you are being redirected to the login page/i');
+		$this->__waitForSection('login_redirect');
 		// Wait until I reach the login page
 		$this->waitUntilISee('.information h2', '/Welcome back!/');
 
 		// Login as john doe
 		$this->loginAs([
-			'Username' => 'johndoe3@passbolt.com',
-			'MasterPassword' => 'johndoemasterpassword'
+			'Username' => $key['owner_email'],
+			'MasterPassword' => $key['masterpassword']
 		]);
 
 		$this->waitCompletion();
@@ -738,12 +786,12 @@ GFq/vw==
 		// Check that the name is ok.
 		$this->assertElementContainsText(
 			$this->findByCss('.header .user.profile .details .name'),
-			'John Doe III'
+			$key['owner_name']
 		);
 		// Check that the email is ok.
 		$this->assertElementContainsText(
 			$this->findByCss('.header .user.profile .details .email'),
-			'johndoe3@passbolt.com'
+			$key['owner_email']
 		);
 
 		// Since content was edited, we reset the database
