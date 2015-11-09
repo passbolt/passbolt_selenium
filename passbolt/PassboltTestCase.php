@@ -186,7 +186,15 @@ class PassboltTestCase extends WebDriverTestCase {
 
 		// PASSBOLT-1084 trick to speed up the test execution
 		if($config['Username'] != 'ada@passbolt.com') {
-			$key = file_get_contents(GPG_FIXTURES . DS . $config['PrivateKey'] );
+			$key = '';
+			// If the key provided is a path, then look in the complete path.
+			if (strpos($config['PrivateKey'], '/') !== FALSE) {
+				$key = file_get_contents( $config['PrivateKey'] );
+			}
+			// Else look in the fixtures only.
+			else {
+				$key = file_get_contents(GPG_FIXTURES . DS . $config['PrivateKey'] );
+			}
 			$this->inputText('myKeyAscii', $key);
 		}
 		$this->click('saveKey');

@@ -297,6 +297,7 @@ class UserWorkspaceTest extends PassboltTestCase {
 		$user = User::get('admin');
 
 		// And I am logged in on the user workspace
+		$this->setClientConfig($user);
 		$this->loginAs($user);
 		$this->gotoWorkspace('user');
 
@@ -349,6 +350,7 @@ class UserWorkspaceTest extends PassboltTestCase {
 		$user = User::get('ada');
 
 		// And I am logged in on the user workspace
+		$this->setClientConfig($user);
 		$this->loginAs($user);
 		$this->gotoWorkspace('user');
 

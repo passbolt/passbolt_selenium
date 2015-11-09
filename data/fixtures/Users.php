@@ -60,6 +60,24 @@ class User {
 			        'PrivateKey' => 'admin_private.key'
 		        ));
 		        break;
+
+	        /***************************************************
+	         *  Definition of non existing users we can
+	         *  reuse to create predictive data
+	         ***************************************************/
+
+	        case 'john':
+		        return array_merge($conf,array(
+			        'id' => Uuid::get('johndoe@passbolt.com'),
+			        'name' => 'john',
+			        'FirstName' => 'John',
+			        'LastName' => 'Doe',
+			        'Username' => 'johndoe@passbolt.com',
+			        'MasterPassword' => 'johndoe@passbolt.com',
+			        'TokenCode' => 'JON',
+			        'PrivateKey' => Gpgkey::get(['name' => 'johndoe'])['filepath']
+		        ));
+		        break;
         }
     }
 }

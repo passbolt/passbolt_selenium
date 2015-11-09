@@ -384,6 +384,7 @@ class UserEditTest extends PassboltTestCase {
 
 		// And I log in as the user who has been edited
 		$user = User::get( 'betty' );
+		$this->setClientConfig( $user );
 		$this->loginAs( $user['Username'] );
 
 		// And go to the user workspace
@@ -438,14 +439,14 @@ class UserEditTest extends PassboltTestCase {
 
 		// Create user
 		$newUser = [
-			'first_name' => 'admintest',
-			'last_name'  => 'admintest',
-			'username'   => 'admintest@passbolt.com',
+			'first_name' => 'John',
+			'last_name'  => 'Doe',
+			'username'   => 'johndoe@passbolt.com',
 			'admin'      => true
 		];
 		$this->createUser($newUser);
 
-		// Logout
+		// Log out.
 		$this->logout();
 
 		// As new user, access the email sent after accoun creation
@@ -455,17 +456,13 @@ class UserEditTest extends PassboltTestCase {
 		// Wait until I am sure that the page is loaded.
 		$this->waitUntilISee('.plugin-check-wrapper', '/Plugin check/');
 		// Go to login page. we don't need to complete the setup since we just want to check the login.
-		$this->completeSetupWithKeyGeneration([
-			'username' => $newUser['username'],
-			'password' => 'password',
-			'masterpassword' => 'masterpassword'
+		$this->completeSetupWithKeyImport([
+			'private_key'=>file_get_contents(Gpgkey::get(['name' => 'johndoe'])['filepath'])
 		]);
-		// Logout
-		$this->logout();
 
 		// Given I am Admin
 		$user = User::get( 'admin' );
-
+		$this->setClientConfig( $user );
 		// And I am logged in on the user workspace
 		$this->loginAs( $user['Username'] );
 		$this->gotoWorkspace( 'user' );
@@ -488,6 +485,9 @@ class UserEditTest extends PassboltTestCase {
 		// When I logout
 		$this->logout();
 
+		// Through the dummies, we can predict the user that was created (predictible uuid).
+		$user = User::get( 'john' );
+		$this->setClientConfig( $user );
 		// And I login again as the newly created user
 		$this->loginAs( $newUser['username'] );
 
@@ -556,7 +556,7 @@ class UserEditTest extends PassboltTestCase {
 		$this->getUrl('logout');
 
 		// And I am Ada
-		$user = User::get('ada');
+		$user = User::get('carol');
 		$this->setClientConfig($user);
 
 		// And I am logged in on the user workspace
