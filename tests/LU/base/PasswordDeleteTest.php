@@ -125,7 +125,7 @@ class PasswordDeleteTest extends PassboltTestCase
         $this->setClientConfig($userA);
 
         // And I am logged in on the password workspace
-        $this->loginAs($userA['Username']);
+        $this->loginAs($userA);
 
         // Then I can see a password shared with ada in the list
         $resource = Resource::get(array('user' => 'ada', 'id' => Uuid::get('resource.id.apache')));
@@ -136,10 +136,10 @@ class PasswordDeleteTest extends PassboltTestCase
 
         // And I am Betty
         $userB = User::get('betty');
-        $this->setClientConfig($userA);
+        $this->setClientConfig($userB);
 
         // And I am logged in on the password workspace
-        $this->loginAs($userB['Username']);
+        $this->loginAs($userB);
 
         // When I click on the password shared with Ada
         $this->assertVisible('resource_' . $resource['id']);
@@ -170,7 +170,7 @@ class PasswordDeleteTest extends PassboltTestCase
         $this->setClientConfig($userB);
 
         // And I am logged in on the password worskpace
-        $this->loginAs($userB['Username']);
+        $this->loginAs($userB);
 
         // And I should not see the password deleted by ada in the list anymore
         $this->assertNotVisible('resource_' . $resource['id']);
