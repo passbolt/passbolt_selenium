@@ -9,6 +9,7 @@ class LoginTest extends PassboltTestCase {
 
     public function testLogin() {
         $this->getUrl('login');
+	    sleep(1);
         $this->assertVisible('.plugin-check.firefox.warning');
 
         $user = User::get('ada');
