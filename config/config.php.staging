@@ -8,11 +8,11 @@
 $config = array (
 	// the base url to use to access this app
 	'testsuite' => array(
-		'url' => 'http://52.11.203.62/passbolt_selenium'
+		'url' => 'http://52.32.88.103/passbolt_selenium'
 	),
 	// the url of your passbolt app
 	'passbolt' => array (
-		'url' => 'http://52.11.203.62:8081',
+		'url' => 'http://52.32.88.103:8081',
 		'server_key' => array(
             'fingerprint' => '2FC8945833C51946E937F9FED47B0811573EE67E',
             'path'        => GPG_FIXTURES . DS . 'server_public.key'
@@ -30,7 +30,7 @@ $config = array (
 	),
 	// the base url of your selenium server
 	'selenium' => array (
-		'url' => 'http://52.11.203.62:4444/wd/hub'
+		'url' => 'http://52.32.88.103:4444/wd/hub'
 	),
 	'browsers' => array (
 		'default' => 'firefox_with_passbolt_extension',
