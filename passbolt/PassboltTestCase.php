@@ -129,7 +129,15 @@ class PassboltTestCase extends WebDriverTestCase {
 				'MasterPassword' => $user
 			];
 		}
-		$this->getUrl('login');
+
+		// If not on the login page, we redirect to it.
+		try {
+			$this->find('.users.login.form');
+		}
+		catch(Exception $e) {
+			$this->getUrl('login');
+		}
+
 		$this->waitUntilISee('.plugin-check.firefox.success');
 		$this->waitUntilISee('.plugin-check.gpg.success');
 		$this->goIntoLoginIframe();
@@ -159,33 +167,92 @@ class PassboltTestCase extends WebDriverTestCase {
 	}
 
 	/**
+	 * Trigger an event on a page.
+	 * @param $eventName
+	 */
+	public function triggerEvent($eventName) {
+		$fireEvent = 'function fireEvent(obj, evt, data){
+		     var fireOnThis = obj;
+		     if( document.createEvent ) {
+		       var evObj = document.createEvent("MouseEvents");
+		       evObj.initEvent( evt, true, false );
+		       fireOnThis.dispatchEvent( evObj );
+		     }
+		      else if( document.createEventObject ) { //IE
+		       var evObj = document.createEventObject();
+		       fireOnThis.fireEvent( "on" + evt, evObj );
+		     }
+		}
+		fireEvent(window, "' . $eventName . '");';
+		$this->driver->executeScript($fireEvent);
+	}
+
+	/**
+	 * Set client config data.
+	 * Populate the field js_auto_settings from the debug page, with the settings given.
+	 * The settings are encoded in json, and base64 to avoir return to lines which cause issues in javascript.
+	 * The debug page then decode these data, and populate the settings fields.
+	 * This method is much faster that asking the driver to fill the fields manually.
+	 * @param $config
+	 */
+	function _setClientConfigData($config) {
+		$configBase64 = base64_encode(json_encode($config));
+		$setData = "
+			document.getElementById(\"js_auto_settings\").value='$configBase64';
+		";
+		$this->driver->executeScript($setData);
+	}
+
+	/**
 	 * Use the debug screen to set the values set by the setup
 	 * @param $config array user config (see fixtures)
+	 * @param $manual bool whether the data should be entered manually, or through javascript.
 	 */
-	public function setClientConfig($config) {
+	public function setClientConfig($config, $manual = false) {
 		$this->getUrl('debug');
-		sleep(1); // plugin need some time to trigger a page change
+		$this->waitUntilISee('.config.page');
 
-		$this->inputText('baseUrl', Config::read('passbolt.url'));
-		$this->inputText('UserId',$config['id']);
-		$this->inputText('ProfileFirstName',$config['FirstName']);
-		$this->inputText('ProfileLastName',$config['LastName']);
-		$this->inputText('UserUsername',$config['Username']);
-		$this->inputText('securityTokenCode',$config['TokenCode']);
-		$this->inputText('securityTokenColor',$config['TokenColor']);
-		$this->inputText('securityTokenTextColor',$config['TokenTextColor']);
-		$this->click('js_save_conf');
+		$userPrivateKey = '';
+		// If the key provided is a path, then look in the complete path.
+		if (strpos($config['PrivateKey'], '/') !== FALSE) {
+			$userPrivateKey = file_get_contents( $config['PrivateKey'] );
+		}
+		// Else look in the fixtures only.
+		else {
+			$userPrivateKey = file_get_contents(GPG_FIXTURES . DS . $config['PrivateKey'] );
+		}
 
-		// Assert it has been saved.
-		$this->assertElementContainsText(
-			$this->findbyCss('.user.settings.feedback'),
-			'User and settings have been saved!'
-		);
+		// Fill config data through javascript
+		if (!$manual) {
+			$conf = [
+				'baseUrl' => Config::read('passbolt.url'),
+				'UserId'  => $config['id'],
+				'ProfileFirstName' => $config['FirstName'],
+				'ProfileLastName' => $config['LastName'],
+				'UserUsername' => $config['Username'],
+				'securityTokenCode' => $config['TokenCode'],
+				'securityTokenColor' => $config['TokenColor'],
+				'securityTokenTextColor' => $config['TokenTextColor'],
+				'myKeyAscii' => $userPrivateKey,
+				'serverKeyAscii' => file_get_contents(Config::read('passbolt.server_key.path'))
+			];
+			$this->_setClientConfigData($conf);
+			$this->triggerEvent('passbolt.debug.settings.set');
 
-		// Set the keys.
+			$this->waitUntilISee('.debug-data-set');
+		}
+		// Fill config data manually
+		else {
+			$this->inputText('baseUrl', Config::read('passbolt.url'));
+			$this->inputText('UserId',$config['id']);
+			$this->inputText('ProfileFirstName',$config['FirstName']);
+			$this->inputText('ProfileLastName',$config['LastName']);
+			$this->inputText('UserUsername',$config['Username']);
+			$this->inputText('securityTokenCode',$config['TokenCode']);
+			$this->inputText('securityTokenColor',$config['TokenColor']);
+			$this->inputText('securityTokenTextColor',$config['TokenTextColor']);
 
-		// PASSBOLT-1084 trick to speed up the test execution
-		if($config['Username'] != 'ada@passbolt.com') {
+			// Set the keys.
 			$key = '';
 			// If the key provided is a path, then look in the complete path.
 			if (strpos($config['PrivateKey'], '/') !== FALSE) {
@@ -196,13 +263,22 @@ class PassboltTestCase extends WebDriverTestCase {
 				$key = file_get_contents(GPG_FIXTURES . DS . $config['PrivateKey'] );
 			}
 			$this->inputText('myKeyAscii', $key);
+
+			$key = file_get_contents(Config::read('passbolt.server_key.path'));
+			$this->inputText('serverKeyAscii', $key);
 		}
+
+		$this->click('js_save_conf');
+		// Assert it has been saved.
+		$this->assertElementContainsText(
+			$this->findbyCss('.user.settings.feedback'),
+			'User and settings have been saved!'
+		);
+
 		$this->click('saveKey');
 		// Assert it has been saved.
 		$this->waitUntilISee('.my.key-import.feedback', '/The key has been imported succesfully/');
 
-//		$key = file_get_contents(Config::read('passbolt.server_key.path'));
-//		$this->inputText('serverKeyAscii', $key);
 		$this->click('saveServerKey');
 		$this->waitUntilISee('.server.key-import.feedback', '/The key has been imported successfully/');
 	}
