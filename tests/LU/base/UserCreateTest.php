@@ -477,6 +477,9 @@ class UserCreateTest extends PassboltTestCase {
 
 		// Observe that delete button is not visible
 		$this->assertNotVisible('js_user_wk_menu_deletion_button');
+
+		// Reset database.
+		$this->resetDatabase();
 	}
 
 	/**
@@ -548,6 +551,9 @@ class UserCreateTest extends PassboltTestCase {
 
 		// Observe that delete button is visible
 		$this->assertVisible('js_user_wk_menu_deletion_button');
+
+		// Reset database.
+		$this->resetDatabase();
 	}
 
 	/**
