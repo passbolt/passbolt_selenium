@@ -35,11 +35,15 @@ class LoginTest extends PassboltTestCase {
         $this->click('loginSubmit');
         $this->assertElementContainsText('loginMessage','Please wait');
         $this->waitCompletion();
-        $this->assertElementContainsText('loginMessage','You are now logged in!');
 
         // wait for redirection trigger
         sleep(1);
         $this->waitCompletion();
+
+	    $this->assertElementContainsText(
+		    $this->findByCss('.header .user.profile .details .name'),
+		    'Ada Lovelace'
+	    );
     }
 
 }
