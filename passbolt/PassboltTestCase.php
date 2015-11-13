@@ -67,6 +67,9 @@ class PassboltTestCase extends WebDriverTestCase {
 	public function gotoWorkspace($name) {
 		$linkCssSelector = '';
 		switch ($name) {
+			case 'password':
+				$linkCssSelector = '#js_app_nav_left_pwd_wsp_link a';
+				break;
 			default:
 				$linkCssSelector = '#js_app_nav_left_' . $name . '_wsp_link a';
 				break;
@@ -537,6 +540,11 @@ class PassboltTestCase extends WebDriverTestCase {
 			$this->goOutOfIframe();
 			$this->assertMasterPasswordDialog($user);
 			$this->enterMasterPassword($user['MasterPassword']);
+			$this->waitUntilIDontSee('passbolt-iframe-master-password');
+
+			// Wait for password to be decrypted.
+			// TODO : update when a different system based on classes will be there on the field. See #PASSBOLT-1154
+			sleep(4);
 			$this->inputSecret($password['password']);
 		}
 		if (isset($password['description'])) {
@@ -687,11 +695,12 @@ class PassboltTestCase extends WebDriverTestCase {
 	 */
 	public function copyToClipboard($resource, $user) {
 		$this->rightClickPassword($resource['id']);
-		// Without the line below, the click doesn't seem to be propagated.
-		sleep(2);
+		$this->waitUntilISee('js_contextual_menu');
 		$this->clickLink('Copy password');
+		sleep(1);
 		$this->assertMasterPasswordDialog($user);
 		$this->enterMasterPassword($user['MasterPassword']);
+		$this->assertNotification('plugin_secret_copy_success');
 	}
 
 	/**

@@ -19,11 +19,8 @@
     </php>
 
     <testsuites>
-        <testsuite>
-            <file>./base/ConfigTest.php</file>
-            <file>./base/LoginTest.php</file>
-            <file>./base/RegisterTest.php</file>
-            <file>./base/SetupTest.php</file>
+        <testsuite name="Anonymous user">
+            <directory>./base</directory>
         </testsuite>
     </testsuites>
 

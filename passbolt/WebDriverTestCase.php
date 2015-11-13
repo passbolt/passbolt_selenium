@@ -381,8 +381,38 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
             usleep(100000); // Sleep 1/10 seconds
         }
         $backtrace = debug_backtrace();
-        throw new Exception( "Timeout thrown by " . $backtrace[1]['class'] . "::" . $backtrace[1]['function'] . "()\n . element: $id ($regexp)");
+        throw new Exception( "waitUntilISee $id, $regexp : Timeout thrown by " . $backtrace[1]['class'] . "::" . $backtrace[1]['function'] . "()\n . element: $id ($regexp)");
     }
+
+	/**
+	 * Wait until I don't see an element, or an element containing a given text.
+	 * @param      $id
+	 * @param null $regexp
+	 * @param int  $timeout
+	 *
+	 * @throws Exception
+	 */
+	public function waitUntilIDontSee($id, $regexp = null, $timeout = 10) {
+		for ($i = 0; $i < $timeout * 10; $i++) {
+			try {
+				$elt = $this->find( $id );
+				// Element is found, but is not visible, return true.
+				if (!$elt->isDisplayed()) {
+					return true;
+				}
+				if (!preg_match($regexp, $elt->getText())) {
+					return true;
+				}
+			}
+			catch (Exception $e) {
+				// Element was not found, we return true.
+				return true;
+			}
+			usleep(100000); // Sleep 1/10 seconds
+		}
+		$backtrace = debug_backtrace();
+		throw new Exception( "waitUntilIDontSee $id, $regexp : Timeout thrown by " . $backtrace[1]['class'] . "::" . $backtrace[1]['function'] . "()\n . element: $id ($regexp)");
+	}
 
 	/**
 	 * Select an option in a select list

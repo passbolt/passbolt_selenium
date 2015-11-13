@@ -9,7 +9,7 @@ class LoginTest extends PassboltTestCase {
 
     public function testLogin() {
         $this->getUrl('login');
-        $this->assertVisible('.plugin-check.firefox.warning');
+        $this->waitUntIlISee('.plugin-check.firefox.warning', null, 2);
     }
 
 }

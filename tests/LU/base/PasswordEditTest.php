@@ -494,6 +494,12 @@ class PasswordEditTest extends PassboltTestCase
         // When I enter the master password and click submit
         $this->enterMasterPassword($user['MasterPassword']);
 
+	    $this->waitUntilIDontSee('passbolt-iframe-master-password');
+
+	    // Wait for password to be decrypted.
+	    // TODO : update when a different system based on classes will be there on the field. See #PASSBOLT-1154
+	    sleep(4);
+
         // Then I can see the password edit dialog
         $this->assertVisible('.edit-password-dialog');
 
@@ -560,6 +566,13 @@ class PasswordEditTest extends PassboltTestCase
 
         // When I enter the master password and I press the submit button
         $this->enterMasterPassword($user['MasterPassword']);
+
+	    // Wait until I don't see the master password window anymore.
+	    $this->waitUntilIDontSee('passbolt-iframe-master-password');
+
+	    // Wait for password to be decrypted.
+	    // TODO : update when a different system based on classes will be there on the field. See #PASSBOLT-1154
+	    sleep(4);
 
         // Then I should see the input field with the password in clear text
         $this->goIntoSecretIframe();
@@ -628,6 +641,13 @@ class PasswordEditTest extends PassboltTestCase
 
         // When I enter the master password in the input field
         $this->enterMasterPassword($user['MasterPassword']);
+
+	    // Wait until I don't see the master password window anymore.
+	    $this->waitUntilIDontSee('passbolt-iframe-master-password');
+
+	    // Wait for password to be decrypted.
+	    // TODO : update when a different system based on classes will be there on the field. See #PASSBOLT-1154
+	    sleep(4);
 
         // Then I should see the secret field populated
         $this->goIntoSecretIframe();

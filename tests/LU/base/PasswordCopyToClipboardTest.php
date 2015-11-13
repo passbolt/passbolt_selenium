@@ -236,6 +236,9 @@ class PasswordCopyToClipboardTest extends PassboltTestCase
         // And I enter my master password
         $this->enterMasterPassword($user['MasterPassword']);
 
+	    // Then I can see a success message saying the username was copied to clipboard
+	    $this->assertNotification('plugin_secret_copy_success');
+
         // Then the password is copied to clipboard
         $this->assertClipboard($resource['password']);
 
@@ -268,6 +271,9 @@ class PasswordCopyToClipboardTest extends PassboltTestCase
 
         // And I enter my master password
         $this->enterMasterPassword($user['MasterPassword']);
+
+	    // Then I can see a success message saying the username was copied to clipboard
+	    $this->assertNotification('plugin_secret_copy_success');
 
         // Then the password is copied to clipboard
         $this->assertClipboard($resource['password']);
