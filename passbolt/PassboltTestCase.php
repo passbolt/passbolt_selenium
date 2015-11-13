@@ -1056,17 +1056,54 @@ class PassboltTestCase extends WebDriverTestCase {
 	}
 
 	/**
-	 * Assert that the content content of the clipboard match what is given
+	 * Append Html in a given element according to the given id.
+	 * Beware : no multiline html will be processed.
+	 * @param $elId
+	 * @param $html
+	 */
+	public function appendHtmlInPage($elId, $html) {
+		$html = str_replace("'", "\'", $html);
+		$script = "
+		function appendHtml(el, str) {
+			var div = document.createElement('div');
+			div.innerHTML = str;
+			while (div.children.length > 0) {
+				el.appendChild(div.children[0]);
+            }
+		}
+		var el = document.getElementById('$elId');
+		appendHtml(el, '$html');
+		";
+		$this->driver->executeScript($script);
+	}
+
+	/**
+	 * Remove an HTML element from the page.
+	 * @param $elId
+	 */
+	public function removeElementFromPage($elId) {
+		$script = "
+		var element = document.getElementById('$elId');
+		element.outerHTML = '';
+		delete element;
+		";
+		$this->driver->executeScript($script);
+	}
+
+	/**
+	 * Assert that the content of the clipboard match what is given
 	 * @param $content
 	 */
 	public function assertClipboard($content) {
-		// trick: we copy the content in the search field
+		// trick: we create a temporary textarea in the page.
 		// and check its content match the content given
-		$e = $this->findById('js_app_filter_keywords');
+		$this->appendHtmlInPage('container', '<textarea id="webdriver-clipboard-content"></textarea>');
+		$e = $this->findById('webdriver-clipboard-content');
 		$e->click();
 		$action = new WebDriverActions($this->driver);
 		$action->sendKeys($e, array(WebDriverKeys::CONTROL,'v'))->perform();
 		$this->assertTrue($e->getAttribute('value') == $content);
+		$this->removeElementFromPage('webdriver-clipboard-content');
 	}
 
 	/**
