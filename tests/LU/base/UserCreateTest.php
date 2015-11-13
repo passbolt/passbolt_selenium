@@ -6,6 +6,7 @@
  *  - As a user I can view the create user dialog
  *  - As a user I can open close the create user dialog
  *  - As a admin I can see error messages when creating a user with wrong inputs
+ *  - As an admin, I cannot create a user that has a username that is already taken
  *  - As a user I can view a user I just created on my list of users
  *  - After creating a user, the given user can complete the setup and login with the chosen password
  *  - After creating a non admin user, the given user shouldn't have access to the admin functionalities
@@ -180,11 +181,11 @@ class UserCreateTest extends PassboltTestCase {
 	 * And      I see an error message saying that the length of last name should be between x and x characters
 	 */
 	public function testCreateUserErrorMessages() {
-		// Given that I am Ada
+		// Given that I am Admin
 		$user = User::get('admin');
 		$this->setClientConfig($user);
 
-		// And I am logged in and on the password workspace
+		// And I am logged in and on the user workspace
 		$this->loginAs($user);
 
 		// Go to user workspace
@@ -264,7 +265,7 @@ class UserCreateTest extends PassboltTestCase {
 	}
 
 	/**
-	 * Scenario: As a user I can view a user I just created on my list of users
+	 * Scenario: As an admin, I cannot create a user that has a username that is already taken.
 	 *
 	 * Given    I am Admin
 	 * And      I am logged in
@@ -276,7 +277,36 @@ class UserCreateTest extends PassboltTestCase {
 	 * And      I see a notice message that the username is already taken
 	 */
 	public function testCreateUserUsernameExist() {
-		// TODO #PASSBOLT-1121
+		// Given that I am Admin
+		$user = User::get('admin');
+		$this->setClientConfig($user);
+
+		// And I am logged in and on the user workspace
+		$this->loginAs($user);
+
+		// Go to user workspace
+		$this->gotoWorkspace('user');
+
+		// Create a new user
+		$this->gotoCreateUser();
+
+		// When I enter & as a first name
+		$this->inputText('js_field_first_name', 'firstnametest');
+
+		// When I enter & as a last name
+		$this->inputText('js_field_last_name', 'lastnametest');
+
+		// And I enter & as a username
+		$this->inputText('js_field_username', 'ada@passbolt.com');
+
+		// And I click save
+		$this->click('.create-user-dialog input[type=submit]');
+
+		// Then I see an error message saying that the username should be an email
+		$this->waitUntilISee('#js_field_username_feedback.error.message');
+		$this->assertElementContainsText(
+			$this->find('js_field_username_feedback'), 'The username has already been taken'
+		);
 	}
 
 	/**
