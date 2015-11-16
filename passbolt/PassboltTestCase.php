@@ -1,4 +1,7 @@
 <?php
+define('TOGGLE_BUTTON_PRESSED', 1);
+define('TOGGLE_BUTTON_UNPRESSED', 0);
+
 /**
  * Passbolt Test Case
  * The base class for test cases related to passbolt.
@@ -1127,5 +1130,24 @@ class PassboltTestCase extends WebDriverTestCase {
 		// I can see the permission is as expected
 		$select = new WebDriverSelect($rowElement->findElement(WebDriverBy::cssSelector('.js_share_rs_perm_type')));
 		$this->assertEquals($permissionType, $select->getFirstSelectedOption()->getText());
+	}
+
+	/**
+	 * Assert that the toggle button is in the given status (pressed or unpressed)
+	 * @param     $id
+	 * @param int $status
+	 *
+	 * @return bool
+	 */
+	public function assertToggleButtonStatus($id, $status = TOGGLE_BUTTON_PRESSED) {
+		$toggleButton = $this->find($id);
+		$classes = $toggleButton->getAttribute('class');
+		$classes = explode(' ', $classes);
+		$pressed = 0;
+		if (in_array('selected', $classes)) {
+			$pressed = 1;
+		}
+		return $pressed == $status;
+
 	}
 }

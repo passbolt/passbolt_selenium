@@ -8,6 +8,7 @@
  * - As a user I should be able to view my password details
  * - As a user I should be able to fav/unfav
  * - As a user I should be able to search a password by keywords
+ * - As a user, I should be able to control the sidebar visibility through the sidebar button
  *
  * @copyright    (c) 2015-present Bolt Software Pvt. Ltd.
  * @licence      GPLv3 onwards www.gnu.org/licenses/gpl-3.0.en.html
@@ -378,4 +379,103 @@ class PasswordWorkspaceTest extends PassboltTestCase
         $this->assertBreadcrumb('password', $breadcrumb);
     }
 
+
+	/**
+	 * Scenario:    As a logged in user, I should be able to control the sidebar visibility through the sidebar button
+	 * Given        I am logged in as ada
+	 * And          I am on the password workspace
+	 * Then         I should see that the sidebar button is pressed
+	 * And          I should not see the sidebar
+	 * When         I click on a resource to select it
+	 * Then         I should see the sidebar
+	 * When         I click on the same resource to deselect it
+	 * Then         I should not see the sidebar anymore
+	 * When         I click on the same resource to select it
+	 * Then         I should see that the sidebar is visible again
+	 * When         I toggle off the sidebar button
+	 * Then         I should see that the sidebar button is now deactivated
+	 * And          I should not see the sidebar anymore
+	 * When         I click on the resource again to deselect it
+	 * Then         I should see that the sidebar button is deactivated
+	 * And          I should see that the sidebar is not visible
+	 * When         I toggle in the sidebar button
+	 * Then         I should see that the sidebar is not visible
+	 * When         I click on the resource again to select it
+	 * Then         I should see that the sidebar is visible
+	 * When         I click on the close button at the top of the sidebar
+	 * Then         I should not see the sidebar anymore
+	 */
+	public function testSidebarVisibility() {
+		// Given I am Ada
+		$user = User::get('ada');
+		$this->setClientConfig($user);
+
+		// And I am logged in on the password workspace
+		$this->loginAs($user);
+
+		$this->assertToggleButtonStatus('js_wk_secondary_menu_view_sidebar_button', TOGGLE_BUTTON_PRESSED);
+
+		// I should not see the sidebar
+		$this->assertNotVisible('#js_pwd_details');
+
+		// And I am editing a password I own
+		$resource = Resource::get(array('user' => 'ada', 'permission' => 'owner'));
+
+		// Click on a password
+		$this->clickPassword($resource['id']);
+
+		// I should see a secondary side bar appearing
+		$this->assertVisible('#js_pwd_details');
+
+		// Click on a password to deselect it
+		$this->clickPassword($resource['id']);
+
+		// I should not see the secondary sidebar
+		$this->assertNotVisible('#js_pwd_details');
+
+		// Click on a password
+		$this->clickPassword($resource['id']);
+
+		// I should that the sidebar is visible again
+		$this->assertVisible('#js_pwd_details');
+
+		// Click on the sidebar button.
+		$this->click('js_wk_secondary_menu_view_sidebar_button');
+
+		// I should see that the button is not pressed.
+		$this->assertToggleButtonStatus('js_wk_secondary_menu_view_sidebar_button', TOGGLE_BUTTON_UNPRESSED);
+
+		// I should not see the sidebar anymore.
+		$this->assertNotVisible('#js_pwd_details');
+
+		// Click on the password again to deselect it.
+		$this->clickPassword($resource['id']);
+
+		// The toggle button should still be unpressed.
+		$this->assertToggleButtonStatus('js_wk_secondary_menu_view_sidebar_button', TOGGLE_BUTTON_UNPRESSED);
+
+		// I should not see the sidebar.
+		$this->assertNotVisible('#js_pwd_details');
+
+		// Click on the sidebar button to toggle it in.
+		$this->click('js_wk_secondary_menu_view_sidebar_button');
+
+		// The toggle button should still be pressed.
+		$this->assertToggleButtonStatus('js_wk_secondary_menu_view_sidebar_button', TOGGLE_BUTTON_PRESSED);
+
+		// I should not see the sidebar.
+		$this->assertNotVisible('#js_pwd_details');
+
+		// Click on the password again to select it.
+		$this->clickPassword($resource['id']);
+
+		// I should that the sidebar is visible
+		$this->assertVisible('#js_pwd_details');
+
+		// I click on the button close at the top of the dialogue.
+		$this->click('#js_pwd_details .dialog-close');
+
+		// Then I should not see the sidebar anymore.
+		$this->assertNotVisible('#js_pwd_details');
+	}
 }
