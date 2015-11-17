@@ -18,6 +18,8 @@ class PASSBOLT1103 extends PassboltTestCase {
 	 * Then         I should see the contextual menu
 	 * When         I go to password workspace
 	 * Then         I should not see the contextual menu
+	 * When         I right click again on the previous password where I had clicked.
+	 * Then         I should see again the contextual menu
 	 */
 	public function testContextualMenuDisappearAfterChangingWorkspace() {
 		// Given I am Ada
@@ -52,5 +54,11 @@ class PASSBOLT1103 extends PassboltTestCase {
 
 		// Then I shouldn't see the contextual menu anymore
 		$this->assertNotVisible('js_contextual_menu');
+
+		// And I right click on the password I clicked before.
+		$this->rightClickPassword($resource['id']);
+
+		// Then I can see the contextual menu
+		$this->assertVisible('js_contextual_menu');
 	}
 }

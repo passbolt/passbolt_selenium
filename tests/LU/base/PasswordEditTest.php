@@ -572,7 +572,7 @@ class PasswordEditTest extends PassboltTestCase
 
 	    // Wait for password to be decrypted.
 	    // TODO : update when a different system based on classes will be there on the field. See #PASSBOLT-1154
-	    sleep(4);
+	    sleep(6);
 
         // Then I should see the input field with the password in clear text
         $this->goIntoSecretIframe();

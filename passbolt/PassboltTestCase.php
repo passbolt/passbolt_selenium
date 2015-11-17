@@ -70,9 +70,6 @@ class PassboltTestCase extends WebDriverTestCase {
 	public function gotoWorkspace($name) {
 		$linkCssSelector = '';
 		switch ($name) {
-			case 'password':
-				$linkCssSelector = '#js_app_nav_left_pwd_wsp_link a';
-				break;
 			default:
 				$linkCssSelector = '#js_app_nav_left_' . $name . '_wsp_link a';
 				break;
@@ -700,7 +697,7 @@ class PassboltTestCase extends WebDriverTestCase {
 		$this->rightClickPassword($resource['id']);
 		$this->waitUntilISee('js_contextual_menu');
 		$this->clickLink('Copy password');
-		sleep(1);
+		sleep(2);
 		$this->assertMasterPasswordDialog($user);
 		$this->enterMasterPassword($user['MasterPassword']);
 		$this->assertNotification('plugin_secret_copy_success');
