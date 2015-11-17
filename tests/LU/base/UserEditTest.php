@@ -11,6 +11,7 @@
  *  - As an admin I can edit the last name of a user
  *  - As an admin I can modify the role of a non admin user to admin
  *  - As an admin I can modify the role of an admin user to non admin
+ *  - As an admin I should'nt be able to edit my own role
  *  - As user B I can see the changes are reflected when user A has edited a user I can see
  *  - As user I can see validation error messages while editing a user and inputting bad information
  *
@@ -509,17 +510,34 @@ class UserEditTest extends PassboltTestCase {
 	}
 
 	/**
-	 * // TODO : #PASSBOLT-1125
 	 * Scenario :   As a admin I shouldn't be able to edit my own role
 	 * Given        I am logged in as admin in the user workspace
 	 * When         I click on my own name in the users list
 	 * And          I click on the edit button
 	 * Then         I should see a field first name
 	 * And          I should see a field last name
-	 * And          I should not see a checkbox role
+	 * And          I should see that the checkbox role is disabled
 	 */
 	public function testEditUserOwnAdminRole() {
-		// TODO : #PASSBOLT-1125
+		// Given I am Admin
+		$user = User::get('admin');
+		$this->setClientConfig($user);
+
+		// And I am logged in on the user workspace
+		$this->loginAs($user);
+
+		// And I go to user workspace
+		$this->gotoWorkspace( 'user' );
+
+		// Edit admin
+		$this->GoToEditUser( $user['id'] );
+
+		// Check that admin role checkbox is disabled.
+		$this->assertElementAttributeEquals(
+			$this->find('#js_field_role_id .role-admin input[type=checkbox]'),
+			'disabled',
+			'true'
+		);
 	}
 
 	/**
