@@ -5,6 +5,7 @@
  * Scenarios :
  *  - As admin I should be able to delete a user on a right click
  *  - As admin I should be able to delete a user using the delete button
+ *  - As Admin I should'nt be able to delete my own user account
  *
  * @copyright    (c) 2015-present Bolt Software Pvt. Ltd.
  * @licence      GPLv3 onwards www.gnu.org/licenses/gpl-3.0.en.html
@@ -123,17 +124,40 @@ class UserDeleteTest extends PassboltTestCase {
 	}
 
 	/**
-	 * TODO #PASSBOLT-1126
-	 * Scenario :   As Admin I shouldn't be able to delete my own user account
+	 * Scenario :   As Admin I should'nt be able to delete my own user account
 	 * Given        I am logged in as admin in the user workspace
 	 * And          I click on my own name in the user list
 	 * Then         I should see that the delete button is disabled
 	 * When         I right click on my name in the users list
 	 * Then         I should see a contextual menu
-	 * And          I should see that the delete option is disabled
+	 * And          I should see that the delete option is not available.
 	 */
 	public function testDeleteUserMyself() {
-		// TODO : #PASSBOLT-1126
+		// And I am Admin
+		$user = User::get('admin');
+		$this->setClientConfig($user);
+
+		// And I am logged in on the user workspace
+		$this->loginAs($user);
+
+		// Go to user workspace
+		$this->gotoWorkspace('user');
+
+		// When I right click on a user
+		$this->clickUser($user['id']);
+
+		// Then I should see that the delete button is disabled.
+		$this->assertElementAttributeEquals(
+			$this->find('js_user_wk_menu_deletion_button'),
+			'disabled',
+			'true'
+		);
+
+		// Right click on the same user.
+		$this->rightClickUser($user['id']);
+
+		// I should see that the delete option is not available.
+		$this->assertNotVisible('js_user_browser_menu_delete');
 	}
 
 }
