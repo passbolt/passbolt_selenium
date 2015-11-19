@@ -483,6 +483,20 @@ class PassboltTestCase extends WebDriverTestCase {
 	}
 
 	/**
+	 * Put the focus inside the password share iframe
+	 */
+	public function goIntoShareIframe() {
+		$this->driver->switchTo()->frame('passbolt-iframe-password-share');
+	}
+
+	/**
+	 * Put the focus inside the password share autocomplete iframe
+	 */
+	public function goIntoShareAutocompleteIframe() {
+		$this->driver->switchTo()->frame('passbolt-iframe-password-share-autocomplete');
+	}
+
+	/**
 	 * Put the focus back to the normal context
 	 */
 	public function goOutOfIframe() {
@@ -564,21 +578,21 @@ class PassboltTestCase extends WebDriverTestCase {
 	 */
 	public function sharePassword($password, $username, $permissionType, $user) {
 		$this->gotoSharePassword($password['id']);
+		$shareWithUser = User::get($username);
+		$shareWithUserFullName = $shareWithUser['FirstName'] . ' ' . $shareWithUser['LastName'];
 
 		// I enter the username I want to share the password with in the autocomplete field
-		$this->inputText('js_perm_create_form_aro_auto_cplt', $username);
+		$this->goIntoShareIframe();
+		$this->inputText('js_perm_create_form_aro_auto_cplt', $shareWithUserFullName);
+		$this->goOutOfIframe();
 
 		// I wait until I see the automplete field resolved
-		$this->waitUntilISee('.share-password-dialog .autocomplete-content', '/' . $username . '/i');
+		$this->goIntoShareAutocompleteIframe();
+		$this->waitUntilISee('.autocomplete-content', '/' . $shareWithUserFullName . '/i');
 
 		// I click on the username link the autocomplete field retrieved.
-		$this->clickLink($username);
-
-		// I select the permission I want to grant to the user
-		$this->selectOption('js_perm_create_form_type', $permissionType);
-
-		// I add the permission
-		$this->click('js_perm_create_form_add_btn');
+		$this->click($shareWithUser['id']);
+		$this->goOutOfIframe();
 
 		// I can see that temporary changes are waiting to be saved
 		$this->assertElementContainsText(

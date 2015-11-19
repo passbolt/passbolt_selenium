@@ -236,7 +236,7 @@ class PasswordShareTest extends PassboltTestCase
 		);
 
 		// When I give read access to betty for a password I own
-		$this->sharePassword($resource, 'betty@passbolt.com', 'can read', $user);
+		$this->sharePassword($resource, 'betty', 'can read', $user);
 
 		// Then I can see Betty has read access on the password
 		$this->assertPermission($resource, 'betty@passbolt.com', 'can read');
