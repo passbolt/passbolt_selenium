@@ -73,7 +73,7 @@ class PasswordCommentTest extends PassboltTestCase {
 
 		// Click on the + icon to add a new comment
 		$this->assertVisible('#js_rs_details_comments a.section-action');
-		$this->click('#js_rs_details_comments a.section-action');
+		$this->click('#js_rs_details_comments .section-action i.fa-plus-circle');
 
 		// Make sure password field is visible again.
 		$this->assertVisible($this->commentFormSelector);
