@@ -7,6 +7,8 @@
  * As a user I can see the share dialog using the right click contextual menu
  * As a user I cannot access the share dialog from the action bar or the contextual menu if I have only read or update access to
  * As a user I can view the permissions for a password I own
+ * As a user I cannot add twice a permission for the same user
+ * As a user I can add a permission after previously adding and deleting one for the same user
  * As a user I can share a password with other users
  * As a user I edit the permissions of a password I own
  * As a user I delete a permission of a password I own
@@ -196,6 +198,91 @@ class PasswordShareTest extends PassboltTestCase
 	}
 
 	/**
+	 * Scenario: As a user I cannot add twice a permission for the same user
+	 *
+	 * Given    I am Carol
+	 * And      I am logged in on the password workspace
+	 * When     I add a temporary permission for Betty
+	 * And		I search again Betty
+	 * Then		Then I should not see it in the autocomplete results
+	 */
+	public function testCannotAddTwiceAPermissionForTheSameUser() {
+		// Given I am Carol
+		$user = User::get('carol');
+		$this->setClientConfig($user);
+
+		// Retrieve the user to share the password with.
+		$shareWithUser = User::get('betty');
+		$shareWithUserFullName = $shareWithUser['FirstName'] . ' ' . $shareWithUser['LastName'];
+
+		// And I am logged in on the password workspace
+		$this->loginAs($user);
+
+		// When I add a temporary permission for Betty on a password I own
+		$resource = Resource::get(array(
+			'user' => 'carol',
+			'id' => Uuid::get('resource.id.gnupg')
+		));
+		$this->addTemporaryPermission($resource, $shareWithUser['name'], $user);
+
+		// And I search again Betty
+		$this->searchUserToGrant($resource, $shareWithUser['name'], $user);
+
+		// Then I should not see her in the autocomplete results
+		$this->goIntoShareAutocompleteIframe();
+		$this->assertElementNotContainText($this->findByCss('ul'), $shareWithUserFullName);
+		$this->goOutOfIframe();
+	}
+
+	/**
+	 * Scenario: As a user I can add a permission after previously adding and deleting one for the same user
+	 *
+	 * Given    I am Carol
+	 * And      I am logged in on the password workspace
+	 * When     I add a temporary permission for Betty
+	 * And		I delete the just added temporary permission
+	 * Then		I should not see anymore the changes feedback
+	 * When		I search again Betty
+	 * Then		I should see her in the autocomplete results
+	 */
+	public function testAddAfterAddAndDelete() {
+		// Given I am Carol
+		$user = User::get('carol');
+		$this->setClientConfig($user);
+
+		// Retrieve the user to share the password with.
+		$shareWithUser = User::get('betty');
+		$shareWithUserFullName = $shareWithUser['FirstName'] . ' ' . $shareWithUser['LastName'];
+
+		// And I am logged in on the password workspace
+		$this->loginAs($user);
+
+		// When I add a temporary permission for Betty on a password I own
+		$resource = Resource::get(array(
+			'user' => 'carol',
+			'id' => Uuid::get('resource.id.gnupg')
+		));
+		$this->addTemporaryPermission($resource, $shareWithUser['name'], $user);
+
+		// And I delete the just added temporary permission
+		$this->deleteTemporaryPermission($resource, $shareWithUser['Username']);
+
+		// Then I should not see anymore the changes feedback
+		$this->assertElementNotContainText(
+			$this->findByCss('.share-password-dialog #js_permissions_changes'),
+			'You need to save to apply the changes'
+		);
+
+		// When I search again Betty
+		$this->searchUserToGrant($resource, $shareWithUser['name'], $user);
+
+		// Then I should see her in the autocomplete results
+		$this->goIntoShareAutocompleteIframe();
+		$this->find($shareWithUser['id']);
+		$this->goOutOfIframe();
+	}
+
+	/**
 	 * Scenario: As a user I can share a password with other users
 	 *
 	 * Given    I am Carol
@@ -236,7 +323,7 @@ class PasswordShareTest extends PassboltTestCase
 		);
 
 		// When I give read access to betty for a password I own
-		$this->sharePassword($resource, 'betty', 'can read', $user);
+		$this->sharePassword($resource, 'betty', $user);
 
 		// Then I can see Betty has read access on the password
 		$this->assertPermission($resource, 'betty@passbolt.com', 'can read');
