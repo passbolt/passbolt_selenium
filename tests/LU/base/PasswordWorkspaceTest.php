@@ -473,7 +473,7 @@ class PasswordWorkspaceTest extends PassboltTestCase
 		$this->assertVisible('#js_pwd_details');
 
 		// I click on the button close at the top of the dialogue.
-		$this->click('#js_pwd_details .dialog-close');
+		$this->click('#js_pwd_details .js_sidebar_close');
 
 		// Then I should not see the sidebar anymore.
 		$this->assertNotVisible('#js_pwd_details');
