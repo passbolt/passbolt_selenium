@@ -313,7 +313,7 @@ class UserWorkspaceTest extends PassboltTestCase {
 
 		// Right click on a user
 		$betty = User::get(array('user' => 'betty'));
-		$this->rightClickUser($user['id']);
+		$this->rightClickUser($betty['id']);
 
 		// Then I can see the contextual menu
 		$this->assertVisible('js_contextual_menu');
@@ -325,10 +325,10 @@ class UserWorkspaceTest extends PassboltTestCase {
 		// And I should see the option Copy email address
 		$this->assertElementContainsText($contextualMenu, 'Copy email address');
 
-		// And I should not see the option Edit
+		// And I should see the option Edit
 		$this->assertElementContainsText($contextualMenu, 'Edit');
 
-		// And I should not see the option Delete
+		// And I should see the option Delete
 		$this->assertElementContainsText($contextualMenu, 'Delete');
 	}
 

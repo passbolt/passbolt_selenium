@@ -73,7 +73,7 @@ class PasswordCommentTest extends PassboltTestCase {
 
 		// Click on the + icon to add a new comment
 		$this->assertVisible('#js_rs_details_comments a.section-action');
-		$this->click('#js_rs_details_comments a.section-action');
+		$this->click('#js_rs_details_comments a.js_add_comment');
 
 		// Make sure password field is visible again.
 		$this->assertVisible($this->commentFormSelector);
@@ -177,7 +177,7 @@ class PasswordCommentTest extends PassboltTestCase {
 		$this->assertNotVisible($this->commentFormSelector);
 
 		// Delete comment.
-		$buttonDeleteSelector = '#js_rs_details_comments_list a .icon.delete';
+		$buttonDeleteSelector = '#js_rs_details_comments_list a.js_delete_comment';
 		$this->assertVisible($buttonDeleteSelector);
 		$this->click($buttonDeleteSelector);
 

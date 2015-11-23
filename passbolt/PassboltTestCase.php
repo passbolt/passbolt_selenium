@@ -84,12 +84,16 @@ class PassboltTestCase extends WebDriverTestCase {
 	 * @return bool
 	 * @throws Exception
 	 */
-	public function waitCompletion($timeout = 10) {
+	public function waitCompletion($timeout = 10, $elementSelector = null) {
 		$ex = null;
+
+		if (is_null($elementSelector)) {
+			$elementSelector = 'html.loaded';
+		}
 
 		for ($i = 0; $i < $timeout * 10; $i++) {
 			try {
-				$elt = $this->findByCss('html.loaded');
+				$elt = $this->findByCss($elementSelector);
 				if(count($elt)) {
 					return true;
 				}
@@ -483,10 +487,17 @@ class PassboltTestCase extends WebDriverTestCase {
 	}
 
 	/**
-	 * Put the focus back to the normal context
+	 * Put the focus inside the password share iframe
 	 */
-	public function goOutOfIframe() {
-		$this->driver->switchTo()->defaultContent();
+	public function goIntoShareIframe() {
+		$this->driver->switchTo()->frame('passbolt-iframe-password-share');
+	}
+
+	/**
+	 * Put the focus inside the password share autocomplete iframe
+	 */
+	public function goIntoShareAutocompleteIframe() {
+		$this->driver->switchTo()->frame('passbolt-iframe-password-share-autocomplete');
 	}
 
 	/**
@@ -494,6 +505,13 @@ class PassboltTestCase extends WebDriverTestCase {
 	 */
 	public function goIntoMasterPasswordIframe() {
 		$this->driver->switchTo()->frame('passbolt-iframe-master-password');
+	}
+
+	/**
+	 * Put the focus back to the normal context
+	 */
+	public function goOutOfIframe() {
+		$this->driver->switchTo()->defaultContent();
 	}
 
 	/**
@@ -555,36 +573,64 @@ class PassboltTestCase extends WebDriverTestCase {
 	}
 
 	/**
-	 * Share a password helper
+	 * Search a user to share a password with.
 	 * @param $password
 	 * @param $username
-	 * @param $permissionType
+	 * @param $user
+	 */
+	public function searchUserToGrant($password, $username, $user) {
+		$this->gotoSharePassword($password['id']);
+		$shareWithUser = User::get($username);
+
+		// I enter the username I want to share the password with in the autocomplete field
+		$this->goIntoShareIframe();
+		$this->assertSecurityToken($user, 'share');
+		$this->inputText('js_perm_create_form_aro_auto_cplt', $shareWithUser['FirstName'], true);
+		$this->click('.security-token');
+		$this->goOutOfIframe();
+
+		// I wait the autocomplete box is loaded.
+		$this->waitCompletion(10, '#passbolt-iframe-password-share-autocomplete.loaded');
+	}
+
+	/**
+	 * Add a temporary permission helper
+	 * @param $password
+	 * @param $username
 	 * @param $user
 	 * @throws Exception
 	 */
-	public function sharePassword($password, $username, $permissionType, $user) {
-		$this->gotoSharePassword($password['id']);
+	public function addTemporaryPermission($password, $username, $user) {
+		$shareWithUser = User::get($username);
+		$shareWithUserFullName = $shareWithUser['FirstName'] . ' ' . $shareWithUser['LastName'];
 
-		// I enter the username I want to share the password with in the autocomplete field
-		$this->inputText('js_perm_create_form_aro_auto_cplt', $username);
+		// Search the user to grant.
+		$this->searchUserToGrant($password, $username, $user);
 
 		// I wait until I see the automplete field resolved
-		$this->waitUntilISee('.share-password-dialog .autocomplete-content', '/' . $username . '/i');
+		$this->goIntoShareAutocompleteIframe();
+		$this->waitUntilISee('.autocomplete-content', '/' . $shareWithUserFullName . '/i');
 
 		// I click on the username link the autocomplete field retrieved.
-		$this->clickLink($username);
-
-		// I select the permission I want to grant to the user
-		$this->selectOption('js_perm_create_form_type', $permissionType);
-
-		// I add the permission
-		$this->click('js_perm_create_form_add_btn');
+		$this->click($shareWithUser['id']);
+		$this->goOutOfIframe();
 
 		// I can see that temporary changes are waiting to be saved
 		$this->assertElementContainsText(
 			$this->findByCss('.share-password-dialog #js_permissions_changes'),
 			'You need to save to apply the changes'
 		);
+	}
+
+	/**
+	 * Share a password helper
+	 * @param $password
+	 * @param $username
+	 * @param $user
+	 * @throws Exception
+	 */
+	public function sharePassword($password, $username, $user) {
+		$this->addTemporaryPermission($password, $username, $user);
 
 		// When I click on the save button
 		$this->click('js_rs_share_save');
@@ -642,12 +688,12 @@ class PassboltTestCase extends WebDriverTestCase {
 	}
 
 	/**
-	 * Delete a password permission helper
+	 * Delete temporary a permission helper
 	 * @param $password
 	 * @param $username
 	 * @throws Exception
 	 */
-	public function deletePermission($password, $username) {
+	public function deleteTemporaryPermission($password, $username) {
 		$this->gotoSharePassword($password['id']);
 
 		// I can see the user has a direct permission
@@ -662,6 +708,17 @@ class PassboltTestCase extends WebDriverTestCase {
 		// I delete the permission
 		$deleteButton = $rowElement->findElement(WebDriverBy::cssSelector('.js_perm_delete'));
 		$deleteButton->click();
+	}
+
+	/**
+	 * Delete a password permission helper
+	 * @param $password
+	 * @param $username
+	 * @throws Exception
+	 */
+	public function deletePermission($password, $username) {
+		// Delete temporary the permission
+		$this->deleteTemporaryPermission($password, $username);
 
 		// I can see that temporary changes are waiting to be saved
 		$this->assertElementContainsText(
@@ -989,6 +1046,8 @@ class PassboltTestCase extends WebDriverTestCase {
 			$this->click('js_master_password');
 		} else if ($context == 'login') {
 			$this->click('js_master_password');
+		} else if ($context == 'share') {
+			$this->click('js_perm_create_form_aro_auto_cplt');
 		}
 		else {
 			$this->click('js_secret');
