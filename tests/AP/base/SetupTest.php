@@ -25,7 +25,7 @@ class SetupTest extends PassboltSetupTestCase {
 		],
 		'generate_key_master_password' => [
 			'title' => 'Now let\'s setup your master password!',
-			'subtitle'  => 'Create a new key',
+			'subtitle'  => 'Set your passphrase',
 			'menu_item' => '3. Set a master password'
 		],
 		'generate_key_progress' => [
