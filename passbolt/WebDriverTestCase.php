@@ -403,14 +403,20 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
 				return true;
 			}
 
-			// Element is found, but is not visible, return true.
-			if (!$elt->isDisplayed()) {
+			try {
+				// Element is found, but is not visible, return true.
+				if (!$elt->isDisplayed()) {
+					return true;
+				}
+				// Else if element is visible, and a regexp is provided, test if the content match the regexp.
+				elseif ($regexp != null && !preg_match($regexp, $elt->getText())) {
+					return true;
+				}
+			}
+			catch(Exception $e) {
 				return true;
 			}
-			// Else if element is visible, and a regexp is provided, test if the content match the regexp.
-			elseif ($regexp != null && !preg_match($regexp, $elt->getText())) {
-				return true;
-			}
+
 
 			// If none of the above was found, wait for 1/10 seconds, and try again.
 			usleep(100000); // Sleep 1/10 seconds
