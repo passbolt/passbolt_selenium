@@ -168,6 +168,7 @@ class PasswordShareTest extends PassboltTestCase
 	 * And      I can see that Betty can update
 	 * And      I can see that Carol can read
 	 * And      I can see that Dame can read
+	 * And 		I can see the save button is disabled
 	 */
 	public function testViewPasswordPermissions() {
 		// Given I am Ada
@@ -195,6 +196,9 @@ class PasswordShareTest extends PassboltTestCase
 
 		// And I can see that Dame can read
 		$this->assertPermission($resource, 'dame@passbolt.com', 'can read');
+
+		// And I can see the save button is disabled
+		$this->assertVisible('#js_rs_share_save.disabled');
 	}
 
 	/**
@@ -240,8 +244,10 @@ class PasswordShareTest extends PassboltTestCase
 	 * Given    I am Carol
 	 * And      I am logged in on the password workspace
 	 * When     I add a temporary permission for Betty
+	 * And 		I can see the save button is enabled
 	 * And		I delete the just added temporary permission
 	 * Then		I should not see anymore the changes feedback
+	 * And 		I can see the save button is disabled
 	 * When		I search again Betty
 	 * Then		I should see her in the autocomplete results
 	 */
@@ -264,8 +270,14 @@ class PasswordShareTest extends PassboltTestCase
 		));
 		$this->addTemporaryPermission($resource, $shareWithUser['name'], $user);
 
+		// And I can see the save button is enabled
+		$this->assertNotVisible('#js_rs_share_save.disabled');
+
 		// And I delete the just added temporary permission
 		$this->deleteTemporaryPermission($resource, $shareWithUser['Username']);
+
+		// And I can see the save button is disabled
+		$this->assertVisible('#js_rs_share_save.disabled');
 
 		// Then I should not see anymore the changes feedback
 		$this->assertElementNotContainText(
