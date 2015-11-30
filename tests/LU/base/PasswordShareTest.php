@@ -12,6 +12,7 @@
  * As a user I can share a password with other users
  * As a user I edit the permissions of a password I own
  * As a user I delete a permission of a password I own
+ * As a user I should not let a resource without at least one owner
  *
  * @copyright    (c) 2015-present Bolt Software Pvt. Ltd.
  * @licence      GPLv3 onwards www.gnu.org/licenses/gpl-3.0.en.html
@@ -446,6 +447,131 @@ class PasswordShareTest extends PassboltTestCase
 			$this->findByCss('#js_permissions_list'),
 			'betty@passbolt.com'
 		);
+
+		// Since content was edited, we reset the database
+		$this->resetDatabase();
+	}
+
+	/**
+	 * Scenario: As a user I should not let a resource without at least one owner
+	 *
+	 * Given    I am Ada
+	 * And      I am logged in on the password workspace
+	 * When     I go to the sharing dialog of a password I own
+	 * Then 	I can see the permission type dropdown of the owner Ada is disabled
+	 * And 		I can see the permission delete button of the owner Ada is disabled
+	 * When 	I change the permission of Betty to owner access
+	 * Then 	I can see the permission type dropdown of the owner Ada is enabled
+	 * And 		I can see the permission delete button of the owner Ada is enabled
+	 * And 		I can see the permission type dropdown of the owner Betty is enabled
+	 * And 		I can see the permission delete button of the owner Betty is enabled
+	 * When		I delete the permission of Betty
+	 * Then 	I can see the permission type dropdown of the owner Ada is disabled
+	 * And 		I can see the permission delete button of the owner Ada is disabled
+	 * When 	I add a temporary permission for Frances
+	 * And 		I change the permission of Frances to owner access
+	 * Then 	I can see the permission type dropdown of the owner Ada is enabled
+	 * And 		I can see the permission delete button of the owner Ada is enabled
+	 * And 		I can see the permission type dropdown of the owner Betty is enabled
+	 * And 		I can see the permission delete button of the owner Betty is enabled
+	 * When 	I click on the save button
+	 * Then 	I see the master password dialog
+	 * When 	I enter the master password and click submit
+	 * Then 	I see a dialog telling me encryption is in progress
+	 * And 		I see a notice message that the operation was a success
+	 */
+	public function testAtLeastOneOwner() {
+		// Given I am Ada
+		$userAda = User::get('ada');
+		$userBetty = User::get('betty');
+		$userFrances = User::get('frances');
+		$this->setClientConfig($userAda);
+
+		// And I am logged in on the password workspace
+		$this->loginAs($userAda);
+
+		// When I go to the sharing dialog of a password I own
+		$resourceId = Uuid::get('resource.id.apache');
+		$resource = Resource::get(array(
+			'user' => 'ada',
+			'id' => $resourceId
+		));
+		$this->gotoSharePassword($resourceId);
+
+		// Then I can see the permission type dropdown of the owner Ada is disabled
+		$permissionAdaId = Uuid::get('permission.id.' . $resourceId . '-' . $userAda['id']);
+		$permissionBettyId = Uuid::get('permission.id.' . $resourceId . '-' . $userBetty['id']);
+		$this->assertDisabled('#js_share_perm_type_' . $permissionAdaId);
+
+		// And I can see the permission delete button of the owner Ada is disabled
+		$this->assertDisabled('#js_share_perm_delete_' . $permissionAdaId);
+
+		// When I change the permission of Betty to owner access
+		$this->editTemporaryPermission($resource, 'betty@passbolt.com', 'is owner', $userAda);
+
+		// Then I can see the permission type dropdown of the owner Ada is enabled
+		$this->assertVisible('#js_share_perm_type_' . $permissionAdaId);
+		$this->assertNotVisible('#js_share_perm_type_' . $permissionAdaId . '.disabled');
+
+		// And I can see the permission delete button of the owner Ada is enabled
+		$this->assertVisible('#js_share_perm_delete_' . $permissionAdaId);
+		$this->assertNotVisible('#js_share_perm_delete_' . $permissionAdaId . '.disabled');
+
+		// And I can see the permission type dropdown of the owner Betty is enabled
+		$this->assertVisible('#js_share_perm_type_' . $permissionBettyId);
+		$this->assertNotVisible('#js_share_perm_type_' . $permissionBettyId . '.disabled');
+
+		// And I can see the permission delete button of the owner Betty is enabled
+		$this->assertVisible('#js_share_perm_delete_' . $permissionBettyId);
+		$this->assertNotVisible('#js_share_perm_delete_' . $permissionBettyId . '.disabled');
+
+		// When I delete the permission of Betty
+		$this->deleteTemporaryPermission($resource, 'betty@passbolt.com');
+
+		// Then I can see the permission type dropdown of the owner Ada is disabled
+		$this->assertDisabled('#js_share_perm_type_' . $permissionAdaId);
+
+		// And I can see the permission delete button of the owner Ada is disabled
+		$this->assertDisabled('#js_share_perm_delete_' . $permissionAdaId);
+
+		// When I add a temporary permission for Frances
+		$this->addTemporaryPermission($resource, $userFrances['name'], $userAda);
+		$permissionFrancesId = $this->driver->findElement(WebDriverBy::cssSelector('.permission-updated'))->GetAttribute("id");
+
+		// And I change the permission of Frances to owner access
+		$this->editTemporaryPermission($resource, 'frances@passbolt.com', 'is owner', $userAda);
+
+		// Then I can see the permission type dropdown of the owner Ada is enabled
+		$this->assertVisible('#js_share_perm_type_' . $permissionAdaId);
+		$this->assertNotVisible('#js_share_perm_type_' . $permissionAdaId . '.disabled');
+
+		// And I can see the permission delete button of the owner Ada is enabled
+		$this->assertVisible('#js_share_perm_delete_' . $permissionAdaId);
+		$this->assertNotVisible('#js_share_perm_delete_' . $permissionAdaId . '.disabled');
+
+		// And I can see the permission type dropdown of the owner Betty is enabled
+		$this->assertVisible('#js_share_perm_type_' . $permissionFrancesId);
+		$this->assertNotVisible('#js_share_perm_type_' . $permissionFrancesId . '.disabled');
+
+		// And I can see the permission delete button of the owner Betty is enabled
+		$this->assertVisible('#js_share_perm_delete_' . $permissionFrancesId);
+		$this->assertNotVisible('#js_share_perm_delete_' . $permissionFrancesId . '.disabled');
+
+		// When I click on the save button
+		$this->click('js_rs_share_save');
+
+		// Then I see the master password dialog
+		$this->assertMasterPasswordDialog($userAda);
+
+		// When I enter the master password and click submit
+		$this->enterMasterPassword($userAda['MasterPassword']);
+
+		// Then I see a dialog telling me encryption is in progress
+		$this->waitUntilISee('passbolt-iframe-progress-dialog');
+		$this->waitCompletion();
+
+		// And I see a notice message that the operation was a success
+		$this->assertNotification('app_share_update_success');
 
 		// Since content was edited, we reset the database
 		$this->resetDatabase();

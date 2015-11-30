@@ -651,14 +651,14 @@ class PassboltTestCase extends WebDriverTestCase {
 	}
 
 	/**
-	 * Edit a password permission helper
+	 * Edit temporary a permission
 	 * @param $password
 	 * @param $username
 	 * @param $permissionType
 	 * @param $user
 	 * @throws Exception
 	 */
-	public function editPermission($password, $username, $permissionType, $user) {
+	public function editTemporaryPermission($password, $username, $permissionType, $user) {
 		$this->gotoSharePassword($password['id']);
 
 		// I can see the user has a direct permission
@@ -679,6 +679,19 @@ class PassboltTestCase extends WebDriverTestCase {
 			$this->findByCss('.share-password-dialog #js_permissions_changes'),
 			'You need to save to apply the changes'
 		);
+	}
+
+	/**
+	 * Edit a password permission helper
+	 * @param $password
+	 * @param $username
+	 * @param $permissionType
+	 * @param $user
+	 * @throws Exception
+	 */
+	public function editPermission($password, $username, $permissionType, $user) {
+		// Make a temporary edition
+		$this->editTemporaryPermission($password, $username, $permissionType, $user);
 
 		// When I click on the save button
 		$this->click('js_rs_share_save');
