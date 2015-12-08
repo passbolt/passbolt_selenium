@@ -152,6 +152,10 @@ class PassboltTestCase extends WebDriverTestCase {
 		$this->assertInputValue('UserUsername', $user['Username']);
 		$this->inputText('js_master_password', $user['MasterPassword']);
 		$this->click('loginSubmit');
+		$this->goOutOfIframe();
+
+		// wait for login to take place
+		$this->waitUntilISee('.login.form .feedback');
 		$this->waitCompletion();
 
 		// wait for redirection trigger
