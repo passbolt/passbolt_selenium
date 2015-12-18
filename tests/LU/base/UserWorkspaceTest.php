@@ -303,7 +303,7 @@ class UserWorkspaceTest extends PassboltTestCase {
 		$this->gotoWorkspace('user');
 
 		// Then I should not see the create button
-		$this->assertVisible('js_user_wk_menu_creation_button');
+		$this->assertVisible('js_wsp_create_button');
 
 		// And I should not see the edit button
 		$this->assertVisible('js_user_wk_menu_edition_button');
@@ -356,7 +356,7 @@ class UserWorkspaceTest extends PassboltTestCase {
 		$this->gotoWorkspace('user');
 
 		// Then I should not see the create button
-		$this->assertNotVisible('js_user_wk_menu_creation_button');
+		$this->assertNotVisible('js_wsp_create_button');
 
 		// And I should not see the edit button
 		$this->assertNotVisible('js_user_wk_menu_edition_button');

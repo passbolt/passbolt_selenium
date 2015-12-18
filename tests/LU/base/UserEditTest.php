@@ -393,7 +393,7 @@ class UserEditTest extends PassboltTestCase {
 
 		// Assert that the user has admin capabilities.
 		// Observe that create button is visible
-		$this->assertVisible('js_user_wk_menu_creation_button');
+		$this->assertVisible('js_wsp_create_button');
 
 		// Observe that edit button is visible
 		$this->assertVisible('js_user_wk_menu_edition_button');
@@ -497,7 +497,7 @@ class UserEditTest extends PassboltTestCase {
 
 		// Assert that the user doesn't have admin capabilities
 		// Observe that create button is not visible
-		$this->assertNotVisible('js_user_wk_menu_creation_button');
+		$this->assertNotVisible('js_wsp_create_button');
 
 		// Observe that edit button is not visible
 		$this->assertNotVisible('js_user_wk_menu_edition_button');

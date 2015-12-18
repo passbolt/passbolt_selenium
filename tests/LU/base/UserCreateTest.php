@@ -133,7 +133,7 @@ class UserCreateTest extends PassboltTestCase {
 
 		// -- WITH X BUTTON --
 		// When I click on the create password button
-		$this->click('js_user_wk_menu_creation_button');
+		$this->click('js_wsp_create_button');
 
 		// Then I see the create password dialog
 		$this->assertVisible('.create-user-dialog');
@@ -146,7 +146,7 @@ class UserCreateTest extends PassboltTestCase {
 
 		// -- WITH ESCAPE --
 		// When I click on the create password button
-		$this->click('js_user_wk_menu_creation_button');
+		$this->click('js_wsp_create_button');
 
 		// Then I see the create password dialog
 		$this->assertVisible('.create-user-dialog');
@@ -500,7 +500,7 @@ class UserCreateTest extends PassboltTestCase {
 		$this->gotoWorkspace('user');
 
 		// Observe that create button is not visible
-		$this->assertNotVisible('js_user_wk_menu_creation_button');
+		$this->assertNotVisible('js_wsp_create_button');
 
 		// Observe that edit button is not visible
 		$this->assertNotVisible('js_user_wk_menu_edition_button');
@@ -574,7 +574,7 @@ class UserCreateTest extends PassboltTestCase {
 		$this->gotoWorkspace('user');
 
 		// Observe that create button is visible
-		$this->assertVisible('js_user_wk_menu_creation_button');
+		$this->assertVisible('js_wsp_create_button');
 
 		// Observe that edit button is visible
 		$this->assertVisible('js_user_wk_menu_edition_button');
