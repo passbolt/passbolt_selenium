@@ -45,6 +45,12 @@ class UserWorkspaceTest extends PassboltTestCase {
 			);
 		}
 
+    // I should not see the create button in the main action wrapper
+    $this->assertElementNotContainText(
+      $this->findByCss('.main-action-wrapper'),
+      'create'
+    );
+
 		// I should the workspace filters.
 		$filters = ['All users', 'Recently modified'];
 		for ($i = 0; $i < count($filters); $i++) {
