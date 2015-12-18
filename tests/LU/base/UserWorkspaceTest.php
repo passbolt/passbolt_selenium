@@ -37,7 +37,7 @@ class UserWorkspaceTest extends PassboltTestCase {
 		$this->gotoWorkspace('user');
 
 		// I should not see the workspace primary menu
-		$buttons = ['create', 'edit', 'delete', 'more'];
+		$buttons = ['edit', 'delete', 'more'];
 		for ($i = 0; $i < count($buttons); $i++) {
 			$this->assertElementNotContainText(
 				$this->findByCss('#js_wsp_primary_menu_wrapper ul'),
