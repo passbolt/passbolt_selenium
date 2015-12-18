@@ -34,7 +34,7 @@ class SetupTest extends PassboltSetupTestCase {
 		// Wait until I am sure that the page is loaded.
 		$this->waitUntilISee('.plugin-check-wrapper', '/Plugin check/');
 		// Assert that url matches or regular expression
-		$this->assertUrlMatch('/\/setup\/install\/[a-z0-9\-]{36}\/[a-z0-9]{32}/');
+		$this->assertUrlMatch('/\/setup\/install\/[a-z0-9\-]{36}\/[a-z0-9\-]{36}/');
 		// Assert that title equals what it should.
 		$this->assertTitleEquals('Welcome to passbolt! Let\'s take 5 min to setup your system.');
 		// Assert that there is a warning message regarding plugin.
