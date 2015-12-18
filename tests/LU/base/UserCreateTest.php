@@ -47,7 +47,7 @@ class UserCreateTest extends PassboltTestCase {
 		$this->gotoWorkspace('user');
 
 		// then I see the create password button
-    $this->assertElementContainText(
+    $this->assertElementContainsText(
       $this->findByCss('.main-action-wrapper'),
       'create'
     );
