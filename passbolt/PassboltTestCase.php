@@ -925,7 +925,14 @@ class PassboltTestCase extends WebDriverTestCase {
 	public function confirmActionInConfirmationDialog() {
 		$button = $this->find('confirm-button');
 		$button->click();
-
+	}
+	/**
+	 *
+	 * Click on the cancel button in the confirm dialog.
+	 */
+	public function cancelActionInConfirmationDialog() {
+		$button = $this->findByCss('.dialog.confirm .js-dialog-cancel');
+		$button->click();
 	}
 
 	/********************************************************************************
