@@ -37,18 +37,30 @@ class User {
                     'PrivateKey' => 'betty_private.key'
                 ));
                 break;
-            case 'carol':
-                return array_merge($conf,array(
-                    'id' => Uuid::get('user.id.carol'),
-	                'name' => 'carol',
-                    'FirstName' => 'Carol',
-                    'LastName' => 'Shaw',
-                    'Username' => 'carol@passbolt.com',
-                    'MasterPassword' => 'carol@passbolt.com',
-                    'TokenCode' => 'CAR',
-                    'PrivateKey' => 'carol_private.key'
-                ));
-                break;
+			case 'carol':
+				return array_merge($conf,array(
+					'id' => Uuid::get('user.id.carol'),
+					'name' => 'carol',
+					'FirstName' => 'Carol',
+					'LastName' => 'Shaw',
+					'Username' => 'carol@passbolt.com',
+					'MasterPassword' => 'carol@passbolt.com',
+					'TokenCode' => 'CAR',
+					'PrivateKey' => 'carol_private.key'
+				));
+				break;
+			case 'frances':
+				return array_merge($conf,array(
+					'id' => Uuid::get('user.id.frances'),
+					'name' => 'frances',
+					'FirstName' => 'Frances',
+					'LastName' => 'Allen',
+					'Username' => 'frances@passbolt.com',
+					'MasterPassword' => 'frances@passbolt.com',
+					'TokenCode' => 'FRA',
+					'PrivateKey' => 'frances_private.key'
+				));
+				break;
 	        case 'admin':
 		        return array_merge($conf,array(
 			        'id' => Uuid::get('user.id.admin'),

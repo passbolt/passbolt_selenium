@@ -158,6 +158,10 @@ class PassboltTestCase extends WebDriverTestCase {
 		$this->assertInputValue('UserUsername', $user['Username']);
 		$this->inputText('js_master_password', $user['MasterPassword']);
 		$this->click('loginSubmit');
+		$this->goOutOfIframe();
+
+		// wait for login to take place
+		$this->waitUntilISee('.login.form .feedback');
 		$this->waitCompletion();
 
 		// wait for redirection trigger
@@ -657,14 +661,14 @@ class PassboltTestCase extends WebDriverTestCase {
 	}
 
 	/**
-	 * Edit a password permission helper
+	 * Edit temporary a permission
 	 * @param $password
 	 * @param $username
 	 * @param $permissionType
 	 * @param $user
 	 * @throws Exception
 	 */
-	public function editPermission($password, $username, $permissionType, $user) {
+	public function editTemporaryPermission($password, $username, $permissionType, $user) {
 		$this->gotoSharePassword($password['id']);
 
 		// I can see the user has a direct permission
@@ -685,6 +689,19 @@ class PassboltTestCase extends WebDriverTestCase {
 			$this->findByCss('.share-password-dialog #js_permissions_changes'),
 			'You need to save to apply the changes'
 		);
+	}
+
+	/**
+	 * Edit a password permission helper
+	 * @param $password
+	 * @param $username
+	 * @param $permissionType
+	 * @param $user
+	 * @throws Exception
+	 */
+	public function editPermission($password, $username, $permissionType, $user) {
+		// Make a temporary edition
+		$this->editTemporaryPermission($password, $username, $permissionType, $user);
 
 		// When I click on the save button
 		$this->click('js_rs_share_save');
@@ -774,9 +791,9 @@ class PassboltTestCase extends WebDriverTestCase {
 		if(!$this->isVisible('.page.people')) {
 			$this->getUrl('');
 			$this->waitUntilISee('.page.people');
-			$this->waitUntilISee('#js_user_wk_menu_creation_button');
+			$this->waitUntilISee('#js_wsp_create_button');
 		}
-		$this->click('#js_user_wk_menu_creation_button');
+		$this->click('#js_wsp_create_button');
 		$this->assertVisible('.create-user-dialog');
 	}
 
@@ -914,7 +931,14 @@ class PassboltTestCase extends WebDriverTestCase {
 	public function confirmActionInConfirmationDialog() {
 		$button = $this->find('confirm-button');
 		$button->click();
-
+	}
+	/**
+	 *
+	 * Click on the cancel button in the confirm dialog.
+	 */
+	public function cancelActionInConfirmationDialog() {
+		$button = $this->findByCss('.dialog.confirm .js-dialog-cancel');
+		$button->click();
 	}
 
 	/********************************************************************************

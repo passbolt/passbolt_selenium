@@ -34,6 +34,10 @@ class LoginTest extends PassboltTestCase {
 
         $this->click('loginSubmit');
         $this->assertElementContainsText('loginMessage','Please wait');
+        $this->goOutOfIframe();
+
+        $this->waitUntilISee('.login.form .feedback');
+        $this->assertElementContainsText('.login.form .feedback','Logging in');
         $this->waitCompletion();
 
         // wait for redirection trigger

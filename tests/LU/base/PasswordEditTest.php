@@ -300,6 +300,131 @@ class PasswordEditTest extends PassboltTestCase
 
     }
 
+	/**
+	 * Scenario: As a user I should be notified I will lose my changes on the edit password dialog after editing a field
+	 *
+	 * Given    I am Ada
+	 * And      I am logged in on the password workspace
+	 * And      I am editing a password I own
+	 * When     I click on name input text field
+	 * And      I empty the name input text field value
+	 * And      I switch to the share screen
+	 * Then     I should see a confirmation dialog notifying me regarding the changes I'm going to lose
+	 *
+	 * When     I click cancel in confirmation dialog
+	 * Then		I should stay on the edit dialog
+	 * 
+	 * When     I switch to the share screen
+	 * And		I click ok in confirmation dialog
+	 * Then     I should leave the edit dialog for the share dialog
+	 */
+	public function testEditPasswordLoseChanges() {
+		// Given I am Ada
+		$user = User::get('ada');
+		$this->setClientConfig($user);
+
+		// And I am logged in on the password workspace
+		$this->loginAs($user);
+
+		// And I am editing a password I own
+		$resource = Resource::get(array('user' => 'ada', 'permission' => 'owner'));
+		$this->gotoEditPassword($resource['id']);
+
+		// When I click on name input text field
+		$this->click('js_field_name');
+
+		// And I change the name input text field value
+		$newname = 'New password name';
+		$this->inputText('js_field_name', $newname);
+
+		// And I switch to the share screen
+		$this->findByCss('#js_tab_nav_js_rs_permission a')->click();
+
+		// Then I should see a confirmation dialog notifying me regarding the changes I'm going to lose
+		$this->assertConfirmationDialog('Do you really want to leave ?');
+
+		// When I click cancel in confirmation dialog
+		$this->cancelActionInConfirmationDialog();
+
+		// Then	I should stay on the edit dialog
+		$this->assertVisible('#js_rs_edit');
+
+	 	// When	I switch to the share dialog
+		$this->findByCss('#js_tab_nav_js_rs_permission a')->click();
+		$this->assertConfirmationDialog('Do you really want to leave ?');
+
+	 	// And I click ok in confirmation dialog
+		$this->confirmActionInConfirmationDialog();
+
+		// Then I should leave the edit dialog for the share dialog
+		$this->assertVisible('#js_rs_permission');
+	}
+
+	/**
+	 * Scenario: As a user I should be notified I will lose my changes on the edit password dialog after editing the secret
+	 *
+	 * Given    I am Ada
+	 * And      I am logged in on the password workspace
+	 * And      I am editing a password I own
+	 * When     I edit the secret
+	 * And      I switch to the share screen
+	 * Then     I should see a confirmation dialog notifying me regarding the changes I'm going to lose
+	 *
+	 * When     I click cancel in confirmation dialog
+	 * Then		I should stay on the edit dialog
+	 *
+	 * When     I switch to the share screen
+	 * And		I click ok in confirmation dialog
+	 * Then     I should leave the edit dialog for the share dialog
+	 */
+	public function testEditPasswordSecretLoseChanges() {
+		// Given I am Ada
+		$user = User::get('ada');
+		$this->setClientConfig($user);
+
+		// And I am logged in on the password workspace
+		$this->loginAs($user);
+
+		// And I am editing a password I own
+		$resource = Resource::get(array('user' => 'ada', 'permission' => 'owner'));
+		$this->gotoEditPassword($resource['id']);
+
+		// When edit the secret
+		$this->goIntoSecretIframe();
+		$this->click('js_secret');
+		$this->goOutOfIframe();
+		$this->assertMasterPasswordDialog($user);
+		$this->enterMasterPassword($user['MasterPassword']);
+		$this->waitUntilIDontSee('passbolt-iframe-master-password');
+		// Wait for password to be decrypted.
+		// TODO : update when a different system based on classes will be there on the field. See #PASSBOLT-1154
+		sleep(4);
+		$this->assertVisible('.edit-password-dialog');
+		$this->inputSecret('My new password');
+
+		// And I switch to the share screen
+		$this->findByCss('#js_tab_nav_js_rs_permission a')->click();
+
+		// Then I should see a confirmation dialog notifying me regarding the changes I'm going to lose
+		$this->assertConfirmationDialog('Do you really want to leave ?');
+
+		// When I click cancel in confirmation dialog
+		$this->cancelActionInConfirmationDialog();
+
+		// Then	I should stay on the edit dialog
+		$this->assertVisible('#js_rs_edit');
+
+		// When	I switch to the share dialog
+		$this->findByCss('#js_tab_nav_js_rs_permission a')->click();
+		$this->assertConfirmationDialog('Do you really want to leave ?');
+
+		// And I click ok in confirmation dialog
+		$this->confirmActionInConfirmationDialog();
+
+		// Then I should leave the edit dialog for the share dialog
+		$this->assertVisible('#js_rs_permission');
+	}
+
     /**
      * Scenario: As a user I can edit the name of a password I have own
      * Regression: PASSBOLT-1038

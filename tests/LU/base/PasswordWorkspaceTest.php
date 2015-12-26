@@ -187,7 +187,11 @@ class PasswordWorkspaceTest extends PassboltTestCase
      * Given        I am logged in as Ada, and I go to the password workspace
      * When         I click on a password
      * Then         I should see a secondary side bar appearing
-     * And          I should the details of the selected password
+     * And          I should see the password's username
+     * And          I should see the password's url
+     * And          I should see the password's modified time
+     * And          I should see the password's creator
+     * And          I should see the password's modifier
      */
     public function testPasswordDetails() {
         // Given I am Ada
@@ -197,11 +201,11 @@ class PasswordWorkspaceTest extends PassboltTestCase
         // And I am logged in on the password workspace
         $this->loginAs($user);
 
-        // I click on a password
+        // When I click on a password
         $this->click("#js_wsp_pwd_browser .tableview-content div[title='Inkscape']");
         $this->waitCompletion();
 
-        // I should see a secondary side bar appearing
+        // And I should see a secondary side bar appearing
         $this->assertPageContainsElement('#js_pwd_details');
 
         // I should the details of the selected password
@@ -212,31 +216,31 @@ class PasswordWorkspaceTest extends PassboltTestCase
             'created-by'      => 'edith@passbolt.com',
             'modified-by'     => 'anonymous@passbolt.com',
         ];
-        // I should see the password's username
+        // And I should see the password's username
         $cssSelector = '#js_pwd_details .detailed-information li.username';
         $this->assertElementContainsText(
             $this->findByCss($cssSelector),
             $pwdDetails['username']
         );
-        // I should see the password's url
+        // And I should see the password's url
         $cssSelector = '#js_pwd_details .detailed-information li.uri';
         $this->assertElementContainsText(
             $this->findByCss($cssSelector),
             $pwdDetails['url']
         );
-        // I should see the password's modified time
+        // And I should see the password's modified time
         $cssSelector = '#js_pwd_details .detailed-information li.modified';
         $this->assertElementContainsText(
             $this->findByCss($cssSelector),
             $pwdDetails['modified']
         );
-        // I should see the password's creator
+        // And I should see the password's creator
         $cssSelector = '#js_pwd_details .detailed-information li.created-by';
         $this->assertElementContainsText(
             $this->findByCss($cssSelector),
             $pwdDetails['created-by']
         );
-        // I should see the password's modifier
+        // And I should see the password's modifier
         $cssSelector = '#js_pwd_details .detailed-information li.modified-by';
         $this->assertElementContainsText(
             $this->findByCss($cssSelector),

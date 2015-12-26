@@ -37,13 +37,19 @@ class UserWorkspaceTest extends PassboltTestCase {
 		$this->gotoWorkspace('user');
 
 		// I should not see the workspace primary menu
-		$buttons = ['create', 'edit', 'delete', 'more'];
+		$buttons = ['edit', 'delete', 'more'];
 		for ($i = 0; $i < count($buttons); $i++) {
 			$this->assertElementNotContainText(
 				$this->findByCss('#js_wsp_primary_menu_wrapper ul'),
 				$buttons[$i]
 			);
 		}
+
+    // I should not see the create button in the main action wrapper
+    $this->assertElementNotContainText(
+      $this->findByCss('.main-action-wrapper'),
+      'create'
+    );
 
 		// I should the workspace filters.
 		$filters = ['All users', 'Recently modified'];
@@ -303,7 +309,7 @@ class UserWorkspaceTest extends PassboltTestCase {
 		$this->gotoWorkspace('user');
 
 		// Then I should not see the create button
-		$this->assertVisible('js_user_wk_menu_creation_button');
+		$this->assertVisible('js_wsp_create_button');
 
 		// And I should not see the edit button
 		$this->assertVisible('js_user_wk_menu_edition_button');
@@ -356,7 +362,7 @@ class UserWorkspaceTest extends PassboltTestCase {
 		$this->gotoWorkspace('user');
 
 		// Then I should not see the create button
-		$this->assertNotVisible('js_user_wk_menu_creation_button');
+		$this->assertNotVisible('js_wsp_create_button');
 
 		// And I should not see the edit button
 		$this->assertNotVisible('js_user_wk_menu_edition_button');
