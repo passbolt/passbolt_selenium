@@ -13,6 +13,7 @@
  * As a user I edit the permissions of a password I own
  * As a user I delete a permission of a password I own
  * As a user I should not let a resource without at least one owner
+ * As a user I should be able to drop my owner permission if there is another owner
  *
  * @copyright    (c) 2015-present Bolt Software Pvt. Ltd.
  * @licence      GPLv3 onwards www.gnu.org/licenses/gpl-3.0.en.html
@@ -572,6 +573,56 @@ class PasswordShareTest extends PassboltTestCase
 
 		// And I see a notice message that the operation was a success
 		$this->assertNotification('app_share_update_success');
+
+		// Since content was edited, we reset the database
+		$this->resetDatabase();
+	}
+
+	/**
+	 * Scenario: As a user I should be able to drop my owner permission if there is another owner.
+	 *
+	 * Given    I am Ada
+	 * And      I am logged in on the password workspace
+	 * When     I go to the sharing dialog of a password I own
+	 * And 		I change the permission of Betty to owner access
+	 * And		I delete my own permission
+	 * And 		I click on the save button
+	 * Then		I see a notice message that the operation was a success
+	 * And		I should not see the share password dialog
+	 * And		I should not see the resource anymore in my browser
+	 */
+	public function testOwnerDropHisPermission() {
+		// Given I am Ada
+		$userAda = User::get('ada');
+		$userBetty = User::get('betty');
+		$userFrances = User::get('frances');
+		$this->setClientConfig($userAda);
+
+		// And I am logged in on the password workspace
+		$this->loginAs($userAda);
+
+		// When I go to the sharing dialog of a password I own
+		$resourceId = Uuid::get('resource.id.apache');
+		$resource = Resource::get(array(
+			'user' => 'ada',
+			'id' => $resourceId
+		));
+		$this->gotoSharePassword($resourceId);
+
+		// And I change the permission of Betty to owner access
+		$this->editTemporaryPermission($resource, 'betty@passbolt.com', 'is owner', $userAda);
+
+		// And I delete my own permission
+		$this->deleteTemporaryPermission($resource, 'ada@passbolt.com');
+
+		// When I click on the save button
+		$this->click('js_rs_share_save');
+
+		// Then I see a notice message that the operation was a success
+		$this->assertNotification('app_share_update_success');
+
+		// And I should not see the share password dialog
+		$this->assertNotVisible('.share-password-dialog');
 
 		// Since content was edited, we reset the database
 		$this->resetDatabase();
