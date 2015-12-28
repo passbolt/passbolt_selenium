@@ -462,6 +462,8 @@ class SettingsProfileTest extends PassboltTestCase {
 		  $this->find('.table-info.profile .name'),
 		  $newname . ' Lovelace'
 		);
+
+    $this->resetDatabase();
 	}
 
 	/**
@@ -528,5 +530,7 @@ class SettingsProfileTest extends PassboltTestCase {
 		  $this->find('.table-info.profile .name'),
 		  'Ada ' . $newname
 		);
+
+    $this->resetDatabase();
 	}
 }
