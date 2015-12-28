@@ -1097,9 +1097,18 @@ class PassboltTestCase extends WebDriverTestCase {
 	 */
 	public function assertComplexity($strength) {
 		$class = str_replace(' ','_',$strength);
-		$this->assertVisible('#js_secret_strength .progress-bar.'.$class);
+    $this->assertVisible('#js_secret_strength.'.$class);
+    $this->assertElementHasClass(
+      $this->find('#js_secret_strength .progress-bar'),
+      $class
+    );
+    // We check visibility only if the strength is available.
+    if ($strength != 'not available') {
+      $this->assertVisible('#js_secret_strength .progress-bar.'.$class);
+    }
 		$this->assertVisible('#js_secret_strength .complexity-text');
-		$this->assertElementContainsText('#js_secret_strength .complexity-text', 'complexity: '.$strength);
+    $labelStrength = $strength != 'not available' ? $strength : '--';
+		$this->assertElementContainsText('#js_secret_strength .complexity-text', 'complexity: '.$labelStrength);
 	}
 
 	/**

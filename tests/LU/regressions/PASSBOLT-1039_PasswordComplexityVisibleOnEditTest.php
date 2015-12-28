@@ -51,7 +51,29 @@ class PASSBOLT1039 extends PassboltTestCase
         // Then I can see the complexity is set to very strong in the edit password screen
         // TODO : modify this test and uncomment the line below once a solution will be found to store the strength of the passwords.
 	    //$this->assertComplexity('very strong');
-	    $this->assertComplexity('very weak');
+	    $this->assertComplexity('not available');
+
+      // Click on th secret field.
+      $this->click('js_secret');
+
+      // Leave IFrame.
+      $this->goOutOfIframe();
+
+      // Then I see the master password dialog
+      $this->assertMasterPasswordDialog($user);
+
+      // When I enter the master password and click submit
+      $this->enterMasterPassword($user['MasterPassword']);
+
+      $this->waitUntilIDontSee('passbolt-iframe-master-password');
+
+      // Wait for password to be decrypted.
+      // TODO : update when a different system based on classes will be there on the field. See #PASSBOLT-1154
+      sleep(4);
+
+      $this->goIntoSecretIframe();
+      $this->assertComplexity('very strong');
+      $this->goOutOfIframe();
 
 	    // And the database is in the default state
 	    $this->resetDatabase();
