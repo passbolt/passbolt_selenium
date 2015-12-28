@@ -104,7 +104,7 @@ class PasswordCreateTest extends PassboltTestCase
 
         // And I see the complexity meter
         // And I see the complexity textual indicator
-        $this->assertComplexity('very weak');
+        $this->assertComplexity('not available');
 
         // When I switch back out of the password iframe
         $this->goOutOfIframe();
@@ -373,6 +373,7 @@ class PasswordCreateTest extends PassboltTestCase
 
         // When I click the button to generate a new random password automatically
         $this->goIntoSecretIframe();
+        $this->assertComplexity('not available');
         $this->click('js_secret_generate');
 
         // Then I see the secret field populated

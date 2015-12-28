@@ -30,8 +30,8 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
         $this->_checkSeleniumConfig();
         $capabilities = $this->_getCapabilities();
         $this->driver = RemoteWebDriver::create(Config::read('selenium.url'), $capabilities);
-	    // Redirect it immediately on an empty page, so we avoid the default home page.
-	    $this->driver->get('');
+        // Redirect it immediately on an empty page, so we avoid the default home page.
+        $this->driver->get('');
     }
 
     /**
@@ -90,6 +90,11 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
                         $profile->addExtension($ext_path);
                     }
                 }
+
+                // Set download preferences for the browser.
+                $profile->setPreference("browser.download.folderList", 2);
+                $profile->setPreference("browser.download.dir", SELENIUM_TMP);
+
                 $capabilities->setCapability(FirefoxDriver::PROFILE, $profile);
             break;
 
@@ -426,15 +431,15 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
 		throw new Exception( "waitUntilIDontSee $id, $regexp : Timeout thrown by " . $backtrace[1]['class'] . "::" . $backtrace[1]['function'] . "()\n . element: $id ($regexp)");
 	}
 
-	/**
-	 * Select an option in a select list
-	 * @param $id string an element id or selector
-	 * @param $option string the label of the option
-	 */
-	public function selectOption($id, $option) {
-		$select = new WebDriverSelect($this->driver->findElement(WebDriverBy::id($id)));
-		$select->selectByVisibleText($option);
-	}
+    /**
+     * Select an option in a select list
+     * @param $id string an element id or selector
+     * @param $option string the label of the option
+     */
+    public function selectOption($id, $option) {
+      $select = new WebDriverSelect($this->driver->findElement(WebDriverBy::id($id)));
+      $select->selectByVisibleText($option);
+    }
 
     /********************************************************************************
      * ASSERT HELPERS

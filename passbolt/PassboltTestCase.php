@@ -70,6 +70,12 @@ class PassboltTestCase extends WebDriverTestCase {
 	public function gotoWorkspace($name) {
 		$linkCssSelector = '';
 		switch ($name) {
+			case 'settings':
+				$this->click('#js_app_profile_dropdown');
+				$this->clickLink('my profile');
+				$this->waitUntilISee('.page.settings.profile');
+				return;
+				break;
 			default:
 				$linkCssSelector = '#js_app_nav_left_' . $name . '_wsp_link a';
 				break;
@@ -1091,9 +1097,18 @@ class PassboltTestCase extends WebDriverTestCase {
 	 */
 	public function assertComplexity($strength) {
 		$class = str_replace(' ','_',$strength);
-		$this->assertVisible('#js_secret_strength .progress-bar.'.$class);
+    $this->assertVisible('#js_secret_strength.'.$class);
+    $this->assertElementHasClass(
+      $this->find('#js_secret_strength .progress-bar'),
+      $class
+    );
+    // We check visibility only if the strength is available.
+    if ($strength != 'not available') {
+      $this->assertVisible('#js_secret_strength .progress-bar.'.$class);
+    }
 		$this->assertVisible('#js_secret_strength .complexity-text');
-		$this->assertElementContainsText('#js_secret_strength .complexity-text', 'complexity: '.$strength);
+    $labelStrength = $strength != 'not available' ? $strength : '--';
+		$this->assertElementContainsText('#js_secret_strength .complexity-text', 'complexity: '.$labelStrength);
 	}
 
 	/**
@@ -1228,7 +1243,27 @@ class PassboltTestCase extends WebDriverTestCase {
 		if (in_array('selected', $classes)) {
 			$pressed = 1;
 		}
-		return $pressed == $status;
+		$this->assertTrue($pressed == $status);
 
+	}
+
+	/**
+	 * Assert that 2 images are same.
+	 * To compare images, it uses the ImageCompare library.
+	 * this library compare the colors of the 2 resized images, and see if the
+	 * average color is the same.
+	 * The method is described here :
+	 * http://www.hackerfactor.com/blog/index.php?/archives/432-Looks-Like-It.html
+	 *
+	 * @param       $image1Path
+	 * @param       $image2Path
+	 * @param float $tolerance
+	 */
+	public function assertImagesAreSame($image1Path, $image2Path, $tolerance = 0.05) {
+		$image1 = Image::fromFile($image1Path);
+		$image2 = Image::fromFile($image2Path);
+		$diff = $image1->difference($image2);
+		$scoreMin = 1 - $tolerance;
+		$this->assertTrue($diff >= $scoreMin );
 	}
 }

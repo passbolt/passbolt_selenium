@@ -280,7 +280,7 @@ class PasswordEditTest extends PassboltTestCase
 
         // And I can see the complexity meter
         // And I can see the complexity textual indicator
-        $this->assertComplexity('very weak');
+        $this->assertComplexity('not available');
 
         // When I switch back out of the password iframe
         $this->goOutOfIframe();

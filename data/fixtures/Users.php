@@ -21,7 +21,8 @@ class User {
                     'Username' => 'ada@passbolt.com',
                     'MasterPassword' => 'ada@passbolt.com',
                     'TokenCode' => 'ADA',
-                    'PrivateKey' => 'ada_private.key'
+                    'PrivateKey' => 'ada_private.key',
+                    'PublicKey'  => 'ada_public.key',
                 ));
                 break;
             case 'betty':
