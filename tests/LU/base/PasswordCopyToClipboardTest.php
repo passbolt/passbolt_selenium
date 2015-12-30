@@ -5,6 +5,7 @@
  * Scenarios :
  * As a user I can see the list of copy options when clicking right on a password
  * As a user I can copy my password to clipboard with a right click
+ * As a user I can copy a password to clipboard using a right click, and by pressing enter in the master key dialog.
  * As a user I can copy the URI of one resource to clipboard with a right click
  * As a user I can copy the username of one resource to clipboard with a right click
  *
@@ -147,6 +148,58 @@ class PasswordCopyToClipboardTest extends PassboltTestCase
         // And the content of the clipboard is valid
         $this->assertClipboard($resource['password']);
     }
+
+	/**
+	 * Scenario : As a user I can copy a password to clipboard using a right click, and by pressing enter in the master key dialog.
+	 *
+	 * Given    I am Ada
+	 * And      I am logged in on the password workspace
+	 * When     I select the first password in the list
+	 * And      I right click
+	 * Then     I can see the contextual menu
+	 * When     I click on the link 'copy password'
+	 * Then     I can see the master key dialog
+	 * When     I enter my master password and press enter
+	 * Then     I can see a success message saying the password was 'copied to clipboard'
+	 * And      The content of the clipboard is valid
+	 */
+	public function testCopyPasswordToClipboardViaContextualMenuAndEnterKey() {
+		// Given I am Ada
+		$user = User::get('ada');
+		$resource = Resource::get(array('user' => 'ada'));
+		$this->setClientConfig($user);
+
+		// And I am logged on the password workspace
+		$this->loginAs($user);
+
+		// When I select the first password in the list
+		$this->click('multiple_select_checkbox_' . $resource['id']);
+
+		// And I right click
+		$this->rightClickPassword($resource['id']);
+
+		// Then I can see the contextual menu
+		$this->assertVisible('js_contextual_menu');
+
+		// When I click on the link 'copy password'
+		$this->click('#js_password_browser_menu_copy_password a');
+
+		// Then I can see the master key dialog
+		$this->assertMasterPasswordDialog($user);
+
+		// When I enter the master key.
+		$this->goIntoMasterPasswordIframe();
+		$this->inputText('js_master_password', $user['MasterPassword']);
+		// And I press enter.
+		$this->find('js_master_password')->sendKeys(WebDriverKeys::ENTER);
+		$this->goOutOfIframe();
+
+		// Then I can see a success message telling me the password was copied to clipboard
+		$this->assertNotification('plugin_secret_copy_success');
+
+		// And the content of the clipboard is valid
+		$this->assertClipboard($resource['password']);
+	}
 
     /**
      * Scenario : As a user I can copy the URI of one resource to clipboard with a right click
