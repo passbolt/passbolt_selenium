@@ -61,6 +61,18 @@ class User {
 					'PrivateKey' => 'frances_private.key'
 				));
 				break;
+			case 'edith':
+				return array_merge($conf,array(
+					'id' => Uuid::get('user.id.edith'),
+					'name' => 'edith',
+					'FirstName' => 'Edith',
+					'LastName' => 'Clarke',
+					'Username' => 'edith@passbolt.com',
+					'MasterPassword' => 'edith@passbolt.com',
+					'TokenCode' => 'EDI',
+					'PrivateKey' => 'edith_private.key'
+				));
+				break;
 	        case 'admin':
 		        return array_merge($conf,array(
 			        'id' => Uuid::get('user.id.admin'),

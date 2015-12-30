@@ -13,6 +13,8 @@
  * As a user I edit the permissions of a password I own
  * As a user I delete a permission of a password I own
  * As a user I should not let a resource without at least one owner
+ * As a user I should be able to drop my owner permission if there is another owner
+ * As a user I can view the permissions for a password I don't own
  *
  * @copyright    (c) 2015-present Bolt Software Pvt. Ltd.
  * @licence      GPLv3 onwards www.gnu.org/licenses/gpl-3.0.en.html
@@ -164,7 +166,7 @@ class PasswordShareTest extends PassboltTestCase
 	 *
 	 * Given    I am Ada
 	 * And      I am logged in on the password workspace
-	 * When     I go to the sharing dialog of the apache password
+	 * When     I go to the sharing dialog of a password I own
 	 * Then     I can see that Ada is owner
 	 * And      I can see that Betty can update
 	 * And      I can see that Carol can read
@@ -197,6 +199,68 @@ class PasswordShareTest extends PassboltTestCase
 
 		// And I can see that Dame can read
 		$this->assertPermission($resource, 'dame@passbolt.com', 'can read');
+
+		// And I can see the save button is disabled
+		$this->assertVisible('#js_rs_share_save.disabled');
+	}
+
+	/**
+	 * Scenario: As a user I can view the permissions for a password I don't own
+	 *
+	 * Given    I am Ada
+	 * And      I am logged in on the password workspace
+	 * When     I go to the edit dialog of a password I don't own
+	 * And		I go to the share tab
+	 * Then     I can see that Ada is owner
+	 * And      I can see that Betty can update
+	 * And      I can see that Carol can read
+	 * And      I can see that Dame can read
+	 * And 		I can't see the add users form
+	 * And 		I can see the save button is disabled
+	 */
+	public function testViewPasswordPermissionsWithoutOwnerRight() {
+		// Given I am Ada
+		$userAda = User::get('ada');
+		$userBetty = User::get('betty');
+		$userCarole = User::get('carole');
+		$userEdith = User::get('edith');
+		$this->setClientConfig($userAda);
+
+		// And I am logged in on the password workspace
+		$this->loginAs($userAda);
+
+		// When I go to the edit dialog of a password I don't own
+		$resource = Resource::get(array(
+			'user' => 'ada',
+			'id' => Uuid::get('resource.id.canjs')
+		));
+		$this->gotoEditPassword(Uuid::get('resource.id.canjs'));
+
+		// And I go to the share tab
+		$this->findByCss('#js_tab_nav_js_rs_permission a')->click();
+
+		// Then I can see that Ada is owner
+		$permissionAdaId = Uuid::get('permission.id.' . $resource['id'] . '-' . $userAda['id']);
+		$this->assertPermission($resource, 'ada@passbolt.com', 'can update');
+		$this->assertDisabled('#js_share_perm_type_' . $permissionAdaId);
+
+		// And I can see that Betty can update
+		$permissionBettyId = Uuid::get('permission.id.' . $resource['id'] . '-' . $userBetty['id']);
+		$this->assertPermission($resource, 'betty@passbolt.com', 'can read');
+		$this->assertDisabled('#js_share_perm_type_' . $permissionBettyId);
+
+		// And I can see that Carol can read
+		$permissionCaroleId = Uuid::get('permission.id.' . $resource['id'] . '-' . $userCarole['id']);
+		$this->assertPermission($resource, 'carol@passbolt.com', 'can read');
+		$this->assertDisabled('#js_share_perm_type_' . $permissionCaroleId);
+
+		// And I can see that Dame can read
+		$permissionEdithId = Uuid::get('permission.id.' . $resource['id'] . '-' . $userEdith['id']);
+		$this->assertPermission($resource, 'edith@passbolt.com', 'is owner');
+		$this->assertDisabled('#js_share_perm_type_' . $permissionEdithId);
+
+		// And I can't see the add users form
+		$this->assertNotVisible('#js_permissions_create_wrapper');
 
 		// And I can see the save button is disabled
 		$this->assertVisible('#js_rs_share_save.disabled');
@@ -572,6 +636,56 @@ class PasswordShareTest extends PassboltTestCase
 
 		// And I see a notice message that the operation was a success
 		$this->assertNotification('app_share_update_success');
+
+		// Since content was edited, we reset the database
+		$this->resetDatabase();
+	}
+
+	/**
+	 * Scenario: As a user I should be able to drop my owner permission if there is another owner.
+	 *
+	 * Given    I am Ada
+	 * And      I am logged in on the password workspace
+	 * When     I go to the sharing dialog of a password I own
+	 * And 		I change the permission of Betty to owner access
+	 * And		I delete my own permission
+	 * And 		I click on the save button
+	 * Then		I see a notice message that the operation was a success
+	 * And		I should not see the share password dialog
+	 * And		I should not see the resource anymore in my browser
+	 */
+	public function testOwnerDropHisPermission() {
+		// Given I am Ada
+		$userAda = User::get('ada');
+		$userBetty = User::get('betty');
+		$userFrances = User::get('frances');
+		$this->setClientConfig($userAda);
+
+		// And I am logged in on the password workspace
+		$this->loginAs($userAda);
+
+		// When I go to the sharing dialog of a password I own
+		$resourceId = Uuid::get('resource.id.apache');
+		$resource = Resource::get(array(
+			'user' => 'ada',
+			'id' => $resourceId
+		));
+		$this->gotoSharePassword($resourceId);
+
+		// And I change the permission of Betty to owner access
+		$this->editTemporaryPermission($resource, 'betty@passbolt.com', 'is owner', $userAda);
+
+		// And I delete my own permission
+		$this->deleteTemporaryPermission($resource, 'ada@passbolt.com');
+
+		// When I click on the save button
+		$this->click('js_rs_share_save');
+
+		// Then I see a notice message that the operation was a success
+		$this->assertNotification('app_share_update_success');
+
+		// And I should not see the share password dialog
+		$this->assertNotVisible('.share-password-dialog');
 
 		// Since content was edited, we reset the database
 		$this->resetDatabase();
