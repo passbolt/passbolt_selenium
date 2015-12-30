@@ -1,6 +1,6 @@
 composer.phar
 composer.lock
-vendor
+#vendor
 
 # generic files to ignore
 *.lock
