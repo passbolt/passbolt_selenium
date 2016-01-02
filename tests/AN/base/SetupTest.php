@@ -2,11 +2,32 @@
 /**
  * Feature : Setup
  * As an anonymous user, I need to be able to see the setup page with an invitation to install the plugin.
+ * As AN and freshly self registered user, I receive an email that invite me to setup passbolt.
  *
  * @copyright 	(c) 2015-present Bolt Software Pvt. Ltd.
  * @licence			GPLv3 onwards www.gnu.org/licenses/gpl-3.0.en.html
  */
 class SetupTest extends PassboltSetupTestCase {
+
+	/**
+	 * Scenario:  As AN and freshly self registered user, I receive an email that invite me to setup passbolt.
+	 */
+	public function testCanSeeRegistrationEmail() {
+		// Register John Doe as a user.
+		$this->getUrl('register');
+		$this->inputText('ProfileFirstName','John');
+		$this->inputText('ProfileLastName','Doe');
+		$this->inputText('UserUsername','johndoe@passbolt.com');
+		$this->pressEnter();
+		$this->assertCurrentUrl('register' . DS . 'thankyou');
+		// Get last email.
+		$this->getUrl('seleniumTests/showLastEmail/' . urlencode('johndoe@passbolt.com'));
+		// Assert the title of the email is "Welcome to passbolt, john!"
+		$this->assertMetaTitleContains('Welcome to passbolt, John!');
+		// Assert I can see the text "You just opened an account on passbolt"
+		$this->assertPageContainsText('You just opened an account on passbolt at');
+		$this->resetDatabase();
+	}
 
 	/**
 	 * Scenario:  I can see the setup page with instructions to install the plugin
