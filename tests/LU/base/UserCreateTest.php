@@ -12,6 +12,7 @@
  *  - After creating a non admin user, the given user shouldn't have access to the admin functionalities
  *  - After creating an admin user, the given user shouldn have access to the admin functionalities
  *  - As admin I can see a user I have just created, but a normal user can't until the created user has completed the setup
+ *  - As LU, after an admin created an account for me, I should receive a confirmation email.
  *
  * @copyright    (c) 2015-present Bolt Software Pvt. Ltd.
  * @licence      GPLv3 onwards www.gnu.org/licenses/gpl-3.0.en.html
@@ -702,6 +703,51 @@ class UserCreateTest extends PassboltTestCase {
 		);
 
 		// Since content was edited, we reset the database
+		$this->resetDatabase();
+	}
+
+	/**
+	 * Scenario : As LU, after an admin created an account for me, I should receive a confirmation email.
+	 * Given    I am Admin
+	 * And      I am logged in
+	 * And      I am on the create user dialog
+	 * When     I enter 'John' as the first name
+	 * And      I enter 'Doe' as the last name
+	 * And      I enter 'johndoe@passbolt.com' as the username
+	 * And      I click on the save button
+	 * And      I see a notice message that the operation was a success
+	 *
+	 * Given    I log out
+	 * And      I check the email box of johndoe@passbolt.com
+	 * Then     I should see an invitation email with subject "Admin created an account for you!"
+	 */
+	public function testCreateUserEmail() {
+		// Given I am Admin
+		$user = User::get('admin');
+		$this->setClientConfig($user);
+
+		// And I am logged in
+		$this->loginAs($user);
+
+		// Go to user workspace
+		$this->gotoWorkspace('user');
+
+		// Create user
+		$newUser = [
+			'first_name' => 'john',
+			'last_name'  => 'doe',
+			'username'   => 'johndoe@passbolt.com',
+			'admin'      => false
+		];
+		$this->createUser($newUser);
+
+		// Check email.
+		$this->getUrl('seleniumTests/showLastEmail/' . urlencode('johndoe@passbolt.com'));
+
+		// Assert the title of the email is "Admin created an account for you!'"
+		$this->assertMetaTitleContains('Admin created an account for you!');
+		// Assert I can see the text "Admin just invited you yo join"
+		$this->assertPageContainsText('Admin just invited you to join');
 		$this->resetDatabase();
 	}
 }
