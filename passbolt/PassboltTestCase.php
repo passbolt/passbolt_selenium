@@ -1266,4 +1266,26 @@ class PassboltTestCase extends WebDriverTestCase {
 		$scoreMin = 1 - $tolerance;
 		$this->assertTrue($diff >= $scoreMin );
 	}
+
+    /**
+     * Assert that a filter is selected.
+     * @param $filterId
+     */
+    public function assertFilterIsSelected($filterId) {
+        $this->assertElementHasClass(
+          $this->find("#$filterId .row"),
+          'selected'
+        );
+    }
+
+    /**
+     * Assert that a filter is not selected.
+     * @param $filterId
+     */
+    public function assertFilterIsNotSelected($filterId) {
+        $this->assertElementHasNotClass(
+          $this->find("#$filterId .row"),
+          'selected'
+        );
+    }
 }

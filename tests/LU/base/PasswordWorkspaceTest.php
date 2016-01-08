@@ -93,23 +93,29 @@ class PasswordWorkspaceTest extends PassboltTestCase
     /**
      * Scenario :   As a user I should be able to filter my passwords
      * Given        I am logged in as Ada, and I go to the password workspace
+     * Then         I should see the filter "All items" is selected.
      * When         I click on the favorite filter
      * Then         I should only see my favorite passwords
+     * And          I should see the filter "All items" is not selected anymore
+     * And          I should see the filter "Favorites" is selected.
      * And          I should see the breadcrumb with the following:
      *                    | All items
      *                    | Favorite
      * When         I click on the recently modified filter
      * Then         I should see my passwords ordered my modification date
+     * And          I should see the filter "Recently modified" is selected.
      * And          I should see the breadcrumb with the following:
      *                    | All items
      *                    | Recently modified
      * When         I click on the shared with me filter
      * Then         I should only see the passwords that have been share with me
+     * And          I should see the filter "Shared with me" is selected.
      * And          I should see the breadcrumb with the following:
      *                    | All items
      *                    | Shared with me
      * When         I click on the items I own filter
      * Then         I should only see the passwords I own
+     * And          I should see the filter "Items I own" is selected.
      * And          I should see the breadcrumb with the following:
      *                    | All items
      *                    | Items I own
@@ -122,6 +128,9 @@ class PasswordWorkspaceTest extends PassboltTestCase
         // And I am logged in on the password workspace
         $this->loginAs($user);
 
+        // Assert menu All items is selected.
+        $this->assertFilterIsSelected('js_pwd_wsp_filter_all');
+
         // I click on the favorite filter
         $this->clickLink("Favorite");
         $this->waitCompletion();
@@ -132,9 +141,19 @@ class PasswordWorkspaceTest extends PassboltTestCase
         //    | Search : Favorite
         $this->assertBreadcrumb('password', ['All items', 'Favorite']);
 
+        // I should see that menu favorite is selected.
+        $this->assertFilterIsSelected('js_pwd_wsp_filter_favorite');
+
+        // And I should see that menu All items is not selected anymore.
+        $this->assertFilterIsNotSelected('js_pwd_wsp_filter_all');
+
         // I click on the recently modified filter
         $this->clickLink("Recently modified");
         $this->waitCompletion();
+
+        // I should see the filter item Recently modified selected.
+        $this->assertFilterIsSelected('js_pwd_wsp_filter_modified');
+
         // I should see my passwords ordered by modification date
         // @todo Test with a case where the modified date are different
         // I should see the breadcrumb with the following:
@@ -145,6 +164,10 @@ class PasswordWorkspaceTest extends PassboltTestCase
         // I click on the shared with me filter
         $this->clickLink("Shared with me");
         $this->waitCompletion();
+
+        // I should see the filter item Shared with me selected.
+        $this->assertFilterIsSelected('js_pwd_wsp_filter_share');
+
         // I should only see the passwords that have been shared with me
         $passwords = [
 	        'Inkscape',
@@ -174,6 +197,10 @@ class PasswordWorkspaceTest extends PassboltTestCase
         // I click on the items I own filter
         $this->clickLink("Items I own");
         $this->waitCompletion();
+
+        // I should see the filter items I own selected.
+        $this->assertFilterIsSelected('js_pwd_wsp_filter_own');
+
         // I should only see the passwords I own
         // @todo Test with a case which owns some passwords
         // I should see the breadcrumb with the following:

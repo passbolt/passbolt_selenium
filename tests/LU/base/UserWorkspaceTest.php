@@ -120,8 +120,11 @@ class UserWorkspaceTest extends PassboltTestCase {
 	 * Scenario :   As a user I should be able to filter the users
 	 *
 	 * Given        I am logged in as Ada, and I go to the user workspace
+     * Then         I should see the filter "All users" is selected.
 	 * When			I click on the recently modified filter
 	 * Then			I should see the users ordered my modification date
+     * And          I should see that the filter "All users" is not selected anymore
+     * And          I should see that the filter "Recently modified" is selected.
 	 * And			I should see the breadcrumb with the following:
 	 *					| All items
 	 *					| Recently modified
@@ -135,9 +138,19 @@ class UserWorkspaceTest extends PassboltTestCase {
 		$this->loginAs($user);
 		$this->gotoWorkspace('user');
 
+        // Assert menu All users is selected.
+        $this->assertFilterIsSelected('js_users_wsp_filter_all');
+
 		// I click on the recently modified filter
 		$this->clickLink("Recently modified");
 		$this->waitCompletion();
+
+        // I should not see the filter All users as selected.
+        $this->assertFilterIsNotSelected('js_users_wsp_filter_all');
+
+        // I should see the filter recently modified selected.
+        $this->assertFilterIsSelected('js_users_wsp_filter_recently_modified');
+
 		// I should see the users ordered by modification date
 		// @todo Test with a case where the modified date are different
 		// I should see the breadcrumb with the following:
