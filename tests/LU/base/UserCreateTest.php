@@ -304,7 +304,7 @@ class UserCreateTest extends PassboltTestCase {
 		// And I click save
 		$this->click('.create-user-dialog input[type=submit]');
 
-		// Then I see an error message saying that the username should be an email
+		// Then I see a notice message that the username is already taken
 		$this->waitUntilISee('#js_field_username_feedback.error.message');
 		$this->assertElementContainsText(
 			$this->find('js_field_username_feedback'), 'The username has already been taken'

@@ -46,6 +46,9 @@ class PasswordEditDescriptionTest extends PassboltTestCase {
 		$resource = Resource::get(array('user' => 'ada', 'permission' => 'owner'));
 		$this->clickPassword($resource['id']);
 
+		// Wait until the resource details description component is ready.
+		$this->waitUntilISee('#js_pwd_details.ready');
+
 		// I should see the edit button.
 		$this->assertVisible("js_edit_description_button");
 
@@ -53,7 +56,7 @@ class PasswordEditDescriptionTest extends PassboltTestCase {
 		$this->assertElementContainsText('#js_rs_details_description', 'Apache is the world\'s most used web server software.');
 
 		// Click on the edit button.
-		$this->click("js_edit_description_button");
+		$this->click("#js_edit_description_button i");
 
 		// I should see a form to edit the description.
 		$this->waitUntilISee("#js_rs_details_edit_description textarea.js_resource_description");
