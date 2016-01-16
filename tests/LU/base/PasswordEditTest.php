@@ -271,7 +271,7 @@ class PasswordEditTest extends PassboltTestCase
         $this->assertInputValue('js_secret','');
 
         // And I can see the security token
-        $this->assertSecurityToken($user);
+        $this->assertSecurityToken($user, 'has_encrypted_secret');
 
         // And I can see the view password button
         $this->assertVisible('js_secret_view');

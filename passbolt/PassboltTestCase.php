@@ -766,6 +766,10 @@ class PassboltTestCase extends WebDriverTestCase {
 		$this->goIntoMasterPasswordIframe();
 		$this->inputText('js_master_password', $pwd);
 		$this->click('master-password-submit');
+		$this->assertElementHasClass(
+			$this->find('master-password-submit'),
+			'processing'
+		);
 		$this->goOutOfIframe();
 	}
 
@@ -1072,23 +1076,26 @@ class PassboltTestCase extends WebDriverTestCase {
 		$this->assertEquals(Color::toHex($t->getCssValue("background-color")), $user['TokenColor']);
 		$this->assertEquals(Color::toHex($t->getCssValue("color")), $user['TokenTextColor']);
 
-		// check color switch when input is selected
-		if (isset($context) && $context == 'master') {
-			$this->click('js_master_password');
-		} else if ($context == 'login') {
-			$this->click('js_master_password');
-		} else if ($context == 'share') {
-			$this->click('js_perm_create_form_aro_auto_cplt');
-		}
-		else {
-			$this->click('js_secret');
-		}
-		$t = $this->findByCss('.security-token');
-		$this->assertEquals(Color::toHex($t->getCssValue("background-color")), $user['TokenTextColor']);
-		$this->assertEquals(Color::toHex($t->getCssValue("color")), $user['TokenColor']);
 
-		// back to normal
-		$this->click('.security-token');
+		if ($context != 'has_encrypted_secret') {
+			// check color switch when input is selected
+			if (isset($context) && $context == 'master') {
+				$this->click('js_master_password');
+			} else if ($context == 'login') {
+				$this->click('js_master_password');
+			} else if ($context == 'share') {
+				$this->click('js_perm_create_form_aro_auto_cplt');
+			}
+			else {
+				$this->click('js_secret');
+			}
+			$t = $this->findByCss('.security-token');
+			$this->assertEquals(Color::toHex($t->getCssValue("background-color")), $user['TokenTextColor']);
+			$this->assertEquals(Color::toHex($t->getCssValue("color")), $user['TokenColor']);
+
+			// back to normal
+			$this->click('.security-token');
+		}
 	}
 
 	/**
