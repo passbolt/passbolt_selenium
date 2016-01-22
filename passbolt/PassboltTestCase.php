@@ -929,6 +929,17 @@ class PassboltTestCase extends WebDriverTestCase {
 		}
 	}
 
+    /**
+     * Type text like a user would do, pressing key after key.
+     * @param $text
+     */
+    public function typeTextLikeAUser($text) {
+        $sizeStr = strlen($text);
+        for ($i = 0; $i < $sizeStr; $i++) {
+            $this->driver->getKeyboard()->pressKey($text[$i]);
+        }
+    }
+
 	/**
 	 * Click on the ok button in the confirm dialog.
 	 */

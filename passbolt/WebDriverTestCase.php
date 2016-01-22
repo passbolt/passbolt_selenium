@@ -222,6 +222,21 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
     }
 
     /**
+     * Press tab key
+     */
+    public function pressTab() {
+        $this->driver->getKeyboard()->pressKey(WebDriverKeys::TAB);
+    }
+
+    /**
+     * Press backtab key
+     */
+    public function pressBacktab() {
+        $this->driver->getKeyboard()
+            ->sendKeys([WebDriverKeys::SHIFT, WebDriverKeys::TAB]);
+    }
+
+    /**
      * A generic find, try by id, then css
      * @param $id string id or css
      */
@@ -560,6 +575,17 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
         $eltClasses = explode(' ', $eltClasses);
         $contains = in_array($className, $eltClasses);
         $this->assertFalse($contains, sprintf("Failed asserting that element has not the class '%s'", $className));
+    }
+
+    /**
+     * Assert if an element has the focus.
+     * @param $id
+     */
+    public function assertElementHasFocus($id) {
+        $activeElt = $this->driver->switchTo()->activeElement();
+        $activeId = $activeElt->getAttribute('id');
+        $this->assertEquals($id, $activeId);
+        $this->driver->switchTo()->defaultContent();
     }
 
     /**

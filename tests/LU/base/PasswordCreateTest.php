@@ -7,6 +7,8 @@
  * As a user I can open close the password dialog
  * As a user I can see error messages when creating a password with wrong inputs
  * As a user I can view a password I just created on my list of passwords
+ * As a user I can view a password I just created by using keyboard shortcuts only
+ * As a user I can go to next / previous field in the create password form by using the keyboard tabs
  * As a user I can generate a random password automatically
  * As a user I can view the password I am creating in clear text
  *
@@ -351,6 +353,201 @@ class PasswordCreateTest extends PassboltTestCase
     }
 
     /**
+     * Scenario: As a user I can view a password I just created by using keyboard shortcuts only
+     *
+     * Given    I am Ada
+     * And      I am logged in
+     * And      I am on the create password dialog
+     * Then     I can see that the field name has the focus
+     * When     I enter 'localhost ftp' as the name
+     * And      I press the tab key
+     * Then     I should see that the field username has the focus
+     * When     I enter 'test' as the username
+     * And      I press the tab key
+     * Then     I should see that the field uri has the focus
+     * When     I enter 'ftp://passbolt.com' as the uri
+     * And      I press the tab key
+     * Then     I should see that the password field is selected
+     * When     I enter 'ftp-password-test' as password
+     * And      I press the tab key
+     * Then     I should see that the field description is selected
+     * When     I enter 'localhost ftp test account' as the description
+     * And      I press enter
+     * Then     I see a dialog telling me encryption is in progress
+     * And      I see a notice message that the operation was a success
+     * And      I see the password I created in my password list
+     */
+    public function testCreatePasswordWithKeyboardShortcutsAndView() {
+        // Given I am Ada
+        $user = User::get('ada');
+        $this->setClientConfig($user);
+
+        // And I am logged in
+        $this->loginAs($user);
+
+        // And I am on the create password dialog
+        $this->gotoCreatePassword();
+
+        // I should see that the field name has the focus.
+        $this-> assertElementHasFocus('js_field_name');
+
+        // Type localhost ftp without clicking on the field.
+        $this->typeTextLikeAUser('localhost ftp');
+
+        // Press tab key.
+        $this->pressTab();
+
+        // Then the field uri should have the focus.
+        $this-> assertElementHasFocus('js_field_uri');
+
+        // I type the uri.
+        $this->typeTextLikeAUser('ftp://passbolt.com');
+
+        // Press tab key.
+        $this->pressTab();
+
+        // Then the field username should have the focus.
+        $this-> assertElementHasFocus('js_field_username');
+
+        // I type the username.
+        $this->typeTextLikeAUser('test');
+
+        // Press tab key.
+        $this->pressTab();
+
+        // The field password should have the focus (inside the iframe).
+        $this->goIntoSecretIframe();
+        $this-> assertElementHasFocus('js_secret');
+
+        // Type the password.
+        $this->typeTextLikeAUser('ftp-password-test');
+
+        // Press tab key.
+        $this->pressTab();
+        $this->goOutOfIframe();
+
+        // Then the field description should have the focus.
+        $this-> assertElementHasFocus('js_field_description');
+
+        // Type description.
+        $this->typeTextLikeAUser('localhost ftp test account');
+
+        // Press tab key.
+        $this->pressTab();
+
+        // Press enter.
+        $this->pressEnter();
+
+        // I see a notice message that the operation was a success
+        $this->assertNotification('app_resources_add_success');
+
+        // I see the password I created in my password list
+        $this->assertElementContainsText(
+            $this->find('js_wsp_pwd_browser'), 'ftp://passbolt.com'
+        );
+        $this->assertElementContainsText(
+            $this->find('js_wsp_pwd_browser'), 'localhost ftp'
+        );
+
+        // Reset database.
+        $this->resetDatabase();
+    }
+
+    /**
+     * Scenario: As a user I can go to next / previous field in the create password form by using the keyboard tabs
+     *
+     * Given    I am Ada
+     * And      I am logged in
+     * And      I am on the create password dialog
+     * Then     I can see that the field name has the focus
+     * When     I press the tab key
+     * Then     I should see that the field username has the focus
+     * When     I press the tab key
+     * Then     I should see that the field uri has the focus
+     * When     I press the tab key
+     * Then     I should see that the password field has the focus
+     * When     I press the tab key
+     * Then     I should see that the field description has the focus
+     * When     I press backtab key
+     * Then     I should see that the password field has the focus
+     * When     I press the backtab key
+     * Then     I should see that the uri field has the focus
+     * When     I press the backtab key
+     * Then     I should see that the username field has the focus
+     * When     I press the backtab key
+     * Then     I should see that the name field has the focus.
+     */
+    public function testCreatePasswordKeyboardShortcuts() {
+        // Given I am Ada
+        $user = User::get('ada');
+        $this->setClientConfig($user);
+
+        // And I am logged in
+        $this->loginAs($user);
+
+        // And I am on the create password dialog
+        $this->gotoCreatePassword();
+
+        // I should see that the field name has the focus.
+        $this-> assertElementHasFocus('js_field_name');
+
+        // Press tab key.
+        $this->pressTab();
+
+        // I should see that the field name has the focus.
+        $this-> assertElementHasFocus('js_field_uri');
+
+        // Press tab key.
+        $this->pressTab();
+
+        // I should see that the field name has the focus.
+        $this-> assertElementHasFocus('js_field_username');
+
+        // Press tab key.
+        $this->pressTab();
+
+        // The field password should have the focus (inside the iframe).
+        $this->goIntoSecretIframe();
+        $this-> assertElementHasFocus('js_secret');
+
+        // Press tab key.
+        $this->pressTab();
+        $this->goOutOfIframe();
+
+        // Then the field description should have the focus.
+        $this-> assertElementHasFocus('js_field_description');
+
+        // Press backtab.
+        $this->pressBacktab();
+
+        // The field password should have the focus (inside the iframe).
+        $this->goIntoSecretIframe();
+        $this-> assertElementHasFocus('js_secret');
+
+        // Press tab key.
+        // TODO : fix the below part of the test.
+        // Backtab doesn't seem to be done properly. Tab is received by the plugin, but shiftKey in the event
+        // is set to false.
+        //$this->pressBacktab();
+        $this->goOutOfIframe();
+
+        // I should see that the field name has the focus.
+//        $this-> assertElementHasFocus('js_field_username');
+//
+//        // Press backtab key.
+//        $this->pressBacktab();
+//
+//        // I should see that the field name has the focus.
+//        $this-> assertElementHasFocus('js_field_uri');
+//
+//        // Press backtab key.
+//        $this->pressBacktab();
+//
+//        // I should see that the field name has the focus.
+//        $this-> assertElementHasFocus('js_field_name');
+    }
+
+    /**
      * Scenario: As a user I can generate a random password automatically
      *
      * Given    I am Ada
@@ -430,5 +627,4 @@ class PasswordCreateTest extends PassboltTestCase
         // Then I should not see the input field with the password in clear text
         $this->assertNotVisible('js_secret_clear');
     }
-
 }
