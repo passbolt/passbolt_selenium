@@ -7,6 +7,7 @@
  * As a user I can edit a password using the right click contextual menu
  * As a user I can open close the edit password dialog
  * As a user I can see the edit password dialog content
+ * As a user I can edit a password by using keyboard shortcuts only
  * As a user I can edit the name of a password I have own
  * As a user I can edit the description of a password I have own
  * As a user I can edit the uri of a password I have own
@@ -298,6 +299,232 @@ class PasswordEditTest extends PassboltTestCase
         // And I can see the cancel button
         $this->assertVisible('.edit-password-dialog a.cancel');
 
+    }
+
+    /**
+     * Scenario: As a user I can edit a password by using keyboard shortcuts only
+     *
+     * Given    I am Ada
+     * And      I am logged in
+     * And      I am on the edit password dialog
+     * Then     I can see that the field name has the focus
+     * When     I type a new name on the keyboard to modify the current one already selected
+     * And      I press the tab key
+     * Then     I should see that the field username has the focus
+     * When     I press the tab key
+     * Then     I should see that the field uri has the focus
+     * When     I press the tab key
+     * Then     I should see the master password dialog opening
+     * When     I type the master password on keyboard (without clicking anywhere first)
+     * And      I press enter
+     * And      I wait for a few seconds
+     * Then     I should see the password field populated with my password
+     * and      I should see that the password field has the focus
+     * When     I press the tab key
+     * Then     I should see that the field description has the focus
+     * When     I press tab
+     * And      I press enter
+     * Then     I should see a notice message saying that the password was edited succesfully
+     * And      I see the password updated with the new name I just entered in my password list
+     */
+    public function testEditPasswordWithKeyboardShortcutAndView() {
+        // Given I am Ada
+        $user = User::get('ada');
+        $this->setClientConfig($user);
+
+        // And I am logged in on the password workspace
+        $this->loginAs($user);
+
+        // And I am editing a password I own
+        $resource = Resource::get(array('user' => 'ada', 'permission' => 'owner'));
+        $this->gotoEditPassword($resource['id']);
+
+        // Then I can see the edit password dialog
+        $this->assertVisible('.edit-password-dialog');
+
+        // The field name should have the focus
+        $this->assertElementHasFocus('js_field_name');
+
+        // I type a new name using keyboard only
+        $this->typeTextLikeAUser('keyboardupdate');
+
+        // Press tab key.
+        $this->pressTab();
+
+        // Then the field uri should have the focus.
+        $this-> assertElementHasFocus('js_field_uri');
+
+        // Press tab key.
+        $this->pressTab();
+
+        // Then the field username should have the focus.
+        $this-> assertElementHasFocus('js_field_username');
+
+        // Press tab key.
+        $this->pressTab();
+
+        // Then I see the master password dialog
+        // Given I can see the iframe
+        $this->waitUntilISee('passbolt-iframe-master-password');
+
+        // I type the master password using keyboard only
+        $this->typeTextLikeAUser($user['MasterPassword']);
+
+        // And I press enter
+        $this->pressEnter();
+
+        // Then the master password dialog should disappear
+        $this->waitUntilIDontSee('passbolt-iframe-master-password');
+
+        // Wait for password to be decrypted.
+        // TODO : update when a different system based on classes will be there on the field. See #PASSBOLT-1154
+        sleep(4);
+
+        // Then I can see the password edit dialog
+        $this->assertVisible('.edit-password-dialog');
+
+        // The field password should have the focus (inside the iframe).
+        $this->goIntoSecretIframe();
+        $this-> assertElementHasFocus('js_secret');
+
+        // Press tab key.
+        $this->pressTab();
+        $this->goOutOfIframe();
+
+        // Then the field description should have the focus.
+        $this-> assertElementHasFocus('js_field_description');
+
+        // Press tab key.
+        $this->pressTab();
+
+        // Press enter.
+        $this->pressEnter();
+
+        // Then I can see a success notification
+        $this->assertNotification('app_resources_edit_success');
+
+        // And I can see that the password name have changed in the overview
+        $this->assertElementContainsText('#js_wsp_pwd_browser .tableview-content', 'keyboardupdate');
+
+        // Reset database.
+        $this->resetDatabase();
+    }
+
+    /**
+     * Scenario: As a user I can go to next / previous field in the edit password form by using the keyboard tabs
+     *
+     * Given    I am Ada
+     * And      I am logged in
+     * And      I am on the edit password dialog
+     * Then     I can see that the field name has the focus
+     * When     I press the tab key
+     * Then     I should see that the field username has the focus
+     * When     I press the tab key
+     * Then     I should see that the field uri has the focus
+     * When     I press the tab key
+     * Then     I should see the master password dialog opening
+     * When     I type the master password on keyboard (without clicking anywhere first)
+     * And      I press enter
+     * And      I wait for a few seconds
+     * Then     I should see the password field populated with my password
+     * And      I should see that the password field has the focus
+     * When     I press the tab key
+     * Then     I should see that the field description has the focus
+     * When     I press backtab key
+     * Then     I should see that the password field has the focus
+     * When     I press the backtab key
+     * Then     I should see that the uri field has the focus
+     * When     I press the backtab key
+     * Then     I should see that the username field has the focus
+     * When     I press the backtab key
+     * Then     I should see that the name field has the focus.
+     */
+    public function testEditPasswordKeyboardShortcuts() {
+        // Given I am Ada
+        $user = User::get('ada');
+        $this->setClientConfig($user);
+
+        // And I am logged in
+        $this->loginAs($user);
+
+        // And I am editing a password I own
+        $resource = Resource::get(array('user' => 'ada', 'permission' => 'owner'));
+        $this->gotoEditPassword($resource['id']);
+
+        // I should see that the field name has the focus.
+        $this-> assertElementHasFocus('js_field_name');
+
+        // Press tab key.
+        $this->pressTab();
+
+        // I should see that the field name has the focus.
+        $this-> assertElementHasFocus('js_field_uri');
+
+        // Press tab key.
+        $this->pressTab();
+
+        // I should see that the field name has the focus.
+        $this-> assertElementHasFocus('js_field_username');
+
+        // Press tab key.
+        $this->pressTab();
+
+        // Then I see the master password dialog
+        // Given I can see the iframe
+        $this->waitUntilISee('passbolt-iframe-master-password');
+
+        // I type the master password using keyboard only
+        $this->typeTextLikeAUser($user['MasterPassword']);
+
+        // And I press enter
+        $this->pressEnter();
+
+        // Then the master password dialog should disappear
+        $this->waitUntilIDontSee('passbolt-iframe-master-password');
+
+        // Wait for password to be decrypted.
+        // TODO : update when a different system based on classes will be there on the field. See #PASSBOLT-1154
+        sleep(4);
+
+        // The field password should have the focus (inside the iframe).
+        $this->goIntoSecretIframe();
+        $this-> assertElementHasFocus('js_secret');
+
+        // Press tab key.
+        $this->pressTab();
+        $this->goOutOfIframe();
+
+        // Then the field description should have the focus.
+        $this-> assertElementHasFocus('js_field_description');
+
+        // Press backtab.
+        $this->pressBacktab();
+
+        // The field password should have the focus (inside the iframe).
+        $this->goIntoSecretIframe();
+        $this-> assertElementHasFocus('js_secret');
+
+        // Press tab key.
+        // TODO (PASSBOLT-1295) : fix the below part of the test.
+        // Backtab doesn't seem to be done properly. Tab is received by the plugin, but shiftKey in the event
+        // is set to false.
+        //$this->pressBacktab();
+        $this->goOutOfIframe();
+
+        // I should see that the field name has the focus.
+//        $this-> assertElementHasFocus('js_field_username');
+//
+//        // Press backtab key.
+//        $this->pressBacktab();
+//
+//        // I should see that the field name has the focus.
+//        $this-> assertElementHasFocus('js_field_uri');
+//
+//        // Press backtab key.
+//        $this->pressBacktab();
+//
+//        // I should see that the field name has the focus.
+//        $this-> assertElementHasFocus('js_field_name');
     }
 
 	/**
