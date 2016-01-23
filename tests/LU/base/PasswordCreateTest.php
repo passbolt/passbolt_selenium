@@ -525,7 +525,7 @@ class PasswordCreateTest extends PassboltTestCase
         $this-> assertElementHasFocus('js_secret');
 
         // Press tab key.
-        // TODO : fix the below part of the test.
+        // TODO (PASSBOLT-1295) : fix the below part of the test.
         // Backtab doesn't seem to be done properly. Tab is received by the plugin, but shiftKey in the event
         // is set to false.
         //$this->pressBacktab();
