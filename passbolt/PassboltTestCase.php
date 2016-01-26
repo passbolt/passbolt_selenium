@@ -773,6 +773,34 @@ class PassboltTestCase extends WebDriverTestCase {
 		$this->goOutOfIframe();
 	}
 
+    /**
+     * Enter the password in the master password iframe using only keyboard, and no clicks.
+     *
+     * @param $pwd
+     *   master password string
+     * @param $tabFirst
+     *   if tab should be pressed first to give focus
+     *
+     */
+    public function enterMasterPasswordWithKeyboardShortcuts($pwd, $tabFirst = false) {
+        $this->waitUntilISee('passbolt-iframe-master-password');
+        sleep(1);
+        if ($tabFirst) {
+            $this->pressTab();
+            $this->goIntoMasterPasswordIframe();
+            $this->assertElementHasFocus('js_master_password');
+            $this->goOutOfIframe();
+        }
+        $this->typeTextLikeAUser($pwd);
+        $this->pressEnter();
+        $this->goIntoMasterPasswordIframe();
+        $this->assertElementHasClass(
+            $this->find('master-password-submit'),
+            'processing'
+        );
+        $this->goOutOfIframe();
+    }
+
 	/**
 	 * Copy a password to clipboard
 	 * @param $resource
@@ -928,6 +956,17 @@ class PassboltTestCase extends WebDriverTestCase {
 			$this->driver->getKeyboard()->pressKey(WebDriverKeys::BACKSPACE);
 		}
 	}
+
+    /**
+     * Type text like a user would do, pressing key after key.
+     * @param $text
+     */
+    public function typeTextLikeAUser($text) {
+        $sizeStr = strlen($text);
+        for ($i = 0; $i < $sizeStr; $i++) {
+            $this->driver->getKeyboard()->pressKey($text[$i]);
+        }
+    }
 
 	/**
 	 * Click on the ok button in the confirm dialog.
