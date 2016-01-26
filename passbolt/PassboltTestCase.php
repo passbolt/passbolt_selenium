@@ -116,6 +116,14 @@ class PassboltTestCase extends WebDriverTestCase {
 	}
 
 	/**
+	 * Wait until the secret is decrypted and inserted in the secret field.
+	 * @throws Exception
+	 */
+	public function waitUntilSecretIsDecryptedInField() {
+		$this->waitUntilIDontSee('#js_secret.decrypting');
+	}
+
+	/**
 	 * Register a user using the registration form.
 	 * @param $firstname
 	 * @param $lastname

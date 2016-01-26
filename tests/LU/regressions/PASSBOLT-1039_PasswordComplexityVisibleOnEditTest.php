@@ -67,11 +67,10 @@ class PASSBOLT1039 extends PassboltTestCase
 
       $this->waitUntilIDontSee('passbolt-iframe-master-password');
 
-      // Wait for password to be decrypted.
-      // TODO : update when a different system based on classes will be there on the field. See #PASSBOLT-1154
-      sleep(4);
-
       $this->goIntoSecretIframe();
+
+	    $this->waitUntilSecretIsDecryptedInField();
+
       $this->assertComplexity('very strong');
       $this->goOutOfIframe();
 

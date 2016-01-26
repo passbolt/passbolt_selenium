@@ -128,12 +128,12 @@ class MasterPasswordShortcutTest extends PassboltTestCase {
         // When I enter my master password from keyboard only, by pressing tab first.
         $this->enterMasterPasswordWithKeyboardShortcuts($user['MasterPassword']);
 
-        // Wait for password to be decrypted.
-        // TODO : update when a different system based on classes will be there on the field. See #PASSBOLT-1154
-        sleep(4);
-
         $this->goIntoSecretIframe();
 
+	    // Wait for password to be decrypted.
+	    $this->waitUntilSecretIsDecryptedInField();
+
+	    // Assert that password matches what we expect.
         $this->assertInputValue('js_secret', $resource['password']);
 
         $this->goOutOfIframe();
@@ -176,11 +176,10 @@ class MasterPasswordShortcutTest extends PassboltTestCase {
         // When I enter my master password from keyboard only, by pressing tab first.
         $this->enterMasterPasswordWithKeyboardShortcuts($user['MasterPassword'], true);
 
-        // Wait for password to be decrypted.
-        // TODO : update when a different system based on classes will be there on the field. See #PASSBOLT-1154
-        sleep(4);
-
         $this->goIntoSecretIframe();
+
+	    // Wait for password to be decrypted.
+	    $this->waitUntilSecretIsDecryptedInField();
 
         $this->assertInputValue('js_secret', $resource['password']);
 

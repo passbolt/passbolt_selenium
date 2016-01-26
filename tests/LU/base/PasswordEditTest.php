@@ -376,15 +376,12 @@ class PasswordEditTest extends PassboltTestCase
         // Then the master password dialog should disappear
         $this->waitUntilIDontSee('passbolt-iframe-master-password');
 
-        // Wait for password to be decrypted.
-        // TODO : update when a different system based on classes will be there on the field. See #PASSBOLT-1154
-        sleep(4);
-
         // Then I can see the password edit dialog
         $this->assertVisible('.edit-password-dialog');
 
         // The field password should have the focus (inside the iframe).
         $this->goIntoSecretIframe();
+	    $this->waitUntilSecretIsDecryptedInField();
         $this-> assertElementHasFocus('js_secret');
 
         // Press tab key.
@@ -482,12 +479,9 @@ class PasswordEditTest extends PassboltTestCase
         // Then the master password dialog should disappear
         $this->waitUntilIDontSee('passbolt-iframe-master-password');
 
-        // Wait for password to be decrypted.
-        // TODO : update when a different system based on classes will be there on the field. See #PASSBOLT-1154
-        sleep(4);
-
         // The field password should have the focus (inside the iframe).
         $this->goIntoSecretIframe();
+	    $this->waitUntilSecretIsDecryptedInField();
         $this-> assertElementHasFocus('js_secret');
 
         // Press tab key.
@@ -623,9 +617,12 @@ class PasswordEditTest extends PassboltTestCase
 		$this->assertMasterPasswordDialog($user);
 		$this->enterMasterPassword($user['MasterPassword']);
 		$this->waitUntilIDontSee('passbolt-iframe-master-password');
-		// Wait for password to be decrypted.
-		// TODO : update when a different system based on classes will be there on the field. See #PASSBOLT-1154
-		sleep(4);
+
+		// Wait until the password is decrypted and displayed in the field.
+		$this->goIntoSecretIframe();
+		$this->waitUntilSecretIsDecryptedInField();
+		$this->goOutOfIframe();
+
 		$this->assertVisible('.edit-password-dialog');
 		$this->inputSecret('My new password');
 
@@ -848,9 +845,9 @@ class PasswordEditTest extends PassboltTestCase
 
 	    $this->waitUntilIDontSee('passbolt-iframe-master-password');
 
-	    // Wait for password to be decrypted.
-	    // TODO : update when a different system based on classes will be there on the field. See #PASSBOLT-1154
-	    sleep(4);
+	    $this->goIntoSecretIframe();
+	    $this->waitUntilSecretIsDecryptedInField();
+	    $this->goOutOfIframe();
 
         // Then I can see the password edit dialog
         $this->assertVisible('.edit-password-dialog');
@@ -925,12 +922,9 @@ class PasswordEditTest extends PassboltTestCase
 	    // Wait until I don't see the master password window anymore.
 	    $this->waitUntilIDontSee('passbolt-iframe-master-password');
 
-	    // Wait for password to be decrypted.
-	    // TODO : update when a different system based on classes will be there on the field. See #PASSBOLT-1154
-	    sleep(6);
-
         // Then I should see the input field with the password in clear text
         $this->goIntoSecretIframe();
+	    $this->waitUntilSecretIsDecryptedInField();
         $this->assertNotVisible('js_secret');
         $this->assertVisible('js_secret_clear');
         $this->assertTrue($this->findById('js_secret_clear')->getAttribute('value') == $r1['password']);
@@ -949,6 +943,8 @@ class PasswordEditTest extends PassboltTestCase
 
         // Then I can see the password in clear text
         $this->assertVisible('js_secret_clear');
+
+	    $this->goOutOfIframe();
     }
 
     /**
@@ -1000,12 +996,11 @@ class PasswordEditTest extends PassboltTestCase
 	    // Wait until I don't see the master password window anymore.
 	    $this->waitUntilIDontSee('passbolt-iframe-master-password');
 
-	    // Wait for password to be decrypted.
-	    // TODO : update when a different system based on classes will be there on the field. See #PASSBOLT-1154
-	    sleep(4);
-
         // Then I should see the secret field populated
         $this->goIntoSecretIframe();
+
+	    $this->waitUntilSecretIsDecryptedInField();
+
 	    $s = $this->findById('js_secret')->getAttribute('value');
 	    $this->assertNotEmpty($s);
 
