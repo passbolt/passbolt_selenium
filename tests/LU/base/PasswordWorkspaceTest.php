@@ -434,7 +434,8 @@ class PasswordWorkspaceTest extends PassboltTestCase
 	 * When         I click on the resource again to select it
 	 * Then         I should see that the sidebar is visible
 	 * When         I click on the close button at the top of the sidebar
-	 * Then         I should not see the sidebar anymore
+	 * Then         I should see that the sidebar button is deactivated
+	 * And			I should not see the sidebar anymore
 	 */
 	public function testSidebarVisibility() {
 		// Given I am Ada
@@ -505,6 +506,9 @@ class PasswordWorkspaceTest extends PassboltTestCase
 
 		// I click on the button close at the top of the dialogue.
 		$this->click('#js_pwd_details .js_sidebar_close');
+
+		// I should see that the sidebar button is deactivated
+		$this->assertToggleButtonStatus('js_wk_secondary_menu_view_sidebar_button', TOGGLE_BUTTON_UNPRESSED);
 
 		// Then I should not see the sidebar anymore.
 		$this->assertNotVisible('#js_pwd_details');
