@@ -8,7 +8,9 @@
 $config = array (
 	// the base url to use to access this app
 	'testsuite' => array(
-		'url' => 'http://localhost/passbolt_selenium'
+		'url' => 'http://localhost/passbolt_selenium',
+		// path to access the testsuite files from the running firefox.
+		'path' => __DIR__ . '/..',
 	),
 	// the url of your passbolt app
 	'passbolt' => array (
