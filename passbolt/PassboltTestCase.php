@@ -1161,7 +1161,7 @@ class PassboltTestCase extends WebDriverTestCase {
       $this->assertVisible('#js_secret_strength .progress-bar.'.$class);
     }
 		$this->assertVisible('#js_secret_strength .complexity-text');
-    $labelStrength = $strength != 'not available' ? $strength : '--';
+        $labelStrength = $strength != 'not available' ? $strength : 'n/a';
 		$this->assertElementContainsText('#js_secret_strength .complexity-text', 'complexity: '.$labelStrength);
 	}
 
