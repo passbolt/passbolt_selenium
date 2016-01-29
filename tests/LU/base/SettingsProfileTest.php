@@ -75,13 +75,13 @@ class SettingsProfileTest extends PassboltTestCase {
 		// And I should the created date in the ago format
 		$this->assertElementContainsText(
 			$this->find('.table-info.profile .created'),
-			'/(an|[0-9]{1,2}) (seconds|minute|minutes|hour|hours|day|days) ago/'
+			'/(a|[1-2]) (minute|minutes) ago/'
 		);
 
 		// And I should see the correct modified date in the ago format
 		$this->assertElementContainsText(
 			$this->find('.table-info.profile .modified'),
-			'/(an|[0-9]{1,2}) (seconds|minute|minutes|hour|hours|day|days) ago/'
+			'/(a|[1-2]) (minute|minutes) ago/'
 		);
 
 		// I should see the picture of Ada.

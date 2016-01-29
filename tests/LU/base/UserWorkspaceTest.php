@@ -114,6 +114,8 @@ class UserWorkspaceTest extends PassboltTestCase {
 		}
 
 		// @todo Test de rows details
+
+
 	}
 
 	/**
@@ -186,7 +188,7 @@ class UserWorkspaceTest extends PassboltTestCase {
 		// I should see the details of the selected user
 		$userDetails = [
 			'role' 			=> 'User',
-			'modified' 		=> 'ago',
+			'modified' 		=> '7 days ago',
 			'keyid' 		=> 'E61D7009',
 			'type'		 	=> 'RSA',
 			'created'		=> '/[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}/',
