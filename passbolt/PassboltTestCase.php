@@ -347,7 +347,7 @@ class PassboltTestCase extends WebDriverTestCase {
 		// Press Next.
 		$this->clickLink("Next");
 		// Fill up password.
-		$this->waitUntilISee('#js_step_content h3', '/you are being redirected/i');
+		$this->waitUntilISee('#js_step_content h3', '/The setup is complete/i');
 		// Wait until I see the login page.
 		$this->waitUntilISee('.information h2', '/Welcome back!/i');
 	}
@@ -387,7 +387,7 @@ class PassboltTestCase extends WebDriverTestCase {
 		// Press Next.
 		$this->clickLink("Next");
 		// Fill up password.
-		$this->waitUntilISee('#js_step_content h3', '/you are being redirected/i');
+		$this->waitUntilISee('#js_step_content h3', '/The setup is complete/i');
 		// Wait until I see the login page.
 		$this->waitUntilISee('.information h2', '/Welcome back!/i');
 	}
