@@ -129,9 +129,7 @@ class DebugTest extends PassboltTestCase {
         // Check security token code is not alpha numeric
         $this->inputText('securityTokenCode', '?');
         $this->click('js_save_conf');
-	    // TODO reactivate test below after fixing token validation.
-        //$this->assertElementContainsText($feedback, 'The token code should only contain alphabetical and numeric characters');
-	    $this->assertElementContainsText($feedback, 'The token code should only contain 3 characters');
+        $this->assertElementContainsText($feedback, 'The token code should only contain alphabetical and numeric characters');
 
         // Check security token code length is exactly 3 characters in length
         $this->inputText('securityTokenCode', '12');

@@ -55,7 +55,7 @@ class SetupTest extends PassboltSetupTestCase {
 		],
 		'login_redirect' => [
 			'title' => 'Alright sparky, it\'s time to log in!',
-			'subtitle' => 'Please wait... you are being redirected to the login page',
+			'subtitle' => 'The setup is complete',
 			'menu_item' => '5. Login !'
 		],
 
@@ -358,7 +358,7 @@ class SetupTest extends PassboltSetupTestCase {
 		// Assert that error message contains the right text.
 		$this->assertElementContainsText(
 			$this->find('KeyErrorMessage'),
-			'The key selected has an invalid format.'
+			'Unknown ASCII armor type'
 		);
 		// Emtpy value.
 		$this->find('js_setup_import_key_text')->clear();
@@ -407,12 +407,15 @@ class SetupTest extends PassboltSetupTestCase {
 	 * @throws Exception
 	 */
 	private function __testStepGenerateAndDownloadKey() {
+
+		// Wait until section appears.
+		$this->__waitForSection('generate_key_progress');
+
+		// Assert that button submit is in processing state.
 		$this->assertElementHasClass(
 			$this->find('js_setup_submit_step'),
 			'processing'
 		);
-		// Wait until section appears.
-		$this->__waitForSection('generate_key_progress');
 
 		$this->waitUntilISee('#js_setup_submit_step.enabled', null, 20);
 
@@ -478,9 +481,9 @@ class SetupTest extends PassboltSetupTestCase {
 		// I should see the subtitle.
 		$this->assertTitleEquals($this->__getSectionInfo('login_redirect', 'title'));
 
-		// Test that button Next is enabled.
+		// Test that a button is processing.
 		$this->assertElementHasClass(
-			$this->find('js_setup_submit_step'),
+			$this->find('js_spinner'),
 			'processing'
 		);
 
