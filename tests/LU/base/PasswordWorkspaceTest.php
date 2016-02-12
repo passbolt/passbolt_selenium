@@ -241,7 +241,7 @@ class PasswordWorkspaceTest extends PassboltTestCase
             'url'             => 'https://inkscape.org/',
             'modified'        => '/([0-9]{1}|a) (minute)[s]? ago/',
             'created-by'      => 'edith@passbolt.com',
-            'modified-by'     => 'anonymous@passbolt.com',
+            'modified-by'     => 'edith@passbolt.com',
         ];
         // And I should see the password's username
         $cssSelector = '#js_pwd_details .detailed-information li.username';
