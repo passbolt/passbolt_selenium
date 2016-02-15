@@ -17,4 +17,22 @@ class PassboltServer {
 	                   ->send();
 		return preg_match('/created/', $response->body);
 	}
+
+	/**
+	 * Add extra server configuration.
+	 */
+	static public function setExtraConfig($config = []) {
+		$url = Config::read('passbolt.url') . DS . '/seleniumTests/setExtraConfig';
+		$request = Httpful\Request::post($url, $config);
+		$request->sendsType(Httpful\Mime::JSON)->send();
+	}
+
+	/**
+	 * Reset extra server configuration.
+	 */
+	static public function resetExtraConfig() {
+		$url = Config::read('passbolt.url') . DS . '/seleniumTests/resetExtraConfig';
+		$request = Httpful\Request::post($url);
+		$request->sendsType(Httpful\Mime::JSON)->send();
+	}
 }
