@@ -1250,7 +1250,7 @@ class PassboltTestCase extends WebDriverTestCase {
 	public function assertClipboard($content) {
 		// trick: we create a temporary textarea in the page.
 		// and check its content match the content given
-		$this->appendHtmlInPage('container', '<textarea id="webdriver-clipboard-content"></textarea>');
+		$this->appendHtmlInPage('container', '<textarea id="webdriver-clipboard-content" style="position:absolute; top:0; left:0; z-index:999;"></textarea>');
 		$e = $this->findById('webdriver-clipboard-content');
 		$e->click();
 		$action = new WebDriverActions($this->driver);
