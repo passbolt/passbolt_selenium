@@ -37,7 +37,7 @@ class UserDeleteTest extends PassboltTestCase {
 		$this->gotoWorkspace('user');
 
 		// When I right click on a user
-		$user= User::get(array('user' => 'betty'));
+		$user = User::get('betty');
 		$this->rightClickUser($user['id']);
 
 		// Then I select the delete option in the contextual menu
@@ -92,7 +92,7 @@ class UserDeleteTest extends PassboltTestCase {
 		$this->gotoWorkspace('user');
 
 		// When I right click on a user
-		$user= User::get(array('user' => 'betty'));
+		$user = User::get('betty');
 		$this->clickUser($user['id']);
 
 		// Then I select the delete option in the contextual menu

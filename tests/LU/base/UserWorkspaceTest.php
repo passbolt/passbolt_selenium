@@ -333,7 +333,7 @@ class UserWorkspaceTest extends PassboltTestCase {
 		$this->assertVisible('js_user_wk_menu_deletion_button');
 
 		// Right click on a user
-		$betty = User::get(array('user' => 'betty'));
+		$betty = User::get('betty');
 		$this->rightClickUser($betty['id']);
 
 		// Then I can see the contextual menu
@@ -386,8 +386,8 @@ class UserWorkspaceTest extends PassboltTestCase {
 		$this->assertNotVisible('js_user_wk_menu_deletion_button');
 
 		// Right click on a user
-		$betty = User::get(array('user' => 'betty'));
-		$this->rightClickUser($user['id']);
+		$betty = User::get('betty');
+		$this->rightClickUser($betty['id']);
 
 		// Then I can see the contextual menu
 		$this->assertVisible('js_contextual_menu');

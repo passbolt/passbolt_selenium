@@ -48,7 +48,7 @@ class UserEditTest extends PassboltTestCase {
 		$this->assertVisible('#js_user_wk_menu_edition_button.disabled');
 
 		// Select Frances Allen
-		$user= User::get(array('user' => 'betty'));
+		$user = User::get('betty');
 		$this->clickUser($user['id']);
 
 		// Then I can see the edit user button is disabled
@@ -84,7 +84,7 @@ class UserEditTest extends PassboltTestCase {
 		$this->gotoWorkspace('user');
 
 		// When I right click on a user
-		$user= User::get(array('user' => 'betty'));
+		$user = User::get('betty');
 		$this->rightClickUser($user['id']);
 
 		// Then I can see the contextual menu
@@ -123,7 +123,7 @@ class UserEditTest extends PassboltTestCase {
 		$this->gotoWorkspace('user');
 
 		// And I am editing a user
-		$user= User::get(array('user' => 'betty'));
+		$user = User::get('betty');
 		$this->gotoEditUser($user['id']);
 
 		// When I click on the cancel button
@@ -184,7 +184,7 @@ class UserEditTest extends PassboltTestCase {
 		$this->gotoWorkspace( 'user' );
 
 		// And I am editing a user
-		$user = User::get( array( 'user' => 'betty' ) );
+		$user = User::get('betty');
 		$this->gotoEditUser( $user['id'] );
 		// And I can see the title is set to "edit user"
 		$this->assertElementContainsText(
@@ -247,7 +247,7 @@ class UserEditTest extends PassboltTestCase {
 		$this->gotoWorkspace( 'user' );
 
 		// And I am editing a user
-		$user = User::get( array( 'user' => 'betty' ) );
+		$user = User::get('betty');
 		$this->gotoEditUser( $user['id'] );
 
 		// When I click on name input text field
@@ -306,7 +306,7 @@ class UserEditTest extends PassboltTestCase {
 		$this->gotoWorkspace( 'user' );
 
 		// And I am editing a user
-		$user = User::get( array( 'user' => 'betty' ) );
+		$user = User::get('betty');
 		$this->gotoEditUser( $user['id'] );
 
 		// When I click on name input text field
@@ -562,7 +562,7 @@ class UserEditTest extends PassboltTestCase {
 		// And I go to user workspace
 		$this->gotoWorkspace( 'user' );
 
-		$betty = User::get( array( 'user' => 'betty' ) );
+		$betty = User::get('betty');
 		// And I edit the user betty
 		$u1 = array(
 			'id' => $betty['id'],
@@ -623,7 +623,7 @@ class UserEditTest extends PassboltTestCase {
 		$this->gotoWorkspace( 'user' );
 
 		// Edit betty
-		$betty = User::get( array( 'user' => 'betty' ) );
+		$betty = User::get('betty');
 		$this->GoToEditUser( $betty['id'] );
 
 		// And I empty the first name input field
