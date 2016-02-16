@@ -20,7 +20,7 @@ class LogoutTest extends PassboltTestCase {
 		// Assert I can see the confirm dialog.
 		$this->waitUntilISee('.session-expired-dialog');
 		// Then I can see the close dialog button
-		$this->assertVisible('.session-expired-dialog a.dialog-close');
+		$this->assertNotVisible('.session-expired-dialog a.dialog-close');
 		// Then I can see the cancel link.
 		$this->assertNotVisible('.session-expired-dialog a.cancel');
 		// Then I can see the Ok button.
@@ -74,7 +74,7 @@ class LogoutTest extends PassboltTestCase {
 		$this->assertSessionExpiredDialog();
 
 		// And I should be redirected to the login page in 60 seconds
-		$this->waitUntilISee('.plugin-check.firefox.success', null, 62);
+		$this->waitUntilISee('.plugin-check.firefox.success', null, 7);
 	}
 
 	public function testSessionExpiredManualRedirect() {
