@@ -215,7 +215,7 @@ class PasswordEditDescriptionTest extends PassboltTestCase {
 		$this->assertElementContainsText('.js_resource_description_feedback', '/Description should only contain alphabets, numbers/');
 
 		// Click somewhere else in the interface.
-		$this->click('#js_rs_details_description h4');
+		$this->releaseFocus();
 
 		// Make sure the description field is not visible.
 		$this->assertNotVisible(".js_rs_details_edit_description textarea");

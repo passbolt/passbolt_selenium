@@ -454,7 +454,7 @@ class PassboltTestCase extends WebDriverTestCase {
 			$this->waitUntilISee('.page.password');
 			$this->waitUntilISee('#js_wk_menu_edition_button');
 		}
-		$this->click('footer'); // we click somewhere in case the password is already active
+		$this->releaseFocus(); // we click somewhere in case the password is already active
 		$this->clickPassword($id);
 		$this->click('js_wk_menu_edition_button');
 		$this->waitCompletion();
@@ -473,7 +473,7 @@ class PassboltTestCase extends WebDriverTestCase {
 			$this->waitUntilISee('#js_wk_menu_sharing_button');
 		}
 		if(!$this->isVisible('#js_rs_permission')) {
-			$this->click( 'footer' ); // we click somewhere in case the password is already active
+			$this->releaseFocus(); // we click somewhere in case the password is already active
 			$this->clickPassword( $id );
 			$this->click( 'js_wk_menu_sharing_button' );
 			$this->waitCompletion();
@@ -908,7 +908,7 @@ class PassboltTestCase extends WebDriverTestCase {
 			$this->waitUntilISee('.page.people');
 			$this->waitUntilISee('#js_user_wk_menu_edition_button');
 		}
-		$this->click('footer'); // we click somewhere in case the password is already active
+		$this->releaseFocus(); // we click somewhere in case the password is already active
 		$this->clickUser($id);
 		$this->click('js_user_wk_menu_edition_button');
 		$this->waitCompletion();
