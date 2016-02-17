@@ -194,7 +194,7 @@ class PasswordEditDescriptionTest extends PassboltTestCase {
 
 
 		// Click on the edit button.
-		$this->click("js_edit_description_button");
+		$this->click("#js_edit_description_button i");
 
 		// Make sure description field is visible.
 		$this->waitUntilISee("#js_rs_details_edit_description textarea.js_resource_description");
@@ -221,7 +221,7 @@ class PasswordEditDescriptionTest extends PassboltTestCase {
 		$this->assertNotVisible(".js_rs_details_edit_description textarea");
 
 		// Click on the edit button.
-		$this->click("js_edit_description_button");
+		$this->click("#js_edit_description_button i");
 
 		// I should see the description field again.
 		$this->waitUntilISee("#js_rs_details_edit_description textarea.js_resource_description");
