@@ -238,6 +238,7 @@ class PasswordShareTest extends PassboltTestCase
 
 		// And I go to the share tab
 		$this->findByCss('#js_tab_nav_js_rs_permission a')->click();
+		$this->waitCompletion();
 
 		// Then I can see that Ada is owner
 		$permissionAdaId = Uuid::get('permission.id.' . $resource['id'] . '-' . $userAda['id']);
@@ -689,6 +690,85 @@ class PasswordShareTest extends PassboltTestCase
 
 		// Since content was edited, we reset the database
 		$this->resetDatabase();
+	}
+
+	/**
+	 * Scenario: As a user I shouldn't see the permissions of deleted users for a password I own
+	 *
+	 * Given        I am logged in as admin in the user workspace
+	 * And          I click on the user
+	 * And          I click on delete button
+	 * Then         I should see a confirmation dialog
+	 * When         I click ok in the confirmation dialog
+	 * Then         I should see a confirmation message
+	 *
+	 * When     	I logout and I log in as Ada
+	 * And      	I am logged in on the password workspace
+	 * When     	I go to the sharing dialog of a password I own
+	 * Then     	I can see that Ada is owner
+	 * And      	I don't see Betty in the list of permissions
+	 * And      	I can see that Carol can read
+	 * And      	I can see that Dame can read
+	 * And 			I can see the save button is disabled
+	 */
+	public function testDeletedUsersShouldntBeVisibileInTheListOfPermissions() {
+		// Given I am Admin
+		$user = User::get('admin');
+		$this->setClientConfig($user);
+
+		// And I am logged in on the user workspace
+		$this->loginAs($user);
+
+		// Go to user workspace
+		$this->gotoWorkspace('user');
+
+		// When I right click on a user
+		$user = User::get('betty');
+		$this->clickUser($user['id']);
+
+		// Then I select the delete option in the contextual menu
+		$this->click('js_user_wk_menu_deletion_button');
+
+		// Assert that the confirmation dialog is displayed.
+		$this->assertConfirmationDialog('Do you really want to delete user ?');
+
+		// Click ok in confirmation dialog.
+		$this->confirmActionInConfirmationDialog();
+
+		// Then I should see a success notification message saying the user is deleted
+		$this->assertNotification('app_users_delete_success');
+
+		// When I logout
+		$this->logout();
+
+		// And I am Ada
+		$user = User::get('ada');
+		$this->setClientConfig($user);
+
+		// And I am logged in on the password workspace
+		$this->loginAs($user);
+
+		// When I go to the sharing dialog of a password I own
+		$resource = Resource::get(array(
+			'user' => 'ada',
+			'id' => Uuid::get('resource.id.apache')
+		));
+		$this->gotoSharePassword(Uuid::get('resource.id.apache'));
+
+		// Then I can see that Ada is owner
+		$this->assertPermission($resource, 'ada@passbolt.com', 'is owner');
+
+		// And I don't see Betty in the list of permissions
+		$this->assertNoPermission($resource, 'betty@passbolt.com');
+
+		// And I can see that Carol can read
+		$this->assertPermission($resource, 'carol@passbolt.com', 'can read');
+
+		// And I can see that Dame can read
+		$this->assertPermission($resource, 'dame@passbolt.com', 'can read');
+
+		// And I can see the save button is disabled
+		$this->assertVisible('#js_rs_share_save.disabled');
 	}
 
 }

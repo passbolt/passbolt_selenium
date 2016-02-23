@@ -81,7 +81,7 @@ class UserDeleteTest extends PassboltTestCase {
 	 * Then         I still shouldn't see the user in the user list anymore
 	 */
 	public function testDeleteUserButton() {
-		// And I am Admin
+		// Given I am Admin
 		$user = User::get('admin');
 		$this->setClientConfig($user);
 

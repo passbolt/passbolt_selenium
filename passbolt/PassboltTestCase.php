@@ -1283,6 +1283,21 @@ class PassboltTestCase extends WebDriverTestCase {
 	}
 
 	/**
+	 * Assert that the password has no direct permission for a target user
+	 * @param $password
+	 * @param $username
+	 */
+	public function assertNoPermission($password, $username) {
+		$this->gotoSharePassword($password['id']);
+
+		// I can see the user has a direct permission
+		$this->assertElementNotContainText(
+			$this->findByCss('#js_permissions_list'),
+			$username
+		);
+	}
+
+	/**
 	 * Assert that the toggle button is in the given status (pressed or unpressed)
 	 * @param     $id
 	 * @param int $status
