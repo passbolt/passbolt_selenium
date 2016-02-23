@@ -503,7 +503,7 @@ class SetupTest extends PassboltSetupTestCase {
 	 * And        I follow the registration process and click on submit
 	 * And        I click on the link get started in the email I received
 	 * Then       I should reach the setup page
-	 * And        the url should look like resource://passbolt-firefox-at-passbolt-dot-com/passbolt-firefox-addon/data/setup.html
+	 * And        the url should look like resource://passbolt-at-passbolt-dot-com/passbolt-firefox-addon/data/setup.html
 	 * And        I should see the text "Nice one! Firefox plugin is installed and up to date. You are good to go!"
 	 * And        I should see that the domain in the url check textbox is the same as the one configured.
 	 */
@@ -517,7 +517,7 @@ class SetupTest extends PassboltSetupTestCase {
 		// Follow the link in the email.
 		$this->followLink("get started");
 		// Test that the url is the plugin one.
-		$this->assertUrlMatch('/resource:\/\/passbolt-firefox-at-passbolt-dot-com\/data\/setup.html/');
+		$this->assertUrlMatch('/resource:\/\/passbolt-at-passbolt-dot-com\/data\/setup.html/');
 
 		// Test that the plugin confirmation message is displayed.
 		$this->waitUntilISee('.plugin-check.success', '/Firefox plugin is installed and up to date/i');

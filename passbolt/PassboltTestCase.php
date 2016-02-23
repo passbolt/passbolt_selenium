@@ -56,7 +56,7 @@ class PassboltTestCase extends WebDriverTestCase {
 	 */
 	public function getUrl($url=null) {
 		if ($url == 'debug') {
-			$url = 'resource://passbolt-firefox-at-passbolt-dot-com/data/config-debug.html';
+			$url = 'resource://passbolt-at-passbolt-dot-com/data/config-debug.html';
 		} else {
 			$url = Config::read('passbolt.url') . DS . $url;
 		}
