@@ -14,22 +14,22 @@ class LoginTest extends PassboltTestCase {
 	 * When     I am trying to access the login page
 	 * Then     I should see that I am automatically redirected to the https version of it
 	 */
-	public function testSslRedirect() {
-		PassboltServer::setExtraConfig([
-				'App' => [
-					'force_ssl' => true
-				]
-			]);
-		$this->getUrl('auth/login');
-		$url = $this->driver->getCurrentURL();
-		try {
-			$this->assertTrue(preg_match('/https.*\/auth\/login/', $url) === 1);
-		} catch(Exception $e) {
-			PassboltServer::resetExtraConfig();
-			throw $e;
-		}
-		PassboltServer::resetExtraConfig();
-	}
+//	public function testSslRedirect() {
+//		PassboltServer::setExtraConfig([
+//				'App' => [
+//					'force_ssl' => true
+//				]
+//			]);
+//		$this->getUrl('auth/login');
+//		$url = $this->driver->getCurrentURL();
+//		try {
+//			$this->assertTrue(preg_match('/https.*\/auth\/login/', $url) === 1);
+//		} catch(Exception $e) {
+//			PassboltServer::resetExtraConfig();
+//			throw $e;
+//		}
+//		PassboltServer::resetExtraConfig();
+//	}
 
 	/**
 	 * Scenario: I can see an error message telling me I need a plugin
