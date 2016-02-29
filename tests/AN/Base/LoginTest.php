@@ -9,6 +9,24 @@
 class LoginTest extends PassboltTestCase {
 
 	/**
+	 * Scenario: As AN, I should be redirected to https if force_ssl parameter is set to true.
+	 * Given    I am an anonymous user
+	 * When     I am trying to access the login page
+	 * Then     I should see that I am automatically redirected to the https version of it
+	 */
+	public function testSslRedirect() {
+		PassboltServer::setExtraConfig([
+				'App' => [
+					'force_ssl' => true
+				]
+			]);
+		$this->getUrl('auth/login');
+		$url = $this->driver->getCurrentURL();
+		$this->assertTrue(preg_match('/https.*\/auth\/login/', $url) === 1);
+		PassboltServer::resetExtraConfig();
+	}
+
+	/**
 	 * Scenario: I can see an error message telling me I need a plugin
 	 * Given 	I am an anonymous user with no plugin on the login page
 	 * When 	The page is loaded
