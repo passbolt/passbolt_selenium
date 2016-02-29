@@ -22,7 +22,12 @@ class LoginTest extends PassboltTestCase {
 			]);
 		$this->getUrl('auth/login');
 		$url = $this->driver->getCurrentURL();
-		$this->assertTrue(preg_match('/https.*\/auth\/login/', $url) === 1);
+		try {
+			$this->assertTrue(preg_match('/https.*\/auth\/login/', $url) === 1);
+		} catch(Exception $e) {
+			PassboltServer::resetExtraConfig();
+			throw $e;
+		}
 		PassboltServer::resetExtraConfig();
 	}
 
