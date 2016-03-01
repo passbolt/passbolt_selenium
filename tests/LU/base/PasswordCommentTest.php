@@ -71,6 +71,9 @@ class PasswordCommentTest extends PassboltTestCase {
 		// Check whether the comments list contain the new comment.
 		$this->waitUntilISee('#js_rs_details_comments_list', '/' . $comments[0] . '/');
 
+		// Check that the comment date (time ago) is correct.
+		$this->waitUntilISee('#js_rs_details_comments_list .modified', '/a few seconds ago/');
+
 		// Click on the + icon to add a new comment
 		$this->assertVisible('#js_rs_details_comments a.section-action');
 		$this->click('#js_rs_details_comments a.js_add_comment');
