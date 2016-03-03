@@ -16,10 +16,10 @@ class LoginTest extends PassboltTestCase {
 	 */
 	public function testSslRedirect() {
 		PassboltServer::setExtraConfig([
-				'App' => [
-					'force_ssl' => true
-				]
-			]);
+			'App' => [
+				'force_ssl' => true
+			]
+		]);
 		$this->getUrl('auth/login');
 		$url = $this->driver->getCurrentURL();
 		try {

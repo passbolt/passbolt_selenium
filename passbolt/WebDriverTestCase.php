@@ -101,6 +101,7 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
                 // Set download preferences for the browser.
                 $profile->setPreference("browser.download.folderList", 2);
                 $profile->setPreference("browser.download.dir", SELENIUM_TMP);
+				$profile->setPreference("xpinstall.signatures.required", false);
 
                 $capabilities->setCapability(FirefoxDriver::PROFILE, $profile);
             break;
