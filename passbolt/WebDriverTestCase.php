@@ -329,12 +329,18 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
     }
 
     /**
-     * Click on an element defined by its Id
+     * Click on an element defined by its Id or CSS selector
      * @param $id string
+	 * @throw NoSuchElementException
      */
     public function click($id) {
-        $elt = $this->find($id);
-        $elt->click();
+		try {
+			$element = $this->driver->findElement(WebDriverBy::id($id));
+			$element->click();
+		} catch (NoSuchElementException $e) {
+			$element = $this->driver->findElement(WebDriverBy::cssSelector($id));
+			$element->click();
+		}
     }
 
     /**
