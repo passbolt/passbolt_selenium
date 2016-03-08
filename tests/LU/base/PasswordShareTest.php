@@ -507,6 +507,9 @@ class PasswordShareTest extends PassboltTestCase
 		// When I delete the permission of Betty
 		$this->deletePermission($resource, 'betty@passbolt.com');
 
+		// And I go to the sharing dialog of a password I update the permissions
+		$this->gotoSharePassword(Uuid::get('resource.id.apache'));
+
 		// Then I can see Betty has no right anymore
 		$this->assertElementNotContainText(
 			$this->findByCss('#js_permissions_list'),

@@ -371,6 +371,24 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
     }
 
     /**
+     * Check if an element has a given class name
+     * @param $elt
+     * @param $className
+     * @return bool
+     */
+    public function elementHasClass($elt, $className) {
+        if(!is_object($elt)) {
+            $elt = $this->find($elt);
+        }
+        $eltClasses = $elt->getAttribute('class');
+        $eltClasses = explode(' ', $eltClasses);
+        if(in_array($className, $eltClasses)) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
      * Tell if an element is not visible or not present
      * @param $id
      * @return boolean
@@ -564,9 +582,7 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
      * @param $className
      */
     public function assertElementHasClass($elt, $className) {
-        $eltClasses = $elt->getAttribute('class');
-        $eltClasses = explode(' ', $eltClasses);
-        $contains = in_array($className, $eltClasses);
+        $contains = $this->elementHasClass($elt, $className);
         $this->assertTrue($contains, sprintf("Failed asserting that element has class '%s'", $className));
     }
 

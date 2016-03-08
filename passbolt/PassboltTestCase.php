@@ -444,6 +444,19 @@ class PassboltTestCase extends WebDriverTestCase {
 	}
 
 	/**
+	 * Check if the password has already been selected
+	 * @param $id string
+	 * @return bool
+	 */
+	public function isPasswordSelected($id) {
+		$eltSelector = '#resource_' . $id;
+		if ($this->elementHasClass($eltSelector, 'selected')) {
+			return true;
+		}
+		return false;
+	}
+
+	/**
 	 * Goto the edit password dialog for a given resource id
 	 * @param $id string
 	 * @throws Exception
@@ -455,7 +468,9 @@ class PassboltTestCase extends WebDriverTestCase {
 			$this->waitUntilISee('#js_wk_menu_edition_button');
 		}
 		$this->releaseFocus(); // we click somewhere in case the password is already active
-		$this->clickPassword($id);
+		if (!$this->isPasswordSelected($id)) {
+			$this->clickPassword( $id );
+		}
 		$this->click('js_wk_menu_edition_button');
 		$this->waitCompletion();
 		$this->assertVisible('.edit-password-dialog');
@@ -474,10 +489,11 @@ class PassboltTestCase extends WebDriverTestCase {
 		}
 		if(!$this->isVisible('#js_rs_permission')) {
 			$this->releaseFocus(); // we click somewhere in case the password is already active
-			$this->clickPassword( $id );
-			$this->click( 'js_wk_menu_sharing_button' );
-			$this->waitCompletion();
-			$this->assertVisible( '.share-password-dialog' );
+			if (!$this->isPasswordSelected($id)) {
+				$this->clickPassword($id);
+			}
+			$this->click('js_wk_menu_sharing_button');
+			$this->waitUntilISee('.share-password-dialog #js_rs_permission.ready');
 		}
 	}
 
@@ -666,6 +682,9 @@ class PassboltTestCase extends WebDriverTestCase {
 
 		// And I see a notice message that the operation was a success
 		$this->assertNotification('app_share_update_success');
+
+		// And I should not see the share dialog anymore
+		$this->assertNotVisible('.share-password-dialog');
 	}
 
 	/**
@@ -717,6 +736,9 @@ class PassboltTestCase extends WebDriverTestCase {
 
 		// And I see a notice message that the operation was a success
 		$this->assertNotification('app_share_update_success');
+
+		// And I should not see the share dialog anymore
+		$this->assertNotVisible('.share-password-dialog');
 	}
 
 	/**
@@ -764,6 +786,9 @@ class PassboltTestCase extends WebDriverTestCase {
 
 		// And I see a notice message that the operation was a success
 		$this->assertNotification('app_share_update_success');
+
+		// And I should not see the share dialog anymore
+		$this->assertNotVisible('.share-password-dialog');
 	}
 
 	/**
