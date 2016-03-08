@@ -251,7 +251,7 @@ class PassboltTestCase extends WebDriverTestCase {
 		// Fill config data through javascript
 		if (!$manual) {
 			$conf = [
-				'baseUrl' => Config::read('passbolt.url'),
+				'baseUrl' => isset($config['domain']) ? $config['domain'] : Config::read('passbolt.url'),
 				'UserId'  => $config['id'],
 				'ProfileFirstName' => $config['FirstName'],
 				'ProfileLastName' => $config['LastName'],
@@ -269,7 +269,7 @@ class PassboltTestCase extends WebDriverTestCase {
 		}
 		// Fill config data manually
 		else {
-			$this->inputText('baseUrl', Config::read('passbolt.url'));
+			$this->inputText('baseUrl', isset($config['domain']) ? $config['domain'] : Config::read('passbolt.url'));
 			$this->inputText('UserId',$config['id']);
 			$this->inputText('ProfileFirstName',$config['FirstName']);
 			$this->inputText('ProfileLastName',$config['LastName']);

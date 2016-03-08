@@ -21,6 +21,7 @@
     <testsuites>
         <testsuite name="Anonymous user">
             <directory>./base</directory>
+            <directory>./regressions</directory>
         </testsuite>
     </testsuites>
 

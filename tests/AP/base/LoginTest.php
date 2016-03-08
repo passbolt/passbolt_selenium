@@ -12,4 +12,19 @@ class LoginTest extends PassboltTestCase {
         $this->waitUntIlISee('.plugin-check.firefox.warning', null, 2);
     }
 
+	/**
+	 * Test that if the wrong domain is configured, we will see a page explaining that
+	 * the domain is not known.
+	 * @throws Exception
+	 */
+	public function testWrongDomain() {
+		$user = User::get('ada');
+		$user['domain'] = 'https://custom.passbolt.com';
+		$this->setClientConfig($user);
+
+		$this->getUrl('login');
+		$this->waitUntilISee('html.domain-unknown');
+		$this->waitUntilISee('a.trusteddomain', '/https:\/\/custom\.passbolt\.com/');
+	}
+
 }

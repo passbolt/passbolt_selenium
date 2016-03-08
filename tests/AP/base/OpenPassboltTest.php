@@ -19,7 +19,7 @@ class OpenPassboltTest extends PassboltSetupTestCase {
 	 */
 	public function testOpenPassboltNoConfig() {
 		$this->findByCss('body')->sendKeys(array(WebDriverKeys::CONTROL, WebDriverKeys::SHIFT, WebDriverKeys::ALT, 'p'));
-		sleep(1);
+		sleep(2);
 		$this->assertEquals('https://www.passbolt.com/start', $this->driver->getCurrentURL());
 	}
 
