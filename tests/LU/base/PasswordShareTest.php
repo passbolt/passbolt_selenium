@@ -446,6 +446,7 @@ class PasswordShareTest extends PassboltTestCase
 	 * When     I go to the sharing dialog of a password I own
 	 * Then     I can see Betty has update right on the password
 	 * When     I change the permission of Betty to read access only
+	 * And		I should see the password remains selected
 	 * Then     I can see Betty has read access on the password
 	 */
 	public function testEditPasswordPermission() {
@@ -457,9 +458,10 @@ class PasswordShareTest extends PassboltTestCase
 		$this->loginAs($user);
 
 		// When I go to the sharing dialog of a password I own
+		$resourceId = Uuid::get('resource.id.apache');
 		$resource = Resource::get(array(
 			'user' => 'betty',
-			'id' => Uuid::get('resource.id.apache')
+			'id' => $resourceId
 		));
 		$this->gotoSharePassword(Uuid::get('resource.id.apache'));
 
@@ -469,7 +471,10 @@ class PasswordShareTest extends PassboltTestCase
 		// When I change the permission of Betty to read access only
 		$this->editPermission($resource, 'betty@passbolt.com', 'can read', $user);
 
-		// Then I can see Betty has read access on the password
+		// And I should see the password remains selected
+		$this->assertTrue($this->isPasswordSelected($resourceId));
+
+		// And I can see Betty has read access on the password
 		$this->assertPermission($resource, 'betty@passbolt.com', 'can read');
 
 		// Since content was edited, we reset the database
@@ -484,6 +489,7 @@ class PasswordShareTest extends PassboltTestCase
 	 * When     I go to the sharing dialog of a password I own
 	 * Then     I can see Betty has update right on the password
 	 * When     I delete the permission of Betty
+	 * And 		I should see the password remains selected
 	 * Then     I can see Betty has no right anymore
 	 */
 	public function testDeletePasswordPermission() {
@@ -495,17 +501,21 @@ class PasswordShareTest extends PassboltTestCase
 		$this->loginAs($user);
 
 		// When I go to the sharing dialog of a password I own
+		$resourceId = Uuid::get('resource.id.apache');
 		$resource = Resource::get(array(
 			'user' => 'betty',
-			'id' => Uuid::get('resource.id.apache')
+			'id' =>$resourceId
 		));
-		$this->gotoSharePassword(Uuid::get('resource.id.apache'));
+		$this->gotoSharePassword($resourceId);
 
 		// Then I can see Betty has update right on the password
 		$this->assertPermission($resource, 'betty@passbolt.com', 'can update');
 
 		// When I delete the permission of Betty
 		$this->deletePermission($resource, 'betty@passbolt.com');
+
+		// And I should see the password remains selected
+		$this->assertTrue($this->isPasswordSelected($resourceId));
 
 		// And I go to the sharing dialog of a password I update the permissions
 		$this->gotoSharePassword(Uuid::get('resource.id.apache'));
