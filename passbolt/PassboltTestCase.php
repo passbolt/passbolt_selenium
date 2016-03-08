@@ -448,6 +448,29 @@ class PassboltTestCase extends WebDriverTestCase {
 	 * @param $id string
 	 * @return bool
 	 */
+	public function isPasswordFavorite($id) {
+		$eltSelector = '#favorite_' . $id . ' i';
+		if ($this->elementHasClass($eltSelector, 'unfav')) {
+			return true;
+		}
+		return false;
+	}
+
+	/**
+	 * Mark or unmark a password as a favorite
+	 * @param $id string
+	 * @throws Exception
+	 */
+	public function clickPasswordFavorite($id) {
+		$eltSelector = '#favorite_' . $id . ' i';
+		$this->click($eltSelector);
+	}
+
+	/**
+	 * Check if the password has already been selected
+	 * @param $id string
+	 * @return bool
+	 */
 	public function isPasswordSelected($id) {
 		$eltSelector = '#resource_' . $id;
 		if ($this->elementHasClass($eltSelector, 'selected')) {

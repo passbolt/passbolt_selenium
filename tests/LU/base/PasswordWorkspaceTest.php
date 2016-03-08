@@ -277,24 +277,30 @@ class PasswordWorkspaceTest extends PassboltTestCase
 
     /**
      * Scenario :   As a user I should be able to fav/unfav
-     * Given        I am logged in as Ada, and I go to the password workspace
+     * Given        I am Ada
+	 * And			I go to the password workspace
      * When         I click on the favorite star located before the password (the password shouldn't be a favorite)
      * Then         I should see the star becoming red
-     * And          I should see a confirmation of my action in the notification area
+	 * When 		the favorite request is completed
+     * Then			I should see a confirmation of my action in the notification area
+	 * And 			I should see the star in red
      * When         I click on the favorite filter
      * Then         I should see the password I just added to my favorites in the list of passwords
-     * When         I click on the all Items filter
-     * Then         I should see the password in the list
-     * When         I click on the favorite red star located before the password (the password has to be a favorite)
+     * When         I go Back to All items
+     * And          I click on the favorite red star located before the password (the password has to be a favorite)
      * Then         I should see the star becoming white
+	 * When			the favorite request is completed
      * And          I should see a confirmation of my action in the notification area
+	 * And			I should see the star is white
      * When         I click on the favorite filter
      * Then         I shouldn't see anymore the password in my list of favorite passwords
      */
     public function testFavorite() {
-        $passwordTitle = 'apache';
-        $xpathFavSelector = "//tr[*/div[contains(.,'" . $passwordTitle . "')]]//i[contains(@class, fav)]";
-        $xpathUnfavSelector = "//tr[*/div[contains(.,'" . $passwordTitle . "')]]//i[contains(@class, unfav)]";
+		$resourceId = Uuid::get('resource.id.apache');
+		$resource = Resource::get(array(
+			'user' => 'betty',
+			'id' => $resourceId
+		));
 
         // Given I am Ada
         $user = User::get('ada');
@@ -303,48 +309,57 @@ class PasswordWorkspaceTest extends PassboltTestCase
         // And I am logged in on the password workspace
         $this->loginAs($user);
 
-        // I click on the favorite star located before the password (the password shouldn't be a favorite)
-        $favElt = $this->findByXpath($xpathFavSelector);
-        $favElt->click();
-        $this->waitCompletion();
+        // When I click on the favorite star located before the password (the password shouldn't be a favorite)
+        $this->clickPasswordFavorite($resourceId);
 
-        // I should see the star becoming red
-        // The following operation should throw an exception if the element is not found
-        $unfavElt = $this->findByXpath($xpathUnfavSelector);
+		// Then I should see the star becoming red
+		$this->assertTrue($this->isPasswordFavorite($resourceId));
 
-        // I should see a confirmation of my action in the notification area
-	    $this->assertNotification('app_favorites_add_success');
+        // When the favorite request is completed
+		$this->waitCompletion();
 
-        // I click on the favorite filter
+		// Then I should see a confirmation of my action in the notification area
+		$this->assertNotification('app_favorites_add_success');
+
+		// And I should see the star in red
+		$this->assertTrue($this->isPasswordFavorite($resourceId));
+
+        // When I click on the favorite filter
         $this->clickLink("Favorite");
         $this->waitCompletion();
 
-        // I should see the password I just added to my favorites in the list of passwords
+        // Then I should see the password I just added to my favorites in the list of passwords
         $this->assertElementContainsText(
             $this->findByCss('#js_wsp_pwd_browser .tableview-content'),
-            $passwordTitle
+			$resource['name']
         );
 
-	    // Back to All items.
+	    // When I go Back to All items.
 	    $this->clickLink("All items");
 
-        // Back to favorite filI click on the favorite red star located before the password (the password has to be a favorite)
-        $unfavElt = $this->findByXpath($xpathUnfavSelector);
-        $unfavElt->click();
+        // And I click on the favorite red star located before the password (the password has to be a favorite)
+		$this->clickPasswordFavorite($resourceId);
 
-        // I should see the star becoming white
-        // The following operation should throw an exception if the element is not found
-        $favElt = $this->findByXpath($xpathFavSelector);
-	    // I should see a confirmation of my action in the notification area
+        // Then I should see the star becoming white
+		$this->assertFalse($this->isPasswordFavorite($resourceId));
+
+		// When the favorite request is completed
+		$this->waitCompletion();
+
+	    // Then I should see a confirmation of my action in the notification area
 	    $this->assertNotification('app_favorites_delete_success');
 
-	    $this->clickLink("Favorite");
-	    sleep(1);
+		// And I should see the star is white
+		$this->assertFalse($this->isPasswordFavorite($resourceId));
 
-        // I shouldn't see anymore the password in my list of favorite passwords
+		// When I click on the favorite filter
+	    $this->clickLink("Favorite");
+		$this->waitCompletion();
+
+        // Then I shouldn't see anymore the password in my list of favorite passwords
         $this->assertElementNotContainText(
             $this->findByCss('#js_wsp_pwd_browser .tableview-content'),
-            $passwordTitle
+			$resource['name']
         );
 
         // Since content was edited, we reset the database
