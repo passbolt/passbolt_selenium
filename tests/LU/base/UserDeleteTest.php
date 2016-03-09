@@ -7,8 +7,8 @@
  *  - As admin I should be able to delete a user using the delete button
  *  - As Admin I should'nt be able to delete my own user account
  *
- * @copyright    (c) 2015-present Bolt Software Pvt. Ltd.
- * @licence      GPLv3 onwards www.gnu.org/licenses/gpl-3.0.en.html
+ * @copyright (c) 2015-present Bolt Softwares Pvt Ltd
+ * @licence GNU Affero General Public License http://www.gnu.org/licenses/agpl-3.0.en.html
  */
 class UserDeleteTest extends PassboltTestCase {
 

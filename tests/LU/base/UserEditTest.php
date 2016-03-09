@@ -16,8 +16,8 @@
  *  - As user I can see validation error messages while editing a user and inputting bad information
  *
  *
- * @copyright    (c) 2015-present Bolt Software Pvt. Ltd.
- * @licence      GPLv3 onwards www.gnu.org/licenses/gpl-3.0.en.html
+ * @copyright (c) 2015-present Bolt Softwares Pvt Ltd
+ * @licence GNU Affero General Public License http://www.gnu.org/licenses/agpl-3.0.en.html
  */
 class UserEditTest extends PassboltTestCase {
 

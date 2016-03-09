@@ -3,8 +3,8 @@
 /**
  * Anonymous user with plugin but no config open passbolt test
  *
- * @copyright 	(c) 2015-present Bolt Software Pvt. Ltd.
- * @licence			GPLv3 onwards www.gnu.org/licenses/gpl-3.0.en.html
+ * @copyright (c) 2015-present Bolt Softwares Pvt Ltd
+ * @licence GNU Affero General Public License http://www.gnu.org/licenses/agpl-3.0.en.html
  */
 class OpenPassboltTest extends PassboltSetupTestCase {
 

@@ -19,8 +19,8 @@
  * @TODO Move somewhere else
  * As a user I can open the url of a resource in a new tab
  *
- * @copyright    (c) 2015-present Bolt Software Pvt. Ltd.
- * @licence      GPLv3 onwards www.gnu.org/licenses/gpl-3.0.en.html
+ * @copyright (c) 2015-present Bolt Softwares Pvt Ltd
+ * @licence GNU Affero General Public License http://www.gnu.org/licenses/agpl-3.0.en.html
  */
 class PasswordCopyToClipboardTest extends PassboltTestCase
 {

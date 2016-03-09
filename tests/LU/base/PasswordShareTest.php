@@ -16,8 +16,8 @@
  * As a user I should be able to drop my owner permission if there is another owner
  * As a user I can view the permissions for a password I don't own
  *
- * @copyright    (c) 2015-present Bolt Software Pvt. Ltd.
- * @licence      GPLv3 onwards www.gnu.org/licenses/gpl-3.0.en.html
+ * @copyright (c) 2015-present Bolt Softwares Pvt Ltd
+ * @licence GNU Affero General Public License http://www.gnu.org/licenses/agpl-3.0.en.html
  */
 class PasswordShareTest extends PassboltTestCase
 {

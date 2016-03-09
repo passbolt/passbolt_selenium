@@ -1,14 +1,31 @@
 {
-  "name": "facebook/webdriver",
-  "description": "A php client for WebDriver",
-  "keywords": ["webdriver", "selenium", "php", "facebook"],
-  "homepage": "https://github.com/facebook/php-webdriver",
-  "type": "library",
-  "license": "Apache-2.0",
+  "name": "Passbolt_Selenium",
+  "version": "0.0.1",
+  "keywords": ["passbolt", "selenium", "php"],
+  "description": "Passbolt selenium tests",
+  "license": "AGPL-3.0",
+  "homepage": "https://www.passbolt.com",
+  "authors": [
+	{
+	  "name": "Kevin Muller",
+	  "email": "kevin@passbolt.com",
+	  "role": "Developer"
+	},
+	{
+	  "name": "Remy Bertot",
+	  "email": "remy@passbolt.com",
+	  "role": "Developer"
+	},
+	{
+	  "name": "Cédric Alfonsi",
+	  "email": "cedric@passbolt.com",
+	  "role": "Developer"
+	}
+  ],
   "support": {
-	"issues": "https://github.com/facebook/php-webdriver/issues",
-	"forum": "https://www.facebook.com/groups/phpwebdriver/",
-	"source": "https://github.com/facebook/php-webdriver"
+	"issues": "https://github.com/passbolt/passbolt",
+	"forum": "https://github.com/passbolt/passbolt",
+	"source": "https://github.com/passbolt/passbolt"
   },
   "config": {
 	"vendor-dir": "passbolt/vendor"
