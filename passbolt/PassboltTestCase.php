@@ -1044,11 +1044,38 @@ class PassboltTestCase extends WebDriverTestCase {
 	 * Passbolt Application Asserts
 	 ********************************************************************************/
 	/**
-	 * Check if the current url match the one given in parameter
-	 * @param $url
+	 * Wait until the url match a pattern
+	 * @param string $url
+	 * @param bool $addBase
+	 * @param int $timeout
+	 * @return bool
+	 * @throws Exception
 	 */
-	public function assertCurrentUrl($url) {
-		$url = Config::read('passbolt.url') . DS . $url;
+	public function waitUntilUrlMatches($url, $addBase = true, $timeout = 10) {
+		for ($i = 0; $i < $timeout * 10; $i++) {
+			try {
+				$this->assertCurrentUrl($url, $addBase);
+				return true;
+			}
+			catch (Exception $e) {}
+
+			// If none of the above was found, wait for 1/10 seconds, and try again.
+			usleep(100000); // Sleep 1/10 seconds
+		}
+
+		$backtrace = debug_backtrace();
+		throw new Exception( "waitUntilURLMatches $url : Timeout thrown by " . $backtrace[1]['class'] . "::" . $backtrace[1]['function'] . "()\n . element: $url");
+	}
+
+	/**
+	 * Check if the current url match the one given in parameter
+	 * @param string $url
+	 * @param bool $addBase
+	 */
+	public function assertCurrentUrl($url, $addBase = true) {
+		if($addBase) {
+			$url = Config::read('passbolt.url') . DS . $url;
+		}
 		$this->assertEquals($url, $this->driver->getCurrentURL());
 	}
 
