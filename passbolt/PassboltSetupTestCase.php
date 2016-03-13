@@ -126,8 +126,10 @@ class PassboltSetupTestCase extends PassboltTestCase {
 	/**
 	 * go To Setup page.
 	 * @throws Exception
+	 * @param string $username
+	 * @param bool $checkPluginSuccess
 	 */
-	public function goToSetup($username) {
+	public function goToSetup($username, $checkPluginSuccess = true) {
 		// Get last email.
 		$this->getUrl('seleniumTests/showLastEmail/' . urlencode($username));
 
@@ -139,8 +141,9 @@ class PassboltSetupTestCase extends PassboltTestCase {
 		$this->driver->get($setupUrl);
 
 		// Test that the plugin confirmation message is displayed.
-		$this->waitUntilISee('.plugin-check-wrapper .plugin-check.success', '/Firefox plugin is installed and up to date/i');
-
+		if ($checkPluginSuccess) {
+			$this->waitUntilISee('.plugin-check-wrapper .plugin-check.success', '/Firefox plugin is installed and up to date/i');
+		}
 	}
 
 	/**
