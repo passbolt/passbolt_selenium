@@ -27,4 +27,26 @@ class LoginTest extends PassboltTestCase {
 		$this->waitUntilISee('a.trusteddomain', '/https:\/\/custom\.passbolt\.com/');
 	}
 
+	/**
+	 * Test that if the server verification failed, we will see a page explaining that
+	 * something went wrong with a message explaining what happened
+	 * @throws Exception
+	 */
+	public function testStage0VerifyError() {
+		$user = User::get('ada');
+		$this->setClientConfig($user);
+
+		// Load a wrong public server key.
+		$this->getUrl('debug');
+		$this->waitUntilISee('.config.page');
+		$key = file_get_contents(GPG_FIXTURES . DS . 'user_public.key');
+		$this->inputText('serverKeyAscii', $key);
+		$this->click('saveServerKey');
+		$this->waitUntilISee('.server.key-import.feedback', '/The key has been imported successfully/');
+
+		$this->getUrl('login');
+		$this->waitUntilISee('html.server-not-verified');
+		$this->assertElementContainsText('.plugin-check.gpg', 'Decryption failed');
+	}
+
 }
