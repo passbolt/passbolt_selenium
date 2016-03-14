@@ -6,8 +6,8 @@ define('TOGGLE_BUTTON_UNPRESSED', 0);
  * Passbolt Test Case
  * The base class for test cases related to passbolt.
  *
- * @copyright (c) 2015-present Bolt Software Pvt. Ltd.
- * @licence GPLv3 onwards www.gnu.org/licenses/gpl-3.0.en.html
+ * @copyright (c) 2015-present Bolt Softwares Pvt Ltd
+ * @licence GNU Affero General Public License http://www.gnu.org/licenses/agpl-3.0.en.html
  */
 class PassboltTestCase extends WebDriverTestCase {
 
@@ -444,6 +444,42 @@ class PassboltTestCase extends WebDriverTestCase {
 	}
 
 	/**
+	 * Check if the password has already been selected
+	 * @param $id string
+	 * @return bool
+	 */
+	public function isPasswordFavorite($id) {
+		$eltSelector = '#favorite_' . $id . ' i';
+		if ($this->elementHasClass($eltSelector, 'unfav')) {
+			return true;
+		}
+		return false;
+	}
+
+	/**
+	 * Mark or unmark a password as a favorite
+	 * @param $id string
+	 * @throws Exception
+	 */
+	public function clickPasswordFavorite($id) {
+		$eltSelector = '#favorite_' . $id . ' i';
+		$this->click($eltSelector);
+	}
+
+	/**
+	 * Check if the password has already been selected
+	 * @param $id string
+	 * @return bool
+	 */
+	public function isPasswordSelected($id) {
+		$eltSelector = '#resource_' . $id;
+		if ($this->elementHasClass($eltSelector, 'selected')) {
+			return true;
+		}
+		return false;
+	}
+
+	/**
 	 * Goto the edit password dialog for a given resource id
 	 * @param $id string
 	 * @throws Exception
@@ -455,7 +491,9 @@ class PassboltTestCase extends WebDriverTestCase {
 			$this->waitUntilISee('#js_wk_menu_edition_button');
 		}
 		$this->releaseFocus(); // we click somewhere in case the password is already active
-		$this->clickPassword($id);
+		if (!$this->isPasswordSelected($id)) {
+			$this->clickPassword( $id );
+		}
 		$this->click('js_wk_menu_edition_button');
 		$this->waitCompletion();
 		$this->assertVisible('.edit-password-dialog');
@@ -474,10 +512,11 @@ class PassboltTestCase extends WebDriverTestCase {
 		}
 		if(!$this->isVisible('#js_rs_permission')) {
 			$this->releaseFocus(); // we click somewhere in case the password is already active
-			$this->clickPassword( $id );
-			$this->click( 'js_wk_menu_sharing_button' );
-			$this->waitCompletion();
-			$this->assertVisible( '.share-password-dialog' );
+			if (!$this->isPasswordSelected($id)) {
+				$this->clickPassword($id);
+			}
+			$this->click('js_wk_menu_sharing_button');
+			$this->waitUntilISee('.share-password-dialog #js_rs_permission.ready');
 		}
 	}
 
@@ -662,10 +701,13 @@ class PassboltTestCase extends WebDriverTestCase {
 
 		// Then I see a dialog telling me encryption is in progress
 		$this->waitUntilISee('passbolt-iframe-progress-dialog');
-		$this->waitCompletion();
+		$this->waitUntilIDontSee('passbolt-iframe-progress-dialog');
 
 		// And I see a notice message that the operation was a success
 		$this->assertNotification('app_share_update_success');
+
+		// And I should not see the share dialog anymore
+		$this->assertNotVisible('.share-password-dialog');
 	}
 
 	/**
@@ -717,6 +759,9 @@ class PassboltTestCase extends WebDriverTestCase {
 
 		// And I see a notice message that the operation was a success
 		$this->assertNotification('app_share_update_success');
+
+		// And I should not see the share dialog anymore
+		$this->assertNotVisible('.share-password-dialog');
 	}
 
 	/**
@@ -764,6 +809,9 @@ class PassboltTestCase extends WebDriverTestCase {
 
 		// And I see a notice message that the operation was a success
 		$this->assertNotification('app_share_update_success');
+
+		// And I should not see the share dialog anymore
+		$this->assertNotVisible('.share-password-dialog');
 	}
 
 	/**
@@ -996,11 +1044,38 @@ class PassboltTestCase extends WebDriverTestCase {
 	 * Passbolt Application Asserts
 	 ********************************************************************************/
 	/**
-	 * Check if the current url match the one given in parameter
-	 * @param $url
+	 * Wait until the url match a pattern
+	 * @param string $url
+	 * @param bool $addBase
+	 * @param int $timeout
+	 * @return bool
+	 * @throws Exception
 	 */
-	public function assertCurrentUrl($url) {
-		$url = Config::read('passbolt.url') . DS . $url;
+	public function waitUntilUrlMatches($url, $addBase = true, $timeout = 10) {
+		for ($i = 0; $i < $timeout * 10; $i++) {
+			try {
+				$this->assertCurrentUrl($url, $addBase);
+				return true;
+			}
+			catch (Exception $e) {}
+
+			// If none of the above was found, wait for 1/10 seconds, and try again.
+			usleep(100000); // Sleep 1/10 seconds
+		}
+
+		$backtrace = debug_backtrace();
+		throw new Exception( "waitUntilURLMatches $url : Timeout thrown by " . $backtrace[1]['class'] . "::" . $backtrace[1]['function'] . "()\n . element: $url");
+	}
+
+	/**
+	 * Check if the current url match the one given in parameter
+	 * @param string $url
+	 * @param bool $addBase
+	 */
+	public function assertCurrentUrl($url, $addBase = true) {
+		if($addBase) {
+			$url = Config::read('passbolt.url') . DS . $url;
+		}
 		$this->assertEquals($url, $this->driver->getCurrentURL());
 	}
 

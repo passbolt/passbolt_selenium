@@ -8,8 +8,8 @@
  * As a admin I can copy the email address to clipboard with a right click
  * As a admin I can copy the public key to clipboard with the copy button in the sidebar
  *
- * @copyright    (c) 2015-present Bolt Software Pvt. Ltd.
- * @licence      GPLv3 onwards www.gnu.org/licenses/gpl-3.0.en.html
+ * @copyright (c) 2015-present Bolt Softwares Pvt Ltd
+ * @licence GNU Affero General Public License http://www.gnu.org/licenses/agpl-3.0.en.html
  */
 class UserCopyToClipboardTest extends PassboltTestCase
 {

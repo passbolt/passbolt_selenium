@@ -12,8 +12,8 @@
  * As a user I can generate a random password automatically
  * As a user I can view the password I am creating in clear text
  *
- * @copyright    (c) 2015-present Bolt Software Pvt. Ltd.
- * @licence      GPLv3 onwards www.gnu.org/licenses/gpl-3.0.en.html
+ * @copyright (c) 2015-present Bolt Softwares Pvt Ltd
+ * @licence GNU Affero General Public License http://www.gnu.org/licenses/agpl-3.0.en.html
  */
 class PasswordCreateTest extends PassboltTestCase
 {

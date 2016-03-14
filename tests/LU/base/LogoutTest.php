@@ -2,8 +2,8 @@
 /**
  * User with configured plugin login test
  *
- * @copyright 	(c) 2015-present Bolt Software Pvt. Ltd.
- * @licence			GPLv3 onwards www.gnu.org/licenses/gpl-3.0.en.html
+ * @copyright (c) 2015-present Bolt Softwares Pvt Ltd
+ * @licence GNU Affero General Public License http://www.gnu.org/licenses/agpl-3.0.en.html
  */
 class LogoutTest extends PassboltTestCase {
 
@@ -34,6 +34,7 @@ class LogoutTest extends PassboltTestCase {
 		$user = User::get('ada');
 		$this->setClientConfig($user);
 
+		// Reduce the session timeout to accelerate the test
 		PassboltServer::setExtraConfig([
 			'Session' => [
 				'timeout' => 0.25
@@ -50,11 +51,12 @@ class LogoutTest extends PassboltTestCase {
 		$this->waitUntilISee('.plugin-check.firefox.success');
 	}
 
-	public function testSessionExpiredAutoRedirect() {
+	public function testOnClickSessionExpiredAutoRedirect() {
 		// Given I am Ada
 		$user = User::get('ada');
 		$this->setClientConfig($user);
 
+		// Reduce the session timeout to accelerate the test
 		PassboltServer::setExtraConfig([
 			'Session' => [
 				'timeout' => 0.25
@@ -77,11 +79,12 @@ class LogoutTest extends PassboltTestCase {
 		$this->waitUntilISee('.plugin-check.firefox.success', null, 7);
 	}
 
-	public function testSessionExpiredManualRedirect() {
+	public function testOnClickSessionExpiredManualRedirect() {
 		// Given I am Ada
 		$user = User::get('ada');
 		$this->setClientConfig($user);
 
+		// Reduce the session timeout to accelerate the test
 		PassboltServer::setExtraConfig([
 			'Session' => [
 				'timeout' => 0.25
@@ -96,6 +99,33 @@ class LogoutTest extends PassboltTestCase {
 		// When I click on a password I own
 		$resource = Resource::get(array('user' => 'ada', 'permission' => 'owner'));
 		$this->clickPassword($resource['id']);
+
+		// Then I should see the session expired dialog
+		$this->assertSessionExpiredDialog();
+
+		// When I click on Redirect now
+		$this->click('confirm-button');
+
+		// Then I should see the login page
+		$this->waitUntilISee('.plugin-check.firefox.success');
+	}
+
+	public function testSessionExpired() {
+		// Given I am Ada
+		$user = User::get('ada');
+		$this->setClientConfig($user);
+
+		// Reduce the session timeout to accelerate the test
+		PassboltServer::setExtraConfig([
+			'Session' => [
+				'timeout' => 0.25
+			]
+		]);
+
+		// And I am logged in on the password workspace
+		$this->loginAs($user);
+
+		sleep(60);
 
 		// Then I should see the session expired dialog
 		$this->assertSessionExpiredDialog();

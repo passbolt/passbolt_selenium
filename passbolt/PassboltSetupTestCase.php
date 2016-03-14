@@ -4,8 +4,8 @@
  * A specialized class to test the setup of passbolt.
  * It contains a set of functions useful to test specific elements of the setup.
  *
- * @copyright (c) 2015-present Bolt Software Pvt. Ltd.
- * @licence GPLv3 onwards www.gnu.org/licenses/gpl-3.0.en.html
+ * @copyright (c) 2015-present Bolt Softwares Pvt Ltd
+ * @licence GNU Affero General Public License http://www.gnu.org/licenses/agpl-3.0.en.html
  */
 class PassboltSetupTestCase extends PassboltTestCase {
 
@@ -126,8 +126,10 @@ class PassboltSetupTestCase extends PassboltTestCase {
 	/**
 	 * go To Setup page.
 	 * @throws Exception
+	 * @param string $username
+	 * @param bool $checkPluginSuccess
 	 */
-	public function goToSetup($username) {
+	public function goToSetup($username, $checkPluginSuccess = true) {
 		// Get last email.
 		$this->getUrl('seleniumTests/showLastEmail/' . urlencode($username));
 
@@ -139,8 +141,9 @@ class PassboltSetupTestCase extends PassboltTestCase {
 		$this->driver->get($setupUrl);
 
 		// Test that the plugin confirmation message is displayed.
-		$this->waitUntilISee('.plugin-check-wrapper .plugin-check.success', '/Firefox plugin is installed and up to date/i');
-
+		if ($checkPluginSuccess) {
+			$this->waitUntilISee('.plugin-check-wrapper .plugin-check.success', '/Firefox plugin is installed and up to date/i');
+		}
 	}
 
 	/**

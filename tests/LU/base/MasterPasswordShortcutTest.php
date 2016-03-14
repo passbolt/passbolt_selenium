@@ -9,8 +9,8 @@
  * As a user I can edit the secret of a password I have own, and enter my master password from keyboard only, using tab first
  *
  *
- * @copyright    (c) 2015-present Bolt Software Pvt. Ltd.
- * @licence      GPLv3 onwards www.gnu.org/licenses/gpl-3.0.en.html
+ * @copyright (c) 2015-present Bolt Softwares Pvt Ltd
+ * @licence GNU Affero General Public License http://www.gnu.org/licenses/agpl-3.0.en.html
  */
 class MasterPasswordShortcutTest extends PassboltTestCase {
 

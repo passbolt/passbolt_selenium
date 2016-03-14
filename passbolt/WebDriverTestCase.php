@@ -10,8 +10,8 @@ define('SELENIUM_TMP', SELENIUM_ROOT . DS . 'tmp');
  * Web Driver Test Case
  * The base class for test cases.
  *
- * @copyright     (c) 2015-present Bolt Software Pvt. Ltd.
- * @licence        GPLv3 onwards www.gnu.org/licenses/gpl-3.0.en.html
+ * @copyright (c) 2015-present Bolt Softwares Pvt Ltd
+ * @licence GNU Affero General Public License http://www.gnu.org/licenses/agpl-3.0.en.html
  */
 class WebDriverTestCase extends PHPUnit_Framework_TestCase {
 
@@ -329,12 +329,18 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
     }
 
     /**
-     * Click on an element defined by its Id
+     * Click on an element defined by its Id or CSS selector
      * @param $id string
+	 * @throw NoSuchElementException
      */
     public function click($id) {
-        $elt = $this->find($id);
-        $elt->click();
+		try {
+			$element = $this->driver->findElement(WebDriverBy::id($id));
+			$element->click();
+		} catch (NoSuchElementException $e) {
+			$element = $this->driver->findElement(WebDriverBy::cssSelector($id));
+			$element->click();
+		}
     }
 
     /**
@@ -368,6 +374,24 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
 
 	    }
         return (!is_null($element) && $element->isDisplayed());
+    }
+
+    /**
+     * Check if an element has a given class name
+     * @param $elt
+     * @param $className
+     * @return bool
+     */
+    public function elementHasClass($elt, $className) {
+        if(!is_object($elt)) {
+            $elt = $this->find($elt);
+        }
+        $eltClasses = $elt->getAttribute('class');
+        $eltClasses = explode(' ', $eltClasses);
+        if(in_array($className, $eltClasses)) {
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -564,9 +588,7 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
      * @param $className
      */
     public function assertElementHasClass($elt, $className) {
-        $eltClasses = $elt->getAttribute('class');
-        $eltClasses = explode(' ', $eltClasses);
-        $contains = in_array($className, $eltClasses);
+        $contains = $this->elementHasClass($elt, $className);
         $this->assertTrue($contains, sprintf("Failed asserting that element has class '%s'", $className));
     }
 
