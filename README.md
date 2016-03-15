@@ -8,7 +8,7 @@ Checkout [passbolt.com](http://www.passbolt.com) for more information
 
 ## License and copyright
 Unless it is mentioned otherwise in the individual source files the code is copyright 2015-onward Passbolt.com
-and distrubed under GPL v3 License, see [License](license.md)
+and distributed under AGPL v3 License.	
 
 
 How to get started
