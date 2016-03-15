@@ -701,7 +701,7 @@ class PassboltTestCase extends WebDriverTestCase {
 
 		// Then I see a dialog telling me encryption is in progress
 		$this->waitUntilISee('passbolt-iframe-progress-dialog');
-		$this->waitCompletion();
+		$this->waitUntilIDontSee('passbolt-iframe-progress-dialog');
 
 		// And I see a notice message that the operation was a success
 		$this->assertNotification('app_share_update_success');
