@@ -16,11 +16,12 @@ class OpenPassboltTest extends PassboltSetupTestCase {
 	 * And			The passbolt plugin is not configured
 	 * When			I click on the passbolt toolbar icon or I compose the passbolt shortcut
 	 * Then			I should reach the passbolt public page "getting started" in a new tab
+	 * And			This page redirects me to the demo login
 	 */
 	public function testOpenPassboltNoConfig() {
 		$this->findByCss('body')->sendKeys(array(WebDriverKeys::CONTROL, WebDriverKeys::SHIFT, WebDriverKeys::ALT, 'p'));
-		sleep(2);
-		$this->assertEquals('https://www.passbolt.com/start', $this->driver->getCurrentURL());
+ 		//$this->waitUntilUrlMatches('https://www.passbolt.com/start', false);
+		$this->waitUntilUrlMatches('https://demo.passbolt.com/auth/login', false);
 	}
 
 	/**
