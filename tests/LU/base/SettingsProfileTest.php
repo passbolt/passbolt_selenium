@@ -17,8 +17,6 @@
 
 class SettingsProfileTest extends PassboltTestCase {
 
-	// TODO : @PASSBOLT-1243 errors management when a illegal file is being updated
-
 	/**
 	 * Scenario :   As a LU I should be able to see my profile information in the profile section
 	 * Given        I am logged in as a LU in the settings workspace, profile section
