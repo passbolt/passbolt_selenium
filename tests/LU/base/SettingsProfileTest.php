@@ -164,7 +164,7 @@ class SettingsProfileTest extends PassboltTestCase {
 	 *
 	 * @throws Exception
 	 */
-	public function testSettingsProfileAvatarEdit() {
+	public function testSettingsProfileAvatarEditOk() {
 		// Given I am Ada
 		$user = User::get( 'ada' );
 		$this->setClientConfig( $user );
