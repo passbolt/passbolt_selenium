@@ -5,6 +5,7 @@
  * - As a LU I should be able to see my profile information in the profile section
  * - As a LU I should be able to see and use the breadcrumb of the profile section.
  * - As LU, I should be able to edit my avatar picture.
+ * - As LU, I shouldn't be able to upload a wrong file format as my avatar picture
  * - As LU, I should be able to edit my profile and see the editable fields.
  * - As LU I can see validation error messages while editing my profile information.
  * - As LU I can edit my own last name.
@@ -218,6 +219,68 @@ class SettingsProfileTest extends PassboltTestCase {
 		// And I should see that the profile picture has been replaced in the profile details.
 		$actualImage =  $this->find('.avatar img')->getAttribute('src');
 		$expectedImage = IMG_FIXTURES . '/avatar/' . $bettyImage;
+		$this->assertImagesAreSame($actualImage, $expectedImage);
+
+		// And I should see that the profile picture has been replaced in the profile drop down.
+		$topProfileImage =  $this->find('#js_app_profile_dropdown .picture img')->getAttribute('src');
+		$this->assertImagesAreSame($actualImage, $topProfileImage);
+
+		// When I Refresh the window.
+		$this->refresh();
+
+		// Then I should see that the profile drop down image is still there.
+		$this->assertImagesAreSame($actualImage, $topProfileImage);
+
+		// Database has been modified so we reset.
+		$this->resetDatabase();
+	}
+
+	/**
+	 * Scenario :   As LU, I shouldn't be able to upload a wrong file format as my avatar picture
+	 * Given        I am logged in as LU in the settings workspace, profile section.
+	 * When         I click on upload a new picture
+	 * Then         I should see a dialog window where I can select a file to upload
+	 * When         I click on upload a new picture
+	 * And          I select a file to upload from the dialog, with a wrong file type (.xpi, .pdf)
+	 * And          I click on save
+	 * Then         I should see an error message
+	 * And          I should see that the photo in the profile details is still the same as before
+	 * And          I should see that the photo in the profile dropdown is still the same as before
+	 *
+	 * @throws Exception
+	 */
+	public function testSettingsProfileAvatarEditErrorFileType() {
+		$this->resetDatabase();
+		// Given I am Ada
+		$user = User::get( 'ada' );
+		$this->setClientConfig( $user );
+
+		// And I am logged in on the user workspace
+		$this->loginAs( $user );
+
+		// Go to user workspace
+		$this->gotoWorkspace( 'settings' );
+
+		// I click on the link Click here to upload a new picture.
+		$this->click('.section.profile-detailed-information a.edit-avatar-action');
+
+		// I should see a dialog with title "Edit Avatar".
+		$this->waitUntilISee('.dialog', '/Edit Avatar/');
+
+		// I upload Betty's photo.
+		$filebox = $this->find('js_field_avatar');
+		$extensionFullUrl = SELENIUM_ROOT . $this->_browser['extensions'][0];
+
+		$filebox->sendKeys($extensionFullUrl);
+		$this->click('.dialog input[type=submit]');
+
+		// Then I should see a success message.
+		$this->assertNotification('app_users_editavatar_error');
+
+		// And I should see that the profile picture has been replaced in the profile details.
+		$adaImage = 'ada.png';
+		$actualImage =  $this->find('.avatar img')->getAttribute('src');
+		$expectedImage = IMG_FIXTURES . '/avatar/' . $adaImage;
 		$this->assertImagesAreSame($actualImage, $expectedImage);
 
 		// And I should see that the profile picture has been replaced in the profile drop down.
