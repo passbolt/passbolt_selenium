@@ -166,7 +166,7 @@ class SettingsProfileTest extends PassboltTestCase {
 	 */
 	public function testSettingsProfileAvatarEditOk() {
 		// Given I am Ada
-		$user = User::get( 'ada' );
+		$user = User::get( 'edith' );
 		$this->setClientConfig( $user );
 
 		// And I am logged in on the user workspace
