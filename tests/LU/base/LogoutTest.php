@@ -18,7 +18,7 @@ class LogoutTest extends PassboltTestCase {
 
 	public function assertSessionExpiredDialog() {
 		// Assert I can see the confirm dialog.
-		$this->waitUntilISee('.session-expired-dialog');
+		$this->waitUntilISee('.session-expired-dialog', null, 120);
 		// Then I can see the close dialog button
 		$this->assertNotVisible('.session-expired-dialog a.dialog-close');
 		// Then I can see the cancel link.
@@ -124,8 +124,6 @@ class LogoutTest extends PassboltTestCase {
 
 		// And I am logged in on the password workspace
 		$this->loginAs($user);
-
-		sleep(60);
 
 		// Then I should see the session expired dialog
 		$this->assertSessionExpiredDialog();
