@@ -173,7 +173,7 @@ class PassboltTestCase extends WebDriverTestCase {
 		$this->waitCompletion();
 
 		// wait for redirection trigger
-		sleep(1);
+		$this->waitUntilUrlMatches('');
 		$this->waitCompletion();
 	}
 
@@ -587,6 +587,10 @@ class PassboltTestCase extends WebDriverTestCase {
 			$this->inputText('js_field_description', $password['description']);
 		}
 		$this->click('.create-password-dialog input[type=submit]');
+
+		$this->waitUntilISee('passbolt-iframe-progress-dialog');
+		$this->waitUntilIDontSee('passbolt-iframe-progress-dialog');
+
 		$this->assertNotification('app_resources_add_success');
 	}
 
@@ -619,8 +623,10 @@ class PassboltTestCase extends WebDriverTestCase {
 			$this->waitUntilIDontSee('passbolt-iframe-master-password');
 
 			// Wait for password to be decrypted.
-			// TODO : update when a different system based on classes will be there on the field. See #PASSBOLT-1154
-			sleep(4);
+			$this->goIntoSecretIframe();
+			$this->waitUntilSecretIsDecryptedInField();
+			$this->goOutOfIframe();
+
 			$this->inputSecret($password['password']);
 		}
 		if (isset($password['description'])) {
@@ -819,6 +825,7 @@ class PassboltTestCase extends WebDriverTestCase {
 	 * @param $pwd
 	 */
 	public function enterMasterPassword($pwd) {
+		$this->waitUntilISee('passbolt-iframe-master-password');
 		$this->goIntoMasterPasswordIframe();
 		$this->inputText('js_master_password', $pwd);
 		$this->click('master-password-submit');
