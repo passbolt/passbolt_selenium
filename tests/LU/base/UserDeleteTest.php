@@ -6,6 +6,7 @@
  *  - As admin I should be able to delete a user on a right click
  *  - As admin I should be able to delete a user using the delete button
  *  - As Admin I should'nt be able to delete my own user account
+ *  - As LU I should be able to get a clear feedback at login if my account has been deleted.
  *
  * @copyright (c) 2015-present Bolt Softwares Pvt Ltd
  * @licence GNU Affero General Public License http://www.gnu.org/licenses/agpl-3.0.en.html
@@ -158,6 +159,65 @@ class UserDeleteTest extends PassboltTestCase {
 
 		// I should see that the delete option is not available.
 		$this->assertNotVisible('js_user_browser_menu_delete');
+	}
+
+	/**
+	 * Scenario :   As LU I should be able to get a clear feedback at login if my account has been deleted.
+	 * Given        I am logged in as admin in the user workspace
+	 * And          I click on the user
+	 * And          I click on delete button
+	 * Then         I should see a confirmation dialog
+	 * When         I click ok in the confirmation dialog
+	 * Then         I should see a confirmation message
+	 * When         I log out
+	 * And          I become betty
+	 * And          I go to the login page
+	 * Then         I should see a feedback telling me that my account doesn't exist on server
+	 */
+	public function testDeletedUserGetFeedback() {
+		// Given I am Admin
+		$user = User::get('admin');
+		$this->setClientConfig($user);
+
+		// And I am logged in on the user workspace
+		$this->loginAs($user);
+
+		// Go to user workspace
+		$this->gotoWorkspace('user');
+
+		// When I right click on a user
+		$user = User::get('betty');
+		$this->clickUser($user['id']);
+
+		// Then I select the delete option in the contextual menu
+		$this->click('js_user_wk_menu_deletion_button');
+
+		// Assert that the confirmation dialog is displayed.
+		$this->assertConfirmationDialog('Do you really want to delete user ?');
+
+		// Click ok in confirmation dialog.
+		$this->confirmActionInConfirmationDialog();
+
+		// Then I should see a success notification message saying the user is deleted
+		$this->assertNotification('app_users_delete_success');
+
+		// Log out.
+		$this->logout();
+
+		// I become betty.
+		$betty = User::get('betty');
+		$this->setClientConfig($betty);
+
+		// When I go to login.
+		$this->getUrl('login');
+
+		// I should see a feedback telling me that the user doesn't exist on server.
+		$this->waitUntilISee('html.server-not-verified.server-no-user');
+		$this->waitUntilISee('.plugin-check.gpg.error', '/There is no user associated with this key/');
+		$this->waitUntilISee('.users.login.form .feedback', '/Your account doesn\'t exist on server/');
+
+		// Since content was edited, we reset the database.
+		$this->resetDatabase();
 	}
 
 }

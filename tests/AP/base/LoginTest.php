@@ -49,4 +49,18 @@ class LoginTest extends PassboltTestCase {
 		$this->assertElementContainsText('.plugin-check.gpg', 'Decryption failed');
 	}
 
+	/**
+	 * Test that if the account doesn't exist on server, we get a proper feedback.
+	 * @throws Exception
+	 */
+	public function testStage0VerifyNoAccount() {
+		$user = User::get('john');
+		$this->setClientConfig($user);
+		$this->getUrl('login');
+		$this->waitUntilISee('html.server-not-verified.server-no-user');
+		$this->waitUntilISee('.plugin-check.gpg.error', '/There is no user associated with this key/');
+		$this->waitUntilISee('.users.login.form .feedback', '/Your account doesn\'t exist on server/');
+		$this->click('.users.login.form a.primary');
+		$this->waitUntilISee('div.page.register');
+	}
 }
