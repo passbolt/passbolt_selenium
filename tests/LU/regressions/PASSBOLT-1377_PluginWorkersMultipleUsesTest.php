@@ -35,6 +35,7 @@ class PASSBOLT1377 extends PassboltTestCase {
 			$this->waitUntilISee('.plugin-check.firefox.success');
 		}
 	}
+
 	/**
 	 * Scenario: As LU I can create a password mutliple times
 	 *
