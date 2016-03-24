@@ -344,4 +344,23 @@ class SetupTest extends PassboltSetupTestCase {
 		// Since content was edited, we reset the database
 		$this->resetDatabase();
 	}
+
+	public function testSetupMultipleTimes() {
+		// Register John Doe as a user.
+		$this->registerUser('John', 'Doe', 'johndoe@passbolt.com');
+
+		// Go to setup page.
+		$this->goToSetup('johndoe@passbolt.com');
+		$this->completeRegistration();
+
+		// Register John Doe as a user.
+		$this->registerUser('John', 'Doe', 'johndoe1@passbolt.com');
+
+		// Go to setup page.
+		$this->goToSetup('johndoe1@passbolt.com');
+
+		sleep(10000);
+
+		$this->resetDatabase();
+	}
 }
