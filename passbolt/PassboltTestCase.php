@@ -480,6 +480,45 @@ class PassboltTestCase extends WebDriverTestCase {
 	}
 
 	/**
+	 * Check if the password has not been selected
+	 * @param $id string
+	 * @return bool
+	 */
+	public function isPasswordNotSelected($id) {
+		$eltSelector = '#resource_' . $id;
+		if ($this->elementHasClass($eltSelector, 'selected')) {
+			return false;
+		}
+		return true;
+	}
+
+	/**
+	 * Check if the user has already been selected
+	 * @param $id string
+	 * @return bool
+	 */
+	public function isUserSelected($id) {
+		$eltSelector = '#user_' . $id;
+		if ($this->elementHasClass($eltSelector, 'selected')) {
+			return true;
+		}
+		return false;
+	}
+
+	/**
+	 * Check if the user has not been selected
+	 * @param $id string
+	 * @return bool
+	 */
+	public function isUserNotSelected($id) {
+		$eltSelector = '#user_' . $id;
+		if ($this->elementHasClass($eltSelector, 'selected')) {
+			return false;
+		}
+		return true;
+	}
+
+	/**
 	 * Goto the edit password dialog for a given resource id
 	 * @param $id string
 	 * @throws Exception
