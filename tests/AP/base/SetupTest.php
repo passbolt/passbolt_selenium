@@ -409,7 +409,15 @@ class SetupTest extends PassboltSetupTestCase {
 		$this->clickLink("Next");
 
 		// Go to setup page.
-		$this->goToSetup($john['Username']);
+		// Get last email.
+		$this->getUrl('seleniumTests/showLastEmail/' . urlencode($john['Username']));
+
+		// Remember setup url. (We will use it later).
+		$linkElement = $this->findLinkByText('get started');
+		$setupUrl = $linkElement->getAttribute('href');
+
+		// Go to url remembered above.
+		$this->driver->get($setupUrl);
 
 		// Wait until master password section appears.
 		$this->waitForSection('generate_key_master_password');
@@ -419,9 +427,6 @@ class SetupTest extends PassboltSetupTestCase {
 
 		// I should see the previous section generate_key_form.
 		$this->waitForSection('generate_key_form');
-
-		// Wait until master password section appears.
-		$this->waitForSection('generate_key_master_password');
 
 		// Database has changed, reset it.
 		$this->resetDatabase();
