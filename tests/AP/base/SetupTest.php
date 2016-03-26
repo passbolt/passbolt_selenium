@@ -377,4 +377,53 @@ class SetupTest extends PassboltSetupTestCase {
 		// Database has changed, reset it.
 		$this->resetDatabase();
 	}
+
+
+	/**
+	 * Scenario :   As an AP, I should be able to restart the setup where I left it.
+	 * Given I have completed already one registration and setup, but left the setup in the middle.
+	 * When  I click again on the setup link in the email I received
+	 * Then  I should see that the setup is restarting at the same screen where I was last time.
+	 * When  I press Cancel
+	 * Then  I should see that the setup is at the step before.
+	 * @throws Exception
+	 */
+	public function testSetupRestartWhereItWasLeft() {
+		// Register John Doe as a user.
+		$john = User::get('john');
+		$this->registerUser($john['FirstName'], $john['LastName'], $john['Username']);
+
+		// Go to setup page.
+		$this->goToSetup($john['Username']);
+
+		// Test step domain verification.
+		$this->completeStepDomainVerification();
+
+		// Click Next.
+		$this->clickLink("Next");
+
+		// test step that prepares key creation.
+		$this->completeStepPrepareCreateKey($john);
+
+		// Fill comment.
+		$this->clickLink("Next");
+
+		// Go to setup page.
+		$this->goToSetup($john['Username']);
+
+		// Wait until master password section appears.
+		$this->waitForSection('generate_key_master_password');
+
+		// Test that Cancel button is working.
+		$this->clickLink('Cancel');
+
+		// I should see the previous section generate_key_form.
+		$this->waitForSection('generate_key_form');
+
+		// Wait until master password section appears.
+		$this->waitForSection('generate_key_master_password');
+
+		// Database has changed, reset it.
+		$this->resetDatabase();
+	}
 }
