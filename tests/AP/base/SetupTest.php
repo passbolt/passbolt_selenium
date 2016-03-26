@@ -345,22 +345,36 @@ class SetupTest extends PassboltSetupTestCase {
 		$this->resetDatabase();
 	}
 
+	/**
+	 * Scenario :   As an AP, I should be able to complete 2 setup consecutively.
+	 * Given I have completed already one registration + setup successfully.
+	 * When  I register again with a different username
+	 * Then  I should be able to complete the setup another time without error.
+	 * @throws Exception
+	 */
 	public function testSetupMultipleTimes() {
 		// Register John Doe as a user.
-		$this->registerUser('John', 'Doe', 'johndoe@passbolt.com');
+		$john = User::get('john');
+		$this->registerUser($john['FirstName'], $john['LastName'], $john['Username']);
 
 		// Go to setup page.
-		$this->goToSetup('johndoe@passbolt.com');
-		$this->completeRegistration();
+		$this->goToSetup($john['Username']);
+		$this->completeRegistration($john);
 
-		// Register John Doe as a user.
-		$this->registerUser('John', 'Doe', 'johndoe1@passbolt.com');
+		// Register Curtis Mayfield as a user.
+		$curtis = User::get('curtis');
+		$this->registerUser($curtis['FirstName'], $curtis['LastName'], $curtis['Username']);
 
 		// Go to setup page.
-		$this->goToSetup('johndoe1@passbolt.com');
+		$this->goToSetup($curtis['Username']);
 
-		sleep(10000);
+		// Wait until I see the setup section domain check.
+		$this->waitForSection('domain_check');
 
+		// Complete registration.
+		$this->completeRegistration($curtis);
+
+		// Database has changed, reset it.
 		$this->resetDatabase();
 	}
 }

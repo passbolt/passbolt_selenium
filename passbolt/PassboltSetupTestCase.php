@@ -263,7 +263,7 @@ class PassboltSetupTestCase extends PassboltTestCase {
 	 *
 	 * @throws Exception
 	 */
-	protected function completeStepPrepareCreateKey() {
+	protected function completeStepPrepareCreateKey($user) {
 		// Wait
 		$this->waitForSection('generate_key_form');
 		// Test that the text corresponding to key section is set.
@@ -272,13 +272,13 @@ class PassboltSetupTestCase extends PassboltTestCase {
 		$this->assertElementAttributeEquals(
 			$this->findById('OwnerName'),
 			'value',
-			'John Doe'
+			$user['FirstName'] . ' ' . $user['LastName']
 		);
 		// Test that field owner email is set to johndoe@passbolt.com
 		$this->assertElementAttributeEquals(
 			$this->findById('OwnerEmail'),
 			'value',
-			'johndoe@passbolt.com'
+			$user['Username']
 		);
 		// Test that email field is disabled.
 		$this->assertElementAttributeEquals(
@@ -288,7 +288,7 @@ class PassboltSetupTestCase extends PassboltTestCase {
 		);
 
 		// Fill master key.
-		$this->inputText('KeyComment', 'This is a comment for john doe key');
+		$this->inputText('KeyComment', 'This is a comment for ' . strtolower($user['FirstName'] . ' ' . $user['LastName']) . ' key');
 	}
 
 	/**
@@ -302,22 +302,24 @@ class PassboltSetupTestCase extends PassboltTestCase {
 	 * Then            I should see the password in clear
 	 * @throws Exception
 	 */
-	protected function completeStepEnterMasterPassword() {
+	protected function completeStepEnterMasterPassword($user) {
 		// Wait until section appears.
 		$this->waitForSection('generate_key_master_password');
 
 		// Fill master key.
-		$this->inputText('js_field_password', 'johndoemasterpassword');
+		$this->inputText('js_field_password', $user['MasterPassword']);
 		// Test that complexity has been updated.
 		$this->assertElementContainsText(
 			$this->findByCss('#js_user_pwd_strength .complexity-text strong'),
-			'fair'
+			isset($user['PasswordStrength']) ? $user['PasswordStrength'] : 'fair'
 		);
+
 		// Test that progress bar contains class fair.
 		$this->assertElementHasClass(
 			$this->findByCss('#js_user_pwd_strength .progress .progress-bar'),
-			'fair'
+			isset($user['PasswordStrength']) ? str_replace(' ', '_', $user['PasswordStrength']) : 'fair'
 		);
+
 		// Test that password in clear is hidden.
 		$this->assertElementHasClass(
 			$this->find('js_field_password_clear'),
@@ -527,7 +529,10 @@ class PassboltSetupTestCase extends PassboltTestCase {
 	 * Register steps
 	 * @throws Exception
 	 */
-	protected function completeRegistration() {
+	protected function completeRegistration($user = null) {
+		if ($user == null) {
+			$user = User::get('john');
+		}
 		// Test step domain verification.
 		$this->completeStepDomainVerification();
 
@@ -539,11 +544,11 @@ class PassboltSetupTestCase extends PassboltTestCase {
 			'processing'
 		);
 		// test step that prepares key creation.
-		$this->completeStepPrepareCreateKey();
+		$this->completeStepPrepareCreateKey($user);
 		// Fill comment.
 		$this->clickLink("Next");
 		// Test enter master password step.
-		$this->completeStepEnterMasterPassword();
+		$this->completeStepEnterMasterPassword($user);
 		// Next.
 		$this->clickLink("Next");
 		// Test step generate and download key.

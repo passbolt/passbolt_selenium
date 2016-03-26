@@ -105,9 +105,24 @@ class User {
 			        'LastName' => 'Doe',
 			        'Username' => 'johndoe@passbolt.com',
 			        'MasterPassword' => 'johndoe@passbolt.com',
+			        'PasswordStrength' => 'strong',
 			        'TokenCode' => 'JON',
 			        'PrivateKey' => Gpgkey::get(['name' => 'johndoe'])['filepath']
 		        ));
+		        break;
+
+	        case 'curtis':
+		        return array_merge($conf,array(
+				        'id' => Uuid::get('curtismayfield@passbolt.com'),
+				        'name' => 'curtis',
+				        'FirstName' => 'Curtis',
+				        'LastName' => 'Mayfield',
+				        'Username' => 'curtis@passbolt.com',
+				        'MasterPassword' => 'curtismayfield@passbolt.com',
+				        'PasswordStrength' => 'very strong',
+				        'TokenCode' => 'CUR',
+				        'PrivateKey' => Gpgkey::get(['name' => 'johndoe'])['filepath']
+			        ));
 		        break;
         }
     }
