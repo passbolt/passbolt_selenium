@@ -217,16 +217,17 @@ class SetupTest extends PassboltSetupTestCase {
 	 * @throws Exception
 	 */
 	public function testCanFollowSetupWithDefaultSteps() {
+		$john = User::get('john');
 		// Register John Doe as a user.
-		$this->registerUser('John', 'Doe', 'johndoe@passbolt.com');
+		$this->registerUser($john['FirstName'], $john['LastName'], $john['Username']);
 
 		// Go to setup page and register
-		$this->goToSetup('johndoe@passbolt.com');
+		$this->goToSetup($john['Username']);
 		$this->completeRegistration();
 
 		$this->loginAs([
-			'Username' => 'johndoe@passbolt.com',
-			'MasterPassword' => 'johndoemasterpassword'
+			'Username' => $john['Username'],
+			'MasterPassword' => $john['MasterPassword']
 		]);
 		// Check we are logged in.
 		$this->waitCompletion();
@@ -234,12 +235,12 @@ class SetupTest extends PassboltSetupTestCase {
 		// Check that the name is ok.
 		$this->assertElementContainsText(
 			$this->findByCss('.header .user.profile .details .name'),
-			'John Doe'
+			$john['FirstName'] . ' ' . $john['LastName']
 		);
 		// Check that the email is ok.
 		$this->assertElementContainsText(
 			$this->findByCss('.header .user.profile .details .email'),
-			'johndoe@passbolt.com'
+			$john['Username']
 		);
 
 		// Since content was edited, we reset the database
@@ -260,11 +261,12 @@ class SetupTest extends PassboltSetupTestCase {
 	public function testFollowSetupWithImportKey() {
 		$key = Gpgkey::get(['name' => 'johndoe']);
 
+		$john = User::get('john');
 		// Register John Doe as a user.
-		$this->registerUser('John', 'Doe', $key['owner_email']);
+		$this->registerUser($john['FirstName'], $john['LastName'], $john['Username']);
 
-		// Go to setup page.
-		$this->goToSetup($key['owner_email']);
+		// Go to setup page and register
+		$this->goToSetup($john['Username']);
 		// Wait
 		$this->waitForSection('domain_check');
 		// Wait for the server key to be retrieved.
