@@ -9,6 +9,7 @@
  * - As a user I should be able to fav/unfav
  * - As a user I should be able to search a password by keywords
  * - As a user, I should be able to control the sidebar visibility through the sidebar button
+ * - As a user, I should see a welcome message when I am on an empty password workspace
  *
  * @copyright (c) 2015-present Bolt Softwares Pvt Ltd
  * @licence GNU Affero General Public License http://www.gnu.org/licenses/agpl-3.0.en.html
@@ -527,5 +528,81 @@ class PasswordWorkspaceTest extends PassboltTestCase
 
 		// Then I should not see the sidebar anymore.
 		$this->assertNotVisible('#js_pwd_details');
+	}
+
+	/**
+	 * Scenario:    As a logged in user, I should see a welcome message when I am on an empty password workspace
+	 * Given        I create a new account as John Doe, and I proceed with the setup.
+	 * When         I log in as John
+	 * Then         I should see the password workspace with the text 'Welcome to passbolt!)
+	 * And          I should see an illustration (not testable here)
+	 * When         I click on the filter "favorites"
+	 * Then         I should not see the welcome message anymore
+	 * When         I click on all items filter
+	 * Then         I should see the welcome message again
+	 * When         I create a new password
+	 * Then         I should see the new password in my password list
+	 * And          I should not see the welcome message anymore
+	 * When         I delete the newly created password
+	 * Then         I should not see any password in my password list anymore
+	 * And          I should see the welcome message again
+	 */
+	public function testPasswordWorkspaceEmptyState() {
+		$john = User::get('john');
+		// Register John Doe as a user.
+		$this->registerUser($john['FirstName'], $john['LastName'], $john['Username']);
+
+		// Go to setup page and register
+		$this->goToSetup($john['Username']);
+		$this->completeSetupWithKeyGeneration([
+				'username' => $john['Username'],
+				'masterpassword' =>  $john['MasterPassword']
+			]);
+
+		$this->loginAs([
+				'Username' => $john['Username'],
+				'MasterPassword' => $john['MasterPassword']
+			]);
+		// Check we are logged in.
+		$this->waitCompletion();
+		$this->waitUntilISee('#js_app_controller.ready');
+
+		// I should see an empty workspace with the text Welcome to passbolt!
+		$this->assertElementContainsText('.empty-content', 'Welcome to passbolt!');
+
+		// The password browser should have the class empty.
+		$this->assertElementHasClass('#js_wsp_pwd_browser', 'empty');
+
+		// When I click on the favorite filter.
+		$this->clickLink("Favorite");
+		$this->waitCompletion();
+
+		// The layer empty content with text should not be visible.
+		$this->assertNotVisible('.empty-content');
+		$this->assertElementNotContainText($this->find('js_wsp_pwd_browser'), 'Welcome to passbolt!');
+
+		// When I go Back to All items.
+		$this->clickLink("All items");
+		$this->waitCompletion();
+
+		// I should see an empty workspace with the text Welcome to passbolt!
+		$this->assertElementContainsText('.empty-content', 'Welcome to passbolt!');
+
+		// When I create a password.
+		$this->createPassword([
+				'name' => 'passwordtest',
+				'username' => 'test',
+				'uri' => '',
+				'password' => 'testpassword',
+				'description' => ''
+			]);
+
+		// The layer empty content with text should not be visible.
+		$this->assertNotVisible('.empty-content');
+		$this->assertElementNotContainText($this->find('js_wsp_pwd_browser'), 'Welcome to passbolt!');
+
+		// Database has changed, we reset.
+		$this->resetDatabase();
+
 	}
 }

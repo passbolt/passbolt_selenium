@@ -124,29 +124,6 @@ class PassboltSetupTestCase extends PassboltTestCase {
 	}
 
 	/**
-	 * go To Setup page.
-	 * @throws Exception
-	 * @param string $username
-	 * @param bool $checkPluginSuccess
-	 */
-	public function goToSetup($username, $checkPluginSuccess = true) {
-		// Get last email.
-		$this->getUrl('seleniumTests/showLastEmail/' . urlencode($username));
-
-		// Remember setup url. (We will use it later).
-		$linkElement = $this->findLinkByText('get started');
-		$setupUrl = $linkElement->getAttribute('href');
-
-		// Go to url remembered above.
-		$this->driver->get($setupUrl);
-
-		// Test that the plugin confirmation message is displayed.
-		if ($checkPluginSuccess) {
-			$this->waitUntilISee('.plugin-check-wrapper .plugin-check.success', '/Firefox plugin is installed and up to date/i');
-		}
-	}
-
-	/**
 	 * Scenario :   As an AP I should be able to use the domain verification step of the setup
 	 * Given        I am an anonymous user with the plugin on the first page of the setup
 	 * Then         the button Cancel should not be visible

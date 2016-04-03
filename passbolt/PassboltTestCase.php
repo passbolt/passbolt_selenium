@@ -392,6 +392,30 @@ class PassboltTestCase extends WebDriverTestCase {
 		$this->waitUntilISee('.information h2', '/Welcome back!/i');
 	}
 
+
+	/**
+	 * go To Setup page.
+	 * @throws Exception
+	 * @param string $username
+	 * @param bool $checkPluginSuccess
+	 */
+	public function goToSetup($username, $checkPluginSuccess = true) {
+		// Get last email.
+		$this->getUrl('seleniumTests/showLastEmail/' . urlencode($username));
+
+		// Remember setup url. (We will use it later).
+		$linkElement = $this->findLinkByText('get started');
+		$setupUrl = $linkElement->getAttribute('href');
+
+		// Go to url remembered above.
+		$this->driver->get($setupUrl);
+
+		// Test that the plugin confirmation message is displayed.
+		if ($checkPluginSuccess) {
+			$this->waitUntilISee('.plugin-check-wrapper .plugin-check.success', '/Firefox plugin is installed and up to date/i');
+		}
+	}
+
 	/**
 	 * Go to the password workspace and click on the create password button
 	 */
