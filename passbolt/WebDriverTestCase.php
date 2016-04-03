@@ -347,7 +347,7 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
      * Click on a non significant element to release the focus
      */
     public function releaseFocus() {
-        $elt = $this->find('.logo.no-img');
+        $elt = $this->find('#container');
         $elt->click();
     }
 

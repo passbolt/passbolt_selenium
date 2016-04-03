@@ -568,6 +568,7 @@ class PasswordWorkspaceTest extends PassboltTestCase
 		$this->waitUntilISee('#js_app_controller.ready');
 
 		// I should see an empty workspace with the text Welcome to passbolt!
+		$this->waitUntilISee('.empty-content');
 		$this->assertElementContainsText('.empty-content', 'Welcome to passbolt!');
 
 		// The password browser should have the class empty.
@@ -586,6 +587,7 @@ class PasswordWorkspaceTest extends PassboltTestCase
 		$this->waitCompletion();
 
 		// I should see an empty workspace with the text Welcome to passbolt!
+		$this->waitUntilISee('.empty-content');
 		$this->assertElementContainsText('.empty-content', 'Welcome to passbolt!');
 
 		// When I create a password.
