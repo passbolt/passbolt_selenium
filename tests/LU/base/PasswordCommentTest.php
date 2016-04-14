@@ -208,4 +208,66 @@ class PasswordCommentTest extends PassboltTestCase {
 
 		$this->resetDatabase();
 	}
+
+	/**
+	 * Scenario :       As a user I should be able to delete a comment
+	 * Given            I am Ada
+	 * And              I am logged in
+	 * And              I click password
+	 * And              I enter and save a comment
+	 * Then             I should see the comment in the list
+	 * And              I should see a delete button
+	 * When             I log out and I log in again as betty
+	 * And              I select the same password
+	 * Then             I should see the comment posted by ada
+	 * And              I should not see the delete button
+	 */
+	public function testCommentDeleteOnlyOwner() {
+		// Given I am Ada
+		$user = User::get('ada');
+		$this->setClientConfig($user);
+
+		// And I am logged in on the password workspace
+		$this->loginAs($user);
+
+		// When I click the password apache
+		$this->clickPassword(Uuid::get('resource.id.apache'));
+
+		// I should see the comment form.
+		$this->waitUntilISee($this->commentFormSelector);
+
+		// Fill up a first comment
+		$this->inputText('js_field_comment_content', 'this is a test comment');
+
+		// Click on submit.
+		$this->click('#js_rs_details_comments a.comment-submit');
+
+		// Check whether the comments list contain the new comment.
+		$this->waitUntilISee('#js_rs_details_comments_list', '/this is a test comment/');
+
+		// I should see the delete button.
+		$buttonDeleteSelector = '#js_rs_details_comments_list a.js_delete_comment';
+		$this->assertVisible($buttonDeleteSelector);
+
+		// When I logout.
+		$this->logout();
+
+		// And I log in again as betty.
+		$user = User::get('betty');
+		$this->setClientConfig($user);
+
+		$this->loginAs($user);
+
+		// And I select the same apache password.
+		$this->clickPassword(Uuid::get('resource.id.apache'));
+
+		// Check whether the comments list contain the new comment.
+		$this->waitUntilISee('#js_rs_details_comments_list', '/this is a test comment/');
+
+		// I should not see the delete button.
+		$this->assertNotVisible($buttonDeleteSelector);
+
+		// Reset database after modifications.
+		$this->resetDatabase();
+	}
 }
