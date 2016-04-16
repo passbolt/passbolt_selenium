@@ -7,7 +7,7 @@ Checkout [passbolt.com](http://www.passbolt.com) for more information
 
 
 
-Licence
+License
 ==============
 
 This project is distributed under [Affero General Public License v3](http://www.gnu.org/licenses/agpl-3.0.html)
