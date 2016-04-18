@@ -6,9 +6,11 @@ This project is the functional testsuite of Passbolt. It is based on Selenium, P
 Checkout [passbolt.com](http://www.passbolt.com) for more information
 
 
-## License and copyright
-Unless it is mentioned otherwise in the individual source files the code is copyright 2015-onward Passbolt.com
-and distributed under AGPL v3 License.	
+
+License
+==============
+
+This project is distributed under [Affero General Public License v3](http://www.gnu.org/licenses/agpl-3.0.html)
 
 
 How to get started
