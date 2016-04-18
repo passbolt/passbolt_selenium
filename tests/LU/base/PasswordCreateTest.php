@@ -30,7 +30,7 @@ class PasswordCreateTest extends PassboltTestCase
      * And          I see the title is set to "create password"
      * And          I see the name input and label is marked as mandatory
      * And          I see the url text input and label
-     * And          I see the username text input and label marked as mandatory
+     * And          I see the username text input and label
      * And          I see the password iframe
      * And          I see the iframe label
      * When         I switch to the password iframe
@@ -79,8 +79,8 @@ class PasswordCreateTest extends PassboltTestCase
         $this->assertVisible('.create-password-dialog input[type=text]#js_field_uri');
         $this->assertVisible('.create-password-dialog label[for=js_field_uri]');
 
-        // And I see the username field marked as mandatory
-        $this->assertVisible('.create-password-dialog input[type=text]#js_field_username.required');
+        // And I see the username field
+        $this->assertVisible('.create-password-dialog input[type=text]#js_field_username');
         $this->assertVisible('.create-password-dialog label[for=js_field_username]');
 
         // And I see the password iframe
@@ -200,7 +200,6 @@ class PasswordCreateTest extends PassboltTestCase
      * And      I am on the create password dialog
      * When     I press the enter key on the keyboard
      * Then     I see an error message saying that the name is required
-     * Then     I see an error message saying that the username is required
      * When     I enter '&' as a name
      * And      I enter '&' as a username
      * And      I enter '&' as a url
@@ -236,11 +235,8 @@ class PasswordCreateTest extends PassboltTestCase
             $this->find('js_field_name_feedback'), 'is required'
         );
 
-        // Then I see an error message saying that the username is required
-        $this->assertVisible('#js_field_username_feedback.error.message');
-        $this->assertElementContainsText(
-            $this->find('js_field_username_feedback'), 'is required'
-        );
+        // I should not see an error message for username.
+        $this->assertNotVisible('#js_field_username_feedback.error.message');
 
         // When I enter & as a name
         $this->inputText('js_field_name', '&');

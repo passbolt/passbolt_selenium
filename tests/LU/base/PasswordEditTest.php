@@ -247,8 +247,8 @@ class PasswordEditTest extends PassboltTestCase
         // And  I can see the resource url in the text input
         $this->assertInputValue('js_field_uri', $resource['uri']);
 
-        // And I can see the username field marked as mandatory
-        $this->assertVisible('.edit-password-dialog input[type=text]#js_field_username.required');
+        // And I can see the username field
+        $this->assertVisible('.edit-password-dialog input[type=text]#js_field_username');
         $this->assertVisible('.edit-password-dialog label[for=js_field_username]');
 
         // And I can see the resource ursername in the text input
@@ -1122,7 +1122,7 @@ class PasswordEditTest extends PassboltTestCase
      * And      I empty the username input field
      * And      I press enter
      * Then     I see an error message saying that the name is required
-     * Then     I see an error message saying that the username is required
+     * Then     I don't see an error message saying that the username is required
      * When     I enter & as a name
      * And      I enter & as a username
      * And      I enter & as a url
@@ -1164,10 +1164,7 @@ class PasswordEditTest extends PassboltTestCase
         );
 
         // Then I see an error message saying that the username is required
-        $this->assertVisible('#js_field_username_feedback.error.message');
-        $this->assertElementContainsText(
-            $this->find('js_field_username_feedback'), 'is required'
-        );
+        $this->assertNotVisible('#js_field_username_feedback.error.message');
 
         // When I enter & as a name
         $this->inputText('js_field_name', '&');
