@@ -87,7 +87,7 @@ class PasswordCreateTest extends PassboltTestCase
         $this->assertVisible('.create-password-dialog #passbolt-iframe-secret-edition');
 
         // And I see the password label is marked as mandatory
-        $this->assertVisible('.create-password-dialog label[for=js_field_secret_data_0].required');
+        $this->assertVisible('.create-password-dialog .js_form_secret_wrapper.required');
 
         // When I switch to the password iframe
         $this->goIntoSecretIframe();

@@ -1121,7 +1121,7 @@ class PasswordEditTest extends PassboltTestCase
      * And      I empty the name input field
 	 * And      I empty the username input field
 	 * And      I empty the password input field
-     * And      I press enter
+     * And      I click save
      * Then     I see an error message saying that the name is required
 	 * And		I see an error message saying that the password is required
      * Then     I don't see an error message saying that the username is required
@@ -1157,10 +1157,19 @@ class PasswordEditTest extends PassboltTestCase
 	    $this->emptyFieldLikeAUser('js_field_username');
 
 		// I empty the password
+		$this->goIntoSecretIframe();
+		$this->click('js_secret');
+		$this->goOutOfIframe();
+		$this->assertMasterPasswordDialog($user);
+		$this->enterMasterPassword($user['MasterPassword']);
+		$this->waitUntilIDontSee('passbolt-iframe-master-password');
+		$this->goIntoSecretIframe();
+		$this->waitUntilSecretIsDecryptedInField();
+		$this->goOutOfIframe();
 		$this->inputSecret('');
 
-        // And I press enter
-        $this->pressEnter();
+        // And I click on the submit button
+		$this->click('.edit-password-dialog input[type=submit]');
 
         // Then I see an error message saying that the name is required
         $this->assertVisible('#js_field_name_feedback.error.message');
