@@ -433,4 +433,46 @@ class SetupTest extends PassboltSetupTestCase {
 		// Database has changed, reset it.
 		$this->resetDatabase();
 	}
+
+	/**
+	 * Scenario :   As an AP trying to complete the setup a second time, I should see a warning informing me that the plugin is already configured.
+	 * Given I have completed already one registration + setup successfully (without seeing a warning)
+	 * When  I register again with a different username
+	 * And   I begin the setup process
+	 * Then  I should see a warning informing me that the plugin is already configured.
+	 * @throws Exception
+	 */
+	public function testSetupDisplayWarningIfAlreadyConfigured() {
+		// Register John Doe as a user.
+		$john = User::get('john');
+		$this->registerUser($john['FirstName'], $john['LastName'], $john['Username']);
+
+		// Go to setup page.
+		$this->goToSetup($john['Username']);
+
+		// Wait until I see the setup section domain check.
+		$this->waitForSection('domain_check');
+
+		// I should not se any warning.
+		$this->assertNotVisible('.plugin-check.warning');
+
+		// Complete registration.
+		$this->completeRegistration($john);
+
+		// Register Curtis Mayfield as a user.
+		$curtis = User::get('curtis');
+		$this->registerUser($curtis['FirstName'], $curtis['LastName'], $curtis['Username']);
+
+		// Go to setup page.
+		$this->goToSetup($curtis['Username'], false);
+
+		// Wait until I see the setup section domain check.
+		$this->waitForSection('domain_check');
+
+		$this->assertVisible('.plugin-check.warning');
+		$this->assertElementContainsText(
+			$this->find('.plugin-check.warning'),
+			'The plugin is already configured'
+		);
+	}
 }
