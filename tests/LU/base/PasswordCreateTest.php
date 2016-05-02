@@ -32,7 +32,7 @@ class PasswordCreateTest extends PassboltTestCase
      * And          I see the url text input and label
      * And          I see the username text input and label
      * And          I see the password iframe
-     * And          I see the iframe label
+     * And          I see the password label is marked as mandatory
      * When         I switch to the password iframe
      * And          I see the password input
      * And          I see the security token
@@ -86,8 +86,8 @@ class PasswordCreateTest extends PassboltTestCase
         // And I see the password iframe
         $this->assertVisible('.create-password-dialog #passbolt-iframe-secret-edition');
 
-        // And I see the iframe label
-        $this->assertVisible('.create-password-dialog label[for=js_field_secret_data_0]');
+        // And I see the password label is marked as mandatory
+        $this->assertVisible('.create-password-dialog .js_form_secret_wrapper.required');
 
         // When I switch to the password iframe
         $this->goIntoSecretIframe();
@@ -259,26 +259,36 @@ class PasswordCreateTest extends PassboltTestCase
             $this->find('js_field_name_feedback'), 'should only contain alphabets, numbers'
         );
 
-        // Then I see an error message saying that the username contain invalid characters
+        // And I see an error message saying that the username contain invalid characters
         $this->assertVisible('#js_field_username_feedback.error.message');
         $this->assertElementContainsText(
             $this->find('js_field_username_feedback'), 'should only contain alphabets, numbers'
         );
 
-        // Then I see an error message saying that the url is not valid
+        // And I see an error message saying that the url is not valid
         $this->assertVisible('#js_field_uri_feedback.error.message');
         $this->assertElementContainsText(
             $this->find('js_field_uri_feedback'), 'should only contain alphabets, numbers'
         );
 
-        // Then I see an error message saying that the description contain invalid characters
+        // And I see an error message saying that the password should not be empty
+        $this->goIntoSecretIframe();
+        $this->assertVisible('#js_field_password_feedback.error.message');
+        $this->assertElementContainsText(
+            $this->find('js_field_password_feedback'), 'This information is required'
+        );
+        $this->goOutOfIframe();
+
+        // And I see an error message saying that the description contain invalid characters
         $this->assertVisible('#js_field_description_feedback.error.message');
         $this->assertElementContainsText(
             $this->find('js_field_description_feedback'), 'should only contain alphabets, numbers'
         );
 
-	    // And I enter aa as a url
+	    // When I enter aa as a url
 	    $this->inputText('js_field_uri', 'aa');
+
+        // Then I see an error message saying that the length should be between x and x characters
 	    $this->assertVisible('#js_field_uri_feedback.error.message');
 	    $this->assertElementContainsText(
 		    $this->find('js_field_uri_feedback'), 'URI should be between'

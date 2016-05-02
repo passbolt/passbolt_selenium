@@ -1119,9 +1119,11 @@ class PasswordEditTest extends PassboltTestCase
      * And      I edit a password I own
      * When     I click on the name input field
      * And      I empty the name input field
-     * And      I empty the username input field
-     * And      I press enter
+	 * And      I empty the username input field
+	 * And      I empty the password input field
+     * And      I click save
      * Then     I see an error message saying that the name is required
+	 * And		I see an error message saying that the password is required
      * Then     I don't see an error message saying that the username is required
      * When     I enter & as a name
      * And      I enter & as a username
@@ -1154,8 +1156,20 @@ class PasswordEditTest extends PassboltTestCase
         // And I empty the username input field
 	    $this->emptyFieldLikeAUser('js_field_username');
 
-        // And I press enter
-        $this->pressEnter();
+		// I empty the password
+		$this->goIntoSecretIframe();
+		$this->click('js_secret');
+		$this->goOutOfIframe();
+		$this->assertMasterPasswordDialog($user);
+		$this->enterMasterPassword($user['MasterPassword']);
+		$this->waitUntilIDontSee('passbolt-iframe-master-password');
+		$this->goIntoSecretIframe();
+		$this->waitUntilSecretIsDecryptedInField();
+		$this->goOutOfIframe();
+		$this->inputSecret('');
+
+        // And I click on the submit button
+		$this->click('.edit-password-dialog input[type=submit]');
 
         // Then I see an error message saying that the name is required
         $this->assertVisible('#js_field_name_feedback.error.message');
@@ -1165,6 +1179,14 @@ class PasswordEditTest extends PassboltTestCase
 
         // Then I see an error message saying that the username is required
         $this->assertNotVisible('#js_field_username_feedback.error.message');
+
+		// And I see an error message saying that the password is required
+		$this->goIntoSecretIframe();
+		$this->assertVisible('#js_field_password_feedback.error.message');
+		$this->assertElementContainsText(
+			$this->find('js_field_password_feedback'), 'This information is required'
+		);
+		$this->goOutOfIframe();
 
         // When I enter & as a name
         $this->inputText('js_field_name', '&');
