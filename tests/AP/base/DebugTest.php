@@ -81,7 +81,7 @@ class DebugTest extends PassboltTestCase {
         // Check empty user id
         $this->click('js_save_conf');
         $feedback = '.user.settings.feedback .message.error';
-        $this->assertVisible($feedback);
+        $this->waitUntilISee($feedback);
         $this->assertElementContainsText($feedback, 'The user id cannot be empty');
 
         // Check user id is not uuid
