@@ -5,6 +5,7 @@
  * - As a user I should be able to ad comments
  * - As a user I should see error messages if the content entered is not alright
  * - As a user I should be able to delete a comment
+ * - As a user I should receive an email notification when I write a comment.
  *
  * @copyright (c) 2015-present Bolt Softwares Pvt Ltd
  * @licence GNU Affero General Public License http://www.gnu.org/licenses/agpl-3.0.en.html
@@ -269,5 +270,76 @@ class PasswordCommentTest extends PassboltTestCase {
 
 		// Reset database after modifications.
 		$this->resetDatabase();
+	}
+
+	/**
+	 * Scenario :   As a user I should receive an email notification when I write a comment.
+	 * Given        I am Ada
+	 * And          I am logged in
+	 * And          I click on a password
+	 * Then         I should see the section comments in the sidebar
+	 * And          I should see the comment form with a submit button
+	 * Given        I am enter a comment in the textearea
+	 * And          I click on the send button
+	 * Then         I should see a notification saying that the comment has been added
+	 * When         I access the last email sent to a person the password is shared with (not me)
+	 * Then         I should see that the title contains 'myname' commented on 'resourcename'
+	 * And          I should see that the email contains the resource name
+	 * And          I should see that the email containe the comment content
+	 */
+	public function testCommentAddEmailNotification() {
+
+		// Define comment.
+		$comment = 'this is a comment';
+
+		// Given I am Ada
+		$user = User::get('ada');
+		$this->setClientConfig($user);
+
+		// And I am logged in on the password workspace
+		$this->loginAs($user);
+
+		// Make sure the password field is not visible
+		$this->assertNotVisible($this->commentFormSelector);
+
+		// When I click on a password I own
+		$resource = Resource::get(array('user' => 'ada', 'permission' => 'owner'));
+		$this->clickPassword($resource['id']);
+
+		// Make sure password field is visible
+		$this->waitUntilISee($this->commentFormSelector);
+
+		// Fill up a first comment
+		$this->inputText('js_field_comment_content', $comment);
+
+		// Click on submit.
+		$this->click('#js_rs_details_comments a.comment-submit');
+
+		// Assert that notification is shown
+		$this->assertNotification('app_comments_addforeigncomment_success');
+
+		// Access last email sent to Betty.
+		$this->getUrl('seleniumTests/showLastEmail/' . urlencode(User::get('betty')['Username']));
+
+		// The email title should be:
+		$this->assertMetaTitleContains(sprintf('%s commented on %s', $user['FirstName'], $resource['name']));
+
+		// I should see the resource name in the email.
+		$this->assertElementContainsText(
+			'bodyTable',
+			$user['FirstName'] . ' ' . $user['LastName']
+		);
+
+		// I should see the resource name in the email.
+		$this->assertElementContainsText(
+			'bodyTable',
+			$comment
+		);
+
+		// I should see the comment in the email
+		$this->assertElementContainsText(
+			'bodyTable',
+			$comment
+		);
 	}
 }
