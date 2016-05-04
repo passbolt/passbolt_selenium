@@ -891,11 +891,17 @@ class PassboltTestCase extends WebDriverTestCase {
 	/**
 	 * Enter the password in the master password iframe
 	 * @param $pwd
+	 * @param $remember
 	 */
-	public function enterMasterPassword($pwd) {
+	public function enterMasterPassword($pwd, $remember = false) {
 		$this->waitUntilISee('passbolt-iframe-master-password');
 		$this->goIntoMasterPasswordIframe();
 		$this->inputText('js_master_password', $pwd);
+
+		if ($remember == true) {
+			$this->checkCheckbox('js_remember_master_password');
+		}
+
 		$this->click('master-password-submit');
 		$this->assertElementHasClass(
 			$this->find('master-password-submit'),
@@ -931,6 +937,7 @@ class PassboltTestCase extends WebDriverTestCase {
         );
         $this->goOutOfIframe();
     }
+
 
 	/**
 	 * Copy a password to clipboard
