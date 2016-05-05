@@ -37,7 +37,7 @@ class SetupTest extends PassboltSetupTestCase {
 	 * Then       I should reach the setup page
 	 * And        the url should look like /setup/install/5569df1d-7bec-4c0c-a09d-55e2c0a895dc/d45c0bf1e00fb8db60af1e8b5482f9f3
 	 * And        I should see the text "Welcome to passbolt! Let's take 5 min to setup your system."
-	 * And        I should see the text "An add-on is required to use Passbolt."
+	 * And        I should see the text "An add-on is required to use passbolt."
 	 * And        I should see that the second menu item on the left is deactivated
 	 */
 	public function testCanSeeSetupPage() {
@@ -61,7 +61,7 @@ class SetupTest extends PassboltSetupTestCase {
 		// Assert that there is a warning message regarding plugin.
 		$this->assertElementContainsText(
 			$this->findByCss('.plugin-check-wrapper .plugin-check.error'),
-			'An add-on is required to use Passbolt.'
+			'An add-on is required to use passbolt.'
 		);
 
 		// Since content was edited, we reset the database
