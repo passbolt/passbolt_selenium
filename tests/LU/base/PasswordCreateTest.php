@@ -11,6 +11,7 @@
  * As a user I can go to next / previous field in the create password form by using the keyboard tabs
  * As a user I can generate a random password automatically
  * As a user I can view the password I am creating in clear text
+ * As a user I receive an email notification when I create a new password
  *
  * @copyright (c) 2015-present Bolt Softwares Pvt Ltd
  * @licence GNU Affero General Public License http://www.gnu.org/licenses/agpl-3.0.en.html
@@ -633,4 +634,73 @@ class PasswordCreateTest extends PassboltTestCase
         // Then I should not see the input field with the password in clear text
         $this->assertNotVisible('js_secret_clear');
     }
+
+	/**
+	 * Scenario: As a user I receive an email notification when I create a new password
+	 *
+	 * Given    I am Ada
+	 * And      I am logged in
+	 * And      I am on the create password dialog
+	 * When     I enter 'localhost ftp' as the name
+	 * And      I enter 'test' as the username
+	 * And      I enter 'ftp://passbolt.com' as the uri
+	 * And      I enter 'localhost ftp test account' as the description
+	 * And      I enter 'ftp-password-test' as password
+	 * And      I click on the save button
+	 * Then     I see a dialog telling me encryption is in progress
+	 * And      I see a notice message that the operation was a success
+	 * And      I see the password I created in my password list
+	 * When     I access the last notification email sent
+	 * Then     I should see an email informing me that I have saved a new password
+	 */
+	public function testCreatePasswordEmailNotification() {
+		// Given I am Ada
+		$user = User::get('ada');
+		$this->setClientConfig($user);
+
+		// And I am logged in
+		$this->loginAs($user);
+
+		// And I am on the create password dialog
+		$this->gotoCreatePassword();
+
+		// And I enter 'localhost ftp' as the name
+		$this->inputText('js_field_name', 'localhost ftp');
+
+		// And I enter 'test' as the username
+		$this->inputText('js_field_username', 'test');
+
+		// And I enter 'ftp://localhost' as the uri
+		$this->inputText('js_field_uri', 'ftp://passbolt.com');
+
+		// I enter 'ftp-password-test' as password
+		$this->inputSecret('ftp-password-test');
+
+		// And I enter 'localhost ftp test account' as the description
+		$this->inputText('js_field_description', 'localhost ftp test account');
+
+		// When I click on the save button
+		$this->click('.create-password-dialog input[type=submit]');
+
+		// Then I see a dialog telling me encryption is in progress
+		$this->waitUntilISee('passbolt-iframe-progress-dialog');
+
+		// I see a notice message that the operation was a success
+		$this->assertNotification('app_resources_add_success');
+
+		// Access last email sent to Betty.
+		$this->getUrl('seleniumTests/showLastEmail/' . $user['Username']);
+
+		// The email title should be:
+		$this->assertMetaTitleContains(sprintf('A new password %s has been saved', 'localhost ftp'));
+
+		// I should see the resource name in the email.
+		$this->assertElementContainsText(
+			'bodyTable',
+			'localhost ftp'
+		);
+
+		// Reset database after modifications.
+		$this->resetDatabase();
+	}
 }

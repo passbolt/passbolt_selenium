@@ -341,5 +341,8 @@ class PasswordCommentTest extends PassboltTestCase {
 			'bodyTable',
 			$comment
 		);
+
+		// Reset database after modifications.
+		$this->resetDatabase();
 	}
 }
