@@ -78,6 +78,8 @@ class DebugTest extends PassboltTestCase {
         $user = User::get('ada');
         $this->getUrl('debug');
 
+	    sleep(1);
+
         // Check empty user id
         $this->click('js_save_conf');
         $feedback = '.user.settings.feedback .message.error';
