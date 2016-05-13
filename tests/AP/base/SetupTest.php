@@ -393,7 +393,7 @@ class SetupTest extends PassboltSetupTestCase {
 	public function testSetupRestartWhereItWasLeft() {
 		// Register John Doe as a user.
 		$john = User::get('john');
-		$this->registerUser($john['FirstName'], $john['LastName'], $john['Username']);
+		$this->registerUser($john['FirstName'] , $john['LastName'], $john['Username']);
 
 		// Go to setup page.
 		$this->goToSetup($john['Username']);

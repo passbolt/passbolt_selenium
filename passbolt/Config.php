@@ -48,6 +48,16 @@ class Config {
 	}
 
 	/**
+	 * Write a configuration value
+	 *
+	 * @return array
+	 */
+	public static function write($path, $value) {
+		self::$_config = Hash::insert(self::$_config,$path, $value);
+		return self::$_config;
+	}
+
+	/**
 	 * Returns the config path if set
 	 *
 	 * @return path.
