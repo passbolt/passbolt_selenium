@@ -32,9 +32,8 @@ class PASSBOLT1494 extends PassboltSetupTestCase
 		// Complete registration.
 		$this->completeRegistration($john);
 
-		// Change URL in config to hit a different domain.
-		$passboltUrl = Config::read('passbolt.url');
-		Config::write('passbolt.url', Config::read('passbolt.url_mirror'));
+		// Switch config to secondary domain.
+		$this->switchToSecondaryDomain();
 
 		// Register Curtis Mayfield as a user.
 		$curtis = User::get('curtis');
@@ -61,10 +60,10 @@ class PASSBOLT1494 extends PassboltSetupTestCase
 			$curtis['FirstName'] . ' ' . $curtis['LastName']
 		);
 
+		// Switch back config to primary domain.
+		$this->switchToPrimaryDomain();
+
 		// Database has changed, reset it.
 		$this->resetDatabase();
-
-		// Reset the config with the base url.
-		Config::write('passbolt.url', $passboltUrl);
 	}
 }
