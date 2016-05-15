@@ -305,6 +305,47 @@ class PasswordShareTest extends PassboltTestCase
 	}
 
 	/**
+	 * Scenario: As a user I cannot add twice a permission for the same user
+	 *
+	 * Given    I am Ada
+	 * And      I am logged in on the password workspace
+	 * And		I open the share dialog of a password I own
+	 * And		I try to share the password with a user that does not exist
+	 * Then		Then I should not see it in the autocomplete results
+	 * And		The save button should be disabled
+	 */
+	public function testCannotAddNonExistingUser() {
+		// Given I am Ada
+		$user = User::get('ada');
+		$this->setClientConfig($user);
+
+		// And I am logged in on the password workspace
+		$this->loginAs($user);
+
+		// And I open the share dialog of a password I own
+		$resource = Resource::get(array(
+				'user' => 'ada',
+				'permission' => 'owner'
+		));
+		$this->gotoSharePassword($resource['id']);
+
+		// And I try share the password with a user that does not exist
+
+		$this->goIntoShareIframe();
+		$this->inputText('js_perm_create_form_aro_auto_cplt', 'not.a.user@something.com', true);
+		$this->goOutOfIframe();
+
+		// Then I should not see her in the autocomplete results
+		$this->goIntoShareAutocompleteIframe();
+		$this->waitUntilISee('.autocomplete-content.loaded');
+		$this->assertElementContainsText('.autocomplete-content.loaded', 'No user found');
+		$this->goOutOfIframe();
+
+		// And the save button should be disabled
+		$this->assertVisible('#js_rs_share_save.disabled');
+	}
+
+	/**
 	 * Scenario: As a user I can add a permission after previously adding and deleting one for the same user
 	 *
 	 * Given    I am Carol
