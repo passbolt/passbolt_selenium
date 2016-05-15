@@ -1,12 +1,12 @@
 <?php
 /**
- * Feature :  As a user I can enter my master password using the keyboard shortcuts
+ * Feature :  As a user I can enter my passphrase using the keyboard shortcuts
  *
  * Scenarios :
- * As a user I can copy a password using the button in the action bar, and enter my master password from keyboard only
- * As a user I can copy a password using the button in the action bar, and enter my master password from keyboard only by pressing tab first
- * As a user I can edit the secret of a password I have own, and enter my master password from keyboard only
- * As a user I can edit the secret of a password I have own, and enter my master password from keyboard only, using tab first
+ * As a user I can copy a password using the button in the action bar, and enter my passphrase from keyboard only
+ * As a user I can copy a password using the button in the action bar, and enter my passphrase from keyboard only by pressing tab first
+ * As a user I can edit the secret of a password I have own, and enter my passphrase from keyboard only
+ * As a user I can edit the secret of a password I have own, and enter my passphrase from keyboard only, using tab first
  *
  *
  * @copyright (c) 2015-present Bolt Softwares Pvt Ltd
@@ -16,14 +16,14 @@ class MasterPasswordShortcutTest extends PassboltTestCase {
 
     /**
      * Scenario : As a user I can copy a password using the button in the action bar,
-     * and enter my master password from keyboard only.
+     * and enter my passphrase from keyboard only.
      *
      * Given    I am Ada
      * And      I am logged in on the password workspace
      * When     I click a password
      * When     I click on the copy button in the action bar
      * Then     I can see the master key dialog
-     * When     I enter my master password by typing it on keyboard only
+     * When     I enter my passphrase by typing it on keyboard only
      * Then     I can see a success message saying the password was 'copied to clipboard'
      * And      The content of the clipboard is valid
      */
@@ -42,7 +42,7 @@ class MasterPasswordShortcutTest extends PassboltTestCase {
         // When I click on the link 'copy password'
         $this->click('js_wk_menu_secretcopy_button');
 
-        // When I enter my master password from keyboard only.
+        // When I enter my passphrase from keyboard only.
         $this->enterMasterPasswordWithKeyboardShortcuts($user['MasterPassword']);
 
         // Then I can see a success message telling me the password was copied to clipboard
@@ -54,7 +54,7 @@ class MasterPasswordShortcutTest extends PassboltTestCase {
 
     /**
      * Scenario : As a user I can copy a password using the button in the action bar,
-     * and enter my master password from keyboard only by pressing tab first.
+     * and enter my passphrase from keyboard only by pressing tab first.
      *
      * Given    I am Ada
      * And      I am logged in on the password workspace
@@ -62,8 +62,8 @@ class MasterPasswordShortcutTest extends PassboltTestCase {
      * When     I click on the copy button in the action bar
      * Then     I can see the master key dialog
      * When     I press tab
-     * Then     I can see that the master password field gets the focus
-     * When     I type my master password on the keyboard
+     * Then     I can see that the passphrase field gets the focus
+     * When     I type my passphrase on the keyboard
      * And      I press enter
      * Then     I can see a success message saying the password was 'copied to clipboard'
      * And      The content of the clipboard is valid
@@ -83,7 +83,7 @@ class MasterPasswordShortcutTest extends PassboltTestCase {
         // When I click on the link 'copy password'
         $this->click('js_wk_menu_secretcopy_button');
 
-        // When I enter my master password from keyboard only, by pressing tab first.
+        // When I enter my passphrase from keyboard only, by pressing tab first.
         $this->enterMasterPasswordWithKeyboardShortcuts($user['MasterPassword'], true);
 
         // Then I can see a success message telling me the password was copied to clipboard
@@ -95,14 +95,14 @@ class MasterPasswordShortcutTest extends PassboltTestCase {
 
     /**
      * Scenario: As a user I can edit the secret of a password I have own,
-     * and enter my master password from keyboard only.
+     * and enter my passphrase from keyboard only.
      *
      * Given    I am Ada
      * And      I am logged in on the password workspace
      * And      I am editing a password I own
      * When     I click on the secret password field
-     * Then     I see the master password dialog
-     * When     I enter the master password from keyboard only
+     * Then     I see the passphrase dialog
+     * When     I enter the passphrase from keyboard only
      * And      I press enter
      * Then     I can see the password decrypted in the secret field
      */
@@ -125,7 +125,7 @@ class MasterPasswordShortcutTest extends PassboltTestCase {
 
         $this->goOutOfIframe();
 
-        // When I enter my master password from keyboard only, by pressing tab first.
+        // When I enter my passphrase from keyboard only, by pressing tab first.
         $this->enterMasterPasswordWithKeyboardShortcuts($user['MasterPassword']);
 
         $this->goIntoSecretIframe();
@@ -141,16 +141,16 @@ class MasterPasswordShortcutTest extends PassboltTestCase {
 
     /**
      * Scenario: As a user I can edit the secret of a password I have own,
-     * and enter my master password from keyboard only, using tab first.
+     * and enter my passphrase from keyboard only, using tab first.
      *
      * Given    I am Ada
      * And      I am logged in on the password workspace
      * And      I am editing a password I own
      * When     I click on the secret password field
-     * Then     I see the master password dialog
+     * Then     I see the passphrase dialog
      * When     I press tab
-     * Then     I can see that the master password field gets the focus
-     * When     I type my master password on the keyboard
+     * Then     I can see that the passphrase field gets the focus
+     * When     I type my passphrase on the keyboard
      * And      I press enter
      * Then     I can see the password decrypted in the secret field
      */
@@ -173,7 +173,7 @@ class MasterPasswordShortcutTest extends PassboltTestCase {
 
         $this->goOutOfIframe();
 
-        // When I enter my master password from keyboard only, by pressing tab first.
+        // When I enter my passphrase from keyboard only, by pressing tab first.
         $this->enterMasterPasswordWithKeyboardShortcuts($user['MasterPassword'], true);
 
         $this->goIntoSecretIframe();

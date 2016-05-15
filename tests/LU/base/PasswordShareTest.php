@@ -375,7 +375,7 @@ class PasswordShareTest extends PassboltTestCase
 	 * And      I click on a password shared with me
 	 * And      I click on the link 'copy password'
 	 * Then     I can see the master key dialog
-	 * When     I enter my master password and click submit
+	 * When     I enter my passphrase and click submit
 	 * Then     I can see a success message telling me the password was copied to clipboard
 	 * And      the content of the clipboard is valid
 	 */
@@ -425,7 +425,7 @@ class PasswordShareTest extends PassboltTestCase
 		// Then I can see the master key dialog
 		$this->assertMasterPasswordDialog($user);
 
-		// When I enter my master password and click submit
+		// When I enter my passphrase and click submit
 		$this->enterMasterPassword($user['MasterPassword']);
 
 		// Then I can see a success message telling me the password was copied to clipboard
@@ -553,8 +553,8 @@ class PasswordShareTest extends PassboltTestCase
 	 * And 		I can see the permission type dropdown of the owner Betty is enabled
 	 * And 		I can see the permission delete button of the owner Betty is enabled
 	 * When 	I click on the save button
-	 * Then 	I see the master password dialog
-	 * When 	I enter the master password and click submit
+	 * Then 	I see the passphrase dialog
+	 * When 	I enter the passphrase and click submit
 	 * Then 	I see a dialog telling me encryption is in progress
 	 * And 		I see a notice message that the operation was a success
 	 */
@@ -638,10 +638,10 @@ class PasswordShareTest extends PassboltTestCase
 		// When I click on the save button
 		$this->click('js_rs_share_save');
 
-		// Then I see the master password dialog
+		// Then I see the passphrase dialog
 		$this->assertMasterPasswordDialog($userAda);
 
-		// When I enter the master password and click submit
+		// When I enter the passphrase and click submit
 		$this->enterMasterPassword($userAda['MasterPassword']);
 
 		// Then I see a dialog telling me encryption is in progress

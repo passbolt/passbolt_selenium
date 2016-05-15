@@ -63,22 +63,22 @@ class SetupTest extends PassboltSetupTestCase {
 	 * Then         I should be back on the page to generate a key
 	 * When         I click "Next" again
 	 * Then         I should be at the step 3
-	 * And          I should see a page with title "Now let's setup your master password"
-	 * And          The menu "3. Set a master password" should be selected
+	 * And          I should see a page with title "Now let's setup your passphrase"
+	 * And          The menu "3. Set a passphrase" should be selected
 	 * When         I click "Cancel"
 	 * Then         I should be back at step 2
 	 * And          the menu "2. Define your keys should be selected"
 	 * When         I click "Next"
 	 * Then         I should be back at step 3
-	 * When         I fill up a master password in the password field
+	 * When         I fill up a passphrase in the password field
 	 * And          I click "Next"
 	 * Then         I should reach a page saying that the secret and public key is generating
 	 * And          I should wait until the key is generated
 	 * And          I should reach the next step saying that the secret key is ready.
-	 * And          I should see that the menu "3. Set a master password" is selected
+	 * And          I should see that the menu "3. Set a passphrase" is selected
 	 * When         I click "Cancel"
-	 * Then         I should be back at the step "enter master password"
-	 * When         I enter the master password and click Next
+	 * Then         I should be back at the step "enter passphrase"
+	 * When         I enter the passphrase and click Next
 	 * Then         I should see that the key generates again
 	 * When         The key is generated and I reach the next step "Success! Your secret key is ready"
 	 * And          I click "Next"
@@ -204,7 +204,7 @@ class SetupTest extends PassboltSetupTestCase {
 	 * When         I click "Next"
 	 * Then         I should be able to prepare the generation of my key
 	 * When         I click "Next"
-	 * Then         I should be able to enter a master password
+	 * Then         I should be able to enter a passphrase
 	 * When         I click "Next"
 	 * Then         The key should be generated and I should be able to download it
 	 * When         I click "Next"
@@ -421,7 +421,7 @@ class SetupTest extends PassboltSetupTestCase {
 		// Go to url remembered above.
 		$this->driver->get($setupUrl);
 
-		// Wait until master password section appears.
+		// Wait until passphrase section appears.
 		$this->waitForSection('generate_key_master_password');
 
 		// Test that Cancel button is working.

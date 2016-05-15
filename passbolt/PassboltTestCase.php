@@ -332,8 +332,8 @@ class PassboltTestCase extends WebDriverTestCase {
 		$this->inputText('KeyComment', 'This is a comment for john doe key');
 		// Click Next.
 		$this->clickLink("Next");
-		// Check that we are now on the master password page
-		$this->waitUntilISee('#js_step_title', '/Now let\'s setup your master password!/i');
+		// Check that we are now on the passphrase page
+		$this->waitUntilISee('#js_step_title', '/Now let\'s setup your passphrase!/i');
 		// Fill master key.
 		$this->inputText('js_field_password', $data['masterpassword']);
 		// Click Next.
@@ -622,7 +622,7 @@ class PassboltTestCase extends WebDriverTestCase {
 	}
 
 	/**
-	 * Dig into the master password iframe
+	 * Dig into the passphrase iframe
 	 */
 	public function goIntoMasterPasswordIframe() {
 		$this->driver->switchTo()->frame('passbolt-iframe-master-password');
@@ -767,10 +767,10 @@ class PassboltTestCase extends WebDriverTestCase {
 		// When I click on the save button
 		$this->click('js_rs_share_save');
 
-		// Then I see the master password dialog
+		// Then I see the passphrase dialog
 		$this->assertMasterPasswordDialog($user);
 
-		// When I enter the master password and click submit
+		// When I enter the passphrase and click submit
 		$this->enterMasterPassword($user['MasterPassword']);
 
 		// Then I see a dialog telling me encryption is in progress
@@ -889,7 +889,7 @@ class PassboltTestCase extends WebDriverTestCase {
 	}
 
 	/**
-	 * Enter the password in the master password iframe
+	 * Enter the password in the passphrase iframe
 	 * @param $pwd
 	 * @param $remember
 	 */
@@ -911,10 +911,10 @@ class PassboltTestCase extends WebDriverTestCase {
 	}
 
     /**
-     * Enter the password in the master password iframe using only keyboard, and no clicks.
+     * Enter the password in the passphrase iframe using only keyboard, and no clicks.
      *
      * @param $pwd
-     *   master password string
+     *   passphrase string
      * @param $tabFirst
      *   if tab should be pressed first to give focus
      *
@@ -1323,7 +1323,7 @@ class PassboltTestCase extends WebDriverTestCase {
 	}
 
 	/**
-	 * Check if the master password dialog is working as expected
+	 * Check if the passphrase dialog is working as expected
 	 */
 	public function assertMasterPasswordDialog($user) {
 		// Get out of the previous iframe in case we are in one
@@ -1335,7 +1335,7 @@ class PassboltTestCase extends WebDriverTestCase {
 		// Then I can see the security token is valid
 		$this->assertSecurityToken($user, 'master');
 		// Then I can see the title
-		$this->assertElementContainsText('.master-password.dialog','Please enter your master password');
+		$this->assertElementContainsText('.master-password.dialog','Please enter your passphrase');
 		// Then I can see the close dialog button
 		$this->assertVisible('a.dialog-close');
 		// Then I can see the OK button

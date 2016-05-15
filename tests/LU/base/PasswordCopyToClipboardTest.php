@@ -13,7 +13,7 @@
  * As a user I can copy my password to clipboard using the action bar button
  *
  * @TODO more MASTER KEY TESTS
- * As a user I can cancel and close the master password dialog
+ * As a user I can cancel and close the passphrase dialog
  * As a user I should see errors when entering the wrong master key
  *
  * @TODO Move somewhere else
@@ -33,7 +33,7 @@ class PasswordCopyToClipboardTest extends PassboltTestCase
 	 * When     I click a password
 	 * When     I click on the copy button in the action bar
 	 * Then     I can see the master key dialog
-	 * When     I enter my master password and click submit
+	 * When     I enter my passphrase and click submit
 	 * Then     I can see a success message saying the password was 'copied to clipboard'
 	 * And      The content of the clipboard is valid
 	 */
@@ -55,7 +55,7 @@ class PasswordCopyToClipboardTest extends PassboltTestCase
 		// Then I can see the master key dialog
 		$this->assertMasterPasswordDialog($user);
 
-		// When I enter my master password and click submit
+		// When I enter my passphrase and click submit
 		$this->enterMasterPassword($user['MasterPassword']);
 
 		// Then I can see a success message telling me the password was copied to clipboard
@@ -111,7 +111,7 @@ class PasswordCopyToClipboardTest extends PassboltTestCase
      * Then     I can see the contextual menu
      * When     I click on the link 'copy password'
      * Then     I can see the master key dialog
-     * When     I enter my master password and click submit
+     * When     I enter my passphrase and click submit
      * Then     I can see a success message saying the password was 'copied to clipboard'
      * And      The content of the clipboard is valid
      */
@@ -139,7 +139,7 @@ class PasswordCopyToClipboardTest extends PassboltTestCase
         // Then I can see the master key dialog
         $this->assertMasterPasswordDialog($user);
 
-        // When I enter my master password and click submit
+        // When I enter my passphrase and click submit
         $this->enterMasterPassword($user['MasterPassword']);
 
         // Then I can see a success message telling me the password was copied to clipboard
@@ -159,7 +159,7 @@ class PasswordCopyToClipboardTest extends PassboltTestCase
 	 * Then     I can see the contextual menu
 	 * When     I click on the link 'copy password'
 	 * Then     I can see the master key dialog
-	 * When     I enter my master password and press enter
+	 * When     I enter my passphrase and press enter
 	 * Then     I can see a success message saying the password was 'copied to clipboard'
 	 * And      The content of the clipboard is valid
 	 */
@@ -271,7 +271,7 @@ class PasswordCopyToClipboardTest extends PassboltTestCase
      * Given    I am Ada
      * And      I am logged in on the password workspace
      * When     I click on a password link of the first row of the table view
-     * And      I enter my master password
+     * And      I enter my passphrase
      * Then     the password is copied to clipboard
      */
     public function testCopyPasswordToClipboardViaGridSecretCopy() {
@@ -286,7 +286,7 @@ class PasswordCopyToClipboardTest extends PassboltTestCase
         // When I click on a password link of the first row of the table view
         $this->click('grid_secret_copy_' . $resource['id']);
 
-        // And I enter my master password
+        // And I enter my passphrase
         $this->enterMasterPassword($user['MasterPassword']);
 
 	    // Then I can see a success message saying the username was copied to clipboard
@@ -304,7 +304,7 @@ class PasswordCopyToClipboardTest extends PassboltTestCase
      * And      I am logged in on the password workspace
      * When     I click on the resource row in the grid
      * And      I click on a the copy secret password link in the sidebar
-     * And      I enter my master password
+     * And      I enter my passphrase
      * Then     the password is copied to clipboard
      */
     public function testCopyPasswordToClipboardViaSidebarSecretCopy() {
@@ -322,7 +322,7 @@ class PasswordCopyToClipboardTest extends PassboltTestCase
         // And I click on a the copy secret password link in the sidebar
         $this->click('sidebar_secret_copy_' . $resource['id']);
 
-        // And I enter my master password
+        // And I enter my passphrase
         $this->enterMasterPassword($user['MasterPassword']);
 
 	    // Then I can see a success message saying the username was copied to clipboard

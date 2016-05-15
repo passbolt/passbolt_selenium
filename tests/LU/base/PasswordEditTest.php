@@ -314,8 +314,8 @@ class PasswordEditTest extends PassboltTestCase
      * When     I press the tab key
      * Then     I should see that the field uri has the focus
      * When     I press the tab key
-     * Then     I should see the master password dialog opening
-     * When     I type the master password on keyboard (without clicking anywhere first)
+     * Then     I should see the passphrase dialog opening
+     * When     I type the passphrase on keyboard (without clicking anywhere first)
      * And      I press enter
      * And      I wait for a few seconds
      * Then     I should see the password field populated with my password
@@ -363,17 +363,17 @@ class PasswordEditTest extends PassboltTestCase
         // Press tab key.
         $this->pressTab();
 
-        // Then I see the master password dialog
+        // Then I see the passphrase dialog
         // Given I can see the iframe
         $this->waitUntilISee('passbolt-iframe-master-password');
 
-        // I type the master password using keyboard only
+        // I type the passphrase using keyboard only
         $this->typeTextLikeAUser($user['MasterPassword']);
 
         // And I press enter
         $this->pressEnter();
 
-        // Then the master password dialog should disappear
+        // Then the passphrase dialog should disappear
         $this->waitUntilIDontSee('passbolt-iframe-master-password');
 
         // Then I can see the password edit dialog
@@ -419,8 +419,8 @@ class PasswordEditTest extends PassboltTestCase
      * When     I press the tab key
      * Then     I should see that the field uri has the focus
      * When     I press the tab key
-     * Then     I should see the master password dialog opening
-     * When     I type the master password on keyboard (without clicking anywhere first)
+     * Then     I should see the passphrase dialog opening
+     * When     I type the passphrase on keyboard (without clicking anywhere first)
      * And      I press enter
      * And      I wait for a few seconds
      * Then     I should see the password field populated with my password
@@ -466,17 +466,17 @@ class PasswordEditTest extends PassboltTestCase
         // Press tab key.
         $this->pressTab();
 
-        // Then I see the master password dialog
+        // Then I see the passphrase dialog
         // Given I can see the iframe
         $this->waitUntilISee('passbolt-iframe-master-password');
 
-        // I type the master password using keyboard only
+        // I type the passphrase using keyboard only
         $this->typeTextLikeAUser($user['MasterPassword']);
 
         // And I press enter
         $this->pressEnter();
 
-        // Then the master password dialog should disappear
+        // Then the passphrase dialog should disappear
         $this->waitUntilIDontSee('passbolt-iframe-master-password');
 
         // The field password should have the focus (inside the iframe).
@@ -803,8 +803,8 @@ class PasswordEditTest extends PassboltTestCase
      * And      I am logged in on the password workspace
      * And      I am editing a password I own
      * When     I click on the secret password field
-     * Then     I see the master password dialog
-     * When     I enter the master password and click submit
+     * Then     I see the passphrase dialog
+     * When     I enter the passphrase and click submit
      * Then     I can see the password edit dialog
      * When     I enter a new password
      * And      I press the submit button
@@ -837,10 +837,10 @@ class PasswordEditTest extends PassboltTestCase
         $this->click('js_secret');
         $this->goOutOfIframe();
 
-        // Then I see the master password dialog
+        // Then I see the passphrase dialog
         $this->assertMasterPasswordDialog($user);
 
-        // When I enter the master password and click submit
+        // When I enter the passphrase and click submit
         $this->enterMasterPassword($user['MasterPassword']);
 
 	    $this->waitUntilIDontSee('passbolt-iframe-master-password');
@@ -884,14 +884,14 @@ class PasswordEditTest extends PassboltTestCase
      * And      I am logged in on the password workspace
      * And      I am editing a password I own
      * When     I click the button to view my password in clear text
-     * Then     I see the master password dialog
-     * When     I enter the master password in the input field
+     * Then     I see the passphrase dialog
+     * When     I enter the passphrase in the input field
      * And      I press the submit button
      * Then     I can see the password in clear text
      * When     I press the same button to hide my password again
      * Then     I do not see the password in clear text
      * When     I press the button to view my password in cleartext
-     * Then     I do not the master password dialog
+     * Then     I do not the passphrase dialog
      * Then     I can see the password in clear text
      */
     public function testEditPasswordViewClearText() {
@@ -913,13 +913,13 @@ class PasswordEditTest extends PassboltTestCase
         $this->goIntoSecretIframe();
         $this->click('js_secret_view');
 
-        // Then I see the master password dialog
+        // Then I see the passphrase dialog
         $this->assertMasterPasswordDialog($user);
 
-        // When I enter the master password and I press the submit button
+        // When I enter the passphrase and I press the submit button
         $this->enterMasterPassword($user['MasterPassword']);
 
-	    // Wait until I don't see the master password window anymore.
+	    // Wait until I don't see the passphrase window anymore.
 	    $this->waitUntilIDontSee('passbolt-iframe-master-password');
 
         // Then I should see the input field with the password in clear text
@@ -938,7 +938,7 @@ class PasswordEditTest extends PassboltTestCase
         // When I press the button to view my password in cleartext
         $this->click('js_secret_view');
 
-        // Then I do not the master password dialog
+        // Then I do not the passphrase dialog
         $this->assertNotVisible('passbolt-iframe-master-password');
 
         // Then I can see the password in clear text
@@ -955,8 +955,8 @@ class PasswordEditTest extends PassboltTestCase
      * And      I am editing a password I own
 	 * And      I can see the generate button is not active
      * When     I click on the secret password field
-     * Then     I see the master password dialog
-     * And      I enter the master password in the input field and press the submit button
+     * Then     I see the passphrase dialog
+     * And      I enter the passphrase in the input field and press the submit button
      * And      I can see the secret field populated
      * And      I can see the generate button is now active
      * When     I click the button the generate a new random password button
@@ -987,13 +987,13 @@ class PasswordEditTest extends PassboltTestCase
 	    // When I click on the secret password field
 	    $this->click('js_secret');
 
-        // Then I see the master password dialog
+        // Then I see the passphrase dialog
         $this->assertMasterPasswordDialog($user);
 
-        // When I enter the master password in the input field
+        // When I enter the passphrase in the input field
         $this->enterMasterPassword($user['MasterPassword']);
 
-	    // Wait until I don't see the master password window anymore.
+	    // Wait until I don't see the passphrase window anymore.
 	    $this->waitUntilIDontSee('passbolt-iframe-master-password');
 
         // Then I should see the secret field populated

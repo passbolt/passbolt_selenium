@@ -53,29 +53,29 @@ class PASSBOLT1039 extends PassboltTestCase
 	    //$this->assertComplexity('very strong');
 	    $this->assertComplexity('not available');
 
-      // Click on th secret field.
-      $this->click('js_secret');
+        // Click on th secret field.
+        $this->click('js_secret');
 
-      // Leave IFrame.
-      $this->goOutOfIframe();
+        // Leave IFrame.
+        $this->goOutOfIframe();
 
-      // Then I see the master password dialog
-      $this->assertMasterPasswordDialog($user);
+        // Then I see the passphrase dialog
+        $this->assertMasterPasswordDialog($user);
 
-      // When I enter the master password and click submit
-      $this->enterMasterPassword($user['MasterPassword']);
+        // When I enter the passphrase and click submit
+        $this->enterMasterPassword($user['MasterPassword']);
 
-      $this->waitUntilIDontSee('passbolt-iframe-master-password');
+        $this->waitUntilIDontSee('passbolt-iframe-master-password');
 
-      $this->goIntoSecretIframe();
+        $this->goIntoSecretIframe();
 
-	    $this->waitUntilSecretIsDecryptedInField();
+        $this->waitUntilSecretIsDecryptedInField();
 
-      $this->assertComplexity('very strong');
-      $this->goOutOfIframe();
+        $this->assertComplexity('very strong');
+        $this->goOutOfIframe();
 
-	    // And the database is in the default state
-	    $this->resetDatabase();
+        // And the database is in the default state
+        $this->resetDatabase();
 
     }
 }

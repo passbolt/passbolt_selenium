@@ -22,19 +22,19 @@ class PassboltSetupTestCase extends PassboltTestCase {
 
 		],
 		'generate_key_master_password' => [
-			'title' => 'Now let\'s setup your master password!',
+			'title' => 'Now let\'s setup your passphrase!',
 			'subtitle'  => 'Set your passphrase',
-			'menu_item' => '3. Set a master password'
+			'menu_item' => '3. Set a passphrase'
 		],
 		'generate_key_progress' => [
 			'title' => 'Give us a second while we crunch them numbers!',
 			'subtitle' => 'Generating the secret and public key',
-			'menu_item' => '3. Set a master password'
+			'menu_item' => '3. Set a passphrase'
 		],
 		'generate_key_done' => [
 			'title' => 'Success! Your secret key is ready.',
 			'subtitle' => 'Let\'s make a backup',
-			'menu_item' => '3. Set a master password'
+			'menu_item' => '3. Set a passphrase'
 		],
 		'import_key_form' => [
 			'title' => 'Import an existing key or create a new one!',
@@ -269,12 +269,12 @@ class PassboltSetupTestCase extends PassboltTestCase {
 	}
 
 	/**
-	 * Scenario :      As an AP using the setup, I should be able to enter my master password for the protected key.
-	 * Given           I am at the step asking me to enter my master password.
-	 * When            I fill up a master password
+	 * Scenario :      As an AP using the setup, I should be able to enter my passphrase for the protected key.
+	 * Given           I am at the step asking me to enter my passphrase.
+	 * When            I fill up a passphrase
 	 * Then            I should see that the strength is getting updated
 	 * And             I should see that the strength progress bar is getting updated
-	 * And             I should not see the master password in clear
+	 * And             I should not see the passphrase in clear
 	 * When            I click on the show password button
 	 * Then            I should see the password in clear
 	 * @throws Exception
@@ -524,7 +524,7 @@ class PassboltSetupTestCase extends PassboltTestCase {
 		$this->completeStepPrepareCreateKey($user);
 		// Fill comment.
 		$this->clickLink("Next");
-		// Test enter master password step.
+		// Test enter passphrase step.
 		$this->completeStepEnterMasterPassword($user);
 		// Next.
 		$this->clickLink("Next");
