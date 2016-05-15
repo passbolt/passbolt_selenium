@@ -7,6 +7,7 @@
  * As a user I can delete a password using the button in the action bar
  * As user B I can see a password that user A shared with me and deleted.
  * As a user I should not be able to delete a password when I have read access
+ * As a user I should receive a notification email on password deletion
  *
  * @copyright (c) 2015-present Bolt Softwares Pvt Ltd
  * @licence GNU Affero General Public License http://www.gnu.org/licenses/agpl-3.0.en.html
@@ -231,4 +232,88 @@ class PasswordDeleteTest extends PassboltTestCase
         // Then I can still see the password in the list
         $this->assertVisible('resource_' . $resource['id']);
     }
+
+	/**
+	 * Scenario: As a user I should receive a notification email on password deletion
+	 *
+	 * And      I am Ada
+	 * And      I am logged in on the password workspace
+	 * When     I click a password I have update right on
+	 * And		I click on the more button
+	 * And 		I click on the delete link
+	 * Then     I should see a success notification message saying the password is deleted
+	 * When     I access the last notification email for this user
+	 * Then     I should see a notification email stating that the password has been deleted
+	 * When     I access the last notification email of a user the password was shared with
+	 * Then     I should see a notification email stating that the password has been deleted
+	 */
+	public function testDeletePasswordEmailNotification() {
+		// And I am Ada
+		$user = User::get('ada');
+		$this->setClientConfig($user);
+
+		// And I am logged in on the password workspace
+		$this->loginAs($user);
+
+		// When I click a password I have update right on
+		$resource = Resource::get(array('user' => 'ada', 'permission' => 'update'));
+		$this->clickPassword($resource['id']);
+
+		// And I click on the more button
+		$this->click('js_wk_menu_more_button');
+
+		// When I click on the delete link
+		$this->clickLink('delete');
+
+		// Assert that the confirmation dialog is displayed.
+		$this->assertConfirmationDialog('Do you really want to delete password ?');
+
+		// Click ok in confirmation dialog.
+		$this->confirmActionInConfirmationDialog();
+
+		// Then I should see a success notification message saying the password is deleted
+		$this->assertNotification('app_resources_delete_success');
+
+		// Access last email sent to Betty.
+		$this->getUrl('seleniumTests/showLastEmail/' . $user['Username']);
+
+		// The email title should be:
+		$this->assertMetaTitleContains(sprintf('Password %s has been deleted', $resource['name']));
+
+		// I should see the user name in the email.
+		$this->assertElementContainsText(
+			'bodyTable',
+			'You (' . $user['Username'] . ')'
+		);
+
+		// I should see the resource name in the email.
+		$this->assertElementContainsText(
+			'bodyTable',
+			$resource['name']
+		);
+
+		// Get the details of betty, with whom the password is shared.
+		$betty = User::get('betty');
+
+		// Access last email sent to Betty.
+		$this->getUrl('seleniumTests/showLastEmail/' . $betty['Username']);
+
+		// The email title should be:
+		$this->assertMetaTitleContains(sprintf('Password %s has been deleted', $resource['name']));
+
+		// I should see the user name in the email.
+		$this->assertElementContainsText(
+			'bodyTable',
+			$user['FirstName'] . ' ' . $user['LastName'] . ' (' . $user['Username'] . ')'
+		);
+
+		// I should see the resource name in the email.
+		$this->assertElementContainsText(
+			'bodyTable',
+			$resource['name']
+		);
+
+		// Since content was edited, we reset the database
+		$this->resetDatabase();
+	}
 }

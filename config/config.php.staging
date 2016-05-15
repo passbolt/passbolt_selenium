@@ -15,6 +15,7 @@ $config = array (
 	// the url of your passbolt app
 	'passbolt' => array (
 		'url' => 'http://52.32.88.103:8081',
+		'url_secondary' => 'http://52.32.88.103:8082',
 		'server_key' => array(
             'fingerprint' => '2FC8945833C51946E937F9FED47B0811573EE67E',
             'path'        => GPG_SERVER . DS . 'unsecure.key'

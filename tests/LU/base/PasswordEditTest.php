@@ -18,6 +18,7 @@
  * As a user I can not edit a password I have only read access to
  * As user B I can see the changes are reflected when user A is editing a password we share
  * As a user I can see error messages when editing a password with wrong inputs
+ * As a user I receive an email notification on a password update
  *
  * @copyright (c) 2015-present Bolt Softwares Pvt Ltd
  * @licence GNU Affero General Public License http://www.gnu.org/licenses/agpl-3.0.en.html
@@ -1227,6 +1228,100 @@ class PasswordEditTest extends PassboltTestCase
             $this->find('js_field_description_feedback'), 'should only contain alphabets, numbers'
         );
     }
+
+
+	/**
+	 * Scenario: As a user I receive an email notification on a password update.
+	 *
+	 * Given    I am Ada
+	 * And      I am logged in on the password workspace
+	 * And      I am editing a password I own
+	 * When     I click on name input text field
+	 * And      I empty the name input text field value
+	 * And      I enter a new value
+	 * And      I click save
+	 * Then     I can see a success notification
+	 * And      I can see that the password name have changed in the overview
+	 * When     I access my last email notification
+	 * Then     I should see that I received an email informing me that the password has been updated
+	 * And      I should see that the email title should be the old name (not the changed one)
+	 * And      I should see that the email contains You (ada.lovelace@passbolt.com)
+	 *
+	 * Given    I am betty, and the password was shared with me
+	 * When     I access my last email notification
+	 * Then     I should see that I received an email informing me that the password has been updated
+	 * And      I should see that the email contains Ada Lovelace (ada.lovelace@passbolt.com)
+	 */
+	public function testEditPasswordEmailNotification() {
+		// Given I am Ada
+		$user = User::get('ada');
+		$this->setClientConfig($user);
+
+		// And I am logged in on the password workspace
+		$this->loginAs($user);
+
+		// And I am editing a password I own
+		$resource = Resource::get(array('user' => 'ada', 'permission' => 'owner'));
+		$this->gotoEditPassword($resource['id']);
+
+		// When I click on name input text field
+		$this->click('js_field_name');
+
+		// And I empty the name input text field value
+		// And I enter a new value
+		$newName = 'MyNewName';
+		$this->inputText('js_field_name',$newName);
+
+		// And I click save
+		$this->click('.edit-password-dialog input[type=submit]');
+
+		// Then I can see a success notification
+		$this->assertNotification('app_resources_edit_success');
+
+		// And I can see that the password name have changed in the overview
+		$this->assertElementContainsText('#js_wsp_pwd_browser .tableview-content', $newName);
+
+		// Access last email sent to Betty.
+		$this->getUrl('seleniumTests/showLastEmail/' . $user['Username']);
+
+		// The email title should be:
+		$this->assertMetaTitleContains(sprintf('Password %s has been updated', $resource['name']));
+
+		// I should see the resource name in the email.
+		$this->assertElementContainsText(
+			'bodyTable',
+			$newName
+		);
+
+		// I should see the resource name in the email.
+		$this->assertElementContainsText(
+			'bodyTable',
+			'You (' . $user['Username'] . ')'
+		);
+
+		$betty = User::get('betty');
+
+		// Access last email sent to Betty.
+		$this->getUrl('seleniumTests/showLastEmail/' . $betty['Username']);
+
+		// The email title should be:
+		$this->assertMetaTitleContains(sprintf('Password %s has been updated', $resource['name']));
+
+		// I should see the resource name in the email.
+		$this->assertElementContainsText(
+			'bodyTable',
+			$newName
+		);
+
+		// I should see the resource name in the email.
+		$this->assertElementContainsText(
+			'bodyTable',
+			$user['FirstName'] . ' ' . $user['LastName'] . ' (' . $user['Username'] . ')'
+		);
+
+		// Reset database after modifications.
+		$this->resetDatabase();
+	}
 }
 
 

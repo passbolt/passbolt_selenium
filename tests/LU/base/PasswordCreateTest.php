@@ -692,7 +692,7 @@ class PasswordCreateTest extends PassboltTestCase
 		$this->getUrl('seleniumTests/showLastEmail/' . $user['Username']);
 
 		// The email title should be:
-		$this->assertMetaTitleContains(sprintf('A new password %s has been saved', 'localhost ftp'));
+		$this->assertMetaTitleContains(sprintf('Password %s has been added', 'localhost ftp'));
 
 		// I should see the resource name in the email.
 		$this->assertElementContainsText(

@@ -64,6 +64,33 @@ class PassboltTestCase extends WebDriverTestCase {
 	}
 
 	/**
+	 * Switch config to use secondary domain (for multi domain testing).
+	 */
+	public function switchToSecondaryDomain() {
+		Config::write('passbolt.url_primary', Config::read('passbolt.url'));
+		Config::write('passbolt.url', Config::read('passbolt.url_secondary'));
+		PassboltServer::setExtraConfig([
+				'App' => [
+					'fullBaseUrl' => Config::read('passbolt.url_secondary')
+				]
+			]);
+	}
+
+	/**
+	 * Switch config to use primary domain (for multi domain testing).
+	 *
+	 * Switch will happen only if a first switch to secondary domain was done first.
+	 */
+	public function switchToPrimaryDomain() {
+		// Switch needs to be done only if a switch to secondary domain was done first.
+		if (Config::read('passbolt.url_primary')) {
+			// Reset the config with the base url.
+			Config::write('passbolt.url', Config::read('passbolt.url_primary'));
+			PassboltServer::resetExtraConfig();
+		}
+	}
+
+	/**
 	 * Goto workspace
 	 * @param $name
 	 */
