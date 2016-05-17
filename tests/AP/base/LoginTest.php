@@ -63,4 +63,26 @@ class LoginTest extends PassboltTestCase {
 		$this->click('.users.login.form a.primary');
 		$this->waitUntilISee('div.page.register');
 	}
+
+	/**
+	 * Scenario: I can see the app version number and the plugin version number in the footer
+	 * Given 	I am an anonymous user with no plugin on the login page
+	 * When		When the page is loaded
+	 * Then 	I can see the app version number in the footer
+	 * And      I can see the plugin version number
+	 */
+	public function testCanSeeVersionNumber() {
+		$this->getUrl('login');
+
+		$loginForm = null;
+
+		try {
+			$versionElt = $this->findByCss('#version a');
+		} catch (NoSuchElementException $e) {
+			$this->fail('No element wit id #version was found');
+		}
+
+		$version = $versionElt->getAttribute('data-tooltip');
+		$this->assertRegExp('/^[0-9]{1,2}\.[0-9]{1,2}\.[0-9]{1,2} \/ [0-9]{1,2}\.[0-9]{1,2}\.[0-9]{1,2}$/', $version);
+	}
 }

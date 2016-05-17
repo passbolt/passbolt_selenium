@@ -105,7 +105,6 @@ class LoginTest extends PassboltTestCase {
 		);
 	}
 
-
 	/**
 	 * Scenario: I should not see warnings if I accept cookies and javascript is enabled
 	 * Given 	I am an anonymous user with no plugin on the login page
@@ -116,5 +115,28 @@ class LoginTest extends PassboltTestCase {
 		$this->getUrl('login');
 		$this->assertNotVisible('.message.error.no-js');
 		$this->assertNotVisible('.message.error.no-cookies');
+	}
+
+
+	/**
+	 * Scenario: I can see the version number in the footer
+	 * Given 	I am an anonymous user with no plugin on the login page
+	 * When		When the page is loaded
+	 * Then 	I can see the app version number in the footer
+	 * And      I can't see the plugin version number
+	 */
+	public function testCanSeeVersionNumber() {
+		$this->getUrl('login');
+
+		$loginForm = null;
+
+		try {
+			$versionElt = $this->findByCss('#version a');
+		} catch (NoSuchElementException $e) {
+			$this->fail('No element wit id #version was found');
+		}
+
+		$version = $versionElt->getAttribute('data-tooltip');
+		$this->assertRegExp('/^[0-9]{1,2}\.[0-9]{1,2}\.[0-9]{1,2}$/', $version);
 	}
 }
