@@ -223,8 +223,7 @@ class PasswordDeleteTest extends PassboltTestCase
         $this->rightClickPassword($resource['id']);
 
         // Then I should see the delete option is disabled in the contextual dialog
-        // @TODO PASSBOLT-1028
-        //$this->assertElementContainsText($this->findByCss('#js_contextual_menu .disabled'),'delete');
+        $this->assertElementContainsText($this->findByCss('#js_contextual_menu #js_password_browser_menu_delete.disabled'), 'Delete');
 
         // When I click on the delete option in the contextual dialog
         $this->click('#js_password_browser_menu_delete a');
