@@ -3,6 +3,7 @@
 /**
  * Feature : Setup
  * As an anonymous user, I need to be able to see the setup page with an invitation to install the plugin.
+ * As AP doing the setup, I should not be able to import a key already used by another user.
  *
  * @TODO : Test a scenario where the key is not compatible with GPG on server side.
  * @TODO : Test scenario with a key that has matching information (same name and email).
@@ -474,5 +475,148 @@ class SetupTest extends PassboltSetupTestCase {
 			$this->find('.plugin-check.warning'),
 			'The plugin is already configured'
 		);
+	}
+
+
+	/**
+	 * Scenario:    As AP doing the setup, I should not be able to import a key already used by another user.
+	 * Given    I have registered and I am following the setup
+	 * When     I am at the import step, and I try to import a key that is already in use by another user (example: Ada).
+	 * Then     I should see an error message informing me that this key is already in use.
+	 *
+	 * @throws Exception
+	 */
+	public function testFollowSetupWithImportNonUniqueKey() {
+		$john = User::get('john');
+		$john['PrivateKey'] = 'ada_private_nopassphrase.key';
+
+		// Register John Doe as a user.
+		$this->registerUser($john['FirstName'], $john['LastName'], $john['Username']);
+
+		// Go to setup page and register
+		$this->goToSetup($john['Username']);
+
+		// Wait
+		$this->waitForSection('domain_check');
+
+		// Wait for the server key to be retrieved.
+		sleep(2);
+
+		// Check box domain check.
+		$this->checkCheckbox('js_setup_domain_check');
+
+		// Click Next.
+		$this->clickLink("Next");
+
+		// Wait
+		$this->waitForSection('generate_key_form');
+
+		// Click on import.
+		$this->clickLink('import');
+
+		// Wait
+		$this->waitForSection('import_key_form');
+
+		// Insert Ada's key instead of John's key (Ada's key already exist in database).
+		$keyData = file_get_contents(GPG_FIXTURES . DS .  $john['PrivateKey']);
+		$this->inputText('js_setup_import_key_text', $keyData);
+
+		// Click Next
+		$this->clickLink('Next');
+
+		// I should see an error message.
+		$this->waitUntilISee('KeyErrorMessage', '/This key is already used by another user/');
+
+		// Since content was edited, we reset the database
+		$this->resetDatabase();
+	}
+
+	/**
+	 * Scenario:    As AP doing the setup, I should be able to import a key already used by another user who is soft deleted.
+	 * Given    I first login as admin and I delete Ada
+	 * When     I have registered as a new user and I am following the setup
+	 * When     I am at the import step, and I try to import a key that was already used by a deleted user.
+	 * Then     I should see that the key is imported normally.
+	 *
+	 * @throws Exception
+	 */
+	public function testFollowSetupWithImportNonUniqueKeyBelongingToDeletedUser() {
+
+		// And I am Admin
+		$user = User::get('admin');
+		$this->setClientConfig($user);
+
+		// And I am logged in on the user workspace
+		$this->loginAs($user);
+
+		// Go to user workspace
+		$this->gotoWorkspace('user');
+
+		// When I right click on a user
+		$user = User::get('ada');
+		$this->rightClickUser($user['id']);
+
+		// Then I select the delete option in the contextual menu
+		$this->click('#js_user_browser_menu_delete a');
+
+		// Assert that the confirmation dialog is displayed.
+		$this->assertConfirmationDialog('Do you really want to delete user ?');
+
+		// Click ok in confirmation dialog.
+		$this->confirmActionInConfirmationDialog();
+
+		// Then I should see a success notification message saying the user is deleted
+		$this->assertNotification('app_users_delete_success');
+
+		$this->logout();
+
+		$john = User::get('john');
+		$john['PrivateKey'] = 'ada_private_nopassphrase.key';
+
+		// Register John Doe as a user.
+		$this->registerUser($john['FirstName'], $john['LastName'], $john['Username']);
+
+		// Go to setup page and register
+		$this->goToSetup($john['Username'], false);
+
+		// Wait
+		$this->waitForSection('domain_check');
+
+		// Wait for the server key to be retrieved.
+		sleep(2);
+
+		// Check box domain check.
+		$this->checkCheckbox('js_setup_domain_check');
+
+		// Click Next.
+		$this->clickLink("Next");
+
+		// Wait
+		$this->waitForSection('generate_key_form');
+
+		// Click on import.
+		$this->clickLink('import');
+
+		// Wait
+		$this->waitForSection('import_key_form');
+
+		// Insert Ada's key instead of John's key (Ada's key already exist in database).
+		$keyData = file_get_contents(GPG_FIXTURES . DS .  $john['PrivateKey']);
+		$this->inputText('js_setup_import_key_text', $keyData);
+
+		// Click Next
+		$this->clickLink('Next');
+
+		// Wait until section appears.
+		$this->waitForSection('import_key_done');
+
+		// I should see a success message.
+		$this->assertElementContainsText(
+			$this->findByCss('.message.warning'),
+			'Warning'
+		);
+
+		// Since content was edited, we reset the database
+		$this->resetDatabase();
 	}
 }
