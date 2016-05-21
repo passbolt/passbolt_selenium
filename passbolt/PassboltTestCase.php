@@ -1467,6 +1467,30 @@ class PassboltTestCase extends WebDriverTestCase {
 	}
 
 	/**
+	 * Assert that the password has a specific permission for a target user, inside the sidebar
+	 * @param $password
+	 * @param $username
+	 * @param $permissionType
+	 */
+	public function assertPermissionInSidebar($username, $permissionType) {
+		// Wait until the permissions are loaded. (ready state).
+		$this->waitUntilISee('#js_rs_details_permissions_list.ready');
+
+		// I can see the user has a direct permission
+		$this->assertElementContainsText(
+			$this->findByCss('#js_rs_details_permissions_list'),
+			$username
+		);
+
+		// Find the permission row element
+		$rowElement = $this->findByXpath('//*[@id="js_rs_details_permissions_list"]//*[contains(@class, "permission")]//*[contains(text(), "' . $username . '")]//ancestor::li');
+
+		// I can see the permission is as expected
+		$permissionTypeElt = $rowElement->findElement(WebDriverBy::cssSelector('.subinfo'));
+		$this->assertEquals($permissionType, $permissionTypeElt->getText());
+	}
+
+	/**
 	 * Assert that the password has no direct permission for a target user
 	 * @param $password
 	 * @param $username
