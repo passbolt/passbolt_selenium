@@ -486,15 +486,28 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
 		throw new Exception( "waitUntilIDontSee $id, $regexp : Timeout thrown by " . $backtrace[1]['class'] . "::" . $backtrace[1]['function'] . "()\n . element: $id ($regexp)");
 	}
 
-    /**
-     * Select an option in a select list
-     * @param $id string an element id or selector
-     * @param $option string the label of the option
-     */
-    public function selectOption($id, $option) {
-      $select = new WebDriverSelect($this->driver->findElement(WebDriverBy::id($id)));
-      $select->selectByVisibleText($option);
-    }
+	/**
+	 * Select an option in a select list
+	 * @param $id string an element id or selector
+	 * @param $option string the label of the option
+	 */
+	public function selectOption($id, $option) {
+		$select = new WebDriverSelect($this->driver->findElement(WebDriverBy::id($id)));
+		$select->selectByVisibleText($option);
+	}
+
+
+	/**
+	 * Scroll an element to its bottom.
+	 * @param $idSelector
+	 */
+	public function scrollElementToBottom($idSelector) {
+		$script = "
+		var objDiv = document.getElementById('$idSelector');
+		objDiv.scrollTop = objDiv.scrollHeight;
+		";
+		$this->driver->executeScript($script);
+	}
 
     /********************************************************************************
      * ASSERT HELPERS

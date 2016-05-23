@@ -1149,6 +1149,39 @@ class PassboltTestCase extends WebDriverTestCase {
 		$button->click();
 	}
 
+	/**
+	 * Scroll the sidebar to bottom.
+	 */
+	public function scrollSidebarToBottom() {
+		$this->scrollElementToBottom('js_pwd_details');
+	}
+
+	/**
+	 * Post a comment.
+	 *
+	 * This expects the comment form to be shown already.
+	 *
+	 * @param $comment
+	 *
+	 * @throws Exception
+	 */
+	public function postCommentInSidebar($comment) {
+		// Make sure password field is visible again.
+		$this->waitUntilISee('#js_rs_details_comments form#js_comment_add_form');
+
+		// Scroll down in sidebar.
+		$this->scrollSidebarToBottom();
+
+		// Fill up a second comment.
+		$this->inputText('js_field_comment_content', $comment);
+
+		// Click on submit.
+		$this->click('#js_rs_details_comments a.comment-submit');
+
+		// Assert that notification is shown.
+		$this->assertNotification('app_comments_addforeigncomment_success');
+	}
+
 	/********************************************************************************
 	 * Passbolt Application Asserts
 	 ********************************************************************************/
