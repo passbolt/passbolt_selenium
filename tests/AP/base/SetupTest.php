@@ -475,6 +475,9 @@ class SetupTest extends PassboltSetupTestCase {
 			$this->find('.plugin-check.warning'),
 			'The plugin is already configured'
 		);
+
+		// Database has changed, reset it.
+		$this->resetDatabase();
 	}
 
 
