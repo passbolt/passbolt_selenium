@@ -5,11 +5,16 @@
  * Scenarios :
  * As a user I can see the share dialog using the share button in the action bar
  * As a user I can see the share dialog using the right click contextual menu
+ * As a user I can see the share dialog using the edit permissions button in the sidebar
  * As a user I cannot access the share dialog from the action bar or the contextual menu if I have only read or update access to
  * As a user I can view the permissions for a password I own
+ * As a user I can view the permissions for a password I own in the sidebar
+ * As a user I can view the permissions for a password I don't own
+ * As a user I can view the permissions for a password I have read-only rights in the sidebar
  * As a user I cannot add twice a permission for the same user
  * As a user I can add a permission after previously adding and deleting one for the same user
  * As a user I can share a password with other users
+ * As a user I can share a password with other users, and see them immediately in the sidebar
  * As a user I edit the permissions of a password I own
  * As a user I delete a permission of a password I own
  * As a user I should not let a resource without at least one owner
@@ -91,6 +96,42 @@ class PasswordShareTest extends PassboltTestCase
 
 		// When I click on the share link in the contextual menu
 		$this->click('#js_password_browser_menu_share a');
+
+		// Then I can see the share password dialog
+		$this->assertVisible('.share-password-dialog');
+	}
+
+	/**
+	 * Scenario: As a user I can see the share dialog using the edit permissions button in the sidebar
+	 *
+	 * Given    I am Ada
+	 * And      I am logged in on the password workspace
+	 * When     I click on a password I own
+	 * Then     I can see the sidebar with a permissions section
+	 * And      I can see a edit permissions button
+	 * When     I click on the edit permissions button
+	 * Then     I can see the share password dialog
+	 */
+	public function testSharePasswordFromSidebar() {
+		// Given I am Ada
+		$user = User::get('ada');
+		$this->setClientConfig($user);
+
+		// And I am logged in on the password workspace
+		$this->loginAs($user);
+
+		// When I right click on a password I own
+		$resource = Resource::get(array('user' => 'ada', 'permission' => 'owner'));
+		$this->clickPassword($resource['id']);
+
+		// Then I can see the sidebar.
+		$this->waitUntilISee('js_pwd_details');
+
+		// And I can see the permission details in the sidebar.
+		$this->assertVisible('js_rs_details_permissions');
+
+		// When I click on the edit permissions button
+		$this->click('#js_rs_details_permissions a#js_edit_permissions_button');
 
 		// Then I can see the share password dialog
 		$this->assertVisible('.share-password-dialog');
@@ -205,6 +246,51 @@ class PasswordShareTest extends PassboltTestCase
 	}
 
 	/**
+	 * Scenario: As a user I can view the permissions for a password I own in the sidebar
+	 *
+	 * Given    I am Ada
+	 * And      I am logged in on the password workspace
+	 * When     I click on a password I own
+	 * Then     I should see the sidebar with a section about the permissions
+	 * And      I can see that Ada is owner
+	 * And      I can see that Betty can update
+	 * And      I can see that Carol can read
+	 * And      I can see that Dame can read
+	 */
+	public function testViewPasswordPermissionsInSidebar() {
+		// Given I am Ada
+		$user = User::get('ada');
+		$this->setClientConfig($user);
+
+		// And I am logged in on the password workspace
+		$this->loginAs($user);
+
+		// When I go to the sharing dialog of a password I own
+		$resource = Resource::get(array(
+				'user' => 'ada',
+				'id' => Uuid::get('resource.id.apache')
+			));
+
+		// Click on the password.
+		$this->clickPassword($resource['id']);
+
+		// Wait until I see the list of permissions.
+		$this->waitUntilISee('js_rs_details_permissions');
+
+		// Then I can see that Ada is owner
+		$this->assertPermissionInSidebar('ada@passbolt.com', 'is owner');
+
+		// And I can see that Betty can update
+		$this->assertPermissionInSidebar('betty@passbolt.com', 'can update');
+
+		// And I can see that Carol can read
+		$this->assertPermissionInSidebar('carol@passbolt.com', 'can read');
+
+		// And I can see that Dame can read
+		$this->assertPermissionInSidebar('dame@passbolt.com', 'can read');
+	}
+
+	/**
 	 * Scenario: As a user I can view the permissions for a password I don't own
 	 *
 	 * Given    I am Ada
@@ -265,6 +351,51 @@ class PasswordShareTest extends PassboltTestCase
 
 		// And I can see the save button is disabled
 		$this->assertVisible('#js_rs_share_save.disabled');
+	}
+
+	/**
+	 * Scenario: As a user I can view the permissions for a password I have read-only rights in the sidebar
+	 *
+	 * Given    I am Ada
+	 * And      I am logged in on the password workspace
+	 * When     I click on a password I own
+	 * Then     I should see the sidebar with a section about the permissions
+	 * And      I can see that Ada can update
+	 * And      I can see that Betty can read
+	 * And      I can see that Carol can read
+	 * And      I can see that Edith is owner
+	 */
+	public function testViewPasswordPermissionsWithReadOnlyRightInSidebar() {
+		// Given I am Ada
+		$user = User::get('carol');
+		$this->setClientConfig($user);
+
+		// And I am logged in on the password workspace
+		$this->loginAs($user);
+
+		// When I click on a password for which I have read only rights.
+		$resource = Resource::get(array(
+				'user' => 'carol',
+				'id' => Uuid::get('resource.id.canjs')
+			));
+
+		// Click on the password.
+		$this->clickPassword($resource['id']);
+
+		// Wait until I see the list of permissions.
+		$this->waitUntilISee('js_rs_details_permissions');
+
+		// Then I can see that Ada is owner
+		$this->assertPermissionInSidebar('ada@passbolt.com', 'can update');
+
+		// And I can see that Betty can update
+		$this->assertPermissionInSidebar('betty@passbolt.com', 'can read');
+
+		// And I can see that Carol can read
+		$this->assertPermissionInSidebar('carol@passbolt.com', 'can read');
+
+		// And I can see that Dame can read
+		$this->assertPermissionInSidebar('edith@passbolt.com', 'is owner');
 	}
 
 	/**
@@ -477,6 +608,46 @@ class PasswordShareTest extends PassboltTestCase
 
 		// Since content was edited, we reset the database
 		$this->resetDatabase();
+	}
+
+	/**
+	 * Scenario: As a user I can share a password with other users, and see them immediately in the sidebar
+	 *
+	 * Given    I am Carol
+	 * And      I am logged in on the password workspace
+	 * When     I go to the sharing dialog of a password I own
+	 * Then     I can see Betty has no right on the password
+	 * When     I give read access to betty for a password I own
+	 * Then     I can see Betty is in the sidebar, under the permissions section
+	 */
+	public function testSharePasswordAndViewNewPermissionInSidebar() {
+		// Given I am Carol
+		$user = User::get('carol');
+		$this->setClientConfig($user);
+
+		// And I am logged in on the password workspace
+		$this->loginAs($user);
+
+		// When I go to the sharing dialog of a password I own
+		$resource = Resource::get(
+			array(
+				'user' => 'betty',
+				'id'   => Uuid::get('resource.id.gnupg')
+			)
+		);
+		$this->gotoSharePassword(Uuid::get('resource.id.gnupg'));
+
+		// Then I can see Betty has no right on the password
+		$this->assertElementNotContainText(
+			$this->findByCss('#js_permissions_list'),
+			'betty@passbolt.com'
+		);
+
+		// When I give read access to betty for a password I own
+		$this->sharePassword($resource, 'betty', $user);
+
+		// I can see the new permission in sidebar
+		$this->assertPermissionInSidebar('betty@passbolt.com', 'can read');
 	}
 
 	/**
@@ -765,7 +936,7 @@ class PasswordShareTest extends PassboltTestCase
 	 * And      	I can see that Dame can read
 	 * And 			I can see the save button is disabled
 	 */
-	public function testDeletedUsersShouldntBeVisibileInTheListOfPermissions() {
+	public function testDeletedUsersShouldntBeVisibleInTheListOfPermissions() {
 		// Given I am Admin
 		$user = User::get('admin');
 		$this->setClientConfig($user);

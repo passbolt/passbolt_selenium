@@ -1149,6 +1149,39 @@ class PassboltTestCase extends WebDriverTestCase {
 		$button->click();
 	}
 
+	/**
+	 * Scroll the sidebar to bottom.
+	 */
+	public function scrollSidebarToBottom() {
+		$this->scrollElementToBottom('js_pwd_details');
+	}
+
+	/**
+	 * Post a comment.
+	 *
+	 * This expects the comment form to be shown already.
+	 *
+	 * @param $comment
+	 *
+	 * @throws Exception
+	 */
+	public function postCommentInSidebar($comment) {
+		// Make sure password field is visible again.
+		$this->waitUntilISee('#js_rs_details_comments form#js_comment_add_form');
+
+		// Scroll down in sidebar.
+		$this->scrollSidebarToBottom();
+
+		// Fill up a second comment.
+		$this->inputText('js_field_comment_content', $comment);
+
+		// Click on submit.
+		$this->click('#js_rs_details_comments a.comment-submit');
+
+		// Assert that notification is shown.
+		$this->assertNotification('app_comments_addforeigncomment_success');
+	}
+
 	/********************************************************************************
 	 * Passbolt Application Asserts
 	 ********************************************************************************/
@@ -1464,6 +1497,30 @@ class PassboltTestCase extends WebDriverTestCase {
 		// I can see the permission is as expected
 		$select = new WebDriverSelect($rowElement->findElement(WebDriverBy::cssSelector('.js_share_rs_perm_type')));
 		$this->assertEquals($permissionType, $select->getFirstSelectedOption()->getText());
+	}
+
+	/**
+	 * Assert that the password has a specific permission for a target user, inside the sidebar
+	 * @param $password
+	 * @param $username
+	 * @param $permissionType
+	 */
+	public function assertPermissionInSidebar($username, $permissionType) {
+		// Wait until the permissions are loaded. (ready state).
+		$this->waitUntilISee('#js_rs_details_permissions_list.ready');
+
+		// I can see the user has a direct permission
+		$this->assertElementContainsText(
+			$this->findByCss('#js_rs_details_permissions_list'),
+			$username
+		);
+
+		// Find the permission row element
+		$rowElement = $this->findByXpath('//*[@id="js_rs_details_permissions_list"]//*[contains(@class, "permission")]//*[contains(text(), "' . $username . '")]//ancestor::li');
+
+		// I can see the permission is as expected
+		$permissionTypeElt = $rowElement->findElement(WebDriverBy::cssSelector('.subinfo'));
+		$this->assertEquals($permissionType, $permissionTypeElt->getText());
 	}
 
 	/**

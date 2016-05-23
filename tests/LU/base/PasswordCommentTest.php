@@ -41,29 +41,20 @@ class PasswordCommentTest extends PassboltTestCase {
 		$user = User::get('ada');
 		$this->setClientConfig($user);
 
-		// And I am logged in on the password workspace
+		// And I am logged in on the password workspace.
 		$this->loginAs($user);
 
-		// Make sure the password field is not visible
+		// Make sure the password field is not visible.
 		$this->assertNotVisible($this->commentFormSelector);
 
-		// When I click on a password I own
+		// When I click on a password I own.
 		$resource = Resource::get(array('user' => 'ada', 'permission' => 'owner'));
 		$this->clickPassword($resource['id']);
 
-		// Make sure password field is visible
-		$this->waitUntilISee($this->commentFormSelector);
+		// Enter comment and post.
+		$this->postCommentInSidebar($comments[0]);
 
-		// Fill up a first comment
-		$this->inputText('js_field_comment_content', $comments[0]);
-
-		// Click on submit.
-		$this->click('#js_rs_details_comments a.comment-submit');
-
-		// Assert that notification is shown
-		$this->assertNotification('app_comments_addforeigncomment_success');
-
-		// Make sure the password field is not visible
+		// Make sure the password field is not visible.
 		$this->assertNotVisible($this->commentFormSelector);
 
 		// And check that the form is not visible anymore.
@@ -75,16 +66,12 @@ class PasswordCommentTest extends PassboltTestCase {
 		// Check that the comment date (time ago) is correct.
 		$this->waitUntilISee('#js_rs_details_comments_list .modified', '/a few seconds ago/');
 
-		// Click on the + icon to add a new comment
+		// Click on the + icon to add a new comment.
 		$this->assertVisible('#js_rs_details_comments a.section-action');
 		$this->click('#js_rs_details_comments a.js_add_comment');
 
-		// Make sure password field is visible again.
-		$this->assertVisible($this->commentFormSelector);
-		// Fill up a second comment
-		$this->inputText('js_field_comment_content', $comments[1]);
-		// Click on submit.
-		$this->click('#js_rs_details_comments a.comment-submit');
+		// Enter and post comment.
+		$this->postCommentInSidebar($comments[1]);
 
 		// Check that the 2 comments are visible.
 		$this->waitUntilISee('#js_rs_details_comments_list', '/' . $comments[1] . '/');
@@ -93,6 +80,7 @@ class PasswordCommentTest extends PassboltTestCase {
 			$comments[0]
 		);
 
+		// Reset database.
 		$this->resetDatabase();
 	}
 
@@ -123,6 +111,9 @@ class PasswordCommentTest extends PassboltTestCase {
 
 		// Make sure password field is visible
 		$this->waitUntilISee($this->commentFormSelector);
+
+		// Scroll sidebar to bottom.
+		$this->scrollSidebarToBottom();
 
 		// Click on submit.
 		$this->click('#js_rs_details_comments a.comment-submit');
@@ -167,14 +158,8 @@ class PasswordCommentTest extends PassboltTestCase {
 		$resource = Resource::get(array('user' => 'ada', 'permission' => 'owner'));
 		$this->clickPassword($resource['id']);
 
-		// Make sure password field is visible
-		$this->waitUntilISee($this->commentFormSelector);
-
-		// Fill up a first comment
-		$this->inputText('js_field_comment_content', 'this is a test comment');
-
-		// Click on submit.
-		$this->click('#js_rs_details_comments a.comment-submit');
+		// Enter comment and submit.
+		$this->postCommentInSidebar('this is a test comment');
 
 		// Check whether the comments list contain the new comment.
 		$this->waitUntilISee('#js_rs_details_comments_list', '/this is a test comment/');
@@ -234,17 +219,8 @@ class PasswordCommentTest extends PassboltTestCase {
 		// When I click the password apache
 		$this->clickPassword(Uuid::get('resource.id.apache'));
 
-		// I should see the comment form.
-		$this->waitUntilISee($this->commentFormSelector);
-
-		// Fill up a first comment
-		$this->inputText('js_field_comment_content', 'this is a test comment');
-
-		// Click on submit.
-		$this->click('#js_rs_details_comments a.comment-submit');
-
-		// Check whether the comments list contain the new comment.
-		$this->waitUntilISee('#js_rs_details_comments_list', '/this is a test comment/');
+		// Enter and post comment.
+		$this->postCommentInSidebar('this is a test comment');
 
 		// I should see the delete button.
 		$buttonDeleteSelector = '#js_rs_details_comments_list a.js_delete_comment';
@@ -306,17 +282,8 @@ class PasswordCommentTest extends PassboltTestCase {
 		$resource = Resource::get(array('user' => 'ada', 'permission' => 'owner'));
 		$this->clickPassword($resource['id']);
 
-		// Make sure password field is visible
-		$this->waitUntilISee($this->commentFormSelector);
-
-		// Fill up a first comment
-		$this->inputText('js_field_comment_content', $comment);
-
-		// Click on submit.
-		$this->click('#js_rs_details_comments a.comment-submit');
-
-		// Assert that notification is shown
-		$this->assertNotification('app_comments_addforeigncomment_success');
+		// Enter comment and submit.
+		$this->postCommentInSidebar($comment);
 
 		// Access last email sent to Betty.
 		$this->getUrl('seleniumTests/showLastEmail/' . urlencode(User::get('betty')['Username']));
