@@ -203,7 +203,7 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
         if(!$append) {
             $input->clear();
         }
-        $this->driver->getKeyboard()->sendKeys($txt);
+		$input->sendKeys($txt);
     }
 
     /**

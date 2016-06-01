@@ -20,6 +20,7 @@
  * As a user I should not let a resource without at least one owner
  * As a user I should be able to drop my owner permission if there is another owner
  * As a user I can view the permissions for a password I don't own
+ * As LU I can use passbolt on multiple windows and edit the permissions of a password I own
  *
  * @copyright (c) 2015-present Bolt Softwares Pvt Ltd
  * @licence GNU Affero General Public License http://www.gnu.org/licenses/agpl-3.0.en.html
@@ -994,6 +995,100 @@ class PasswordShareTest extends PassboltTestCase
 
 		// And I can see the save button is disabled
 		$this->assertVisible('#js_rs_share_save.disabled');
+	}
+
+	/**
+	 * Scenario: As LU I can use passbolt on multiple windows and edit the permissions of a password I own
+	 *
+	 * Given    I am Ada
+	 * And      I am logged in on the password workspace
+	 * When 	I open a new window and go to passbolt url
+	 * And 		I switch back to the first window
+	 * And 		I go to the sharing dialog of a password I own
+	 * Then 	I can see Betty has update right on the password
+	 * When 	I change the permission of Betty to read access only
+	 * Then		I should see the password remains selected
+	 * And 		I can see Betty has read access on the password
+	 * When 	I switch to the second window
+	 * And 		I go to the sharing dialog of a password I own
+	 * Then 	I can see Betty has read access on the password
+	 * When 	I change the permission of Betty to owner
+	 * Then 	I should see the password remains selected
+	 * And 		I can see Betty has read access on the password
+	 * When 	I switch to the first window
+	 * And 		I go to the sharing dialog of a password I own
+	 * Then 	I can see Betty has read access on the password
+	 */
+	public function testMultipleTabsEditPasswordPermission() {
+		// Given I am Ada
+		$user = User::get('ada');
+		$this->setClientConfig($user);
+
+		// And I am logged in on the password workspace
+		$this->loginAs($user);
+
+		// When I open a new window and go to passbolt url
+		$this->driver->getKeyboard()
+			->sendKeys([WebDriverKeys::CONTROL, 'n']);
+		$windowHandles = $this->driver->getWindowHandles();
+		$this->driver->switchTo()->window($windowHandles[1]);
+		$this->getUrl('');
+
+		// And I switch back to the first window
+		$this->driver->switchTo()->window($windowHandles[0]);
+		$this->click('html');
+
+		// And I go to the sharing dialog of a password I own
+		$resourceId = Uuid::get('resource.id.apache');
+		$resource = Resource::get(array(
+			'user' => 'betty',
+			'id' => $resourceId
+		));
+		$this->gotoSharePassword(Uuid::get('resource.id.apache'));
+
+		// Then I can see Betty has update right on the password
+		$this->assertPermission($resource, 'betty@passbolt.com', 'can update');
+
+		// When I change the permission of Betty to read access only
+		$this->editPermission($resource, 'betty@passbolt.com', 'can read', $user);
+
+		// Then I should see the password remains selected
+		$this->assertTrue($this->isPasswordSelected($resourceId));
+
+		// And I can see Betty has read access on the password
+		$this->assertPermission($resource, 'betty@passbolt.com', 'can read');
+
+		// When I switch to the second window
+		$this->driver->switchTo()->window($windowHandles[1]);
+		$this->click('html');
+
+		// And I go to the sharing dialog of a password I own
+		$this->gotoSharePassword(Uuid::get('resource.id.apache'));
+
+		// Then I can see Betty has read access on the password
+		$this->assertPermission($resource, 'betty@passbolt.com', 'can read');
+
+		// When I change the permission of Betty to owner
+		$this->editPermission($resource, 'betty@passbolt.com', 'is owner', $user);
+
+		// Then I should see the password remains selected
+		$this->assertTrue($this->isPasswordSelected($resourceId));
+
+		// And I can see Betty has read access on the password
+		$this->assertPermission($resource, 'betty@passbolt.com', 'is owner');
+
+		// When I switch to the first window
+		$this->driver->switchTo()->window($windowHandles[0]);
+		$this->click('html');
+
+		// And I go to the sharing dialog of a password I own
+		$this->gotoSharePassword(Uuid::get('resource.id.apache'));
+
+		// Then I can see Betty has read access on the password
+		$this->assertPermission($resource, 'betty@passbolt.com', 'is owner');
+
+		// Since content was edited, we reset the database
+		$this->resetDatabase();
 	}
 
 }

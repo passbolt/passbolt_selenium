@@ -12,6 +12,7 @@
  * As a user I can generate a random password automatically
  * As a user I can view the password I am creating in clear text
  * As a user I receive an email notification when I create a new password
+ * As LU I can use passbolt on multiple windows and create password
  *
  * @copyright (c) 2015-present Bolt Softwares Pvt Ltd
  * @licence GNU Affero General Public License http://www.gnu.org/licenses/agpl-3.0.en.html
@@ -703,4 +704,93 @@ class PasswordCreateTest extends PassboltTestCase
 		// Reset database after modifications.
 		$this->resetDatabase();
 	}
+
+    /**
+     * Scenario:  As LU I can use passbolt on multiple windows and create password
+     * Given    I am Ada
+     * And      I am logged in
+     * When     I open a new window and go to passbolt url
+     * And      I switch back to the first window
+     * And      I create a password
+     * Then     I should see my newly created password
+     * When     I switch to the second window
+     * And      I create a password
+     * Then     I should see my newly created password
+     * When     I refresh the second window
+     * Then     I should see the password I created on the first window
+     * When     I switch to the first window and I refresh it
+     * Then     I should see the password I created on the second window
+     * @throws Exception
+     */
+    public function testMultipleTabsCreatePassword() {
+        $user = User::get('ada');
+        $this->setClientConfig($user);
+
+        // Given I am Ada
+        // And I am logged in
+        $this->loginAs($user);
+
+        // When I open a new window and go to passbolt url
+        $this->driver->getKeyboard()
+            ->sendKeys([WebDriverKeys::CONTROL, 'n']);
+        $windowHandles = $this->driver->getWindowHandles();
+        $this->driver->switchTo()->window($windowHandles[1]);
+        $this->getUrl('');
+
+        // And I switch back to the first window
+        $this->driver->switchTo()->window($windowHandles[0]);
+        $this->click('html');
+
+        // And I create a password
+        $password = array(
+            'name' => 'password_window_1',
+            'username' => 'password_window_1',
+            'password' => 'password_window_1'
+        );
+        $this->createPassword($password);
+
+        // Then I should see my newly created password
+        $this->assertElementContainsText(
+            $this->find('js_wsp_pwd_browser'), 'password_window_1'
+        );
+
+        // When I switch to the second window
+        $this->driver->switchTo()->window($windowHandles[1]);
+        $this->click('html');
+
+        // And I create a password
+        $password = array(
+            'name' => 'password_window_2',
+            'username' => 'password_window_2',
+            'password' => 'password_window_2'
+        );
+        $this->createPassword($password);
+
+        // Then I should see my newly created password
+        $this->assertElementContainsText(
+            $this->find('js_wsp_pwd_browser'), 'password_window_2'
+        );
+
+        // When I refresh the second window
+        $this->driver->navigate()->refresh();
+        $this->waitCompletion();
+
+        // Then I should see the password I created on the first window
+        $this->assertElementContainsText(
+            $this->find('js_wsp_pwd_browser'), 'password_window_1'
+        );
+
+        // When I switch to the first window and I refresh it
+        $this->driver->switchTo()->window($windowHandles[0]);
+        $this->driver->navigate()->refresh();
+        $this->waitCompletion();
+
+        // Then I should see the password I created on the second window
+        $this->assertElementContainsText(
+            $this->find('js_wsp_pwd_browser'), 'password_window_2'
+        );
+
+        // Since content was edited, we reset the database
+        $this->resetDatabase();
+    }
 }

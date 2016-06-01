@@ -1497,6 +1497,9 @@ class PassboltTestCase extends WebDriverTestCase {
 		// I can see the permission is as expected
 		$select = new WebDriverSelect($rowElement->findElement(WebDriverBy::cssSelector('.js_share_rs_perm_type')));
 		$this->assertEquals($permissionType, $select->getFirstSelectedOption()->getText());
+
+		// Close the dialog
+		$this->find('.dialog .dialog-close')->click();
 	}
 
 	/**

@@ -19,6 +19,7 @@
  * As user B I can see the changes are reflected when user A is editing a password we share
  * As a user I can see error messages when editing a password with wrong inputs
  * As a user I receive an email notification on a password update
+ * As LU I can use passbolt on multiple windows and edit password
  *
  * @copyright (c) 2015-present Bolt Softwares Pvt Ltd
  * @licence GNU Affero General Public License http://www.gnu.org/licenses/agpl-3.0.en.html
@@ -1320,6 +1321,98 @@ class PasswordEditTest extends PassboltTestCase
 		);
 
 		// Reset database after modifications.
+		$this->resetDatabase();
+	}
+
+
+	/**
+	 * Scenario:  As LU I can use passbolt on multiple windows and edit password
+	 * Given    I am Ada
+	 * And      I am logged in
+	 * When     I open a new window and go to passbolt url
+	 * And      I switch back to the first window
+	 * And      I edit a password
+	 * Then     I should see the password has been edited
+	 * When     I switch to the second window
+	 * And      I edit a password
+	 * Then     I should see the password has been edited
+	 * When     I refresh the second window
+	 * Then     I should see the password I edited on the first window updated on the second window
+	 * When     I switch to the first window and I refresh it
+	 * Then     I should see the password I edited on the second window updated on the first window
+	 * @throws Exception
+	 */
+	public function testMultipleTabsEditPassword() {
+		$user = User::get('ada');
+		$this->setClientConfig($user);
+
+		// Given I am Ada
+		// And I am logged in
+		$this->loginAs($user);
+
+		// When I open a new window and go to passbolt url
+		$this->driver->getKeyboard()
+			->sendKeys([WebDriverKeys::CONTROL, 'n']);
+		$windowHandles = $this->driver->getWindowHandles();
+		$this->driver->switchTo()->window($windowHandles[1]);
+		$this->getUrl('');
+
+		// And I switch back to the first window
+		$this->driver->switchTo()->window($windowHandles[0]);
+		$this->click('html');
+
+		// And I edit a password
+		$resource1 = Resource::get(array(
+			'user' => 'ada',
+			'permission' => 'owner'
+		));
+		$resource1UpdateData['id'] = $resource1['id'];
+		$resource1UpdateData['name'] = $resource1['name'] . ' updated';
+		$this->editPassword($resource1UpdateData);
+
+		// Then I should see the password has been edited
+		$this->assertElementContainsText(
+			$this->find('js_wsp_pwd_browser'), $resource1UpdateData['name']
+		);
+
+		// When I switch to the second window
+		$this->driver->switchTo()->window($windowHandles[1]);
+		$this->click('html');
+
+		// And I edit a password
+		$resource2 = Resource::get(array(
+			'user' => 'ada',
+			'permission' => 'update'
+		));
+		$resource2UpdateData['id'] = $resource2['id'];
+		$resource2UpdateData['name'] = $resource2['name'] . ' updated';
+		$this->editPassword($resource2UpdateData);
+
+		// Then I should see the password has been edited
+		$this->assertElementContainsText(
+			$this->find('js_wsp_pwd_browser'), $resource2UpdateData['name']
+		);
+
+		// When I refresh the second window
+		$this->driver->navigate()->refresh();
+		$this->waitCompletion();
+
+		// Then I should see the password I edited on the first window updated on the second window
+		$this->assertElementContainsText(
+			$this->find('js_wsp_pwd_browser'), $resource1UpdateData['name']
+		);
+
+		// When I switch to the first window and I refresh it
+		$this->driver->switchTo()->window($windowHandles[0]);
+		$this->driver->navigate()->refresh();
+		$this->waitCompletion();
+
+		// Then I should see the password I edited on the second window updated on the first window
+		$this->assertElementContainsText(
+			$this->find('js_wsp_pwd_browser'), $resource2UpdateData['name']
+		);
+
+		// Since content was edited, we reset the database
 		$this->resetDatabase();
 	}
 }

@@ -66,7 +66,7 @@ class LoginTest extends PassboltTestCase {
 
 	/**
 	 * Scenario: I can see the app version number and the plugin version number in the footer
-	 * Given 	I am an anonymous user with no plugin on the login page
+	 * Given 	I am an anonymous user with plugin on the login page
 	 * When		When the page is loaded
 	 * Then 	I can see the app version number in the footer
 	 * And      I can see the plugin version number

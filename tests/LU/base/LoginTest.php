@@ -1,12 +1,21 @@
 <?php
 /**
- * User with configured plugin login test
+ * Feature : Login
+ *
+ * As AN I can login to passbolt
+ * As AN I can login to passbolt by submitting the login form with the enter key
+ * As AN I can login to passbol on different tabs without conflict between workers
  *
  * @copyright (c) 2015-present Bolt Softwares Pvt Ltd
  * @licence GNU Affero General Public License http://www.gnu.org/licenses/agpl-3.0.en.html
  */
 class LoginTest extends PassboltTestCase {
 
+	/**
+	 * Scenario:  As AN I can login to passbolt
+	 * @todo document the steps
+	 * @throws Exception
+	 */
     public function testLogin() {
         $this->getUrl('login');
 	    sleep(1);
@@ -50,6 +59,11 @@ class LoginTest extends PassboltTestCase {
 	    );
     }
 
+	/**
+	 * Scenario:  As AN I can login to passbolt by submitting the login form with the enter key
+	 * @todo document the steps
+	 * @throws Exception
+	 */
 	public function testLoginWithEnterKey() {
 		$this->getUrl('login');
 		sleep(1);
@@ -88,6 +102,53 @@ class LoginTest extends PassboltTestCase {
 			$this->findByCss('.header .user.profile .details .name'),
 			'Ada Lovelace'
 		);
+	}
+
+	/**
+	 * Scenario:  As AN I can login to passbol on different tabs without conflict between workers
+	 * Given 	As AN with plugin on the login page
+	 * When 	I open a new window and go to the login page
+	 * And 		I switch to the first window
+	 * Then 	I should be able to login to passbolt from the first window
+	 * When 	I logout
+	 * And 		I switch to the second window
+	 * Then 	I should be able to login to passbolt from the second window
+	 *
+	 * @throws Exception
+	 */
+	public function testMultipleTabsLogin() {
+		$user = User::get('ada');
+		$this->setClientConfig($user);
+
+		// Given As AN with plugin on the login page
+		$this->getUrl('login');
+		$this->waitUntilISee('.plugin-check.gpg.success');
+
+		// When I open a new window and go to the login page
+		$this->driver->getKeyboard()
+			->sendKeys([WebDriverKeys::CONTROL, 'n']);
+		$windowHandles = $this->driver->getWindowHandles();
+		$this->driver->switchTo()->window($windowHandles[1]);
+		$this->click('html');
+		$this->getUrl('login');
+		$this->waitUntilISee('.plugin-check.gpg.success');
+
+		// And I switch to the first window
+		$this->driver->switchTo()->window($windowHandles[0]);
+		$this->click('html');
+
+		// Then I should be able to login to passbolt from the first window.
+		$this->loginAs($user);
+
+		// When I logout
+		$this->logout();
+
+		// And I switch to the second window
+		$this->driver->switchTo()->window($windowHandles[1]);
+		$this->click('html');
+
+		// Then I should be able to login to passbolt from the second window
+		$this->loginAs($user);
 	}
 
 }
