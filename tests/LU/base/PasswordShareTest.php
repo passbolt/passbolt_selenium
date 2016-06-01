@@ -209,11 +209,11 @@ class PasswordShareTest extends PassboltTestCase
 	 * Given    I am Ada
 	 * And      I am logged in on the password workspace
 	 * When     I go to the sharing dialog of a password I own
+	 * And 		I can see the save button is disabled
 	 * Then     I can see that Ada is owner
 	 * And      I can see that Betty can update
 	 * And      I can see that Carol can read
 	 * And      I can see that Dame can read
-	 * And 		I can see the save button is disabled
 	 */
 	public function testViewPasswordPermissions() {
 		// Given I am Ada
@@ -230,20 +230,20 @@ class PasswordShareTest extends PassboltTestCase
 		));
 		$this->gotoSharePassword(Uuid::get('resource.id.apache'));
 
-		// Then I can see that Ada is owner
-		$this->assertPermission($resource, 'ada@passbolt.com', 'is owner');
+		// Then I can see the save button is disabled
+		$this->assertVisible('#js_rs_share_save.disabled');
+
+		// And I can see that Ada is owner
+		$this->assertPermission($resource, 'ada@passbolt.com', 'is owner', ['closeDialog' => false]);
 
 		// And I can see that Betty can update
-		$this->assertPermission($resource, 'betty@passbolt.com', 'can update');
+		$this->assertPermission($resource, 'betty@passbolt.com', 'can update', ['closeDialog' => false]);
 
 		// And I can see that Carol can read
-		$this->assertPermission($resource, 'carol@passbolt.com', 'can read');
+		$this->assertPermission($resource, 'carol@passbolt.com', 'can read', ['closeDialog' => false]);
 
 		// And I can see that Dame can read
-		$this->assertPermission($resource, 'dame@passbolt.com', 'can read');
-
-		// And I can see the save button is disabled
-		$this->assertVisible('#js_rs_share_save.disabled');
+		$this->assertPermission($resource, 'dame@passbolt.com', 'can read', ['closeDialog' => false]);
 	}
 
 	/**
@@ -329,22 +329,22 @@ class PasswordShareTest extends PassboltTestCase
 
 		// Then I can see that Ada is owner
 		$permissionAdaId = Uuid::get('permission.id.' . $resource['id'] . '-' . $userAda['id']);
-		$this->assertPermission($resource, 'ada@passbolt.com', 'can update');
+		$this->assertPermission($resource, 'ada@passbolt.com', 'can update', ['closeDialog' => false]);
 		$this->assertDisabled('#js_share_perm_type_' . $permissionAdaId);
 
 		// And I can see that Betty can update
 		$permissionBettyId = Uuid::get('permission.id.' . $resource['id'] . '-' . $userBetty['id']);
-		$this->assertPermission($resource, 'betty@passbolt.com', 'can read');
+		$this->assertPermission($resource, 'betty@passbolt.com', 'can read', ['closeDialog' => false]);
 		$this->assertDisabled('#js_share_perm_type_' . $permissionBettyId);
 
 		// And I can see that Carol can read
 		$permissionCaroleId = Uuid::get('permission.id.' . $resource['id'] . '-' . $userCarole['id']);
-		$this->assertPermission($resource, 'carol@passbolt.com', 'can read');
+		$this->assertPermission($resource, 'carol@passbolt.com', 'can read', ['closeDialog' => false]);
 		$this->assertDisabled('#js_share_perm_type_' . $permissionCaroleId);
 
 		// And I can see that Dame can read
 		$permissionEdithId = Uuid::get('permission.id.' . $resource['id'] . '-' . $userEdith['id']);
-		$this->assertPermission($resource, 'edith@passbolt.com', 'is owner');
+		$this->assertPermission($resource, 'edith@passbolt.com', 'is owner', ['closeDialog' => false]);
 		$this->assertDisabled('#js_share_perm_type_' . $permissionEdithId);
 
 		// And I can't see the add users form
@@ -931,11 +931,11 @@ class PasswordShareTest extends PassboltTestCase
 	 * When     	I logout and I log in as Ada
 	 * And      	I am logged in on the password workspace
 	 * When     	I go to the sharing dialog of a password I own
-	 * Then     	I can see that Ada is owner
+	 * Then 		I can see the save button is disabled
+	 * And 	    	I can see that Ada is owner
 	 * And      	I don't see Betty in the list of permissions
 	 * And      	I can see that Carol can read
 	 * And      	I can see that Dame can read
-	 * And 			I can see the save button is disabled
 	 */
 	public function testDeletedUsersShouldntBeVisibleInTheListOfPermissions() {
 		// Given I am Admin
@@ -981,20 +981,20 @@ class PasswordShareTest extends PassboltTestCase
 		));
 		$this->gotoSharePassword(Uuid::get('resource.id.apache'));
 
-		// Then I can see that Ada is owner
-		$this->assertPermission($resource, 'ada@passbolt.com', 'is owner');
+		// Then I can see the save button is disabled
+		$this->assertVisible('#js_rs_share_save.disabled');
+
+		// And I can see that Ada is owner
+		$this->assertPermission($resource, 'ada@passbolt.com', 'is owner', ['closeDialog' => false]);
 
 		// And I don't see Betty in the list of permissions
-		$this->assertNoPermission($resource, 'betty@passbolt.com');
+		$this->assertNoPermission($resource, 'betty@passbolt.com', ['closeDialog' => false]);
 
 		// And I can see that Carol can read
-		$this->assertPermission($resource, 'carol@passbolt.com', 'can read');
+		$this->assertPermission($resource, 'carol@passbolt.com', 'can read', ['closeDialog' => false]);
 
 		// And I can see that Dame can read
-		$this->assertPermission($resource, 'dame@passbolt.com', 'can read');
-
-		// And I can see the save button is disabled
-		$this->assertVisible('#js_rs_share_save.disabled');
+		$this->assertPermission($resource, 'dame@passbolt.com', 'can read', ['closeDialog' => false]);
 	}
 
 	/**
@@ -1047,7 +1047,7 @@ class PasswordShareTest extends PassboltTestCase
 		$this->gotoSharePassword(Uuid::get('resource.id.apache'));
 
 		// Then I can see Betty has update right on the password
-		$this->assertPermission($resource, 'betty@passbolt.com', 'can update');
+		$this->assertPermission($resource, 'betty@passbolt.com', 'can update', ['closeDialog' => false]);
 
 		// When I change the permission of Betty to read access only
 		$this->editPermission($resource, 'betty@passbolt.com', 'can read', $user);
@@ -1066,7 +1066,7 @@ class PasswordShareTest extends PassboltTestCase
 		$this->gotoSharePassword(Uuid::get('resource.id.apache'));
 
 		// Then I can see Betty has read access on the password
-		$this->assertPermission($resource, 'betty@passbolt.com', 'can read');
+		$this->assertPermission($resource, 'betty@passbolt.com', 'can read', ['closeDialog' => false]);
 
 		// When I change the permission of Betty to owner
 		$this->editPermission($resource, 'betty@passbolt.com', 'is owner', $user);

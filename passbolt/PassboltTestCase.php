@@ -1481,8 +1481,9 @@ class PassboltTestCase extends WebDriverTestCase {
 	 * @param $password
 	 * @param $username
 	 * @param $permissionType
+	 * @param $options
 	 */
-	public function assertPermission($password, $username, $permissionType) {
+	public function assertPermission($password, $username, $permissionType, $options = array()) {
 		$this->gotoSharePassword($password['id']);
 
 		// I can see the user has a direct permission
@@ -1499,7 +1500,9 @@ class PassboltTestCase extends WebDriverTestCase {
 		$this->assertEquals($permissionType, $select->getFirstSelectedOption()->getText());
 
 		// Close the dialog
-		$this->find('.dialog .dialog-close')->click();
+		if (!isset($options['closeDialog']) || $options['closeDialog'] == true) {
+			$this->find('.dialog .dialog-close')->click();
+		}
 	}
 
 	/**
