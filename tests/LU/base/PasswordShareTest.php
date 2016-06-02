@@ -995,6 +995,9 @@ class PasswordShareTest extends PassboltTestCase
 
 		// And I can see that Dame can read
 		$this->assertPermission($resource, 'dame@passbolt.com', 'can read', ['closeDialog' => false]);
+
+		// Since content was edited, we reset the database
+		$this->resetDatabase();
 	}
 
 	/**
