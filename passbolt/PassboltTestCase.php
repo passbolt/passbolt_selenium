@@ -443,6 +443,30 @@ class PassboltTestCase extends WebDriverTestCase {
 		}
 	}
 
+
+	/**
+	 * go To Recover page.
+	 * @throws Exception
+	 * @param string $username
+	 * @param bool $checkPluginSuccess
+	 */
+	public function goToRecover($username, $checkPluginSuccess = true) {
+		// Get last email.
+		$this->getUrl('seleniumTests/showLastEmail/' . urlencode($username));
+
+		// Remember setup url. (We will use it later).
+		$linkElement = $this->findLinkByText('start recovery');
+		$setupUrl = $linkElement->getAttribute('href');
+
+		// Go to url remembered above.
+		$this->driver->get($setupUrl);
+
+		// Test that the plugin confirmation message is displayed.
+		if ($checkPluginSuccess) {
+			$this->waitUntilISee('.plugin-check-wrapper .plugin-check.success', '/Firefox plugin is installed and up to date/i');
+		}
+	}
+
 	/**
 	 * Go to the password workspace and click on the create password button
 	 */

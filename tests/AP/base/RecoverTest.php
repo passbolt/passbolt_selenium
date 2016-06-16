@@ -8,12 +8,14 @@
  * - As an AP with a plugin configured for a non existing user, I should be able to access the account recovery page
  * - As AP, I should see a thank you page after I start the recovery procedure
  * - As AP, I should receive a notification email after I start the recovery procedure
+ * - As AP, I should be able to recover my account and log in.
+ * - As AP, I should not be able to recover my account with a key that doesn't exist on server
  *
  * @copyright (c) 2015-present Bolt Softwares Pvt Ltd
  * @licence GNU Affero General Public License http://www.gnu.org/licenses/agpl-3.0.en.html
  */
 
-class RecoverTest extends PassboltTestCase {
+class RecoverTest extends PassboltSetupTestCase {
 
 	/**
 	 * Scenario:    As an AP with a non configured plugin, I should be able to recover my account
@@ -104,9 +106,16 @@ class RecoverTest extends PassboltTestCase {
 	 * Then     I should see a thank you page
 	 */
 	public function testRecoverThankYouPage() {
+		// Go to recover start page.
 		$this->getUrl('recover');
+
+		// Enter Ada's email.
 		$this->inputText('UserUsername', 'ada@passbolt.com');
+
+		// Submit form.
 		$this->pressEnter();
+
+		// I should see a thank you page.
 		$this->waitUntilISee('.page.recover.thank-you');
 		$this->waitUntilISee('.information', '/See you in your mailbox!/');
 		$this->assertCurrentUrl('recover' . DS . 'thankyou');
@@ -124,17 +133,162 @@ class RecoverTest extends PassboltTestCase {
 	 * Then     I should see a notification email with an invite to recover my account
 	 */
 	public function testRecoverEmailNotification() {
+		// Go to recover start page.
 		$this->getUrl('recover');
+
+		// Enter Ada's email.
 		$this->inputText('UserUsername', 'ada@passbolt.com');
+
+		// Submit form.
 		$this->pressEnter();
+
+		// I should see a thank you page.
 		$this->waitUntilISee('.page.recover.thank-you');
 
+		// I should receive a recovery email.
 		$this->getUrl('seleniumTests/showLastEmail/' . urlencode('ada@passbolt.com'));
+
 		$this->waitUntilISee('emailBody', '/have initiated an account recovery/');
 		$this->waitUntilISee('emailBody', '/ada@passbolt.com/');
 		$this->waitUntilISee('emailBody', '/Welcome back Ada,/');
-		$this->waitUntilISee('.buttonContent', '/recover your account/');
+		$this->waitUntilISee('.buttonContent', '/start recovery/');
 
+		// Database has changed, we reset.
+		$this->resetDatabase();
+	}
+
+	/**
+	 * Scenario:    As AP, I should be able to recover my account and log in.
+	 * Given    I am Ada
+	 * When     start a recovery procedure, and click on the link provided in the email
+	 * Then     I should see a domain validation step
+	 * When     I check the domain validation checkbox
+	 * And      I click on the link "Next"
+	 * Then     I should see the key import step
+	 * When     I Import the key that belongs to my user
+	 * And      I click on the link "Next"
+	 * Then     I should see a security token generation step
+	 * When     I click on the link "Next"
+	 * Then     I should see a login redirection page
+	 * And      I should be redirected to the login page after a few seconds.
+	 * When     I try to login as Ada
+	 * Then     I should be logged in as Ada
+	 * And      I should see Ada Lovelace in the profile drop down menu
+	 */
+	public function testRecoverDefaultSteps() {
+		// Go to recover page.
+		$this->getUrl('recover');
+
+		// Enter the username ada@passbolt.com
+		$this->inputText('UserUsername', 'ada@passbolt.com');
+
+		// Press enter to submit the form.
+		$this->pressEnter();
+
+		// I should see a thank you page.
+		$this->waitUntilISee('.page.recover.thank-you');
+
+		// Go to recovery procedure by clicking on notification email.
+		$this->goToRecover('ada@passbolt.com', true);
+
+		// Wait until I see the first page of the recovery.
+		$this->waitUntilISee('#js_step_title', '/Account recovery/i');
+
+		// Wait for the server key to be retrieved.
+		sleep(2);
+
+		// Check box domain check.
+		$this->checkCheckbox('js_setup_domain_check');
+
+		// Click Next.
+		$this->clickLink("Next");
+
+		// I should see the import key page.
+		$this->waitUntilISee('#js_step_title', '/Import your existing key/i');
+
+		// Insert Ada's key.
+		$keyData = file_get_contents(GPG_FIXTURES . DS .  'ada_private.key');
+		$this->inputText('js_setup_import_key_text', $keyData);
+
+		// Click Next
+		$this->clickLink('Next');
+
+		// I should see the token generation page.
+		$this->waitUntilISee('#js_step_title', '/We need a visual cue to protect us from the bad guys/i');
+
+		// Click Next
+		$this->clickLink('Next');
+
+		// I should be redirected to login page.
+		$this->completeStepLoginRedirection();
+
+		// Attempt to log in as ada.
+		$user = User::get('ada');
+		$this->loginAs($user);
+
+		// Assert I am logged in as Ada.
+		$this->assertElementContainsText(
+			$this->findByCss('.header .user.profile .details .name'),
+			'Ada Lovelace'
+		);
+
+		$this->resetDatabase();
+	}
+
+	/**
+	 * Scenario:    As AP, I should not be able to recover my account with a key that doesn't exist on server.
+	 * Given    I am Ada
+	 * When     start a recovery procedure, and click on the link provided in the email
+	 * Then     I should see a domain validation step
+	 * When     I check the domain validation checkbox
+	 * And      I click on the link "Next"
+	 * Then     I should see the key import step
+	 * When     I Import the key that doesn't belong to my user, nor is used by anybody else.
+	 * And      I click on the link "Next"
+	 * Then     I should see an error message informing me that the key is not associated to a user.
+	 */
+	public function testRecoverKeyDoesntExist() {
+		// Go to recover page.
+		$this->getUrl('recover');
+
+		// Enter the username ada@passbolt.com
+		$this->inputText('UserUsername', 'ada@passbolt.com');
+
+		// Press enter to submit the form.
+		$this->pressEnter();
+
+		// I should see a thank you page.
+		$this->waitUntilISee('.page.recover.thank-you');
+
+		// Go to recovery procedure by clicking on notification email.
+		$this->goToRecover('ada@passbolt.com', true);
+
+		// Wait until I see the first page of the recovery.
+		$this->waitUntilISee('#js_step_title', '/Account recovery/i');
+
+		// Wait for the server key to be retrieved.
+		sleep(2);
+
+		// Check box domain check.
+		$this->checkCheckbox('js_setup_domain_check');
+
+		// Click Next.
+		$this->clickLink("Next");
+
+		// I should see the import key page.
+		$this->waitUntilISee('#js_step_title', '/Import your existing key/i');
+
+		// Insert a key that is not already used on server.
+		$keyData = file_get_contents(GPG_FIXTURES . DS .  'test_private.key');
+		$this->inputText('js_setup_import_key_text', $keyData);
+
+		// Click Next
+		$this->clickLink('Next');
+
+		// I should see an error message.
+		$this->waitUntilISee('#KeyErrorMessage', '/There is no user associated with this key/');
+
+		// Database has changed, we reset database.
 		$this->resetDatabase();
 	}
 }
