@@ -38,7 +38,7 @@ class PassboltSetupTestCase extends PassboltTestCase {
 		],
 		'import_key_form' => [
 			'title' => 'Import an existing key or create a new one!',
-			'subtitle' => 'Copy paste your public and private key below, or select it from a file.',
+			'subtitle' => 'Copy paste your private key below',
 			'menu_item' => '2. Import your key'
 		],
 		'import_key_done' => [
