@@ -71,11 +71,11 @@ class SetupTest extends PassboltSetupTestCase {
 	/**
 	 * Scenario :   I cannot see the setup page if user id and token are incorrect.
 	 * Given        I try to access the setup page with wrong information in the url
-	 * Then         I should reach an error page with text "Invalid token"
+	 * Then         I should reach an error page with text "Token not found"
 	 */
 	public function testCannotSeeSetupPageWithInvalidInformation() {
 		// Access url with wrong user id and token.
 		$this->getUrl('setup/install/5569df1d-7bec-4c0c-a09d-55e2c0a895dc/d45c0bf1e00fb8db60af1e8b5482f9f3');
-		$this->assertPageContainsText('Invalid token');
+		$this->assertPageContainsText('Token not found');
 	}
 }
