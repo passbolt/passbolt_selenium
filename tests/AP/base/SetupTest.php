@@ -323,7 +323,7 @@ class SetupTest extends PassboltSetupTestCase {
 	 * Scenario :   As an AP, I should not be able to do the setup after my account has been activated
 	 * Given I click again on the link in the invitation email
 	 * Then  I should not see the setup again
-	 * And   I should see a page with a "Invalid token" error
+	 * And   I should see a page with a "Token not found" error
 	 * @throws Exception
 	 */
 	public function testSetupNotAccessibleAfterAccountValidation() {
@@ -342,7 +342,7 @@ class SetupTest extends PassboltSetupTestCase {
 
 		// Go to url remembered above.
 		$this->driver->get($setupUrl);
-		$this->waitUntilISee('h2', '/Invalid token/');
+		$this->waitUntilISee('h2', '/Token not found/');
 
 		// Since content was edited, we reset the database
 		$this->resetDatabase();
