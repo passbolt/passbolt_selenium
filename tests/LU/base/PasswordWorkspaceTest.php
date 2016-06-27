@@ -625,9 +625,9 @@ class PasswordWorkspaceTest extends PassboltTestCase
 			]);
 
 		$this->loginAs([
-				'Username' => $john['Username'],
-				'MasterPassword' => $john['MasterPassword']
-			]);
+			'Username' => $john['Username'],
+			'MasterPassword' => $john['MasterPassword']
+		]);
 		// Check we are logged in.
 		$this->waitCompletion();
 		$this->waitUntilISee('#js_app_controller.ready');
