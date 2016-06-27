@@ -8,6 +8,8 @@
  * - As a user I should be able to use the navigation filters
  * - As a user I should be able to view the user details
  * - As a user I should be able to search a user by keywords
+ * - As a user when I filter the user workspace all users should be unselected
+ * - As a user when I filter by keywords the user workspace the global filter "All users" should be selected
  * - As an admin user, I should have admin rights inside the user workspace
  * - As a non admin user, I should not have admin rights inside the user workspace
  * - As a logged in user, I should be able to control the sidebar visibility through the sidebar button
@@ -299,6 +301,72 @@ class UserWorkspaceTest extends PassboltTestCase {
 		// 	| All users
 		//	| Search : User Test
 		$this->assertBreadcrumb('users', $breadcrumb);
+	}
+
+	/**
+	 * Scenario :   As a user when I filter the user workspace all users should be unselected
+	 * Given        I am logged in as Ada, and I go to the user workspace
+	 * When         I select a user I own
+	 * And 			I filter the workspace by keywords
+	 * Then 		I should see the user unselected
+	 */
+	public function testSearchByKeywordsUnselectUsers() {
+		$searchUser = 'Betty';
+		$userId = Uuid::get('user.id.betty');
+
+		// Given I am Ada
+		$user = User::get('ada');
+		$this->setClientConfig($user);
+
+		// And I am logged in on the user workspace
+		$this->loginAs($user);
+		$this->gotoWorkspace('user');
+
+		// When I select a user I own
+		$this->clickUser($userId);
+
+		// And I filter the workspace by keywords
+		$this->inputText('js_app_filter_keywords', $searchUser);
+		$this->click("#js_app_filter_form button[value='search']");
+		$this->waitCompletion();
+
+		// Then I should see the password unselected
+		$this->assertUserNotSelected($userId);
+	}
+
+	/**
+	 * Scenario :   As a user when I filter by keywords the user workspace the global filter "All users" should be selected
+	 * Given        I am logged in as Ada, and I go to the user workspace
+	 * When 		I click on the recently modified filter
+	 * Then 		I should see that menu All users is not selected anymore
+	 * When 		I fill the "app search" field with "Betty"
+	 * Then 		I should see the filter "All users" is selected.
+	 */
+	public function testSearchByKeywordsChangesGlobalFilterToAllUsers() {
+		$searchUser = 'Betty';
+
+		// Given I am Ada
+		$user = User::get('ada');
+		$this->setClientConfig($user);
+
+		// And I am logged in on the user workspace
+		$this->loginAs($user);
+		$this->gotoWorkspace('user');
+
+		// When I click on the recently modified filter
+		$this->clickLink("Recently modified");
+		$this->waitCompletion();
+
+		// Then I should see that menu All users is not selected anymore
+		$this->assertFilterIsNotSelected('js_users_wsp_filter_all');
+
+		// When I fill the "app search" field with "shared resource"
+		$this->inputText('js_app_filter_keywords', $searchUser);
+		$this->click("#js_app_filter_form button[value='search']");
+		$this->waitCompletion();
+
+		// Then I should see the filter "All items" is selected.
+		$this->assertFilterIsSelected('js_users_wsp_filter_all');
 	}
 
 	/**
