@@ -907,6 +907,7 @@ class PasswordShareTest extends PassboltTestCase
 
 		// When I click on the save button
 		$this->click('js_rs_share_save');
+		$this->waitCompletion();
 
 		// Then I see a notice message that the operation was a success
 		$this->assertNotification('app_share_update_success');
