@@ -342,7 +342,7 @@ class SetupTest extends PassboltSetupTestCase {
 
 		// Go to url remembered above.
 		$this->driver->get($setupUrl);
-		$this->waitUntilISee('h2', '/Token not found/');
+		$this->waitUntilISee('h2', '/Invalid token/');
 
 		// Since content was edited, we reset the database
 		$this->resetDatabase();

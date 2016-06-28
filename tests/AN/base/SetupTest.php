@@ -76,6 +76,6 @@ class SetupTest extends PassboltSetupTestCase {
 	public function testCannotSeeSetupPageWithInvalidInformation() {
 		// Access url with wrong user id and token.
 		$this->getUrl('setup/install/5569df1d-7bec-4c0c-a09d-55e2c0a895dc/d45c0bf1e00fb8db60af1e8b5482f9f3');
-		$this->assertPageContainsText('Token not found');
+		$this->assertPageContainsText('Invalid token');
 	}
 }
