@@ -1628,4 +1628,40 @@ class PassboltTestCase extends WebDriverTestCase {
           'selected'
         );
     }
+
+	/**
+	 * Assert a password is selected
+	 * @param $id string
+	 * @return bool
+	 */
+	public function assertPasswordSelected($id) {
+		$this->assertTrue($this->isPasswordSelected($id));
+	}
+
+	/**
+	 * Assert a password is not selected
+	 * @param $id string
+	 * @return bool
+	 */
+	public function assertPasswordNotSelected($id) {
+		$this->assertTrue($this->isPasswordNotSelected($id));
+	}
+
+	/**
+	 * Assert a user is selected
+	 * @param $id string
+	 * @return bool
+	 */
+	public function assertUserSelected($id) {
+		$this->assertTrue($this->isUserSelected($id));
+	}
+
+	/**
+	 * Assert a is not selected
+	 * @param $id string
+	 * @return bool
+	 */
+	public function assertUserNotSelected($id) {
+		$this->assertTrue($this->isUserNotSelected($id));
+	}
 }

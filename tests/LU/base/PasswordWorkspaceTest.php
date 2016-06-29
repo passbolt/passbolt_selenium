@@ -8,6 +8,8 @@
  * - As a user I should be able to view my password details
  * - As a user I should be able to fav/unfav
  * - As a user I should be able to search a password by keywords
+ * - As a user when I filter the password workspace all passwords should be unselected
+ * - As a user when I filter by keywords the password workspace the global filter "All items" should be selected
  * - As a user, I should be able to control the sidebar visibility through the sidebar button
  * - As a user, I should see a welcome message when I am on an empty password workspace
  *
@@ -426,6 +428,69 @@ class PasswordWorkspaceTest extends PassboltTestCase
         $this->assertBreadcrumb('password', $breadcrumb);
     }
 
+	/**
+	 * Scenario :   As a user when I filter the password workspace all passwords should be unselected
+	 * Given        I am logged in as Ada, and I go to the password workspace
+	 * When         I select a password I own
+	 * And 			I filter the workspace by keywords
+	 * Then 		I should see the password unselected
+	 */
+	public function testSearchByKeywordsUnselectPasswords() {
+		$searchPwd = 'Apache';
+		$resourceId = Uuid::get('resource.id.apache');
+
+		// Given I am Ada
+		$user = User::get('ada');
+		$this->setClientConfig($user);
+
+		// And I am logged in on the password workspace
+		$this->loginAs($user);
+
+		// When I select a password I own
+		$this->clickPassword($resourceId);
+
+		// And I filter the workspace by keywords
+		$this->inputText('js_app_filter_keywords', $searchPwd);
+		$this->click("#js_app_filter_form button[value='search']");
+		$this->waitCompletion();
+
+		// Then I should see the password unselected
+		$this->assertPasswordNotSelected($resourceId);
+	}
+
+	/**
+	 * Scenario :   As a user when I filter by keywords the password workspace the global filter "All items" should be selected
+	 * Given        I am logged in as Ada, and I go to the password workspace
+	 * When 		I click on the recently modified filter
+	 * Then 		I should see that menu All items is not selected anymore
+	 * When 		I fill the "app search" field with "shared resource"
+	 * Then 		I should see the filter "All items" is selected.
+	 */
+	public function testSearchByKeywordsChangesGlobalFilterToAllItems() {
+		$searchPwd = 'Apache';
+
+		// Given I am Ada
+		$user = User::get('ada');
+		$this->setClientConfig($user);
+
+		// And I am logged in on the password workspace
+		$this->loginAs($user);
+
+		// When I click on the recently modified filter
+		$this->clickLink("Favorite");
+		$this->waitCompletion();
+
+		// Then I should see that menu All items is not selected anymore
+		$this->assertFilterIsNotSelected('js_pwd_wsp_filter_all');
+
+		// When I fill the "app search" field with "shared resource"
+		$this->inputText('js_app_filter_keywords', $searchPwd);
+		$this->click("#js_app_filter_form button[value='search']");
+		$this->waitCompletion();
+
+		// Then I should see the filter "All items" is selected.
+		$this->assertFilterIsSelected('js_pwd_wsp_filter_all');
+	}
 
 	/**
 	 * Scenario:    As a logged in user, I should be able to control the sidebar visibility through the sidebar button
@@ -560,9 +625,9 @@ class PasswordWorkspaceTest extends PassboltTestCase
 			]);
 
 		$this->loginAs([
-				'Username' => $john['Username'],
-				'MasterPassword' => $john['MasterPassword']
-			]);
+			'Username' => $john['Username'],
+			'MasterPassword' => $john['MasterPassword']
+		]);
 		// Check we are logged in.
 		$this->waitCompletion();
 		$this->waitUntilISee('#js_app_controller.ready');
@@ -605,6 +670,5 @@ class PasswordWorkspaceTest extends PassboltTestCase
 
 		// Database has changed, we reset.
 		$this->resetDatabase();
-
 	}
 }

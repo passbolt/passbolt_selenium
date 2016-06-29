@@ -38,8 +38,8 @@ class PASSBOLT1395 extends PassboltTestCase {
 		$this->click('multiple_select_checkbox_' . $rsG['id']);
 
 		// Then I should see only the last user selected
-		$this->isPasswordSelected($rsG['id']);
-		$this->isPasswordNotSelected($rsA['id']);
+		$this->assertPasswordSelected($rsG['id']);
+		$this->assertPasswordNotSelected($rsA['id']);
 	}
 
 	/**
