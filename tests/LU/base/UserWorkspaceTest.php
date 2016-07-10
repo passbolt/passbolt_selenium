@@ -26,6 +26,7 @@ class UserWorkspaceTest extends PassboltTestCase {
 	 * And			I should see the workspace secondary menu
 	 * And 			I should see the workspace filters shortcuts
 	 * And          I should see a grid and its columns
+	 * And 			I should see some grid columns are sortable
 	 * And			I should see the breadcrumb with the following:
 	 * 				| All users
 	 */
@@ -68,6 +69,15 @@ class UserWorkspaceTest extends PassboltTestCase {
 			$this->assertElementContainsText(
 				$this->findByCss('#js_wsp_users_browser .tableview-header'),
 				$columns[$i]
+			);
+		}
+
+		// I should see some grid columns are sortable
+		$columnsId = ['name', 'username', 'modified', 'last_logged_in'];
+		for ($i = 0; $i < count($columnsId); $i++) {
+			$this->assertElementHasClass(
+				$this->findByCss('#js_wsp_pwd_browser .tableview-header .js_grid_column_' . $columnsId[$i]),
+				'sortable'
 			);
 		}
 
@@ -572,6 +582,70 @@ class UserWorkspaceTest extends PassboltTestCase {
 
 		// Then I should not see the sidebar anymore.
 		$this->assertNotVisible('#js_user_details');
+	}
+
+	/**
+	 * Scenario :   As a user I should be able to sort the users browser by column
+	 * Given        I am logged in as Ada, and I go to the user workspace
+	 * When 		I sort the users browser by name
+	 * Then 		I should see it sorted by name
+	 * When 		I sort the users browser by username
+	 * Then 		I should see it sorted by username
+	 * When 		I sort the users browser by modified
+	 * Then 		I should see it sorted by modified
+	 * When 		I sort the users browser by lasted logged in
+	 * Then 		I should see it sorted by lasted logged in
+	 */
+	public function testSortByColumn() {
+		// Given I am Ada
+		$user = User::get('ada');
+		$this->setClientConfig($user);
+
+		// And I am logged in on the password workspace
+		$this->loginAs($user);
+		$this->gotoWorkspace('user');
+
+		// When I sort the users browser by name
+		$columnId = 'name';
+		$this->click('.js_grid_column_' . $columnId);
+
+		// Then I should see it sorted by name
+		$columnHeaderResourceElement = $this->find('#js_wsp_users_browser .tableview-header .js_grid_column_' . $columnId);
+		$this->assertElementHasClass($columnHeaderResourceElement, 'sorted');
+		$this->assertElementHasClass($columnHeaderResourceElement, 'sort-asc');
+
+		// When I sort the users browser by username
+		$columnId = 'username';
+		$this->click('.js_grid_column_' . $columnId);
+
+		// Then I should see it sorted by username
+		$columnHeaderUsernameElement = $this->find('#js_wsp_users_browser .tableview-header .js_grid_column_' . $columnId);
+		$this->assertElementHasClass($columnHeaderUsernameElement, 'sorted');
+		$this->assertElementHasClass($columnHeaderUsernameElement, 'sort-asc');
+		$this->assertElementHasNotClass($columnHeaderResourceElement, 'sorted');
+		$this->assertElementHasNotClass($columnHeaderResourceElement, 'sort-asc');
+
+		// When I sort the users browser by modified
+		$columnId = 'modified';
+		$this->click('.js_grid_column_' . $columnId);
+
+		// Then I should see it sorted by modified
+		$columnHeaderModifiedElement = $this->find('#js_wsp_users_browser .tableview-header .js_grid_column_' . $columnId);
+		$this->assertElementHasClass($columnHeaderModifiedElement, 'sorted');
+		$this->assertElementHasClass($columnHeaderModifiedElement, 'sort-asc');
+		$this->assertElementHasNotClass($columnHeaderUsernameElement, 'sorted');
+		$this->assertElementHasNotClass($columnHeaderUsernameElement, 'sort-asc');
+
+		// When I sort the users browser by uri
+		$columnId = 'last_logged_in';
+		$this->click('.js_grid_column_' . $columnId);
+
+		// Then I should see it sorted by lasted logged in
+		$columnHeaderUriElement = $this->find('#js_wsp_users_browser .tableview-header .js_grid_column_' . $columnId);
+		$this->assertElementHasClass($columnHeaderUriElement, 'sorted');
+		$this->assertElementHasClass($columnHeaderUriElement, 'sort-asc');
+		$this->assertElementHasNotClass($columnHeaderModifiedElement, 'sorted');
+		$this->assertElementHasNotClass($columnHeaderModifiedElement, 'sort-asc');
 	}
 
 }

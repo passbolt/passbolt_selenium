@@ -12,6 +12,7 @@
  * - As a user when I filter by keywords the password workspace the global filter "All items" should be selected
  * - As a user, I should be able to control the sidebar visibility through the sidebar button
  * - As a user, I should see a welcome message when I am on an empty password workspace
+ * - As a user I should be able to sort the passwords browser by column
  *
  * @copyright (c) 2015-present Bolt Softwares Pvt Ltd
  * @licence GNU Affero General Public License http://www.gnu.org/licenses/agpl-3.0.en.html
@@ -26,6 +27,7 @@ class PasswordWorkspaceTest extends PassboltTestCase
      * And          I should see the workspace secondary menu
      * And          I should see the workspace filters shortcuts
      * And          I should see a grid and its columns
+	 * And			I should see some grid columns are sortable
      * And          I should see the breadcrumb with the following:
      *                 | All items
      */
@@ -63,6 +65,15 @@ class PasswordWorkspaceTest extends PassboltTestCase
                 $columns[$i]
             );
         }
+
+		// I should see some grid columns are sortable
+		$columnsId = ['name', 'username', 'uri', 'modified', 'owner'];
+		for ($i = 0; $i < count($columnsId); $i++) {
+			$this->assertElementHasClass(
+				$this->findByCss('#js_wsp_pwd_browser .tableview-header .js_grid_column_' . $columnsId[$i]),
+				'sortable'
+			);
+		}
 
         // I should see the breadcrumb with the following:
         //     | All items
@@ -670,5 +681,69 @@ class PasswordWorkspaceTest extends PassboltTestCase
 
 		// Database has changed, we reset.
 		$this->resetDatabase();
+	}
+
+	/**
+	 * Scenario :   As a user I should be able to sort the passwords browser by column
+	 * Given        I am logged in as Ada, and I go to the password workspace
+	 * When 		I sort the passwords browser by resource name
+	 * Then 		I should see it sorted by resource name
+	 * When 		I sort the passwords browser by username
+	 * Then 		I should see it sorted by username
+	 * When 		I sort the passwords browser by uri
+	 * Then 		I should see it sorted by uri
+	 * When 		I sort the passwords browser by modified
+	 * Then 		I should see it sorted by modified
+	 */
+	public function testSortByColumn()
+	{
+		// Given I am Ada
+		$user = User::get('ada');
+		$this->setClientConfig($user);
+
+		// And I am logged in on the password workspace
+		$this->loginAs($user);
+
+		// When I sort the passwords browser by resource name
+		$columnId = 'name';
+		$this->click('.js_grid_column_' . $columnId);
+
+		// Then I should see it sorted by resource name
+		$columnHeaderResourceElement = $this->find('#js_wsp_pwd_browser .tableview-header .js_grid_column_' . $columnId);
+		$this->assertElementHasClass($columnHeaderResourceElement, 'sorted');
+		$this->assertElementHasClass($columnHeaderResourceElement, 'sort-asc');
+
+		// When I sort the passwords browser by username
+		$columnId = 'username';
+		$this->click('.js_grid_column_' . $columnId);
+
+		// Then I should see it sorted by username
+		$columnHeaderUsernameElement = $this->find('#js_wsp_pwd_browser .tableview-header .js_grid_column_' . $columnId);
+		$this->assertElementHasClass($columnHeaderUsernameElement, 'sorted');
+		$this->assertElementHasClass($columnHeaderUsernameElement, 'sort-asc');
+		$this->assertElementHasNotClass($columnHeaderResourceElement, 'sorted');
+		$this->assertElementHasNotClass($columnHeaderResourceElement, 'sort-asc');
+
+		// When I sort the passwords browser by uri
+		$columnId = 'uri';
+		$this->click('.js_grid_column_' . $columnId);
+
+		// Then I should see it sorted by uri
+		$columnHeaderUriElement = $this->find('#js_wsp_pwd_browser .tableview-header .js_grid_column_' . $columnId);
+		$this->assertElementHasClass($columnHeaderUriElement, 'sorted');
+		$this->assertElementHasClass($columnHeaderUriElement, 'sort-asc');
+		$this->assertElementHasNotClass($columnHeaderUsernameElement, 'sorted');
+		$this->assertElementHasNotClass($columnHeaderUsernameElement, 'sort-asc');
+
+		// When I sort the passwords browser by modified
+		$columnId = 'modified';
+		$this->click('.js_grid_column_' . $columnId);
+
+		// Then I should see it sorted by modified
+		$columnHeaderModifiedElement = $this->find('#js_wsp_pwd_browser .tableview-header .js_grid_column_' . $columnId);
+		$this->assertElementHasClass($columnHeaderModifiedElement, 'sorted');
+		$this->assertElementHasClass($columnHeaderModifiedElement, 'sort-asc');
+		$this->assertElementHasNotClass($columnHeaderUriElement, 'sorted');
+		$this->assertElementHasNotClass($columnHeaderUriElement, 'sort-asc');
 	}
 }
