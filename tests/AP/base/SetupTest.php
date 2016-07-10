@@ -323,7 +323,7 @@ class SetupTest extends PassboltSetupTestCase {
 	 * Scenario :   As an AP, I should not be able to do the setup after my account has been activated
 	 * Given I click again on the link in the invitation email
 	 * Then  I should not see the setup again
-	 * And   I should see a page with a "Invalid token" error
+	 * And   I should see a page with a "Token not found" error
 	 * @throws Exception
 	 */
 	public function testSetupNotAccessibleAfterAccountValidation() {

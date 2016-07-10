@@ -71,7 +71,7 @@ class SetupTest extends PassboltSetupTestCase {
 	/**
 	 * Scenario :   I cannot see the setup page if user id and token are incorrect.
 	 * Given        I try to access the setup page with wrong information in the url
-	 * Then         I should reach an error page with text "Invalid token"
+	 * Then         I should reach an error page with text "Token not found"
 	 */
 	public function testCannotSeeSetupPageWithInvalidInformation() {
 		// Access url with wrong user id and token.
