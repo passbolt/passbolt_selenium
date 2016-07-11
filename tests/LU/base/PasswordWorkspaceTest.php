@@ -28,6 +28,7 @@ class PasswordWorkspaceTest extends PassboltTestCase
      * And          I should see the workspace filters shortcuts
      * And          I should see a grid and its columns
 	 * And			I should see some grid columns are sortable
+	 * And 			I should see the grid filtered by modified date
      * And          I should see the breadcrumb with the following:
      *                 | All items
      */
@@ -74,6 +75,11 @@ class PasswordWorkspaceTest extends PassboltTestCase
 				'sortable'
 			);
 		}
+
+		// I should see the grid filtered by modified date
+		$columnHeaderModifiedElement = $this->findByCss('#js_wsp_pwd_browser .tableview-header .js_grid_column_modified');
+		$this->assertElementHasClass($columnHeaderModifiedElement, 'sorted');
+		$this->assertElementHasClass($columnHeaderModifiedElement, 'sort-desc');
 
         // I should see the breadcrumb with the following:
         //     | All items

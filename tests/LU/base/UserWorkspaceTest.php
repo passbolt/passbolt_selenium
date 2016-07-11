@@ -48,11 +48,11 @@ class UserWorkspaceTest extends PassboltTestCase {
 			);
 		}
 
-    // I should not see the create button in the main action wrapper
-    $this->assertElementNotContainText(
-      $this->findByCss('.main-action-wrapper'),
-      'create'
-    );
+		// I should not see the create button in the main action wrapper
+		$this->assertElementNotContainText(
+		  $this->findByCss('.main-action-wrapper'),
+		  'create'
+		);
 
 		// I should the workspace filters.
 		$filters = ['All users', 'Recently modified'];
@@ -76,10 +76,15 @@ class UserWorkspaceTest extends PassboltTestCase {
 		$columnsId = ['name', 'username', 'modified', 'last_logged_in'];
 		for ($i = 0; $i < count($columnsId); $i++) {
 			$this->assertElementHasClass(
-				$this->findByCss('#js_wsp_pwd_browser .tableview-header .js_grid_column_' . $columnsId[$i]),
+				$this->findByCss('#js_wsp_users_browser .tableview-header .js_grid_column_' . $columnsId[$i]),
 				'sortable'
 			);
 		}
+
+		// I should see the grid filtered by full name
+		$columnHeaderModifiedElement = $this->findByCss('#js_wsp_users_browser .tableview-header .js_grid_column_name');
+		$this->assertElementHasClass($columnHeaderModifiedElement, 'sorted');
+		$this->assertElementHasClass($columnHeaderModifiedElement, 'sort-asc');
 
 		// I should see the breadcrumb with the following:
 		// 	| All users
