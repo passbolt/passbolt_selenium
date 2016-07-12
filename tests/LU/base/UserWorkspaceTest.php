@@ -617,7 +617,7 @@ class UserWorkspaceTest extends PassboltTestCase {
 		// Then I should see it sorted by name
 		$columnHeaderResourceElement = $this->find('#js_wsp_users_browser .tableview-header .js_grid_column_' . $columnId);
 		$this->assertElementHasClass($columnHeaderResourceElement, 'sorted');
-		$this->assertElementHasClass($columnHeaderResourceElement, 'sort-asc');
+		$this->assertElementHasClass($columnHeaderResourceElement, 'sort-desc');
 
 		// When I sort the users browser by username descendingly as it is by default sorted ascendingly
 		$columnId = 'username';
@@ -626,7 +626,7 @@ class UserWorkspaceTest extends PassboltTestCase {
 		// Then I should see it sorted by username
 		$columnHeaderUsernameElement = $this->find('#js_wsp_users_browser .tableview-header .js_grid_column_' . $columnId);
 		$this->assertElementHasClass($columnHeaderUsernameElement, 'sorted');
-		$this->assertElementHasClass($columnHeaderUsernameElement, 'sort-desc');
+		$this->assertElementHasClass($columnHeaderUsernameElement, 'sort-asc');
 		$this->assertElementHasNotClass($columnHeaderResourceElement, 'sorted');
 		$this->assertElementHasNotClass($columnHeaderResourceElement, 'sort-asc');
 
