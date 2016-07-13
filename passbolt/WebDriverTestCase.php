@@ -281,15 +281,25 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
         return $this->driver->findElement(WebDriverBy::xpath($xpath));
     }
 
-    /**
-     * Find an element by ID
-     * @param $id
-     * @return mixed
-     * @throws NoSuchElementException
-     */
-    public function findById($id) {
-        return $this->driver->findElement(WebDriverBy::id($id));
-    }
+	/**
+	 * Find all elements by a XPath selector
+	 * @param $text
+	 * @return mixed
+	 * @throws NoSuchElementException
+	 */
+	public function findAllByXpath($xpath) {
+		return $this->driver->findElements(WebDriverBy::xpath($xpath));
+	}
+
+	/**
+	 * Find an element by ID
+	 * @param $id
+	 * @return mixed
+	 * @throws NoSuchElementException
+	 */
+	public function findById($id) {
+		return $this->driver->findElement(WebDriverBy::id($id));
+	}
 
     /**
      * Find a link by its text
