@@ -14,6 +14,12 @@ class PassboltTestCase extends WebDriverTestCase {
 	// indicate if the database should be reset at the end of the test
 	protected $resetDatabase = false;
 
+	// the current username
+	protected $currentUsername = null;
+
+	// the cookies used to log the different user.
+	protected $loginCookies = array();
+
 	/**
 	 * Called before the first test of the test case class is run
 	 */
@@ -175,9 +181,13 @@ class PassboltTestCase extends WebDriverTestCase {
 		if (!is_array($user)) {
 			$user = [
 				'Username' => $user,
-				'MasterPassword' => $user
+				'MasterPassword' => $user,
+				'name' => $user
 			];
 		}
+
+		// Store the current username.
+		$this->currentUser = $user;
 
 		// If not on the login page, we redirect to it.
 		try {
@@ -200,8 +210,11 @@ class PassboltTestCase extends WebDriverTestCase {
 		$this->waitCompletion();
 
 		// wait for redirection trigger
-		$this->waitUntilUrlMatches('');
+		$this->waitUntilISee('.logout');
 		$this->waitCompletion();
+
+		// save the cookie
+		$this->loginCookies[$this->currentUser['name']] = $this->driver->manage()->getCookies();
 	}
 
 	/**
@@ -209,6 +222,31 @@ class PassboltTestCase extends WebDriverTestCase {
 	 */
 	public function logout() {
 		$this->getUrl('logout');
+	}
+
+	/**
+	 * Quit and reload the browser to the given url
+	 * @param string $url
+	 */
+	public function quitAndReload($url = '') {
+		$this->driver->quit();
+		$this->initBrowser();
+		$this->driver->manage()->window()->maximize();
+
+		if (!is_null($this->currentUser)) {
+			$this->setClientConfig($this->currentUser);
+		}
+
+		$this->getUrl($url);
+
+		if (!empty($this->loginCookies[$this->currentUser['name']])) {
+			foreach($this->loginCookies[$this->currentUser['name']] as $cookie) {
+				$this->driver->manage()->addCookie($cookie);
+			}
+			$this->getUrl($url);
+		}
+
+		$this->waitCompletion();
 	}
 
 	/**

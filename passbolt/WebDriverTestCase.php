@@ -32,14 +32,21 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
     protected function setUp() {
         $this->_quit = getenv('QUIT');
         $this->_failing = null;
-        $this->_setVerbose();
-        $this->_setBrowserConfig();
-        $this->_checkSeleniumConfig();
-        $capabilities = $this->_getCapabilities();
-        $this->driver = RemoteWebDriver::create(Config::read('selenium.url'), $capabilities);
-        // Redirect it immediately on an empty page, so we avoid the default home page.
-        $this->driver->get('');
+		$this->initBrowser();
     }
+
+	/**
+	 * Initialize the browser
+	 */
+	public function initBrowser() {
+		$this->_setVerbose();
+		$this->_setBrowserConfig();
+		$this->_checkSeleniumConfig();
+		$capabilities = $this->_getCapabilities();
+		$this->driver = RemoteWebDriver::create(Config::read('selenium.url'), $capabilities);
+		// Redirect it immediately to an empty page, so we avoid the default firefox home page.
+		$this->driver->get('');
+	}
 
     /**
      * This function is executed after a test is run
