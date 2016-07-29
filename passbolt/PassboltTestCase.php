@@ -214,7 +214,7 @@ class PassboltTestCase extends WebDriverTestCase {
 		$this->waitCompletion();
 
 		// save the cookie
-		$this->loginCookies[$this->currentUser['name']] = $this->driver->manage()->getCookies();
+		$this->loginCookies[$this->currentUser['Username']] = $this->driver->manage()->getCookies();
 	}
 
 	/**
@@ -239,8 +239,8 @@ class PassboltTestCase extends WebDriverTestCase {
 
 		$this->getUrl($url);
 
-		if (!empty($this->loginCookies[$this->currentUser['name']])) {
-			foreach($this->loginCookies[$this->currentUser['name']] as $cookie) {
+		if (!empty($this->loginCookies[$this->currentUser['Username']])) {
+			foreach($this->loginCookies[$this->currentUser['Username']] as $cookie) {
 				$this->driver->manage()->addCookie($cookie);
 			}
 			$this->getUrl($url);
