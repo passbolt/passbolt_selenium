@@ -242,8 +242,8 @@ class PassboltTestCase extends WebDriverTestCase {
 	 * 	waitBeforeRestart : Should the browser be restarted after a sleep in seconds
 	 */
 	public function restartBrowser($options = array()) {
-		$options = $options || array();
-		$waitBeforeRestart = $options['waitBeforeRestart'] || 0;
+		$options = $options ? $options : array();
+		$waitBeforeRestart = isset($options['waitBeforeRestart']) ? $options['waitBeforeRestart'] : 0;
 
 		// Quit the browser.
 		$this->driver->quit();
@@ -275,6 +275,21 @@ class PassboltTestCase extends WebDriverTestCase {
 
 		// Go to the application
 		$this->getUrl('');
+	}
+
+	/**
+	 * Close and restore the current tab.
+	 * Ensure the test run already on a second tab.
+	 *
+	 * @param $options
+	 * 	waitBeforeRestore : Should the tab be restored after a sleep in seconds
+	 */
+	public function closeAndRestoreTab($options = array()) {
+		$options = $options ? $options : array();
+		$waitBeforeRestore = isset($options['waitBeforeRestore']) ? $options['waitBeforeRestore'] : 0;
+		$this->findByCSS('html')->sendKeys(array(WebDriverKeys::CONTROL, 'w'));
+		sleep($waitBeforeRestore);
+		$this->findByCss('html')->sendKeys(array(WebDriverKeys::SHIFT, WebDriverKeys::CONTROL, 't'));
 	}
 
 	/**
@@ -1296,7 +1311,8 @@ class PassboltTestCase extends WebDriverTestCase {
 		}
 
 		$backtrace = debug_backtrace();
-		throw new Exception( "waitUntilURLMatches $url : Timeout thrown by " . $backtrace[1]['class'] . "::" . $backtrace[1]['function'] . "()\n . element: $url");
+		$currentUrl = $this->driver->getCurrentURL();
+		throw new Exception( "waitUntilURLMatches $url : Timeout thrown by " . $backtrace[1]['class'] . "::" . $backtrace[1]['function'] . "()\n . element: $url \n . current url : $currentUrl \n");
 	}
 
 	/**

@@ -83,7 +83,7 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
      * @return DesiredCapabilities|null
      * @throws error browser type not supported
      */
-    private function _getCapabilities() {
+    public function _getCapabilities() {
         $capabilities = null;
 
         switch($this->_browser['type']) {

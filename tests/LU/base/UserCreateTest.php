@@ -13,6 +13,8 @@
  *  - After creating an admin user, the given user shouldn have access to the admin functionalities
  *  - As admin I can see a user I have just created, but a normal user can't until the created user has completed the setup
  *  - As LU, after an admin created an account for me, I should receive a confirmation email.
+ *  - As LU I should be able to create a user after I restart the browser
+ *  - As LU I should be able to create a user after I close and restore the passbolt tab
  *
  * @copyright (c) 2015-present Bolt Softwares Pvt Ltd
  * @licence GNU Affero General Public License http://www.gnu.org/licenses/agpl-3.0.en.html
@@ -773,11 +775,9 @@ class UserCreateTest extends PassboltTestCase {
 
 		// When restart the browser
 		$this->restartBrowser();
-
-		// Go to user workspace
 		$this->gotoWorkspace('user');
 
-		// Create user
+		// Then I should be able to create a user
 		$newUser = [
 			'first_name' => 'john',
 			'last_name'  => 'doe',
@@ -785,6 +785,48 @@ class UserCreateTest extends PassboltTestCase {
 			'admin'      => false
 		];
 		$this->createUser($newUser);
+
+		// Since content was edited, we reset the database
+		$this->resetDatabase();
+	}
+
+	/**
+	 * Scenario:  As LU I should be able to create a user after I close and restore the passbolt tab
+	 * Given    I am Ada
+	 * And		I am on second tab
+	 * And      I am logged in on the users workspace
+	 * When 	I close and restore the tab
+	 * Then 	I should be able to create a user
+	 *
+	 * @throws Exception
+	 */
+	public function testCloseRestoreTabAndCreateUser() {
+		// Given I am Admin
+		$user = User::get('admin');
+		$this->setClientConfig($user);
+
+		// And I am on second tab
+		$this->findByCSS('html')->sendKeys(array(WebDriverKeys::CONTROL, 't'));
+
+		// And I am logged in on the user workspace
+		$this->loginAs($user);
+		$this->gotoWorkspace('user');
+
+		// When I close and restore the tab
+		$this->closeAndRestoreTab();
+		$this->waitCompletion();
+		$this->gotoWorkspace('user');
+
+		// Then I should be able to create a user
+		$newUser = [
+			'first_name' => 'john',
+			'last_name'  => 'doe',
+			'username'   => 'johndoe@passbolt.com',
+			'admin'      => false
+		];
+		$this->createUser($newUser);
+
+		// Since content was edited, we reset the database
 		$this->resetDatabase();
 	}
 }

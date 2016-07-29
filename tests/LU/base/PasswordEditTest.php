@@ -21,6 +21,7 @@
  * As a user I receive an email notification on a password update
  * As LU I can use passbolt on multiple windows and edit password
  * As LU I should be able to edit a password after I restart the browser
+ * As LU I should be able to edit a password after I close and restore the passbolt tab
  *
  * @copyright (c) 2015-present Bolt Softwares Pvt Ltd
  * @licence GNU Affero General Public License http://www.gnu.org/licenses/agpl-3.0.en.html
@@ -1448,6 +1449,47 @@ class PasswordEditTest extends PassboltTestCase
 		);
 		$this->editPassword($r2, $user);
 
+		// Since content was edited, we reset the database
+		$this->resetDatabase();
+	}
+
+	/**
+	 * Scenario:  As LU I should be able to edit a password after I close and restore the passbolt tab
+	 * Given    I am Ada
+	 * And      I am on second tab
+	 * And      I am logged in on the passwords workspace
+	 * When 	I close and restore the tab
+	 * Then 	I should be able to edit a password
+	 *
+	 * @throws Exception
+	 */
+	public function testCloseRestoreTabAndEditPassword() {
+		// Given I am Ada
+		$user = User::get('ada');
+		$this->setClientConfig($user);
+
+		// And I am on second tab
+		$this->findByCSS('html')->sendKeys(array(WebDriverKeys::CONTROL, 't'));
+
+		// And I am logged in on the password workspace
+		$this->loginAs($user);
+
+		// When I close and restore the tab
+		$this->closeAndRestoreTab();
+		$this->waitCompletion();
+
+		// Then I should be able to edit a password
+		$r1 = Resource::get(array(
+			'user' => 'betty',
+			'permission' => 'update'
+		));
+		$r2 = array(
+			'id' => $r1['id'],
+			'password' => 'our_brand_new_password'
+		);
+		$this->editPassword($r2, $user);
+
+		// Since content was edited, we reset the database
 		$this->resetDatabase();
 	}
 }

@@ -6,6 +6,7 @@
  * As AN I can login to passbolt by submitting the login form with the enter key
  * As AN I can login to passbol on different tabs without conflict between workers
  * As LU I should still be logged in after I restart the browser
+ * As LU I should still be logged in after I close and restore the passbolt tab
  *
  * @copyright (c) 2015-present Bolt Softwares Pvt Ltd
  * @licence GNU Affero General Public License http://www.gnu.org/licenses/agpl-3.0.en.html
@@ -161,7 +162,7 @@ class LoginTest extends PassboltTestCase {
 	 *
 	 * @throws Exception
 	 */
-	public function testLoggedInAfterLeavingBrowserAndReload() {
+	public function testRestartBrowserAndStillLoggedIn() {
 		// Given I am Ada
 		$user = User::get('ada');
 		$this->setClientConfig($user);
@@ -171,6 +172,35 @@ class LoginTest extends PassboltTestCase {
 
 		// When I restart the browser
 		$this->restartBrowser();
+
+		// Then I should still be logged in
+		$this->waitUntilISee('.logout');
+	}
+
+	/**
+	 * Scenario:  As LU I should still be logged in after I close and restore the passbolt tab
+	 * Given    I am Ada
+	 * And 		I am on second tab
+	 * And      I am logged in on the passwords workspace
+	 * When 	I close and restore the tab
+	 * Then 	I should still be logged in
+	 *
+	 * @throws Exception
+	 */
+	public function testCloseRestoreTabAndStillLoggedIn() {
+		// Given I am Ada
+		$user = User::get('ada');
+		$this->setClientConfig($user);
+
+		// And I am on second tab
+		$this->findByCSS('html')->sendKeys(array(WebDriverKeys::CONTROL, 't'));
+
+		// And I am logged in
+		$this->loginAs($user);
+
+		// When I close and restore the tab
+		$this->closeAndRestoreTab();
+		$this->waitCompletion();
 
 		// Then I should still be logged in
 		$this->waitUntilISee('.logout');

@@ -21,6 +21,8 @@
  * As a user I should be able to drop my owner permission if there is another owner
  * As a user I can view the permissions for a password I don't own
  * As LU I can use passbolt on multiple windows and edit the permissions of a password I own
+ * As a user I can share a password with other users after I restart the browser
+ * As a user I can share a password with other users after I close and restore the passbolt tab
  *
  * @copyright (c) 2015-present Bolt Softwares Pvt Ltd
  * @licence GNU Affero General Public License http://www.gnu.org/licenses/agpl-3.0.en.html
@@ -1129,7 +1131,51 @@ class PasswordShareTest extends PassboltTestCase
 		// Then I can see Betty has read access on the password
 		$this->assertPermission($resource, 'betty@passbolt.com', 'can read');
 
+		// Since content was edited, we reset the database
+		$this->resetDatabase();
+	}
 
+	/**
+	 * Scenario: As a user I can share a password with other users after I close and restore the passbolt tab
+	 *
+	 * Given    I am Carol
+	 * And 		I am on second tab
+	 * And      I am logged in on the password workspace
+	 * When		I close and restore the tab
+	 * And      I go to the sharing dialog of a password I own
+	 * And      I give read access to betty for a password I own
+	 * Then     I can see Betty has read access on the password
+	 */
+	public function testCloseRestoreTabAndSharePassword() {
+		// Given I am Carol
+		$user = User::get('carol');
+		$this->setClientConfig($user);
+
+		// And I am on second tab
+		$this->findByCSS('html')->sendKeys(array(WebDriverKeys::CONTROL, 't'));
+
+		// And I am logged in on the password workspace
+		$this->loginAs($user);
+
+		// When I close and restore the tab
+		$this->closeAndRestoreTab();
+		$this->waitCompletion();
+
+		// And I go to the sharing dialog of a password I own
+		$resource = Resource::get(array(
+			'user' => 'betty',
+			'id' => Uuid::get('resource.id.gnupg')
+		));
+		$this->gotoSharePassword(Uuid::get('resource.id.gnupg'));
+
+		// And I give read access to betty for a password I own
+		$this->sharePassword($resource, 'betty', $user);
+
+		// Then I can see Betty has read access on the password
+		$this->assertPermission($resource, 'betty@passbolt.com', 'can read');
+
+		// Since content was edited, we reset the database
+		$this->resetDatabase();
 	}
 
 }

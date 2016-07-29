@@ -1,6 +1,9 @@
 <?php
 /**
- * User with configured plugin login test
+ * Feature : Logout
+ *
+ * As LU I should be logged out when I quit the browser and restart it after my session expired
+ * As LU I should be logged out when I close the passbolt tab and restore it after my session expired
  *
  * @copyright (c) 2015-present Bolt Softwares Pvt Ltd
  * @licence GNU Affero General Public License http://www.gnu.org/licenses/agpl-3.0.en.html
@@ -144,7 +147,7 @@ class LogoutTest extends PassboltTestCase {
 	 *
 	 * @throws Exception
 	 */
-	public function testLoggedOutAfterSessionExpiredAndBrowserRestart() {
+	public function testRestartBrowserAndLoggedOutAfterSessionExpired() {
 		// Given I am Ada
 		$user = User::get('ada');
 		$this->setClientConfig($user);
@@ -166,6 +169,42 @@ class LogoutTest extends PassboltTestCase {
 
 		// Then I should be logged out
 		$this->assertUrlMatch('/\/auth\/login/');
+	}
+
+	/**
+	 * Scenario:  As LU I should be logged out when I close the passbolt tab and restore it after my session expired
+	 * Given    I am Ada
+	 * And      I am logged in on the passwords workspace
+	 * When 	I close the tab and restore it after my session is expired
+	 * Then 	I should be logged out
+	 *
+	 * @throws Exception
+	 */
+	public function testCloseRestoreTabAndLoggedOutAfterSessionExpired() {
+		// Given I am Ada
+		$user = User::get('ada');
+		$this->setClientConfig($user);
+
+		// And I am on second tab
+		$this->findByCSS('html')->sendKeys(array(WebDriverKeys::CONTROL, 't'));
+
+		// Reduce the session timeout to accelerate the test
+		PassboltServer::setExtraConfig([
+			'Session' => [
+				'timeout' => 0.25
+			]
+		]);
+
+		// And I am logged in on the password workspace
+		$this->loginAs($user);
+
+		// When I close and restore the tab
+		$this->closeAndRestoreTab(array(
+			'waitBeforeRestore' => 15
+		));
+
+		// Then I should be logged out
+		$this->waitUntilUrlMatches('auth/login', 120);
 	}
 
 }
