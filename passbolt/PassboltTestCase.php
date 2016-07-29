@@ -181,8 +181,7 @@ class PassboltTestCase extends WebDriverTestCase {
 		if (!is_array($user)) {
 			$user = [
 				'Username' => $user,
-				'MasterPassword' => $user,
-				'name' => $user
+				'MasterPassword' => $user
 			];
 		}
 
