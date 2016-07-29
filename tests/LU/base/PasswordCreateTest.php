@@ -13,6 +13,7 @@
  * As a user I can view the password I am creating in clear text
  * As a user I receive an email notification when I create a new password
  * As LU I can use passbolt on multiple windows and create password
+ * As LU I should be able to create a password after I restart the browser
  *
  * @copyright (c) 2015-present Bolt Softwares Pvt Ltd
  * @licence GNU Affero General Public License http://www.gnu.org/licenses/agpl-3.0.en.html
@@ -793,4 +794,37 @@ class PasswordCreateTest extends PassboltTestCase
         // Since content was edited, we reset the database
         $this->resetDatabase();
     }
+
+    /**
+     * Scenario:  As LU I should be able to create a password after I restart the browser
+     * Given    I am Ada
+     * And      I am logged in on the passwords workspace
+     * When 	I restart the browser
+     * Then 	I should be able to create a password
+     *
+     * @throws Exception
+     */
+    public function testRestartBrowserAndCreatePassword() {
+        // Given I am Ada
+        $user = User::get('ada');
+        $this->setClientConfig($user);
+
+        // And I am logged in
+        $this->loginAs($user);
+
+        // When restart the browser
+        $this->restartBrowser();
+
+        // Then I should be able to create a password
+        $password = array(
+            'name' => 'password_create_after_leaving_browser',
+            'username' => 'password_create_after_leaving_browser',
+            'password' => 'password_create_after_leaving_browser'
+        );
+        $this->createPassword($password);
+
+        // Since content was edited, we reset the database
+        $this->resetDatabase();
+    }
+
 }

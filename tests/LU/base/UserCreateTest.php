@@ -750,4 +750,41 @@ class UserCreateTest extends PassboltTestCase {
 		$this->assertPageContainsText('Admin just invited you to join');
 		$this->resetDatabase();
 	}
+
+	/**
+	 * Scenario:  As LU I should be able to create a user after I restart the browser
+	 * Given    I am Ada
+	 * And      I am logged in on the users workspace
+	 * When 	I restart the browser
+	 * Then 	I should be able to create a user
+	 *
+	 * @throws Exception
+	 */
+	public function testRestartBrowserAndCreateUser() {
+		// Given I am Admin
+		$user = User::get('admin');
+		$this->setClientConfig($user);
+
+		// And I am logged in
+		$this->loginAs($user);
+
+		// Go to user workspace
+		$this->gotoWorkspace('user');
+
+		// When restart the browser
+		$this->restartBrowser();
+
+		// Go to user workspace
+		$this->gotoWorkspace('user');
+
+		// Create user
+		$newUser = [
+			'first_name' => 'john',
+			'last_name'  => 'doe',
+			'username'   => 'johndoe@passbolt.com',
+			'admin'      => false
+		];
+		$this->createUser($newUser);
+		$this->resetDatabase();
+	}
 }

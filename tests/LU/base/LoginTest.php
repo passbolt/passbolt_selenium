@@ -5,7 +5,7 @@
  * As AN I can login to passbolt
  * As AN I can login to passbolt by submitting the login form with the enter key
  * As AN I can login to passbol on different tabs without conflict between workers
- * As LU I can leave the browser and reload it I should still be logged in
+ * As LU I should still be logged in after I restart the browser
  *
  * @copyright (c) 2015-present Bolt Softwares Pvt Ltd
  * @licence GNU Affero General Public License http://www.gnu.org/licenses/agpl-3.0.en.html
@@ -153,10 +153,10 @@ class LoginTest extends PassboltTestCase {
 	}
 
 	/**
-	 * Scenario:  As LU I can leave the browser and reload it I should still be logged in
+	 * Scenario:  As LU I should still be logged in after I restart the browser
 	 * Given    I am Ada
 	 * And      I am logged in on the passwords workspace
-	 * When 	I quit the browser and reload it
+	 * When 	I restart the browser
 	 * Then 	I should still be logged in
 	 *
 	 * @throws Exception
@@ -169,8 +169,8 @@ class LoginTest extends PassboltTestCase {
 		// And I am logged in
 		$this->loginAs($user);
 
-		// When I quit the browser and reload it
-		$this->quitAndReload('');
+		// When I restart the browser
+		$this->restartBrowser();
 
 		// Then I should still be logged in
 		$this->waitUntilISee('.logout');

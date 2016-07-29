@@ -20,6 +20,7 @@
  * As a user I can see error messages when editing a password with wrong inputs
  * As a user I receive an email notification on a password update
  * As LU I can use passbolt on multiple windows and edit password
+ * As LU I should be able to edit a password after I restart the browser
  *
  * @copyright (c) 2015-present Bolt Softwares Pvt Ltd
  * @licence GNU Affero General Public License http://www.gnu.org/licenses/agpl-3.0.en.html
@@ -354,7 +355,7 @@ class PasswordEditTest extends PassboltTestCase
         $this->pressTab();
 
         // Then the field uri should have the focus.
-        $this-> assertElementHasFocus('js_field_uri');
+        $this->assertElementHasFocus('js_field_uri');
 
         // Press tab key.
         $this->pressTab();
@@ -1413,6 +1414,40 @@ class PasswordEditTest extends PassboltTestCase
 		);
 
 		// Since content was edited, we reset the database
+		$this->resetDatabase();
+	}
+
+	/**
+	 * Scenario:  As LU I should be able to edit a password after I restart the browser
+	 * Given    I am Ada
+	 * And      I am logged in on the passwords workspace
+	 * When 	I restart the browser
+	 * Then 	I should be able to edit a password
+	 *
+	 * @throws Exception
+	 */
+	public function testRestartBrowserAndEditPassword() {
+		// Given I am Ada
+		$user = User::get('ada');
+		$this->setClientConfig($user);
+
+		// And I am logged in on the password workspace
+		$this->loginAs($user);
+
+		// When restart the browser
+		$this->restartBrowser();
+
+		// Then I should be able to edit a password
+		$r1 = Resource::get(array(
+			'user' => 'betty',
+			'permission' => 'update'
+		));
+		$r2 = array(
+			'id' => $r1['id'],
+			'password' => 'our_brand_new_password'
+		);
+		$this->editPassword($r2, $user);
+
 		$this->resetDatabase();
 	}
 }

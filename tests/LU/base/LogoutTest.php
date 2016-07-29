@@ -135,4 +135,37 @@ class LogoutTest extends PassboltTestCase {
 		$this->waitUntilISee('.plugin-check.firefox.success');
 	}
 
+	/**
+	 * Scenario:  As LU I should be logged out when I quit the browser and restart it after my session expired
+	 * Given    I am Ada
+	 * And      I am logged in on the passwords workspace
+	 * When 	I quit the browser and restart it after my session is expired
+	 * Then 	I should be logged out
+	 *
+	 * @throws Exception
+	 */
+	public function testLoggedOutAfterSessionExpiredAndBrowserRestart() {
+		// Given I am Ada
+		$user = User::get('ada');
+		$this->setClientConfig($user);
+
+		// Reduce the session timeout to accelerate the test
+		PassboltServer::setExtraConfig([
+			'Session' => [
+				'timeout' => 0.25
+			]
+		]);
+
+		// And I am logged in on the password workspace
+		$this->loginAs($user);
+
+		// When I restart the browser
+		$this->restartBrowser(array(
+			'waitBeforeRestart' => 15
+		));
+
+		// Then I should be logged out
+		$this->assertUrlMatch('/\/auth\/login/');
+	}
+
 }

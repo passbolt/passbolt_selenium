@@ -1095,4 +1095,41 @@ class PasswordShareTest extends PassboltTestCase
 		$this->resetDatabase();
 	}
 
+	/**
+	 * Scenario: As a user I can share a password with other users after I restart the browser
+	 *
+	 * Given    I am Carol
+	 * And      I am logged in on the password workspace
+	 * When		I restart the browser
+	 * And      I go to the sharing dialog of a password I own
+	 * And      I give read access to betty for a password I own
+	 * Then     I can see Betty has read access on the password
+	 */
+	public function testRestartBrowserAndSharePassword() {
+		// Given I am Carol
+		$user = User::get('carol');
+		$this->setClientConfig($user);
+
+		// And I am logged in on the password workspace
+		$this->loginAs($user);
+
+		// When restart the browser
+		$this->restartBrowser();
+
+		// And I go to the sharing dialog of a password I own
+		$resource = Resource::get(array(
+			'user' => 'betty',
+			'id' => Uuid::get('resource.id.gnupg')
+		));
+		$this->gotoSharePassword(Uuid::get('resource.id.gnupg'));
+
+		// And I give read access to betty for a password I own
+		$this->sharePassword($resource, 'betty', $user);
+
+		// Then I can see Betty has read access on the password
+		$this->assertPermission($resource, 'betty@passbolt.com', 'can read');
+
+
+	}
+
 }

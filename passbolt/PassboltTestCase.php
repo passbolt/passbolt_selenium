@@ -224,28 +224,57 @@ class PassboltTestCase extends WebDriverTestCase {
 	}
 
 	/**
-	 * Quit and reload the browser to the given url
-	 * @param string $url
+	 * Restart the browser.
+	 *
+	 * We mimic the following behavior :
+	 * * The user quits the browser;
+	 * * The user restarts it.
+	 *
+	 * We expect the cookies to be as they were before quitting the browser. So if the user was logged-in on the
+	 * application before quitting the browser, he should be logged-in after the browser is restarted.
+	 * -> We store and reload manually the cookies
+	 *
+	 * The application pagemod is started after a successful authentication or when the plugin is started for the first
+	 * time with a user already logged-in. However we can't load the cookies before starting the plugin.
+	 * -> We implements a workaround to start the application pagemod manually, see the debug page.
+	 *
+	 * @param $options
+	 * 	waitBeforeRestart : Should the browser be restarted after a sleep in seconds
 	 */
-	public function quitAndReload($url = '') {
+	public function restartBrowser($options = array()) {
+		$options = $options || array();
+		$waitBeforeRestart = $options['waitBeforeRestart'] || 0;
+
+		// Quit the browser.
 		$this->driver->quit();
+
+		// If a wait before restart option has been given.
+		sleep($waitBeforeRestart);
+
+		// Restart the brower
 		$this->initBrowser();
 		$this->driver->manage()->window()->maximize();
 
+		// As the browser local storage has been cleaned.
+		// Set the client config has it was before quitting.
 		if (!is_null($this->currentUser)) {
 			$this->setClientConfig($this->currentUser);
 		}
 
-		$this->getUrl($url);
-
+		// Same for the cookies.
 		if (!empty($this->loginCookies[$this->currentUser['Username']])) {
+			$this->getUrl('/auth/login');
 			foreach($this->loginCookies[$this->currentUser['Username']] as $cookie) {
 				$this->driver->manage()->addCookie($cookie);
 			}
-			$this->getUrl($url);
 		}
 
-		$this->waitCompletion();
+		// The application page mode needs to be restarted manually.
+		$this->getUrl('debug');
+		$this->click('initAppPagemod');
+
+		// Go to the application
+		$this->getUrl('');
 	}
 
 	/**
