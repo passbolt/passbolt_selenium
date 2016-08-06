@@ -50,10 +50,10 @@ class UserCreateTest extends PassboltTestCase {
 		$this->gotoWorkspace('user');
 
 		// then I see the create password button
-    $this->assertElementContainsText(
-      $this->findByCss('.main-action-wrapper'),
-      'create'
-    );
+		$this->assertElementContainsText(
+		  $this->findByCss('.main-action-wrapper'),
+		  'create'
+		);
 
 		// Create a new user
 		$this->gotoCreateUser();
@@ -775,6 +775,7 @@ class UserCreateTest extends PassboltTestCase {
 
 		// When restart the browser
 		$this->restartBrowser();
+		$this->waitCompletion();
 		$this->gotoWorkspace('user');
 
 		// Then I should be able to create a user

@@ -15,74 +15,80 @@ class MasterPasswordRememberTest extends PassboltTestCase {
 	 *
 	 * Given    I am Ada
 	 * And      I am logged in on the password workspace
-	 * When     I click a password
-	 * When     I click on the copy button in the action bar
-	 * Then     I can see the master key dialog
-	 * And      I can see a checkbox to remember the password for x minutes
-	 * When     I enter my passphrase and click on submit
-	 * Then     I can see a success message saying the password was 'copied to clipboard'
-	 * When     I click again on the copy button in the action bar
-	 * And      I can see the master key dialog
-	 * When     I enter my password
+	 * When     I click on a password in the list
+	 * And      I click on the link 'copy password'
+	 * Then     I should see the passphrase dialog.
+	 * And      I should see a checkbox remember my passphrase.
+	 * When     I enter my passphrase from keyboard only
+	 * Then     The password should have been copied to clipboard
+	 * When     I click on another password in the list
+	 * And		I click on the link 'copy password'
+	 * Then     I should see the passphrase dialog
+	 * When     I enter my passphrase from keyboard only
 	 * And      I check the remember checkbox
-	 * And      I click on submit
-	 * Then     I can see a success message saying the password was 'copied to clipboard'
-	 * When     I wait for 20 seconds to remove all the notifications
+	 * Then     The password should have been copied to clipboard
+	 * When     I click on another password in the list
 	 * And      I click again on the copy button in the action bar
-	 * Then     I can see that the passphrase is not asked
-	 * And      I can see a success message saying the password was 'copied to clipboard'
+	 * Then     The password should have been copied to clipboard
 	 */
 	function testMasterPasswordRemember() {
 		// Given I am Ada
 		$user = User::get('ada');
-		$resource = Resource::get(array('user' => 'ada'));
 		$this->setClientConfig($user);
 
 		// And I am logged in on the password workspace
 		$this->loginAs($user);
 
-		// When I click on the first password in the list
-		$this->clickPassword($resource['id']);
+		// When I click on a password in the list
+		$rsA = Resource::get(array('user' => 'ada', 'id' => Uuid::get('resource.id.apache')));
+		$this->clickPassword($rsA['id']);
 
-		// When I click on the link 'copy password'
+		// And I click on the link 'copy password'
 		$this->click('js_wk_menu_secretcopy_button');
 
-		// I should see the passphrase dialog.
+		// Then I should see the passphrase dialog.
 		$this->assertMasterPasswordDialog($user);
 
-		// I should see a checkbox remember my passphrase.
+		// And I should see a checkbox remember my passphrase
 		$this->goIntoMasterPasswordIframe();
 		$this->assertVisible('js_remember_master_password');
 		$this->goOutOfIframe();
 
-		// When I enter my passphrase from keyboard only.
+		// When I enter my passphrase from keyboard only
 		$this->enterMasterPassword($user['MasterPassword'], false);
 
-		// Then I can see a success message telling me the password was copied to clipboard
-		$this->assertNotification('plugin_secret_copy_success');
+		// Then The password should have been copied to clipboard
+		$this->waitCompletion();
+		$this->assertClipboard($rsA['password']);
 
-		// When I click on the link 'copy password'
+		// When I click on another password in the list
+		$rsB = Resource::get(array('user' => 'ada', 'id' => Uuid::get('resource.id.bower')));
+		$this->clickPassword($rsB['id']);
+
+		// And I click on the link 'copy password'
 		$this->click('js_wk_menu_secretcopy_button');
 
-		// I should see the passphrase dialog.
+		// Then I should see the passphrase dialog
 		$this->assertMasterPasswordDialog($user);
 
-		// When I enter my passphrase.
+		// When I enter my passphrase from keyboard only
+		// And I check the remember checkbox
 		$this->enterMasterPassword($user['MasterPassword'], true);
 
-		// Then I can see a success message telling me the password was copied to clipboard
-		$this->assertNotification('plugin_secret_copy_success');
+		// Then The password should have been copied to clipboard
+		$this->waitCompletion();
+		$this->assertClipboard($rsB['password']);
 
-		// Wait 20 seconds for all notifications to be cleared.
-		sleep(20);
+		// When I click on another password in the list
+		$rsC = Resource::get(array('user' => 'ada', 'id' => Uuid::get('resource.id.centos')));
+		$this->clickPassword($rsC['id']);
 
-		// When I click on the link 'copy password'
+		// And I click on the link 'copy password'
 		$this->click('js_wk_menu_secretcopy_button');
 
-		// Then I can see a success message telling me the password was copied to clipboard
-		$this->assertNotification('plugin_secret_copy_success');
+		// Then The password should have been copied to clipboard
+		$this->waitCompletion();
+		$this->assertClipboard($rsC['password']);
 
-		// No passphrase should have appeared.
-		$this->waitUntilIDontSee('passbolt-iframe-master-password');
 	}
 }

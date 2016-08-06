@@ -297,10 +297,10 @@ class UserWorkspaceTest extends PassboltTestCase {
 		// I fill the "app search" field with "tetris license"
 		$this->inputText('js_app_filter_keywords', $searchUser);
 		$this->click("#js_app_filter_form button[value='search']");
-		$this->waitCompletion();
+		$this->waitUntilISee('js_wsp_users_breadcrumb', "/Search : $searchUser/");
 
 		// I should see the view filtered with my search
-		$userBrowser = $this->findByCss('#js_wsp_users_browser .tableview-content');
+		$userBrowser = $this->find('#js_wsp_users_browser .tableview-content');
 		$this->assertElementContainsText(
 			$userBrowser,
 			$searchUser
@@ -343,7 +343,7 @@ class UserWorkspaceTest extends PassboltTestCase {
 		// And I filter the workspace by keywords
 		$this->inputText('js_app_filter_keywords', $searchUser);
 		$this->click("#js_app_filter_form button[value='search']");
-		$this->waitCompletion();
+		$this->waitUntilISee('js_wsp_users_breadcrumb', "/Search : $searchUser/");
 
 		// Then I should see the password unselected
 		$this->assertUserNotSelected($userId);
@@ -378,7 +378,7 @@ class UserWorkspaceTest extends PassboltTestCase {
 		// When I fill the "app search" field with "shared resource"
 		$this->inputText('js_app_filter_keywords', $searchUser);
 		$this->click("#js_app_filter_form button[value='search']");
-		$this->waitCompletion();
+		$this->waitUntilISee('js_wsp_users_breadcrumb', "/Search : $searchUser/");
 
 		// Then I should see the filter "All items" is selected.
 		$this->assertFilterIsSelected('js_users_wsp_filter_all');

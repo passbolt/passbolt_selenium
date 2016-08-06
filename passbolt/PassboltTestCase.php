@@ -18,7 +18,7 @@ class PassboltTestCase extends WebDriverTestCase {
 	protected $currentUsername = null;
 
 	// the cookies used to log the different user.
-	protected $loginCookies = array();
+	protected static $loginCookies = array();
 
 	/**
 	 * Called before the first test of the test case class is run
@@ -188,6 +188,26 @@ class PassboltTestCase extends WebDriverTestCase {
 		// Store the current username.
 		$this->currentUser = $user;
 
+		if (isset(self::$loginCookies[$this->currentUser['Username']])) {
+			$this->getUrl('login');
+			foreach(self::$loginCookies[$this->currentUser['Username']] as $cookie) {
+				$this->driver->manage()->addCookie($cookie);
+			}
+			// The application page mode needs to be restarted manually.
+			$this->getUrl('debug');
+			$this->click('initAppPagemod');
+			$this->getUrl('');
+			try {
+				$this->findbyCss('.logout');
+				$this->waitCompletion();
+				return;
+			} catch (Exception $e) {
+				// If not logged in, maybe the session expired.
+				// Or a test logged the user out.
+				// Try to login the normal way.
+			}
+		}
+
 		// If not on the login page, we redirect to it.
 		try {
 			$this->find('.users.login.form');
@@ -213,7 +233,7 @@ class PassboltTestCase extends WebDriverTestCase {
 		$this->waitCompletion();
 
 		// save the cookie
-		$this->loginCookies[$this->currentUser['Username']] = $this->driver->manage()->getCookies();
+		self::$loginCookies[$this->currentUser['Username']] = $this->driver->manage()->getCookies();
 	}
 
 	/**
@@ -262,9 +282,9 @@ class PassboltTestCase extends WebDriverTestCase {
 		}
 
 		// Same for the cookies.
-		if (!empty($this->loginCookies[$this->currentUser['Username']])) {
+		if (!empty(self::$loginCookies[$this->currentUser['Username']])) {
 			$this->getUrl('/auth/login');
-			foreach($this->loginCookies[$this->currentUser['Username']] as $cookie) {
+			foreach(self::$loginCookies[$this->currentUser['Username']] as $cookie) {
 				$this->driver->manage()->addCookie($cookie);
 			}
 		}
@@ -1040,6 +1060,7 @@ class PassboltTestCase extends WebDriverTestCase {
 			'processing'
 		);
 		$this->goOutOfIframe();
+		$this->waitUntilIDontSee('passbolt-iframe-master-password');
 	}
 
     /**
@@ -1080,7 +1101,6 @@ class PassboltTestCase extends WebDriverTestCase {
 		$this->rightClickPassword($resource['id']);
 		$this->waitUntilISee('js_contextual_menu');
 		$this->clickLink('Copy password');
-		sleep(2);
 		$this->assertMasterPasswordDialog($user);
 		$this->enterMasterPassword($user['MasterPassword']);
 		$this->assertNotification('plugin_secret_copy_success');
@@ -1290,6 +1310,7 @@ class PassboltTestCase extends WebDriverTestCase {
 	/********************************************************************************
 	 * Passbolt Application Asserts
 	 ********************************************************************************/
+
 	/**
 	 * Wait until the url match a pattern
 	 * @param string $url
@@ -1313,6 +1334,57 @@ class PassboltTestCase extends WebDriverTestCase {
 		$backtrace = debug_backtrace();
 		$currentUrl = $this->driver->getCurrentURL();
 		throw new Exception( "waitUntilURLMatches $url : Timeout thrown by " . $backtrace[1]['class'] . "::" . $backtrace[1]['function'] . "()\n . element: $url \n . current url : $currentUrl \n");
+	}
+
+	/**
+	 * Wait until the css value is equal
+	 * @param string $selector
+	 * @param string $name
+	 * @param string $expectedValue
+	 * @param int $timeout
+	 * @return bool
+	 * @throws Exception
+	 */
+	public function waitUntilCssValueEqual($selector, $name, $expectedValue, $timeout = 10) {
+		$elt = $this->find($selector);
+
+		for ($i = 0; $i < $timeout * 10 * 10; $i++) {
+			try {
+				$value = $elt->getCssValue($name);
+				$this->assertEquals($value, $expectedValue);
+				return true;
+			}
+			catch (Exception $e) {}
+
+			// If none of the above was found, wait for 1/10 seconds, and try again.
+			usleep(100000);
+		}
+
+		$backtrace = debug_backtrace();
+		throw new Exception("waitUntilCssValueEqual $name: $expectedValue Timeout thrown by " . $backtrace[1]['class'] . "::" . $backtrace[1]['function'] . "() \n");
+	}
+
+	/**
+	 * Wait until the element has focus
+	 * @param string $id
+	 * @param int $timeout
+	 * @return bool
+	 * @throws Exception
+	 */
+	public function waitUntilElementHasFocus($id, $timeout = 10) {
+		for ($i = 0; $i < $timeout * 10 * 10; $i++) {
+			try {
+				$this->assertElementHasFocus($id);
+				return true;
+			}
+			catch (Exception $e) {}
+
+			// If none of the above was found, wait for 1/10 seconds, and try again.
+			usleep(100000);
+		}
+
+		$backtrace = debug_backtrace();
+		throw new Exception("waitUntilElementHasFocus $id Timeout thrown by " . $backtrace[1]['class'] . "::" . $backtrace[1]['function'] . "() \n");
 	}
 
 	/**
@@ -1438,33 +1510,39 @@ class PassboltTestCase extends WebDriverTestCase {
 	 */
 	public function assertSecurityToken($user, $context = null)
 	{
-		$this->assertVisible('.security-token');
-
 		// check base color
-		$t = $this->findByCss('.security-token');
-		$this->assertElementContainsText($t, $user['TokenCode']);
-		$this->assertEquals(Color::toHex($t->getCssValue("background-color")), $user['TokenColor']);
-		$this->assertEquals(Color::toHex($t->getCssValue("color")), $user['TokenTextColor']);
-
+		$securityTokenElt = $this->findByCss('.security-token');
+		$this->assertElementContainsText($securityTokenElt, $user['TokenCode']);
+		$this->waitUntilCssValueEqual($securityTokenElt, 'background-color', Color::toRgba($user['TokenColor']), 2);
+		$this->waitUntilCssValueEqual($securityTokenElt, 'color', Color::toRgba($user['TokenTextColor']), 2);
 
 		if ($context != 'has_encrypted_secret') {
 			// check color switch when input is selected
-			if (isset($context) && $context == 'master') {
-				$this->click('js_master_password');
-			} else if ($context == 'login') {
-				$this->click('js_master_password');
-			} else if ($context == 'share') {
-				$this->click('js_perm_create_form_aro_auto_cplt');
+			switch ($context) {
+				case 'master':
+					$this->waitUntilElementHasFocus('js_master_password_focus_first');
+					$this->waitUntilISee('js_master_password');
+					$this->click('js_master_password');
+					break;
+				case 'login':
+					$this->waitUntilISee('js_master_password');
+					$this->click('js_master_password');
+					break;
+				case 'share':
+					$this->waitUntilISee('js_perm_create_form_aro_auto_cplt');
+					$this->click('js_perm_create_form_aro_auto_cplt');
+					break;
+				default:
+					$this->waitUntilISee('js_secret');
+					$this->click('js_secret');
+					break;
 			}
-			else {
-				$this->click('js_secret');
-			}
-			$t = $this->findByCss('.security-token');
-			$this->assertEquals(Color::toHex($t->getCssValue("background-color")), $user['TokenTextColor']);
-			$this->assertEquals(Color::toHex($t->getCssValue("color")), $user['TokenColor']);
+
+			$this->waitUntilCssValueEqual($securityTokenElt, 'background-color', Color::toRgba($user['TokenTextColor']), 2);
+			$this->waitUntilCssValueEqual($securityTokenElt, 'color', Color::toRgba($user['TokenColor']), 2);
 
 			// back to normal
-			$this->click('.security-token');
+			$securityTokenElt->click('.security-token');
 		}
 	}
 
@@ -1576,8 +1654,7 @@ class PassboltTestCase extends WebDriverTestCase {
 		$this->appendHtmlInPage('container', '<textarea id="webdriver-clipboard-content" style="position:absolute; top:0; left:0; z-index:999;"></textarea>');
 		$e = $this->findById('webdriver-clipboard-content');
 		$e->click();
-		$action = new WebDriverActions($this->driver);
-		$action->sendKeys($e, array(WebDriverKeys::CONTROL,'v'))->perform();
+		$e->sendKeys(array(WebDriverKeys::CONTROL, 'v'));
 		$this->assertTrue($e->getAttribute('value') == $content);
 		$this->removeElementFromPage('webdriver-clipboard-content');
 	}

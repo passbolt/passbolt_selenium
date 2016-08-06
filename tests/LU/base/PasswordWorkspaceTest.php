@@ -356,6 +356,7 @@ class PasswordWorkspaceTest extends PassboltTestCase
 
 	    // When I go Back to All items.
 	    $this->clickLink("All items");
+		$this->waitCompletion();
 
         // And I click on the favorite red star located before the password (the password has to be a favorite)
 		$this->clickPasswordFavorite($resourceId);
@@ -425,7 +426,7 @@ class PasswordWorkspaceTest extends PassboltTestCase
         // I fill the "app search" field with "shared resource"
         $this->inputText('js_app_filter_keywords', $searchPwd);
         $this->click("#js_app_filter_form button[value='search']");
-        $this->waitCompletion();
+		$this->waitUntilISee('js_wsp_password_breadcrumb', "/Search : $searchPwd/");
 
         // I should see the view filtered with my search
         $this->assertElementContainsText(
@@ -469,7 +470,7 @@ class PasswordWorkspaceTest extends PassboltTestCase
 		// And I filter the workspace by keywords
 		$this->inputText('js_app_filter_keywords', $searchPwd);
 		$this->click("#js_app_filter_form button[value='search']");
-		$this->waitCompletion();
+		$this->waitUntilISee('js_wsp_password_breadcrumb', "/Search : $searchPwd/");
 
 		// Then I should see the password unselected
 		$this->assertPasswordNotSelected($resourceId);
@@ -503,7 +504,7 @@ class PasswordWorkspaceTest extends PassboltTestCase
 		// When I fill the "app search" field with "shared resource"
 		$this->inputText('js_app_filter_keywords', $searchPwd);
 		$this->click("#js_app_filter_form button[value='search']");
-		$this->waitCompletion();
+		$this->waitUntilISee('js_wsp_password_breadcrumb', "/Search : $searchPwd/");
 
 		// Then I should see the filter "All items" is selected.
 		$this->assertFilterIsSelected('js_pwd_wsp_filter_all');

@@ -195,7 +195,7 @@ class RecoverTest extends PassboltSetupTestCase {
 		$this->waitUntilISee('#js_step_title', '/Account recovery/i');
 
 		// Wait for the server key to be retrieved.
-		sleep(2);
+		$this->waitUntilISee('.why-plugin-wrapper', '/I\'ve checked/i');
 
 		// Check box domain check.
 		$this->checkCheckbox('js_setup_domain_check');
@@ -267,7 +267,7 @@ class RecoverTest extends PassboltSetupTestCase {
 		$this->waitUntilISee('#js_step_title', '/Account recovery/i');
 
 		// Wait for the server key to be retrieved.
-		sleep(2);
+		$this->waitUntilISee('.why-plugin-wrapper', '/I\'ve checked/i');
 
 		// Check box domain check.
 		$this->checkCheckbox('js_setup_domain_check');

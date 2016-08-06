@@ -101,7 +101,8 @@ class SetupTest extends PassboltSetupTestCase {
 		$this->waitForSection('domain_check');
 		// Assert menu is selected.
 		$this->assertMenuIsSelected($this->getSectionInfo('domain_check', 'menu_item'));
-		sleep(2);
+		// Give it time to load the server key.
+		$this->waitUntilISee('.why-plugin-wrapper', '/I\'ve checked/i');
 		// Check box domain check.
 		$this->checkCheckbox('js_setup_domain_check');
 		// Click Next.
@@ -116,7 +117,8 @@ class SetupTest extends PassboltSetupTestCase {
 		$this->waitForSection('domain_check');
 		// Assert menu is selected.
 		$this->assertMenuIsSelected($this->getSectionInfo('domain_check', 'menu_item'));
-		sleep(2);
+		// Wait the server key to be retrieved
+		$this->waitUntilISee('.why-plugin-wrapper', '/I\'ve checked/i');
 		// Check box domain check.
 		$this->checkCheckbox('js_setup_domain_check');
 		// Click Next.
@@ -197,7 +199,6 @@ class SetupTest extends PassboltSetupTestCase {
 		$this->resetDatabase();
 	}
 
-
 	/**
 	 * Scenario     As an AP using the setup, I should be able to go through all the steps of the setup
 	 * Given        I am registered and on the first page of the setup
@@ -271,7 +272,7 @@ class SetupTest extends PassboltSetupTestCase {
 		// Wait
 		$this->waitForSection('domain_check');
 		// Wait for the server key to be retrieved.
-		sleep(2);
+		$this->waitUntilISee('.why-plugin-wrapper', '/I\'ve checked/i');
 		// Check box domain check.
 		$this->checkCheckbox('js_setup_domain_check');
 		// Click Next.
@@ -480,7 +481,6 @@ class SetupTest extends PassboltSetupTestCase {
 		$this->resetDatabase();
 	}
 
-
 	/**
 	 * Scenario:    As AP doing the setup, I should not be able to import a key already used by another user.
 	 * Given    I have registered and I am following the setup
@@ -503,7 +503,7 @@ class SetupTest extends PassboltSetupTestCase {
 		$this->waitForSection('domain_check');
 
 		// Wait for the server key to be retrieved.
-		sleep(2);
+		$this->waitUntilISee('.why-plugin-wrapper', '/I\'ve checked/i');
 
 		// Check box domain check.
 		$this->checkCheckbox('js_setup_domain_check');
@@ -586,7 +586,7 @@ class SetupTest extends PassboltSetupTestCase {
 		$this->waitForSection('domain_check');
 
 		// Wait for the server key to be retrieved.
-		sleep(2);
+		$this->waitUntilISee('.why-plugin-wrapper', '/I\'ve checked/i');
 
 		// Check box domain check.
 		$this->checkCheckbox('js_setup_domain_check');

@@ -1117,6 +1117,7 @@ class PasswordShareTest extends PassboltTestCase
 
 		// When restart the browser
 		$this->restartBrowser();
+		$this->waitCompletion();
 
 		// And I go to the sharing dialog of a password I own
 		$resource = Resource::get(array(

@@ -148,7 +148,7 @@ class PassboltSetupTestCase extends PassboltTestCase {
 		$this->assertEquals(Config::read('passbolt.url'), $domain);
 
 		// Give it time to load the server key.
-		sleep(2);
+		$this->waitUntilISee('.why-plugin-wrapper', '/I\'ve checked/i');
 
 		// Test that the server key fingerprint is correct.
 		$serverKey = $this->findById("js_setup_key_fingerprint")->getAttribute('value');

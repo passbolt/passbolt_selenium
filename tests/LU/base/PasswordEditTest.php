@@ -1437,6 +1437,7 @@ class PasswordEditTest extends PassboltTestCase
 
 		// When restart the browser
 		$this->restartBrowser();
+		$this->waitCompletion();
 
 		// Then I should be able to edit a password
 		$r1 = Resource::get(array(

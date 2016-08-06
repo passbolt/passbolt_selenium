@@ -253,18 +253,42 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
 
     /**
      * A generic find, try by id, then css
-     * @param $id string id or css
+     * @param mixed $selector Element or selector string
+	 * @return Object
      */
-    public function find($id) {
-        try {
-            $element = $this->driver->findElement(WebDriverBy::id($id));
-        } catch (NoSuchElementException $e) {
-            try {
-                $element = $this->driver->findElement(WebDriverBy::cssSelector($id));
-            } catch (NoSuchElementException $e) {
-                $this->fail('Cannot find element: ' . $id);
-            }
-        }
+    public function find($selector) {
+		$element = null;
+
+		// If the given selector is already an element.
+		if (is_object($selector)) {
+			return $selector;
+		}
+
+		// Could the selector be an identifier
+		$matches = [];
+		if (preg_match('/^[#]?([^\.\s]*)$/', $selector, $matches)) {
+			try {
+				$id = $matches[1];
+				$element = $this->driver->findElement(WebDriverBy::id($id));
+			} catch (Exception $e) {
+				// error treated later
+			}
+		}
+
+		// If the element selector looked liked an id but wasn't found
+		// or was not an id like, try to search by css
+		if (is_null($element)) {
+			try {
+				$element = $this->driver->findElement(WebDriverBy::cssSelector($selector));
+			} catch (Exception $e) {
+				// error treated later
+			}
+		}
+
+		if (is_null($element)) {
+			$this->fail('Cannot find element: ' . $selector);
+		}
+
         return $element;
     }
 
@@ -347,17 +371,12 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
 
     /**
      * Click on an element defined by its Id or CSS selector
-     * @param $id string
+     * @param $selector selector|element
 	 * @throw NoSuchElementException
      */
-    public function click($id) {
-		try {
-			$element = $this->driver->findElement(WebDriverBy::id($id));
-			$element->click();
-		} catch (NoSuchElementException $e) {
-			$element = $this->driver->findElement(WebDriverBy::cssSelector($id));
-			$element->click();
-		}
+    public function click($selector) {
+		$elt = $this->find($selector);
+		$elt->click();
     }
 
     /**
@@ -653,7 +672,6 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
         $activeElt = $this->driver->switchTo()->activeElement();
         $activeId = $activeElt->getAttribute('id');
         $this->assertEquals($id, $activeId);
-        $this->driver->switchTo()->defaultContent();
     }
 
     /**

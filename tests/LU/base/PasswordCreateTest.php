@@ -814,6 +814,7 @@ class PasswordCreateTest extends PassboltTestCase
 
         // When restart the browser
         $this->restartBrowser();
+        $this->waitCompletion();
 
         // Then I should be able to create a password
         $password = array(
