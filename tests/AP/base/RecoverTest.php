@@ -286,7 +286,7 @@ class RecoverTest extends PassboltSetupTestCase {
 		$this->clickLink('Next');
 
 		// I should see an error message.
-		$this->waitUntilISee('#KeyErrorMessage', '/There is no user associated with this key/');
+		$this->waitUntilISee('#KeyErrorMessage', '/This key doesn\' match any account/');
 
 		// Database has changed, we reset database.
 		$this->resetDatabase();
