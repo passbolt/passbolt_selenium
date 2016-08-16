@@ -11,4 +11,6 @@ return array(
     $vendorDir . '/phpunit/php-code-coverage',
     $vendorDir . '/phpunit/phpunit',
     $vendorDir . '/symfony/yaml',
+    $vendorDir . '/phpunit/phpunit-selenium',
+    $vendorDir . '/appium/php-client',
 );
