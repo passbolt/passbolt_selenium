@@ -35,8 +35,9 @@ require_once('lib/ImageCompare/src/imagecollection.php');
 require_once('lib/ImageCompare/src/imagepixelmatrix.php');
 require_once('lib/ImageCompare/src/pixel.php');
 
-
-
+// Saucelabs
+require_once('vendor/sauce/sausage/src/Sauce/Sausage/SauceMethods.php');
+require_once('vendor/sauce/sausage/src/Sauce/Sausage/SauceAPI.php');
 
 // Test case redefinition
 require_once('WebDriverTestCase.php');

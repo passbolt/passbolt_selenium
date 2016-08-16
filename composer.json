@@ -1,43 +1,49 @@
 {
-  "name": "Passbolt_Selenium",
-  "version": "0.0.1",
-  "keywords": ["passbolt", "selenium", "php"],
-  "description": "Passbolt selenium tests",
-  "license": "AGPL-3.0",
-  "homepage": "https://www.passbolt.com",
-  "authors": [
-	{
-	  "name": "Kevin Muller",
-	  "email": "kevin@passbolt.com",
-	  "role": "Developer"
-	},
-	{
-	  "name": "Remy Bertot",
-	  "email": "remy@passbolt.com",
-	  "role": "Developer"
-	},
-	{
-	  "name": "Cédric Alfonsi",
-	  "email": "cedric@passbolt.com",
-	  "role": "Developer"
-	}
-  ],
-  "support": {
-	"issues": "https://github.com/passbolt/passbolt",
-	"forum": "https://github.com/passbolt/passbolt",
-	"source": "https://github.com/passbolt/passbolt"
-  },
-  "config": {
-	"vendor-dir": "passbolt/vendor"
-  },
-  "require": {
-	"php": ">=5.3.19",
-	"nategood/httpful": "*"
-  },
-  "require-dev": {
-	"phpunit/phpunit": "3.7.*"
-  },
-  "autoload": {
-	"classmap": ["lib/"]
-  }
+    "name": "Passbolt_Selenium",
+    "version": "0.0.1",
+    "keywords": [
+        "passbolt",
+        "selenium",
+        "php"
+    ],
+    "description": "Passbolt selenium tests",
+    "license": "AGPL-3.0",
+    "homepage": "https://www.passbolt.com",
+    "authors": [
+        {
+            "name": "Kevin Muller",
+            "email": "kevin@passbolt.com",
+            "role": "Developer"
+        },
+        {
+            "name": "Remy Bertot",
+            "email": "remy@passbolt.com",
+            "role": "Developer"
+        },
+        {
+            "name": "Cédric Alfonsi",
+            "email": "cedric@passbolt.com",
+            "role": "Developer"
+        }
+    ],
+    "support": {
+        "issues": "https://github.com/passbolt/passbolt",
+        "forum": "https://github.com/passbolt/passbolt",
+        "source": "https://github.com/passbolt/passbolt"
+    },
+    "config": {
+        "vendor-dir": "passbolt/vendor"
+    },
+    "require": {
+        "php": ">=5.3.19",
+        "nategood/httpful": "*",
+        "sauce/sausage": ">=0.15.2"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "3.7.*",
+        "brianium/paratest": "dev-master"
+    },
+    "autoload": {
+        "classmap": ["lib/"]
+    }
 }

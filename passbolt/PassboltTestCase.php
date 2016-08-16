@@ -25,6 +25,45 @@ class PassboltTestCase extends WebDriverTestCase {
 	 */
 	public static function setUpBeforeClass() {
 		PassboltServer::resetDatabase(Config::read('passbolt.url'));
+
+	}
+
+	public static function reserveInstance() {
+		//TODO: remove file if doesn't match config.
+		$instancesConfig = Config::read('passbolt.instances');
+		$instancesFilePath = ROOT . DS . 'tmp' . DS . 'instances.json';
+
+		if (file_exists($instancesFilePath)) {
+			$instancesState = file_get_contents($instancesFilePath);
+			$instancesState = json_decode($instancesState, true);
+		}
+		else {
+			foreach($instancesConfig as $instance ) {
+				$instancesState[$instance] = 0;
+			}
+		}
+
+		foreach($instancesState as $instanceUrl => $instanceLocked) {
+			if($instanceLocked == 0) {
+				$instancesState[$instanceUrl] = 1;
+				file_put_contents($instancesFilePath, json_encode($instancesState));
+				Config::write('passbolt.url', $instanceUrl);
+				echo "Reserve instance $instanceUrl";
+				return $instanceUrl;
+			}
+		}
+
+		throw new Exception('could not find an available instance');
+
+	}
+
+	public static function releaseInstance() {
+		$instancesFilePath = ROOT . DS . 'tmp' . DS . 'instances.json';
+		$instancesState = file_get_contents($instancesFilePath);
+		$instancesState = json_decode($instancesState, true);
+		$instancesState[Config::read('passbolt.url')] = 0;
+		echo "Release instance " . Config::read('passbolt.url');
+		file_put_contents($instancesFilePath, json_encode($instancesState));
 	}
 
 	/**
@@ -32,6 +71,8 @@ class PassboltTestCase extends WebDriverTestCase {
 	 */
 	protected function setUp() {
 		parent::setUp();
+		self::reserveInstance();
+		echo "> start test: " . Config::read('passbolt.url');
 		$this->driver->manage()->window()->maximize();
 
 	}
@@ -41,6 +82,7 @@ class PassboltTestCase extends WebDriverTestCase {
 	 */
 	protected function tearDown() {
 		parent::tearDown();
+		self::releaseInstance();
 		if ($this->resetDatabase) {
 			PassboltServer::resetDatabase(Config::read('passbolt.url'));
 		}

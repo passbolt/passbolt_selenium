@@ -22,6 +22,10 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
     protected $_quit;
     protected $_failing;
 
+	// Saucelab job.
+	protected $sauceAPI;
+	protected $sauceLabJob;
+
     /********************************************************************************
      * Pre/Post Tests Execution Callback
      ********************************************************************************/
@@ -33,7 +37,18 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
         $this->_quit = getenv('QUIT');
         $this->_failing = null;
 		$this->initBrowser();
+	    // TODO: condition, has to run on saucelab only.
+	    $this->sauceAPI = new Sauce\Sausage\SauceAPI('passbolt', '688b92b6-6d74-40b9-9d03-15b97124a666');
+	    $this->sauceLabJob = $this->getSauceLabJob();
     }
+
+	/**
+	 * Get Saucelab latest job through rest API.
+	 * @return array Sauce lab job object.
+	 */
+	public function getSauceLabJob() {
+		return $this->sauceAPI->getJobs(0)['jobs'][0];
+	}
 
 	/**
 	 * Initialize the browser
@@ -43,7 +58,27 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
 		$this->_setBrowserConfig();
 		$this->_checkSeleniumConfig();
 		$capabilities = $this->_getCapabilities();
-		$this->driver = RemoteWebDriver::create(Config::read('selenium.url'), $capabilities);
+		$capabilities->setCapability('platform', 'Windows 10');
+		$capabilities->setCapability('version', '47.0');
+		$capabilities->setCapability('screenResolution', '1280x1024');
+		$capabilities->setCapability('name', $this->toString());
+		$capabilities->setCapability('build', time());
+//		$capabilities->setCapability('custom-data', json_encode([
+//					'server' => Config::read('passbolt.url'),
+//				]));
+		//print_r($capabilities);
+		//die();
+
+		// Build end point url.
+		$testServer = Config::read('testserver.default');
+		$serverUrl = Config::read("testserver.$testServer.url");
+		if ($testServer == 'saucelabs') {
+			$username = Config::read('testserver.saucelabs.username');
+			$key = Config::read('testserver.saucelabs.key');
+			$serverUrl = "http://$username:$key@$serverUrl";// Default format: http://passbolt:688b92b6-6d74-40b9-9d03-15b97124a666@ondemand.saucelabs.com:80/wd/hub
+		}
+
+		$this->driver = RemoteWebDriver::create($serverUrl, $capabilities, 120000, 120000);
 		// Redirect it immediately to an empty page, so we avoid the default firefox home page.
 		$this->driver->get('');
 	}
@@ -68,7 +103,22 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
             }
         }
 
+	    // TODO: condition saucelab.
+	    $this->updateTestStatus();
     }
+
+	/**
+	 * Update test status on saucelabs.
+	 */
+	public function updateTestStatus() {
+		if (isset($this->sauceLabJob) && is_array($this->sauceLabJob)) {
+			$this->sauceAPI->updateJob(
+				$this->sauceLabJob['id'],
+				array('passed' => $this->hasFailed() ? false : true)
+			);
+		}
+
+	}
 
     protected function assertPostConditions() {
         $this->_failing = false;
@@ -153,9 +203,11 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
      * @throws error No selenium config
      */
     private function _checkSeleniumConfig() {
-        $s = Config::read('selenium.url');
-        if(!isset($s)) {
-            $this->_error('ERROR No selenium configuration found.');
+        $s = Config::read('testserver');
+	    $default = Config::read('testserver.default');
+	    $url = Config::read("testserver.$default.url");
+        if(!isset($s) || !isset($url)) {
+            $this->_error('ERROR No testserver configuration found.');
         }
     }
 

@@ -16,6 +16,12 @@ $config = array (
 	'passbolt' => array (
 		'url' => 'http://localhost/passbolt',
 		'url_secondary' => 'http://localhost/passbolt:8082', // Used for multidomains.
+		'instances' => [
+			'http://192.168.99.100:8081',
+			'http://192.168.99.100:8082',
+			'http://192.168.99.100:8083',
+			'http://192.168.99.100:8084',
+		],
 		'server_key' => array(
             'fingerprint' => '2FC8945833C51946E937F9FED47B0811573EE67E',
             'path'        => GPG_SERVER . DS . 'unsecure.key'
@@ -31,9 +37,20 @@ $config = array (
 			)
 		)
 	),
-	// the base url of your selenium server
-	'selenium' => array (
-		'url' => 'http://localhost:4444/wd/hub'
+	// Configuration of the testserver.
+	'testserver' => array(
+		// Default can be either saucelabs or selenium.
+		'default' => 'saucelabs',
+		// Configuration for saucelabs.
+		'saucelabs' => array(
+			'url'       => 'ondemand.saucelabs.com:80/wd/hub',
+			'username'  => 'username',
+			'key'       => 'access_key',
+		),
+		// Configuration for custom selenium server.
+		'selenium' => array (
+			'url' => 'http://192.168.99.100:4444/wd/hub'
+		),
 	),
 	'browsers' => array (
 		'default' => 'firefox_with_passbolt_extension',
