@@ -22,6 +22,9 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
     protected $_quit;
     protected $_failing;
 
+	// Name of the current test.
+	public $testName;
+
 	// Saucelab job.
 	protected $sauceAPI;
 	protected $sauceLabJob;
@@ -36,6 +39,7 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
     protected function setUp() {
         $this->_quit = getenv('QUIT');
         $this->_failing = null;
+	    $this->testName = $this->toString();
 		$this->initBrowser();
 	    // TODO: condition, has to run on saucelab only.
 	    $this->sauceAPI = new Sauce\Sausage\SauceAPI('passbolt', '688b92b6-6d74-40b9-9d03-15b97124a666');
@@ -43,11 +47,17 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
     }
 
 	/**
-	 * Get Saucelab latest job through rest API.
+	 * Get saucelab job corresponding to current test through rest API.
 	 * @return array Sauce lab job object.
 	 */
 	public function getSauceLabJob() {
-		return $this->sauceAPI->getJobs(0)['jobs'][0];
+		$jobs = $this->sauceAPI->getJobs(0, null, 10)['jobs'];
+		foreach ($jobs as $job) {
+			if ($job['name'] == $this->testName) {
+				return $job;
+			}
+		}
+		return false;
 	}
 
 	/**
@@ -61,7 +71,7 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
 		$capabilities->setCapability('platform', 'Windows 10');
 		$capabilities->setCapability('version', '47.0');
 		$capabilities->setCapability('screenResolution', '1280x1024');
-		$capabilities->setCapability('name', $this->toString());
+		$capabilities->setCapability('name', $this->testName);
 		$capabilities->setCapability('build', time());
 //		$capabilities->setCapability('custom-data', json_encode([
 //					'server' => Config::read('passbolt.url'),
@@ -526,7 +536,7 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
             catch (Exception $e) {
                 // We do nothing
             }
-            usleep(100000); // Sleep 1/10 seconds
+            usleep(500000); // Sleep 1/2 seconds
         }
         $backtrace = debug_backtrace();
         throw new Exception( "waitUntilISee $id, $regexp : Timeout thrown by " . $backtrace[1]['class'] . "::" . $backtrace[1]['function'] . "()\n . element: $id ($regexp)");
@@ -567,7 +577,7 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
 
 
 			// If none of the above was found, wait for 1/10 seconds, and try again.
-			usleep(100000); // Sleep 1/10 seconds
+			usleep(500000); // Sleep 1/10 seconds
 		}
 
 		$backtrace = debug_backtrace();

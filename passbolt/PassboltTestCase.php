@@ -62,7 +62,7 @@ class PassboltTestCase extends WebDriverTestCase {
 		$instancesState = file_get_contents($instancesFilePath);
 		$instancesState = json_decode($instancesState, true);
 		$instancesState[Config::read('passbolt.url')] = 0;
-		echo "Release instance " . Config::read('passbolt.url');
+		//echo "Release instance " . Config::read('passbolt.url');
 		file_put_contents($instancesFilePath, json_encode($instancesState));
 	}
 
