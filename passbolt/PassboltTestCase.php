@@ -73,11 +73,11 @@ class PassboltTestCase extends WebDriverTestCase {
 	 * Executed before every tests
 	 */
 	protected function setUp() {
-		parent::setUp();
+		// Reserve instance before anything else.
 		self::reserveInstance();
-		//echo "> start test: " . Config::read('passbolt.url');
-		$this->driver->manage()->window()->maximize();
 
+		// Setup test.
+		parent::setUp();
 	}
 
 	/**

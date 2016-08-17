@@ -41,6 +41,9 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
         $this->_failing = null;
 	    $this->testName = $this->toString();
 		$this->initBrowser();
+	    // Maximize window.
+	    $this->driver->manage()->window()->maximize();
+
 	    // TODO: condition, has to run on saucelab only.
 	    $this->sauceAPI = new Sauce\Sausage\SauceAPI('passbolt', '688b92b6-6d74-40b9-9d03-15b97124a666');
 	    $this->sauceLabJob = $this->getSauceLabJob();
