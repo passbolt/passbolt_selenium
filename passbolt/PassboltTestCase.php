@@ -25,7 +25,11 @@ class PassboltTestCase extends WebDriverTestCase {
 	 */
 	public static function setUpBeforeClass() {
 		PassboltServer::resetDatabase(Config::read('passbolt.url'));
+	}
 
+	protected function onNotSuccessfulTest(Exception $e) {
+		PassboltServer::resetDatabase(Config::read('passbolt.url'));
+		parent::onNotSuccessfulTest($e);
 	}
 
 	public static function reserveInstance() {
@@ -48,7 +52,6 @@ class PassboltTestCase extends WebDriverTestCase {
 				$instancesState[$instanceUrl] = 1;
 				file_put_contents($instancesFilePath, json_encode($instancesState));
 				Config::write('passbolt.url', $instanceUrl);
-				echo "Reserve instance $instanceUrl";
 				return $instanceUrl;
 			}
 		}
@@ -72,7 +75,7 @@ class PassboltTestCase extends WebDriverTestCase {
 	protected function setUp() {
 		parent::setUp();
 		self::reserveInstance();
-		echo "> start test: " . Config::read('passbolt.url');
+		//echo "> start test: " . Config::read('passbolt.url');
 		$this->driver->manage()->window()->maximize();
 
 	}
