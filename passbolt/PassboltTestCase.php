@@ -24,11 +24,13 @@ class PassboltTestCase extends WebDriverTestCase {
 	 * Called before the first test of the test case class is run
 	 */
 	public static function setUpBeforeClass() {
+		self::logFile(">> ResetDatabase " . Config::read('passbolt.url'));
 		PassboltServer::resetDatabase(Config::read('passbolt.url'));
 	}
 
 	protected function onNotSuccessfulTest(Exception $e) {
 		self::logFile("# Error (" . $this->testName . ")");
+		self::logFile("> ResetDatabase " . Config::read('passbolt.url') . "(" . $this->testName . ")");
 		PassboltServer::resetDatabase(Config::read('passbolt.url'));
 		parent::onNotSuccessfulTest($e);
 	}
@@ -48,6 +50,7 @@ class PassboltTestCase extends WebDriverTestCase {
 	protected function tearDown() {
 		// Reset the database if mentioned.
 		if ($this->resetDatabase) {
+			self::logFile("> ResetDatabase " . Config::read('passbolt.url') . "(" . $this->testName . ")");
 			PassboltServer::resetDatabase(Config::read('passbolt.url'));
 		}
 
