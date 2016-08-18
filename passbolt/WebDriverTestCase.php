@@ -83,16 +83,21 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
 		$this->_setBrowserConfig();
 		$this->_checkSeleniumConfig();
 		$capabilities = $this->_getCapabilities();
-		$capabilities->setCapability('platform', 'Windows 10');
-		$capabilities->setCapability('version', '47.0');
-		$capabilities->setCapability('screenResolution', '1280x1024');
-		$capabilities->setCapability('name', $this->testName);
-		$capabilities->setCapability('build', time());
-		// TODO : define this in config file.
-		$capabilities->setCapability('videoUploadOnPass', false);
-		$capabilities->setCapability('recordVideo', false);
-		$capabilities->setCapability('recordScreenshots', false);
-		$capabilities->setCapability('recordLogs', false);
+
+		// TODO: move this in config.
+		if ($this->_saucelabs) {
+			$capabilities->setCapability('platform', 'Windows 10');
+			$capabilities->setCapability('version', '47.0');
+			$capabilities->setCapability('screenResolution', '1280x1024');
+			$capabilities->setCapability('name', $this->testName);
+			// TODO: define build number.
+			$capabilities->setCapability('build', time());
+			// TODO : define this in config file.
+			$capabilities->setCapability('videoUploadOnPass', false);
+			$capabilities->setCapability('recordVideo', false);
+			$capabilities->setCapability('recordScreenshots', false);
+			$capabilities->setCapability('recordLogs', false);
+		}
 
 		// Build end point url.
 		$serverUrl = $this->getTestServerUrl();

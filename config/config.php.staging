@@ -2,24 +2,31 @@
 /**
  * Passbolt Selenium Config
  *
- * @copyright (c) 2015-present Bolt Softwares Pvt Ltd
- * @licence GNU Affero General Public License http://www.gnu.org/licenses/agpl-3.0.en.html
+ * @copyright (c) 2015-present Bolt Software Pvt. Ltd.
+ * @licence GPLv3 onwards www.gnu.org/licenses/gpl-3.0.en.html
  */
 $config = array (
-	// the base url to use to access this app
 	'testsuite' => array(
+		// the base url to use to access this app
 		'url' => 'http://52.32.88.103/passbolt_selenium',
 		// path to access the testsuite files from the running firefox.
-        'path' => DS . 'home' . DS . 'passbolt_selenium'
+		'path' => DS . 'home' . DS . 'passbolt_selenium',
 	),
 	// the url of your passbolt app
 	'passbolt' => array (
-		'url' => 'http://52.32.88.103:8081',
-		'url_secondary' => 'http://52.32.88.103:8082',
+		'url' => 'http://52.32.88.103:8083',
+		'url_secondary' => 'http://52.32.88.103:8084', // Used for multidomains.
+		'instances' => [
+			'http://52.32.88.103:8083',
+			'http://52.32.88.103:8084',
+			'http://52.32.88.103:8085',
+			'http://52.32.88.103:8086',
+			'http://52.32.88.103:8087',
+		],
 		'server_key' => array(
-            'fingerprint' => '2FC8945833C51946E937F9FED47B0811573EE67E',
-            'path'        => GPG_SERVER . DS . 'unsecure.key'
-        ),
+			'fingerprint' => '2FC8945833C51946E937F9FED47B0811573EE67E',
+			'path'        => GPG_SERVER . DS . 'unsecure.key'
+		),
 		'registration' => array(
 			'public' => TRUE
 		),
@@ -31,15 +38,25 @@ $config = array (
 			)
 		)
 	),
-	// the base url of your selenium server
-	'selenium' => array (
-		'url' => 'http://52.32.88.103:4444/wd/hub'
+	'testserver' => array(
+		'default' => 'saucelabs',
+		'saucelabs' => array(
+			'url'       => 'ondemand.saucelabs.com:80/wd/hub',
+			'username'  => 'passbolt',
+			'key'       => '688b92b6-6d74-40b9-9d03-15b97124a666',
+		),
+		// the base url of your selenium server
+		'selenium' => array (
+			'url' => 'http://52.32.88.103:4444/wd/hub'
+		),
 	),
 	'browsers' => array (
 		'default' => 'firefox_with_passbolt_extension',
 		'firefox_with_passbolt_extension' => array(
 			'name' => 'Firefox with Passbolt extension',
 			'type' => 'firefox',
+			'platform' => 'Windows 10',
+			'version' => '47.0',
 			'extensions' => array(
 				'data/extensions/passbolt-firefox-addon.xpi'
 			)
