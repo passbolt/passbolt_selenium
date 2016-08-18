@@ -32,6 +32,9 @@ class PasswordEditDescriptionTest extends PassboltTestCase {
 	 * @throws Exception
 	 */
 	public function testDescriptionEditButton() {
+		// Reset database at the end of test.
+		$this->resetDatabaseWhenComplete();
+
 		// Given I am Ada
 		$user = User::get('ada');
 		$this->setClientConfig($user);
@@ -81,9 +84,6 @@ class PasswordEditDescriptionTest extends PassboltTestCase {
 
 		// And check that the new description is shown.
 		$this->assertElementContainsText('#js_rs_details_description', 'this is a test description');
-
-		// Reset database since we modified it.
-		$this->resetDatabase();
 	}
 
 	/**
@@ -104,6 +104,9 @@ class PasswordEditDescriptionTest extends PassboltTestCase {
 	 * @throws Exception
 	 */
 	public function testDescriptionEditClick() {
+		// Reset database at the end of test.
+		$this->resetDatabaseWhenComplete();
+
 		// Given I am Ada
 		$user = User::get('ada');
 		$this->setClientConfig($user);
@@ -150,9 +153,6 @@ class PasswordEditDescriptionTest extends PassboltTestCase {
 
 		// And check that the new description reflects in the sidebar.
 		$this->assertElementContainsText('#js_rs_details_description', 'this is a test description');
-
-		// Reset database since we modified it.
-		$this->resetDatabase();
 	}
 
 	/**

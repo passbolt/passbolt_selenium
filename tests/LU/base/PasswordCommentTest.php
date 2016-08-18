@@ -32,6 +32,9 @@ class PasswordCommentTest extends PassboltTestCase {
 	 * Then         I should see the new comment in the comments list
 	 */
 	public function testCommentAdd() {
+		// Reset database at the end of test.
+		$this->resetDatabaseWhenComplete();
+
 		$comments = [
 			'this is a comment',
 			'reply to the first comment',
@@ -79,9 +82,6 @@ class PasswordCommentTest extends PassboltTestCase {
 			$this->find('#js_rs_details_comments_list'),
 			$comments[0]
 		);
-
-		// Reset database.
-		$this->resetDatabase();
 	}
 
 	/**
@@ -147,6 +147,9 @@ class PasswordCommentTest extends PassboltTestCase {
 	 * And              I should see the comment form shown again
 	 */
 	public function testCommentDelete() {
+		// Reset database at the end of test.
+		$this->resetDatabaseWhenComplete();
+
 		// Given I am Ada
 		$user = User::get('ada');
 		$this->setClientConfig($user);
@@ -191,8 +194,6 @@ class PasswordCommentTest extends PassboltTestCase {
 			'this is a test comment'
 		);
 		$this->assertVisible($this->commentFormSelector);
-
-		$this->resetDatabase();
 	}
 
 	/**
@@ -209,6 +210,9 @@ class PasswordCommentTest extends PassboltTestCase {
 	 * And              I should not see the delete button
 	 */
 	public function testCommentDeleteOnlyOwner() {
+		// Reset database at the end of test.
+		$this->resetDatabaseWhenComplete();
+
 		// Given I am Ada
 		$user = User::get('ada');
 		$this->setClientConfig($user);
@@ -244,8 +248,6 @@ class PasswordCommentTest extends PassboltTestCase {
 		// I should not see the delete button.
 		$this->assertNotVisible($buttonDeleteSelector);
 
-		// Reset database after modifications.
-		$this->resetDatabase();
 	}
 
 	/**
@@ -264,6 +266,8 @@ class PasswordCommentTest extends PassboltTestCase {
 	 * And          I should see that the email containe the comment content
 	 */
 	public function testCommentAddEmailNotification() {
+		// Reset database at the end of test.
+		$this->resetDatabaseWhenComplete();
 
 		// Define comment.
 		$comment = 'this is a comment';
@@ -308,8 +312,5 @@ class PasswordCommentTest extends PassboltTestCase {
 			'bodyTable',
 			$comment
 		);
-
-		// Reset database after modifications.
-		$this->resetDatabase();
 	}
 }

@@ -13,6 +13,7 @@ class SetupTest extends PassboltSetupTestCase {
 	 * Scenario:  As AN and freshly self registered user, I receive an email that invite me to setup passbolt.
 	 */
 	public function testCanSeeRegistrationEmail() {
+		$this->resetDatabaseWhenComplete();
 		// Register John Doe as a user.
 		$this->getUrl('register');
 		$this->inputText('ProfileFirstName','John');
@@ -26,7 +27,6 @@ class SetupTest extends PassboltSetupTestCase {
 		$this->assertMetaTitleContains('Welcome to passbolt, John!');
 		// Assert I can see the text "You just opened an account on passbolt"
 		$this->assertPageContainsText('You just opened an account on passbolt at');
-		$this->resetDatabase();
 	}
 
 	/**
@@ -41,6 +41,9 @@ class SetupTest extends PassboltSetupTestCase {
 	 * And        I should see that the second menu item on the left is deactivated
 	 */
 	public function testCanSeeSetupPage() {
+		// Reset database at the end of test.
+		$this->resetDatabaseWhenComplete();
+
 		// Register John Doe as a user.
 		$this->getUrl('register');
 		$this->inputText('ProfileFirstName','John');
@@ -63,9 +66,6 @@ class SetupTest extends PassboltSetupTestCase {
 			$this->findByCss('.plugin-check-wrapper .plugin-check.error'),
 			'An add-on is required to use passbolt.'
 		);
-
-		// Since content was edited, we reset the database
-		$this->resetDatabase();
 	}
 
 	/**

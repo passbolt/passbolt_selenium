@@ -18,6 +18,9 @@ class PASSBOLT1039 extends PassboltTestCase
      * Then     I can see the complexity is set to very strong in the edit password screen
      */
     public function testEditPasswordComplexityCheck() {
+	    // Reset database at the end of test.
+	    $this->resetDatabaseWhenComplete();
+
         // Given I am Ada
         $user = User::get('ada');
         $this->setClientConfig($user);
@@ -73,9 +76,6 @@ class PASSBOLT1039 extends PassboltTestCase
 
         $this->assertComplexity('very strong');
         $this->goOutOfIframe();
-
-        // And the database is in the default state
-        $this->resetDatabase();
 
     }
 }

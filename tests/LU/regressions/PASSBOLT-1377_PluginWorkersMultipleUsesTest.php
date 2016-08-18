@@ -48,6 +48,9 @@ class PASSBOLT1377 extends PassboltTestCase {
 	 *
 	 */
 	public function testCreatePasswordMultipleTimes() {
+		// Reset database at the end of test.
+		$this->resetDatabaseWhenComplete();
+
 		// Given I am logged in as ada in the user workspace
 		$user = User::get('ada');
 		$this->setClientConfig($user);
@@ -63,9 +66,6 @@ class PASSBOLT1377 extends PassboltTestCase {
 			);
 			$this->createPassword($password);
 		}
-
-		// Since content was edited, we reset the database
-		$this->resetDatabase();
 	}
 
 	/**
@@ -80,6 +80,9 @@ class PASSBOLT1377 extends PassboltTestCase {
 	 *
 	 */
 	public function testEditPasswordMultipleTimes() {
+		// Reset database at the end of test.
+		$this->resetDatabaseWhenComplete();
+
 		// Given I am logged in as ada in the user workspace
 		$user = User::get('ada');
 		$this->setClientConfig($user);
@@ -97,9 +100,6 @@ class PASSBOLT1377 extends PassboltTestCase {
 			$r['password'] = 'password_' . $i;
 			$this->editPassword($r, $user);
 		}
-
-		// Since content was edited, we reset the database
-		$this->resetDatabase();
 	}
 
 	/**
@@ -114,6 +114,9 @@ class PASSBOLT1377 extends PassboltTestCase {
 	 *
 	 */
 	public function testSharePasswordMultipleTimes() {
+		// Reset database at the end of test.
+		$this->resetDatabaseWhenComplete();
+
 		// Given I am logged in as ada in the user workspace
 		$user = User::get('ada');
 		$this->setClientConfig($user);
@@ -136,8 +139,5 @@ class PASSBOLT1377 extends PassboltTestCase {
 			$r['password'] = 'password_' . $i;
 			$this->sharePassword($resource, $shareWith[$i], $user);
 		}
-
-		// Since content was edited, we reset the database
-		$this->resetDatabase();
 	}
 }

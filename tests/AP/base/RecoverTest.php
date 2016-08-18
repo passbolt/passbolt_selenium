@@ -106,6 +106,9 @@ class RecoverTest extends PassboltSetupTestCase {
 	 * Then     I should see a thank you page
 	 */
 	public function testRecoverThankYouPage() {
+		// Reset database at the end of test.
+		$this->resetDatabaseWhenComplete();
+
 		// Go to recover start page.
 		$this->getUrl('recover');
 
@@ -119,8 +122,6 @@ class RecoverTest extends PassboltSetupTestCase {
 		$this->waitUntilISee('.page.recover.thank-you');
 		$this->waitUntilISee('.information', '/See you in your mailbox!/');
 		$this->assertCurrentUrl('recover' . DS . 'thankyou');
-
-		$this->resetDatabase();
 	}
 
 	/**
@@ -133,6 +134,9 @@ class RecoverTest extends PassboltSetupTestCase {
 	 * Then     I should see a notification email with an invite to recover my account
 	 */
 	public function testRecoverEmailNotification() {
+		// Reset database at the end of test.
+		$this->resetDatabaseWhenComplete();
+
 		// Go to recover start page.
 		$this->getUrl('recover');
 
@@ -152,9 +156,6 @@ class RecoverTest extends PassboltSetupTestCase {
 		$this->waitUntilISee('emailBody', '/ada@passbolt.com/');
 		$this->waitUntilISee('emailBody', '/Welcome back Ada,/');
 		$this->waitUntilISee('.buttonContent', '/start recovery/');
-
-		// Database has changed, we reset.
-		$this->resetDatabase();
 	}
 
 	/**
@@ -176,6 +177,9 @@ class RecoverTest extends PassboltSetupTestCase {
 	 * And      I should see Ada Lovelace in the profile drop down menu
 	 */
 	public function testRecoverDefaultSteps() {
+		// Reset database at the end of test.
+		$this->resetDatabaseWhenComplete();
+
 		// Go to recover page.
 		$this->getUrl('recover');
 
@@ -231,8 +235,6 @@ class RecoverTest extends PassboltSetupTestCase {
 			$this->findByCss('.header .user.profile .details .name'),
 			'Ada Lovelace'
 		);
-
-		$this->resetDatabase();
 	}
 
 	/**
@@ -248,6 +250,9 @@ class RecoverTest extends PassboltSetupTestCase {
 	 * Then     I should see an error message informing me that the key is not associated to a user.
 	 */
 	public function testRecoverKeyDoesntExist() {
+		// Reset database at the end of test.
+		$this->resetDatabaseWhenComplete();
+
 		// Go to recover page.
 		$this->getUrl('recover');
 
@@ -287,8 +292,5 @@ class RecoverTest extends PassboltSetupTestCase {
 
 		// I should see an error message.
 		$this->waitUntilISee('#KeyErrorMessage', '/This key doesn\'t match any account/');
-
-		// Database has changed, we reset database.
-		$this->resetDatabase();
 	}
 }

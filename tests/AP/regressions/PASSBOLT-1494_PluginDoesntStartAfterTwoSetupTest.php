@@ -16,6 +16,9 @@ class PASSBOLT1494 extends PassboltSetupTestCase
 	 * And      I should be able to login
 	 */
 	public function testPluginShouldStartAfterTwoSetup() {
+		// Reset database at the end of test.
+		$this->resetDatabaseWhenComplete();
+
 		// Register John Doe as a user.
 		$john = User::get('john');
 		$this->registerUser($john['FirstName'], $john['LastName'], $john['Username']);
@@ -62,8 +65,5 @@ class PASSBOLT1494 extends PassboltSetupTestCase
 
 		// Switch back config to primary domain.
 		$this->switchToPrimaryDomain();
-
-		// Database has changed, reset it.
-		$this->resetDatabase();
 	}
 }

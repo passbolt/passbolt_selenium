@@ -12,7 +12,7 @@ define('TOGGLE_BUTTON_UNPRESSED', 0);
 class PassboltTestCase extends WebDriverTestCase {
 
 	// indicate if the database should be reset at the end of the test
-	protected $resetDatabase = false;
+	protected $resetDatabaseWhenComplete = false;
 
 	// the current username
 	protected $currentUsername = null;
@@ -27,13 +27,6 @@ class PassboltTestCase extends WebDriverTestCase {
 		// Nothing to add here for now.
 	}
 
-	protected function onNotSuccessfulTest(Exception $e) {
-		self::logFile("# Error (" . $this->testName . ")");
-		self::logFile("> ResetDatabase " . Config::read('passbolt.url') . "(" . $this->testName . ")");
-		PassboltServer::resetDatabase(Config::read('passbolt.url'));
-		parent::onNotSuccessfulTest($e);
-	}
-
 
 	/**
 	 * Executed before every tests
@@ -43,12 +36,17 @@ class PassboltTestCase extends WebDriverTestCase {
 		parent::setUp();
 	}
 
+
 	/**
 	 * Executed after every tests
 	 */
 	protected function tearDown() {
+		if ($this->hasFailed()) {
+			self::logFile("# Error (" . $this->testName . ")");
+		}
+
 		// Reset the database if mentioned.
-		if ($this->resetDatabase) {
+		if ($this->resetDatabaseWhenComplete) {
 			self::logFile("> ResetDatabase " . Config::read('passbolt.url') . "(" . $this->testName . ")");
 			PassboltServer::resetDatabase(Config::read('passbolt.url'));
 		}
@@ -59,8 +57,8 @@ class PassboltTestCase extends WebDriverTestCase {
 	/**
 	 * Mark the database to be reset at the end of the test
 	 */
-	public function resetDatabase() {
-		$this->resetDatabase = true;
+	public function resetDatabaseWhenComplete() {
+		$this->resetDatabaseWhenComplete = true;
 	}
 
 	/********************************************************************************

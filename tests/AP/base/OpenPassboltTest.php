@@ -34,6 +34,9 @@ class OpenPassboltTest extends PassboltSetupTestCase {
 	 * Then			I should reach the setup in a new tab
 	 */
 	public function testOpenPassboltPartialConfig() {
+		// Reset database at the end of test.
+		$this->resetDatabaseWhenComplete();
+
 		$key = Gpgkey::get(['name' => 'johndoe']);
 
 		// Register John Doe as a user.
@@ -48,9 +51,6 @@ class OpenPassboltTest extends PassboltSetupTestCase {
 
 		// Test that the url is the plugin one.
 		$this->assertUrlMatch('/resource:\/\/passbolt-at-passbolt-dot-com\/data\/setup.html/');
-
-		// Since content was edited, we reset the database
-		$this->resetDatabase();
 	}
 
 	/**
@@ -63,6 +63,9 @@ class OpenPassboltTest extends PassboltSetupTestCase {
 	 * Then			I should reach the passbolt application in a new tab
 	 */
 	public function testOpenPassboltConfig() {
+		// Reset database at the end of test.
+		$this->resetDatabaseWhenComplete();
+
 		$key = Gpgkey::get(['name' => 'johndoe']);
 
 		// Register John Doe as a user.
@@ -78,9 +81,6 @@ class OpenPassboltTest extends PassboltSetupTestCase {
 
 		// I should be on the login page.
 		$this->waitUntilISee('.information h2', '/Welcome back!/');
-
-		// Since content was edited, we reset the database
-		$this->resetDatabase();
 	}
 
 }

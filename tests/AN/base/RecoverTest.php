@@ -19,13 +19,13 @@ class RecoverTest extends PassboltTestCase {
 	 * And		I should see an error message telling me an add-on is required to use passbolt
 	 */
 	public function testRecoverNoPlugin() {
+		$this->resetDatabaseWhenComplete();
 		$this->getUrl('recover');
 		$this->inputText('UserUsername', 'ada@passbolt.com');
 		$this->pressEnter();
 		$this->waitUntilISee('.page.recover.thank-you');
 		$this->goToRecover('ada@passbolt.com', false);
 		$this->waitUntilISee('.error .message', '/An add-on is required to use passbolt/');
-		$this->resetDatabase();
 	}
 
 }

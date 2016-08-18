@@ -24,6 +24,9 @@ class SetupTest extends PassboltSetupTestCase {
 	 * And        I should see that the domain in the url check textbox is the same as the one configured.
 	 */
 	public function testCanSeeSetupPageWithFirstPluginSection() {
+		// Reset database at the end of test.
+		$this->resetDatabaseWhenComplete();
+
 		// Register John Doe as a user.
 		$this->registerUser('John', 'Doe', 'johndoe@passbolt.com');
 
@@ -42,8 +45,6 @@ class SetupTest extends PassboltSetupTestCase {
 		$domain = $this->findById("js_setup_domain")->getAttribute('value');
 		$this->assertEquals(Config::read('passbolt.url'), $domain);
 
-		// Since content was edited, we reset the database
-		$this->resetDatabase();
 	}
 
 	/**
@@ -92,6 +93,9 @@ class SetupTest extends PassboltSetupTestCase {
 	 * @throws Exception
 	 */
 	public function testNavigation() {
+		// Reset database at the end of test.
+		$this->resetDatabaseWhenComplete();
+
 		// Register John Doe as a user.
 		$this->registerUser('John', 'Doe', 'johndoe@passbolt.com');
 
@@ -195,8 +199,6 @@ class SetupTest extends PassboltSetupTestCase {
 		$this->waitForSection('login_redirect');
 		// Assert menu is selected.
 		$this->assertMenuIsSelected($this->getSectionInfo('login_redirect', 'menu_item'));
-		// Since content was edited, we reset the database
-		$this->resetDatabase();
 	}
 
 	/**
@@ -219,6 +221,9 @@ class SetupTest extends PassboltSetupTestCase {
 	 * @throws Exception
 	 */
 	public function testCanFollowSetupWithDefaultSteps() {
+		// Reset database at the end of test.
+		$this->resetDatabaseWhenComplete();
+
 		$john = User::get('john');
 		// Register John Doe as a user.
 		$this->registerUser($john['FirstName'], $john['LastName'], $john['Username']);
@@ -244,9 +249,6 @@ class SetupTest extends PassboltSetupTestCase {
 			$this->findByCss('.header .user.profile .details .email'),
 			$john['Username']
 		);
-
-		// Since content was edited, we reset the database
-		$this->resetDatabase();
 	}
 
 	/**
@@ -261,6 +263,9 @@ class SetupTest extends PassboltSetupTestCase {
 	 * @throws Exception
 	 */
 	public function testFollowSetupWithImportKey() {
+		// Reset database at the end of test.
+		$this->resetDatabaseWhenComplete();
+
 		$key = Gpgkey::get(['name' => 'johndoe']);
 
 		$john = User::get('john');
@@ -315,9 +320,6 @@ class SetupTest extends PassboltSetupTestCase {
 			$this->findByCss('.header .user.profile .details .email'),
 			$key['owner_email']
 		);
-
-		// Since content was edited, we reset the database
-		$this->resetDatabase();
 	}
 
 	/**
@@ -328,6 +330,9 @@ class SetupTest extends PassboltSetupTestCase {
 	 * @throws Exception
 	 */
 	public function testSetupNotAccessibleAfterAccountValidation() {
+		// Reset database at the end of test.
+		$this->resetDatabaseWhenComplete();
+
 		// Register John Doe as a user.
 		$this->registerUser('John', 'Doe', 'johndoe@passbolt.com');
 
@@ -344,9 +349,6 @@ class SetupTest extends PassboltSetupTestCase {
 		// Go to url remembered above.
 		$this->driver->get($setupUrl);
 		$this->waitUntilISee('h2', '/Invalid token/');
-
-		// Since content was edited, we reset the database
-		$this->resetDatabase();
 	}
 
 	/**
@@ -357,6 +359,9 @@ class SetupTest extends PassboltSetupTestCase {
 	 * @throws Exception
 	 */
 	public function testSetupMultipleTimes() {
+		// Reset database at the end of test.
+		$this->resetDatabaseWhenComplete();
+
 		// Register John Doe as a user.
 		$john = User::get('john');
 		$this->registerUser($john['FirstName'], $john['LastName'], $john['Username']);
@@ -377,9 +382,6 @@ class SetupTest extends PassboltSetupTestCase {
 
 		// Complete registration.
 		$this->completeRegistration($curtis);
-
-		// Database has changed, reset it.
-		$this->resetDatabase();
 	}
 
 
@@ -393,6 +395,9 @@ class SetupTest extends PassboltSetupTestCase {
 	 * @throws Exception
 	 */
 	public function testSetupRestartWhereItWasLeft() {
+		// Reset database at the end of test.
+		$this->resetDatabaseWhenComplete();
+
 		// Register John Doe as a user.
 		$john = User::get('john');
 		$this->registerUser($john['FirstName'] , $john['LastName'], $john['Username']);
@@ -431,9 +436,6 @@ class SetupTest extends PassboltSetupTestCase {
 
 		// I should see the previous section generate_key_form.
 		$this->waitForSection('generate_key_form');
-
-		// Database has changed, reset it.
-		$this->resetDatabase();
 	}
 
 	/**
@@ -445,6 +447,9 @@ class SetupTest extends PassboltSetupTestCase {
 	 * @throws Exception
 	 */
 	public function testSetupDisplayWarningIfAlreadyConfigured() {
+		// Reset database at the end of test.
+		$this->resetDatabaseWhenComplete();
+
 		// Register John Doe as a user.
 		$john = User::get('john');
 		$this->registerUser($john['FirstName'], $john['LastName'], $john['Username']);
@@ -476,9 +481,6 @@ class SetupTest extends PassboltSetupTestCase {
 			$this->find('.plugin-check.warning'),
 			'The plugin is already configured'
 		);
-
-		// Database has changed, reset it.
-		$this->resetDatabase();
 	}
 
 	/**
@@ -490,6 +492,9 @@ class SetupTest extends PassboltSetupTestCase {
 	 * @throws Exception
 	 */
 	public function testFollowSetupWithImportNonUniqueKey() {
+		// Reset database at the end of test.
+		$this->resetDatabaseWhenComplete();
+
 		$john = User::get('john');
 		$john['PrivateKey'] = 'ada_private_nopassphrase.key';
 
@@ -529,9 +534,6 @@ class SetupTest extends PassboltSetupTestCase {
 
 		// I should see an error message.
 		$this->waitUntilISee('KeyErrorMessage', '/This key is already used by another user/');
-
-		// Since content was edited, we reset the database
-		$this->resetDatabase();
 	}
 
 	/**
@@ -544,6 +546,8 @@ class SetupTest extends PassboltSetupTestCase {
 	 * @throws Exception
 	 */
 	public function testFollowSetupWithImportNonUniqueKeyBelongingToDeletedUser() {
+		// Reset database at the end of test.
+		$this->resetDatabaseWhenComplete();
 
 		// And I am Admin
 		$user = User::get('admin');
@@ -618,8 +622,5 @@ class SetupTest extends PassboltSetupTestCase {
 			$this->findByCss('.message.warning'),
 			'Warning'
 		);
-
-		// Since content was edited, we reset the database
-		$this->resetDatabase();
 	}
 }

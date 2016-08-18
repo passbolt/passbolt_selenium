@@ -18,13 +18,13 @@ class PASSBOLT1041 extends PassboltTestCase
      * Then I cannot see the contextual menu
      */
     public function testContextualMenuMustCloseAfterClick() {
+	    // Reset database at the end of test.
+	    $this->resetDatabaseWhenComplete();
+
         // Given I am Ada
         $user = User::get('ada');
         $resource = Resource::get(array('user' => 'ada'));
         $this->setClientConfig($user);
-
-        // And the database is in the default state
-        $this->resetDatabase();
 
         // And I am logged in on the password workspace
         $this->loginAs($user);

@@ -26,6 +26,9 @@ class PasswordDeleteTest extends PassboltTestCase
      * And      I should not see the password in the list anymore
      */
     public function testDeletePasswordRightClick() {
+	    // Reset database at the end of test.
+	    $this->resetDatabaseWhenComplete();
+
         // And I am Ada
         $user = User::get('ada');
         $this->setClientConfig($user);
@@ -51,9 +54,6 @@ class PasswordDeleteTest extends PassboltTestCase
 
         // And I should not see the password in the list anymore
         $this->assertTrue($this->isNotVisible('resource_' . $resource['id']));
-
-        // Since content was edited, we reset the database
-        $this->resetDatabase();
     }
 
     /**
@@ -68,6 +68,9 @@ class PasswordDeleteTest extends PassboltTestCase
      * And      I should not see the password in the list anymore
      */
     public function testDeletePasswordButton() {
+	    // Reset database at the end of test.
+	    $this->resetDatabaseWhenComplete();
+
         // And I am Ada
         $user = User::get('ada');
         $this->setClientConfig($user);
@@ -96,9 +99,6 @@ class PasswordDeleteTest extends PassboltTestCase
 
         // And I should not see the password in the list anymore
         $this->assertTrue($this->isNotVisible('resource_' . $resource['id']));
-
-        // Since content was edited, we reset the database
-        $this->resetDatabase();
     }
 
     /**
@@ -121,6 +121,9 @@ class PasswordDeleteTest extends PassboltTestCase
      * Then     I cannot see the password in the list anymore
      */
     public function testDeletePasswordShared() {
+	    // Reset database at the end of test.
+	    $this->resetDatabaseWhenComplete();
+
         // Given I am Ada
         $userA = User::get('ada');
         $this->setClientConfig($userA);
@@ -175,9 +178,6 @@ class PasswordDeleteTest extends PassboltTestCase
 
         // And I should not see the password deleted by ada in the list anymore
         $this->assertNotVisible('resource_' . $resource['id']);
-
-        // Since content was edited, we reset the database
-        $this->resetDatabase();
     }
 
     /**
@@ -247,6 +247,9 @@ class PasswordDeleteTest extends PassboltTestCase
 	 * Then     I should see a notification email stating that the password has been deleted
 	 */
 	public function testDeletePasswordEmailNotification() {
+		// Reset database at the end of test.
+		$this->resetDatabaseWhenComplete();
+
 		// And I am Ada
 		$user = User::get('ada');
 		$this->setClientConfig($user);
@@ -311,8 +314,5 @@ class PasswordDeleteTest extends PassboltTestCase
 			'bodyTable',
 			$resource['name']
 		);
-
-		// Since content was edited, we reset the database
-		$this->resetDatabase();
 	}
 }

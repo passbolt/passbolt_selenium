@@ -555,6 +555,9 @@ class PasswordShareTest extends PassboltTestCase
 	 * And      the content of the clipboard is valid
 	 */
 	public function testSharePasswordAndView() {
+		// Reset database at the end of test.
+		$this->resetDatabaseWhenComplete();
+
 		// Given I am Carol
 		$user = User::get('carol');
 		$this->setClientConfig($user);
@@ -608,9 +611,6 @@ class PasswordShareTest extends PassboltTestCase
 
 		// And the content of the clipboard is valid
 		$this->assertClipboard($resource['password']);
-
-		// Since content was edited, we reset the database
-		$this->resetDatabase();
 	}
 
 	/**
@@ -665,6 +665,9 @@ class PasswordShareTest extends PassboltTestCase
 	 * Then     I can see Betty has read access on the password
 	 */
 	public function testEditPasswordPermission() {
+		// Reset database at the end of test.
+		$this->resetDatabaseWhenComplete();
+
 		// Given I am Ada
 		$user = User::get('ada');
 		$this->setClientConfig($user);
@@ -691,9 +694,6 @@ class PasswordShareTest extends PassboltTestCase
 
 		// And I can see Betty has read access on the password
 		$this->assertPermission($resource, 'betty@passbolt.com', 'can read');
-
-		// Since content was edited, we reset the database
-		$this->resetDatabase();
 	}
 
 	/**
@@ -708,6 +708,9 @@ class PasswordShareTest extends PassboltTestCase
 	 * Then     I can see Betty has no right anymore
 	 */
 	public function testDeletePasswordPermission() {
+		// Reset database at the end of test.
+		$this->resetDatabaseWhenComplete();
+
 		// Given I am Ada
 		$user = User::get('ada');
 		$this->setClientConfig($user);
@@ -741,8 +744,6 @@ class PasswordShareTest extends PassboltTestCase
 			'betty@passbolt.com'
 		);
 
-		// Since content was edited, we reset the database
-		$this->resetDatabase();
 	}
 
 	/**
@@ -774,6 +775,9 @@ class PasswordShareTest extends PassboltTestCase
 	 * And 		I see a notice message that the operation was a success
 	 */
 	public function testAtLeastOneOwner() {
+		// Reset database at the end of test.
+		$this->resetDatabaseWhenComplete();
+
 		// Given I am Ada
 		$userAda = User::get('ada');
 		$userBetty = User::get('betty');
@@ -865,9 +869,6 @@ class PasswordShareTest extends PassboltTestCase
 
 		// And I see a notice message that the operation was a success
 		$this->assertNotification('app_share_update_success');
-
-		// Since content was edited, we reset the database
-		$this->resetDatabase();
 	}
 
 	/**
@@ -884,6 +885,9 @@ class PasswordShareTest extends PassboltTestCase
 	 * And		I should not see the resource anymore in my browser
 	 */
 	public function testOwnerDropHisPermission() {
+		// Reset database at the end of test.
+		$this->resetDatabaseWhenComplete();
+
 		// Given I am Ada
 		$userAda = User::get('ada');
 		$userBetty = User::get('betty');
@@ -916,9 +920,6 @@ class PasswordShareTest extends PassboltTestCase
 
 		// And I should not see the share password dialog
 		$this->assertNotVisible('.share-password-dialog');
-
-		// Since content was edited, we reset the database
-		$this->resetDatabase();
 	}
 
 	/**
@@ -941,6 +942,9 @@ class PasswordShareTest extends PassboltTestCase
 	 * And      	I can see that Dame can read
 	 */
 	public function testDeletedUsersShouldntBeVisibleInTheListOfPermissions() {
+		// Reset database at the end of test.
+		$this->resetDatabaseWhenComplete();
+
 		// Given I am Admin
 		$user = User::get('admin');
 		$this->setClientConfig($user);
@@ -998,9 +1002,6 @@ class PasswordShareTest extends PassboltTestCase
 
 		// And I can see that Dame can read
 		$this->assertPermission($resource, 'dame@passbolt.com', 'can read', ['closeDialog' => false]);
-
-		// Since content was edited, we reset the database
-		$this->resetDatabase();
 	}
 
 	/**
@@ -1026,6 +1027,9 @@ class PasswordShareTest extends PassboltTestCase
 	 * Then 	I can see Betty has read access on the password
 	 */
 	public function testMultipleTabsEditPasswordPermission() {
+		// Reset database at the end of test.
+		$this->resetDatabaseWhenComplete();
+
 		// Given I am Ada
 		$user = User::get('ada');
 		$this->setClientConfig($user);
@@ -1092,9 +1096,6 @@ class PasswordShareTest extends PassboltTestCase
 
 		// Then I can see Betty has read access on the password
 		$this->assertPermission($resource, 'betty@passbolt.com', 'is owner');
-
-		// Since content was edited, we reset the database
-		$this->resetDatabase();
 	}
 
 	/**
@@ -1108,6 +1109,9 @@ class PasswordShareTest extends PassboltTestCase
 	 * Then     I can see Betty has read access on the password
 	 */
 	public function testRestartBrowserAndSharePassword() {
+		// Reset database at the end of test.
+		$this->resetDatabaseWhenComplete();
+
 		// Given I am Carol
 		$user = User::get('carol');
 		$this->setClientConfig($user);
@@ -1131,9 +1135,6 @@ class PasswordShareTest extends PassboltTestCase
 
 		// Then I can see Betty has read access on the password
 		$this->assertPermission($resource, 'betty@passbolt.com', 'can read');
-
-		// Since content was edited, we reset the database
-		$this->resetDatabase();
 	}
 
 	/**
@@ -1148,6 +1149,9 @@ class PasswordShareTest extends PassboltTestCase
 	 * Then     I can see Betty has read access on the password
 	 */
 	public function testCloseRestoreTabAndSharePassword() {
+		// Reset database at the end of test.
+		$this->resetDatabaseWhenComplete();
+
 		// Given I am Carol
 		$user = User::get('carol');
 		$this->setClientConfig($user);
@@ -1174,9 +1178,6 @@ class PasswordShareTest extends PassboltTestCase
 
 		// Then I can see Betty has read access on the password
 		$this->assertPermission($resource, 'betty@passbolt.com', 'can read');
-
-		// Since content was edited, we reset the database
-		$this->resetDatabase();
 	}
 
 }

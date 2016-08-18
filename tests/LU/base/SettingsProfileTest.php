@@ -165,6 +165,9 @@ class SettingsProfileTest extends PassboltTestCase {
 	 * @throws Exception
 	 */
 	public function testSettingsProfileAvatarEditOk() {
+		// Reset database at the end of test.
+		$this->resetDatabaseWhenComplete();
+
 		// Given I am Ada
 		$user = User::get( 'edith' );
 		$this->setClientConfig( $user );
@@ -228,9 +231,6 @@ class SettingsProfileTest extends PassboltTestCase {
 
 		// Then I should see that the profile drop down image is still there.
 		$this->assertImagesAreSame($actualImage, $topProfileImage);
-
-		// Database has been modified so we reset.
-		$this->resetDatabase();
 	}
 
 	/**
@@ -248,7 +248,9 @@ class SettingsProfileTest extends PassboltTestCase {
 	 * @throws Exception
 	 */
 	public function testSettingsProfileAvatarEditErrorFileType() {
-		$this->resetDatabase();
+		// Reset database at the end of test.
+		$this->resetDatabaseWhenComplete();
+
 		// Given I am Ada
 		$user = User::get( 'ada' );
 		$this->setClientConfig( $user );
@@ -290,9 +292,6 @@ class SettingsProfileTest extends PassboltTestCase {
 
 		// Then I should see that the profile drop down image is still there.
 		$this->assertImagesAreSame($actualImage, $topProfileImage);
-
-		// Database has been modified so we reset.
-		$this->resetDatabase();
 	}
 
 	/**
@@ -476,6 +475,9 @@ class SettingsProfileTest extends PassboltTestCase {
 	 *
 	 */
 	public function testSettingsProfileUpdateEditFirstName() {
+		// Reset database at the end of test.
+		$this->resetDatabaseWhenComplete();
+
 		// Given I am Ada
 		$user = User::get( 'ada' );
 		$this->setClientConfig( $user );
@@ -523,8 +525,6 @@ class SettingsProfileTest extends PassboltTestCase {
 		  $this->find('.table-info.profile .name'),
 		  $newname . ' Lovelace'
 		);
-
-    $this->resetDatabase();
 	}
 
 	/**
@@ -544,6 +544,9 @@ class SettingsProfileTest extends PassboltTestCase {
 	 * Then     I can see the new last name in my name
 	 */
 	public function testSettingsProfileUpdateEditLastName() {
+		// Reset database at the end of test.
+		$this->resetDatabaseWhenComplete();
+
 		// Given I am Ada
 		$user = User::get( 'ada' );
 		$this->setClientConfig( $user );
@@ -591,7 +594,5 @@ class SettingsProfileTest extends PassboltTestCase {
 		  $this->find('.table-info.profile .name'),
 		  'Ada ' . $newname
 		);
-
-    $this->resetDatabase();
 	}
 }

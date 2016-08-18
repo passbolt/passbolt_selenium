@@ -238,6 +238,9 @@ class UserEditTest extends PassboltTestCase {
 	 * Then     I can see the new first name in the edit user dialog
 	 */
 	public function testEditUserFirstName() {
+		// Reset database at the end of test.
+		$this->resetDatabaseWhenComplete();
+
 		// Given I am Ada
 		$user = User::get( 'admin' );
 		$this->setClientConfig( $user );
@@ -275,9 +278,6 @@ class UserEditTest extends PassboltTestCase {
 
 		// Then I can see the new name in the edit user dialog
 		$this->assertInputValue('js_field_first_name', $newname);
-
-		// Since content was edited, we reset the database
-		$this->resetDatabase();
 	}
 
 	/**
@@ -297,6 +297,9 @@ class UserEditTest extends PassboltTestCase {
 	 * Then     I can see the new last name in the edit user dialog
 	 */
 	public function testEditUserLastName() {
+		// Reset database at the end of test.
+		$this->resetDatabaseWhenComplete();
+
 		// Given I am Admin
 		$user = User::get( 'admin' );
 		$this->setClientConfig( $user );
@@ -334,9 +337,6 @@ class UserEditTest extends PassboltTestCase {
 
 		// Then I can see the new name in the edit user dialog
 		$this->assertInputValue('js_field_last_name', $newname);
-
-		// Since content was edited, we reset the database
-		$this->resetDatabase();
 	}
 
 	/**
@@ -353,6 +353,9 @@ class UserEditTest extends PassboltTestCase {
 	 * Then     I can see the new last name in the edit user dialog
 	 */
 	public function testEditUserRoleChangeToAdmin() {
+		// Reset database at the end of test.
+		$this->resetDatabaseWhenComplete();
+
 		// Given I am Admin
 		$user = User::get( 'admin' );
 		$this->setClientConfig( $user );
@@ -400,9 +403,6 @@ class UserEditTest extends PassboltTestCase {
 
 		// Observe that delete button is visible
 		$this->assertVisible('js_user_wk_menu_deletion_button');
-
-		// Since content was edited, we reset the database
-		$this->resetDatabase();
 	}
 
 	/**
@@ -430,6 +430,9 @@ class UserEditTest extends PassboltTestCase {
 	 * And      I should not see the delete button
 	 */
 	public function testEditUserRoleChangeToNonAdmin() {
+		// Reset database at the end of test.
+		$this->resetDatabaseWhenComplete();
+
 		// Given I am Admin
 		$user = User::get( 'admin' );
 		$this->setClientConfig( $user );
@@ -504,9 +507,6 @@ class UserEditTest extends PassboltTestCase {
 
 		// Observe that delete button is not visible
 		$this->assertNotVisible('js_user_wk_menu_deletion_button');
-
-		// Since content was edited, we reset the database
-		$this->resetDatabase();
 	}
 
 	/**
@@ -552,6 +552,9 @@ class UserEditTest extends PassboltTestCase {
 	 * Then     I can see the user with the new name
 	 */
 	public function testEditUserUserAEditUserBCanSee() {
+		// Reset database at the end of test.
+		$this->resetDatabaseWhenComplete();
+
 		// Given I am Ada
 		$user = User::get('admin');
 		$this->setClientConfig($user);
@@ -585,9 +588,6 @@ class UserEditTest extends PassboltTestCase {
 
 		// Then I could see
 		$this->assertElementContainsText('#js_wsp_users_browser .tableview-content', $u1['first_name'] . ' ' . $betty['LastName']);
-
-		// Since content was edited, we reset the database
-		$this->resetDatabase();
 	}
 
 	/**

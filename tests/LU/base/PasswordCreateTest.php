@@ -315,6 +315,9 @@ class PasswordCreateTest extends PassboltTestCase
      * And      I see the password I created in my password list
      */
     public function testCreatePasswordAndView() {
+	    // Reset database at the end of test.
+	    $this->resetDatabaseWhenComplete();
+
         // Given I am Ada
         $user = User::get('ada');
         $this->setClientConfig($user);
@@ -356,9 +359,6 @@ class PasswordCreateTest extends PassboltTestCase
         $this->assertElementContainsText(
             $this->find('js_wsp_pwd_browser'), 'localhost ftp'
         );
-
-        // Since content was edited, we reset the database
-        $this->resetDatabase();
     }
 
     /**
@@ -387,6 +387,9 @@ class PasswordCreateTest extends PassboltTestCase
      * And      I see the password I created in my password list
      */
     public function testCreatePasswordWithKeyboardShortcutsAndView() {
+	    // Reset database at the end of test.
+	    $this->resetDatabaseWhenComplete();
+
         // Given I am Ada
         $user = User::get('ada');
         $this->setClientConfig($user);
@@ -457,9 +460,6 @@ class PasswordCreateTest extends PassboltTestCase
         $this->assertElementContainsText(
             $this->find('js_wsp_pwd_browser'), 'localhost ftp'
         );
-
-        // Reset database.
-        $this->resetDatabase();
     }
 
     /**
@@ -656,6 +656,9 @@ class PasswordCreateTest extends PassboltTestCase
 	 * Then     I should see an email informing me that I have saved a new password
 	 */
 	public function testCreatePasswordEmailNotification() {
+		// Reset database at the end of test.
+		$this->resetDatabaseWhenComplete();
+
 		// Given I am Ada
 		$user = User::get('ada');
 		$this->setClientConfig($user);
@@ -701,9 +704,6 @@ class PasswordCreateTest extends PassboltTestCase
 			'bodyTable',
 			'localhost ftp'
 		);
-
-		// Reset database after modifications.
-		$this->resetDatabase();
 	}
 
     /**
@@ -724,6 +724,9 @@ class PasswordCreateTest extends PassboltTestCase
      * @throws Exception
      */
     public function testMultipleTabsCreatePassword() {
+	    // Reset database at the end of test.
+	    $this->resetDatabaseWhenComplete();
+
         $user = User::get('ada');
         $this->setClientConfig($user);
 
@@ -790,9 +793,6 @@ class PasswordCreateTest extends PassboltTestCase
         $this->assertElementContainsText(
             $this->find('js_wsp_pwd_browser'), 'password_window_2'
         );
-
-        // Since content was edited, we reset the database
-        $this->resetDatabase();
     }
 
     /**
@@ -805,6 +805,9 @@ class PasswordCreateTest extends PassboltTestCase
      * @throws Exception
      */
     public function testRestartBrowserAndCreatePassword() {
+	    // Reset database at the end of test.
+	    $this->resetDatabaseWhenComplete();
+
         // Given I am Ada
         $user = User::get('ada');
         $this->setClientConfig($user);
@@ -823,9 +826,6 @@ class PasswordCreateTest extends PassboltTestCase
             'password' => 'password_create_after_leaving_browser'
         );
         $this->createPassword($password);
-
-        // Since content was edited, we reset the database
-        $this->resetDatabase();
     }
 
     /**
@@ -839,6 +839,9 @@ class PasswordCreateTest extends PassboltTestCase
      * @throws Exception
      */
     public function testCloseRestoreTabAndCreatePassword() {
+	    // Reset database at the end of test.
+	    $this->resetDatabaseWhenComplete();
+
         // Given I am Ada
         $user = User::get('ada');
         $this->setClientConfig($user);
@@ -860,9 +863,6 @@ class PasswordCreateTest extends PassboltTestCase
             'password' => 'password_create_after_leaving_browser'
         );
         $this->createPassword($password);
-
-        // Since content was edited, we reset the database
-        $this->resetDatabase();
     }
 
 }

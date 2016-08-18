@@ -31,6 +31,9 @@ class PASSBOLT1337 extends PassboltTestCase {
 	 * Then     	I can see the new name in the edit password dialog
 	 */
 	public function testEditingPasswordSharedWithDeletedUsersShouldntCrash() {
+		// Reset database at the end of test.
+		$this->resetDatabaseWhenComplete();
+
 		// Given I am Admin
 		$user = User::get('admin');
 		$this->setClientConfig($user);
@@ -97,8 +100,5 @@ class PASSBOLT1337 extends PassboltTestCase {
 
 		// Then I can see the new name in the edit password dialog
 		$this->assertInputValue('js_field_name', $newname);
-
-		// Since content was edited, we reset the database
-		$this->resetDatabase();
 	}
 }

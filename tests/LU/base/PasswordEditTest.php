@@ -332,6 +332,9 @@ class PasswordEditTest extends PassboltTestCase
      * And      I see the password updated with the new name I just entered in my password list
      */
     public function testEditPasswordWithKeyboardShortcutAndView() {
+	    // Reset database at the end of test.
+	    $this->resetDatabaseWhenComplete();
+
         // Given I am Ada
         $user = User::get('ada');
         $this->setClientConfig($user);
@@ -406,9 +409,6 @@ class PasswordEditTest extends PassboltTestCase
 
         // And I can see that the password name have changed in the overview
         $this->assertElementContainsText('#js_wsp_pwd_browser .tableview-content', 'keyboardupdate');
-
-        // Reset database.
-        $this->resetDatabase();
     }
 
     /**
@@ -671,6 +671,9 @@ class PasswordEditTest extends PassboltTestCase
      * Then     I can see the new name in the edit password dialog
      */
     public function testEditPasswordName() {
+	    // Reset database at the end of test.
+	    $this->resetDatabaseWhenComplete();
+
         // Given I am Ada
         $user = User::get('ada');
         $this->setClientConfig($user);
@@ -708,9 +711,6 @@ class PasswordEditTest extends PassboltTestCase
 
         // Then I can see the new name in the edit password dialog
         $this->assertInputValue('js_field_name', $newname);
-
-        // Since content was edited, we reset the database
-        $this->resetDatabase();
     }
 
     /**
@@ -725,6 +725,9 @@ class PasswordEditTest extends PassboltTestCase
      * Then     I can see the new description in the edit password dialog
      */
     public function testEditPasswordDescription() {
+	    // Reset database at the end of test.
+	    $this->resetDatabaseWhenComplete();
+
         // Given I am Ada
         $user = User::get('ada');
         $this->setClientConfig($user);
@@ -750,9 +753,6 @@ class PasswordEditTest extends PassboltTestCase
 
         // Then I can see the new description in the edit password dialog
         $this->assertInputValue('js_field_description', $r['description']);
-
-        // Since content was edited, we reset the database
-        $this->resetDatabase();
     }
 
     /**
@@ -767,6 +767,9 @@ class PasswordEditTest extends PassboltTestCase
      * Then     I can see the new uri in the edit password dialog
      */
     public function testEditPasswordUri() {
+	    // Reset database at the end of test.
+	    $this->resetDatabaseWhenComplete();
+
         // Given I am Ada
         $user = User::get('ada');
         $this->setClientConfig($user);
@@ -795,9 +798,6 @@ class PasswordEditTest extends PassboltTestCase
 
         // Then I can see the new uri in the edit password dialog
         $this->assertInputValue('js_field_uri', $r['uri']);
-
-        // Since content was edited, we reset the database
-        $this->resetDatabase();
     }
 
     /**
@@ -818,6 +818,9 @@ class PasswordEditTest extends PassboltTestCase
      * Then     I can see that password have been updated
      */
     public function testEditPasswordSecret() {
+	    // Reset database at the end of test.
+	    $this->resetDatabaseWhenComplete();
+
         // Given I am Ada
         $user = User::get('ada');
         $this->setClientConfig($user);
@@ -876,9 +879,6 @@ class PasswordEditTest extends PassboltTestCase
 
         // Then I can see that password have been updated
         $this->assertClipboard($r2['password']);
-
-        // Since content was edited, we reset the database
-        $this->resetDatabase();
     }
 
     /**
@@ -1077,6 +1077,9 @@ class PasswordEditTest extends PassboltTestCase
      * Then     I can see the new password
      */
     public function testEditPasswordUserAEditUserBCanSee() {
+	    // Reset database at the end of test.
+	    $this->resetDatabaseWhenComplete();
+
         // Given I am Ada
         $user = User::get('ada');
         $this->setClientConfig($user);
@@ -1110,9 +1113,6 @@ class PasswordEditTest extends PassboltTestCase
 
         // Then I can see the new password
         $this->assertClipboard($r2['password']);
-
-        // Since content was edited, we reset the database
-        $this->resetDatabase();
     }
 
     /**
@@ -1256,6 +1256,9 @@ class PasswordEditTest extends PassboltTestCase
 	 * And      I should see that the email contains Ada Lovelace (ada.lovelace@passbolt.com)
 	 */
 	public function testEditPasswordEmailNotification() {
+		// Reset database at the end of test.
+		$this->resetDatabaseWhenComplete();
+
 		// Given I am Ada
 		$user = User::get('ada');
 		$this->setClientConfig($user);
@@ -1321,9 +1324,6 @@ class PasswordEditTest extends PassboltTestCase
 			'bodyTable',
 			$user['FirstName'] . ' ' . $user['LastName'] . ' (' . $user['Username'] . ')'
 		);
-
-		// Reset database after modifications.
-		$this->resetDatabase();
 	}
 
 
@@ -1345,6 +1345,9 @@ class PasswordEditTest extends PassboltTestCase
 	 * @throws Exception
 	 */
 	public function testMultipleTabsEditPassword() {
+		// Reset database at the end of test.
+		$this->resetDatabaseWhenComplete();
+
 		$user = User::get('ada');
 		$this->setClientConfig($user);
 
@@ -1413,9 +1416,6 @@ class PasswordEditTest extends PassboltTestCase
 		$this->assertElementContainsText(
 			$this->find('js_wsp_pwd_browser'), $resource2UpdateData['name']
 		);
-
-		// Since content was edited, we reset the database
-		$this->resetDatabase();
 	}
 
 	/**
@@ -1428,6 +1428,9 @@ class PasswordEditTest extends PassboltTestCase
 	 * @throws Exception
 	 */
 	public function testRestartBrowserAndEditPassword() {
+		// Reset database at the end of test.
+		$this->resetDatabaseWhenComplete();
+
 		// Given I am Ada
 		$user = User::get('ada');
 		$this->setClientConfig($user);
@@ -1449,9 +1452,6 @@ class PasswordEditTest extends PassboltTestCase
 			'password' => 'our_brand_new_password'
 		);
 		$this->editPassword($r2, $user);
-
-		// Since content was edited, we reset the database
-		$this->resetDatabase();
 	}
 
 	/**
@@ -1465,6 +1465,9 @@ class PasswordEditTest extends PassboltTestCase
 	 * @throws Exception
 	 */
 	public function testCloseRestoreTabAndEditPassword() {
+		// Reset database at the end of test.
+		$this->resetDatabaseWhenComplete();
+
 		// Given I am Ada
 		$user = User::get('ada');
 		$this->setClientConfig($user);
@@ -1489,9 +1492,6 @@ class PasswordEditTest extends PassboltTestCase
 			'password' => 'our_brand_new_password'
 		);
 		$this->editPassword($r2, $user);
-
-		// Since content was edited, we reset the database
-		$this->resetDatabase();
 	}
 }
 

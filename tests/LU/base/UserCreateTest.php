@@ -330,6 +330,9 @@ class UserCreateTest extends PassboltTestCase {
 	 * Then     I should still see the user I created in my user list
 	 */
 	public function testCreateUserAndView() {
+		// Reset database at the end of test.
+		$this->resetDatabaseWhenComplete();
+
 		// Given I am Ada
 		$user = User::get('admin');
 		$this->setClientConfig($user);
@@ -385,9 +388,6 @@ class UserCreateTest extends PassboltTestCase {
 		$this->assertElementContainsText(
 			$this->find('js_passbolt_people_workspace_controller'), 'usernametest'
 		);
-
-		// Since content was edited, we reset the database
-		$this->resetDatabase();
 	}
 
 	/**
@@ -410,6 +410,9 @@ class UserCreateTest extends PassboltTestCase {
 	 * Then         I should be logged in with my new account
 	 */
 	public function testCreateUserCanLogInAfter() {
+		// Reset database at the end of test.
+		$this->resetDatabaseWhenComplete();
+
 		// Given I am Ada
 		$user = User::get('admin');
 		$this->setClientConfig($user);
@@ -443,7 +446,6 @@ class UserCreateTest extends PassboltTestCase {
 		$this->assertElementContainsText(
 			$this->find('js_app_profile_dropdown'), 'johndoe@passbolt.com'
 		);
-		$this->resetDatabase();
 	}
 
 	/**
@@ -467,6 +469,9 @@ class UserCreateTest extends PassboltTestCase {
 	 * And          I should not see the delete button
 	 */
 	public function testCreateNonAdminUserHasNotAdminRights() {
+		// Reset database at the end of test.
+		$this->resetDatabaseWhenComplete();
+
 		// Given I am Ada
 		$user = User::get('admin');
 		$this->setClientConfig($user);
@@ -511,9 +516,6 @@ class UserCreateTest extends PassboltTestCase {
 
 		// Observe that delete button is not visible
 		$this->assertNotVisible('js_user_wk_menu_deletion_button');
-
-		// Reset database.
-		$this->resetDatabase();
 	}
 
 	/**
@@ -537,6 +539,9 @@ class UserCreateTest extends PassboltTestCase {
 	 * And          I should see the delete button
 	 */
 	public function testCreateAdminUserHasAdminRights() {
+		// Reset database at the end of test.
+		$this->resetDatabaseWhenComplete();
+
 		// Given I am Ada
 		$user = User::get('admin');
 		$this->setClientConfig($user);
@@ -585,9 +590,6 @@ class UserCreateTest extends PassboltTestCase {
 
 		// Observe that delete button is visible
 		$this->assertVisible('js_user_wk_menu_deletion_button');
-
-		// Reset database.
-		$this->resetDatabase();
 	}
 
 	/**
@@ -614,6 +616,9 @@ class UserCreateTest extends PassboltTestCase {
 	 * Then     I should see the new user in the users list
 	 */
 	public function testCreateUserAdminCanViewNotUserUntilFirstLogin() {
+		// Reset database at the end of test.
+		$this->resetDatabaseWhenComplete();
+
 		// Given I am Admin
 		$user = User::get('admin');
 		$this->setClientConfig($user);
@@ -703,9 +708,6 @@ class UserCreateTest extends PassboltTestCase {
 		$this->assertElementContainsText(
 			$this->find('js_passbolt_people_workspace_controller'), $newUser['username']
 		);
-
-		// Since content was edited, we reset the database
-		$this->resetDatabase();
 	}
 
 	/**
@@ -724,6 +726,9 @@ class UserCreateTest extends PassboltTestCase {
 	 * Then     I should see an invitation email with subject "Admin created an account for you!"
 	 */
 	public function testCreateUserEmail() {
+		// Reset database at the end of test.
+		$this->resetDatabaseWhenComplete();
+
 		// Given I am Admin
 		$user = User::get('admin');
 		$this->setClientConfig($user);
@@ -750,7 +755,6 @@ class UserCreateTest extends PassboltTestCase {
 		$this->assertMetaTitleContains('Admin created an account for you!');
 		// Assert I can see the text "Admin just invited you yo join"
 		$this->assertPageContainsText('Admin just invited you to join');
-		$this->resetDatabase();
 	}
 
 	/**
@@ -763,6 +767,9 @@ class UserCreateTest extends PassboltTestCase {
 	 * @throws Exception
 	 */
 	public function testRestartBrowserAndCreateUser() {
+		// Reset database at the end of test.
+		$this->resetDatabaseWhenComplete();
+
 		// Given I am Admin
 		$user = User::get('admin');
 		$this->setClientConfig($user);
@@ -786,9 +793,6 @@ class UserCreateTest extends PassboltTestCase {
 			'admin'      => false
 		];
 		$this->createUser($newUser);
-
-		// Since content was edited, we reset the database
-		$this->resetDatabase();
 	}
 
 	/**
@@ -802,6 +806,9 @@ class UserCreateTest extends PassboltTestCase {
 	 * @throws Exception
 	 */
 	public function testCloseRestoreTabAndCreateUser() {
+		// Reset database at the end of test.
+		$this->resetDatabaseWhenComplete();
+
 		// Given I am Admin
 		$user = User::get('admin');
 		$this->setClientConfig($user);
@@ -826,8 +833,5 @@ class UserCreateTest extends PassboltTestCase {
 			'admin'      => false
 		];
 		$this->createUser($newUser);
-
-		// Since content was edited, we reset the database
-		$this->resetDatabase();
 	}
 }

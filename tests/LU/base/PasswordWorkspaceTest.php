@@ -316,6 +316,9 @@ class PasswordWorkspaceTest extends PassboltTestCase
      * Then         I shouldn't see anymore the password in my list of favorite passwords
      */
     public function testFavorite() {
+	    // Reset database at the end of test.
+	    $this->resetDatabaseWhenComplete();
+
 		$resourceId = Uuid::get('resource.id.apache');
 		$resource = Resource::get(array(
 			'user' => 'betty',
@@ -382,9 +385,6 @@ class PasswordWorkspaceTest extends PassboltTestCase
             $this->findByCss('#js_wsp_pwd_browser .tableview-content'),
 			$resource['name']
         );
-
-        // Since content was edited, we reset the database
-        $this->resetDatabase();
     }
 
     /**
@@ -631,6 +631,9 @@ class PasswordWorkspaceTest extends PassboltTestCase
 	 * And          I should see the welcome message again
 	 */
 	public function testPasswordWorkspaceEmptyState() {
+		// Reset database at the end of test.
+		$this->resetDatabaseWhenComplete();
+
 		$john = User::get('john');
 		// Register John Doe as a user.
 		$this->registerUser($john['FirstName'], $john['LastName'], $john['Username']);
@@ -685,9 +688,6 @@ class PasswordWorkspaceTest extends PassboltTestCase
 		// The layer empty content with text should not be visible.
 		$this->assertNotVisible('.empty-content');
 		$this->assertElementNotContainText($this->find('js_wsp_pwd_browser'), 'Welcome to passbolt!');
-
-		// Database has changed, we reset.
-		$this->resetDatabase();
 	}
 
 	/**

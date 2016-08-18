@@ -35,6 +35,9 @@ class PASSBOLT1380_Login extends PassboltSetupTestCase {
 	 * Then		I am redirected to https://addons.mozilla.org
 	 */
 	public function testFirefoxDownloadLinkOnSetup() {
+		// Reset database at the end of test.
+		$this->resetDatabaseWhenComplete();
+
 		// Register John Doe as a user.
 		$this->registerUser('John', 'Doe', 'johndoe@passbolt.com');
 
@@ -51,8 +54,5 @@ class PASSBOLT1380_Login extends PassboltSetupTestCase {
 		// Then I am redirected to https://addons.mozilla.org
 		$this->waitUntilUrlMatches('https://addons.mozilla.org/en-US/firefox/addon/passbolt/', false);
 		$this->assertTitleContain('Add-ons for Firefox');
-
-		// Since content was edited, we reset the database
-		$this->resetDatabase();
 	}
 }

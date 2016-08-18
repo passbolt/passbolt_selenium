@@ -12,6 +12,9 @@ class PASSBOLT1040 extends PassboltTestCase
      * @throws Exception
      */
     public function testNoEncryptionOnResourceNameEdit() {
+	    // Reset database at the end of test.
+	    $this->resetDatabaseWhenComplete();
+
         // Given I am Ada
         $user = User::get('ada');
         $this->setClientConfig($user);
@@ -47,7 +50,5 @@ class PASSBOLT1040 extends PassboltTestCase
 
 	    // Then I should see a success notification message saying the password is updated.
 	    $this->assertNotification('app_resources_edit_success');
-	    // And the database is in the default state
-	    $this->resetDatabase();
     }
 }

@@ -41,6 +41,7 @@ class LoginTest extends PassboltTestCase {
 	 * Then 	I can see the error message telling me an add-on is required
 	 */
 	public function testCanSeeErrorMsg() {
+		throw new Exception('test');
 		$this->getUrl('login');
 		$this->assertTitleContain('Login');
 

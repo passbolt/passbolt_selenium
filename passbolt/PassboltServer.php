@@ -15,7 +15,9 @@ class PassboltServer {
 	static public function resetDatabase($url, $dummy = 'seleniumtests') {
 		$response = \Httpful\Request::get($url . '/seleniumTests/resetInstance/' . $dummy)
 	                   ->send();
-		return preg_match('/created/', $response->body);
+		$seeCreated = preg_match('/created/', $response->body);
+		sleep(2); // Wait for database to be imported (no visible output).
+		return $seeCreated;
 	}
 
 	/**

@@ -27,6 +27,9 @@ class UserDeleteTest extends PassboltTestCase {
 	 * Then         I still shouldn't see the user in the user list anymore
 	 */
 	public function testDeleteUserRightClick() {
+		// Reset database at the end of test.
+		$this->resetDatabaseWhenComplete();
+
 		// And I am Admin
 		$user = User::get('admin');
 		$this->setClientConfig($user);
@@ -64,9 +67,6 @@ class UserDeleteTest extends PassboltTestCase {
 
 		// Then I should not see the user in the list anymore
 		$this->assertTrue($this->isNotVisible('user_' . $user['id']));
-
-		// Since content was edited, we reset the database
-		$this->resetDatabase();
 	}
 
 	/**
@@ -82,6 +82,9 @@ class UserDeleteTest extends PassboltTestCase {
 	 * Then         I still shouldn't see the user in the user list anymore
 	 */
 	public function testDeleteUserButton() {
+		// Reset database at the end of test.
+		$this->resetDatabaseWhenComplete();
+
 		// Given I am Admin
 		$user = User::get('admin');
 		$this->setClientConfig($user);
@@ -119,9 +122,6 @@ class UserDeleteTest extends PassboltTestCase {
 
 		// Then I should not see the user in the list anymore
 		$this->assertTrue($this->isNotVisible('user_' . $user['id']));
-
-		// Since content was edited, we reset the database
-		$this->resetDatabase();
 	}
 
 	/**
@@ -175,6 +175,9 @@ class UserDeleteTest extends PassboltTestCase {
 	 * Then         I should see a feedback telling me that my account doesn't exist on server
 	 */
 	public function testDeletedUserGetFeedback() {
+		// Reset database at the end of test.
+		$this->resetDatabaseWhenComplete();
+
 		// Given I am Admin
 		$user = User::get('admin');
 		$this->setClientConfig($user);
@@ -215,9 +218,6 @@ class UserDeleteTest extends PassboltTestCase {
 		$this->waitUntilISee('html.server-not-verified.server-no-user');
 		$this->waitUntilISee('.plugin-check.gpg.error', '/There is no user associated with this key/');
 		$this->waitUntilISee('.users.login.form .feedback', '/The account configured doesn\'t exist/');
-
-		// Since content was edited, we reset the database.
-		$this->resetDatabase();
 	}
 
 }
