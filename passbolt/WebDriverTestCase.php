@@ -41,8 +41,8 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
 	    $this->testName = $this->toString();
 
 	    // Reserve instance before anything else.
-	    self::logFile("> Reserved " . Config::read('passbolt.url') . " (" . $this->testName . ")");
 	    self::reserveInstance();
+	    self::logFile("> Reserved " . Config::read('passbolt.url') . " (" . $this->testName . ")");
 
 	    // Init browser.
 		$this->initBrowser();
