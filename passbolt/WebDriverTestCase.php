@@ -25,6 +25,8 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
 	// Name of the current test.
 	public $testName;
 
+	protected $_saucelabs; // boolean
+
 	// Saucelab job.
 	protected $sauceAPI;
 	protected $sauceLabJob;
@@ -40,6 +42,8 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
         $this->_failing = null;
 	    $this->testName = $this->toString();
 
+	    $this->_saucelabs = Config::read('testserver.default') == 'saucelabs' ? true : false;
+
 	    // Reserve instance before anything else.
 	    self::reserveInstance();
 	    self::logFile("> Reserved " . Config::read('passbolt.url') . " (" . $this->testName . ")");
@@ -50,9 +54,11 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
 	    // Maximize window.
 	    $this->driver->manage()->window()->maximize();
 
-	    // TODO: condition, has to run on saucelab only.
-	    $this->sauceAPI = new Sauce\Sausage\SauceAPI('passbolt', '688b92b6-6d74-40b9-9d03-15b97124a666');
-	    $this->sauceLabJob = $this->getSauceLabJob();
+	    // SauceAPI.
+	    if ($this->_saucelabs) {
+		    $this->sauceAPI = new Sauce\Sausage\SauceAPI(Config::read('testserver.saucelabs.username'), Config::read('testserver.saucelabs.key'));
+		    $this->sauceLabJob = $this->getSauceLabJob();
+	    }
     }
 
 	/**
@@ -132,8 +138,10 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
             }
         }
 
-	    // TODO: condition saucelab.
-	    $this->updateTestStatus();
+	    // If test was running on saucelabs, we update the status.
+	    if ($this->_saucelabs) {
+		    $this->updateTestStatus();
+	    }
 
 	    // Display logs if any.
 	    if(isset($this->_log) && !empty($this->_log)) {
@@ -159,21 +167,39 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
 		}
 	}
 
+	/**
+	 * Reserve an instance. (in case of parallelization).
+	 * @return int|string
+	 * @throws Exception
+	 */
 	public static function reserveInstance() {
-		//TODO: remove file if doesn't match config.
 		$instancesConfig = Config::read('passbolt.instances');
 		$instancesFilePath = ROOT . DS . 'tmp' . DS . 'instances.json';
 
+		// If there is an instance file.
 		if (file_exists($instancesFilePath)) {
 			$instancesState = file_get_contents($instancesFilePath);
 			$instancesState = json_decode($instancesState, true);
+
+			// If instances mentioned in instance file are different than config, then reset using config.
+			$instancesFile = array_keys($instancesState);
+			$sameInstances = sizeof($instancesFile) == sizeof($instancesConfig) || sizeof(array_diff($instancesConfig, $instancesFile)) == 0;
+
+			if (!$sameInstances) {
+				$instancesState = [];
+				foreach($instancesConfig as $instance ) {
+					$instancesState[$instance] = 0;
+				}
+			}
 		}
+		// If no instance file, base status on config.
 		else {
 			foreach($instancesConfig as $instance ) {
 				$instancesState[$instance] = 0;
 			}
 		}
 
+		// Find free instance, reserve it and write back file.
 		foreach($instancesState as $instanceUrl => $instanceLocked) {
 			if($instanceLocked == 0) {
 				$instancesState[$instanceUrl] = 1;
@@ -186,6 +212,9 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
 		throw new Exception('could not find an available instance');
 	}
 
+	/**
+	 * Release an instance. (in case of parallelization).
+	 */
 	public static function releaseInstance() {
 		$instancesFilePath = ROOT . DS . 'tmp' . DS . 'instances.json';
 		$instancesState = file_get_contents($instancesFilePath);
@@ -195,6 +224,9 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
 		file_put_contents($instancesFilePath, json_encode($instancesState));
 	}
 
+	/**
+	 * Assert post conditions.
+	 */
     protected function assertPostConditions() {
         $this->_failing = false;
         parent::assertPostConditions();
