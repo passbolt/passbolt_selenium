@@ -24,8 +24,7 @@ class PassboltTestCase extends WebDriverTestCase {
 	 * Called before the first test of the test case class is run
 	 */
 	public static function setUpBeforeClass() {
-		self::logFile(">> ResetDatabase " . Config::read('passbolt.url'));
-		PassboltServer::resetDatabase(Config::read('passbolt.url'));
+		// Nothing to add here for now.
 	}
 
 	protected function onNotSuccessfulTest(Exception $e) {

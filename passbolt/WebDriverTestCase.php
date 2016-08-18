@@ -601,7 +601,7 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
             catch (Exception $e) {
                 // We do nothing
             }
-            usleep(500000); // Sleep 1/2 seconds
+            usleep(100000); // Sleep 1/2 seconds
         }
         $backtrace = debug_backtrace();
         throw new Exception( "waitUntilISee $id, $regexp : Timeout thrown by " . $backtrace[1]['class'] . "::" . $backtrace[1]['function'] . "()\n . element: $id ($regexp)");
@@ -642,7 +642,7 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
 
 
 			// If none of the above was found, wait for 1/10 seconds, and try again.
-			usleep(500000); // Sleep 1/10 seconds
+			usleep(100000); // Sleep 1/10 seconds
 		}
 
 		$backtrace = debug_backtrace();
