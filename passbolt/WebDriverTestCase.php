@@ -37,10 +37,16 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
      * It setup the capabilities and browser driver
      */
     protected function setUp() {
-        $this->_quit = getenv('QUIT');
         $this->_failing = null;
 	    $this->testName = $this->toString();
+
+	    // Reserve instance before anything else.
+	    self::logFile("> Reserved " . Config::read('passbolt.url') . " (" . $this->testName . ")");
+	    self::reserveInstance();
+
+	    // Init browser.
 		$this->initBrowser();
+
 	    // Maximize window.
 	    $this->driver->manage()->window()->maximize();
 
@@ -76,13 +82,29 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
 		$capabilities->setCapability('screenResolution', '1280x1024');
 		$capabilities->setCapability('name', $this->testName);
 		$capabilities->setCapability('build', time());
-//		$capabilities->setCapability('custom-data', json_encode([
-//					'server' => Config::read('passbolt.url'),
-//				]));
-		//print_r($capabilities);
-		//die();
+		// TODO : define this in config file.
+		$capabilities->setCapability('videoUploadOnPass', false);
+		$capabilities->setCapability('recordVideo', false);
+		$capabilities->setCapability('recordScreenshots', false);
+		$capabilities->setCapability('recordLogs', false);
 
 		// Build end point url.
+		$serverUrl = $this->getTestServerUrl();
+		$this->driver = RemoteWebDriver::create($serverUrl, $capabilities, 120000, 120000);
+
+		// Redirect it immediately to an empty page, so we avoid the default firefox home page.
+		$this->driver->get('');
+	}
+
+	public static function logFile($str) {
+		file_put_contents(ROOT . DS . 'tmp' . DS . 'logs.txt', $str . "\n", FILE_APPEND);
+	}
+
+	/**
+	 * Get Test server url as per config parameters.
+	 * @return array|string
+	 */
+	public function getTestServerUrl() {
 		$testServer = Config::read('testserver.default');
 		$serverUrl = Config::read("testserver.$testServer.url");
 		if ($testServer == 'saucelabs') {
@@ -90,10 +112,7 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
 			$key = Config::read('testserver.saucelabs.key');
 			$serverUrl = "http://$username:$key@$serverUrl";// Default format: http://passbolt:688b92b6-6d74-40b9-9d03-15b97124a666@ondemand.saucelabs.com:80/wd/hub
 		}
-
-		$this->driver = RemoteWebDriver::create($serverUrl, $capabilities, 120000, 120000);
-		// Redirect it immediately to an empty page, so we avoid the default firefox home page.
-		$this->driver->get('');
+		return $serverUrl;
 	}
 
     /**
@@ -101,23 +120,31 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
      */
     protected function tearDown() {
 
-        if(isset($this->_log) && !empty($this->_log)) {
-            echo "\n\n"
-                . "=== Webdriver Test Case Log ===" . "\n"
-                . $this->_log;
-        }
         if(isset($this->driver)) {
             if($this->_quit === '0') {
                 return;
-            } else if($this->_quit === '1') {
+            } else if(empty($this->_quit) || $this->_quit === '1') {
+	            self::logFile("> Driver Quit (" . $this->testName . ")");
                 $this->driver->quit();
             } else if($this->_quit === '2' && isset($this->_failing) && !$this->_failing) {
+	            self::logFile("> Driver Quit (" . $this->testName . ")");
                 $this->driver->quit();
             }
         }
 
 	    // TODO: condition saucelab.
 	    $this->updateTestStatus();
+
+	    // Display logs if any.
+	    if(isset($this->_log) && !empty($this->_log)) {
+		    echo "\n\n"
+			    . "=== Webdriver Test Case Log ===" . "\n"
+			    . $this->_log;
+	    }
+
+	    // Release instance.
+	    self::releaseInstance();
+	    self::logFile("> Released ". Config::read('passbolt.url') ." (" . $this->testName . ")");
     }
 
 	/**
@@ -130,7 +157,42 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
 				array('passed' => $this->hasFailed() ? false : true)
 			);
 		}
+	}
 
+	public static function reserveInstance() {
+		//TODO: remove file if doesn't match config.
+		$instancesConfig = Config::read('passbolt.instances');
+		$instancesFilePath = ROOT . DS . 'tmp' . DS . 'instances.json';
+
+		if (file_exists($instancesFilePath)) {
+			$instancesState = file_get_contents($instancesFilePath);
+			$instancesState = json_decode($instancesState, true);
+		}
+		else {
+			foreach($instancesConfig as $instance ) {
+				$instancesState[$instance] = 0;
+			}
+		}
+
+		foreach($instancesState as $instanceUrl => $instanceLocked) {
+			if($instanceLocked == 0) {
+				$instancesState[$instanceUrl] = 1;
+				file_put_contents($instancesFilePath, json_encode($instancesState));
+				Config::write('passbolt.url', $instanceUrl);
+				return $instanceUrl;
+			}
+		}
+
+		throw new Exception('could not find an available instance');
+	}
+
+	public static function releaseInstance() {
+		$instancesFilePath = ROOT . DS . 'tmp' . DS . 'instances.json';
+		$instancesState = file_get_contents($instancesFilePath);
+		$instancesState = json_decode($instancesState, true);
+		$instancesState[Config::read('passbolt.url')] = 0;
+		//echo "Release instance " . Config::read('passbolt.url');
+		file_put_contents($instancesFilePath, json_encode($instancesState));
 	}
 
     protected function assertPostConditions() {

@@ -28,54 +28,16 @@ class PassboltTestCase extends WebDriverTestCase {
 	}
 
 	protected function onNotSuccessfulTest(Exception $e) {
+		self::logFile("# Error (" . $this->testName . ")");
 		PassboltServer::resetDatabase(Config::read('passbolt.url'));
 		parent::onNotSuccessfulTest($e);
 	}
 
-	public static function reserveInstance() {
-		//TODO: remove file if doesn't match config.
-		$instancesConfig = Config::read('passbolt.instances');
-		$instancesFilePath = ROOT . DS . 'tmp' . DS . 'instances.json';
-
-		if (file_exists($instancesFilePath)) {
-			$instancesState = file_get_contents($instancesFilePath);
-			$instancesState = json_decode($instancesState, true);
-		}
-		else {
-			foreach($instancesConfig as $instance ) {
-				$instancesState[$instance] = 0;
-			}
-		}
-
-		foreach($instancesState as $instanceUrl => $instanceLocked) {
-			if($instanceLocked == 0) {
-				$instancesState[$instanceUrl] = 1;
-				file_put_contents($instancesFilePath, json_encode($instancesState));
-				Config::write('passbolt.url', $instanceUrl);
-				return $instanceUrl;
-			}
-		}
-
-		throw new Exception('could not find an available instance');
-
-	}
-
-	public static function releaseInstance() {
-		$instancesFilePath = ROOT . DS . 'tmp' . DS . 'instances.json';
-		$instancesState = file_get_contents($instancesFilePath);
-		$instancesState = json_decode($instancesState, true);
-		$instancesState[Config::read('passbolt.url')] = 0;
-		//echo "Release instance " . Config::read('passbolt.url');
-		file_put_contents($instancesFilePath, json_encode($instancesState));
-	}
 
 	/**
 	 * Executed before every tests
 	 */
 	protected function setUp() {
-		// Reserve instance before anything else.
-		self::reserveInstance();
-
 		// Setup test.
 		parent::setUp();
 	}
@@ -84,11 +46,12 @@ class PassboltTestCase extends WebDriverTestCase {
 	 * Executed after every tests
 	 */
 	protected function tearDown() {
-		parent::tearDown();
-		self::releaseInstance();
+		// Reset the database if mentioned.
 		if ($this->resetDatabase) {
 			PassboltServer::resetDatabase(Config::read('passbolt.url'));
 		}
+
+		parent::tearDown();
 	}
 
 	/**
