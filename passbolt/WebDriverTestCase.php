@@ -93,10 +93,10 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
 			// TODO: define build number.
 			$capabilities->setCapability('build', time());
 			// TODO : define this in config file.
-			$capabilities->setCapability('videoUploadOnPass', false);
-			$capabilities->setCapability('recordVideo', false);
-			$capabilities->setCapability('recordScreenshots', false);
-			$capabilities->setCapability('recordLogs', false);
+//			$capabilities->setCapability('videoUploadOnPass', false);
+//			$capabilities->setCapability('recordVideo', false);
+//			$capabilities->setCapability('recordScreenshots', false);
+//			$capabilities->setCapability('recordLogs', false);
 		}
 
 		// Build end point url.
