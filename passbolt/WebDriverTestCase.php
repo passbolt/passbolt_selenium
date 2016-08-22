@@ -305,6 +305,11 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
 
 		// Get Free instance.
 		$db->exec('BEGIN;');
+		$debugFreeInstances = $db->query( "SELECT * FROM instances WHERE type='$type' AND locked=0" )->fetchArray();
+		while ($debugFreeInstance = $debugFreeInstances->fetchArray()) {
+			self::logFile(">>>> free $type instance {$debugFreeInstance['address']}");
+		}
+
 		$freeInstance = $db->query( "SELECT * FROM instances WHERE type='$type' AND locked=0" )->fetchArray();
 		if (empty($freeInstance)) {
 			throw new Exception('could not find an available instance');
@@ -313,13 +318,20 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
 		$db->query( "UPDATE  instances SET locked=1 WHERE id={$freeInstance['id']}" );
 		$db->exec('COMMIT;');
 
+		$debugFreeInstances = $db->query( "SELECT * FROM instances WHERE type='$type' AND locked=0" )->fetchArray();
+		while ($debugFreeInstance = $debugFreeInstances->fetchArray()) {
+			self::logFile(">>>> free instance {$debugFreeInstance['address']}");
+		}
+
 		$db->close();
 
 		if ($type == 'passbolt') {
 			// Write instance url in config.
+			self::logFile(">>>> selected $type {$freeInstance['address']}");
 			Config::write('passbolt.url', $freeInstance['address']);
 		}
 		elseif ($type == 'selenium') {
+			self::logFile(">>>> selected $type {$freeInstance['address']}");
 			Config::write('testserver.selenium.url', $freeInstance['address']);
 		}
 
