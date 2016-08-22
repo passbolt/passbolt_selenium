@@ -279,14 +279,14 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
 
 			// Compare instances in DB, and instances in config.
 			// If they are different, reset Db with config values.
-			$sameInstances = sizeof($instancesDb) == sizeof($instancesConfig)
-				&& sizeof(array_diff($instancesConfig, $instancesDb)) == 0;
+			$sameInstances = sizeof($instancesDb) == sizeof($instanceConfig)
+				&& sizeof(array_diff($instanceConfig[$type], $instancesDb)) == 0;
 			if (!$sameInstances) {
 				$instancesToSave = [];
 
 				self::logFile("@@@@@@@@@@@@@@@@@");
 				self::logFile(print_r($instancesDb, true));
-				self::logFile(print_r($instancesConfig, true));
+				self::logFile(print_r($instanceConfig, true));
 				self::logFile("@@@@@@@@@@@@@@@@@");
 
 				foreach($instanceConfig as $instanceAddress ) {
