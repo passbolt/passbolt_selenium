@@ -211,6 +211,7 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
 			$this->__resetDbInstances($type, $instancesToSave, false);
 			$db->exec('COMMIT;');
 		}
+		$db->close();
 	}
 
 	/**
@@ -232,6 +233,7 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
 		if ($atomic) {
 			$db->exec('COMMIT;');
 		}
+		$db->close();
 	}
 
 	private function __useMultipleSeleniumInstances() {
@@ -283,6 +285,7 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
 				$this->__resetDbInstances($type, $instancesToSave, true);
 			}
 		}
+		$db->close();
 	}
 
 	public function reserveInstance($type = 'passbolt') {
@@ -290,7 +293,6 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
 		if ($db === FALSE) {
 			throw new Exception('SQLite: Could not open instance database');
 		}
-
 
 		// Init instances in DB. Set table and entries if not there.
 		$this->__initDbInstances($type);
@@ -306,6 +308,8 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
 		// Lock free instance.
 		$db->query( "UPDATE  instances SET locked=1 WHERE id={$freeInstance['id']}" );
 		$db->exec('COMMIT;');
+
+		$db->close();
 
 		if ($type == 'passbolt') {
 			// Write instance url in config.
@@ -329,9 +333,10 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
 			$url = Config::read('passbolt.url');
 		}
 		elseif ($type == 'selenium') {
-			$url = Config::read('passbolt.url');
+			$url = Config::read('testserver.selenium.url');
 		}
 		$db->query( "UPDATE instances SET locked=0 WHERE address='{$url}' and type='$type'" );
+		$db->close();
 	}
 
 	/**
