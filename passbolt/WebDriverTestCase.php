@@ -191,6 +191,7 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
 	 */
 	private function __initDbInstances($type = 'passbolt') {
 		$db = new SQLite3(ROOT . DS . 'tmp' . DS . 'instances.db');
+		$db->busyTimeout(1000);
 
 		// Check if table exists.
 		$result = $db->query("SELECT count(*) AS exist FROM sqlite_master WHERE type='table' AND name='instances';")->fetchArray();
@@ -222,6 +223,7 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
 	 */
 	private function __resetDbInstances($type, $instances, $atomic = true) {
 		$db = new SQLite3(ROOT . DS . 'tmp' . DS . 'instances.db');
+		$db->busyTimeout(1000);
 		if ($atomic) {
 			$db->exec('BEGIN;');
 		}
@@ -249,6 +251,7 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
 
 	private function __syncDbInstancesWithConfig($type) {
 		$db = new SQLite3(ROOT . DS . 'tmp' . DS . 'instances.db');
+		$db->busyTimeout(1000);
 
 		$instancesConfig = [];
 		if ($this->__useMultiplePassboltInstances()) {
@@ -290,6 +293,7 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
 
 	public function reserveInstance($type = 'passbolt') {
 		$db = new SQLite3(ROOT . DS . 'tmp' . DS . 'instances.db');
+		$db->busyTimeout(1000);
 		if ($db === FALSE) {
 			throw new Exception('SQLite: Could not open instance database');
 		}
@@ -328,6 +332,7 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
 	 */
 	public static function releaseInstance($type) {
 		$db = new SQLite3(ROOT . DS . 'tmp' . DS . 'instances.db');
+		$db->busyTimeout(1000);
 
 		if ($type == 'passbolt') {
 			$url = Config::read('passbolt.url');
