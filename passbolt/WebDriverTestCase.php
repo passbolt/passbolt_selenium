@@ -198,6 +198,7 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
 		$tableExists = $result['exist'] == '1';
 		// If table doesn't exist, create it and populate it with instances.
 		if (!$tableExists) {
+			self::logFile("####### Create table");
 			$db->query( 'CREATE TABLE instances (id INTEGER PRIMARY KEY, type varchar(10), address varchar(255), locked INTEGER)' );
 
 			$db->exec('BEGIN;');
@@ -227,6 +228,7 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
 		if ($atomic) {
 			$db->exec('BEGIN;');
 		}
+		self::logFile("!!!!!!!! Reset DB instances");
 		$db->query("DELETE FROM instances WHERE type='{$type}'");
 
 		foreach ($instances as $instance) {
