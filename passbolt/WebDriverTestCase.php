@@ -44,9 +44,15 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
 
 	    $this->_saucelabs = Config::read('testserver.default') == 'saucelabs' ? true : false;
 
-	    // Reserve instance before anything else.
-	    self::reserveInstance();
-	    self::logFile("> Reserved " . Config::read('passbolt.url') . " (" . $this->testName . ")");
+	    // Reserve instances for passbolt and selenium.
+	    if ($this->__useMultiplePassboltInstances()) {
+		    self::reserveInstance('passbolt');
+		    self::logFile("> Reserved passbolt instance: " . Config::read('passbolt.url') . " (" . $this->testName . ")");
+	    }
+	    if ($this->__useMultipleSeleniumInstances()) {
+		    self::reserveInstance('selenium');
+		    self::logFile("> Reserved selenium instance: " . Config::read('testserver.selenium.url') . " (" . $this->testName . ")");
+	    }
 
 	    // Init browser.
 		$this->initBrowser();
@@ -156,8 +162,14 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
 	    }
 
 	    // Release instance.
-	    self::releaseInstance();
-	    self::logFile("> Released ". Config::read('passbolt.url') ." (" . $this->testName . ")");
+	    if ($this->__useMultiplePassboltInstances()) {
+		    self::releaseInstance('passbolt');
+		    self::logFile("> Released passbolt instance: " . Config::read('passbolt.url') . " (" . $this->testName . ")");
+	    }
+	    if ($this->__useMultipleSeleniumInstances()) {
+		    self::releaseInstance('selenium');
+		    self::logFile("> Released selenium instance: " . Config::read('testserver.selenium.url') . " (" . $this->testName . ")");
+	    }
     }
 
 	/**
@@ -173,60 +185,153 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
 	}
 
 	/**
-	 * Reserve an instance. (in case of parallelization).
-	 * @return int|string
-	 * @throws Exception
+	 * Init instances in DB.
+	 * Create database and table if not there, and populate initial data.
+	 * @param string $type
 	 */
-	public static function reserveInstance() {
-		$instancesConfig = Config::read('passbolt.instances');
-		$instancesFilePath = ROOT . DS . 'tmp' . DS . 'instances.json';
+	private function __initDbInstances($type = 'passbolt') {
+		$db = new SQLite3(ROOT . DS . 'tmp' . DS . 'instances.db');
 
-		// If there is an instance file.
-		if (file_exists($instancesFilePath)) {
-			$instancesState = file_get_contents($instancesFilePath);
-			$instancesState = json_decode($instancesState, true);
+		// Check if table exists.
+		$result = $db->query("SELECT count(*) AS exist FROM sqlite_master WHERE type='table' AND name='instances';")->fetchArray();
+		$tableExists = $result['exist'] == '1';
+		// If table doesn't exist, create it and populate it with instances.
+		if (!$tableExists) {
+			$db->query( 'CREATE TABLE instances (id INTEGER PRIMARY KEY, type varchar(10), address varchar(255), locked INTEGER)' );
 
-			// If instances mentioned in instance file are different than config, then reset using config.
-			$instancesFile = array_keys($instancesState);
-			$sameInstances = sizeof($instancesFile) == sizeof($instancesConfig) || sizeof(array_diff($instancesConfig, $instancesFile)) == 0;
+			$db->exec('BEGIN;');
+			$instancesToSave = [];
+			// Insert rows in DB for instances, as per config.
+			$instancesConfig = $type == 'passbolt' ? Config::read('passbolt.instances') : Config::read('testserver.selenium.instances');
+			foreach ($instancesConfig as $instance) {
+				$instancesToSave[] = ['type' => $type, 'address' => $instance, 'locked' => 0];
+			}
 
+			// If there is a difference, we reinitialize db with config data.
+			$this->__resetDbInstances($type, $instancesToSave, false);
+			$db->exec('COMMIT;');
+		}
+	}
+
+	/**
+	 * Reset instances in DB with instances given.
+	 * @param      $type
+	 * @param      $instances
+	 * @param bool $atomic
+	 */
+	private function __resetDbInstances($type, $instances, $atomic = true) {
+		$db = new SQLite3(ROOT . DS . 'tmp' . DS . 'instances.db');
+		if ($atomic) {
+			$db->exec('BEGIN;');
+		}
+		$db->query("DELETE FROM instances WHERE type='{$type}'");
+
+		foreach ($instances as $instance) {
+			$db->query( "INSERT INTO instances (id, type, address, locked) VALUES(NULL, '$type', '{$instance['address']}', {$instance['locked']});" );
+		}
+		if ($atomic) {
+			$db->exec('COMMIT;');
+		}
+	}
+
+	private function __useMultipleSeleniumInstances() {
+		$isSelenium = Config::read('testserver.default') == 'selenium';
+		$seleniumInstances = Config::read('testserver.selenium.instances');
+		return $isSelenium && !empty($seleniumInstances);
+	}
+
+	private function __useMultiplePassboltInstances() {
+		$passboltInstances = Config::read('passbolt.instances');
+		return !empty($passboltInstances);
+	}
+
+	private function __syncDbInstancesWithConfig($type) {
+		$db = new SQLite3(ROOT . DS . 'tmp' . DS . 'instances.db');
+
+		$instancesConfig = [];
+		if ($this->__useMultiplePassboltInstances()) {
+			$instancesConfig['passbolt'] = Config::read('passbolt.instances');
+		}
+
+		// If we have multiple selenium db instances.
+		if ($this->__useMultipleSeleniumInstances()) {
+			$instancesConfig['selenium'] = Config::read('testserver.selenium.instances');
+		}
+
+		if (empty($instancesConfig)) {
+			return;
+		}
+
+		foreach ($instancesConfig as $type => $instanceConfig) {
+			// Get instances from DB.
+			$res = $db->query("SELECT * FROM instances WHERE type='$type'");
+			$instancesDb = [];
+			while($instance = $res->fetchArray()) {
+				$instancesDb[] = $instance['address'];
+			}
+
+			// Compare instances in DB, and instances in config.
+			// If they are different, reset Db with config values.
+			$sameInstances = sizeof($instancesDb) == sizeof($instancesConfig)
+				&& count(array_diff($instancesConfig, $instancesDb)) == 0;
 			if (!$sameInstances) {
-				$instancesState = [];
-				foreach($instancesConfig as $instance ) {
-					$instancesState[$instance] = 0;
+				$instancesToSave = [];
+
+				foreach($instanceConfig as $instanceAddress ) {
+					$instancesToSave[] = ['type' => $type, 'address' => $instanceAddress, 'locked' => 0];
 				}
+				$this->__resetDbInstances($type, $instancesToSave, true);
 			}
 		}
-		// If no instance file, base status on config.
-		else {
-			foreach($instancesConfig as $instance ) {
-				$instancesState[$instance] = 0;
-			}
+	}
+
+	public function reserveInstance($type = 'passbolt') {
+		$db = new SQLite3(ROOT . DS . 'tmp' . DS . 'instances.db');
+		if ($db === FALSE) {
+			throw new Exception('SQLite: Could not open instance database');
 		}
 
-		// Find free instance, reserve it and write back file.
-		foreach($instancesState as $instanceUrl => $instanceLocked) {
-			if($instanceLocked == 0) {
-				$instancesState[$instanceUrl] = 1;
-				file_put_contents($instancesFilePath, json_encode($instancesState));
-				Config::write('passbolt.url', $instanceUrl);
-				return $instanceUrl;
-			}
+
+		// Init instances in DB. Set table and entries if not there.
+		$this->__initDbInstances($type);
+		//  Make sure that DB instances match the ones provided in config //
+		$this->__syncDbInstancesWithConfig($type);
+
+		// Get Free instance.
+		$db->exec('BEGIN;');
+		$freeInstance = $db->query( "SELECT * FROM instances WHERE type='$type' AND locked=0" )->fetchArray();
+		if (empty($freeInstance)) {
+			throw new Exception('could not find an available instance');
+		}
+		// Lock free instance.
+		$db->query( "UPDATE  instances SET locked=1 WHERE id={$freeInstance['id']}" );
+		$db->exec('COMMIT;');
+
+		if ($type == 'passbolt') {
+			// Write instance url in config.
+			Config::write('passbolt.url', $freeInstance['address']);
+		}
+		elseif ($type == 'selenium') {
+			Config::write('testserver.selenium.url', $freeInstance['address']);
 		}
 
-		throw new Exception('could not find an available instance');
+		// Return it.
+		return $freeInstance['address'];
 	}
 
 	/**
 	 * Release an instance. (in case of parallelization).
 	 */
-	public static function releaseInstance() {
-		$instancesFilePath = ROOT . DS . 'tmp' . DS . 'instances.json';
-		$instancesState = file_get_contents($instancesFilePath);
-		$instancesState = json_decode($instancesState, true);
-		$instancesState[Config::read('passbolt.url')] = 0;
-		//echo "Release instance " . Config::read('passbolt.url');
-		file_put_contents($instancesFilePath, json_encode($instancesState));
+	public static function releaseInstance($type) {
+		$db = new SQLite3(ROOT . DS . 'tmp' . DS . 'instances.db');
+
+		if ($type == 'passbolt') {
+			$url = Config::read('passbolt.url');
+		}
+		elseif ($type == 'selenium') {
+			$url = Config::read('passbolt.url');
+		}
+		$db->query( "UPDATE instances SET locked=0 WHERE address='{$url}' and type='$type'" );
 	}
 
 	/**
