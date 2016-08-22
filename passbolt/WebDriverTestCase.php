@@ -305,7 +305,7 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
 
 		// Get Free instance.
 		$db->exec('BEGIN;');
-		$debugFreeInstances = $db->query( "SELECT * FROM instances WHERE type='$type' AND locked=0" )->fetchArray();
+		$debugFreeInstances = $db->query( "SELECT * FROM instances WHERE type='$type' AND locked=0" );
 		while ($debugFreeInstance = $debugFreeInstances->fetchArray()) {
 			self::logFile(">>>> free $type instance {$debugFreeInstance['address']}");
 		}
@@ -318,7 +318,7 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
 		$db->query( "UPDATE  instances SET locked=1 WHERE id={$freeInstance['id']}" );
 		$db->exec('COMMIT;');
 
-		$debugFreeInstances = $db->query( "SELECT * FROM instances WHERE type='$type' AND locked=0" )->fetchArray();
+		$debugFreeInstances = $db->query( "SELECT * FROM instances WHERE type='$type' AND locked=0" );
 		while ($debugFreeInstance = $debugFreeInstances->fetchArray()) {
 			self::logFile(">>>> free instance {$debugFreeInstance['address']}");
 		}
