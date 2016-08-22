@@ -198,7 +198,6 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
 		$tableExists = $result['exist'] == '1';
 		// If table doesn't exist, create it and populate it with instances.
 		if (!$tableExists) {
-			self::logFile("####### Create table");
 			$db->query( 'CREATE TABLE instances (id INTEGER PRIMARY KEY, type varchar(10), address varchar(255), locked INTEGER)' );
 
 			$db->exec('BEGIN;');
@@ -228,7 +227,6 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
 		if ($atomic) {
 			$db->exec('BEGIN;');
 		}
-		self::logFile("!!!!!!!! Reset DB instances $type");
 		$db->query("DELETE FROM instances WHERE type='{$type}'");
 
 		foreach ($instances as $instance) {
@@ -283,12 +281,6 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
 				&& sizeof(array_diff($instanceConfig, $instancesDb)) == 0;
 			if (!$sameInstances) {
 				$instancesToSave = [];
-
-				self::logFile("@@@@@@@@@@@@@@@@@");
-				self::logFile(print_r($instancesDb, true));
-				self::logFile(print_r($instanceConfig, true));
-				self::logFile("@@@@@@@@@@@@@@@@@");
-
 				foreach($instanceConfig as $instanceAddress ) {
 					$instancesToSave[] = ['type' => $type, 'address' => $instanceAddress, 'locked' => 0];
 				}
@@ -312,11 +304,6 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
 
 		// Get Free instance.
 		$db->exec('BEGIN;');
-		$debugFreeInstances = $db->query( "SELECT * FROM instances WHERE type='$type' AND locked=0" );
-		while ($debugFreeInstance = $debugFreeInstances->fetchArray()) {
-			self::logFile(">>>> free $type instance {$debugFreeInstance['address']}");
-		}
-
 		$freeInstance = $db->query( "SELECT * FROM instances WHERE type='$type' AND locked=0" )->fetchArray();
 		if (empty($freeInstance)) {
 			throw new Exception('could not find an available instance');
@@ -324,11 +311,6 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
 		// Lock free instance.
 		$db->query( "UPDATE  instances SET locked=1 WHERE id={$freeInstance['id']}" );
 		$db->exec('COMMIT;');
-
-		$debugFreeInstances = $db->query( "SELECT * FROM instances WHERE type='$type' AND locked=0" );
-		while ($debugFreeInstance = $debugFreeInstances->fetchArray()) {
-			self::logFile(">>>> free instance {$debugFreeInstance['address']}");
-		}
 
 		$db->close();
 
