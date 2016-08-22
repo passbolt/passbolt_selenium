@@ -228,7 +228,7 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
 		if ($atomic) {
 			$db->exec('BEGIN;');
 		}
-		self::logFile("!!!!!!!! Reset DB instances");
+		self::logFile("!!!!!!!! Reset DB instances $type");
 		$db->query("DELETE FROM instances WHERE type='{$type}'");
 
 		foreach ($instances as $instance) {
@@ -280,9 +280,14 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
 			// Compare instances in DB, and instances in config.
 			// If they are different, reset Db with config values.
 			$sameInstances = sizeof($instancesDb) == sizeof($instancesConfig)
-				&& count(array_diff($instancesConfig, $instancesDb)) == 0;
+				&& sizeof(array_diff($instancesConfig, $instancesDb)) == 0;
 			if (!$sameInstances) {
 				$instancesToSave = [];
+
+				self::logFile("@@@@@@@@@@@@@@@@@");
+				self::logFile(print_r($instancesDb, true));
+				self::logFile(print_r($instancesConfig, true));
+				self::logFile("@@@@@@@@@@@@@@@@@");
 
 				foreach($instanceConfig as $instanceAddress ) {
 					$instancesToSave[] = ['type' => $type, 'address' => $instanceAddress, 'locked' => 0];
