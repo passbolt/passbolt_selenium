@@ -184,10 +184,16 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
 		}
 	}
 
-	private function __openSqlite3Db() {
-		$db = new SQLite3(ROOT . DS . 'tmp' . DS . 'instances.db');
+	private function __openSqlite3Db($flags = null) {
+		$pathToDb = ROOT . DS . 'tmp' . DS . 'instances.db';
+
+		if ($flags == null) {
+			$db = new SQLite3($pathToDb);
+		}
+		else {
+			$db = new SQLite3($pathToDb, $flags);
+		}
 		$db->busyTimeout(5000);
-		$db->exec('PRAGMA journal_mode = wal;');
 
 		if ($db === FALSE) {
 			throw new Exception('SQLite: Could not open instance database');
@@ -202,13 +208,16 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
 	 * @param string $type
 	 */
 	private function __initDbInstances($type = 'passbolt') {
-		$db = $this->__openSqlite3Db();
 
+		$db = $this->__openSqlite3Db(SQLITE3_OPEN_READONLY);
 		// Check if table exists.
 		$result = $db->query("SELECT count(*) AS exist FROM sqlite_master WHERE type='table' AND name='instances';")->fetchArray();
+		$db->close();
+
 		$tableExists = $result['exist'] == '1';
 		// If table doesn't exist, create it and populate it with instances.
 		if (!$tableExists) {
+			$db = $this->__openSqlite3Db();
 			$db->query( 'CREATE TABLE instances (id INTEGER PRIMARY KEY, type varchar(10), address varchar(255), locked INTEGER)' );
 
 			$db->exec('BEGIN;');
@@ -220,10 +229,10 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
 			}
 
 			// If there is a difference, we reinitialize db with config data.
-			$this->__resetDbInstances($type, $instancesToSave, false);
+			$this->__resetDbInstances($type, $instancesToSave, false, $db);
 			$db->exec('COMMIT;');
+			$db->close();
 		}
-		$db->close();
 	}
 
 	/**
@@ -232,8 +241,10 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
 	 * @param      $instances
 	 * @param bool $atomic
 	 */
-	private function __resetDbInstances($type, $instances, $atomic = true) {
-		$db = $this->__openSqlite3Db();
+	private function __resetDbInstances($type, $instances, $atomic = true, $db = null) {
+		if ($db == null) {
+			$db = $this->__openSqlite3Db();
+		}
 
 		if ($atomic) {
 			$db->exec('BEGIN;');
@@ -261,7 +272,6 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
 	}
 
 	private function __syncDbInstancesWithConfig($type) {
-		$db = $this->__openSqlite3Db();
 
 		$instancesConfig = [];
 		if ($this->__useMultiplePassboltInstances()) {
@@ -277,6 +287,7 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
 			return;
 		}
 
+		$db = $this->__openSqlite3Db();
 		foreach ($instancesConfig as $type => $instanceConfig) {
 			// Get instances from DB.
 			$res = $db->query("SELECT * FROM instances WHERE type='$type'");
@@ -294,7 +305,7 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
 				foreach($instanceConfig as $instanceAddress ) {
 					$instancesToSave[] = ['type' => $type, 'address' => $instanceAddress, 'locked' => 0];
 				}
-				$this->__resetDbInstances($type, $instancesToSave, true);
+				$this->__resetDbInstances($type, $instancesToSave, true, $db);
 			}
 		}
 		$db->close();
@@ -323,11 +334,9 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
 
 		if ($type == 'passbolt') {
 			// Write instance url in config.
-			self::logFile(">>>> selected $type {$freeInstance['address']}");
 			Config::write('passbolt.url', $freeInstance['address']);
 		}
 		elseif ($type == 'selenium') {
-			self::logFile(">>>> selected $type {$freeInstance['address']}");
 			Config::write('testserver.selenium.url', $freeInstance['address']);
 		}
 
