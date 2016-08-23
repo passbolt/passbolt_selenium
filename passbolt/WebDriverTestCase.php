@@ -46,11 +46,11 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
 
 	    // Reserve instances for passbolt and selenium.
 	    if ($this->__useMultiplePassboltInstances()) {
-		    self::reserveInstance('passbolt');
+		    $this->reserveInstance('passbolt');
 		    self::logFile("> Reserved passbolt instance: " . Config::read('passbolt.url') . " (" . $this->testName . ")");
 	    }
 	    if ($this->__useMultipleSeleniumInstances()) {
-		    self::reserveInstance('selenium');
+		    $this->reserveInstance('selenium');
 		    self::logFile("> Reserved selenium instance: " . Config::read('testserver.selenium.url') . " (" . $this->testName . ")");
 	    }
 
@@ -163,11 +163,11 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
 
 	    // Release instance.
 	    if ($this->__useMultiplePassboltInstances()) {
-		    self::releaseInstance('passbolt');
+		    $this->releaseInstance('passbolt');
 		    self::logFile("> Released passbolt instance: " . Config::read('passbolt.url') . " (" . $this->testName . ")");
 	    }
 	    if ($this->__useMultipleSeleniumInstances()) {
-		    self::releaseInstance('selenium');
+		    $this->releaseInstance('selenium');
 		    self::logFile("> Released selenium instance: " . Config::read('testserver.selenium.url') . " (" . $this->testName . ")");
 	    }
     }
@@ -184,14 +184,25 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
 		}
 	}
 
+	private function __openSqlite3Db() {
+		$db = new SQLite3(ROOT . DS . 'tmp' . DS . 'instances.db');
+		$db->busyTimeout(5000);
+		$db->exec('PRAGMA journal_mode = wal;');
+
+		if ($db === FALSE) {
+			throw new Exception('SQLite: Could not open instance database');
+		}
+
+		return $db;
+	}
+
 	/**
 	 * Init instances in DB.
 	 * Create database and table if not there, and populate initial data.
 	 * @param string $type
 	 */
 	private function __initDbInstances($type = 'passbolt') {
-		$db = new SQLite3(ROOT . DS . 'tmp' . DS . 'instances.db');
-		$db->busyTimeout(1000);
+		$db = $this->__openSqlite3Db();
 
 		// Check if table exists.
 		$result = $db->query("SELECT count(*) AS exist FROM sqlite_master WHERE type='table' AND name='instances';")->fetchArray();
@@ -222,8 +233,8 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
 	 * @param bool $atomic
 	 */
 	private function __resetDbInstances($type, $instances, $atomic = true) {
-		$db = new SQLite3(ROOT . DS . 'tmp' . DS . 'instances.db');
-		$db->busyTimeout(1000);
+		$db = $this->__openSqlite3Db();
+
 		if ($atomic) {
 			$db->exec('BEGIN;');
 		}
@@ -250,8 +261,7 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
 	}
 
 	private function __syncDbInstancesWithConfig($type) {
-		$db = new SQLite3(ROOT . DS . 'tmp' . DS . 'instances.db');
-		$db->busyTimeout(1000);
+		$db = $this->__openSqlite3Db();
 
 		$instancesConfig = [];
 		if ($this->__useMultiplePassboltInstances()) {
@@ -291,17 +301,14 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
 	}
 
 	public function reserveInstance($type = 'passbolt') {
-		$db = new SQLite3(ROOT . DS . 'tmp' . DS . 'instances.db');
-		$db->busyTimeout(1000);
-		if ($db === FALSE) {
-			throw new Exception('SQLite: Could not open instance database');
-		}
 
 		// Init instances in DB. Set table and entries if not there.
 		$this->__initDbInstances($type);
 		//  Make sure that DB instances match the ones provided in config //
 		$this->__syncDbInstancesWithConfig($type);
 
+
+		$db = $this->__openSqlite3Db();
 		// Get Free instance.
 		$db->exec('BEGIN;');
 		$freeInstance = $db->query( "SELECT * FROM instances WHERE type='$type' AND locked=0" )->fetchArray();
@@ -331,9 +338,8 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
 	/**
 	 * Release an instance. (in case of parallelization).
 	 */
-	public static function releaseInstance($type) {
-		$db = new SQLite3(ROOT . DS . 'tmp' . DS . 'instances.db');
-		$db->busyTimeout(1000);
+	public function releaseInstance($type) {
+		$db = $this->__openSqlite3Db();
 
 		if ($type == 'passbolt') {
 			$url = Config::read('passbolt.url');
