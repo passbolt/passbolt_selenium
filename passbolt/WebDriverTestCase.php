@@ -249,10 +249,10 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
 		if ($atomic) {
 			$db->exec('BEGIN;');
 		}
-		$db->query("DELETE FROM instances WHERE type='{$type}'");
+		$db->exec("DELETE FROM instances WHERE type='{$type}'");
 
 		foreach ($instances as $instance) {
-			$db->query( "INSERT INTO instances (id, type, address, locked) VALUES(NULL, '$type', '{$instance['address']}', {$instance['locked']});" );
+			$db->exec( "INSERT INTO instances (id, type, address, locked) VALUES(NULL, '$type', '{$instance['address']}', {$instance['locked']});" );
 		}
 		if ($atomic) {
 			$db->exec('COMMIT;');
@@ -327,7 +327,7 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
 			throw new Exception('could not find an available instance');
 		}
 		// Lock free instance.
-		$db->query( "UPDATE  instances SET locked=1 WHERE id={$freeInstance['id']}" );
+		$db->exec( "UPDATE  instances SET locked=1 WHERE id={$freeInstance['id']}" );
 		$db->exec('COMMIT;');
 
 		$db->close();
@@ -356,7 +356,7 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
 		elseif ($type == 'selenium') {
 			$url = Config::read('testserver.selenium.url');
 		}
-		$db->query( "UPDATE instances SET locked=0 WHERE address='{$url}' and type='$type'" );
+		$db->exec( "UPDATE instances SET locked=0 WHERE address='{$url}' and type='$type'" );
 		$db->close();
 	}
 
