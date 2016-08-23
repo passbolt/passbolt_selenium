@@ -16,13 +16,7 @@ $config = array (
 	'passbolt' => array (
 		'url' => 'http://52.32.88.103:8083',
 		'url_secondary' => 'http://52.32.88.103:8084', // Used for multidomains.
-		'instances' => [
-			'http://52.32.88.103:8083',
-			'http://52.32.88.103:8084',
-			'http://52.32.88.103:8085',
-			'http://52.32.88.103:8086',
-			'http://52.32.88.103:8087',
-		],
+		'instances' => [/* passbolt instances */],
 		'server_key' => array(
 			'fingerprint' => '2FC8945833C51946E937F9FED47B0811573EE67E',
 			'path'        => GPG_SERVER . DS . 'unsecure.key'
@@ -39,7 +33,7 @@ $config = array (
 		)
 	),
 	'testserver' => array(
-		'default' => 'saucelabs',
+		'default' => 'selenium',
 		'saucelabs' => array(
 			'url'       => 'ondemand.saucelabs.com:80/wd/hub',
 			'username'  => 'passbolt',
@@ -47,7 +41,8 @@ $config = array (
 		),
 		// the base url of your selenium server
 		'selenium' => array (
-			'url' => 'http://52.32.88.103:4444/wd/hub'
+			'url' => 'http://52.32.88.103:4444/wd/hub',
+			'instances' => [/* selenium instances */],
 		),
 	),
 	'browsers' => array (

@@ -16,12 +16,7 @@ $config = array (
 	'passbolt' => array (
 		'url' => 'http://localhost/passbolt',
 		'url_secondary' => 'http://localhost/passbolt:8082', // Used for multidomains.
-		'instances' => [
-			'http://192.168.99.100:8081',
-			'http://192.168.99.100:8082',
-			'http://192.168.99.100:8083',
-			'http://192.168.99.100:8084',
-		],
+		'instances' => [/* passbolt instances */],
 		'server_key' => array(
             'fingerprint' => '2FC8945833C51946E937F9FED47B0811573EE67E',
             'path'        => GPG_SERVER . DS . 'unsecure.key'
@@ -49,7 +44,8 @@ $config = array (
 		),
 		// Configuration for custom selenium server.
 		'selenium' => array (
-			'url' => 'http://192.168.99.100:4444/wd/hub'
+			'url' => 'http://192.168.99.100:4444/wd/hub',
+			'instances' => [/* selenium instances */],
 		),
 	),
 	'browsers' => array (
