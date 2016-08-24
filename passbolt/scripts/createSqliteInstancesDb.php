@@ -15,6 +15,12 @@ Config::get();
 
 $pathToDb = ROOT . DS . 'tmp' . DS . 'instances.db';
 
+/**
+ * Check that the table exists in the database.
+ * @param $db
+ *
+ * @return bool
+ */
 function checkTableExist(&$db) {
 	// Check if table exists.
 	$result = $db->query("SELECT count(*) AS exist FROM sqlite_master WHERE type='table' AND name='instances';")
@@ -24,6 +30,10 @@ function checkTableExist(&$db) {
 	return $tableExists;
 }
 
+/**
+ * Create the initial "instances" table.
+ * @param $db
+ */
 function createTable(&$db) {
 	// Create table.
 	$db->query(
@@ -31,6 +41,10 @@ function createTable(&$db) {
 	);
 }
 
+/**
+ * Populate table with data provided in the config file.
+ * @param $db
+ */
 function populateTable(&$db) {
 	$db->exec("DELETE FROM instances");
 	// Populate table.
