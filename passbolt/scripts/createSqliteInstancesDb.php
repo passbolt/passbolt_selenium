@@ -1,5 +1,16 @@
 <?php
-require_once(__DIR__ . '/../Config.php');
+/**
+ * @file
+ *
+ * This file contains a PHP script whose mission is to create a SQLite database
+ * and table.
+ * This table is to be used only in case of parallel tests running simultaneously,
+ * to keep a track of which passbolt and selenium instances are free, and which ones are already
+ * used by a running test.
+ *
+ * The database will be pre-populated bny the instances listed in the configuration file.
+ */
+require_once(__DIR__ . '/../../bootstrap.php');
 Config::get();
 
 $pathToDb = ROOT . DS . 'tmp' . DS . 'instances.db';
@@ -51,5 +62,8 @@ if (!$tableExists) {
 }
 
 populateTable($db);
+
+$nbEntries = $db->querySingle('SELECT COUNT(*) AS nbdata FROM instances');
+echo "Database and table instances have been created, and populated with $nbEntries entries\n";
 
 $db->close();
