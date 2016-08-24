@@ -202,64 +202,6 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
 		return $db;
 	}
 
-	/**
-	 * Init instances in DB.
-	 * Create database and table if not there, and populate initial data.
-	 * @param string $type
-	 */
-	private function __initDbInstances($type = 'passbolt') {
-
-		$db = $this->__openSqlite3Db(SQLITE3_OPEN_READONLY);
-		// Check if table exists.
-		$result = $db->query("SELECT count(*) AS exist FROM sqlite_master WHERE type='table' AND name='instances';")->fetchArray();
-		$db->close();
-
-		$tableExists = $result['exist'] == '1';
-		// If table doesn't exist, create it and populate it with instances.
-		if (!$tableExists) {
-			$db = $this->__openSqlite3Db();
-			$db->query( 'CREATE TABLE instances (id INTEGER PRIMARY KEY, type varchar(10), address varchar(255), locked INTEGER)' );
-
-			$db->exec('BEGIN;');
-			$instancesToSave = [];
-			// Insert rows in DB for instances, as per config.
-			$instancesConfig = $type == 'passbolt' ? Config::read('passbolt.instances') : Config::read('testserver.selenium.instances');
-			foreach ($instancesConfig as $instance) {
-				$instancesToSave[] = ['type' => $type, 'address' => $instance, 'locked' => 0];
-			}
-
-			// If there is a difference, we reinitialize db with config data.
-			$this->__resetDbInstances($type, $instancesToSave, false, $db);
-			$db->exec('COMMIT;');
-			$db->close();
-		}
-	}
-
-	/**
-	 * Reset instances in DB with instances given.
-	 * @param      $type
-	 * @param      $instances
-	 * @param bool $atomic
-	 */
-	private function __resetDbInstances($type, $instances, $atomic = true, $db = null) {
-		if ($db == null) {
-			$db = $this->__openSqlite3Db();
-		}
-
-		if ($atomic) {
-			$db->exec('BEGIN;');
-		}
-		$db->exec("DELETE FROM instances WHERE type='{$type}'");
-
-		foreach ($instances as $instance) {
-			$db->exec( "INSERT INTO instances (id, type, address, locked) VALUES(NULL, '$type', '{$instance['address']}', {$instance['locked']});" );
-		}
-		if ($atomic) {
-			$db->exec('COMMIT;');
-		}
-		$db->close();
-	}
-
 	private function __useMultipleSeleniumInstances() {
 		$isSelenium = Config::read('testserver.default') == 'selenium';
 		$seleniumInstances = Config::read('testserver.selenium.instances');
@@ -271,58 +213,12 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
 		return !empty($passboltInstances);
 	}
 
-	private function __syncDbInstancesWithConfig($type) {
-
-		$instancesConfig = [];
-		if ($this->__useMultiplePassboltInstances()) {
-			$instancesConfig['passbolt'] = Config::read('passbolt.instances');
-		}
-
-		// If we have multiple selenium db instances.
-		if ($this->__useMultipleSeleniumInstances()) {
-			$instancesConfig['selenium'] = Config::read('testserver.selenium.instances');
-		}
-
-		if (empty($instancesConfig)) {
-			return;
-		}
-
-		$db = $this->__openSqlite3Db();
-		foreach ($instancesConfig as $type => $instanceConfig) {
-			// Get instances from DB.
-			$res = $db->query("SELECT * FROM instances WHERE type='$type'");
-			$instancesDb = [];
-			while($instance = $res->fetchArray()) {
-				$instancesDb[] = $instance['address'];
-			}
-
-			// Compare instances in DB, and instances in config.
-			// If they are different, reset Db with config values.
-			$sameInstances = sizeof($instancesDb) == sizeof($instanceConfig)
-				&& sizeof(array_diff($instanceConfig, $instancesDb)) == 0;
-			if (!$sameInstances) {
-				$instancesToSave = [];
-				foreach($instanceConfig as $instanceAddress ) {
-					$instancesToSave[] = ['type' => $type, 'address' => $instanceAddress, 'locked' => 0];
-				}
-				$this->__resetDbInstances($type, $instancesToSave, true, $db);
-			}
-		}
-		$db->close();
-	}
-
 	public function reserveInstance($type = 'passbolt') {
-
-		// Init instances in DB. Set table and entries if not there.
-		$this->__initDbInstances($type);
-		//  Make sure that DB instances match the ones provided in config //
-		$this->__syncDbInstancesWithConfig($type);
-
 
 		$db = $this->__openSqlite3Db();
 		// Get Free instance.
 		$db->exec('BEGIN;');
-		$freeInstance = $db->query( "SELECT * FROM instances WHERE type='$type' AND locked=0" )->fetchArray();
+		$freeInstance = $db->querySingle( "SELECT * FROM instances WHERE type='$type' AND locked=0" );
 		if (empty($freeInstance)) {
 			throw new Exception('could not find an available instance');
 		}
