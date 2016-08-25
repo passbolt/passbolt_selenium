@@ -216,13 +216,19 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
 	public function reserveInstance($type = 'passbolt') {
 
 		$db = $this->__openSqlite3Db(SQLITE3_OPEN_READWRITE);
-		// Get Free instance.
-		$freeInstance = $db->query( "SELECT * FROM instances WHERE type='$type' AND locked=0 ORDER BY id LIMIT 1" )->fetchArray();
-		if (empty($freeInstance)) {
-			throw new Exception('could not find an available instance');
-		}
+
 		// Lock free instance.
-		$db->exec( "UPDATE  instances SET locked=1 WHERE id={$freeInstance['id']}" );
+		$lockId = rand(1, 10000);
+		$db->exec( "
+			UPDATE  instances SET locked=$lockId
+			WHERE id=(
+				SELECT id FROM instances WHERE type='$type' AND locked=0 ORDER BY id LIMIT 1
+			)" );
+
+		$freeInstance = $db->query( "SELECT * FROM instances WHERE type='$type' AND locked=$lockId" )->fetchArray();
+		if (empty($freeInstance)) {
+			throw new Exception('could not retrieve the free instance');
+		}
 
 		$db->close();
 
