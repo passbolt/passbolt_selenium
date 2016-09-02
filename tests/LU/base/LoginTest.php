@@ -107,6 +107,8 @@ class LoginTest extends PassboltTestCase {
 	}
 
 	/**
+	 * @group no-parallel
+	 *
 	 * Scenario:  As AN I can login to passbolt on different tabs without conflict between workers
 	 * Given 	As AN with plugin on the login page
 	 * When 	I open a new window and go to the login page
