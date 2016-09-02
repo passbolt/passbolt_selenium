@@ -33,7 +33,7 @@ $config = array (
 		)
 	),
 	'testserver' => array(
-		'default' => 'selenium',
+		'default' => '/* testserver */',
 		'saucelabs' => array(
 			'url'       => 'ondemand.saucelabs.com:80/wd/hub',
 			'username'  => 'passbolt',
