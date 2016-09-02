@@ -146,6 +146,8 @@ class SettingsProfileTest extends PassboltTestCase {
 	}
 
 	/**
+	 * @group no-parallel
+	 *
 	 * Scenario :   As LU, I should be able to edit my avatar picture.
 	 * Given        I am logged in as LU in the settings workspace, profile section.
 	 * When         I click on upload a new picture
