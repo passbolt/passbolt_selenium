@@ -41,13 +41,8 @@ class PassboltTestCase extends WebDriverTestCase {
 	 * Executed after every tests
 	 */
 	protected function tearDown() {
-		if ($this->hasFailed()) {
-			self::logFile("# Error (" . $this->testName . ")");
-		}
-
 		// Reset the database if mentioned.
 		if ($this->resetDatabaseWhenComplete) {
-			self::logFile("> ResetDatabase " . Config::read('passbolt.url') . "(" . $this->testName . ")");
 			PassboltServer::resetDatabase(Config::read('passbolt.url'));
 		}
 
