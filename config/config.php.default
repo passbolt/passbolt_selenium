@@ -41,11 +41,20 @@ $config = array (
 			'url'       => 'ondemand.saucelabs.com:80/wd/hub',
 			'username'  => 'username',
 			'key'       => 'access_key',
+			// Extra capabilities.
+			'capabilities' => array(
+				'videoUploadOnPass' => false,
+				'recordVideo'=> true,
+				'recordScreenshots' => true,
+				'recordLogs' => true
+			),
 		),
 		// Configuration for custom selenium server.
 		'selenium' => array (
 			'url' => 'http://192.168.99.100:4444/wd/hub',
 			'instances' => [/* selenium instances */],
+			// Extra capabilities.
+			'capabilities' => array(),
 		),
 	),
 	'browsers' => array (

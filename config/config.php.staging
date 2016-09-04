@@ -38,6 +38,12 @@ $config = array (
 			'url'       => 'ondemand.saucelabs.com:80/wd/hub',
 			'username'  => 'passbolt',
 			'key'       => '688b92b6-6d74-40b9-9d03-15b97124a666',
+			'capabilities' => array(
+				'videoUploadOnPass' => false,
+				'recordVideo'=> true,
+				'recordScreenshots' => true,
+				'recordLogs' => true
+			),
 		),
 		// the base url of your selenium server
 		'selenium' => array (

@@ -28,8 +28,8 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
 	protected $_saucelabs; // boolean
 
 	// Saucelab job.
-	protected $sauceAPI;
-	protected $sauceLabJob;
+	protected $_sauceAPI;
+	protected $_sauceLabJob;
 
     /********************************************************************************
      * Pre/Post Tests Execution Callback
@@ -47,11 +47,9 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
 	    // Reserve instances for passbolt and selenium.
 	    if ($this->__useMultiplePassboltInstances()) {
 		    $this->reserveInstance('passbolt');
-		    self::logFile("> Reserved passbolt instance: " . Config::read('passbolt.url') . " (" . $this->testName . ")");
 	    }
 	    if ($this->__useMultipleSeleniumInstances()) {
 		    $this->reserveInstance('selenium');
-		    self::logFile("> Reserved selenium instance: " . Config::read('testserver.selenium.url') . " (" . $this->testName . ")");
 	    }
 
 	    // Init browser.
@@ -62,8 +60,8 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
 
 	    // SauceAPI.
 	    if ($this->_saucelabs) {
-		    $this->sauceAPI = new Sauce\Sausage\SauceAPI(Config::read('testserver.saucelabs.username'), Config::read('testserver.saucelabs.key'));
-		    $this->sauceLabJob = $this->getSauceLabJob();
+		    $this->_sauceAPI = new Sauce\Sausage\SauceAPI(Config::read('testserver.saucelabs.username'), Config::read('testserver.saucelabs.key'));
+		    $this->_sauceLabJob = $this->getSauceLabJob();
 	    }
     }
 
@@ -72,7 +70,7 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
 	 * @return array Sauce lab job object.
 	 */
 	public function getSauceLabJob() {
-		$jobs = $this->sauceAPI->getJobs(0, null, 10)['jobs'];
+		$jobs = $this->_sauceAPI->getJobs(0, null, 10)['jobs'];
 		foreach ($jobs as $job) {
 			if ($job['name'] == $this->testName) {
 				return $job;
@@ -95,14 +93,21 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
 			$capabilities->setCapability('platform', 'Windows 10');
 			$capabilities->setCapability('version', '47.0');
 			$capabilities->setCapability('screenResolution', '1280x1024');
-			$capabilities->setCapability('name', $this->testName);
+
+			// Set build name.
 			// TODO: define build number.
 			$capabilities->setCapability('build', time());
-			// TODO : define this in config file.
-//			$capabilities->setCapability('videoUploadOnPass', false);
-//			$capabilities->setCapability('recordVideo', false);
-//			$capabilities->setCapability('recordScreenshots', false);
-//			$capabilities->setCapability('recordLogs', false);
+
+			// Set test name.
+			$capabilities->setCapability('name', $this->testName);
+
+			// Define specific saucelab capabilities.
+			$sauceLabCapabilities = Config::read('testserver.saucelabs.capabilities');
+			if (!empty($sauceLabCapabilities)) {
+				foreach($sauceLabCapabilities as $capabilityName => $capabilityValue) {
+					$capabilities->setCapability($capabilityName, $capabilityValue);
+				}
+			}
 		}
 
 		// Build end point url.
@@ -111,10 +116,6 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
 
 		// Redirect it immediately to an empty page, so we avoid the default firefox home page.
 		$this->driver->get('');
-	}
-
-	public static function logFile($str) {
-		file_put_contents(ROOT . DS . 'tmp' . DS . 'logs.txt', $str . "\n", FILE_APPEND);
 	}
 
 	/**
@@ -141,10 +142,8 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
             if($this->_quit === '0') {
                 return;
             } else if(empty($this->_quit) || $this->_quit === '1') {
-	            self::logFile("> Driver Quit (" . $this->testName . ")");
                 $this->driver->quit();
             } else if($this->_quit === '2' && isset($this->_failing) && !$this->_failing) {
-	            self::logFile("> Driver Quit (" . $this->testName . ")");
                 $this->driver->quit();
             }
         }
@@ -164,11 +163,9 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
 	    // Release instance.
 	    if ($this->__useMultiplePassboltInstances()) {
 		    $this->releaseInstance('passbolt');
-		    self::logFile("> Released passbolt instance: " . Config::read('passbolt.url') . " (" . $this->testName . ")");
 	    }
 	    if ($this->__useMultipleSeleniumInstances()) {
 		    $this->releaseInstance('selenium');
-		    self::logFile("> Released selenium instance: " . Config::read('testserver.selenium.url') . " (" . $this->testName . ")");
 	    }
     }
 
@@ -176,9 +173,9 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
 	 * Update test status on saucelabs.
 	 */
 	public function updateTestStatus() {
-		if (isset($this->sauceLabJob) && is_array($this->sauceLabJob)) {
-			$this->sauceAPI->updateJob(
-				$this->sauceLabJob['id'],
+		if (isset($this->_sauceLabJob) && is_array($this->_sauceLabJob)) {
+			$this->_sauceAPI->updateJob(
+				$this->_sauceLabJob['id'],
 				array('passed' => $this->hasFailed() ? false : true)
 			);
 		}
