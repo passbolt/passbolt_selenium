@@ -68,7 +68,7 @@ $config = array (
 		),
 		'chrome_vanilla' => array(
 			'name' => 'Chrome with no extensions',
-			'type' => 'Chrome'
+			'type' => 'chrome'
 		)
 	)
 );

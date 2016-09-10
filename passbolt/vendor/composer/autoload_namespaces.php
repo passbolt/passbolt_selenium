@@ -7,6 +7,7 @@ $baseDir = dirname(dirname($vendorDir));
 
 return array(
     'Sauce' => array($vendorDir . '/sauce/sausage-installer/src', $vendorDir . '/sauce/sausage/src'),
+    'Prophecy\\' => array($vendorDir . '/phpspec/prophecy/src'),
     'ParaTest' => array($vendorDir . '/brianium/paratest/src'),
     'Httpful' => array($vendorDir . '/nategood/httpful/src'),
     'Habitat' => array($vendorDir . '/brianium/habitat/src'),

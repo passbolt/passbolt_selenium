@@ -1,13 +1,8 @@
 <?php
 class Tests_Selenium2TestCase_Coverage_CookieTest extends Tests_Selenium2TestCase_BaseTestCase
 {
-    // this is a dummy URL (no server at that port), but Firefox still sets domain cookie, which is what's needed
-    protected $coverageScriptUrl = 'http://127.0.0.1:8081/';
-
-    public static function setUpBeforeClass()
-    {
-        self::shareSession(true);
-    }
+    // this is a dummy URL (returns down coverage data in HTML), but Firefox still sets domain cookie, which is what's needed
+    protected $coverageScriptUrl = 'http://127.0.0.1:8080/coverage/dummy.html';
 
     public function run(PHPUnit_Framework_TestResult $result = NULL)
     {
@@ -24,12 +19,12 @@ class Tests_Selenium2TestCase_Coverage_CookieTest extends Tests_Selenium2TestCas
         $result->getCodeCoverage()->clear();
     }
 
-    protected function getTestIdCookie ()
+    protected function getTestIdCookie()
     {
         return $this->prepareSession()->cookie()->get('PHPUNIT_SELENIUM_TEST_ID');
     }
 
-    public function testTestIdCookieIsSet ()
+    public function testTestIdCookieIsSet()
     {
         $this->url('/');
         return $this->getTestIdCookie();
@@ -38,7 +33,7 @@ class Tests_Selenium2TestCase_Coverage_CookieTest extends Tests_Selenium2TestCas
     /**
      * @depends testTestIdCookieIsSet
      */
-    public function testTestsHaveUniqueTestIdCookies ($previousTestIdCookie)
+    public function testTestsHaveUniqueTestIdCookies($previousTestIdCookie)
     {
         $this->url('/');
         $this->assertNotEquals($this->getTestIdCookie(), $previousTestIdCookie);

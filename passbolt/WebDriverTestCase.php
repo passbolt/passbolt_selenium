@@ -115,7 +115,9 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
 		$this->driver = RemoteWebDriver::create($serverUrl, $capabilities, 120000, 120000);
 
 		// Redirect it immediately to an empty page, so we avoid the default firefox home page.
-		$this->driver->get('');
+		if ($this->_browser['type'] == 'firefox') {
+			$this->driver->get('');
+		}
 	}
 
 	/**

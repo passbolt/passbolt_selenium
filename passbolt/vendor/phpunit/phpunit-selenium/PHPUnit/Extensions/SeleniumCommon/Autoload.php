@@ -82,6 +82,7 @@ spl_autoload_register(
             'phpunit_extensions_selenium2testcase_sessioncommand_alerttext' => '/Extensions/Selenium2TestCase/SessionCommand/AlertText.php',
             'phpunit_extensions_selenium2testcase_sessioncommand_click' => '/Extensions/Selenium2TestCase/SessionCommand/Click.php',
             'phpunit_extensions_selenium2testcase_sessioncommand_dismissalert' => '/Extensions/Selenium2TestCase/SessionCommand/DismissAlert.php',
+            'phpunit_extensions_selenium2testcase_sessioncommand_file' => '/Extensions/Selenium2TestCase/SessionCommand/File.php',
             'phpunit_extensions_selenium2testcase_sessioncommand_frame' => '/Extensions/Selenium2TestCase/SessionCommand/Frame.php',
             'phpunit_extensions_selenium2testcase_sessioncommand_genericaccessor' => '/Extensions/Selenium2TestCase/SessionCommand/GenericAccessor.php',
             'phpunit_extensions_selenium2testcase_sessioncommand_genericattribute' => '/Extensions/Selenium2TestCase/SessionCommand/GenericAttribute.php',
@@ -102,8 +103,6 @@ spl_autoload_register(
             'phpunit_extensions_seleniumbrowsersuite' => '/Extensions/SeleniumBrowserSuite.php',
             'phpunit_extensions_seleniumcommon_remotecoverage' => '/Extensions/SeleniumCommon/RemoteCoverage.php',
             'phpunit_extensions_seleniumcommon_exithandler' => '/Extensions/SeleniumCommon/ExitHandler.php',
-            'phpunit_extensions_seleniumtestcase' => '/Extensions/SeleniumTestCase.php',
-            'phpunit_extensions_seleniumtestcase_driver' => '/Extensions/SeleniumTestCase/Driver.php',
             'phpunit_extensions_seleniumtestsuite' => '/Extensions/SeleniumTestSuite.php'
           );
 

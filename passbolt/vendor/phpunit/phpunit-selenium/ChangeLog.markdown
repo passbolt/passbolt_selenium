@@ -1,7 +1,35 @@
-PHPUnit_Selenium 1.4
-====================
+PHPUnit_Selenium
+================
 
-This is the list of changes for the PHPUnit_Selenium 1.4 release series.
+This is the list of changes made to PHPUnit_Selenium.
+
+PHPUnit_Selenium 3.0.2
+----------------------
+
+* Bug fix of waitUntil()
+
+PHPUnit_Selenium 3.0.1
+----------------------
+
+* Configurability of waitUntil() timeout and sleep interval
+
+PHPUnit_Selenium 3.0.0
+----------------------
+
+* Only supports PHPUnit 5
+* Officially supports PHP 7
+
+PHPUnit_Selenium 2.0.1
+----------------------
+
+* Only supports PHPUnit 4
+
+PHPUnit_Selenium 2.0.0
+----------------------
+
+* Only Selenium2TestCase is supported in the 2.x releases
+* file() command
+* Windows compatibility of code coverage
 
 PHPUnit_Selenium 1.4.2
 ----------------------

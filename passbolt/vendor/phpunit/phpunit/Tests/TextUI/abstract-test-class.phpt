@@ -2,29 +2,23 @@
 phpunit AbstractTest ../_files/AbstractTest.php
 --FILE--
 <?php
-define('PHPUNIT_TESTSUITE', TRUE);
-
 $_SERVER['argv'][1] = '--no-configuration';
 $_SERVER['argv'][2] = 'AbstractTest';
-$_SERVER['argv'][3] = dirname(dirname(__FILE__)) . '/_files/AbstractTest.php';
+$_SERVER['argv'][3] = __DIR__ . '/../_files/AbstractTest.php';
 
-require_once dirname(dirname(dirname(__FILE__))) . '/PHPUnit/Autoload.php';
+require __DIR__ . '/../bootstrap.php';
 PHPUnit_TextUI_Command::main();
-?>
 --EXPECTF--
-PHPUnit %s by Sebastian Bergmann.
+PHPUnit %s by Sebastian Bergmann and contributors.
 
-F
+W                                                                   1 / 1 (100%)
 
-Time: %s, Memory: %sMb
+Time: %s, Memory: %s
 
-There was 1 failure:
+There was 1 warning:
 
 1) Warning
 Cannot instantiate class "AbstractTest".
 
-%s:%i
-
-FAILURES!
-Tests: 1, Assertions: 0, Failures: 1.
-
+WARNINGS!
+Tests: 1, Assertions: 0, Warnings: 1.
