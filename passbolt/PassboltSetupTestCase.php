@@ -285,11 +285,10 @@ class PassboltSetupTestCase extends PassboltTestCase {
 
 		// Fill master key.
 		$this->inputText('js_field_password', $user['MasterPassword']);
+
 		// Test that complexity has been updated.
-		$this->assertElementContainsText(
-			$this->findByCss('#js_user_pwd_strength .complexity-text strong'),
-			isset($user['PasswordStrength']) ? $user['PasswordStrength'] : 'fair'
-		);
+		$expectedComplexity = isset($user['PasswordStrength']) ? $user['PasswordStrength'] : 'fair';
+		$this->waitUntilISee('#js_user_pwd_strength .complexity-text', "/$expectedComplexity/", 1);
 
 		// Test that progress bar contains class fair.
 		$this->assertElementHasClass(
