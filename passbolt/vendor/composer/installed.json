@@ -40,49 +40,6 @@
         "homepage": "http://github.com/jlipps/sausage-installer"
     },
     {
-        "name": "brianium/habitat",
-        "version": "v1.0.0",
-        "version_normalized": "1.0.0.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/brianium/habitat.git",
-            "reference": "d0979e3bb379cbc78ecb42b3ac171bc2b7e06d96"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/brianium/habitat/zipball/d0979e3bb379cbc78ecb42b3ac171bc2b7e06d96",
-            "reference": "d0979e3bb379cbc78ecb42b3ac171bc2b7e06d96",
-            "shasum": ""
-        },
-        "require-dev": {
-            "monolog/monolog": ">=1.5.0",
-            "phpunit/phpunit": ">=3.7.21"
-        },
-        "time": "2013-06-08 04:42:29",
-        "type": "library",
-        "installation-source": "dist",
-        "autoload": {
-            "psr-0": {
-                "Habitat": [
-                    "src/"
-                ]
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "MIT"
-        ],
-        "authors": [
-            {
-                "name": "Brian",
-                "email": "scaturrob@gmail.com",
-                "homepage": "http://brianscaturro.com",
-                "role": "Lead"
-            }
-        ],
-        "description": "A dependable php environment"
-    },
-    {
         "name": "nategood/httpful",
         "version": "0.2.20",
         "version_normalized": "0.2.20.0",
@@ -1899,9 +1856,52 @@
         ]
     },
     {
+        "name": "brianium/habitat",
+        "version": "v1.0.0",
+        "version_normalized": "1.0.0.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/brianium/habitat.git",
+            "reference": "d0979e3bb379cbc78ecb42b3ac171bc2b7e06d96"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/brianium/habitat/zipball/d0979e3bb379cbc78ecb42b3ac171bc2b7e06d96",
+            "reference": "d0979e3bb379cbc78ecb42b3ac171bc2b7e06d96",
+            "shasum": ""
+        },
+        "require-dev": {
+            "monolog/monolog": ">=1.5.0",
+            "phpunit/phpunit": ">=3.7.21"
+        },
+        "time": "2013-06-08 04:42:29",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "psr-0": {
+                "Habitat": [
+                    "src/"
+                ]
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Brian",
+                "email": "scaturrob@gmail.com",
+                "homepage": "http://brianscaturro.com",
+                "role": "Lead"
+            }
+        ],
+        "description": "A dependable php environment"
+    },
+    {
         "name": "brianium/paratest",
-        "version": "dev-master",
-        "version_normalized": "9999999-dev",
+        "version": "0.14.0",
+        "version_normalized": "0.14.0.0",
         "source": {
             "type": "git",
             "url": "https://github.com/brianium/paratest.git",
@@ -1930,7 +1930,7 @@
             "bin/paratest"
         ],
         "type": "library",
-        "installation-source": "source",
+        "installation-source": "dist",
         "autoload": {
             "psr-0": {
                 "ParaTest": [
