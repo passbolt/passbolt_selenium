@@ -21,6 +21,7 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
     protected $_log;
     protected $_quit;
     protected $_failing;
+	protected $_build;
 
 	// Name of the current test.
 	public $testName;
@@ -41,6 +42,16 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
     protected function setUp() {
         $this->_failing = null;
 	    $this->testName = $this->toString();
+
+	    // Get Build ID.
+	    // Set it if not provided.
+	    $build = getenv('BUILD');
+	    if (!$build) {
+		    $build = time();
+		    putenv('BUILD', $build);
+	    }
+	    $this->_build =$build;
+
 
 	    $this->_saucelabs = Config::read('testserver.default') == 'saucelabs' ? true : false;
 
@@ -95,8 +106,7 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
 			$capabilities->setCapability('screenResolution', '1280x1024');
 
 			// Set build name.
-			// TODO: define build number.
-			$capabilities->setCapability('build', time());
+			$capabilities->setCapability('build', $this->_build);
 
 			// Set test name.
 			$capabilities->setCapability('name', $this->testName);
