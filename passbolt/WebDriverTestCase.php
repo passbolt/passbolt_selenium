@@ -99,11 +99,7 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
 		$this->_checkSeleniumConfig();
 		$capabilities = $this->_getCapabilities();
 
-		// TODO: move this in config.
 		if ($this->_saucelabs) {
-//			$capabilities->setCapability('platform', 'Windows 10');
-//			$capabilities->setCapability('version', '47.0');
-//			$capabilities->setCapability('screenResolution', '1280x1024');
 
 			// Set build name.
 			$capabilities->setCapability('build', $this->_build);
