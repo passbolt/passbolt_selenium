@@ -1836,67 +1836,6 @@
         ]
     },
     {
-        "name": "brianium/paratest",
-        "version": "dev-master",
-        "version_normalized": "9999999-dev",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/brianium/paratest.git",
-            "reference": "dddcfa8510da7aae9616ba1738ebf630d9e84aa4"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/brianium/paratest/zipball/dddcfa8510da7aae9616ba1738ebf630d9e84aa4",
-            "reference": "dddcfa8510da7aae9616ba1738ebf630d9e84aa4",
-            "shasum": ""
-        },
-        "require": {
-            "brianium/habitat": "1.0.0",
-            "composer/semver": "~1.2",
-            "ext-pcre": "*",
-            "ext-reflection": "*",
-            "ext-simplexml": "*",
-            "php": ">=5.5.11",
-            "phpunit/php-timer": ">=1.0.4",
-            "phpunit/phpunit": ">=3.7.8",
-            "symfony/console": "~2.3|~3.0",
-            "symfony/process": "~2.3|~3.0"
-        },
-        "time": "2016-08-12 20:14:13",
-        "bin": [
-            "bin/paratest"
-        ],
-        "type": "library",
-        "installation-source": "source",
-        "autoload": {
-            "psr-0": {
-                "ParaTest": [
-                    "src/"
-                ]
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "MIT"
-        ],
-        "authors": [
-            {
-                "name": "Brian Scaturro",
-                "email": "scaturrob@gmail.com",
-                "homepage": "http://brianscaturro.com",
-                "role": "Lead"
-            }
-        ],
-        "description": "Parallel testing for PHP",
-        "homepage": "https://github.com/brianium/paratest",
-        "keywords": [
-            "concurrent",
-            "parallel",
-            "phpunit",
-            "testing"
-        ]
-    },
-    {
         "name": "sauce/sausage",
         "version": "0.17.0",
         "version_normalized": "0.17.0.0",
@@ -1956,6 +1895,67 @@
             "appium",
             "phpunit",
             "selenium",
+            "testing"
+        ]
+    },
+    {
+        "name": "brianium/paratest",
+        "version": "dev-master",
+        "version_normalized": "9999999-dev",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/brianium/paratest.git",
+            "reference": "dddcfa8510da7aae9616ba1738ebf630d9e84aa4"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/brianium/paratest/zipball/dddcfa8510da7aae9616ba1738ebf630d9e84aa4",
+            "reference": "dddcfa8510da7aae9616ba1738ebf630d9e84aa4",
+            "shasum": ""
+        },
+        "require": {
+            "brianium/habitat": "1.0.0",
+            "composer/semver": "~1.2",
+            "ext-pcre": "*",
+            "ext-reflection": "*",
+            "ext-simplexml": "*",
+            "php": ">=5.5.11",
+            "phpunit/php-timer": ">=1.0.4",
+            "phpunit/phpunit": ">=3.7.8",
+            "symfony/console": "~2.3|~3.0",
+            "symfony/process": "~2.3|~3.0"
+        },
+        "time": "2016-08-12 20:14:13",
+        "bin": [
+            "bin/paratest"
+        ],
+        "type": "library",
+        "installation-source": "source",
+        "autoload": {
+            "psr-0": {
+                "ParaTest": [
+                    "src/"
+                ]
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Brian Scaturro",
+                "email": "scaturrob@gmail.com",
+                "homepage": "http://brianscaturro.com",
+                "role": "Lead"
+            }
+        ],
+        "description": "Parallel testing for PHP",
+        "homepage": "https://github.com/brianium/paratest",
+        "keywords": [
+            "concurrent",
+            "parallel",
+            "phpunit",
             "testing"
         ]
     }
