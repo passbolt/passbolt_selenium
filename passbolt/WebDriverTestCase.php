@@ -48,7 +48,7 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
 	    $build = getenv('BUILD');
 	    if (!$build) {
 		    $build = time();
-		    putenv('BUILD', $build);
+		    putenv("BUILD=$build");
 	    }
 	    $this->_build =$build;
 
