@@ -43,10 +43,14 @@ $config = array (
 			'key'       => 'access_key',
 			// Extra capabilities.
 			'capabilities' => array(
-				'videoUploadOnPass' => false,
+				'videoUploadOnPass' => true,
 				'recordVideo'=> true,
 				'recordScreenshots' => true,
-				'recordLogs' => true
+				'recordLogs' => true,
+				/* Browser and operating system */
+				'platform' => '/* sl_platform */',
+				'version' => '/* sl_browser_version */',
+				'screenResolution' => '/* sl_screen_resolution */',
 			),
 		),
 		// Configuration for custom selenium server.
