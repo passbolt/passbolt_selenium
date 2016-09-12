@@ -158,7 +158,12 @@ class SetupTest extends PassboltSetupTestCase {
 		// Press Next.
 		$this->clickLink("Next");
 		// Wait to reach the page.
-		$this->waitForSection('generate_key_progress');
+		// It can be very fast on recent computer, in this case check that the cas has been generated.
+		try {
+			$this->waitForSection('generate_key_progress');
+		} catch (Exception $e) {
+			$this->waitForSection('generate_key_done');
+		}
 		// Wait until the key is generated.
 		$this->waitForSection('generate_key_done');
 		// Assert menu is selected.
