@@ -179,8 +179,9 @@ class PassboltTestCase extends WebDriverTestCase {
 	/**
 	 * Login on the application with the given user.
 	 * @param user
+	 * @param useCache {bool} (optional) default true
 	 */
-	public function loginAs($user) {
+	public function loginAs($user, $useCache = true) {
 		if (!is_array($user)) {
 			$user = [
 				'Username' => $user,
@@ -191,7 +192,7 @@ class PassboltTestCase extends WebDriverTestCase {
 		// Store the current username.
 		$this->currentUser = $user;
 
-		if (isset(self::$loginCookies[$this->currentUser['Username']])) {
+		if ($useCache && isset(self::$loginCookies[$this->currentUser['Username']])) {
 			$this->getUrl('login');
 			foreach(self::$loginCookies[$this->currentUser['Username']] as $cookie) {
 				$this->driver->manage()->addCookie($cookie);
@@ -468,6 +469,7 @@ class PassboltTestCase extends WebDriverTestCase {
 		// Fill master key.
 		$this->inputText('js_field_password', $data['masterpassword']);
 		// Click Next.
+		$this->waitUntilISee('#js_setup_submit_step.enabled');
 		$this->clickLink("Next");
 		// Wait until we see the title Master password.
 		$this->waitUntilISee('#js_step_title', '/Success! Your secret key is ready./i');

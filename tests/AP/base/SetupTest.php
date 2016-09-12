@@ -156,14 +156,10 @@ class SetupTest extends PassboltSetupTestCase {
 		// Fill master key.
 		$this->inputText('js_field_password', 'johndoemasterpassword');
 		// Press Next.
+		$this->waitUntilISee('#js_setup_submit_step.enabled');
 		$this->clickLink("Next");
 		// Wait to reach the page.
-		// It can be very fast on recent computer, in this case check that the cas has been generated.
-		try {
-			$this->waitForSection('generate_key_progress');
-		} catch (Exception $e) {
-			$this->waitForSection('generate_key_done');
-		}
+		$this->waitForSection('generate_key_progress');
 		// Wait until the key is generated.
 		$this->waitForSection('generate_key_done');
 		// Assert menu is selected.
@@ -177,6 +173,7 @@ class SetupTest extends PassboltSetupTestCase {
 		// Fill master key.
 		$this->inputText('js_field_password', 'johndoemasterpassword');
 		// Press Next.
+		$this->waitUntilISee('#js_setup_submit_step.enabled');
 		$this->clickLink("Next");
 		// Wait to reach the page.
 		$this->waitForSection('generate_key_progress');

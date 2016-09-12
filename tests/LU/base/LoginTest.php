@@ -142,7 +142,7 @@ class LoginTest extends PassboltTestCase {
 		$this->click('html');
 
 		// Then I should be able to login to passbolt from the first window.
-		$this->loginAs($user);
+		$this->loginAs($user, false);
 
 		// When I logout
 		$this->logout();
@@ -152,7 +152,7 @@ class LoginTest extends PassboltTestCase {
 		$this->click('html');
 
 		// Then I should be able to login to passbolt from the second window
-		$this->loginAs($user);
+		$this->loginAs($user, false);
 	}
 
 	/**
@@ -170,7 +170,7 @@ class LoginTest extends PassboltTestCase {
 		$this->setClientConfig($user);
 
 		// And I am logged in
-		$this->loginAs($user);
+		$this->loginAs($user, false);
 
 		// When I restart the browser
 		$this->restartBrowser();
@@ -198,7 +198,7 @@ class LoginTest extends PassboltTestCase {
 		$this->findByCSS('html')->sendKeys(array(WebDriverKeys::CONTROL, 't'));
 
 		// And I am logged in
-		$this->loginAs($user);
+		$this->loginAs($user, false);
 
 		// When I close and restore the tab
 		$this->closeAndRestoreTab();
