@@ -37,17 +37,11 @@ class PASSBOLT1039 extends PassboltTestCase
         );
         $this->createPassword($password);
 	    $this->waitCompletion();
-	    // Sorry for that :(
-	    sleep(3);
 
         // When I edit the password I just created
-	    $xpathSelector = "//div[contains(@class, 'tableview-content')]//tr//td[.//*[contains(text(),'" . $password['name'] . "')]]";
+	    $xpathSelector = "//div[contains(@class, 'tableview-content')]//tr[.//*[contains(text(),'" . $password['name'] . "')]]";
 	    $resource = $this->findByXpath($xpathSelector);
-
-        $resource->click();
-        $this->click('js_wk_menu_edition_button');
-	    // I already put 100Rs in the douchebag box for that too.
-	    sleep(3);
+        $this->gotoEditPassword(str_replace('resource_', '', $resource->getAttribute('id')));
 
 	    //$this->assertVisible('.edit-password-dialog');
 	    $this->goIntoSecretIframe();
