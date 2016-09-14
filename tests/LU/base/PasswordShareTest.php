@@ -624,6 +624,9 @@ class PasswordShareTest extends PassboltTestCase
 	 * Then     I can see Betty is in the sidebar, under the permissions section
 	 */
 	public function testSharePasswordAndViewNewPermissionInSidebar() {
+		// Reset database at the end of test.
+		$this->resetDatabaseWhenComplete();
+		
 		// Given I am Carol
 		$user = User::get('carol');
 		$this->setClientConfig($user);
