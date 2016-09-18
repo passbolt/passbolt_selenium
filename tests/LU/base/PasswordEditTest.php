@@ -916,6 +916,7 @@ class PasswordEditTest extends PassboltTestCase
         // When I click the button to view my password in clear text
         $this->goIntoSecretIframe();
         $this->click('js_secret_view');
+        $this->goOutOfIframe();
 
         // Then I see the passphrase dialog
         $this->assertMasterPasswordDialog($user);
@@ -1164,6 +1165,7 @@ class PasswordEditTest extends PassboltTestCase
 		$this->goIntoSecretIframe();
 		$this->click('js_secret');
 		$this->goOutOfIframe();
+
 		$this->assertMasterPasswordDialog($user);
 		$this->enterMasterPassword($user['MasterPassword']);
 		$this->waitUntilIDontSee('#passbolt-iframe-master-password');
