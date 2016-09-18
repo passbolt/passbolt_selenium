@@ -867,7 +867,7 @@ class PasswordShareTest extends PassboltTestCase
 		$this->enterMasterPassword($userAda['MasterPassword']);
 
 		// Then I see a dialog telling me encryption is in progress
-		$this->waitUntilISee('passbolt-iframe-progress-dialog');
+		$this->waitUntilISee('#passbolt-iframe-progress-dialog');
 		$this->waitCompletion();
 
 		// And I see a notice message that the operation was a success

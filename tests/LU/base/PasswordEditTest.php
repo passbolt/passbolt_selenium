@@ -866,10 +866,10 @@ class PasswordEditTest extends PassboltTestCase
         $this->click('.edit-password-dialog input[type=submit]');
 
         // Then I can see the encryption in progress dialog
-        $this->waitUntilISee('passbolt-iframe-progress-dialog');
+        $this->waitUntilISee('#passbolt-iframe-progress-dialog');
 
 	    // Then wait until I don't see  the encryption dialog anymore.
-	    $this->waitUntilIDontSee('passbolt-iframe-progress-dialog');
+	    $this->waitUntilIDontSee('#passbolt-iframe-progress-dialog');
 
         // Then I can see the success notification
         $this->assertNotification('app_resources_edit_success');

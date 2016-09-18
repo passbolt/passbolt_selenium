@@ -808,8 +808,8 @@ class PassboltTestCase extends WebDriverTestCase {
 		}
 		$this->click('.create-password-dialog input[type=submit]');
 
-		$this->waitUntilISee('passbolt-iframe-progress-dialog');
-		$this->waitUntilIDontSee('passbolt-iframe-progress-dialog');
+		$this->waitUntilISee('#passbolt-iframe-progress-dialog');
+		$this->waitUntilIDontSee('#passbolt-iframe-progress-dialog');
 
 		$this->assertNotification('app_resources_add_success');
 	}
@@ -855,8 +855,8 @@ class PassboltTestCase extends WebDriverTestCase {
 		$this->click('.edit-password-dialog input[type=submit]');
 
 		if (isset($password['password'])) {
-			$this->waitUntilISee('passbolt-iframe-progress-dialog');
-			$this->waitUntilIDontSee('passbolt-iframe-progress-dialog');
+			$this->waitUntilISee('#passbolt-iframe-progress-dialog');
+			$this->waitUntilIDontSee('#passbolt-iframe-progress-dialog');
 		}
 		$this->assertNotification('app_resources_edit_success');
 	}
@@ -931,8 +931,8 @@ class PassboltTestCase extends WebDriverTestCase {
 		$this->enterMasterPassword($user['MasterPassword']);
 
 		// Then I see a dialog telling me encryption is in progress
-		$this->waitUntilISee('passbolt-iframe-progress-dialog');
-		$this->waitUntilIDontSee('passbolt-iframe-progress-dialog');
+		$this->waitUntilISee('#passbolt-iframe-progress-dialog');
+		$this->waitUntilIDontSee('#passbolt-iframe-progress-dialog');
 
 		// And I see a notice message that the operation was a success
 		$this->assertNotification('app_share_update_success');
