@@ -840,7 +840,7 @@ class PassboltTestCase extends WebDriverTestCase {
 			$this->goOutOfIframe();
 			$this->assertMasterPasswordDialog($user);
 			$this->enterMasterPassword($user['MasterPassword']);
-			$this->waitUntilIDontSee('passbolt-iframe-master-password');
+			$this->waitUntilIDontSee('#passbolt-iframe-master-password');
 
 			// Wait for password to be decrypted.
 			$this->goIntoSecretIframe();
@@ -1051,7 +1051,7 @@ class PassboltTestCase extends WebDriverTestCase {
 	 * @param $remember
 	 */
 	public function enterMasterPassword($pwd, $remember = false) {
-		$this->waitUntilISee('passbolt-iframe-master-password');
+		$this->waitUntilISee('#passbolt-iframe-master-password.ready');
 		$this->goIntoMasterPasswordIframe();
 		$this->inputText('js_master_password', $pwd);
 
@@ -1065,7 +1065,7 @@ class PassboltTestCase extends WebDriverTestCase {
 			'processing'
 		);
 		$this->goOutOfIframe();
-		$this->waitUntilIDontSee('passbolt-iframe-master-password');
+		$this->waitUntilIDontSee('#passbolt-iframe-master-password');
 	}
 
     /**
@@ -1078,7 +1078,7 @@ class PassboltTestCase extends WebDriverTestCase {
      *
      */
     public function enterMasterPasswordWithKeyboardShortcuts($pwd, $tabFirst = false) {
-        $this->waitUntilISee('passbolt-iframe-master-password');
+        $this->waitUntilISee('#passbolt-iframe-master-password.ready');
         sleep(1);
         if ($tabFirst) {
             $this->pressTab();
@@ -1578,13 +1578,13 @@ class PassboltTestCase extends WebDriverTestCase {
 		// Get out of the previous iframe in case we are in one
 		$this->goOutOfIframe();
 		// Given I can see the iframe
-		$this->waitUntilISee('passbolt-iframe-master-password');
+		$this->waitUntilISee('#passbolt-iframe-master-password.ready');
 		// When I can go into the iframe
 		$this->goIntoMasterPasswordIframe();
 		// Then I can see the security token is valid
 		$this->assertSecurityToken($user, 'master');
 		// Then I can see the title
-		$this->assertElementContainsText('.master-password.dialog','Please enter your passphrase');
+		$this->assertElementContainsText('.master-password.dialog', 'Please enter your passphrase');
 		// Then I can see the close dialog button
 		$this->assertVisible('a.dialog-close');
 		// Then I can see the OK button
