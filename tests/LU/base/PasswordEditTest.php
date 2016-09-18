@@ -586,9 +586,7 @@ class PasswordEditTest extends PassboltTestCase
 	}
 
 	/**
-     * @group no-parallel
-     *
-	 * Scenario: As a user I should be notified I will lose my changes on the edit password dialog after editing the secret
+     * Scenario: As a user I should be notified I will lose my changes on the edit password dialog after editing the secret
 	 *
 	 * Given    I am Ada
 	 * And      I am logged in on the password workspace
