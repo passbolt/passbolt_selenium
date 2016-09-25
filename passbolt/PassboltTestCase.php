@@ -645,6 +645,7 @@ class PassboltTestCase extends WebDriverTestCase {
 	public function clickPasswordFavorite($id) {
 		$eltSelector = '#favorite_' . $id . ' i';
 		$this->click($eltSelector);
+		$this->waitCompletion();
 	}
 
 	/**
