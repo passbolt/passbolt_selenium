@@ -717,6 +717,7 @@ class PassboltTestCase extends WebDriverTestCase {
 		$this->click('js_wk_menu_edition_button');
 		$this->waitCompletion();
 		$this->assertVisible('.edit-password-dialog');
+		$this->waitUntilISee('#passbolt-iframe-secret-edition.ready');
 	}
 
 	/**
