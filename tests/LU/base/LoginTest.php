@@ -127,16 +127,13 @@ class LoginTest extends PassboltTestCase {
 		$this->waitUntilISee('.plugin-check.gpg.success');
 
 		// When I open a new window and go to the login page
-		$this->driver->getKeyboard()
-			->sendKeys([WebDriverKeys::CONTROL, 'n']);
-		$windowHandles = $this->driver->getWindowHandles();
-		$this->driver->switchTo()->window($windowHandles[1]);
+		$this->openNewTab('');
 		$this->click('html');
 		$this->getUrl('login');
 		$this->waitUntilISee('.plugin-check.gpg.success');
 
 		// And I switch to the first window
-		$this->driver->switchTo()->window($windowHandles[0]);
+		$this->switchToTab(0);
 		$this->click('html');
 
 		// Then I should be able to login to passbolt from the first window.
@@ -146,7 +143,7 @@ class LoginTest extends PassboltTestCase {
 		$this->logout();
 
 		// And I switch to the second window
-		$this->driver->switchTo()->window($windowHandles[1]);
+		$this->switchToTab(1);
 		$this->click('html');
 
 		// Then I should be able to login to passbolt from the second window

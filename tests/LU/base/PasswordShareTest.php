@@ -1041,14 +1041,10 @@ class PasswordShareTest extends PassboltTestCase
 		$this->loginAs($user);
 
 		// When I open a new window and go to passbolt url
-		$this->driver->getKeyboard()
-			->sendKeys([WebDriverKeys::CONTROL, 'n']);
-		$windowHandles = $this->driver->getWindowHandles();
-		$this->driver->switchTo()->window($windowHandles[1]);
-		$this->getUrl('');
+		$this->openNewTab('');
 
 		// And I switch back to the first window
-		$this->driver->switchTo()->window($windowHandles[0]);
+		$this->switchToTab(0);
 		$this->click('html');
 
 		// And I go to the sharing dialog of a password I own
@@ -1072,7 +1068,7 @@ class PasswordShareTest extends PassboltTestCase
 		$this->assertPermission($resource, 'betty@passbolt.com', 'can read');
 
 		// When I switch to the second window
-		$this->driver->switchTo()->window($windowHandles[1]);
+		$this->switchToTab(1);
 		$this->click('html');
 
 		// And I go to the sharing dialog of a password I own
@@ -1091,7 +1087,7 @@ class PasswordShareTest extends PassboltTestCase
 		$this->assertPermission($resource, 'betty@passbolt.com', 'is owner');
 
 		// When I switch to the first window
-		$this->driver->switchTo()->window($windowHandles[0]);
+		$this->switchToTab(0);
 		$this->click('html');
 
 		// And I go to the sharing dialog of a password I own

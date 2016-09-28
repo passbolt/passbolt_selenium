@@ -1358,14 +1358,10 @@ class PasswordEditTest extends PassboltTestCase
 		$this->loginAs($user);
 
 		// When I open a new window and go to passbolt url
-		$this->driver->getKeyboard()
-			->sendKeys([WebDriverKeys::CONTROL, 'n']);
-		$windowHandles = $this->driver->getWindowHandles();
-		$this->driver->switchTo()->window($windowHandles[1]);
-		$this->getUrl('');
+		$this->openNewTab('');
 
 		// And I switch back to the first window
-		$this->driver->switchTo()->window($windowHandles[0]);
+		$this->switchToTab(0);
 		$this->click('html');
 
 		// And I edit a password
@@ -1383,7 +1379,7 @@ class PasswordEditTest extends PassboltTestCase
 		);
 
 		// When I switch to the second window
-		$this->driver->switchTo()->window($windowHandles[1]);
+		$this->switchToTab(1);
 		$this->click('html');
 
 		// And I edit a password
@@ -1410,7 +1406,7 @@ class PasswordEditTest extends PassboltTestCase
 		);
 
 		// When I switch to the first window and I refresh it
-		$this->driver->switchTo()->window($windowHandles[0]);
+		$this->switchToTab(0);
 		$this->driver->navigate()->refresh();
 		$this->waitCompletion();
 
