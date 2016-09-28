@@ -745,6 +745,46 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
 		$this->driver->executeScript($script);
 	}
 
+	/**
+	 * Open a new tab in browser
+	 */
+	public function openNewTab() {
+		$windowHandles = $this->driver->getWindowHandles();
+		$tabsCount = sizeof($windowHandles);
+		// User driver keyboard.
+		$this->driver->getKeyboard()
+			->sendKeys([WebDriverKeys::CONTROL, 'n']);
+
+		// Wait until tab is opened.
+		// Try for 10 times maximum, and wait half a second between each attempt.
+		$windowHandles = $this->driver->getWindowHandles();
+		$i = 0;
+		while (!(sizeof($windowHandles) > $tabsCount)) {
+			if ($i > 9) {
+				throw new Exception("Couldn't open a new tab");
+			}
+			sleep(0.5);
+			$windowHandles = $this->driver->getWindowHandles();
+			$i++;
+		}
+
+		return $windowHandles[sizeof($windowHandles) - 1];
+	}
+
+	/**
+	 * Switch to tab.
+	 * @param $tabId
+	 * @throws Exception
+	 *   if the tab doesn't exist.
+	 */
+	public function switchToTab($tabId) {
+		$windowHandles = $this->driver->getWindowHandles();
+		if (!isset($windowHandles[$tabId])) {
+			throw new Exception("Couldn't switch to tab " . $tabId);
+		}
+		$this->driver->switchTo()->window($windowHandles[$tabId]);
+	}
+
     /********************************************************************************
      * ASSERT HELPERS
      ********************************************************************************/
