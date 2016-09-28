@@ -757,14 +757,12 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
 
 		// Wait until tab is opened.
 		// Try for 10 times maximum, and wait half a second between each attempt.
-		$windowHandles = $this->driver->getWindowHandles();
 		$i = 0;
-		while (!(sizeof($windowHandles) > $tabsCount)) {
+		while (!(sizeof($this->driver->getWindowHandles()) > $tabsCount)) {
 			if ($i > 9) {
 				throw new Exception("Couldn't open a new tab");
 			}
 			sleep(0.5);
-			$windowHandles = $this->driver->getWindowHandles();
 			$i++;
 		}
 
@@ -777,6 +775,7 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
 
 		return $windowHandles[$newTabId];
 	}
+
 
 	/**
 	 * Switch to tab.

@@ -116,6 +116,7 @@ class PassboltTestCase extends WebDriverTestCase {
 				$linkCssSelector = '#js_app_nav_left_' . $name . '_wsp_link a';
 				break;
 		}
+		$this->waitUntilISee($linkCssSelector);
 		$this->click($linkCssSelector);
 		$this->waitCompletion();
 	}
@@ -311,9 +312,33 @@ class PassboltTestCase extends WebDriverTestCase {
 	public function closeAndRestoreTab($options = array()) {
 		$options = $options ? $options : array();
 		$waitBeforeRestore = isset($options['waitBeforeRestore']) ? $options['waitBeforeRestore'] : 0;
+
+		$tabsCount = sizeof($this->driver->getWindowHandles());
+
 		$this->findByCSS('html')->sendKeys(array(WebDriverKeys::CONTROL, 'w'));
+
+		// Wait for tab to be closed.
+		$i = 0;
+		while (!(sizeof($this->driver->getWindowHandles()) < $tabsCount)) {
+			if ($i > 9) {
+				throw new Exception("Couldn't close the tab");
+			}
+			sleep(0.5);
+			$i++;
+		}
+
 		sleep($waitBeforeRestore);
+
+		$tabsCount = sizeof($this->driver->getWindowHandles());
 		$this->findByCss('html')->sendKeys(array(WebDriverKeys::SHIFT, WebDriverKeys::CONTROL, 't'));
+		$i = 0;
+		while (!(sizeof($this->driver->getWindowHandles()) > $tabsCount)) {
+			if ($i > 9) {
+				throw new Exception("Couldn't reopen the tab");
+			}
+			sleep(0.5);
+			$i++;
+		}
 	}
 
 	/**
