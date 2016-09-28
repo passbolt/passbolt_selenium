@@ -748,7 +748,7 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
 	/**
 	 * Open a new tab in browser
 	 */
-	public function openNewTab() {
+	public function openNewTab($url = '') {
 		$windowHandles = $this->driver->getWindowHandles();
 		$tabsCount = sizeof($windowHandles);
 		// User driver keyboard.
@@ -768,7 +768,14 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
 			$i++;
 		}
 
-		return $windowHandles[sizeof($windowHandles) - 1];
+		$newTabId = sizeof($windowHandles) - 1;
+
+		// Switch to newly created tab.
+		$this->switchToTab($newTabId);
+		// Get url.
+		$this->getUrl('');
+
+		return $windowHandles[$newTabId];
 	}
 
 	/**

@@ -734,10 +734,8 @@ class PasswordCreateTest extends PassboltTestCase
         // And I am logged in
         $this->loginAs($user);
 
-        // When I open a new window and go to passbolt url
-	    $this->openNewTab();
-        $this->switchToTab(1);
-        $this->getUrl('');
+        // When I open a new tab, switch to it and go to passbolt url.
+	    $this->openNewTab('');
 
         // And I switch back to the first window
 	    $this->switchToTab(0);
