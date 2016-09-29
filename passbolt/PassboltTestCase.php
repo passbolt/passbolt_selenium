@@ -318,7 +318,8 @@ class PassboltTestCase extends WebDriverTestCase {
 
 		$url = $this->driver->getCurrentURL();
 
-		$this->findByCSS('html')->sendKeys(array(WebDriverKeys::CONTROL, 'w'));
+		$this->findByCss('html')
+			->sendKeys(array(WebDriverKeys::CONTROL, 'w'));
 
 		// Wait for tab to be closed.
 		$i = 0;
@@ -334,7 +335,11 @@ class PassboltTestCase extends WebDriverTestCase {
 
 		$url = $this->driver->getCurrentURL();
 
-		$this->findByCss('html')->sendKeys(array(WebDriverKeys::SHIFT, WebDriverKeys::CONTROL, 't'));
+		$this->waitUntilISee('html');
+
+		$this->findByCss('html')
+			->sendKeys(array(WebDriverKeys::SHIFT, WebDriverKeys::CONTROL, 't'));
+
 		$i = 0;
 		while ($url == $this->driver->getCurrentURL()) {
 			if ($i > 9) {
