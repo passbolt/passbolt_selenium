@@ -335,6 +335,9 @@ class PassboltTestCase extends WebDriverTestCase {
 
 		$url = $this->driver->getCurrentURL();
 
+		// Make sure the tab has the focus.
+		$this->switchToWindow(0);
+
 		$this->waitUntilISee('html');
 
 		$this->findByCss('html')
@@ -348,6 +351,9 @@ class PassboltTestCase extends WebDriverTestCase {
 			sleep(0.5);
 			$i++;
 		}
+
+		// Make sure the tab has the focus.
+		$this->switchToWindow(0);
 	}
 
 	/**
