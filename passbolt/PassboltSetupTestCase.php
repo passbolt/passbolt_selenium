@@ -93,7 +93,7 @@ class PassboltSetupTestCase extends PassboltTestCase {
 	protected function waitForSection($sectionName) {
 		$timeout = 10;
 		if ($sectionName == 'generate_key_done') {
-			$timeout = 30;
+			$timeout = 60;
 		}
 		$this->waitUntilISee('#js_step_title', '/' . $this->getSectionInfo($sectionName, 'title') . '/i', $timeout);
 		$this->waitUntilISee('#js_step_content h3', '/' . $this->getSectionInfo($sectionName, 'subtitle') . '/i', $timeout);
