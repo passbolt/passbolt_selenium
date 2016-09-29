@@ -118,7 +118,7 @@ class LoginTest extends PassboltTestCase {
 	 *
 	 * @throws Exception
 	 */
-	public function testMultipleTabsLogin() {
+	public function testMultipleWindowsLogin() {
 		$user = User::get('ada');
 		$this->setClientConfig($user);
 
@@ -127,13 +127,13 @@ class LoginTest extends PassboltTestCase {
 		$this->waitUntilISee('.plugin-check.gpg.success');
 
 		// When I open a new window and go to the login page
-		$this->openNewTab('');
+		$this->openNewWindow('');
 		$this->click('html');
 		$this->getUrl('login');
 		$this->waitUntilISee('.plugin-check.gpg.success');
 
 		// And I switch to the first window
-		$this->switchToTab(0);
+		$this->switchToWindow(0);
 		$this->click('html');
 
 		// Then I should be able to login to passbolt from the first window.
@@ -143,7 +143,7 @@ class LoginTest extends PassboltTestCase {
 		$this->logout();
 
 		// And I switch to the second window
-		$this->switchToTab(1);
+		$this->switchToWindow(1);
 		$this->click('html');
 
 		// Then I should be able to login to passbolt from the second window

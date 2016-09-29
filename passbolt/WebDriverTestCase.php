@@ -746,50 +746,79 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
 	}
 
 	/**
-	 * Open a new tab in browser
+	 * Open a new window.
+	 * @throws Exception
 	 */
-	public function openNewTab($url = '') {
-		$windowHandles = $this->driver->getWindowHandles();
-		$tabsCount = sizeof($windowHandles);
-		// User driver keyboard.
+	public function openNewWindow($url = '') {
+		$windowsCount = sizeof($this->driver->getWindowHandles());
+
+		// User driver keyboard to open a new tab.
 		$this->driver->getKeyboard()
 			->sendKeys([WebDriverKeys::CONTROL, 'n']);
 
 		// Wait until tab is opened.
 		// Try for 10 times maximum, and wait half a second between each attempt.
 		$i = 0;
-		while (!(sizeof($this->driver->getWindowHandles()) > $tabsCount)) {
+		while (!(sizeof($this->driver->getWindowHandles()) > $windowsCount)) {
 			if ($i > 9) {
-				throw new Exception("Couldn't open a new tab");
+				throw new Exception("Couldn't open a new window");
 			}
 			sleep(0.5);
 			$i++;
 		}
 
-		$newTabId = sizeof($windowHandles) - 1;
+		// Switch to new window.
+		$windowHandles = $this->driver->getWindowHandles();
+		$this->driver->switchTo()->window($windowHandles[sizeof($windowHandles) - 1]);
 
-		// Switch to newly created tab.
-		$this->switchToTab($newTabId);
-		// Get url.
-		$this->getUrl('');
+		$this->getUrl($url);
 
-		return $windowHandles[$newTabId];
+		return $windowHandles[sizeof($windowHandles) - 1];
 	}
 
-
 	/**
-	 * Switch to tab.
-	 * @param $tabId
+	 * Switch to window.
+	 * @param $windowId
 	 * @throws Exception
 	 *   if the tab doesn't exist.
 	 */
-	public function switchToTab($tabId) {
+	public function switchToWindow($windowId) {
 		$windowHandles = $this->driver->getWindowHandles();
-		if (!isset($windowHandles[$tabId])) {
-			throw new Exception("Couldn't switch to tab " . $tabId);
+		if (!isset($windowHandles[$windowId])) {
+			throw new Exception("Couldn't switch to tab " . $windowId);
 		}
-		$this->driver->switchTo()->window($windowHandles[$tabId]);
+		$this->driver->switchTo()->window($windowHandles[$windowId]);
 	}
+
+	/**
+	 * Open a new tab in browser, and go to given url.
+	 */
+	public function openNewTab($url = '') {
+		// Get initial url.
+		// We will use it to know when the new tab is opened.
+		$initialUrl = $this->driver->getCurrentURL();
+
+		// User driver keyboard shortcut to open a new tab.
+		$this->driver->getKeyboard()
+			->sendKeys([WebDriverKeys::CONTROL, 't']);
+
+		// Wait until tab is opened.
+		// We just check what is the current url. A new tab will
+		// have a 'about:blank' url.
+		// Try for 10 times maximum, and wait for some time between each attempt.
+		$i = 0;
+		while ($this->driver->getCurrentURL() == $initialUrl) {
+			if ($i > 9) {
+				throw new Exception("Couldn't open a new tab");
+			}
+			sleep(0.2);
+			$i++;
+		}
+
+		// Get url.
+		$this->getUrl($url);
+	}
+
 
     /********************************************************************************
      * ASSERT HELPERS

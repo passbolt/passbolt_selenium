@@ -308,18 +308,21 @@ class PassboltTestCase extends WebDriverTestCase {
 	 *
 	 * @param $options
 	 * 	waitBeforeRestore : Should the tab be restored after a sleep in seconds
+	 *
+	 * @throws exception
+	 *   if the tab couldn't be opened or closed.
 	 */
 	public function closeAndRestoreTab($options = array()) {
 		$options = $options ? $options : array();
 		$waitBeforeRestore = isset($options['waitBeforeRestore']) ? $options['waitBeforeRestore'] : 0;
 
-		$tabsCount = sizeof($this->driver->getWindowHandles());
+		$url = $this->driver->getCurrentURL();
 
 		$this->findByCSS('html')->sendKeys(array(WebDriverKeys::CONTROL, 'w'));
 
 		// Wait for tab to be closed.
 		$i = 0;
-		while (!(sizeof($this->driver->getWindowHandles()) < $tabsCount)) {
+		while ($url == $this->driver->getCurrentURL()) {
 			if ($i > 9) {
 				throw new Exception("Couldn't close the tab");
 			}
@@ -329,10 +332,11 @@ class PassboltTestCase extends WebDriverTestCase {
 
 		sleep($waitBeforeRestore);
 
-		$tabsCount = sizeof($this->driver->getWindowHandles());
+		$url = $this->driver->getCurrentURL();
+
 		$this->findByCss('html')->sendKeys(array(WebDriverKeys::SHIFT, WebDriverKeys::CONTROL, 't'));
 		$i = 0;
-		while (!(sizeof($this->driver->getWindowHandles()) > $tabsCount)) {
+		while ($url == $this->driver->getCurrentURL()) {
 			if ($i > 9) {
 				throw new Exception("Couldn't reopen the tab");
 			}

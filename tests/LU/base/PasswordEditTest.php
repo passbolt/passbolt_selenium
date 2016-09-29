@@ -1346,7 +1346,7 @@ class PasswordEditTest extends PassboltTestCase
 	 * Then     I should see the password I edited on the second window updated on the first window
 	 * @throws Exception
 	 */
-	public function testMultipleTabsEditPassword() {
+	public function testMultipleWindowsEditPassword() {
 		// Reset database at the end of test.
 		$this->resetDatabaseWhenComplete();
 
@@ -1358,10 +1358,10 @@ class PasswordEditTest extends PassboltTestCase
 		$this->loginAs($user);
 
 		// When I open a new window and go to passbolt url
-		$this->openNewTab('');
+		$this->openNewWindow('');
 
 		// And I switch back to the first window
-		$this->switchToTab(0);
+		$this->switchToWindow(0);
 		$this->click('html');
 
 		// And I edit a password
@@ -1379,7 +1379,7 @@ class PasswordEditTest extends PassboltTestCase
 		);
 
 		// When I switch to the second window
-		$this->switchToTab(1);
+		$this->switchToWindow(1);
 		$this->click('html');
 
 		// And I edit a password
@@ -1406,7 +1406,7 @@ class PasswordEditTest extends PassboltTestCase
 		);
 
 		// When I switch to the first window and I refresh it
-		$this->switchToTab(0);
+		$this->switchToWindow(0);
 		$this->driver->navigate()->refresh();
 		$this->waitCompletion();
 

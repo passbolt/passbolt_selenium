@@ -723,7 +723,7 @@ class PasswordCreateTest extends PassboltTestCase
      * Then     I should see the password I created on the second window
      * @throws Exception
      */
-    public function testMultipleTabsCreatePassword() {
+    public function testMultipleWindowsCreatePassword() {
 	    // Reset database at the end of test.
 	    $this->resetDatabaseWhenComplete();
 
@@ -735,10 +735,10 @@ class PasswordCreateTest extends PassboltTestCase
         $this->loginAs($user);
 
         // When I open a new tab, switch to it and go to passbolt url.
-	    $this->openNewTab('');
+	    $this->openNewWindow('');
 
         // And I switch back to the first window
-	    $this->switchToTab(0);
+	    $this->switchToWindow(0);
         $this->click('html');
 
         // And I create a password
@@ -755,7 +755,7 @@ class PasswordCreateTest extends PassboltTestCase
         );
 
         // When I switch to the second window
-	    $this->switchToTab(1);
+	    $this->switchToWindow(1);
         $this->click('html');
 
         // And I create a password
@@ -781,7 +781,7 @@ class PasswordCreateTest extends PassboltTestCase
         );
 
         // When I switch to the first window and I refresh it
-	    $this->switchToTab(0);
+	    $this->switchToWindow(0);
         $this->driver->navigate()->refresh();
         $this->waitCompletion();
 
