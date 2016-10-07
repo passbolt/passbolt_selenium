@@ -1,11 +1,4 @@
 <?php
-// The environment constants below define where the testsuite is located in the runtime environment.
-// Firefox should be able to access the files of the testsuite, to access the fixtures for instance.
-define('SELENIUM_ROOT', Config::read('testsuite.path'));
-define('SELENIUM_FIXTURES', SELENIUM_ROOT . DS . DATA . 'fixtures' . DS);
-define('SELENIUM_IMG_FIXTURES', SELENIUM_FIXTURES . 'img');
-define('SELENIUM_TMP', SELENIUM_ROOT . DS . 'tmp');
-
 /**
  * Web Driver Test Case
  * The base class for test cases.
@@ -305,7 +298,6 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
 
                 // Set download preferences for the browser.
                 $profile->setPreference("browser.download.folderList", 2);
-                $profile->setPreference("browser.download.dir", SELENIUM_TMP);
 				$profile->setPreference("xpinstall.signatures.required", false);
 
                 $capabilities->setCapability(FirefoxDriver::PROFILE, $profile);
