@@ -116,6 +116,7 @@ class PassboltTestCase extends WebDriverTestCase {
 				$linkCssSelector = '#js_app_nav_left_' . $name . '_wsp_link a';
 				break;
 		}
+		$this->waitUntilISee($linkCssSelector);
 		$this->click($linkCssSelector);
 		$this->waitCompletion();
 	}
@@ -179,8 +180,9 @@ class PassboltTestCase extends WebDriverTestCase {
 	/**
 	 * Login on the application with the given user.
 	 * @param user
+	 * @param useCache {bool} (optional) default true
 	 */
-	public function loginAs($user) {
+	public function loginAs($user, $useCache = true) {
 		if (!is_array($user)) {
 			$user = [
 				'Username' => $user,
@@ -191,7 +193,7 @@ class PassboltTestCase extends WebDriverTestCase {
 		// Store the current username.
 		$this->currentUser = $user;
 
-		if (isset(self::$loginCookies[$this->currentUser['Username']])) {
+		if ($useCache && isset(self::$loginCookies[$this->currentUser['Username']])) {
 			$this->getUrl('login');
 			foreach(self::$loginCookies[$this->currentUser['Username']] as $cookie) {
 				$this->driver->manage()->addCookie($cookie);
@@ -306,13 +308,52 @@ class PassboltTestCase extends WebDriverTestCase {
 	 *
 	 * @param $options
 	 * 	waitBeforeRestore : Should the tab be restored after a sleep in seconds
+	 *
+	 * @throws exception
+	 *   if the tab couldn't be opened or closed.
 	 */
 	public function closeAndRestoreTab($options = array()) {
 		$options = $options ? $options : array();
 		$waitBeforeRestore = isset($options['waitBeforeRestore']) ? $options['waitBeforeRestore'] : 0;
-		$this->findByCSS('html')->sendKeys(array(WebDriverKeys::CONTROL, 'w'));
+
+		$url = $this->driver->getCurrentURL();
+
+		$this->findByCss('html')
+			->sendKeys(array(WebDriverKeys::CONTROL, 'w'));
+
+		// Wait for tab to be closed.
+		$i = 0;
+		while ($url == $this->driver->getCurrentURL()) {
+			if ($i > 9) {
+				throw new Exception("Couldn't close the tab");
+			}
+			sleep(0.5);
+			$i++;
+		}
+
 		sleep($waitBeforeRestore);
-		$this->findByCss('html')->sendKeys(array(WebDriverKeys::SHIFT, WebDriverKeys::CONTROL, 't'));
+
+		$url = $this->driver->getCurrentURL();
+
+		// Make sure the tab has the focus.
+		$this->switchToWindow(0);
+
+		$this->waitUntilISee('html');
+
+		$this->findByCss('html')
+			->sendKeys(array(WebDriverKeys::SHIFT, WebDriverKeys::CONTROL, 't'));
+
+		$i = 0;
+		while ($url == $this->driver->getCurrentURL()) {
+			if ($i > 9) {
+				throw new Exception("Couldn't reopen the tab");
+			}
+			sleep(0.5);
+			$i++;
+		}
+
+		// Make sure the tab has the focus.
+		$this->switchToWindow(0);
 	}
 
 	/**
@@ -468,6 +509,7 @@ class PassboltTestCase extends WebDriverTestCase {
 		// Fill master key.
 		$this->inputText('js_field_password', $data['masterpassword']);
 		// Click Next.
+		$this->waitUntilISee('#js_setup_submit_step.enabled');
 		$this->clickLink("Next");
 		// Wait until we see the title Master password.
 		$this->waitUntilISee('#js_step_title', '/Success! Your secret key is ready./i');
@@ -643,6 +685,7 @@ class PassboltTestCase extends WebDriverTestCase {
 	public function clickPasswordFavorite($id) {
 		$eltSelector = '#favorite_' . $id . ' i';
 		$this->click($eltSelector);
+		$this->waitCompletion();
 	}
 
 	/**
@@ -715,6 +758,7 @@ class PassboltTestCase extends WebDriverTestCase {
 		$this->click('js_wk_menu_edition_button');
 		$this->waitCompletion();
 		$this->assertVisible('.edit-password-dialog');
+		$this->waitUntilISee('#passbolt-iframe-secret-edition.ready');
 	}
 
 	/**
@@ -806,8 +850,8 @@ class PassboltTestCase extends WebDriverTestCase {
 		}
 		$this->click('.create-password-dialog input[type=submit]');
 
-		$this->waitUntilISee('passbolt-iframe-progress-dialog');
-		$this->waitUntilIDontSee('passbolt-iframe-progress-dialog');
+		$this->waitUntilISee('#passbolt-iframe-progress-dialog');
+		$this->waitUntilIDontSee('#passbolt-iframe-progress-dialog');
 
 		$this->assertNotification('app_resources_add_success');
 	}
@@ -838,7 +882,7 @@ class PassboltTestCase extends WebDriverTestCase {
 			$this->goOutOfIframe();
 			$this->assertMasterPasswordDialog($user);
 			$this->enterMasterPassword($user['MasterPassword']);
-			$this->waitUntilIDontSee('passbolt-iframe-master-password');
+			$this->waitUntilIDontSee('#passbolt-iframe-master-password');
 
 			// Wait for password to be decrypted.
 			$this->goIntoSecretIframe();
@@ -853,8 +897,8 @@ class PassboltTestCase extends WebDriverTestCase {
 		$this->click('.edit-password-dialog input[type=submit]');
 
 		if (isset($password['password'])) {
-			$this->waitUntilISee('passbolt-iframe-progress-dialog');
-			$this->waitUntilIDontSee('passbolt-iframe-progress-dialog');
+			$this->waitUntilISee('#passbolt-iframe-progress-dialog');
+			$this->waitUntilIDontSee('#passbolt-iframe-progress-dialog');
 		}
 		$this->assertNotification('app_resources_edit_success');
 	}
@@ -929,8 +973,8 @@ class PassboltTestCase extends WebDriverTestCase {
 		$this->enterMasterPassword($user['MasterPassword']);
 
 		// Then I see a dialog telling me encryption is in progress
-		$this->waitUntilISee('passbolt-iframe-progress-dialog');
-		$this->waitUntilIDontSee('passbolt-iframe-progress-dialog');
+		$this->waitUntilISee('#passbolt-iframe-progress-dialog');
+		$this->waitUntilIDontSee('#passbolt-iframe-progress-dialog');
 
 		// And I see a notice message that the operation was a success
 		$this->assertNotification('app_share_update_success');
@@ -1049,7 +1093,7 @@ class PassboltTestCase extends WebDriverTestCase {
 	 * @param $remember
 	 */
 	public function enterMasterPassword($pwd, $remember = false) {
-		$this->waitUntilISee('passbolt-iframe-master-password');
+		$this->waitUntilISee('#passbolt-iframe-master-password.ready');
 		$this->goIntoMasterPasswordIframe();
 		$this->inputText('js_master_password', $pwd);
 
@@ -1063,7 +1107,7 @@ class PassboltTestCase extends WebDriverTestCase {
 			'processing'
 		);
 		$this->goOutOfIframe();
-		$this->waitUntilIDontSee('passbolt-iframe-master-password');
+		$this->waitUntilIDontSee('#passbolt-iframe-master-password');
 	}
 
 	/**
@@ -1557,7 +1601,9 @@ class PassboltTestCase extends WebDriverTestCase {
 		$class = str_replace(' ','_',$strength);
 		$this->assertVisible('#js_secret_strength.'.$class);
 		$this->assertElementHasClass(
-		$this->find('#js_secret_strength .progress-bar'), $class);
+		    $this->find('#js_secret_strength .progress-bar'),
+		    $class
+        );
 		// We check visibility only if the strength is available.
 		if ($strength != 'not available') {
 		  $this->assertVisible('#js_secret_strength .progress-bar.'.$class);
@@ -1574,13 +1620,13 @@ class PassboltTestCase extends WebDriverTestCase {
 		// Get out of the previous iframe in case we are in one
 		$this->goOutOfIframe();
 		// Given I can see the iframe
-		$this->waitUntilISee('passbolt-iframe-master-password');
+		$this->waitUntilISee('#passbolt-iframe-master-password.ready');
 		// When I can go into the iframe
 		$this->goIntoMasterPasswordIframe();
 		// Then I can see the security token is valid
 		$this->assertSecurityToken($user, 'master');
 		// Then I can see the title
-		$this->assertElementContainsText('.master-password.dialog','Please enter your passphrase');
+		$this->assertElementContainsText('.master-password.dialog', 'Please enter your passphrase');
 		// Then I can see the close dialog button
 		$this->assertVisible('a.dialog-close');
 		// Then I can see the OK button
@@ -1730,7 +1776,7 @@ class PassboltTestCase extends WebDriverTestCase {
 
 	/**
 	 * Assert that the toggle button is in the given status (pressed or unpressed)
-	 * @param	 $id
+	 * @param $id
 	 * @param int $status
 	 *
 	 * @return bool

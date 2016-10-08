@@ -300,18 +300,17 @@ class PasswordWorkspaceTest extends PassboltTestCase
      * Given        I am Ada
 	 * And			I go to the password workspace
      * When         I click on the favorite star located before the password (the password shouldn't be a favorite)
-     * Then         I should see the star becoming red
-	 * When 		the favorite request is completed
      * Then			I should see a confirmation of my action in the notification area
 	 * And 			I should see the star in red
+	 *
      * When         I click on the favorite filter
      * Then         I should see the password I just added to my favorites in the list of passwords
+	 *
      * When         I go Back to All items
      * And          I click on the favorite red star located before the password (the password has to be a favorite)
-     * Then         I should see the star becoming white
-	 * When			the favorite request is completed
-     * And          I should see a confirmation of my action in the notification area
+     * Then         I should see a confirmation of my action in the notification area
 	 * And			I should see the star is white
+	 * 
      * When         I click on the favorite filter
      * Then         I shouldn't see anymore the password in my list of favorite passwords
      */
@@ -334,17 +333,12 @@ class PasswordWorkspaceTest extends PassboltTestCase
 
         // When I click on the favorite star located before the password (the password shouldn't be a favorite)
         $this->clickPasswordFavorite($resourceId);
-
-		// Then I should see the star becoming red
-		$this->assertTrue($this->isPasswordFavorite($resourceId));
-
-        // When the favorite request is completed
 		$this->waitCompletion();
 
 		// Then I should see a confirmation of my action in the notification area
 		$this->assertNotification('app_favorites_add_success');
 
-		// And I should see the star in red
+		// And I should see the star becoming red
 		$this->assertTrue($this->isPasswordFavorite($resourceId));
 
         // When I click on the favorite filter
@@ -363,11 +357,6 @@ class PasswordWorkspaceTest extends PassboltTestCase
 
         // And I click on the favorite red star located before the password (the password has to be a favorite)
 		$this->clickPasswordFavorite($resourceId);
-
-        // Then I should see the star becoming white
-		$this->assertFalse($this->isPasswordFavorite($resourceId));
-
-		// When the favorite request is completed
 		$this->waitCompletion();
 
 	    // Then I should see a confirmation of my action in the notification area

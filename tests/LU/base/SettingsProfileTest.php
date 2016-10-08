@@ -146,8 +146,6 @@ class SettingsProfileTest extends PassboltTestCase {
 	}
 
 	/**
-	 * @group no-parallel
-	 *
 	 * Scenario :   As LU, I should be able to edit my avatar picture.
 	 * Given        I am logged in as LU in the settings workspace, profile section.
 	 * When         I click on upload a new picture
@@ -210,10 +208,14 @@ class SettingsProfileTest extends PassboltTestCase {
 		// I should see a dialog with title "Edit Avatar".
 		$this->waitUntilISee('.dialog', '/Edit Avatar/');
 
+		// Path to Betty image fixture.
+		$bettyImage = IMG_FIXTURES . DS . 'avatar' . DS . 'betty.png';
+
 		// I upload Betty's photo.
-		$bettyImage = 'betty.png';
 		$filebox = $this->find('js_field_avatar');
-		$filebox->sendKeys(SELENIUM_IMG_FIXTURES . DS . 'avatar' . DS . $bettyImage);
+		$filebox->setFileDetector(new LocalFileDetector);
+		$filebox->sendKeys($bettyImage);
+
 		$this->click('.dialog input[type=submit]');
 
 		// Then I should see a success message.
@@ -221,8 +223,7 @@ class SettingsProfileTest extends PassboltTestCase {
 
 		// And I should see that the profile picture has been replaced in the profile details.
 		$actualImage =  $this->find('.avatar img')->getAttribute('src');
-		$expectedImage = IMG_FIXTURES . '/avatar/' . $bettyImage;
-		$this->assertImagesAreSame($actualImage, $expectedImage);
+		$this->assertImagesAreSame($actualImage, $bettyImage);
 
 		// And I should see that the profile picture has been replaced in the profile drop down.
 		$topProfileImage =  $this->find('#js_app_profile_dropdown .picture img')->getAttribute('src');
@@ -269,11 +270,10 @@ class SettingsProfileTest extends PassboltTestCase {
 		// I should see a dialog with title "Edit Avatar".
 		$this->waitUntilISee('.dialog', '/Edit Avatar/');
 
-		// I upload Betty's photo.
+		// I upload an unallowed file (ada private key).
 		$filebox = $this->find('js_field_avatar');
-		$extensionFullUrl = SELENIUM_ROOT . $this->_browser['extensions'][0];
-
-		$filebox->sendKeys($extensionFullUrl);
+		$filebox->setFileDetector(new LocalFileDetector);
+		$filebox->sendKeys(GPG_FIXTURES . DS . 'ada_private.key');
 		$this->click('.dialog input[type=submit]');
 
 		// Then I should see a success message.
@@ -282,7 +282,7 @@ class SettingsProfileTest extends PassboltTestCase {
 		// And I should see that the profile picture has been replaced in the profile details.
 		$adaImage = 'ada.png';
 		$actualImage =  $this->find('.avatar img')->getAttribute('src');
-		$expectedImage = IMG_FIXTURES . '/avatar/' . $adaImage;
+		$expectedImage = IMG_FIXTURES . DS . 'avatar' . DS . $adaImage;
 		$this->assertImagesAreSame($actualImage, $expectedImage);
 
 		// And I should see that the profile picture has been replaced in the profile drop down.

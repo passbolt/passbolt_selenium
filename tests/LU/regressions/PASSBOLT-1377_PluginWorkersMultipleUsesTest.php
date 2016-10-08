@@ -26,7 +26,7 @@ class PASSBOLT1377 extends PassboltTestCase {
 
 		for ($i=0; $i<5; $i++) {
 			// When I am logged in on the user workspace
-			$this->loginAs($user);
+			$this->loginAs($user, false);
 
 			// And I logout
 			$this->logout();

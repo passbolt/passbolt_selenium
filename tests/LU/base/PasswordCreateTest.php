@@ -347,7 +347,7 @@ class PasswordCreateTest extends PassboltTestCase
         $this->click('.create-password-dialog input[type=submit]');
 
         // Then I see a dialog telling me encryption is in progress
-        $this->waitUntilISee('passbolt-iframe-progress-dialog');
+        $this->waitUntilISee('#passbolt-iframe-progress-dialog');
 
         // I see a notice message that the operation was a success
         $this->assertNotification('app_resources_add_success');
@@ -688,7 +688,7 @@ class PasswordCreateTest extends PassboltTestCase
 		$this->click('.create-password-dialog input[type=submit]');
 
 		// Then I see a dialog telling me encryption is in progress
-		$this->waitUntilISee('passbolt-iframe-progress-dialog');
+		$this->waitUntilISee('#passbolt-iframe-progress-dialog');
 
 		// I see a notice message that the operation was a success
 		$this->assertNotification('app_resources_add_success');
@@ -723,7 +723,7 @@ class PasswordCreateTest extends PassboltTestCase
      * Then     I should see the password I created on the second window
      * @throws Exception
      */
-    public function testMultipleTabsCreatePassword() {
+    public function testMultipleWindowsCreatePassword() {
 	    // Reset database at the end of test.
 	    $this->resetDatabaseWhenComplete();
 
@@ -734,15 +734,11 @@ class PasswordCreateTest extends PassboltTestCase
         // And I am logged in
         $this->loginAs($user);
 
-        // When I open a new window and go to passbolt url
-        $this->driver->getKeyboard()
-            ->sendKeys([WebDriverKeys::CONTROL, 'n']);
-        $windowHandles = $this->driver->getWindowHandles();
-        $this->driver->switchTo()->window($windowHandles[1]);
-        $this->getUrl('');
+        // When I open a new tab, switch to it and go to passbolt url.
+	    $this->openNewWindow('');
 
         // And I switch back to the first window
-        $this->driver->switchTo()->window($windowHandles[0]);
+	    $this->switchToWindow(0);
         $this->click('html');
 
         // And I create a password
@@ -759,7 +755,7 @@ class PasswordCreateTest extends PassboltTestCase
         );
 
         // When I switch to the second window
-        $this->driver->switchTo()->window($windowHandles[1]);
+	    $this->switchToWindow(1);
         $this->click('html');
 
         // And I create a password
@@ -785,7 +781,7 @@ class PasswordCreateTest extends PassboltTestCase
         );
 
         // When I switch to the first window and I refresh it
-        $this->driver->switchTo()->window($windowHandles[0]);
+	    $this->switchToWindow(0);
         $this->driver->navigate()->refresh();
         $this->waitCompletion();
 

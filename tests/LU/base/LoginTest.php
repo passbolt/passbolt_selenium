@@ -107,8 +107,6 @@ class LoginTest extends PassboltTestCase {
 	}
 
 	/**
-	 * @group no-parallel
-	 *
 	 * Scenario:  As AN I can login to passbolt on different tabs without conflict between workers
 	 * Given 	As AN with plugin on the login page
 	 * When 	I open a new window and go to the login page
@@ -120,7 +118,7 @@ class LoginTest extends PassboltTestCase {
 	 *
 	 * @throws Exception
 	 */
-	public function testMultipleTabsLogin() {
+	public function testMultipleWindowsLogin() {
 		$user = User::get('ada');
 		$this->setClientConfig($user);
 
@@ -129,30 +127,27 @@ class LoginTest extends PassboltTestCase {
 		$this->waitUntilISee('.plugin-check.gpg.success');
 
 		// When I open a new window and go to the login page
-		$this->driver->getKeyboard()
-			->sendKeys([WebDriverKeys::CONTROL, 'n']);
-		$windowHandles = $this->driver->getWindowHandles();
-		$this->driver->switchTo()->window($windowHandles[1]);
+		$this->openNewWindow('');
 		$this->click('html');
 		$this->getUrl('login');
 		$this->waitUntilISee('.plugin-check.gpg.success');
 
 		// And I switch to the first window
-		$this->driver->switchTo()->window($windowHandles[0]);
+		$this->switchToWindow(0);
 		$this->click('html');
 
 		// Then I should be able to login to passbolt from the first window.
-		$this->loginAs($user);
+		$this->loginAs($user, false);
 
 		// When I logout
 		$this->logout();
 
 		// And I switch to the second window
-		$this->driver->switchTo()->window($windowHandles[1]);
+		$this->switchToWindow(1);
 		$this->click('html');
 
 		// Then I should be able to login to passbolt from the second window
-		$this->loginAs($user);
+		$this->loginAs($user, false);
 	}
 
 	/**
@@ -170,7 +165,7 @@ class LoginTest extends PassboltTestCase {
 		$this->setClientConfig($user);
 
 		// And I am logged in
-		$this->loginAs($user);
+		$this->loginAs($user, false);
 
 		// When I restart the browser
 		$this->restartBrowser();
@@ -198,7 +193,7 @@ class LoginTest extends PassboltTestCase {
 		$this->findByCSS('html')->sendKeys(array(WebDriverKeys::CONTROL, 't'));
 
 		// And I am logged in
-		$this->loginAs($user);
+		$this->loginAs($user, false);
 
 		// When I close and restore the tab
 		$this->closeAndRestoreTab();

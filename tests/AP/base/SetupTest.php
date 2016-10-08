@@ -156,6 +156,7 @@ class SetupTest extends PassboltSetupTestCase {
 		// Fill master key.
 		$this->inputText('js_field_password', 'johndoemasterpassword');
 		// Press Next.
+		$this->waitUntilISee('#js_setup_submit_step.enabled');
 		$this->clickLink("Next");
 		// Wait to reach the page.
 		$this->waitForSection('generate_key_progress');
@@ -172,6 +173,7 @@ class SetupTest extends PassboltSetupTestCase {
 		// Fill master key.
 		$this->inputText('js_field_password', 'johndoemasterpassword');
 		// Press Next.
+		$this->waitUntilISee('#js_setup_submit_step.enabled');
 		$this->clickLink("Next");
 		// Wait to reach the page.
 		$this->waitForSection('generate_key_progress');

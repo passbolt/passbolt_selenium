@@ -199,19 +199,13 @@ class PasswordEditDescriptionTest extends PassboltTestCase {
 		// Make sure description field is visible.
 		$this->waitUntilISee("#js_rs_details_edit_description textarea.js_resource_description");
 
-		// Fill up an empty string in the textbox.
-		$this->inputText("#js_rs_details_edit_description textarea.js_resource_description", 'aa');
+		// I input ###
+		$this->inputText("#js_rs_details_edit_description textarea.js_resource_description", '###');
 
 		// Click on submit.
 		$this->click('#js_rs_details_edit_description input[type=submit]');
 
-		// I should see an error message saying that the description should be between xx and xx characters.
-		$this->assertElementContainsText('.js_resource_description_feedback', '/Description should be between/');
-
-		// I input ###
-		$this->inputText("#js_rs_details_edit_description textarea.js_resource_description", '###');
-
-		// I should see an error message saying that the description should only contain alphabtes, numbers, etc..
+		// I should see an error message saying that the description should only contain alphabets, numbers, etc..
 		$this->assertElementContainsText('.js_resource_description_feedback', '/Description should only contain alphabets, numbers/');
 
 		// Click somewhere else in the interface.
