@@ -1110,33 +1110,33 @@ class PassboltTestCase extends WebDriverTestCase {
 		$this->waitUntilIDontSee('#passbolt-iframe-master-password');
 	}
 
-    /**
-     * Enter the password in the passphrase iframe using only keyboard, and no clicks.
-     *
-     * @param $pwd
-     *   passphrase string
-     * @param $tabFirst
-     *   if tab should be pressed first to give focus
-     *
-     */
-    public function enterMasterPasswordWithKeyboardShortcuts($pwd, $tabFirst = false) {
-        $this->waitUntilISee('#passbolt-iframe-master-password.ready');
-        sleep(1);
-        if ($tabFirst) {
-            $this->pressTab();
-            $this->goIntoMasterPasswordIframe();
-            $this->assertElementHasFocus('js_master_password');
-            $this->goOutOfIframe();
-        }
-        $this->typeTextLikeAUser($pwd);
-        $this->pressEnter();
-        $this->goIntoMasterPasswordIframe();
-        $this->assertElementHasClass(
-            $this->find('master-password-submit'),
-            'processing'
-        );
-        $this->goOutOfIframe();
-    }
+	/**
+	 * Enter the password in the passphrase iframe using only keyboard, and no clicks.
+	 *
+	 * @param $pwd
+	 *   passphrase string
+	 * @param $tabFirst
+	 *   if tab should be pressed first to give focus
+	 *
+	 */
+	public function enterMasterPasswordWithKeyboardShortcuts($pwd, $tabFirst = false) {
+		$this->waitUntilISee('passbolt-iframe-master-password');
+		sleep(1);
+		if ($tabFirst) {
+			$this->pressTab();
+			$this->goIntoMasterPasswordIframe();
+			$this->assertElementHasFocus('js_master_password');
+			$this->goOutOfIframe();
+		}
+		$this->typeTextLikeAUser($pwd);
+		$this->pressEnter();
+		$this->goIntoMasterPasswordIframe();
+		$this->assertElementHasClass(
+			$this->find('master-password-submit'),
+			'processing'
+		);
+		$this->goOutOfIframe();
+	}
 
 
 	/**
@@ -1294,16 +1294,16 @@ class PassboltTestCase extends WebDriverTestCase {
 		}
 	}
 
-    /**
-     * Type text like a user would do, pressing key after key.
-     * @param $text
-     */
-    public function typeTextLikeAUser($text) {
-        $sizeStr = strlen($text);
-        for ($i = 0; $i < $sizeStr; $i++) {
-            $this->driver->getKeyboard()->pressKey($text[$i]);
-        }
-    }
+	/**
+	 * Type text like a user would do, pressing key after key.
+	 * @param $text
+	 */
+	public function typeTextLikeAUser($text) {
+		$sizeStr = strlen($text);
+		for ($i = 0; $i < $sizeStr; $i++) {
+			$this->driver->getKeyboard()->pressKey($text[$i]);
+		}
+	}
 
 	/**
 	 * Click on the ok button in the confirm dialog.
@@ -1599,17 +1599,17 @@ class PassboltTestCase extends WebDriverTestCase {
 	 */
 	public function assertComplexity($strength) {
 		$class = str_replace(' ','_',$strength);
-    $this->assertVisible('#js_secret_strength.'.$class);
-    $this->assertElementHasClass(
-      $this->find('#js_secret_strength .progress-bar'),
-      $class
-    );
-    // We check visibility only if the strength is available.
-    if ($strength != 'not available') {
-      $this->assertVisible('#js_secret_strength .progress-bar.'.$class);
-    }
+		$this->assertVisible('#js_secret_strength.'.$class);
+		$this->assertElementHasClass(
+		    $this->find('#js_secret_strength .progress-bar'),
+		    $class
+        );
+		// We check visibility only if the strength is available.
+		if ($strength != 'not available') {
+		  $this->assertVisible('#js_secret_strength .progress-bar.'.$class);
+		}
 		$this->assertVisible('#js_secret_strength .complexity-text');
-        $labelStrength = $strength != 'not available' ? $strength : 'n/a';
+		$labelStrength = $strength != 'not available' ? $strength : 'n/a';
 		$this->assertElementContainsText('#js_secret_strength .complexity-text', 'complexity: '.$labelStrength);
 	}
 
@@ -1670,7 +1670,7 @@ class PassboltTestCase extends WebDriverTestCase {
 			div.innerHTML = str;
 			while (div.children.length > 0) {
 				el.appendChild(div.children[0]);
-            }
+			}
 		}
 		var el = document.getElementById('$elId');
 		appendHtml(el, '$html');
@@ -1776,7 +1776,7 @@ class PassboltTestCase extends WebDriverTestCase {
 
 	/**
 	 * Assert that the toggle button is in the given status (pressed or unpressed)
-	 * @param     $id
+	 * @param $id
 	 * @param int $status
 	 *
 	 * @return bool
@@ -1801,8 +1801,8 @@ class PassboltTestCase extends WebDriverTestCase {
 	 * The method is described here :
 	 * http://www.hackerfactor.com/blog/index.php?/archives/432-Looks-Like-It.html
 	 *
-	 * @param       $image1Path
-	 * @param       $image2Path
+	 * @param $image1Path
+	 * @param $image2Path
 	 * @param float $tolerance
 	 */
 	public function assertImagesAreSame($image1Path, $image2Path, $tolerance = 0.05) {
@@ -1813,27 +1813,27 @@ class PassboltTestCase extends WebDriverTestCase {
 		$this->assertTrue($diff >= $scoreMin );
 	}
 
-    /**
-     * Assert that a filter is selected.
-     * @param $filterId
-     */
-    public function assertFilterIsSelected($filterId) {
-        $this->assertElementHasClass(
-          $this->find("#$filterId .row"),
-          'selected'
-        );
-    }
+	/**
+	 * Assert that a filter is selected.
+	 * @param $filterId
+	 */
+	public function assertFilterIsSelected($filterId) {
+		$this->assertElementHasClass(
+		  $this->find("#$filterId .row"),
+		  'selected'
+		);
+	}
 
-    /**
-     * Assert that a filter is not selected.
-     * @param $filterId
-     */
-    public function assertFilterIsNotSelected($filterId) {
-        $this->assertElementHasNotClass(
-          $this->find("#$filterId .row"),
-          'selected'
-        );
-    }
+	/**
+	 * Assert that a filter is not selected.
+	 * @param $filterId
+	 */
+	public function assertFilterIsNotSelected($filterId) {
+		$this->assertElementHasNotClass(
+		  $this->find("#$filterId .row"),
+		  'selected'
+		);
+	}
 
 	/**
 	 * Assert a password is selected
