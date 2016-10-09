@@ -4,6 +4,7 @@
  * Feature : Setup
  * As an anonymous user, I need to be able to see the setup page with an invitation to install the plugin.
  * As AP doing the setup, I should not be able to import a key already used by another user.
+ * As an AP I should be able to download my private key after it is generated
  *
  * @TODO : Test a scenario where the key is not compatible with GPG on server side.
  * @TODO : Test scenario with a key that has matching information (same name and email).
@@ -322,6 +323,74 @@ class SetupTest extends PassboltSetupTestCase {
 			$this->findByCss('.header .user.profile .details .email'),
 			$key['owner_email']
 		);
+	}
+
+	/**
+	 * Scenario :  As an AP I should be able to download my private key after it is generated
+	 * Given       I am registered as John Doe, and I go to the setup
+	 * When        I go through the setup until the key backup step
+	 * And         I click on download
+	 * Then        I should see that the key downloaded is in a valid PGP format
+	 * @throws Exception
+	 */
+	public function testSetupDownloadKeyAfterGenerate() {
+		// Reset database at the end of test.
+		$this->resetDatabaseWhenComplete();
+
+		// Retrieve last download folder.
+		$this->getUrl('debug');
+		$this->click('li.browser_preferences a');
+
+		// Get browser preferences in debug.
+		$prefElt = $this->findById('browserPreferences');
+		$prefs = $prefElt->getText();
+		$prefs = json_decode($prefs, true);
+
+		// Get preferred download directory.
+		$downloadDir = $prefs['preferredDownloadDirectory'];
+
+		// Register John Doe as a user.
+		$john = User::get('john');
+		$this->registerUser($john['FirstName'], $john['LastName'], $john['Username']);
+
+		// Go to setup page and register
+		$this->goToSetup($john['Username']);
+
+		// Test step domain verification.
+		$this->completeStepDomainVerification();
+
+		// Click Next.
+		$this->clickLink("Next");
+		// Test that button Next is disabled.
+		$this->assertElementHasClass(
+			$this->find('js_setup_submit_step'),
+			'processing'
+		);
+		// test step that prepares key creation.
+		$this->completeStepPrepareCreateKey($john);
+		// Fill comment.
+		$this->clickLink("Next");
+		// Test enter passphrase step.
+		$this->completeStepEnterMasterPassword($john);
+		// Next.
+		$this->clickLink("Next");
+		// Generate key and wait for key backup screen.
+		$this->completeStepGenerateAndDownloadKey();
+
+		// Test that key has been downloaded.
+		// Click on download option.
+		$this->findById('js_backup_key_download')->click();
+		sleep(2);
+
+		// Go to the downloaded file url.
+		$this->driver->get($downloadDir . '/passbolt_private.asc.txt');
+
+		// Get source code.
+		$downloadedKey = $this->driver->getPageSource();
+
+		// Assert that the key is in valid PGP format.
+		$this->assertContains('BEGIN PGP PRIVATE KEY BLOCK', $downloadedKey);
+		$this->assertContains('END PGP PRIVATE KEY BLOCK', $downloadedKey);
 	}
 
 	/**
