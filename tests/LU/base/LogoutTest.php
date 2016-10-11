@@ -139,6 +139,8 @@ class LogoutTest extends PassboltTestCase {
 	}
 
 	/**
+	 * @group no-saucelabs
+	 *
 	 * Scenario:  As LU I should be logged out when I quit the browser and restart it after my session expired
 	 * Given    I am Ada
 	 * And      I am logged in on the passwords workspace

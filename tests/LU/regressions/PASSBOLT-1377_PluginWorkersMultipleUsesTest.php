@@ -69,6 +69,8 @@ class PASSBOLT1377 extends PassboltTestCase {
 	}
 
 	/**
+	 * @group no-saucelabs
+	 *
 	 * Scenario: As LU I can edit a password mutliple times
 	 *
 	 * Given        I am logged in as ada in the user workspace
@@ -77,7 +79,6 @@ class PASSBOLT1377 extends PassboltTestCase {
 	 * When         I am editing a password I own
 	 * Then         I should expect the password has been edited with success
 	 * [END_LOOP]
-	 *
 	 */
 	public function testEditPasswordMultipleTimes() {
 		// Reset database at the end of test.

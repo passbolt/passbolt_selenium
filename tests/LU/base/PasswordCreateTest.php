@@ -707,6 +707,8 @@ class PasswordCreateTest extends PassboltTestCase
 	}
 
     /**
+     * @group no-saucelabs
+     *
      * Scenario:  As LU I can use passbolt on multiple windows and create password
      * Given    I am Ada
      * And      I am logged in
@@ -792,6 +794,8 @@ class PasswordCreateTest extends PassboltTestCase
     }
 
     /**
+     * @group no-saucelabs
+     *
      * Scenario:  As LU I should be able to create a password after I restart the browser
      * Given    I am Ada
      * And      I am logged in on the passwords workspace

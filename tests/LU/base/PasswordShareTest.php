@@ -1098,6 +1098,8 @@ class PasswordShareTest extends PassboltTestCase
 	}
 
 	/**
+	 * @group no-saucelabs
+	 *
 	 * Scenario: As a user I can share a password with other users after I restart the browser
 	 *
 	 * Given    I am Carol

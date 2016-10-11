@@ -326,6 +326,8 @@ class SetupTest extends PassboltSetupTestCase {
 	}
 
 	/**
+	 * @group no-saucelabs
+	 *
 	 * Scenario :  As an AP I should be able to download my private key after it is generated
 	 * Given       I am registered as John Doe, and I go to the setup
 	 * When        I go through the setup until the key backup step

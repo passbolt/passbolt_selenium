@@ -758,6 +758,8 @@ class UserCreateTest extends PassboltTestCase {
 	}
 
 	/**
+	 * @group no-saucelabs
+	 *
 	 * Scenario:  As LU I should be able to create a user after I restart the browser
 	 * Given    I am Ada
 	 * And      I am logged in on the users workspace

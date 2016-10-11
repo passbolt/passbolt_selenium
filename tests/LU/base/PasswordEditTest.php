@@ -1417,6 +1417,8 @@ class PasswordEditTest extends PassboltTestCase
 	}
 
 	/**
+	 * @group no-saucelabs
+	 *
 	 * Scenario:  As LU I should be able to edit a password after I restart the browser
 	 * Given    I am Ada
 	 * And      I am logged in on the passwords workspace
@@ -1453,6 +1455,8 @@ class PasswordEditTest extends PassboltTestCase
 	}
 
 	/**
+	 * @group no-saucelabs
+	 *
 	 * Scenario:  As LU I should be able to edit a password after I close and restore the passbolt tab
 	 * Given    I am Ada
 	 * And      I am on second tab

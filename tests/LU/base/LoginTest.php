@@ -151,6 +151,8 @@ class LoginTest extends PassboltTestCase {
 	}
 
 	/**
+	 * @group no-saucelabs
+	 *
 	 * Scenario:  As LU I should still be logged in after I restart the browser
 	 * Given    I am Ada
 	 * And      I am logged in on the passwords workspace
