@@ -10,7 +10,7 @@ $config = array (
 		// the base url to use to access this app
 		'url' => 'http://{APP_URL}/passbolt_selenium',
 		// path to access the testsuite files from the running firefox.
-		'path' => DS . 'home' . DS . 'passbolt_selenium',
+        'path' => __DIR__ . '/..',
 	),
 	// the url of your passbolt app
 	'passbolt' => array (
@@ -36,8 +36,8 @@ $config = array (
 		'default' => '/* testserver */',
 		'saucelabs' => array(
 			'url'       => 'ondemand.saucelabs.com:80/wd/hub',
-			'username'  => 'passbolt',
-			'key'       => '688b92b6-6d74-40b9-9d03-15b97124a666',
+			'username'  => '/* sl_username */',
+			'key'       => '/* sl_key */',
 			'capabilities' => array(
 				'videoUploadOnPass' => false,
 				'recordVideo'=> true,
@@ -53,6 +53,8 @@ $config = array (
 		'selenium' => array (
 			'url' => 'http://{APP_URL}:4444/wd/hub',
 			'instances' => [/* selenium instances */],
+			// Extra capabilities.
+			'capabilities' => array(),
 		),
 	),
 	'browsers' => array (
