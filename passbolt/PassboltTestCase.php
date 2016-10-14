@@ -1104,9 +1104,15 @@ class PassboltTestCase extends WebDriverTestCase {
 			$this->checkCheckbox('js_remember_master_password');
 		}
 
-		$this->click('master-password-submit');
+		// Get master password submit button element.
+		$submit = $this->find('master-password-submit');
+
+		// Click on button.
+		$submit->click();
+
+		// Check that button has processing class.
 		$this->assertElementHasClass(
-			$this->find('master-password-submit'),
+			$submit,
 			'processing'
 		);
 		$this->goOutOfIframe();
