@@ -9,6 +9,8 @@ class PASSBOLT1494 extends PassboltSetupTestCase
 {
 
 	/**
+	 * @group no-saucelabs
+	 *
 	 * Scenario:  As an AP going through the setup two times, I should be able to login at the end of the second setup.
 	 * Given    I create an account as John Doe, and I proceed through the entire setup.
 	 * When     I register again with another username, and proceed again through the entire setup
