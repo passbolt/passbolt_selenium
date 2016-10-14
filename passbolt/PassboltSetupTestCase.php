@@ -95,8 +95,40 @@ class PassboltSetupTestCase extends PassboltTestCase {
 		if ($sectionName == 'generate_key_done') {
 			$timeout = 60;
 		}
-		$this->waitUntilISee('#js_step_title', '/' . $this->getSectionInfo($sectionName, 'title') . '/i', $timeout);
-		$this->waitUntilISee('#js_step_content h3', '/' . $this->getSectionInfo($sectionName, 'subtitle') . '/i', $timeout);
+
+		try {
+			// Wait for section login_redirect.
+			$this->waitUntilISee(
+				'#js_step_title',
+				'/' . $this->getSectionInfo($sectionName, 'title') . '/i',
+				$timeout
+			);
+			$this->waitUntilISee(
+				'#js_step_content h3',
+				'/' . $this->getSectionInfo($sectionName, 'subtitle') . '/i',
+				$timeout
+			);
+		} catch (Exception $e) {
+			// If session is not there, check if we are on the exception page.
+			try {
+				$this->waitUntilISee(
+					'#js_step_title',
+					'/' . 'Damn' . '/i',
+					$timeout
+				);
+			}
+			catch (Exception $e) {
+				throw new Exception("Section $sectionName could not be found, and debug couldn't be retrieved");
+			}
+
+			// Retrieve debug info.
+			$this->waitUntilISee('#show-debug-info');
+			$this->click('#show-debug-info');
+			$this->waitUntilISee('#debug-info');
+			$debug = $this->find('#debug-info')->getText();
+
+			throw new Exception("Section $sectionName could not be reached. \n Debug: ". print_r($debug, true));
+		}
 	}
 
 	/**
@@ -476,7 +508,7 @@ class PassboltSetupTestCase extends PassboltTestCase {
 	 * @throws Exception
 	 */
 	protected function completeStepLoginRedirection() {
-		// Wait for section.
+
 		$this->waitForSection('login_redirect');
 
 		// I should see the subtitle.
