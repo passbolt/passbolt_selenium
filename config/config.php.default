@@ -39,8 +39,8 @@ $config = array (
 		// Configuration for saucelabs.
 		'saucelabs' => array(
 			'url'       => 'ondemand.saucelabs.com:80/wd/hub',
-			'username'  => 'username',
-			'key'       => 'access_key',
+			'username'  => '/* sl_username */',
+			'key'       => '/* sl_key */',
 			// Extra capabilities.
 			'capabilities' => array(
 				'videoUploadOnPass' => true,
