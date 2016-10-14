@@ -346,9 +346,6 @@ class PasswordCreateTest extends PassboltTestCase
         // When I click on the save button
         $this->click('.create-password-dialog input[type=submit]');
 
-        // Then I see a dialog telling me encryption is in progress
-        $this->waitUntilISee('#passbolt-iframe-progress-dialog');
-
         // I see a notice message that the operation was a success
         $this->assertNotification('app_resources_add_success');
 
@@ -686,9 +683,6 @@ class PasswordCreateTest extends PassboltTestCase
 
 		// When I click on the save button
 		$this->click('.create-password-dialog input[type=submit]');
-
-		// Then I see a dialog telling me encryption is in progress
-		$this->waitUntilISee('#passbolt-iframe-progress-dialog');
 
 		// I see a notice message that the operation was a success
 		$this->assertNotification('app_resources_add_success');

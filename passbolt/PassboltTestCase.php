@@ -899,7 +899,6 @@ class PassboltTestCase extends WebDriverTestCase {
 		$this->click('.edit-password-dialog input[type=submit]');
 
 		if (isset($password['password'])) {
-			$this->waitUntilISee('#passbolt-iframe-progress-dialog');
 			$this->waitUntilIDontSee('#passbolt-iframe-progress-dialog');
 		}
 		$this->assertNotification('app_resources_edit_success');
