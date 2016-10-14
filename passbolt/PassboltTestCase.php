@@ -853,7 +853,6 @@ class PassboltTestCase extends WebDriverTestCase {
 		}
 		$this->click('.create-password-dialog input[type=submit]');
 
-		$this->waitUntilISee('#passbolt-iframe-progress-dialog');
 		$this->waitUntilIDontSee('#passbolt-iframe-progress-dialog');
 
 		$this->assertNotification('app_resources_add_success');
