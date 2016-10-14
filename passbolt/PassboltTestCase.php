@@ -1109,10 +1109,16 @@ class PassboltTestCase extends WebDriverTestCase {
 		$submit->click();
 
 		// Check that button has processing class.
-		$this->assertElementHasClass(
-			$submit,
-			'processing'
-		);
+		try {
+			$this->assertElementHasClass(
+				$submit,
+				'processing'
+			);
+		} catch(StaleElementReferenceException $e) {
+			// Everything alright.
+			// It's just that the element has already been removed from the dom.
+		}
+
 		$this->goOutOfIframe();
 		$this->waitUntilIDontSee('#passbolt-iframe-master-password');
 	}
