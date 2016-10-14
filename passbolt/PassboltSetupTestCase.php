@@ -412,15 +412,10 @@ class PassboltSetupTestCase extends PassboltTestCase {
 	 */
 	protected function completeStepGenerateAndDownloadKey() {
 
-		// Wait until section appears.
-		$this->waitForSection('generate_key_progress');
+		// Assert that button submit is in processing state. (generating).
+		$this->waitUntilISee('#js_setup_submit_step.processing');
 
-		// Assert that button submit is in processing state.
-		$this->assertElementHasClass(
-			$this->find('js_setup_submit_step'),
-			'processing'
-		);
-
+		// Assert I am back to normal state.
 		$this->waitUntilISee('#js_setup_submit_step.enabled', null, 20);
 
 		// Wait till the key is generated.

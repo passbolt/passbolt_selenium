@@ -642,35 +642,74 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
 
     /**
      * Wait until I see.
-     * @param $id string
-     * @param null $regexp
+     * @param $ids array of ids (success if only one of them is found), or string representing one id
+     * @param array or string $regexps (follows $ids)
      * @param int timeout timeout in seconds
      * @return bool if element is found
      * @throws Exception if element is not found after a given timeout
      */
-    public function waitUntilISee($id, $regexp = null, $timeout = 10) {
-        for ($i = 0; $i < $timeout * 10; $i++) {
-            try {
-                $elt = $this->find($id);
-                if ($elt && $elt->isDisplayed()) {
-                    if (is_null($regexp)) {
-                        return true;
-                    }
-                    else {
-                        if (preg_match($regexp, $elt->getText())) {
-                            return true;
-                        }
-                    }
-                }
-            }
-            catch (Exception $e) {
-                // We do nothing
-            }
-            usleep(100000); // Sleep 1/2 seconds
+    public function waitUntilISee($ids, $regexps = null, $timeout = 10) {
+        // Number of loops to do.
+	    $loops = 50;
+
+	    for ($i = 0; $i < $loops; $i++) {
+	        if (is_array($ids)) {
+		        foreach($ids as $k => $id) {
+			        $regexp = null;
+			        if (!is_null($regexps) && is_string($regexps)) {
+						$regexp = $regexps;
+			        }
+			        elseif (!is_null($regexps) && is_array($regexps)) {
+				        $regexp = $regexps[$k];
+			        }
+			        $visible = $this->_assertISeeElement($id, $regexp);
+			        if ($visible === true) {
+				        return true;
+			        }
+		        }
+	        }
+	        else {
+		        $visible = $this->_assertISeeElement($ids, $regexps);
+		        if ($visible === true) {
+			        return true;
+		        }
+	        }
+	        $second = 1000000;
+	        usleep(($second * $timeout) / $loops);
         }
         $backtrace = debug_backtrace();
-        throw new Exception( "waitUntilISee $id, $regexp : Timeout thrown by " . $backtrace[1]['class'] . "::" . $backtrace[1]['function'] . "()\n . element: $id ($regexp)");
+	    $id = is_array($ids) ? implode(",", $ids) : $ids;
+	    $regexp = is_array($regexps) ? implode (",", $regexps) : $regexps;
+        throw new Exception( "waitUntilISee $id, $regexp\nTimeout thrown by " . $backtrace[1]['class'] . "::" . $backtrace[1]['function'] . "()\n . element(s): $id ($regexp)");
     }
+
+	/**
+	 * Wait until I see one id, which might contain a regexp.
+	 * @param $id
+	 * @param $regexp
+	 *
+	 * @return bool
+	 */
+	protected function _assertISeeElement($id, $regexp) {
+		try {
+			$elt = $this->find($id);
+			if ($elt && $elt->isDisplayed()) {
+				if (is_null($regexp)) {
+					return true;
+				}
+				else {
+					if (preg_match($regexp, $elt->getText())) {
+						return true;
+					}
+				}
+			}
+		}
+		catch (Exception $e) {
+			// We do nothing
+		}
+
+		return false;
+	}
 
 	/**
 	 * Wait until I don't see an element, or an element containing a given text.
