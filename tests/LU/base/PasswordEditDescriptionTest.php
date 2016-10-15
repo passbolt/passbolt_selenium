@@ -164,9 +164,6 @@ class PasswordEditDescriptionTest extends PassboltTestCase {
 	 * And          I should see the current password description
 	 * When         I click the edit button
 	 * Then         I should see a form to edit the description.
-	 * When         I enter aa in the description field
-	 * And          I click on save
-	 * Then         I should see the error message The description should be between xxx and xxx characters
 	 * When         I enter ### in the description field
 	 * Then         I should see the error message Description should contain only alphabets, numbers, ....
 	 * When         I click outside of the textarea
@@ -191,7 +188,6 @@ class PasswordEditDescriptionTest extends PassboltTestCase {
 		// When I click on a password I own.
 		$resource = Resource::get(array('user' => 'ada', 'permission' => 'owner'));
 		$this->clickPassword($resource['id']);
-
 
 		// Click on the edit button.
 		$this->click("#js_edit_description_button i");
