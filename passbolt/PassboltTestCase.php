@@ -221,6 +221,7 @@ class PassboltTestCase extends WebDriverTestCase {
 			$this->getUrl('login');
 		}
 
+		$this->waitUntilISee('#passbolt-iframe-login-form.loaded');
 		$this->waitUntilISee('.plugin-check.firefox.success');
 		$this->waitUntilISee('.plugin-check.gpg.success');
 		$this->goIntoLoginIframe();
