@@ -1154,10 +1154,16 @@ class PassboltTestCase extends WebDriverTestCase {
 		$this->typeTextLikeAUser($pwd);
 		$this->pressEnter();
 		$this->goIntoMasterPasswordIframe();
-		$this->assertElementHasClass(
-			$this->find('master-password-submit'),
-			'processing'
-		);
+		try {
+			$this->assertElementHasClass(
+				$this->find('master-password-submit'),
+				'processing'
+			);
+		} catch (StaleElementReferenceException $e) {
+			// Do nothing.
+			// This happens sometimes when the master password decryption is too fast
+		}
+
 		$this->goOutOfIframe();
 	}
 
