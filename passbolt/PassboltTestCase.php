@@ -902,6 +902,10 @@ class PassboltTestCase extends WebDriverTestCase {
 		if (isset($password['password'])) {
 			$this->waitUntilIDontSee('#passbolt-iframe-progress-dialog');
 		}
+		// And I should not see the edit dialog anymore
+		$this->waitUntilIDontSee('.edit-password-dialog');
+
+		// And I should see the notification.
 		$this->assertNotification('app_resources_edit_success');
 	}
 
@@ -987,7 +991,7 @@ class PassboltTestCase extends WebDriverTestCase {
 		$this->assertNotification('app_share_update_success');
 
 		// And I should not see the share dialog anymore
-		$this->assertNotVisible('.share-password-dialog');
+		$this->waitUntilIDontSee('.share-password-dialog');
 	}
 
 	/**
@@ -1567,6 +1571,18 @@ class PassboltTestCase extends WebDriverTestCase {
 			}
 			$this->assertTrue(($contain !== false), 'fail to find the notification message ' . $msg);
 		}
+	}
+
+
+	/**
+	 * Wait until a notification disappears.
+	 * @param $notificationId
+	 *
+	 * @throws Exception
+	 */
+	public function waitUntilNotificationDisappears($notificationId) {
+		$notificationId = 'notification_' . Uuid::get($notificationId);
+		$this->waitUntilIDontSee($notificationId);
 	}
 
 	/**

@@ -19,7 +19,7 @@ class PASSBOLT1377 extends PassboltTestCase {
 	 * [END_LOOP]
 	 *
 	 */
-	public function testLoginLogouMultipleTimes() {
+	public function testLoginLogoutMultipleTimes() {
 		// Given I am Ada
 		$user = User::get('ada');
 		$this->setClientConfig($user);
@@ -65,6 +65,9 @@ class PASSBOLT1377 extends PassboltTestCase {
 				'password' => 'password_' . $i
 			);
 			$this->createPassword($password);
+
+			// Wait until notification disappears.
+			$this->waitUntilNotificationDisappears('app_resources_add_success');
 		}
 	}
 
@@ -100,6 +103,9 @@ class PASSBOLT1377 extends PassboltTestCase {
 			$r['id'] = $resource['id'];
 			$r['password'] = 'password_' . $i;
 			$this->editPassword($r, $user);
+
+			// Wait until notification disappears.
+			$this->waitUntilNotificationDisappears('app_resources_edit_success');
 		}
 	}
 
@@ -139,6 +145,7 @@ class PASSBOLT1377 extends PassboltTestCase {
 			$r['id'] = $resource['id'];
 			$r['password'] = 'password_' . $i;
 			$this->sharePassword($resource, $shareWith[$i], $user);
+			$this->waitUntilNotificationDisappears('app_share_update_success');
 		}
 	}
 }
