@@ -62,8 +62,6 @@ $config = array (
 		'firefox_with_passbolt_extension' => array(
 			'name' => 'Firefox with Passbolt extension',
 			'type' => 'firefox',
-			'platform' => 'Windows 10',
-			'version' => '47.0',
 			'extensions' => array(
 				'data/extensions/passbolt-firefox-addon.xpi'
 			)
@@ -75,6 +73,13 @@ $config = array (
 		'chrome_vanilla' => array(
 			'name' => 'Chrome with no extensions',
 			'type' => 'chrome'
-		)
+		),
+		'chrome_with_passbolt_extension' => array(
+			'name' => 'chrome with passbolt extension',
+			'type' => 'chrome',
+			'extensions' => array(
+				'data/extensions/passbolt-chrome-addon.crx'
+			)
+		),
 	)
 );

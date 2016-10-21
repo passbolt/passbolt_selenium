@@ -91,6 +91,20 @@ Clone or rename config.php.default to
 
     ./vendor/bin/phpunit -c ./tests
 
+## TEST WITH FIREFOX
+
+*   Below is an example of a selenium test using firefox with the passbolt plugin, running for AP, and for the test testLogin
+    PLEASE NOTE that a shortcut to the .xpi firefox plugin should be placed in data/extensions folder
+
+    BROWSER=firefox_with_passbolt_extension ./passbolt/vendor/phpunit/phpunit/phpunit -c ./tests/AP/phpunit.xml --filter testLogin
+
+## TEST WITH CHROME
+
+*   Below is an example of a selenium test using chrome with the passbolt plugin, running for AP, and for the test testLogin.
+    PLEASE NOTE that a shortcut to the .crx chrome plugin should be placed in data/extensions folder
+
+    BROWSER=chrome_with_passbolt_extension ./passbolt/vendor/phpunit/phpunit/phpunit -c ./tests/AP/phpunit.xml --filter testLogin
+
 
 ## PASSBOLT Plugin
 

@@ -306,9 +306,18 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
             case 'chrome':
                 $options = new ChromeOptions();
                 $capabilities = DesiredCapabilities::chrome();
-                if (isset($browser['extensions'])) {
-                    $options->addExtensions($this->_browser['extensions']);
-                }
+
+			    if (isset($this->_browser['extensions'])) {
+			        foreach($this->_browser['extensions'] as $i => $ext_path) {
+			            if (!is_file($ext_path)) {
+				            $this->_error('ERROR The extension file was not found: ' . $ext_path);
+			            }
+			            $options->addExtensions($this->_browser['extensions']);
+			        }
+			    }
+
+				// TODO: set options for auto-download if required. (check firefox preferences above).
+
                 $capabilities->setCapability(ChromeOptions::CAPABILITY, $options);
             break;
 
