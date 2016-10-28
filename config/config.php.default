@@ -78,7 +78,7 @@ $config = array (
 			'name' => 'chrome with passbolt extension',
 			'type' => 'chrome',
 			'extensions' => array(
-				'data/extensions/passbolt-chrome-addon.crx'
+				'data/extensions/passbolt-chrome-addon.zip'
 			)
 		),
 	)
