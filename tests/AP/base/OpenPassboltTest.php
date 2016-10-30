@@ -51,7 +51,7 @@ class OpenPassboltTest extends PassboltSetupTestCase {
 		$this->goToSetup($key['owner_email']);
 
 		// Simulate click on the passbolt toolbar icon
-		$this->findByCss('body')->sendKeys(array(WebDriverKeys::CONTROL, WebDriverKeys::SHIFT, WebDriverKeys::ALT, 'p'));
+		$this->findByCss('body')->sendKeys(array(WebDriverKeys::SHIFT, WebDriverKeys::ALT, 'p'));
 		sleep(1);
 
 		// Test that the url is the plugin one.
@@ -81,7 +81,7 @@ class OpenPassboltTest extends PassboltSetupTestCase {
 		$this->completeRegistration();
 
 		// Simulate click on the passbolt toolbar icon
-		$this->findByCss('body')->sendKeys(array(WebDriverKeys::CONTROL, WebDriverKeys::SHIFT, WebDriverKeys::ALT, 'p'));
+		$this->findByCss('body')->sendKeys(array(WebDriverKeys::SHIFT, WebDriverKeys::ALT, 'p'));
 		sleep(1);
 
 		// I should be on the login page.
