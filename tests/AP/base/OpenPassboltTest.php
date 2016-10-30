@@ -19,7 +19,7 @@ class OpenPassboltTest extends PassboltSetupTestCase {
 	 * And			This page redirects me to the demo login
 	 */
 	public function testOpenPassboltNoConfig() {
-		$this->findByCss('body')->sendKeys(array(WebDriverKeys::CONTROL, WebDriverKeys::SHIFT, WebDriverKeys::ALT, 'p'));
+		$this->findByCss('body')->sendKeys(array(WebDriverKeys::SHIFT, WebDriverKeys::ALT, 'p'));
  		//$this->waitUntilUrlMatches('https://www.passbolt.com/start', false);
 		$this->waitUntilUrlMatches('https://demo.passbolt.com/auth/login', false);
 	}
