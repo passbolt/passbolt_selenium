@@ -19,7 +19,12 @@ class OpenPassboltTest extends PassboltSetupTestCase {
 	 * And			This page redirects me to the demo login
 	 */
 	public function testOpenPassboltNoConfig() {
+		$this->waitUntilISee('body');
 		$this->findByCss('body')->sendKeys(array(WebDriverKeys::SHIFT, WebDriverKeys::ALT, 'p'));
+		// Ensure the selenium works on the new tab.
+		$handles=$this->driver->getWindowHandles();
+		$last_window = next($handles);
+		$this->driver->switchTo()->window($last_window);
  		//$this->waitUntilUrlMatches('https://www.passbolt.com/start', false);
 		$this->waitUntilUrlMatches('https://demo.passbolt.com/auth/login', false);
 	}
