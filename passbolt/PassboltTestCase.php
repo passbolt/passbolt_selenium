@@ -59,13 +59,27 @@ class PassboltTestCase extends WebDriverTestCase {
 	/********************************************************************************
 	 * Passbolt Application Helpers
 	 ********************************************************************************/
+
+	/**
+	 * Get the extension url
+	 * @return {string}
+	 * @throws Exception
+	 */
+	public function getExtensionBaseUrl() {
+		if (isset($this->_browser['base_url'])) {
+			return $this->_browser['base_url'];
+		}
+		throw new Exception("This browser configuration has no passbolt extension. ");
+	}
+
 	/**
 	 * Goto a given url
 	 * @param $url
 	 */
-	public function getUrl($url=null) {
+	public function getUrl($url = null) {
 		if ($url == 'debug') {
-			$url = 'resource://passbolt-at-passbolt-dot-com/data/config-debug.html';
+			$baseUrl = $this->getExtensionBaseUrl();
+			$url = $baseUrl . DS . 'data' . DS . 'config-debug.html';
 		} else {
 			$url = Config::read('passbolt.url') . DS . $url;
 		}
