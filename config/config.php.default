@@ -59,6 +59,9 @@ $config = array (
 	),
 	'browsers' => array (
 		'default' => 'firefox_with_passbolt_extension',
+		'common' => array(
+			'downloads_path' => 'file://home/application/Downloads'
+		),
 		'firefox_with_passbolt_extension' => array(
 			'name' => 'Firefox with Passbolt extension',
 			'type' => 'firefox',

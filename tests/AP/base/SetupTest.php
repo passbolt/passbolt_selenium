@@ -339,18 +339,6 @@ class SetupTest extends PassboltSetupTestCase {
 		// Reset database at the end of test.
 		$this->resetDatabaseWhenComplete();
 
-		// Retrieve last download folder.
-		$this->goToDebug();
-		$this->click('li.browser_preferences a');
-
-		// Get browser preferences in debug.
-		$prefElt = $this->findById('browserPreferences');
-		$prefs = $prefElt->getText();
-		$prefs = json_decode($prefs, true);
-
-		// Get preferred download directory.
-		$downloadDir = $prefs['preferredDownloadDirectory'];
-
 		// Register John Doe as a user.
 		$john = User::get('john');
 		$this->registerUser($john['FirstName'], $john['LastName'], $john['Username']);
@@ -385,7 +373,7 @@ class SetupTest extends PassboltSetupTestCase {
 		sleep(2);
 
 		// Go to the downloaded file url.
-		$this->driver->get($downloadDir . '/passbolt_private.asc.txt');
+		$this->driver->get(Config::read('browsers.common.downloads_path') . DS . 'passbolt_private.asc.txt');
 
 		// Get source code.
 		$downloadedKey = $this->driver->getPageSource();
