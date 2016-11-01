@@ -61,6 +61,14 @@ class PassboltTestCase extends WebDriverTestCase {
 	 ********************************************************************************/
 
 	/**
+	 * Go to debug page.
+	 */
+	public function goToDebug() {
+		$this->getUrl('debug');
+		$this->waitUntilISee('.config.page.ready');
+	}
+
+	/**
 	 * Get the extension url
 	 * @return {string}
 	 * @throws Exception
@@ -213,7 +221,7 @@ class PassboltTestCase extends WebDriverTestCase {
 				$this->driver->manage()->addCookie($cookie);
 			}
 			// The application page mode needs to be restarted manually.
-			$this->getUrl('debug');
+			$this->goToDebug();
 			$this->click('initAppPagemod');
 			$this->getUrl('');
 			try {
@@ -313,7 +321,7 @@ class PassboltTestCase extends WebDriverTestCase {
 		}
 
 		// The application page mode needs to be restarted manually.
-		$this->getUrl('debug');
+		$this->goToDebug();
 		$this->click('initAppPagemod');
 
 		// Go to the application
@@ -425,8 +433,7 @@ class PassboltTestCase extends WebDriverTestCase {
 	 * @param $manual bool whether the data should be entered manually, or through javascript.
 	 */
 	public function setClientConfig($config, $manual = false) {
-		$this->getUrl('debug');
-		$this->waitUntilISee('.config.page');
+		$this->goToDebug();
 
 		$userPrivateKey = '';
 		// If the key provided is a path, then look in the complete path.

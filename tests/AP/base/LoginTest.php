@@ -37,8 +37,7 @@ class LoginTest extends PassboltTestCase {
 		$this->setClientConfig($user);
 
 		// Load a wrong public server key.
-		$this->getUrl('debug');
-		$this->waitUntilISee('.config.page');
+		$this->goToDebug();
 		$key = file_get_contents(GPG_FIXTURES . DS . 'user_public.key');
 		$this->inputText('serverKeyAscii', $key);
 		$this->click('saveServerKey');

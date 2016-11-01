@@ -340,7 +340,7 @@ class SetupTest extends PassboltSetupTestCase {
 		$this->resetDatabaseWhenComplete();
 
 		// Retrieve last download folder.
-		$this->getUrl('debug');
+		$this->goToDebug();
 		$this->click('li.browser_preferences a');
 
 		// Get browser preferences in debug.

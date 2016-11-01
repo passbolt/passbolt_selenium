@@ -41,7 +41,7 @@ class DebugTest extends PassboltTestCase {
     public function testDebugConfigIsPersistent() {
         $user = User::get('betty');
         $this->setClientConfig($user);
-        $this->getUrl('debug');
+        $this->goToDebug();
         $this->assertInputValue('baseUrl', Config::read('passbolt.url'));
         $this->assertInputValue('UserId', $user['id']);
         $this->assertInputValue('ProfileFirstName', $user['FirstName']);
@@ -76,9 +76,7 @@ class DebugTest extends PassboltTestCase {
      */
     public function testDebugUserAndSettingsValidation() {
         $user = User::get('ada');
-        $this->getUrl('debug');
-
-	    sleep(1);
+        $this->goToDebug();
 
         // Check empty user id
         $this->click('js_save_conf');
