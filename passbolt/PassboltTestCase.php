@@ -244,7 +244,7 @@ class PassboltTestCase extends WebDriverTestCase {
 		}
 
 		$this->waitUntilISee('#passbolt-iframe-login-form.ready');
-		$this->waitUntilISee('.plugin-check.firefox.success');
+		$this->waitUntilISee('.plugin-check.' . $this->_browser['type'] . '.success');
 		$this->waitUntilISee('.plugin-check.gpg.success');
 		$this->goIntoLoginIframe();
 		$this->assertInputValue('UserUsername', $user['Username']);
@@ -610,7 +610,7 @@ class PassboltTestCase extends WebDriverTestCase {
 
 		// Test that the plugin confirmation message is displayed.
 		if ($checkPluginSuccess) {
-			$this->waitUntilISee('.plugin-check-wrapper .plugin-check.success', '/Firefox plugin is installed and up to date/i');
+			$this->waitUntilISee('.plugin-check-wrapper .plugin-check.success', '/' . $this->_browser['type'] . ' plugin is installed and up to date/i');
 		}
 	}
 
@@ -634,7 +634,7 @@ class PassboltTestCase extends WebDriverTestCase {
 
 		// Test that the plugin confirmation message is displayed.
 		if ($checkPluginSuccess) {
-			$this->waitUntilISee('.plugin-check-wrapper .plugin-check.success', '/Firefox plugin is installed and up to date/i');
+			$this->waitUntilISee('.plugin-check-wrapper .plugin-check.success', '/' . $this->_browser['type'] . ' plugin is installed and up to date/i');
 		}
 	}
 

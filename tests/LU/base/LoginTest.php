@@ -21,14 +21,14 @@ class LoginTest extends PassboltTestCase {
     public function testLogin() {
         $this->getUrl('login');
 	    sleep(1);
-        $this->assertVisible('.plugin-check.firefox.warning');
+        $this->assertVisible('.plugin-check.' . $this->_browser['type'] . '.warning');
 
         $user = User::get('ada');
         $this->setClientConfig($user);
 
         $this->getUrl('login');
 
-        $this->waitUntilISee('.plugin-check.firefox.success');
+        $this->waitUntilISee('.plugin-check.' . $this->_browser['type'] . '.success');
         $this->waitUntilISee('.plugin-check.gpg.success');
 
         $this->assertVisible('passbolt-iframe-login-form');
@@ -69,14 +69,14 @@ class LoginTest extends PassboltTestCase {
 	public function testLoginWithEnterKey() {
 		$this->getUrl('login');
 		sleep(1);
-		$this->assertVisible('.plugin-check.firefox.warning');
+		$this->assertVisible('.plugin-check.' . $this->_browser['type'] . '.warning');
 
 		$user = User::get('ada');
 		$this->setClientConfig($user);
 
 		$this->getUrl('login');
 
-		$this->waitUntilISee('.plugin-check.firefox.success');
+		$this->waitUntilISee('.plugin-check.' . $this->_browser['type'] . '.success');
 		$this->waitUntilISee('.plugin-check.gpg.success');
 
 		$this->assertVisible('passbolt-iframe-login-form');
