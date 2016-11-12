@@ -37,7 +37,7 @@ class SetupTest extends PassboltSetupTestCase {
 		// Follow the link in the email.
 		$this->followLink("get started");
 		// Test that the url is the plugin one.
-		$this->assertUrlMatch('/resource:\/\/passbolt-at-passbolt-dot-com\/data\/setup.html/');
+		$this->assertUrlMatch('/' . preg_quote($this->getExtensionBaseUrl()) . '\/data\/setup.html/');
 
 		// Test that the plugin confirmation message is displayed.
 		$this->waitUntilISee('.plugin-check.success', '/' . ucfirst($this->_browser['type']) . ' plugin is installed and up to date/i');

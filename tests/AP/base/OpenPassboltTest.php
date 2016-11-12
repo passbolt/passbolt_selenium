@@ -55,7 +55,7 @@ class OpenPassboltTest extends PassboltSetupTestCase {
 		sleep(1);
 
 		// Test that the url is the plugin one.
-		$this->assertUrlMatch('/resource:\/\/passbolt-at-passbolt-dot-com\/data\/setup.html/');
+		$this->assertUrlMatch('/' . preg_quote($this->getExtensionBaseUrl(), '/') . '\/data\/setup.html/');
 	}
 
 	/**
