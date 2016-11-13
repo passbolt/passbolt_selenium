@@ -45,10 +45,10 @@ class LoginTest extends PassboltTestCase {
 		$this->assertTitleContain('Login');
 
 		try {
-			$e = $this->findByCss('.plugin-check.firefox.error');
+			$e = $this->findByCss('.plugin-check.' . $this->_browser['type'] . '.error');
 			$this->assertTrue($e->isDisplayed());
 		} catch (NoSuchElementException $e) {
-			$this->fail('Plugin check error message was not found (CSS: .plugin-check.firefox.error)');
+			$this->fail('Plugin check error message was not found (CSS: .plugin-check.' . $this->_browser['type'] . '.error)');
 		}
 
 		$this->assertTrue(true);
