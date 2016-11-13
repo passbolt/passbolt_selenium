@@ -19,9 +19,8 @@ class SetupTest extends PassboltSetupTestCase {
 	 * Given      I am an anonymous user with no plugin on the registration page
 	 * And        I follow the registration process and click on submit
 	 * And        I click on the link get started in the email I received
-	 * Then       I should reach the setup page
-	 * And        the url should look like resource://passbolt-at-passbolt-dot-com/passbolt-firefox-addon/data/setup.html
-	 * And        I should see the text "Nice one! Firefox plugin is installed and up to date. You are good to go!"
+	 * Then       Wait until I see the first page of setup.
+	 * And        I should see the text "Nice one! Firefox/Chrome plugin is installed and up to date. You are good to go!"
 	 * And        I should see that the domain in the url check textbox is the same as the one configured.
 	 */
 	public function testCanSeeSetupPageWithFirstPluginSection() {
@@ -35,15 +34,15 @@ class SetupTest extends PassboltSetupTestCase {
 		// Get last email.
 		$this->getUrl('seleniumTests/showLastEmail/' . urlencode('johndoe@passbolt.com'));
 		// Follow the link in the email.
-		$this->followLink("get started");
-		// Test that the url is the plugin one.
-		$this->assertUrlMatch('/' . preg_quote($this->getExtensionBaseUrl()) . '\/data\/setup.html/');
+		$this->followLink('get started');
+		// Wait until I see the first page of setup.
+		$this->waitForSection('domain_check');
 
 		// Test that the plugin confirmation message is displayed.
-		$this->waitUntilISee('.plugin-check.success', '/' . ucfirst($this->_browser['type']) . ' plugin is installed and up to date/i');
+		$this->waitUntilISee('.plugin-check.success', '/' . $this->_browser['type'] . ' plugin is installed and up to date/i');
 
 		// Test that the domain in the url check textbox is the same as the one configured.
-		$domain = $this->findById("js_setup_domain")->getAttribute('value');
+		$domain = $this->findById('js_setup_domain')->getAttribute('value');
 		$this->assertEquals(Config::read('passbolt.url'), $domain);
 
 	}
