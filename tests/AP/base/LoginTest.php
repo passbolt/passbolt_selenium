@@ -81,7 +81,7 @@ class LoginTest extends PassboltTestCase {
 			$this->fail('No element wit id #version was found');
 		}
 
-		$version = $versionElt->getAttribute('data-tooltip');
-		$this->assertRegExp('/^[0-9]{1,2}\.[0-9]{1,2}\.[0-9]{1,2} \/ [0-9]{1,2}\.[0-9]{1,2}\.[0-9]{1,2}$/', $version);
+		$callback = array($this, 'assertElementAttributeMatches');
+		$this->waitUntil($callback, array($versionElt, 'data-tooltip', '/^[0-9]{1,2}\.[0-9]{1,2}\.[0-9]{1,2} \/ [0-9]{1,2}\.[0-9]{1,2}\.[0-9]{1,2}$/'));
 	}
 }

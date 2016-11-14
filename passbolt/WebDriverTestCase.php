@@ -649,6 +649,33 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
         return (!$element->isDisplayed());
     }
 
+	/**
+	 * Wait until the callback function validates.
+	 * @param Callback $callback The function that will do the assertion
+	 * @param array $args An array of arguments to pass the callback function
+	 * @param int $timeout
+	 * @return bool
+	 * @throws
+	 */
+	public function waitUntil($callback, $args = array(), $timeout = 10) {
+		// Number of loops to do.
+		$loops = 50;
+		// The last exception caught.
+		$caughtException = null;
+
+		for ($i = 0; $i < $loops; $i++) {
+			try {
+				call_user_func_array($callback, $args);
+				return true;
+			} catch (Exception $e) {
+				$caughtException = $e;
+			}
+			$second = 1000000;
+			usleep(($second * $timeout) / $loops);
+		}
+		throw $caughtException;
+	}
+
     /**
      * Wait until I see.
      * @param $ids array of ids (success if only one of them is found), or string representing one id
@@ -966,6 +993,17 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
         $attr = $elt->getAttribute($attribute);
         $this->assertEquals($attr, $value, sprintf("Failed asserting that element attribute %s equals %s", $attribute, $value));
     }
+
+	/**
+	 * Assert that an element's attribute matches the given regex.
+	 * @param $elt
+	 * @param $attribute
+	 * @param $regex
+	 */
+	public function assertElementAttributeMatches($elt, $attribute, $regex) {
+		$attributeValue = $elt->getAttribute($attribute);
+		$this->assertRegExp($regex, $attributeValue);
+	}
 
     /**
      * Assert if an element has a given class name
