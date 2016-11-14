@@ -188,7 +188,7 @@ class LogoutTest extends PassboltTestCase {
 		$this->setClientConfig($user);
 
 		// And I am on second tab
-		$this->findByCSS('html')->sendKeys(array(WebDriverKeys::CONTROL, 't'));
+		$this->openNewTab();
 
 		// Reduce the session timeout to accelerate the test
 		PassboltServer::setExtraConfig([

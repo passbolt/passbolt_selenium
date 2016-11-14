@@ -866,8 +866,12 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
 		$initialUrl = $this->driver->getCurrentURL();
 
 		// User driver keyboard shortcut to open a new tab.
-		$this->driver->getKeyboard()
+		$this->findByCss('body')
 			->sendKeys([WebDriverKeys::CONTROL, 't']);
+
+		// Give the focus to the new tab.
+		$windowHandles = $this->driver->getWindowHandles();
+		$this->driver->switchTo()->window($windowHandles[sizeof($windowHandles) - 1]);
 
 		// Wait until tab is opened.
 		// We just check what is the current url. A new tab will
@@ -886,6 +890,25 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
 		$this->getUrl($url);
 	}
 
+	/**
+	 * Close the current tab.
+	 */
+	public function closeTab() {
+		$this->findByCss('body')
+			->sendKeys(array(WebDriverKeys::CONTROL, 'w'));
+		$windowHandles = $this->driver->getWindowHandles();
+		$this->driver->switchTo()->window($windowHandles[sizeof($windowHandles) - 1]);
+	}
+
+	/**
+	 * Restore the latest closed tab.
+	 */
+	public function restoreTab() {
+		$this->findByCss('body')
+			->sendKeys(array(WebDriverKeys::SHIFT, WebDriverKeys::CONTROL, 't'));
+		$windowHandles = $this->driver->getWindowHandles();
+		$this->driver->switchTo()->window($windowHandles[sizeof($windowHandles) - 1]);
+	}
 
     /********************************************************************************
      * ASSERT HELPERS

@@ -346,8 +346,8 @@ class PassboltTestCase extends WebDriverTestCase {
 
 		$url = $this->driver->getCurrentURL();
 
-		$this->findByCss('html')
-			->sendKeys(array(WebDriverKeys::CONTROL, 'w'));
+		// Close the current tab.
+		$this->closeTab();
 
 		// Wait for tab to be closed.
 		$i = 0;
@@ -368,8 +368,8 @@ class PassboltTestCase extends WebDriverTestCase {
 
 		$this->waitUntilISee('html');
 
-		$this->findByCss('html')
-			->sendKeys(array(WebDriverKeys::SHIFT, WebDriverKeys::CONTROL, 't'));
+		// Restore closed tab.
+		$this->restoreTab();
 
 		$i = 0;
 		while ($url == $this->driver->getCurrentURL()) {
@@ -379,9 +379,6 @@ class PassboltTestCase extends WebDriverTestCase {
 			sleep(0.5);
 			$i++;
 		}
-
-		// Make sure the tab has the focus.
-		$this->switchToWindow(0);
 	}
 
 	/**
