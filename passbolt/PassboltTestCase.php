@@ -297,6 +297,7 @@ class PassboltTestCase extends WebDriverTestCase {
 		$waitBeforeRestart = isset($options['waitBeforeRestart']) ? $options['waitBeforeRestart'] : 0;
 
 		// Quit the browser.
+		$this->driver->close();
 		$this->driver->quit();
 
 		// If a wait before restart option has been given.
@@ -325,6 +326,7 @@ class PassboltTestCase extends WebDriverTestCase {
 		$this->click('initAppPagemod');
 
 		// Go to the application
+		sleep(2);
 		$this->getUrl('');
 	}
 

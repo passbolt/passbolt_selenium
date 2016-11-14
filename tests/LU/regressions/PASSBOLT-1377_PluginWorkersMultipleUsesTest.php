@@ -32,7 +32,7 @@ class PASSBOLT1377 extends PassboltTestCase {
 			$this->logout();
 
 			// Then I should be redirected to the login page
-			$this->waitUntilISee('.plugin-check.firefox.success');
+			$this->waitUntilISee('.plugin-check.' . $this->_browser['type'] . '.success');
 		}
 	}
 
