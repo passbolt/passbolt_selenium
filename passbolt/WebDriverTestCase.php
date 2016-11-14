@@ -820,7 +820,7 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
 		$windowsCount = sizeof($this->driver->getWindowHandles());
 
 		// User driver keyboard to open a new tab.
-		$this->driver->getKeyboard()
+		$this->findByCss('body')
 			->sendKeys([WebDriverKeys::CONTROL, 'n']);
 
 		// Wait until tab is opened.

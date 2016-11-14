@@ -127,14 +127,11 @@ class LoginTest extends PassboltTestCase {
 		$this->waitUntilISee('.plugin-check.gpg.success');
 
 		// When I open a new window and go to the login page
-		$this->openNewWindow('');
-		$this->click('html');
-		$this->getUrl('login');
+		$this->openNewWindow('login');
 		$this->waitUntilISee('.plugin-check.gpg.success');
 
 		// And I switch to the first window
 		$this->switchToWindow(0);
-		$this->click('html');
 
 		// Then I should be able to login to passbolt from the first window.
 		$this->loginAs($user, false);
@@ -144,7 +141,6 @@ class LoginTest extends PassboltTestCase {
 
 		// And I switch to the second window
 		$this->switchToWindow(1);
-		$this->click('html');
 
 		// Then I should be able to login to passbolt from the second window
 		$this->loginAs($user, false);
