@@ -820,6 +820,7 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
 		$windowsCount = sizeof($this->driver->getWindowHandles());
 
 		// User driver keyboard to open a new tab.
+		$this->waitUntilISee('body');
 		$this->findByCss('body')
 			->sendKeys([WebDriverKeys::CONTROL, 'n']);
 
@@ -865,6 +866,8 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
 	 * Open a new tab in browser, and go to given url.
 	 */
 	public function openNewTab($url = '') {
+		$this->waitUntilISee('body');
+
 		// Get initial url.
 		// We will use it to know when the new tab is opened.
 		$initialUrl = $this->driver->getCurrentURL();
