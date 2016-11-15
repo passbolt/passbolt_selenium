@@ -1163,8 +1163,8 @@ class PassboltTestCase extends WebDriverTestCase {
 	 *
 	 */
 	public function enterMasterPasswordWithKeyboardShortcuts($pwd, $tabFirst = false) {
-		$this->waitUntilISee('passbolt-iframe-master-password');
-		sleep(1);
+		$this->waitUntilISee('#passbolt-iframe-master-password.ready');
+
 		if ($tabFirst) {
 			$this->pressTab();
 			$this->goIntoMasterPasswordIframe();

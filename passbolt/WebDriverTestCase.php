@@ -823,14 +823,18 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
 		$this->findByCss('body')
 			->sendKeys([WebDriverKeys::CONTROL, 'n']);
 
-		// Wait until tab is opened.
-		// Try for 10 times maximum, and wait half a second between each attempt.
+		// Wait until window is opened.
+		// Number of loops to do.
+		$loops = 50;
+		// Timeout in seconds.
+		$timeout = 10;
 		$i = 0;
 		while (!(sizeof($this->driver->getWindowHandles()) > $windowsCount)) {
-			if ($i > 9) {
+			if ($i > $loops) {
 				throw new Exception("Couldn't open a new window");
 			}
-			sleep(0.5);
+			$second = 1000000;
+			usleep(($second * $timeout) / $loops);
 			$i++;
 		}
 
@@ -869,21 +873,23 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
 		$this->findByCss('body')
 			->sendKeys([WebDriverKeys::CONTROL, 't']);
 
-		// Give the focus to the new tab.
-		$windowHandles = $this->driver->getWindowHandles();
-		$this->driver->switchTo()->window($windowHandles[sizeof($windowHandles) - 1]);
-
-		// Wait until tab is opened.
-		// We just check what is the current url. A new tab will
-		// have a 'about:blank' url.
-		// Try for 10 times maximum, and wait for some time between each attempt.
+		// Wait until tab is opened. A new tab should have a differnt url.
+		// Number of loops to do.
+		$loops = 50;
+		// Timeout in seconds.
+		$timeout = 10;
 		$i = 0;
 		while ($this->driver->getCurrentURL() == $initialUrl) {
-			if ($i > 9) {
+			if ($i > $loops) {
 				throw new Exception("Couldn't open a new tab");
 			}
-			sleep(0.2);
+			$second = 1000000;
+			usleep(($second * $timeout) / $loops);
 			$i++;
+
+			// Give the focus to the new tab.
+			$windowHandles = $this->driver->getWindowHandles();
+			$this->driver->switchTo()->window($windowHandles[sizeof($windowHandles) - 1]);
 		}
 
 		// Get url.
