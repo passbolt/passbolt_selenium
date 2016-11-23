@@ -19,19 +19,6 @@ class LogoutTest extends PassboltTestCase {
 		parent::tearDown();
 	}
 
-	public function assertSessionExpiredDialog() {
-		// Assert I can see the confirm dialog.
-		$this->waitUntilISee('.session-expired-dialog', null, 120);
-		// Then I can see the close dialog button
-		$this->assertNotVisible('.session-expired-dialog a.dialog-close');
-		// Then I can see the cancel link.
-		$this->assertNotVisible('.session-expired-dialog a.cancel');
-		// Then I can see the Ok button.
-		$this->assertVisible('.session-expired-dialog input#confirm-button');
-		// Then I can see the title
-		$this->assertElementContainsText('.session-expired-dialog', 'Session expired');
-	}
-
 	public function testLogout() {
 		// Given I am Ada
 		$user = User::get('ada');

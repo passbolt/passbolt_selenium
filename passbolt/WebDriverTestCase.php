@@ -720,6 +720,23 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
     }
 
 	/**
+	 * Wait until the expired dialog appears.
+	 * @throws Exception
+	 */
+	public function assertSessionExpiredDialog() {
+		// Assert I can see the confirm dialog.
+		$this->waitUntilISee('.session-expired-dialog', null, 120);
+		// Then I can see the close dialog button
+		$this->assertNotVisible('.session-expired-dialog a.dialog-close');
+		// Then I can see the cancel link.
+		$this->assertNotVisible('.session-expired-dialog a.cancel');
+		// Then I can see the Ok button.
+		$this->assertVisible('.session-expired-dialog input#confirm-button');
+		// Then I can see the title
+		$this->assertElementContainsText('.session-expired-dialog', 'Session expired');
+	}
+
+	/**
 	 * Wait until I see one id, which might contain a regexp.
 	 * @param $id
 	 * @param $regexp
@@ -852,7 +869,7 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
 	 * Switch to window.
 	 * @param $windowId
 	 * @throws Exception
-	 *   if the tab doesn't exist.
+	 *   if the window doesn't exist.
 	 */
 	public function switchToWindow($windowId) {
 		$windowHandles = $this->driver->getWindowHandles();
@@ -860,6 +877,26 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
 			throw new Exception("Couldn't switch to tab " . $windowId);
 		}
 		$this->driver->switchTo()->window($windowHandles[$windowId]);
+	}
+
+	/**
+	 * Switch to next tab.
+	 */
+	public function switchToNextTab() {
+		$this->findByCss('body')
+			->sendKeys(array(WebDriverKeys::CONTROL, WebDriverKeys::PAGE_UP));
+		$windowHandles = $this->driver->getWindowHandles();
+		$this->driver->switchTo()->window($windowHandles[sizeof($windowHandles) - 1]);
+	}
+
+	/**
+	 * Switch to previous tab.
+	 */
+	public function switchToPreviousTab() {
+		$this->findByCss('body')
+			->sendKeys(array(WebDriverKeys::CONTROL, WebDriverKeys::PAGE_DOWN));
+		$windowHandles = $this->driver->getWindowHandles();
+		$this->driver->switchTo()->window($windowHandles[sizeof($windowHandles) - 1]);
 	}
 
 	/**
