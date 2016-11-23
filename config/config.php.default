@@ -32,6 +32,14 @@ $config = array (
 			)
 		)
 	),
+	// The database is used to dispatch instances
+	// when using multiple selenium instances.
+	'database' => array(
+	    'host' => 'localhost',
+	    'username' => 'root',
+	    'password' => 'root',
+	    'name' => 'passbolt_selenium'
+	),
 	'testserver' => array(
 		'default' => '/* testserver */',
 		'saucelabs' => array(

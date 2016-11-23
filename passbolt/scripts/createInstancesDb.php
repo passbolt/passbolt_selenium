@@ -2,18 +2,16 @@
 /**
  * @file
  *
- * This file contains a PHP script whose mission is to create a SQLite database
+ * This file contains a PHP script whose mission is to create and populate a Mysql table in the database
  * and table.
  * This table is to be used only in case of parallel tests running simultaneously,
  * to keep a track of which passbolt and selenium instances are free, and which ones are already
  * used by a running test.
  *
- * The database will be pre-populated bny the instances listed in the configuration file.
+ * The database will be pre-populated by the instances listed in the configuration file.
  */
 require_once(__DIR__ . '/../../bootstrap.php');
 Config::get();
-
-$pathToDb = ROOT . DS . 'tmp' . DS . 'instances.db';
 
 /**
  * Check that the table exists in the database.
@@ -22,11 +20,10 @@ $pathToDb = ROOT . DS . 'tmp' . DS . 'instances.db';
  * @return bool
  */
 function checkTableExist(&$db) {
-	// Check if table exists.
-	$result = $db->query("SELECT count(*) AS exist FROM sqlite_master WHERE type='table' AND name='instances';")
-		->fetchArray();
-
-	$tableExists = $result['exist'] == '1';
+	$table = $db->real_escape_string(Config::read('database.name'));
+	$sql = "show tables like '".$table."'";
+	$res = $db->query($sql);
+	$tableExists = ($res->num_rows > 0);
 	return $tableExists;
 }
 
@@ -36,8 +33,8 @@ function checkTableExist(&$db) {
  */
 function createTable(&$db) {
 	// Create table.
-	$db->query(
-		'CREATE TABLE instances (id INTEGER PRIMARY KEY, type varchar(10), address varchar(255), locked INTEGER)'
+	$result = $db->query(
+		'CREATE TABLE instances (id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY, type varchar(10), address varchar(255), locked INT(6) UNSIGNED)'
 	);
 }
 
@@ -46,7 +43,7 @@ function createTable(&$db) {
  * @param $db
  */
 function populateTable(&$db) {
-	$db->exec("DELETE FROM instances");
+	$db->query("DELETE FROM instances");
 	// Populate table.
 	$passboltInstances = Config::read('passbolt.instances');
 	$seleniumInstances = Config::read('testserver.selenium.instances');
@@ -58,14 +55,22 @@ function populateTable(&$db) {
 	}
 
 	foreach ($instancesToSave as $instance) {
-		$db->exec( "INSERT INTO instances (id, type, address, locked) VALUES(NULL, '{$instance['type']}', '{$instance['address']}', {$instance['locked']});" );
+		$db->query( "INSERT INTO instances (type, address, locked) VALUES('{$instance['type']}', '{$instance['address']}', {$instance['locked']});" );
 	}
 
 }
 
 // Open or create DB.
-$db = new SQLite3($pathToDb);
-$db->busyTimeout(5000);
+$db = new mysqli(
+	Config::read('database.host'),
+	Config::read('database.username'),
+	Config::read('database.password'),
+	Config::read('database.name')
+);
+// Check for errors
+if(mysqli_connect_errno()){
+	echo mysqli_connect_error();
+}
 
 // Check if table exists.
 $tableExists = checkTableExist($db);
@@ -77,7 +82,8 @@ if (!$tableExists) {
 
 populateTable($db);
 
-$nbEntries = $db->querySingle('SELECT COUNT(*) AS nbdata FROM instances');
+$nbEntries = $db->query('SELECT COUNT(*) AS nbdata FROM instances');
+$nbEntries = $nbEntries->fetch_array()['nbdata'];
 echo "Database and table instances have been created, and populated with $nbEntries entries\n";
 
 $db->close();
