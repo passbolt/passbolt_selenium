@@ -1045,7 +1045,6 @@ class PasswordShareTest extends PassboltTestCase
 
 		// And I switch back to the first window
 		$this->switchToWindow(0);
-		$this->click('html');
 
 		// And I go to the sharing dialog of a password I own
 		$resourceId = Uuid::get('resource.id.apache');
@@ -1069,7 +1068,6 @@ class PasswordShareTest extends PassboltTestCase
 
 		// When I switch to the second window
 		$this->switchToWindow(1);
-		$this->click('html');
 
 		// And I go to the sharing dialog of a password I own
 		$this->gotoSharePassword(Uuid::get('resource.id.apache'));
@@ -1088,7 +1086,6 @@ class PasswordShareTest extends PassboltTestCase
 
 		// When I switch to the first window
 		$this->switchToWindow(0);
-		$this->click('html');
 
 		// And I go to the sharing dialog of a password I own
 		$this->gotoSharePassword(Uuid::get('resource.id.apache'));
@@ -1158,7 +1155,7 @@ class PasswordShareTest extends PassboltTestCase
 		$this->setClientConfig($user);
 
 		// And I am on second tab
-		$this->findByCSS('html')->sendKeys(array(WebDriverKeys::CONTROL, 't'));
+		$this->openNewTab();
 
 		// And I am logged in on the password workspace
 		$this->loginAs($user);

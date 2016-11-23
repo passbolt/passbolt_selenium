@@ -8,6 +8,8 @@
 class PASSBOLT1380_Login extends PassboltSetupTestCase {
 
 	/**
+	 * @group firefox-only
+	 *
 	 * Scenario: As AN on the login page I can download the plugin
 	 * Given	I am an AN on the login page
 	 * Then		I can see a block saying that I need an addon
@@ -25,6 +27,8 @@ class PASSBOLT1380_Login extends PassboltSetupTestCase {
 	}
 
 	/**
+	 * @group firefox-only
+	 *
 	 * Scenario: As AN on the stage 0 of the setup I can download the plugin
 	 * Given	I am an AN on the login page
 	 * When		I register as John Doe

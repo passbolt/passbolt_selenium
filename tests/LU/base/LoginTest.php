@@ -21,14 +21,14 @@ class LoginTest extends PassboltTestCase {
     public function testLogin() {
         $this->getUrl('login');
 	    sleep(1);
-        $this->assertVisible('.plugin-check.firefox.warning');
+        $this->assertVisible('.plugin-check.' . $this->_browser['type'] . '.warning');
 
         $user = User::get('ada');
         $this->setClientConfig($user);
 
         $this->getUrl('login');
 
-        $this->waitUntilISee('.plugin-check.firefox.success');
+        $this->waitUntilISee('.plugin-check.' . $this->_browser['type'] . '.success');
         $this->waitUntilISee('.plugin-check.gpg.success');
 
         $this->assertVisible('passbolt-iframe-login-form');
@@ -69,14 +69,14 @@ class LoginTest extends PassboltTestCase {
 	public function testLoginWithEnterKey() {
 		$this->getUrl('login');
 		sleep(1);
-		$this->assertVisible('.plugin-check.firefox.warning');
+		$this->assertVisible('.plugin-check.' . $this->_browser['type'] . '.warning');
 
 		$user = User::get('ada');
 		$this->setClientConfig($user);
 
 		$this->getUrl('login');
 
-		$this->waitUntilISee('.plugin-check.firefox.success');
+		$this->waitUntilISee('.plugin-check.' . $this->_browser['type'] . '.success');
 		$this->waitUntilISee('.plugin-check.gpg.success');
 
 		$this->assertVisible('passbolt-iframe-login-form');
@@ -127,14 +127,11 @@ class LoginTest extends PassboltTestCase {
 		$this->waitUntilISee('.plugin-check.gpg.success');
 
 		// When I open a new window and go to the login page
-		$this->openNewWindow('');
-		$this->click('html');
-		$this->getUrl('login');
+		$this->openNewWindow('login');
 		$this->waitUntilISee('.plugin-check.gpg.success');
 
 		// And I switch to the first window
 		$this->switchToWindow(0);
-		$this->click('html');
 
 		// Then I should be able to login to passbolt from the first window.
 		$this->loginAs($user, false);
@@ -144,7 +141,6 @@ class LoginTest extends PassboltTestCase {
 
 		// And I switch to the second window
 		$this->switchToWindow(1);
-		$this->click('html');
 
 		// Then I should be able to login to passbolt from the second window
 		$this->loginAs($user, false);
@@ -192,7 +188,7 @@ class LoginTest extends PassboltTestCase {
 		$this->setClientConfig($user);
 
 		// And I am on second tab
-		$this->findByCSS('html')->sendKeys(array(WebDriverKeys::CONTROL, 't'));
+		$this->openNewTab();
 
 		// And I am logged in
 		$this->loginAs($user, false);

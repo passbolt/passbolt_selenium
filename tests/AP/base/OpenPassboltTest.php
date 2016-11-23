@@ -19,7 +19,12 @@ class OpenPassboltTest extends PassboltSetupTestCase {
 	 * And			This page redirects me to the demo login
 	 */
 	public function testOpenPassboltNoConfig() {
-		$this->findByCss('body')->sendKeys(array(WebDriverKeys::CONTROL, WebDriverKeys::SHIFT, WebDriverKeys::ALT, 'p'));
+		$this->waitUntilISee('body');
+		$this->findByCss('body')->sendKeys(array(WebDriverKeys::SHIFT, WebDriverKeys::ALT, 'p'));
+		// Ensure the selenium works on the new tab.
+		$handles=$this->driver->getWindowHandles();
+		$last_window = next($handles);
+		$this->driver->switchTo()->window($last_window);
  		//$this->waitUntilUrlMatches('https://www.passbolt.com/start', false);
 		$this->waitUntilUrlMatches('https://demo.passbolt.com/auth/login', false);
 	}
@@ -46,11 +51,11 @@ class OpenPassboltTest extends PassboltSetupTestCase {
 		$this->goToSetup($key['owner_email']);
 
 		// Simulate click on the passbolt toolbar icon
-		$this->findByCss('body')->sendKeys(array(WebDriverKeys::CONTROL, WebDriverKeys::SHIFT, WebDriverKeys::ALT, 'p'));
+		$this->findByCss('body')->sendKeys(array(WebDriverKeys::SHIFT, WebDriverKeys::ALT, 'p'));
 		sleep(1);
 
 		// Test that the url is the plugin one.
-		$this->assertUrlMatch('/resource:\/\/passbolt-at-passbolt-dot-com\/data\/setup.html/');
+		$this->assertUrlMatch('/' . preg_quote($this->getExtensionBaseUrl(), '/') . '\/data\/setup.html/');
 	}
 
 	/**
@@ -76,7 +81,7 @@ class OpenPassboltTest extends PassboltSetupTestCase {
 		$this->completeRegistration();
 
 		// Simulate click on the passbolt toolbar icon
-		$this->findByCss('body')->sendKeys(array(WebDriverKeys::CONTROL, WebDriverKeys::SHIFT, WebDriverKeys::ALT, 'p'));
+		$this->findByCss('body')->sendKeys(array(WebDriverKeys::SHIFT, WebDriverKeys::ALT, 'p'));
 		sleep(1);
 
 		// I should be on the login page.

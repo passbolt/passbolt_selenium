@@ -51,7 +51,7 @@ class LogoutTest extends PassboltTestCase {
 		$this->click('#js_app_navigation_right .logout a');
 
 		// Then I should see the login page
-		$this->waitUntilISee('.plugin-check.firefox.success');
+		$this->waitUntilISee('.plugin-check.' . $this->_browser['type'] . '.success');
 	}
 
 	public function testOnClickSessionExpiredAutoRedirect() {
@@ -79,7 +79,7 @@ class LogoutTest extends PassboltTestCase {
 		$this->assertSessionExpiredDialog();
 
 		// And I should be redirected to the login page in 60 seconds
-		$this->waitUntilISee('.plugin-check.firefox.success', null, 7);
+		$this->waitUntilISee('.plugin-check.' . $this->_browser['type'] . '.success', null, 7);
 	}
 
 	public function testOnClickSessionExpiredManualRedirect() {
@@ -110,7 +110,7 @@ class LogoutTest extends PassboltTestCase {
 		$this->click('confirm-button');
 
 		// Then I should see the login page
-		$this->waitUntilISee('.plugin-check.firefox.success');
+		$this->waitUntilISee('.plugin-check.' . $this->_browser['type'] . '.success');
 	}
 
 	public function testSessionExpired() {
@@ -135,7 +135,7 @@ class LogoutTest extends PassboltTestCase {
 		$this->click('confirm-button');
 
 		// Then I should see the login page
-		$this->waitUntilISee('.plugin-check.firefox.success');
+		$this->waitUntilISee('.plugin-check.' . $this->_browser['type'] . '.success');
 	}
 
 	/**
@@ -188,7 +188,7 @@ class LogoutTest extends PassboltTestCase {
 		$this->setClientConfig($user);
 
 		// And I am on second tab
-		$this->findByCSS('html')->sendKeys(array(WebDriverKeys::CONTROL, 't'));
+		$this->openNewTab();
 
 		// Reduce the session timeout to accelerate the test
 		PassboltServer::setExtraConfig([

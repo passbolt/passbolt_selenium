@@ -59,13 +59,35 @@ class PassboltTestCase extends WebDriverTestCase {
 	/********************************************************************************
 	 * Passbolt Application Helpers
 	 ********************************************************************************/
+
+	/**
+	 * Go to debug page.
+	 */
+	public function goToDebug() {
+		$this->getUrl('debug');
+		$this->waitUntilISee('.config.page.ready');
+	}
+
+	/**
+	 * Get the extension url
+	 * @return {string}
+	 * @throws Exception
+	 */
+	public function getExtensionBaseUrl() {
+		if (isset($this->_browser['base_url'])) {
+			return $this->_browser['base_url'];
+		}
+		throw new Exception("This browser configuration has no passbolt extension. ");
+	}
+
 	/**
 	 * Goto a given url
 	 * @param $url
 	 */
-	public function getUrl($url=null) {
+	public function getUrl($url = null) {
 		if ($url == 'debug') {
-			$url = 'resource://passbolt-at-passbolt-dot-com/data/config-debug.html';
+			$baseUrl = $this->getExtensionBaseUrl();
+			$url = $baseUrl . DS . 'data' . DS . 'config-debug.html';
 		} else {
 			$url = Config::read('passbolt.url') . DS . $url;
 		}
@@ -199,7 +221,7 @@ class PassboltTestCase extends WebDriverTestCase {
 				$this->driver->manage()->addCookie($cookie);
 			}
 			// The application page mode needs to be restarted manually.
-			$this->getUrl('debug');
+			$this->goToDebug();
 			$this->click('initAppPagemod');
 			$this->getUrl('');
 			try {
@@ -222,7 +244,7 @@ class PassboltTestCase extends WebDriverTestCase {
 		}
 
 		$this->waitUntilISee('#passbolt-iframe-login-form.ready');
-		$this->waitUntilISee('.plugin-check.firefox.success');
+		$this->waitUntilISee('.plugin-check.' . $this->_browser['type'] . '.success');
 		$this->waitUntilISee('.plugin-check.gpg.success');
 		$this->goIntoLoginIframe();
 		$this->assertInputValue('UserUsername', $user['Username']);
@@ -275,6 +297,7 @@ class PassboltTestCase extends WebDriverTestCase {
 		$waitBeforeRestart = isset($options['waitBeforeRestart']) ? $options['waitBeforeRestart'] : 0;
 
 		// Quit the browser.
+		$this->driver->close();
 		$this->driver->quit();
 
 		// If a wait before restart option has been given.
@@ -299,10 +322,11 @@ class PassboltTestCase extends WebDriverTestCase {
 		}
 
 		// The application page mode needs to be restarted manually.
-		$this->getUrl('debug');
+		$this->goToDebug();
 		$this->click('initAppPagemod');
 
 		// Go to the application
+		sleep(2);
 		$this->getUrl('');
 	}
 
@@ -322,8 +346,8 @@ class PassboltTestCase extends WebDriverTestCase {
 
 		$url = $this->driver->getCurrentURL();
 
-		$this->findByCss('html')
-			->sendKeys(array(WebDriverKeys::CONTROL, 'w'));
+		// Close the current tab.
+		$this->closeTab();
 
 		// Wait for tab to be closed.
 		$i = 0;
@@ -344,8 +368,8 @@ class PassboltTestCase extends WebDriverTestCase {
 
 		$this->waitUntilISee('html');
 
-		$this->findByCss('html')
-			->sendKeys(array(WebDriverKeys::SHIFT, WebDriverKeys::CONTROL, 't'));
+		// Restore closed tab.
+		$this->restoreTab();
 
 		$i = 0;
 		while ($url == $this->driver->getCurrentURL()) {
@@ -355,9 +379,6 @@ class PassboltTestCase extends WebDriverTestCase {
 			sleep(0.5);
 			$i++;
 		}
-
-		// Make sure the tab has the focus.
-		$this->switchToWindow(0);
 	}
 
 	/**
@@ -411,8 +432,7 @@ class PassboltTestCase extends WebDriverTestCase {
 	 * @param $manual bool whether the data should be entered manually, or through javascript.
 	 */
 	public function setClientConfig($config, $manual = false) {
-		$this->getUrl('debug');
-		$this->waitUntilISee('.config.page');
+		$this->goToDebug();
 
 		$userPrivateKey = '';
 		// If the key provided is a path, then look in the complete path.
@@ -589,7 +609,7 @@ class PassboltTestCase extends WebDriverTestCase {
 
 		// Test that the plugin confirmation message is displayed.
 		if ($checkPluginSuccess) {
-			$this->waitUntilISee('.plugin-check-wrapper .plugin-check.success', '/Firefox plugin is installed and up to date/i');
+			$this->waitUntilISee('.plugin-check-wrapper .plugin-check.success', '/' . $this->_browser['type'] . ' plugin is installed and up to date/i');
 		}
 	}
 
@@ -613,7 +633,7 @@ class PassboltTestCase extends WebDriverTestCase {
 
 		// Test that the plugin confirmation message is displayed.
 		if ($checkPluginSuccess) {
-			$this->waitUntilISee('.plugin-check-wrapper .plugin-check.success', '/Firefox plugin is installed and up to date/i');
+			$this->waitUntilISee('.plugin-check-wrapper .plugin-check.success', '/' . $this->_browser['type'] . ' plugin is installed and up to date/i');
 		}
 	}
 
@@ -1143,8 +1163,8 @@ class PassboltTestCase extends WebDriverTestCase {
 	 *
 	 */
 	public function enterMasterPasswordWithKeyboardShortcuts($pwd, $tabFirst = false) {
-		$this->waitUntilISee('passbolt-iframe-master-password');
-		sleep(1);
+		$this->waitUntilISee('#passbolt-iframe-master-password.ready');
+
 		if ($tabFirst) {
 			$this->pressTab();
 			$this->goIntoMasterPasswordIframe();

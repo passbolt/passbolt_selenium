@@ -190,7 +190,7 @@ class PassboltSetupTestCase extends PassboltTestCase {
 		$this->clickLink('More');
 
 		// Assert that the dialog window is opened.
-		$this->assertVisible('dialog-server-key-info');
+		$this->waitUntilISee('dialog-server-key-info');
 
 		// I should see the title "Please verify the server key"
 		$this->assertElementContainsText(

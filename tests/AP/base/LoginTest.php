@@ -9,7 +9,7 @@ class LoginTest extends PassboltTestCase {
 
     public function testLogin() {
         $this->getUrl('login');
-        $this->waitUntIlISee('.plugin-check.firefox.warning', null, 2);
+        $this->waitUntIlISee('.plugin-check.' . $this->_browser['type'] . '.warning', null, 2);
     }
 
 	/**
@@ -37,8 +37,7 @@ class LoginTest extends PassboltTestCase {
 		$this->setClientConfig($user);
 
 		// Load a wrong public server key.
-		$this->getUrl('debug');
-		$this->waitUntilISee('.config.page');
+		$this->goToDebug();
 		$key = file_get_contents(GPG_FIXTURES . DS . 'user_public.key');
 		$this->inputText('serverKeyAscii', $key);
 		$this->click('saveServerKey');
@@ -82,7 +81,7 @@ class LoginTest extends PassboltTestCase {
 			$this->fail('No element wit id #version was found');
 		}
 
-		$version = $versionElt->getAttribute('data-tooltip');
-		$this->assertRegExp('/^[0-9]{1,2}\.[0-9]{1,2}\.[0-9]{1,2} \/ [0-9]{1,2}\.[0-9]{1,2}\.[0-9]{1,2}$/', $version);
+		$callback = array($this, 'assertElementAttributeMatches');
+		$this->waitUntil($callback, array($versionElt, 'data-tooltip', '/^[0-9]{1,2}\.[0-9]{1,2}\.[0-9]{1,2} \/ [0-9]{1,2}\.[0-9]{1,2}\.[0-9]{1,2}$/'));
 	}
 }

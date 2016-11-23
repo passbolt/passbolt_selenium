@@ -67,12 +67,16 @@ $config = array (
 	),
 	'browsers' => array (
 		'default' => 'firefox_with_passbolt_extension',
+		'common' => array(
+			'downloads_path' => 'file:///home/application/Downloads'
+		),
 		'firefox_with_passbolt_extension' => array(
 			'name' => 'Firefox with Passbolt extension',
 			'type' => 'firefox',
 			'extensions' => array(
 				'data/extensions/passbolt-firefox-addon.xpi'
-			)
+			),
+			'base_url' => 'resource://passbolt-at-passbolt-dot-com'
 		),
 		'firefox_vanilla' => array(
 			'name' => 'Firefox with no extensions',
@@ -87,7 +91,8 @@ $config = array (
 			'type' => 'chrome',
 			'extensions' => array(
 				'data/extensions/passbolt-chrome-addon.crx'
-			)
+			),
+			'base_url' => 'chrome-extension://pbkdijiidghpcncdomklbjkielfalbdj'
 		),
 	)
 );

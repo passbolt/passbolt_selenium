@@ -672,6 +672,33 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
         return (!$element->isDisplayed());
     }
 
+	/**
+	 * Wait until the callback function validates.
+	 * @param Callback $callback The function that will do the assertion
+	 * @param array $args An array of arguments to pass the callback function
+	 * @param int $timeout
+	 * @return bool
+	 * @throws
+	 */
+	public function waitUntil($callback, $args = array(), $timeout = 10) {
+		// Number of loops to do.
+		$loops = 50;
+		// The last exception caught.
+		$caughtException = null;
+
+		for ($i = 0; $i < $loops; $i++) {
+			try {
+				call_user_func_array($callback, $args);
+				return true;
+			} catch (Exception $e) {
+				$caughtException = $e;
+			}
+			$second = 1000000;
+			usleep(($second * $timeout) / $loops);
+		}
+		throw $caughtException;
+	}
+
     /**
      * Wait until I see.
      * @param $ids array of ids (success if only one of them is found), or string representing one id
@@ -816,17 +843,22 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
 		$windowsCount = sizeof($this->driver->getWindowHandles());
 
 		// User driver keyboard to open a new tab.
-		$this->driver->getKeyboard()
+		$this->waitUntilISee('body');
+		$this->findByCss('body')
 			->sendKeys([WebDriverKeys::CONTROL, 'n']);
 
-		// Wait until tab is opened.
-		// Try for 10 times maximum, and wait half a second between each attempt.
+		// Wait until window is opened.
+		// Number of loops to do.
+		$loops = 50;
+		// Timeout in seconds.
+		$timeout = 10;
 		$i = 0;
 		while (!(sizeof($this->driver->getWindowHandles()) > $windowsCount)) {
-			if ($i > 9) {
+			if ($i > $loops) {
 				throw new Exception("Couldn't open a new window");
 			}
-			sleep(0.5);
+			$second = 1000000;
+			usleep(($second * $timeout) / $loops);
 			$i++;
 		}
 
@@ -857,31 +889,58 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
 	 * Open a new tab in browser, and go to given url.
 	 */
 	public function openNewTab($url = '') {
+		$this->waitUntilISee('body');
+
 		// Get initial url.
 		// We will use it to know when the new tab is opened.
 		$initialUrl = $this->driver->getCurrentURL();
 
 		// User driver keyboard shortcut to open a new tab.
-		$this->driver->getKeyboard()
+		$this->findByCss('body')
 			->sendKeys([WebDriverKeys::CONTROL, 't']);
 
-		// Wait until tab is opened.
-		// We just check what is the current url. A new tab will
-		// have a 'about:blank' url.
-		// Try for 10 times maximum, and wait for some time between each attempt.
+		// Wait until tab is opened. A new tab should have a differnt url.
+		// Number of loops to do.
+		$loops = 50;
+		// Timeout in seconds.
+		$timeout = 10;
 		$i = 0;
 		while ($this->driver->getCurrentURL() == $initialUrl) {
-			if ($i > 9) {
+			if ($i > $loops) {
 				throw new Exception("Couldn't open a new tab");
 			}
-			sleep(0.2);
+			$second = 1000000;
+			usleep(($second * $timeout) / $loops);
 			$i++;
+
+			// Give the focus to the new tab.
+			$windowHandles = $this->driver->getWindowHandles();
+			$this->driver->switchTo()->window($windowHandles[sizeof($windowHandles) - 1]);
 		}
 
 		// Get url.
 		$this->getUrl($url);
 	}
 
+	/**
+	 * Close the current tab.
+	 */
+	public function closeTab() {
+		$this->findByCss('body')
+			->sendKeys(array(WebDriverKeys::CONTROL, 'w'));
+		$windowHandles = $this->driver->getWindowHandles();
+		$this->driver->switchTo()->window($windowHandles[sizeof($windowHandles) - 1]);
+	}
+
+	/**
+	 * Restore the latest closed tab.
+	 */
+	public function restoreTab() {
+		$this->findByCss('body')
+			->sendKeys(array(WebDriverKeys::SHIFT, WebDriverKeys::CONTROL, 't'));
+		$windowHandles = $this->driver->getWindowHandles();
+		$this->driver->switchTo()->window($windowHandles[sizeof($windowHandles) - 1]);
+	}
 
     /********************************************************************************
      * ASSERT HELPERS
@@ -989,6 +1048,17 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
         $attr = $elt->getAttribute($attribute);
         $this->assertEquals($attr, $value, sprintf("Failed asserting that element attribute %s equals %s", $attribute, $value));
     }
+
+	/**
+	 * Assert that an element's attribute matches the given regex.
+	 * @param $elt
+	 * @param $attribute
+	 * @param $regex
+	 */
+	public function assertElementAttributeMatches($elt, $attribute, $regex) {
+		$attributeValue = $elt->getAttribute($attribute);
+		$this->assertRegExp($regex, $attributeValue);
+	}
 
     /**
      * Assert if an element has a given class name
