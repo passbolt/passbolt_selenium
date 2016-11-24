@@ -252,12 +252,8 @@ class PassboltTestCase extends WebDriverTestCase {
 		$this->click('loginSubmit');
 		$this->goOutOfIframe();
 
-		// wait for login to take place
-
-		// The line below breaks because selenium is too slow.
-		// TODO: see how it can be done without breaking.
-		//$this->waitUntilISee('.login.form .feedback');
-		$this->waitCompletion();
+		// wait for the login iframe to disappear
+		$this->waitUntilIDontSee('.page.login-form.master-password');
 
 		// wait for redirection trigger
 		$this->waitUntilISee('.logout');
