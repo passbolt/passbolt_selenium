@@ -182,21 +182,18 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
 		}
 	}
 
-	private function __openSqlite3Db($flags = null) {
-		$pathToDb = ROOT . DS . 'tmp' . DS . 'instances.db';
-
-		if ($flags == null) {
-			$db = new SQLite3($pathToDb);
+	private function __openDb() {
+		// Open or create DB.
+		$db = new mysqli(
+			Config::read('database.host'),
+			Config::read('database.username'),
+			Config::read('database.password'),
+			Config::read('database.name')
+		);
+		// Check for errors
+		if(mysqli_connect_errno()){
+			echo mysqli_connect_error();
 		}
-		else {
-			$db = new SQLite3($pathToDb, $flags);
-		}
-		$db->busyTimeout(5000);
-
-		if ($db === FALSE) {
-			throw new Exception('SQLite: Could not open instance database');
-		}
-
 		return $db;
 	}
 
@@ -213,21 +210,38 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
 
 	public function reserveInstance($type = 'passbolt') {
 
-		$db = $this->__openSqlite3Db(SQLITE3_OPEN_READWRITE);
+		$db = $this->__openDb();
+
+		// lock table
+		$db->query("LOCK TABLES instances WRITE");
 
 		// Lock free instance.
 		$lockId = rand(1, 10000);
-		$db->exec( "
-			UPDATE  instances SET locked=$lockId
-			WHERE id=(
-				SELECT id FROM instances WHERE type='$type' AND locked=0 ORDER BY id LIMIT 1
-			)" );
-
-		$freeInstance = $db->query( "SELECT * FROM instances WHERE type='$type' AND locked=$lockId" )->fetchArray();
-		if (empty($freeInstance)) {
-			throw new Exception('could not retrieve the free instance');
+		$db->query("SET autocommit=0");
+		$freeInstance = $db->query("SELECT * FROM instances WHERE type='$type' AND locked=0 ORDER BY id LIMIT 1");
+		if (!$freeInstance) {
+			$db->query("UNLOCK TABLES");
+			$db->close();
+			throw new Exception('error in select query: ' . $freeInstance->error);
+		}
+		elseif($freeInstance->num_rows == 0) {
+			$db->query("UNLOCK TABLES");
+			$db->close();
+			throw new Exception('could not retrieve a free instance');
 		}
 
+		$freeInstance = $freeInstance->fetch_array();
+		$id = $freeInstance['id'];
+
+		$query = $db->query( "UPDATE  instances SET locked=1 WHERE id=$id");
+		if (!$query) {
+			$db->query("UNLOCK TABLES");
+			$db->close();
+			throw new Exception('error with update query: ' . $db->error);
+		}
+
+		// Unlock table.
+		$db->query("UNLOCK TABLES");
 		$db->close();
 
 		if ($type == 'passbolt') {
@@ -246,7 +260,7 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
 	 * Release an instance. (in case of parallelization).
 	 */
 	public function releaseInstance($type) {
-		$db = $this->__openSqlite3Db();
+		$db = $this->__openDb();
 
 		if ($type == 'passbolt') {
 			$url = Config::read('passbolt.url');
@@ -254,7 +268,16 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
 		elseif ($type == 'selenium') {
 			$url = Config::read('testserver.selenium.url');
 		}
-		$db->exec( "UPDATE instances SET locked=0 WHERE address='{$url}' and type='$type'" );
+		// lock table
+		$db->query("SET autocommit=0");
+		$db->query("LOCK TABLES instances WRITE");
+		// Remove lock on instance.
+		$query = $db->query( "UPDATE instances SET locked=0 WHERE address='{$url}' and type='$type'" );
+		if (!$query) {
+			throw new Exception('couldn\'t release instance on Update query');
+		}
+		// Unlock table.
+		$db->query("UNLOCK TABLES");
 		$db->close();
 	}
 
