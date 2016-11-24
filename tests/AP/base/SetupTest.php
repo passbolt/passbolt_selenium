@@ -536,7 +536,7 @@ class SetupTest extends PassboltSetupTestCase {
 		// Wait until I see the setup section domain check.
 		$this->waitForSection('domain_check');
 
-		$this->assertVisible('.plugin-check.warning');
+		$this->waitUntilISee('.plugin-check.warning');
 		$this->assertElementContainsText(
 			$this->find('.plugin-check.warning'),
 			'The plugin is already configured'
