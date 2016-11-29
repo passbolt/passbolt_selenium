@@ -49,6 +49,7 @@ class PASSBOLT1494 extends PassboltSetupTestCase
 
 		// Wait until I see the setup section domain check.
 		$this->waitForSection('domain_check');
+		$this->waitUntilISee('.plugin-check.warning');
 
 		// Complete registration.
 		$this->completeRegistration($curtis);
