@@ -855,9 +855,9 @@ class PassboltTestCase extends WebDriverTestCase {
 	}
 
 	/**
-	 * Helper to create a password
+	 * Helper to fill the password form
 	 */
-	public function createPassword($password) {
+	public function fillPasswordForm($password) {
 		$this->gotoCreatePassword();
 		$this->inputText('js_field_name', $password['name']);
 		$this->inputText('js_field_username', $password['username']);
@@ -868,10 +868,15 @@ class PassboltTestCase extends WebDriverTestCase {
 		if (isset($password['description'])) {
 			$this->inputText('js_field_description', $password['description']);
 		}
+	}
+
+	/**
+	 * Helper to create a password
+	 */
+	public function createPassword($password) {
+		$this->fillPasswordForm($password);
 		$this->click('.create-password-dialog input[type=submit]');
-
 		$this->waitUntilIDontSee('#passbolt-iframe-progress-dialog');
-
 		$this->assertNotification('app_resources_add_success');
 	}
 

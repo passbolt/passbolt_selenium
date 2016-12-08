@@ -437,6 +437,23 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
 		$input->sendKeys($txt);
     }
 
+	/**
+	 * Set an element value.
+	 * Doesn't mimic user behavior, DOM Events are not all triggered.
+	 * @param $id string an element id or selector
+	 * @param $txt the text to be typed on keyboard
+	 */
+	public function setElementValue($id, $text) {
+		$script = "
+		var element = document.getElementById('$id');
+		element.value = '" . addslashes($text) . "';
+		var evt = document.createEvent('HTMLEvents');
+		evt.initEvent('change', false, true);
+		element.dispatchEvent(evt);
+		";
+		$this->driver->executeScript($script);
+	}
+
     /**
      * Emulate escape key press
      */
