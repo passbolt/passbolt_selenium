@@ -293,4 +293,74 @@ class RecoverTest extends PassboltSetupTestCase {
 		// I should see an error message.
 		$this->waitUntilISee('#KeyErrorMessage', '/This key doesn\'t match any account/');
 	}
+
+
+	/**
+	 * Scenario:    As AP, I should not be able to recover my account with a key that is no valid.
+	 * Given    I am Ada
+	 * When     Start a recovery procedure, and click on the link provided in the email
+	 * Then     I should see a domain validation step
+	 * When     I check the domain validation checkbox
+	 * And      I click on the link "Next"
+	 * Then     I should see the key import step
+	 * When     I import my public key.
+	 * And      I click on the link "Next"
+	 * Then     I should see an error message informing me that the key is not a valid private key.
+	 * When 	I import a not valid key.
+	 * And 		I click on the link "Next"
+	 * Then 	I should see an error message informing me that the format of the key is not known.
+	 */
+	public function testRecoverKeyNotValid() {
+		// Reset database at the end of test.
+		$this->resetDatabaseWhenComplete();
+
+		// Start a recovery procedure, and click on the link provided in the email
+		$this->getUrl('recover');
+
+		// Enter the username ada@passbolt.com
+		$this->inputText('UserUsername', 'ada@passbolt.com');
+
+		// Press enter to submit the form.
+		$this->pressEnter();
+
+		// I should see a thank you page.
+		$this->waitUntilISee('.page.recover.thank-you');
+
+		// Go to recovery procedure by clicking on notification email.
+		$this->goToRecover('ada@passbolt.com', true);
+
+		// I should see a domain validation step
+		$this->waitUntilISee('#js_step_title', '/Account recovery/i');
+
+		// Wait for the server key to be retrieved.
+		$this->waitUntilISee('.why-plugin-wrapper', '/I\'ve checked/i');
+
+		// I check the domain validation checkbox
+		$this->checkCheckbox('js_setup_domain_check');
+
+		// I click on the link "Next"
+		$this->clickLink("Next");
+
+		// I should see the key import step
+		$this->waitUntilISee('#js_step_title', '/Import your existing key/i');
+
+		// When I import my public key.
+		$keyData = file_get_contents(GPG_FIXTURES . DS .  'ada_public.key');
+		$this->inputText('js_setup_import_key_text', $keyData);
+
+		// And I click on the link "Next"
+		$this->clickLink('Next');
+
+		// Then I should see an error message informing me that the key is not a valid private key.
+		$this->waitUntilISee('#KeyErrorMessage', '/This key is not a valid private key/');
+
+		// When I import a not valid key.
+		$this->inputText('js_setup_import_key_text', 'Not Valid Key');
+
+		// And I click on the link "Next"
+		$this->clickLink('Next');
+
+		// Then I should see an error message informing me that the format of the key is not known.
+		$this->waitUntilISee('#KeyErrorMessage', '/Unknown ASCII armor type/');
+	}
 }
