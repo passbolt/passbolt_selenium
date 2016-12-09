@@ -669,14 +669,14 @@ class UserEditTest extends PassboltTestCase {
 		);
 
 		// And I enter aa as a first name
-		$this->inputText('js_field_first_name', 'aa');
+		$this->inputText('js_field_first_name', 'a');
 		$this->assertVisible('#js_field_first_name_feedback.error.message');
 		$this->assertElementContainsText(
 			$this->find('js_field_first_name_feedback'), 'First name should be between'
 		);
 
 		// And I enter aa as a last name
-		$this->inputText('js_field_last_name', 'aa');
+		$this->inputText('js_field_last_name', 'a');
 		$this->assertVisible('#js_field_last_name_feedback.error.message');
 		$this->assertElementContainsText(
 			$this->find('js_field_last_name_feedback'), 'Last name should be between'
