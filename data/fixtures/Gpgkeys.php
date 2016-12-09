@@ -24,6 +24,20 @@ class Gpgkey {
 			'filepath'      =>  GPG_DUMMY . DS . 'johndoe.key',
 			'description'   => 'John Doe default key. Nothing special here.'
 		);
+		$gpg[] = array(
+			'name'          => 'chien-shiung',
+			'owner_name'    => 'Chien-Shiung Wu',
+			'owner_email'   => 'chien-shiung@passbolt.com',
+			'created'       => '9 Dec 2016 13:34',
+			'expires'       => '9 Dec 2016 13:34',
+			'comment'       => 'Chien-Shiung Wue\'s key',
+			'algorithm'     => 'rsa',
+			'masterpassword'=> 'chien-shiung@passbolt.com',
+			'fingerprint'   => '2AE4A4AA3C8F8EDCA302E5B7B290FE4509AF67AF',
+			'keyid'         => '09AF67AF',
+			'filepath'      =>  GPG_DUMMY . DS . 'chien-shiung.key',
+			'description'   => 'Chien-Shiung Wu default key. Nothing special here.'
+		);
 
 		return $gpg;
 	}

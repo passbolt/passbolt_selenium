@@ -111,19 +111,33 @@ class User {
 		        ));
 		        break;
 
-	        case 'curtis':
-		        return array_merge($conf,array(
-				        'id' => Uuid::get('curtismayfield@passbolt.com'),
-				        'name' => 'curtis',
-				        'FirstName' => 'Curtis',
-				        'LastName' => 'Mayfield',
-				        'Username' => 'curtis@passbolt.com',
-				        'MasterPassword' => 'curtismayfield@passbolt.com',
-				        'PasswordStrength' => 'very strong',
-				        'TokenCode' => 'CUR',
-				        'PrivateKey' => Gpgkey::get(['name' => 'johndoe'])['filepath']
-			        ));
-		        break;
+			case 'curtis':
+				return array_merge($conf,array(
+					'id' => Uuid::get('curtismayfield@passbolt.com'),
+					'name' => 'curtis',
+					'FirstName' => 'Curtis',
+					'LastName' => 'Mayfield',
+					'Username' => 'curtis@passbolt.com',
+					'MasterPassword' => 'curtismayfield@passbolt.com',
+					'PasswordStrength' => 'very strong',
+					'TokenCode' => 'CUR',
+					'PrivateKey' => Gpgkey::get(['name' => 'johndoe'])['filepath']
+				));
+				break;
+
+			case 'chien-shiung':
+				return array_merge($conf,array(
+					'id' => Uuid::get('chien-shiung@passbolt.com'),
+					'name' => 'curtis',
+					'FirstName' => 'Chien-Shiung',
+					'LastName' => 'Wu',
+					'Username' => 'chien-shiung@passbolt.com',
+					'MasterPassword' => 'chien-shiung@passbolt.com',
+					'PasswordStrength' => 'very strong',
+					'TokenCode' => 'CHN',
+					'PrivateKey' => Gpgkey::get(['name' => 'chien-shiung'])['filepath']
+				));
+				break;
         }
     }
 }
