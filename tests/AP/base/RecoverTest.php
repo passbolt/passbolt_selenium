@@ -95,7 +95,21 @@ class RecoverTest extends PassboltSetupTestCase {
 		$this->getUrl('recover');
 		$this->inputText('UserUsername', 'idontexist@passbolt.com');
 		$this->pressEnter();
-		$this->waitUntilISee('.error-message', '/Email provided doesn\'t belong to an existing user/');
+		$this->waitUntilISee('.error-message', '/This user does not exist/');
+	}
+
+	/**
+	 * Scenario:    As AP, I shouldn't be able to start an account recovery procedure for a user who didn't complete setup
+	 * Given    I am AP on the recover page
+	 * When     I enter the email of a user that registered but did not complete setup in the username field
+	 * And      I click on recover
+	 * Then     I should see an error message saying that I should complete the setup first
+	 */
+	public function testRecoverNonActiveUser() {
+		$this->getUrl('recover');
+		$this->inputText('UserUsername', 'orna@passbolt.com');
+		$this->pressEnter();
+		$this->waitUntilISee('.error-message', '/Please complete the setup first/');
 	}
 
 	/**
