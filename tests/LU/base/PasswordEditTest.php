@@ -1325,25 +1325,24 @@ class PasswordEditTest extends PassboltTestCase
 		);
 	}
 
-
 	/**
-	 * Scenario:  As LU I can use passbolt on multiple windows and edit password
+	 * Scenario:  As LU I can use passbolt on multiple tabs and edit password
 	 * Given    I am Ada
 	 * And      I am logged in
-	 * When     I open a new window and go to passbolt url
-	 * And      I switch back to the first window
+	 * When     I open a new tab and go to passbolt url
+	 * And      I switch back to the first tab
 	 * And      I edit a password
 	 * Then     I should see the password has been edited
-	 * When     I switch to the second window
+	 * When     I switch to the second tab
 	 * And      I edit a password
 	 * Then     I should see the password has been edited
-	 * When     I refresh the second window
-	 * Then     I should see the password I edited on the first window updated on the second window
-	 * When     I switch to the first window and I refresh it
-	 * Then     I should see the password I edited on the second window updated on the first window
+	 * When     I refresh the second tab
+	 * Then     I should see the password I edited on the first tab updated on the second tab
+	 * When     I switch to the first tab and I refresh it
+	 * Then     I should see the password I edited on the second tab updated on the first tab
 	 * @throws Exception
 	 */
-	public function testMultipleWindowsEditPassword() {
+	public function testMultipleTabEditPassword() {
 		// Reset database at the end of test.
 		$this->resetDatabaseWhenComplete();
 
@@ -1354,11 +1353,11 @@ class PasswordEditTest extends PassboltTestCase
 		// And I am logged in
 		$this->loginAs($user);
 
-		// When I open a new window and go to passbolt url
-		$this->openNewWindow('');
+		// When I open a new tab and go to passbolt url
+		$this->openNewTab('');
 
-		// And I switch back to the first window
-		$this->switchToWindow(0);
+		// And I switch back to the first tab
+		$this->switchToPreviousTab();
 
 		// And I edit a password
 		$resource1 = Resource::get(array(
@@ -1374,8 +1373,8 @@ class PasswordEditTest extends PassboltTestCase
 			$this->find('js_wsp_pwd_browser'), $resource1UpdateData['name']
 		);
 
-		// When I switch to the second window
-		$this->switchToWindow(1);
+		// When I switch to the second tab
+		$this->switchToNextTab();
 
 		// And I edit a password
 		$resource2 = Resource::get(array(
@@ -1391,21 +1390,21 @@ class PasswordEditTest extends PassboltTestCase
 			$this->find('js_wsp_pwd_browser'), $resource2UpdateData['name']
 		);
 
-		// When I refresh the second window
+		// When I refresh the second tab
 		$this->driver->navigate()->refresh();
 		$this->waitCompletion();
 
-		// Then I should see the password I edited on the first window updated on the second window
+		// Then I should see the password I edited on the first tab updated on the second tab
 		$this->assertElementContainsText(
 			$this->find('js_wsp_pwd_browser'), $resource1UpdateData['name']
 		);
 
-		// When I switch to the first window and I refresh it
-		$this->switchToWindow(0);
+		// When I switch to the first tab and I refresh it
+		$this->switchToPreviousTab();
 		$this->driver->navigate()->refresh();
 		$this->waitCompletion();
 
-		// Then I should see the password I edited on the second window updated on the first window
+		// Then I should see the password I edited on the second tab updated on the first tab
 		$this->assertElementContainsText(
 			$this->find('js_wsp_pwd_browser'), $resource2UpdateData['name']
 		);

@@ -703,23 +703,23 @@ class PasswordCreateTest extends PassboltTestCase
     /**
      * @group no-saucelabs
      *
-     * Scenario:  As LU I can use passbolt on multiple windows and create password
+     * Scenario:  As LU I can use passbolt on multiple tabs and create password
      * Given    I am Ada
      * And      I am logged in
-     * When     I open a new window and go to passbolt url
-     * And      I switch back to the first window
+     * When     I open a new tab and go to passbolt url
+     * And      I switch back to the first tab
      * And      I create a password
      * Then     I should see my newly created password
-     * When     I switch to the second window
+     * When     I switch to the second tab
      * And      I create a password
      * Then     I should see my newly created password
-     * When     I refresh the second window
-     * Then     I should see the password I created on the first window
-     * When     I switch to the first window and I refresh it
-     * Then     I should see the password I created on the second window
+     * When     I refresh the second tab
+     * Then     I should see the password I created on the first tab
+     * When     I switch to the first tab and I refresh it
+     * Then     I should see the password I created on the second tab
      * @throws Exception
      */
-    public function testMultipleWindowsCreatePassword() {
+    public function testMultipleTabsCreatePassword() {
 	    // Reset database at the end of test.
 	    $this->resetDatabaseWhenComplete();
 
@@ -731,57 +731,57 @@ class PasswordCreateTest extends PassboltTestCase
         $this->loginAs($user);
 
         // When I open a new tab, switch to it and go to passbolt url.
-	    $this->openNewWindow('');
+	    $this->openNewTab('');
 
-        // And I switch back to the first window
-	    $this->switchToWindow(0);
+        // And I switch back to the first tab
+	    $this->switchToPreviousTab();
 
         // And I create a password
         $password = array(
-            'name' => 'password_window_1',
-            'username' => 'password_window_1',
-            'password' => 'password_window_1'
+            'name' => 'password_tab_1',
+            'username' => 'password_tab_1',
+            'password' => 'password_tab_1'
         );
         $this->createPassword($password);
 
         // Then I should see my newly created password
         $this->assertElementContainsText(
-            $this->find('js_wsp_pwd_browser'), 'password_window_1'
+            $this->find('js_wsp_pwd_browser'), 'password_tab_1'
         );
 
-        // When I switch to the second window
-	    $this->switchToWindow(1);
+        // When I switch to the second tab
+	    $this->switchToNextTab();
 
         // And I create a password
         $password = array(
-            'name' => 'password_window_2',
-            'username' => 'password_window_2',
-            'password' => 'password_window_2'
+            'name' => 'password_tab_2',
+            'username' => 'password_tab_2',
+            'password' => 'password_tab_2'
         );
         $this->createPassword($password);
 
         // Then I should see my newly created password
         $this->assertElementContainsText(
-            $this->find('js_wsp_pwd_browser'), 'password_window_2'
+            $this->find('js_wsp_pwd_browser'), 'password_tab_2'
         );
 
-        // When I refresh the second window
+        // When I refresh the second tab
         $this->driver->navigate()->refresh();
         $this->waitCompletion();
 
-        // Then I should see the password I created on the first window
+        // Then I should see the password I created on the first tab
         $this->assertElementContainsText(
-            $this->find('js_wsp_pwd_browser'), 'password_window_1'
+            $this->find('js_wsp_pwd_browser'), 'password_tab_1'
         );
 
-        // When I switch to the first window and I refresh it
-	    $this->switchToWindow(0);
+        // When I switch to the first tab and I refresh it
+	    $this->switchToPreviousTab();
         $this->driver->navigate()->refresh();
         $this->waitCompletion();
 
-        // Then I should see the password I created on the second window
+        // Then I should see the password I created on the second tab
         $this->assertElementContainsText(
-            $this->find('js_wsp_pwd_browser'), 'password_window_2'
+            $this->find('js_wsp_pwd_browser'), 'password_tab_2'
         );
     }
 
