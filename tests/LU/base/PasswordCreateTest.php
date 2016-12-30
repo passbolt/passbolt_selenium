@@ -359,6 +359,7 @@ class PasswordCreateTest extends PassboltTestCase
     }
 
     /**
+     * @group no-chrome-saucelabs
      * Scenario: As a user I can view a password I just created by using keyboard shortcuts only
      *
      * Given    I am Ada
@@ -460,6 +461,7 @@ class PasswordCreateTest extends PassboltTestCase
     }
 
     /**
+     * @group no-chrome-saucelabs
      * Scenario: As a user I can go to next / previous field in the create password form by using the keyboard tabs
      *
      * Given    I am Ada
@@ -495,40 +497,40 @@ class PasswordCreateTest extends PassboltTestCase
         $this->gotoCreatePassword();
 
         // I should see that the field name has the focus.
-        $this-> assertElementHasFocus('js_field_name');
+        $this->assertElementHasFocus('js_field_name');
 
         // Press tab key.
         $this->pressTab();
 
         // I should see that the field name has the focus.
-        $this-> assertElementHasFocus('js_field_uri');
+        $this->assertElementHasFocus('js_field_uri');
 
         // Press tab key.
         $this->pressTab();
 
         // I should see that the field name has the focus.
-        $this-> assertElementHasFocus('js_field_username');
+        $this->assertElementHasFocus('js_field_username');
 
         // Press tab key.
         $this->pressTab();
 
         // The field password should have the focus (inside the iframe).
         $this->goIntoSecretIframe();
-        $this-> assertElementHasFocus('js_secret');
+        $this->assertElementHasFocus('js_secret');
 
         // Press tab key.
         $this->pressTab();
         $this->goOutOfIframe();
 
         // Then the field description should have the focus.
-        $this-> assertElementHasFocus('js_field_description');
+        $this->assertElementHasFocus('js_field_description');
 
         // Press backtab.
         $this->pressBacktab();
 
         // The field password should have the focus (inside the iframe).
         $this->goIntoSecretIframe();
-        $this-> assertElementHasFocus('js_secret');
+        $this->assertElementHasFocus('js_secret');
 
         // Press tab key.
         // TODO (PASSBOLT-1295) : fix the below part of the test.
