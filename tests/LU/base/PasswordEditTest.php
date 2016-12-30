@@ -306,7 +306,6 @@ class PasswordEditTest extends PassboltTestCase
     }
 
     /**
-     * @group no-chrome-saucelabs
      * Scenario: As a user I can edit a password by using keyboard shortcuts only
      *
      * Given    I am Ada
@@ -413,7 +412,6 @@ class PasswordEditTest extends PassboltTestCase
     }
 
     /**
-     * @group no-chrome-saucelabs
      * Scenario: As a user I can go to next / previous field in the edit password form by using the keyboard tabs
      *
      * Given    I am Ada

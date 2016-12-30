@@ -359,7 +359,6 @@ class PasswordCreateTest extends PassboltTestCase
     }
 
     /**
-     * @group no-chrome-saucelabs
      * Scenario: As a user I can view a password I just created by using keyboard shortcuts only
      *
      * Given    I am Ada
@@ -461,7 +460,6 @@ class PasswordCreateTest extends PassboltTestCase
     }
 
     /**
-     * @group no-chrome-saucelabs
      * Scenario: As a user I can go to next / previous field in the create password form by using the keyboard tabs
      *
      * Given    I am Ada
