@@ -299,6 +299,7 @@ class PasswordCreateTest extends PassboltTestCase
     }
 
     /**
+     * @group saucelabs
      * Scenario: As a user I can view a password I just created on my list of passwords
      *
      * Given    I am Ada
@@ -554,6 +555,7 @@ class PasswordCreateTest extends PassboltTestCase
     }
 
     /**
+     * @group saucelabs
      * Scenario: As a user I can generate a random password automatically
      *
      * Given    I am Ada
@@ -589,6 +591,7 @@ class PasswordCreateTest extends PassboltTestCase
     }
 
     /**
+     * @group saucelabs
      * Scenario: As a user I can view the password I am creating in clear text
      *
      * Given I am carol

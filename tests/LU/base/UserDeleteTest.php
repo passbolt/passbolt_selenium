@@ -70,6 +70,7 @@ class UserDeleteTest extends PassboltTestCase {
 	}
 
 	/**
+	 * @group saucelabs
 	 * Scenario :   As admin I should be able to delete a user using the delete button
 	 * Given        I am logged in as admin in the user workspace
 	 * And          I click on the user

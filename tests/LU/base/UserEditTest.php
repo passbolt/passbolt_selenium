@@ -22,6 +22,7 @@
 class UserEditTest extends PassboltTestCase {
 
 	/**
+	 * @group saucelabs
 	 * Scenario: As a user I can edit a user using the edit button in the action bar
 	 *
 	 * Given    I am Admin
@@ -222,6 +223,7 @@ class UserEditTest extends PassboltTestCase {
 	}
 
 	/**
+	 * @group saucelabs
 	 * Scenario: As an admin I can edit the first name of a user
 	 *
 	 * Given    I am admin
@@ -281,6 +283,7 @@ class UserEditTest extends PassboltTestCase {
 	}
 
 	/**
+	 * @group saucelabs
 	 * Scenario: As an admin I can edit the last name of a user
 	 *
 	 * Given    I am admin

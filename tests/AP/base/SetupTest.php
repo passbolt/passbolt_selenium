@@ -206,6 +206,7 @@ class SetupTest extends PassboltSetupTestCase {
 	}
 
 	/**
+	 * @group saucelabs
 	 * Scenario     As an AP using the setup, I should be able to go through all the steps of the setup
 	 * Given        I am registered and on the first page of the setup
 	 * Then         I should be able to verify the domain

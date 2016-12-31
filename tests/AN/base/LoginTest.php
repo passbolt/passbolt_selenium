@@ -34,6 +34,7 @@ class LoginTest extends PassboltTestCase {
 	}
 
 	/**
+	 * @group saucelabs
 	 * Scenario: I can see an error message telling me I need a plugin
 	 * Given 	I am an anonymous user with no plugin on the login page
 	 * When 	The page is loaded
@@ -55,6 +56,7 @@ class LoginTest extends PassboltTestCase {
 	}
 
 	/**
+	 * @group saucelabs
 	 * Scenario: I can see a login form on the login page
 	 * Given 	I am an anonymous user with no plugin on the login page
 	 * When		When the page is loaded

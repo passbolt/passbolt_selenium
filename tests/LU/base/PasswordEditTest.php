@@ -30,6 +30,7 @@ class PasswordEditTest extends PassboltTestCase
 {
 
     /**
+     * @group saucelabs
      * Scenario: As a user I can edit a password using the edit button in the action bar
      *
      * Given    I am Ada
@@ -801,6 +802,7 @@ class PasswordEditTest extends PassboltTestCase
     }
 
     /**
+     * @group saucelabs
      * Scenario: As a user I can edit the secret of a password I have own
      *
      * Given    I am Ada
@@ -879,6 +881,7 @@ class PasswordEditTest extends PassboltTestCase
     }
 
     /**
+     * @group saucelabs
      * Scenario: As a user editing my password I can use the button to view my secret in clear text
      *
      * Given    I am Ada
@@ -950,6 +953,7 @@ class PasswordEditTest extends PassboltTestCase
     }
 
     /**
+     * @group saucelabs
      * Scenario: As a user editing my password I can generate a new random password automatically
      *
      * Given    I am Ada

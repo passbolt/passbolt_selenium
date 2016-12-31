@@ -21,6 +21,7 @@ class PasswordWorkspaceTest extends PassboltTestCase
 {
 
     /**
+	 * @group saucelabs
      * Scenario :   As a user I should be able to see the passwords workspace
      * Given        I am logged in as Ada, and I go to the password workspace
      * Then         I should see the workspace primary menu
@@ -87,6 +88,7 @@ class PasswordWorkspaceTest extends PassboltTestCase
     }
 
     /**
+	 * @group saucelabs
      * Scenario :   As a user I should be able to see my passwords
      * Given        I am logged in as Ada, and I go to the password workspace
      * Then         I should see rows representing my passwords
@@ -111,6 +113,7 @@ class PasswordWorkspaceTest extends PassboltTestCase
     }
 
     /**
+	 * @group saucelabs
      * Scenario :   As a user I should be able to filter my passwords
      * Given        I am logged in as Ada, and I go to the password workspace
      * Then         I should see the filter "All items" is selected.
@@ -230,6 +233,7 @@ class PasswordWorkspaceTest extends PassboltTestCase
     }
 
     /**
+	 * @group saucelabs
      * Scenario :   As a user I should be able to view my password details
      * Given        I am logged in as Ada, and I go to the password workspace
      * When         I click on a password
@@ -296,6 +300,7 @@ class PasswordWorkspaceTest extends PassboltTestCase
     }
 
     /**
+	 * @group saucelabs
      * Scenario :   As a user I should be able to fav/unfav
      * Given        I am Ada
 	 * And			I go to the password workspace
@@ -377,6 +382,7 @@ class PasswordWorkspaceTest extends PassboltTestCase
     }
 
     /**
+	 * @group saucelabs
      * Scenario :   As a user I should be able to search a password by keywords
      * Given        I am logged in as Ada, and I go to the password workspace
      * When         I fill the "app search" field with "shared resource"
@@ -500,6 +506,7 @@ class PasswordWorkspaceTest extends PassboltTestCase
 	}
 
 	/**
+	 * @group saucelabs
 	 * Scenario:    As a logged in user, I should be able to control the sidebar visibility through the sidebar button
 	 * Given        I am logged in as ada
 	 * And          I am on the password workspace
@@ -603,6 +610,7 @@ class PasswordWorkspaceTest extends PassboltTestCase
 	}
 
 	/**
+	 * @group saucelabs
 	 * Scenario:    As a logged in user, I should see a welcome message when I am on an empty password workspace
 	 * Given        I create a new account as John Doe, and I proceed with the setup.
 	 * When         I log in as John
@@ -680,6 +688,7 @@ class PasswordWorkspaceTest extends PassboltTestCase
 	}
 
 	/**
+	 * @group saucelabs
 	 * Scenario :   As a user I should be able to sort the passwords browser by column
 	 * Given        I am logged in as Ada, and I go to the password workspace
 	 * When 		I sort the passwords browser by resource name

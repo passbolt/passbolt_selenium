@@ -9,6 +9,7 @@
 class RecoverTest extends PassboltTestCase {
 
 	/**
+	 * @group saucelabs
 	 * Scenario: As AN trying to recover my account, I should see a page informing me that I need the plugin.
 	 * Given	I am an anonymous user on the recover page
 	 * When		I input my email address in the form

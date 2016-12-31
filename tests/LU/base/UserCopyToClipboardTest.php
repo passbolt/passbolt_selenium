@@ -48,6 +48,7 @@ class UserCopyToClipboardTest extends PassboltTestCase
     }
 
     /**
+	 * @group saucelabs
      * Scenario : As a admin I can copy the public key to clipboard with a right click
      *
      * Given    I am Admin
@@ -87,6 +88,7 @@ class UserCopyToClipboardTest extends PassboltTestCase
     }
 
 	/**
+	 * @group saucelabs
 	 * Scenario : As a admin I can copy the public key to clipboard with a right click
 	 *
 	 * Given    I am Admin
@@ -127,6 +129,7 @@ class UserCopyToClipboardTest extends PassboltTestCase
 
 
     /**
+	 * @group saucelabs
      * Scenario: As a admin I can copy the public key to clipboard with the copy button in the sidebar
      *
      * Given    I am Admin

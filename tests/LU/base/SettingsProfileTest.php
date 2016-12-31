@@ -18,6 +18,7 @@
 class SettingsProfileTest extends PassboltTestCase {
 
 	/**
+	 * @group saucelabs
 	 * Scenario :   As a LU I should be able to see my profile information in the profile section
 	 * Given        I am logged in as a LU in the settings workspace, profile section
 	 * Then         I should see the title Profile
@@ -146,6 +147,7 @@ class SettingsProfileTest extends PassboltTestCase {
 	}
 
 	/**
+	 * @group saucelabs
 	 * Scenario :   As LU, I should be able to edit my avatar picture.
 	 * Given        I am logged in as LU in the settings workspace, profile section.
 	 * When         I click on upload a new picture
@@ -297,6 +299,7 @@ class SettingsProfileTest extends PassboltTestCase {
 	}
 
 	/**
+	 * @group saucelabs
 	 * Scenario :   As LU, I should be able to edit my profile and see the editable fields.
 	 *
 	 * Given    I am logged in as LU in the settings workspace, profile section.
@@ -460,6 +463,7 @@ class SettingsProfileTest extends PassboltTestCase {
 	}
 
 	/**
+	 * @group saucelabs
 	 * Scenario: As LU I can edit my own first name
 	 *
 	 * Given    I am logged in as LU in the settings workspace, profile section.
@@ -530,6 +534,7 @@ class SettingsProfileTest extends PassboltTestCase {
 	}
 
 	/**
+	 * @group saucelabs
 	 * Scenario: As LU I can edit my own last name
 	 *
 	 * Given    I am admin

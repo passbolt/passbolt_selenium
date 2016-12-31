@@ -173,6 +173,7 @@ class RecoverTest extends PassboltSetupTestCase {
 	}
 
 	/**
+	 * @group saucelabs
 	 * Scenario:    As AP, I should be able to recover my account and log in.
 	 * Given    I am Ada
 	 * When     start a recovery procedure, and click on the link provided in the email

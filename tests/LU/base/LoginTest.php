@@ -14,6 +14,7 @@
 class LoginTest extends PassboltTestCase {
 
 	/**
+	 * @group saucelabs
 	 * Scenario:  As AN I can login to passbolt
 	 * @todo document the steps
 	 * @throws Exception

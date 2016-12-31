@@ -249,6 +249,7 @@ class PasswordShareTest extends PassboltTestCase
 	}
 
 	/**
+	 * @group saucelabs
 	 * Scenario: As a user I can view the permissions for a password I own in the sidebar
 	 *
 	 * Given    I am Ada
@@ -536,6 +537,7 @@ class PasswordShareTest extends PassboltTestCase
 	}
 
 	/**
+	 * @group saucelabs
 	 * Scenario: As a user I can share a password with other users
 	 *
 	 * Given    I am Carol

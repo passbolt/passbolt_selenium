@@ -15,6 +15,7 @@
 class MasterPasswordShortcutTest extends PassboltTestCase {
 
     /**
+     * @group saucelabs
      * Scenario : As a user I can copy a password using the button in the action bar,
      * and enter my passphrase from keyboard only.
      *
