@@ -15,7 +15,7 @@
 
     <php>
         <env name="BROWSER" value="chrome_with_passbolt_extension"/>
-        <env name="QUIT" value="1" />
+        <env name="QUIT" value="0" />
     </php>
 
     <testsuites>
