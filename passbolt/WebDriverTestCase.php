@@ -328,6 +328,7 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
 
             case 'chrome':
                 $options = new ChromeOptions();
+				$options->addArguments(array('enable-extensions'));
                 $capabilities = DesiredCapabilities::chrome();
 
 			    if (isset($this->_browser['extensions'])) {
