@@ -95,7 +95,7 @@ class RecoverTest extends PassboltSetupTestCase {
 		$this->getUrl('recover');
 		$this->inputText('UserUsername', 'idontexist@passbolt.com');
 		$this->pressEnter();
-		$this->waitUntilISee('.error.message', '/This user does not exist/');
+		$this->waitUntilISee('form .error.message', '/This user does not exist/');
 	}
 
 	/**
@@ -109,7 +109,7 @@ class RecoverTest extends PassboltSetupTestCase {
 		$this->getUrl('recover');
 		$this->inputText('UserUsername', 'orna@passbolt.com');
 		$this->pressEnter();
-		$this->waitUntilISee('.error.message', '/Please complete the setup first/');
+		$this->waitUntilISee('form .error.message', '/Please complete the setup first/');
 	}
 
 	/**
