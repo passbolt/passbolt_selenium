@@ -12,6 +12,7 @@
 class SettingsKeyTest extends PassboltTestCase {
 
   /**
+   * @group saucelabs
    * Scenario  :  As a LU I should be able to see my keys info in the settings workspace, keys section
    * Given    I am logged in as LU on the settings workspace
    * And      I click on Manage your keys menu
@@ -106,6 +107,7 @@ class SettingsKeyTest extends PassboltTestCase {
 	}
 
   /**
+   * @group saucelabs
    * Scenario :    As a LU I should be able to download my public and private key
    * Given    I am logged in as LU on the settings workspace, keys section
    * And      I click on download public key button

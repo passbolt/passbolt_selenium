@@ -25,6 +25,13 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
 	protected $_sauceAPI;
 	protected $_sauceLabJob;
 
+	// Tabs.
+	public $tabsCount = 1;
+	public $currentTabIndex = 0;
+
+	// Browser specific controller.
+	protected $_browserController;
+
     /********************************************************************************
      * Pre/Post Tests Execution Callback
      ********************************************************************************/
@@ -112,6 +119,13 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
 		// Build end point url.
 		$serverUrl = $this->getTestServerUrl();
 		$this->driver = RemoteWebDriver::create($serverUrl, $capabilities, 120000, 120000);
+
+		// Get browser specific controllers.
+		if ($this->_browser['type'] == 'firefox') {
+			$this->_browserController = new FirefoxBrowserController($this->driver, $this);
+		} else {
+			$this->_browserController = new ChromeBrowserController($this->driver, $this);
+		}
 
 		// Redirect it immediately to an empty page, so we avoid the default firefox home page.
 		if ($this->_browser['type'] == 'firefox') {
@@ -877,7 +891,7 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
 	public function openNewWindow($url = '') {
 		$windowsCount = sizeof($this->driver->getWindowHandles());
 
-		// User driver keyboard to open a new tab.
+		// Use driver keyboard to open a new window.
 		$this->waitUntilISee('body');
 		$this->findByCss('body')
 			->sendKeys([WebDriverKeys::CONTROL, 'n']);
@@ -915,7 +929,7 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
 	public function switchToWindow($windowId) {
 		$windowHandles = $this->driver->getWindowHandles();
 		if (!isset($windowHandles[$windowId])) {
-			throw new Exception("Couldn't switch to tab " . $windowId);
+			throw new Exception("Couldn't switch to window/tab " . $windowId);
 		}
 		$this->driver->switchTo()->window($windowHandles[$windowId]);
 	}
@@ -924,56 +938,25 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
 	 * Switch to next tab.
 	 */
 	public function switchToNextTab() {
-		$this->findByCss('body')
-			->sendKeys(array(WebDriverKeys::CONTROL, WebDriverKeys::PAGE_UP));
-		$windowHandles = $this->driver->getWindowHandles();
-		$this->driver->switchTo()->window($windowHandles[sizeof($windowHandles) - 1]);
+		$this->currentTabIndex++;
+		$this->_browserController->switchToNextTab();
 	}
 
 	/**
 	 * Switch to previous tab.
 	 */
 	public function switchToPreviousTab() {
-		$this->findByCss('body')
-			->sendKeys(array(WebDriverKeys::CONTROL, WebDriverKeys::PAGE_DOWN));
-		$windowHandles = $this->driver->getWindowHandles();
-		$this->driver->switchTo()->window($windowHandles[sizeof($windowHandles) - 1]);
+		$this->currentTabIndex--;
+		$this->_browserController->switchToPreviousTab();
 	}
 
 	/**
 	 * Open a new tab in browser, and go to given url.
 	 */
 	public function openNewTab($url = '') {
-		$this->waitUntilISee('body');
-
-		// Get initial url.
-		// We will use it to know when the new tab is opened.
-		$initialUrl = $this->driver->getCurrentURL();
-
-		// User driver keyboard shortcut to open a new tab.
-		$this->findByCss('body')
-			->sendKeys([WebDriverKeys::CONTROL, 't']);
-
-		// Wait until tab is opened. A new tab should have a differnt url.
-		// Number of loops to do.
-		$loops = 50;
-		// Timeout in seconds.
-		$timeout = 10;
-		$i = 0;
-		while ($this->driver->getCurrentURL() == $initialUrl) {
-			if ($i > $loops) {
-				throw new Exception("Couldn't open a new tab");
-			}
-			$second = 1000000;
-			usleep(($second * $timeout) / $loops);
-			$i++;
-
-			// Give the focus to the new tab.
-			$windowHandles = $this->driver->getWindowHandles();
-			$this->driver->switchTo()->window($windowHandles[sizeof($windowHandles) - 1]);
-		}
-
-		// Get url.
+		$this->tabsCount++;
+		$this->currentTabIndex = $this->tabsCount - 1;
+		$this->_browserController->openNewTab();
 		$this->getUrl($url);
 	}
 
@@ -981,20 +964,41 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
 	 * Close the current tab.
 	 */
 	public function closeTab() {
-		$this->findByCss('body')
-			->sendKeys(array(WebDriverKeys::CONTROL, 'w'));
-		$windowHandles = $this->driver->getWindowHandles();
-		$this->driver->switchTo()->window($windowHandles[sizeof($windowHandles) - 1]);
+		$this->tabsCount--;
+		$this->currentTabIndex--;
+		$this->_browserController->closeTab();
 	}
 
 	/**
 	 * Restore the latest closed tab.
 	 */
 	public function restoreTab() {
-		$this->findByCss('body')
-			->sendKeys(array(WebDriverKeys::SHIFT, WebDriverKeys::CONTROL, 't'));
-		$windowHandles = $this->driver->getWindowHandles();
-		$this->driver->switchTo()->window($windowHandles[sizeof($windowHandles) - 1]);
+		$this->tabsCount++;
+		$this->currentTabIndex++;
+		$this->_browserController->restoreTab();
+	}
+
+	/**
+	 * Close and restore the current tab.
+	 * Ensure the test run already on a second tab.
+	 *
+	 * @param $options
+	 * 	waitBeforeRestore : Should the tab be restored after a sleep in seconds
+	 *
+	 * @throws exception
+	 *   if the tab couldn't be opened or closed.
+	 */
+	public function closeAndRestoreTab($options = array()) {
+		$options = $options ? $options : array();
+		$waitBeforeRestore = isset($options['waitBeforeRestore']) ? $options['waitBeforeRestore'] : 0;
+
+		// Close the current tab.
+		$this->closeTab();
+
+		sleep($waitBeforeRestore);
+
+		// Restore closed tab.
+		$this->restoreTab();
 	}
 
     /********************************************************************************

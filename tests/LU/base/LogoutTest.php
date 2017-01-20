@@ -19,6 +19,11 @@ class LogoutTest extends PassboltTestCase {
 		parent::tearDown();
 	}
 
+	/**
+	 * @group saucelabs
+	 *
+	 * @throws Exception
+	 */
 	public function testLogout() {
 		// Given I am Ada
 		$user = User::get('ada');
@@ -100,6 +105,10 @@ class LogoutTest extends PassboltTestCase {
 		$this->waitUntilISee('.plugin-check.' . $this->_browser['type'] . '.success');
 	}
 
+	/**
+	 * @group saucelabs
+	 * @throws Exception
+	 */
 	public function testSessionExpired() {
 		// Given I am Ada
 		$user = User::get('ada');

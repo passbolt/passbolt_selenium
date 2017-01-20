@@ -19,6 +19,7 @@
  */
 class UserWorkspaceTest extends PassboltTestCase {
 	/**
+	 * @group saucelabs
 	 * Scenario :   As a user I should be able to see the user workspace
 	 *
 	 * Given        I am logged in as Ada, and I go to the user workspace
@@ -92,6 +93,7 @@ class UserWorkspaceTest extends PassboltTestCase {
 	}
 
 	/**
+	 * @group saucelabs
 	 * Scenario :   As a user I should be able to see the users using the app
 	 * Given        I am logged in as Ada, and I go to the user workspace
 	 * Then         I should see rows representing the users
@@ -136,6 +138,7 @@ class UserWorkspaceTest extends PassboltTestCase {
 	}
 
 	/**
+	 * @group saucelabs
 	 * Scenario :   As a user I should be able to filter the users
 	 *
 	 * Given        I am logged in as Ada, and I go to the user workspace
@@ -179,6 +182,7 @@ class UserWorkspaceTest extends PassboltTestCase {
 	}
 
 	/**
+	 * @group saucelabs
 	 * Scenario :   As a user I should be able to view the user details
 	 *
 	 * Given        I am logged in as Ada, and I go to the user workspace
@@ -258,6 +262,7 @@ class UserWorkspaceTest extends PassboltTestCase {
 	}
 
 	/**
+	 * @group saucelabs
 	 * Scenario :   As a user I should be able to search a user by keywords
 	 *
 	 * Given        I am logged in as Ada, and I go to the user workspace
@@ -490,6 +495,7 @@ class UserWorkspaceTest extends PassboltTestCase {
 	}
 
 	/**
+	 * @group saucelabs
 	 * Scenario:    As a logged in user, I should be able to control the sidebar visibility through the sidebar button
 	 * Given        I am logged in as ada
 	 * And          I am on the user workspace
@@ -590,6 +596,7 @@ class UserWorkspaceTest extends PassboltTestCase {
 	}
 
 	/**
+	 * @group saucelabs
 	 * Scenario :   As a user I should be able to sort the users browser by column
 	 * Given        I am logged in as Ada, and I go to the user workspace
 	 * When 		I sort the users browser by name

@@ -327,57 +327,6 @@ class PassboltTestCase extends WebDriverTestCase {
 	}
 
 	/**
-	 * Close and restore the current tab.
-	 * Ensure the test run already on a second tab.
-	 *
-	 * @param $options
-	 * 	waitBeforeRestore : Should the tab be restored after a sleep in seconds
-	 *
-	 * @throws exception
-	 *   if the tab couldn't be opened or closed.
-	 */
-	public function closeAndRestoreTab($options = array()) {
-		$options = $options ? $options : array();
-		$waitBeforeRestore = isset($options['waitBeforeRestore']) ? $options['waitBeforeRestore'] : 0;
-
-		$url = $this->driver->getCurrentURL();
-
-		// Close the current tab.
-		$this->closeTab();
-
-		// Wait for tab to be closed.
-		$i = 0;
-		while ($url == $this->driver->getCurrentURL()) {
-			if ($i > 9) {
-				throw new Exception("Couldn't close the tab");
-			}
-			sleep(0.5);
-			$i++;
-		}
-
-		sleep($waitBeforeRestore);
-
-		$url = $this->driver->getCurrentURL();
-
-		// Make sure the tab has the focus.
-		$this->switchToWindow(0);
-
-		$this->waitUntilISee('html');
-
-		// Restore closed tab.
-		$this->restoreTab();
-
-		$i = 0;
-		while ($url == $this->driver->getCurrentURL()) {
-			if ($i > 9) {
-				throw new Exception("Couldn't reopen the tab");
-			}
-			sleep(0.5);
-			$i++;
-		}
-	}
-
-	/**
 	 * Refresh page.
 	 */
 	public function refresh() {

@@ -57,6 +57,7 @@ class PasswordDeleteTest extends PassboltTestCase
     }
 
     /**
+	 * @group saucelabs
      * Scenario: As a user I can delete a password using the button in the action bar
      *
      * And      I am Ada

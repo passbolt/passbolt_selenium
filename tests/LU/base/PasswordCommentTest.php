@@ -15,6 +15,7 @@ class PasswordCommentTest extends PassboltTestCase {
 	private $commentFormSelector = '#js_rs_details_comments form#js_comment_add_form';
 
 	/**
+	 * @group saucelabs
 	 * Scenario :   As a user I should be able to add comments
 	 * Given        I am Ada
 	 * And          I am logged in

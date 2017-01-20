@@ -14,6 +14,7 @@
 class LoginTest extends PassboltTestCase {
 
 	/**
+	 * @group saucelabs
 	 * Scenario:  As AN I can login to passbolt
 	 * @todo document the steps
 	 * @throws Exception
@@ -109,16 +110,16 @@ class LoginTest extends PassboltTestCase {
 	/**
 	 * Scenario:  As AN I can login to passbolt on different tabs without conflict between workers
 	 * Given 	As AN with plugin on the login page
-	 * When 	I open a new window and go to the login page
-	 * And 		I switch to the first window
-	 * Then 	I should be able to login to passbolt from the first window
+	 * When 	I open a new tab and go to the login page
+	 * And 		I switch back to the first tab
+	 * Then 	I should be able to login to passbolt from the first tab
 	 * When 	I logout
-	 * And 		I switch to the second window
-	 * Then 	I should be able to login to passbolt from the second window
+	 * And 		I switch to the second tab
+	 * Then 	I should be able to login to passbolt from the second tab
 	 *
 	 * @throws Exception
 	 */
-	public function testMultipleWindowsLogin() {
+	public function testMultipleTabsLogin() {
 		$user = User::get('ada');
 		$this->setClientConfig($user);
 
@@ -126,23 +127,23 @@ class LoginTest extends PassboltTestCase {
 		$this->getUrl('login');
 		$this->waitUntilISee('.plugin-check.gpg.success');
 
-		// When I open a new window and go to the login page
-		$this->openNewWindow('login');
+		// When I open a new tab and go to the login page
+		$this->openNewTab('login');
 		$this->waitUntilISee('.plugin-check.gpg.success');
 
-		// And I switch to the first window
-		$this->switchToWindow(0);
+		// And I switch back to the first tab
+		$this->switchToPreviousTab();
 
-		// Then I should be able to login to passbolt from the first window.
+		// Then I should be able to login to passbolt from the first tab.
 		$this->loginAs($user, false);
 
 		// When I logout
 		$this->logout();
 
-		// And I switch to the second window
-		$this->switchToWindow(1);
+		// And I switch to the second tab
+		$this->switchToNextTab();
 
-		// Then I should be able to login to passbolt from the second window
+		// Then I should be able to login to passbolt from the second tab
 		$this->loginAs($user, false);
 	}
 

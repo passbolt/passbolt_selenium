@@ -10,6 +10,7 @@
 class SetupTest extends PassboltSetupTestCase {
 
 	/**
+	 * @group saucelabs
 	 * Scenario:  As AN and freshly self registered user, I receive an email that invite me to setup passbolt.
 	 */
 	public function testCanSeeRegistrationEmail() {
@@ -30,6 +31,7 @@ class SetupTest extends PassboltSetupTestCase {
 	}
 
 	/**
+	 * @group saucelabs
 	 * Scenario:  I can see the setup page with instructions to install the plugin
 	 * Given      I am an anonymous user with no plugin on the registration page
 	 * And        I follow the registration process and click on submit

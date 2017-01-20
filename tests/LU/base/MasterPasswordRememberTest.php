@@ -11,6 +11,7 @@
 class MasterPasswordRememberTest extends PassboltTestCase {
 
 	/**
+	 * @group saucelabs
 	 * Scenario : As a user I can have my passphrase remembered by the system.
 	 *
 	 * Given    I am Ada

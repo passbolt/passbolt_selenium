@@ -26,6 +26,7 @@ class PasswordCopyToClipboardTest extends PassboltTestCase
 {
 
 	/**
+     * @group saucelabs
 	 * Scenario : As a user I can copy a password using the button in the action bar
 	 *
 	 * Given    I am Ada

@@ -7,12 +7,18 @@
  */
 class LoginTest extends PassboltTestCase {
 
+	/**
+	 * @group saucelabs
+	 * Test that if not registered I should see a warning
+	 * @throws Exception
+	 */
     public function testLogin() {
         $this->getUrl('login');
         $this->waitUntIlISee('.plugin-check.' . $this->_browser['type'] . '.warning', null, 2);
     }
 
 	/**
+	 * @group saucelabs
 	 * Test that if the wrong domain is configured, we will see a page explaining that
 	 * the domain is not known.
 	 * @throws Exception

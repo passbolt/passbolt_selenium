@@ -314,6 +314,7 @@ class UserCreateTest extends PassboltTestCase {
 	}
 
 	/**
+	 * @group saucelabs
 	 * Scenario: As a user I can view a user I just created on my list of users
 	 *
 	 * Given    I am Admin
@@ -391,6 +392,7 @@ class UserCreateTest extends PassboltTestCase {
 	}
 
 	/**
+	 * @group saucelabs
 	 * Scenario :   After creating a user, the given user can complete the setup and login with the chosen password
 	 * Given        I am admin
 	 * And          I am logged in

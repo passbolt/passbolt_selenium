@@ -15,6 +15,7 @@
 class PasswordEditDescriptionTest extends PassboltTestCase {
 
 	/**
+	 * @group saucelabs
 	 * Scenario :   As a user I should be able to edit the description of the passwords I own in the sidebar by clicking on the edit button
 	 * Given        I am Ada and I am logged in on the password workspace
 	 * Then         I should not see the sidebar and the textarea to edit the description

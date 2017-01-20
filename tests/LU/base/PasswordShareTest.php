@@ -249,6 +249,7 @@ class PasswordShareTest extends PassboltTestCase
 	}
 
 	/**
+	 * @group saucelabs
 	 * Scenario: As a user I can view the permissions for a password I own in the sidebar
 	 *
 	 * Given    I am Ada
@@ -536,6 +537,7 @@ class PasswordShareTest extends PassboltTestCase
 	}
 
 	/**
+	 * @group saucelabs
 	 * Scenario: As a user I can share a password with other users
 	 *
 	 * Given    I am Carol
@@ -1008,28 +1010,28 @@ class PasswordShareTest extends PassboltTestCase
 	}
 
 	/**
-	 * Scenario: As LU I can use passbolt on multiple windows and edit the permissions of a password I own
+	 * Scenario: As LU I can use passbolt on multiple tabs and edit the permissions of a password I own
 	 *
 	 * Given    I am Ada
 	 * And      I am logged in on the password workspace
-	 * When 	I open a new window and go to passbolt url
-	 * And 		I switch back to the first window
+	 * When 	I open a new tab and go to passbolt url
+	 * And 		I switch back to the first tab
 	 * And 		I go to the sharing dialog of a password I own
 	 * Then 	I can see Betty has update right on the password
 	 * When 	I change the permission of Betty to read access only
 	 * Then		I should see the password remains selected
 	 * And 		I can see Betty has read access on the password
-	 * When 	I switch to the second window
+	 * When 	I switch to the second tab
 	 * And 		I go to the sharing dialog of a password I own
 	 * Then 	I can see Betty has read access on the password
 	 * When 	I change the permission of Betty to owner
 	 * Then 	I should see the password remains selected
 	 * And 		I can see Betty has read access on the password
-	 * When 	I switch to the first window
+	 * When 	I switch to the first tab
 	 * And 		I go to the sharing dialog of a password I own
 	 * Then 	I can see Betty has read access on the password
 	 */
-	public function testMultipleWindowsEditPasswordPermission() {
+	public function testMultipleTabsEditPasswordPermission() {
 		// Reset database at the end of test.
 		$this->resetDatabaseWhenComplete();
 
@@ -1040,11 +1042,11 @@ class PasswordShareTest extends PassboltTestCase
 		// And I am logged in on the password workspace
 		$this->loginAs($user);
 
-		// When I open a new window and go to passbolt url
-		$this->openNewWindow('');
+		// When I open a new tab and go to passbolt url
+		$this->openNewTab('');
 
-		// And I switch back to the first window
-		$this->switchToWindow(0);
+		// And I switch back to the first tab
+		$this->switchToPreviousTab();
 
 		// And I go to the sharing dialog of a password I own
 		$resourceId = Uuid::get('resource.id.apache');
@@ -1066,8 +1068,8 @@ class PasswordShareTest extends PassboltTestCase
 		// And I can see Betty has read access on the password
 		$this->assertPermission($resource, 'betty@passbolt.com', 'can read');
 
-		// When I switch to the second window
-		$this->switchToWindow(1);
+		// When I switch to the second tab
+		$this->switchToNextTab();
 
 		// And I go to the sharing dialog of a password I own
 		$this->gotoSharePassword(Uuid::get('resource.id.apache'));
@@ -1084,8 +1086,8 @@ class PasswordShareTest extends PassboltTestCase
 		// And I can see Betty has read access on the password
 		$this->assertPermission($resource, 'betty@passbolt.com', 'is owner');
 
-		// When I switch to the first window
-		$this->switchToWindow(0);
+		// When I switch to the first tab
+		$this->switchToPreviousTab();
 
 		// And I go to the sharing dialog of a password I own
 		$this->gotoSharePassword(Uuid::get('resource.id.apache'));

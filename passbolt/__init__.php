@@ -45,6 +45,10 @@ require_once('PassboltServer.php');
 require_once('PassboltTestCase.php');
 require_once('PassboltSetupTestCase.php');
 
+// Browser specific controllers.
+require_once('ChromeBrowserController.php');
+require_once('FirefoxBrowserController.php');
+
 // Fixtures classes
 require_once(FIXTURES . 'Users.php');
 require_once(FIXTURES . 'Resources.php');
