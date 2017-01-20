@@ -58,7 +58,7 @@ class LoginTest extends PassboltTestCase {
 		$this->getUrl('login');
 		$this->waitUntilISee('html.server-not-verified.server-no-user');
 		$this->waitUntilISee('.plugin-check.gpg.error', '/There is no user associated with this key/');
-		$this->waitUntilISee('.users.login.form .feedback', '/The account configured doesn\'t exist/');
+		$this->waitUntilISee('.users.login.form .feedback', '/The supplied account does not exist/');
 		$this->click('.users.login.form a.primary');
 		$this->waitUntilISee('div.page.register');
 	}

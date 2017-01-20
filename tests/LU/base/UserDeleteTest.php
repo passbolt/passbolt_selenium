@@ -217,7 +217,7 @@ class UserDeleteTest extends PassboltTestCase {
 		// I should see a feedback telling me that the user doesn't exist on server.
 		$this->waitUntilISee('html.server-not-verified.server-no-user');
 		$this->waitUntilISee('.plugin-check.gpg.error', '/There is no user associated with this key/');
-		$this->waitUntilISee('.users.login.form .feedback', '/The account configured doesn\'t exist/');
+		$this->waitUntilISee('.users.login.form .feedback', '/The supplied account does not exist/');
 	}
 
 }

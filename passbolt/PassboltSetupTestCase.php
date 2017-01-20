@@ -53,7 +53,7 @@ class PassboltSetupTestCase extends PassboltTestCase {
 		],
 		'login_redirect' => [
 			'title' => 'Alright sparky, it\'s time to log in!',
-			'subtitle' => 'The setup is complete',
+			'subtitle' => 'Setup is complete',
 			'menu_item' => '5. Login !'
 		],
 
