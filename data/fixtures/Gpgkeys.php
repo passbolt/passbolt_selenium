@@ -38,6 +38,20 @@ class Gpgkey {
 			'filepath'      =>  GPG_DUMMY . DS . 'chien-shiung.key',
 			'description'   => 'Chien-Shiung Wu default key. Nothing special here.'
 		);
+		$gpg[] = array(
+			'name'          => 'margaret',
+			'owner_name'    => 'Margaret Hamilton',
+			'owner_email'   => 'margaret@passbolt.com',
+			'created'       => '23 Jan 2017 12:44',
+			'expires'       => '23 Jan 2021 12:44',
+			'comment'       => '',
+			'algorithm'     => 'rsa',
+			'masterpassword'=> 'margaret@passbolt.com',
+			'fingerprint'   => 'D5B6D4337F43F0DB741A4EC6B05F23D1979F2FEE',
+			'keyid'         => '979F2FEE',
+			'filepath'      =>  GPG_DUMMY . DS . 'margaret_private.key',
+			'description'   => 'Margaret key has two identities and one picture'
+		);
 
 		return $gpg;
 	}

@@ -138,6 +138,20 @@ class User {
 					'PrivateKey' => Gpgkey::get(['name' => 'chien-shiung'])['filepath']
 				));
 				break;
+
+			case 'margaret':
+				return array_merge($conf,array(
+					'id' => Uuid::get('margaret@passbolt.com'),
+					'name' => 'margaret',
+					'FirstName' => 'Margaret',
+					'LastName' => 'Hamilton',
+					'Username' => 'margaret@passbolt.com',
+					'MasterPassword' => 'margaret@passbolt.com',
+					'PasswordStrength' => 'very strong',
+					'TokenCode' => 'MHH',
+					'PrivateKey' => Gpgkey::get(['name' => 'margaret'])['filepath']
+				));
+				break;
         }
     }
 }
