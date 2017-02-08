@@ -92,7 +92,7 @@ $config = array (
 			'extensions' => array(
 				'data/extensions/passbolt-chrome-addon.crx'
 			),
-			'base_url' => 'chrome-extension://ffgmdhmlbpemjfeejfgjidcpgmipkpen',
+			'base_url' => 'chrome-extension://mpoppaggeidnccghinohognhilihefed',
 		),
 	)
 );
