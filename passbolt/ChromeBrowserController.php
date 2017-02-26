@@ -1,5 +1,7 @@
 <?php
 
+use Facebook\WebDriver\WebDriverKeys;
+
 class ChromeBrowserController {
 
     protected $driver;
