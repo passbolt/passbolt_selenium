@@ -45,6 +45,11 @@
         "brianium/paratest": "0.14.*"
     },
     "autoload": {
-        "classmap": ["lib/"]
+        "classmap": [
+            "passbolt/vendor/facebook/webdriver/lib/"
+        ],
+        "psr-4": {
+            "Facebook\\WebDriver\\Chrome\\": "passbolt/vendor/facebook/webdriver/lib/Chrome"
+        }
     }
 }

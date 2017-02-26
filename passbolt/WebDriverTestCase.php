@@ -6,6 +6,15 @@
  * @copyright (c) 2015-present Bolt Softwares Pvt Ltd
  * @licence GNU Affero General Public License http://www.gnu.org/licenses/agpl-3.0.en.html
  */
+
+use Facebook\WebDriver\Firefox\FirefoxProfile;
+use Facebook\WebDriver\Chrome\ChromeOptions;
+use Facebook\WebDriver\Remote\DesiredCapabilities;
+use Facebook\WebDriver\Remote\RemoteWebDriver;
+use Facebook\WebDriver\WebDriverBy;
+use Facebook\WebDriver\WebDriverKeys;
+use Facebook\WebDriver\Exception\NoSuchElementException;
+
 class WebDriverTestCase extends PHPUnit_Framework_TestCase {
 
     public $driver;             // @var RemoteWebDriver $driver
