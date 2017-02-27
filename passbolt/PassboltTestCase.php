@@ -7,6 +7,7 @@ use Facebook\WebDriver\WebDriverKeys;
 use Facebook\WebDriver\WebDriverSelect;
 use Facebook\WebDriver\Exception\NoSuchElementException;
 use Facebook\WebDriver\Exception\StaleElementReferenceException;
+use Facebook\WebDriver\Remote\DriverCommand;
 
 /**
  * Passbolt Test Case
