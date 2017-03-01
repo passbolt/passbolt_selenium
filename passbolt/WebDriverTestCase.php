@@ -348,6 +348,10 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
 				$profile->setPreference("xpinstall.signatures.required", false);
 
                 $capabilities->setCapability(FirefoxDriver::PROFILE, $profile);
+				$browserVersion = getenv('BROWSER_VERSION');
+				if($browserVersion && $browserVersion >= 48) {
+					$capabilities->setCapability('marionette', true);
+				}
             break;
 
             case 'chrome':
