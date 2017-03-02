@@ -1,4 +1,6 @@
 <?php
+use Facebook\WebDriver\WebDriverKeys;
+
 /**
  * Feature :  As a user I can copy my password info to clipboard
  *

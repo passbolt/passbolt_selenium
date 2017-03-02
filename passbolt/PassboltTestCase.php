@@ -2,6 +2,13 @@
 define('TOGGLE_BUTTON_PRESSED', 1);
 define('TOGGLE_BUTTON_UNPRESSED', 0);
 
+use Facebook\WebDriver\WebDriverBy;
+use Facebook\WebDriver\WebDriverKeys;
+use Facebook\WebDriver\WebDriverSelect;
+use Facebook\WebDriver\Exception\NoSuchElementException;
+use Facebook\WebDriver\Exception\StaleElementReferenceException;
+use Facebook\WebDriver\Remote\DriverCommand;
+
 /**
  * Passbolt Test Case
  * The base class for test cases related to passbolt.

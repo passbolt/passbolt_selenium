@@ -1,5 +1,7 @@
 <?php
 
+use Facebook\WebDriver\WebDriverKeys;
+
 /**
  * Anonymous user with plugin but no config open passbolt test
  *

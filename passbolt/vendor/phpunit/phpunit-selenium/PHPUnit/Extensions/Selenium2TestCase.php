@@ -91,13 +91,13 @@
  * @method array log(string $type) Get the log for a given log type. Log buffer is reset after each request.
  * @method array logTypes() Get available log types.
  * @method void closeWindow() Close the current window.
- * @method void close() Close the current window and clear session data.
+ * @method void stop() Close the current window and clear session data.
  * @method \PHPUnit_Extensions_Selenium2TestCase_Element active() Get the element on the page that currently has focus.
  * @method \PHPUnit_Extensions_Selenium2TestCase_Window currentWindow() get the current Window Object
  */
 abstract class PHPUnit_Extensions_Selenium2TestCase extends PHPUnit_Framework_TestCase
 {
-    const VERSION = '3.0.2';
+    const VERSION = '3.0.3';
 
     /**
      * @var string  override to provide code coverage data from the server
@@ -556,5 +556,18 @@ abstract class PHPUnit_Extensions_Selenium2TestCase extends PHPUnit_Framework_Te
     public function setUpPage()
     {
 
+    }
+
+    /**
+     * Check whether an alert box is present
+     */
+    public function alertIsPresent()
+    {
+        try {
+            $this->alertText();
+            return TRUE;
+        } catch (Exception $e) {
+            return NULL;
+        }
     }
 }

@@ -54,7 +54,7 @@ $config = array (
 				/* Browser and operating system */
 				'platform' => '/* sl_platform */',
 				'version' => '/* sl_browser_version */',
-				'screenResolution' => '/* sl_resolution */',
+				'screenResolution' => '/* sl_resolution */'
 			),
 		),
 		// the base url of your selenium server
