@@ -27,6 +27,9 @@
  * @copyright (c) 2015-present Bolt Softwares Pvt Ltd
  * @licence GNU Affero General Public License http://www.gnu.org/licenses/agpl-3.0.en.html
  */
+
+use Facebook\WebDriver\WebDriverBy;
+
 class PasswordShareTest extends PassboltTestCase
 {
 
@@ -292,6 +295,45 @@ class PasswordShareTest extends PassboltTestCase
 
 		// And I can see that Dame can read
 		$this->assertPermissionInSidebar('dame@passbolt.com', 'can read');
+	}
+
+	/**
+	 * @group saucelabs
+	 * Scenario: As a user I can see which groups a password is shared with from the sidebar
+	 *
+	 * Given 	I am logged in user
+	 * And 		I am on the passwords workspace
+	 * When 	I select a password
+	 * Then 	I should see the information sidebar opening
+	 * And 		I should see that it contains a “shared with” section
+	 * And 		I should see a user the password is shared with
+	 * And 		I should see a group the password is shared with
+	 */
+	public function testViewPasswordPermissionsForGroupsInSidebar() {
+		// Given I am Ada
+		$user = User::get('ada');
+		$this->setClientConfig($user);
+
+		// And I am logged in on the password workspace
+		$this->loginAs($user);
+
+		// When I go to the sharing dialog of a password I own
+		$resource = Resource::get(array(
+			'user' => 'ada',
+			'id' => Uuid::get('resource.id.gnupg')
+		));
+
+		// Click on the password.
+		$this->clickPassword($resource['id']);
+
+		// Wait until I see the list of permissions.
+		$this->waitUntilISee('js_rs_details_permissions');
+
+		// Then I should see a user the password is shared with
+		$this->assertPermissionInSidebar('ada@passbolt.com', 'can read');
+
+		// Then I should see a group the password is shared with
+		$this->assertPermissionInSidebar('Board (group)', 'can update');
 	}
 
 	/**

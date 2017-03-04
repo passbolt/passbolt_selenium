@@ -6,6 +6,16 @@
  * @copyright (c) 2015-present Bolt Softwares Pvt Ltd
  * @licence GNU Affero General Public License http://www.gnu.org/licenses/agpl-3.0.en.html
  */
+
+use Facebook\WebDriver\Firefox\FirefoxDriver;
+use Facebook\WebDriver\Firefox\FirefoxProfile;
+use Facebook\WebDriver\Chrome\ChromeOptions;
+use Facebook\WebDriver\Remote\DesiredCapabilities;
+use Facebook\WebDriver\Remote\RemoteWebDriver;
+use Facebook\WebDriver\WebDriverBy;
+use Facebook\WebDriver\WebDriverKeys;
+use Facebook\WebDriver\Exception\NoSuchElementException;
+
 class WebDriverTestCase extends PHPUnit_Framework_TestCase {
 
     public $driver;             // @var RemoteWebDriver $driver
@@ -125,11 +135,6 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
 			$this->_browserController = new FirefoxBrowserController($this->driver, $this);
 		} else {
 			$this->_browserController = new ChromeBrowserController($this->driver, $this);
-		}
-
-		// Redirect it immediately to an empty page, so we avoid the default firefox home page.
-		if ($this->_browser['type'] == 'firefox') {
-			$this->driver->get('');
 		}
 	}
 
@@ -336,6 +341,9 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
                 // Set download preferences for the browser.
                 $profile->setPreference("browser.download.folderList", 2);
 				$profile->setPreference("xpinstall.signatures.required", false);
+				$profile->setPreference("browser.startup.page", 0); // Empty start page
+				$profile->setPreference("browser.startup.homepage_override.mstone", "ignore"); // Suppress the "What's new" page
+
 
                 $capabilities->setCapability(FirefoxDriver::PROFILE, $profile);
             break;

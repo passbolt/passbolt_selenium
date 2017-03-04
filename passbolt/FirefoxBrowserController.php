@@ -1,5 +1,8 @@
 <?php
 
+use Facebook\WebDriver\WebDriverBy;
+use Facebook\WebDriver\WebDriverKeys;
+
 class FirefoxBrowserController {
     protected $driver;
     protected $testCase;

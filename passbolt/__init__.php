@@ -20,7 +20,6 @@ require_once('Config.php');
 Config::get();
 
 // Vendor dependencies.
-require_once(ROOT . '/lib/__init__.php');
 require_once('vendor/autoload.php');
 
 // ImageCompare
