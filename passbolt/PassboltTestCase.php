@@ -1758,18 +1758,18 @@ class PassboltTestCase extends WebDriverTestCase {
 	 * @param $username
 	 * @param $permissionType
 	 */
-	public function assertPermissionInSidebar($username, $permissionType) {
+	public function assertPermissionInSidebar($aro_name, $permissionType) {
 		// Wait until the permissions are loaded. (ready state).
 		$this->waitUntilISee('#js_rs_details_permissions_list.ready');
 
 		// I can see the user has a direct permission
 		$this->assertElementContainsText(
 			$this->findByCss('#js_rs_details_permissions_list'),
-			$username
+			$aro_name
 		);
 
 		// Find the permission row element
-		$rowElement = $this->findByXpath('//*[@id="js_rs_details_permissions_list"]//*[contains(@class, "permission")]//*[contains(text(), "' . $username . '")]//ancestor::li');
+		$rowElement = $this->findByXpath('//*[@id="js_rs_details_permissions_list"]//*[contains(@class, "permission")]//*[contains(text(), "' . $aro_name . '")]//ancestor::li');
 
 		// I can see the permission is as expected
 		$permissionTypeElt = $rowElement->findElement(WebDriverBy::cssSelector('.subinfo'));
