@@ -52,5 +52,6 @@ require_once('FirefoxBrowserController.php');
 // Fixtures classes
 require_once(FIXTURES . 'Users.php');
 require_once(FIXTURES . 'Resources.php');
+require_once(FIXTURES . 'Groups.php');
 require_once(FIXTURES . 'Gpgkeys.php');
 require_once(FIXTURES . 'SystemDefaults.php');
