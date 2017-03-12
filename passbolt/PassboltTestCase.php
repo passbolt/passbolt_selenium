@@ -886,19 +886,18 @@ class PassboltTestCase extends WebDriverTestCase {
 	}
 
 	/**
-	 * Search a user to share a password with.
+	 * Search an aro (User or Group) to share a password with.
 	 * @param $password
-	 * @param $username
+	 * @param $aroName
 	 * @param $user
 	 */
-	public function searchUserToGrant($password, $username, $user) {
+	public function searchAroToGrant($password, $aroName, $user) {
 		$this->gotoSharePassword($password['id']);
-		$shareWithUser = User::get($username);
 
 		// I enter the username I want to share the password with in the autocomplete field
 		$this->goIntoShareIframe();
 		$this->assertSecurityToken($user, 'share');
-		$this->inputText('js_perm_create_form_aro_auto_cplt', $shareWithUser['FirstName'], true);
+		$this->inputText('js_perm_create_form_aro_auto_cplt', $aroName, true);
 		$this->click('.security-token');
 		$this->goOutOfIframe();
 
@@ -909,23 +908,21 @@ class PassboltTestCase extends WebDriverTestCase {
 	/**
 	 * Add a temporary permission helper
 	 * @param $password
-	 * @param $username
+	 * @param $aroName
 	 * @param $user
 	 * @throws Exception
 	 */
-	public function addTemporaryPermission($password, $username, $user) {
-		$shareWithUser = User::get($username);
-		$shareWithUserFullName = $shareWithUser['FirstName'] . ' ' . $shareWithUser['LastName'];
-
+	public function addTemporaryPermission($password, $aroName, $user) {
 		// Search the user to grant.
-		$this->searchUserToGrant($password, $username, $user);
+		$this->searchAroToGrant($password, $aroName, $user);
 
 		// I wait until I see the automplete field resolved
 		$this->goIntoShareAutocompleteIframe();
-		$this->waitUntilISee('.autocomplete-content', '/' . $shareWithUserFullName . '/i');
+		$this->waitUntilISee('.autocomplete-content', '/' . $aroName . '/i');
 
 		// I click on the username link the autocomplete field retrieved.
-		$this->click($shareWithUser['id']);
+		$element = $this->findByXpath('//*[contains(., "' . $aroName . '")]//ancestor::li[1]');
+		$element->click();
 		$this->goOutOfIframe();
 
 		// I can see that temporary changes are waiting to be saved
@@ -938,12 +935,12 @@ class PassboltTestCase extends WebDriverTestCase {
 	/**
 	 * Share a password helper
 	 * @param $password
-	 * @param $username
+	 * @param $aroName
 	 * @param $user
 	 * @throws Exception
 	 */
-	public function sharePassword($password, $username, $user) {
-		$this->addTemporaryPermission($password, $username, $user);
+	public function sharePassword($password, $aroName, $user) {
+		$this->addTemporaryPermission($password, $aroName, $user);
 
 		// When I click on the save button
 		$this->click('js_rs_share_save');

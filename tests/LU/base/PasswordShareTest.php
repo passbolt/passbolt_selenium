@@ -15,6 +15,7 @@
  * As a user I can add a permission after previously adding and deleting one for the same user
  * As a user I can share a password with other users
  * As a user I can share a password with other users, and see them immediately in the sidebar
+ * As a user I can share a password with a groups
  * As a user I edit the permissions of a password I own
  * As a user I delete a permission of a password I own
  * As a user I should not let a resource without at least one owner
@@ -473,7 +474,7 @@ class PasswordShareTest extends PassboltTestCase
 		$this->addTemporaryPermission($resource, $shareWithUser['name'], $user);
 
 		// And I search again Betty
-		$this->searchUserToGrant($resource, $shareWithUser['name'], $user);
+		$this->searchAroToGrant($resource, $shareWithUser['name'], $user);
 
 		// Then I should not see her in the autocomplete results
 		$this->goIntoShareAutocompleteIframe();
@@ -570,7 +571,7 @@ class PasswordShareTest extends PassboltTestCase
 		);
 
 		// When I search again Betty
-		$this->searchUserToGrant($resource, $shareWithUser['name'], $user);
+		$this->searchAroToGrant($resource, $shareWithUser['name'], $user);
 
 		// Then I should see her in the autocomplete results
 		$this->goIntoShareAutocompleteIframe();
@@ -598,7 +599,7 @@ class PasswordShareTest extends PassboltTestCase
 	 * Then     I can see a success message telling me the password was copied to clipboard
 	 * And      the content of the clipboard is valid
 	 */
-	public function testSharePasswordAndView() {
+	public function testSharePasswordWithUserAndView() {
 		// Reset database at the end of test.
 		$this->resetDatabaseWhenComplete();
 
@@ -623,7 +624,7 @@ class PasswordShareTest extends PassboltTestCase
 		);
 
 		// When I give read access to betty for a password I own
-		$this->sharePassword($resource, 'betty', $user);
+		$this->sharePassword($resource, 'betty@passbolt.com', $user);
 
 		// Then I can see Betty has read access on the password
 		$this->assertPermission($resource, 'betty@passbolt.com', 'can read');
@@ -667,7 +668,7 @@ class PasswordShareTest extends PassboltTestCase
 	 * When     I give read access to betty for a password I own
 	 * Then     I can see Betty is in the sidebar, under the permissions section
 	 */
-	public function testSharePasswordAndViewNewPermissionInSidebar() {
+	public function testSharePasswordWithUserAndViewNewPermissionInSidebar() {
 		// Reset database at the end of test.
 		$this->resetDatabaseWhenComplete();
 		
@@ -694,10 +695,132 @@ class PasswordShareTest extends PassboltTestCase
 		);
 
 		// When I give read access to betty for a password I own
-		$this->sharePassword($resource, 'betty', $user);
+		$this->sharePassword($resource, 'betty@passbolt.com', $user);
 
 		// I can see the new permission in sidebar
 		$this->assertPermissionInSidebar('betty@passbolt.com', 'can read');
+	}
+
+	/**
+	 * @group saucelabs
+	 * Scenario: As a user I can share a password with a groups
+	 *
+	 * Given    I am Carol
+	 * And      I am logged in on the password workspace
+	 * When     I go to the sharing dialog of a password I own
+	 * Then     I can see Accounting has no right on the password
+	 * When     I give read access to Accounting for a password I own
+	 * Then     I can see Accouning has read access on the password
+	 * When     I logout
+	 * And      I am Frances member of Accounting
+	 * And      I am logged in on the password workspace
+	 * And      I click on a password shared with me
+	 * And      I click on the link 'copy password'
+	 * Then     I can see the master key dialog
+	 * When     I enter my passphrase and click submit
+	 * Then     I can see a success message telling me the password was copied to clipboard
+	 * And      the content of the clipboard is valid
+	 */
+	public function testSharePasswordWithGroupAndView() {
+		// Reset database at the end of test.
+		$this->resetDatabaseWhenComplete();
+
+		// Given I am Carol
+		$user = User::get('ada');
+		$this->setClientConfig($user);
+
+		// And I am logged in on the password workspace
+		$this->loginAs($user);
+
+		// When I go to the sharing dialog of a password I own
+		$resource = Resource::get(array(
+			'user' => 'ada',
+			'id' => Uuid::get('resource.id.apache')
+		));
+		$this->gotoSharePassword($resource['id']);
+
+		// Then I can see accounting has no right on the password
+		$this->assertElementNotContainText(
+			$this->findByCss('#js_permissions_list'),
+			'Accounting'
+		);
+
+		// When I give read access to Accounting for a password I own
+		$this->sharePassword($resource, 'Accounting', $user);
+
+		// Then I can see Accounting has read access on the password
+		$this->assertPermission($resource, 'Accounting', 'can read');
+
+		// When I logout
+		$this->logout();
+
+		// And I am Betty
+		$user = User::get('frances');
+		$this->setClientConfig($user);
+
+		// And I am logged in on the password workspace
+		$this->loginAs($user);
+
+		// And I click on a password shared with me
+		$this->clickPassword($resource['id']);
+
+		// And I click on the link 'copy password'
+		$this->click('js_wk_menu_secretcopy_button');
+
+		// Then I can see the master key dialog
+		$this->assertMasterPasswordDialog($user);
+
+		// When I enter my passphrase and click submit
+		$this->enterMasterPassword($user['MasterPassword']);
+
+		// Then I can see a success message telling me the password was copied to clipboard
+		$this->assertNotification('plugin_secret_copy_success');
+
+		// And the content of the clipboard is valid
+		$this->assertClipboard($resource['password']);
+	}
+
+	/**
+	 * Scenario: As a user I can share a password with groups, and see them immediately in the sidebar
+	 *
+	 * Given    I am Ada
+	 * And      I am logged in on the password workspace
+	 * When     I go to the sharing dialog of a password I own
+	 * Then     I can see the group has no right on the password
+	 * When     I give read access to a group for a password I own
+	 * Then     I can see the group is in the sidebar, under the permissions section
+	 */
+	public function testSharePasswordWithGroupAndViewNewPermissionInSidebar() {
+		// Reset database at the end of test.
+		$this->resetDatabaseWhenComplete();
+
+		// Given I am Carol
+		$user = User::get('ada');
+		$this->setClientConfig($user);
+
+		// And I am logged in on the password workspace
+		$this->loginAs($user);
+
+		// When I go to the sharing dialog of a password I own
+		$resource = Resource::get(
+			array(
+				'user' => 'ada',
+				'id'   => Uuid::get('resource.id.apache')
+			)
+		);
+		$this->gotoSharePassword($resource['id']);
+
+		// Then I can see the group has no right on the password
+		$this->assertElementNotContainText(
+			$this->findByCss('#js_permissions_list'),
+			'Accounting'
+		);
+
+		// When I give read access to the group for a password I own
+		$this->sharePassword($resource, 'Accounting', $user);
+
+		// I can see the new permission in sidebar
+		$this->assertPermissionInSidebar('Accounting', 'can read');
 	}
 
 	/**
@@ -1173,7 +1296,7 @@ class PasswordShareTest extends PassboltTestCase
 		$this->gotoSharePassword(Uuid::get('resource.id.gnupg'));
 
 		// And I give read access to betty for a password I own
-		$this->sharePassword($resource, 'betty', $user);
+		$this->sharePassword($resource, 'betty@passbolt.com', $user);
 
 		// Then I can see Betty has read access on the password
 		$this->assertPermission($resource, 'betty@passbolt.com', 'can read');
@@ -1216,7 +1339,7 @@ class PasswordShareTest extends PassboltTestCase
 		$this->gotoSharePassword(Uuid::get('resource.id.gnupg'));
 
 		// And I give read access to betty for a password I own
-		$this->sharePassword($resource, 'betty', $user);
+		$this->sharePassword($resource, 'betty@passbolt.com', $user);
 
 		// Then I can see Betty has read access on the password
 		$this->assertPermission($resource, 'betty@passbolt.com', 'can read');
