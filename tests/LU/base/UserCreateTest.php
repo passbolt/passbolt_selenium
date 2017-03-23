@@ -82,10 +82,6 @@ class UserCreateTest extends PassboltTestCase {
 		$this->assertVisible('.create-user-dialog .input.required #js_field_role_id');
 		$this->assertVisible('.create-user-dialog .input.required label[for=js_field_role_id]');
 
-		// And I see the password send by email field
-		$this->assertVisible('.create-user-dialog .input.required #js_field_email_user');
-		$this->assertVisible('.create-user-dialog .input.required label[for=js_field_email_user]');
-
 		// And I see the save button
 		$this->assertVisible('.create-user-dialog input[type=submit].button.primary');
 
@@ -138,6 +134,8 @@ class UserCreateTest extends PassboltTestCase {
 		// -- WITH X BUTTON --
 		// When I click on the create password button
 		$this->click('js_wsp_create_button');
+		$this->waitUntilISee('.main-action-wrapper ul.dropdown-content');
+		$this->click('.main-action-wrapper ul.dropdown-content li.create-user');
 
 		// Then I see the create password dialog
 		$this->assertVisible('.create-user-dialog');
@@ -151,6 +149,8 @@ class UserCreateTest extends PassboltTestCase {
 		// -- WITH ESCAPE --
 		// When I click on the create password button
 		$this->click('js_wsp_create_button');
+		$this->waitUntilISee('.main-action-wrapper ul.dropdown-content');
+		$this->click('.main-action-wrapper ul.dropdown-content li.create-user');
 
 		// Then I see the create password dialog
 		$this->assertVisible('.create-user-dialog');
