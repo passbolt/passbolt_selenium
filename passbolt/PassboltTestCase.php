@@ -803,6 +803,20 @@ class PassboltTestCase extends WebDriverTestCase {
 	}
 
 	/**
+	 * Put the focus inside the add user iframe
+	 */
+	public function goIntoAddUserIframe() {
+		$this->driver->switchTo()->frame('passbolt-iframe-group-edit');
+	}
+
+	/**
+	 * Put the focus inside the add user autocomplete iframe
+	 */
+	public function goIntoAddUserAutocompleteIframe() {
+		$this->driver->switchTo()->frame('passbolt-iframe-group-edit-autocomplete');
+	}
+
+	/**
 	 * Put the focus back to the normal context
 	 */
 	public function goOutOfIframe() {
@@ -1072,6 +1086,126 @@ class PassboltTestCase extends WebDriverTestCase {
 	}
 
 	/**
+	 * Search a user to add to a group.
+	 * @param $userToAdd
+	 * @param $user
+	 */
+	public function searchGroupUserToAdd($userToAdd, $user) {
+		// I enter the username I want to share the password with in the autocomplete field
+		$this->goIntoAddUserIframe();
+		$this->assertSecurityToken($user, 'group');
+		$this->inputText('js_group_edit_form_auto_cplt', strtolower($userToAdd['FirstName']), true);
+		$this->click('.security-token');
+		$this->goOutOfIframe();
+
+		// I wait the autocomplete box is loaded.
+		$this->waitCompletion(10, '#passbolt-iframe-group-edit-autocomplete.loaded');
+
+		$this->goIntoAddUserAutocompleteIframe();
+		$userFullName = $userToAdd['FirstName'] . ' ' . $userToAdd['LastName'];
+
+		try {
+			$this->waitUntilISee('.autocomplete-content', '/' . $userFullName . '/i');
+		} catch(Exception $e) {
+			$this->goOutOfIframe();
+			throw new Exception("Could not find the requested user '$userFullName' in the autocomplete list");
+		}
+
+		$this->goOutOfIframe();
+	}
+
+	/**
+	 * Add a temporary user to a gtoup.
+	 * @param $user
+	 * @return HTML element added in the list
+	 */
+	public function addTemporaryGroupUser($user) {
+		$userFullName = $user['FirstName'] . ' ' . $user['LastName'];
+		// I wait until I see the automplete field resolved
+		$this->goIntoAddUserAutocompleteIframe();
+		$this->waitUntilISee('.autocomplete-content', '/' . $userFullName . '/i');
+
+		// I click on the username link the autocomplete field retrieved.
+		$element = $this->findByXpath('//*[contains(., "' . $userFullName . '")]//ancestor::li[1]');
+		$element->click();
+		$this->goOutOfIframe();
+
+		$elt = $this->getTemporaryGroupUserElement($user);
+		return $elt;
+	}
+
+
+	/**
+	 * Get temporary group user properties
+	 * @param $user
+	 * @return array $properties
+	 *  bool role_disabled
+	 *  bool delete_disabled
+	 *  bool role
+	 */
+	public function getTemporaryGroupUserProperties($user) {
+		$properties = [];
+
+		$userElt = $this->getTemporaryGroupUserElement($user);
+
+		// I should see that the user role for the group can't be changed.
+		$roleSelect = $userElt->findElement(WebDriverBy::cssSelector('.js_group_user_is_admin'));
+		$properties['role_disabled'] = $roleSelect->getAttribute('disabled') == 'true' ? true:false;
+		$properties['role'] = $roleSelect->getAttribute('value') == '1' ? 'Group manager' : 'Member';
+
+		// I should see that the user can't be deleted (because he is the only group manager
+		$deleteBtn = $userElt->findElement(WebDriverBy::cssSelector('.js_group_user_delete'));
+		$properties['delete_disabled'] = $deleteBtn->getAttribute('disabled') == 'true' ? true:false;
+
+		return $properties;
+	}
+
+	/**
+	 * Get a temporary user element from the list
+	 * @param $user
+	 * @throws Exception
+	 * @return Object $rowElement
+	 */
+	public function getTemporaryGroupUserElement($user) {
+		$userFullName = $user['FirstName'] . ' ' . $user['LastName'];
+
+		// I can see the user has a direct entry
+		$this->assertElementContainsText(
+			$this->findByCss('#js_permissions_list'),
+			$userFullName
+		);
+
+		// Find the permission row element
+		$rowElement = $this->findByXpath('//*[@id="js_permissions_list"]//*[.="' . $userFullName . '"]//ancestor::li[1]');
+
+		return $rowElement;
+	}
+
+
+	/**
+	 * Delete temporary group user
+	 *
+	 * @param $user
+	 */
+	public function deleteTemporaryGroupUser($user) {
+		$userElt = $this->getTemporaryGroupUserElement($user);
+		// I should see that the user can't be deleted (because he is the only group manager
+		$deleteBtn = $userElt->findElement(WebDriverBy::cssSelector('.js_group_user_delete'));
+		$deleteBtn->click();
+
+		// The entry should have disappeared from the list.
+		$elt = null;
+		try {
+			$elt = $this->getTemporaryGroupUserElement($user);
+		}
+		catch (Exception $e) {
+			// Do nothing. Element will remain null.
+		}
+		// Make sure that the element was not returned (because it doesn't exist).
+		$this->assertEquals($elt, null);
+	}
+
+	/**
 	 * Enter the password in the passphrase iframe
 	 * @param $pwd
 	 * @param $remember
@@ -1165,7 +1299,25 @@ class PassboltTestCase extends WebDriverTestCase {
 			$this->waitUntilISee('#js_wsp_create_button');
 		}
 		$this->click('#js_wsp_create_button');
-		$this->assertVisible('.create-user-dialog');
+		$this->waitUntilISee('.main-action-wrapper ul.dropdown-content');
+		$this->click('.main-action-wrapper ul.dropdown-content li.create-user');
+		$this->waitUntilISee('.create-user-dialog');
+	}
+
+	/**
+	 * Go to the user workspace and click on the create group button
+	 */
+	public function gotoCreateGroup() {
+		if(!$this->isVisible('.page.people')) {
+			$this->getUrl('');
+			$this->waitUntilISee('.page.people');
+			$this->waitUntilISee('#js_wsp_create_button');
+		}
+		$this->click('#js_wsp_create_button');
+		$this->waitUntilISee('.main-action-wrapper ul.dropdown-content');
+
+		$this->click('.main-action-wrapper ul.dropdown-content li.create-group');
+		$this->waitUntilISee('.create-group-dialog');
 	}
 
 	/**
@@ -1592,6 +1744,10 @@ class PassboltTestCase extends WebDriverTestCase {
 				case 'share':
 					$this->waitUntilISee('js_perm_create_form_aro_auto_cplt');
 					$this->click('js_perm_create_form_aro_auto_cplt');
+					break;
+				case 'group':
+					$this->waitUntilISee('js_group_edit_form_auto_cplt');
+					$this->click('js_group_edit_form_auto_cplt');
 					break;
 				default:
 					$this->waitUntilISee('js_secret');
