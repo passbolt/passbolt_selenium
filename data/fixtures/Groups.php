@@ -86,4 +86,39 @@ class Group {
 
 		return $g;
 	}
+
+	/**
+	 * Get one group by it's UUID
+	 * @param $g array groups
+	 * @param $id
+	 * @return mixed
+	 */
+	static function _getById($g, $id) {
+		foreach ($g as $i => $rid) {
+			if ($g[$i]['id'] == $id) {
+				return $g[$i];
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * Return one group based on the given conditions
+	 * @param array $conditions
+	 * @return array $group
+	 * @throws exception
+	 */
+	static function get($conditions = array()) {
+		$g = self::_get();
+
+		// filter by id if needed
+		if (isset($conditions['id'])) {
+			$g = self::_getById($g, $conditions['id']);
+		}
+
+		if ($g === false) {
+			throw new Exception('a group fixture could not be found for these conditions, consider adding one');
+		}
+		return $g;
+	}
 }

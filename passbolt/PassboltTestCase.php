@@ -1431,6 +1431,45 @@ class PassboltTestCase extends WebDriverTestCase {
 	}
 
 	/**
+	 * Click on a group inside the user workspace.
+	 * @param string $id id of the group
+	 *
+	 * @throws Exception
+	 */
+	public function clickGroup($id) {
+		if(!$this->isVisible('.page.people')) {
+			$this->getUrl('');
+			$this->gotoWorkspace('user');
+			$this->waitUntilISee('.page.people');
+		}
+		$eltSelector = '#group_' . $id . ' .main-cell';
+		$this->click($eltSelector);
+		$this->waitCompletion();
+	}
+
+	/**
+	 * Check if the group has already been selected
+	 * @param $id string
+	 * @return bool
+	 */
+	public function isGroupSelected($id) {
+		$eltSelector = '#group_' . $id . ' .row';
+		if ($this->elementHasClass($eltSelector, 'selected')) {
+			return true;
+		}
+		return false;
+	}
+
+	/**
+	 * Check if the group has already been selected
+	 * @param $id string
+	 * @return bool
+	 */
+	public function isGroupNotSelected($id) {
+		return !$this->isGroupSelected($id);
+	}
+
+	/**
 	 * Empty a field like a user would do it.
 	 * Click on the field, go at the end of the text, and backspace to remove the whole text.
 	 * @param $id
@@ -2039,5 +2078,23 @@ class PassboltTestCase extends WebDriverTestCase {
 	 */
 	public function assertUserNotSelected($id) {
 		$this->assertTrue($this->isUserNotSelected($id));
+	}
+
+	/**
+	 * Assert a group is selected
+	 * @param $id string
+	 * @return bool
+	 */
+	public function assertGroupSelected($id) {
+		$this->assertTrue($this->isGroupSelected($id));
+	}
+
+	/**
+	 * Assert a group is selected
+	 * @param $id string
+	 * @return bool
+	 */
+	public function assertGroupNotSelected($id) {
+		$this->assertTrue($this->isGroupNotSelected($id));
 	}
 }

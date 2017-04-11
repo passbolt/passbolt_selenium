@@ -566,6 +566,16 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
         return $this->driver->findElement(WebDriverBy::cssSelector($css));
     }
 
+	/**
+	 * Find all elements by a CSS selector
+	 * @param $css
+	 * @return mixed
+	 * @throws NoSuchElementException
+	 */
+	public function findAllByCss($css) {
+		return $this->driver->findElements(WebDriverBy::cssSelector($css));
+	}
+
     /**
      * Find an element by a XPath selector
      * @param $xpath
