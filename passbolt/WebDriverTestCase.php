@@ -65,13 +65,13 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
 
 	    $this->_saucelabs = Config::read('testserver.default') == 'saucelabs' ? true : false;
 
-	    // Reserve instances for passbolt and selenium.
-	    if ($this->__useMultiplePassboltInstances()) {
-		    $this->reserveInstance('passbolt');
-	    }
-	    if ($this->__useMultipleSeleniumInstances()) {
-		    $this->reserveInstance('selenium');
-	    }
+//	    // Reserve instances for passbolt and selenium.
+//	    if ($this->__useMultiplePassboltInstances()) {
+//		    $this->reserveInstance('passbolt');
+//	    }
+//	    if ($this->__useMultipleSeleniumInstances()) {
+//		    $this->reserveInstance('selenium');
+//	    }
 
 	    // Init browser.
 		$this->initBrowser();
@@ -180,13 +180,13 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
 			    . $this->_log;
 	    }
 
-	    // Release instance.
-	    if ($this->__useMultiplePassboltInstances()) {
-		    $this->releaseInstance('passbolt');
-	    }
-	    if ($this->__useMultipleSeleniumInstances()) {
-		    $this->releaseInstance('selenium');
-	    }
+//	    // Release instance.
+//	    if ($this->__useMultiplePassboltInstances()) {
+//		    $this->releaseInstance('passbolt');
+//	    }
+//	    if ($this->__useMultipleSeleniumInstances()) {
+//		    $this->releaseInstance('selenium');
+//	    }
     }
 
 	/**

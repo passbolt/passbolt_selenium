@@ -63,7 +63,7 @@ class GroupCreateTest extends PassboltTestCase {
 		$this->gotoCreateGroup();
 
 		// Then I see the create group dialog
-		$this->assertVisible('.create-group-dialog');
+		$this->assertVisible('.edit-group-dialog');
 
 		// And I see the title is set to "Create group"
 		$this->assertElementContainsText(
@@ -71,8 +71,8 @@ class GroupCreateTest extends PassboltTestCase {
 		);
 
 		// And I see the name text input and label is marked as mandatory
-		$this->assertVisible('.create-group-dialog input[type=text]#js_field_name.required');
-		$this->assertVisible('.create-group-dialog label[for=js_field_name]');
+		$this->assertVisible('.edit-group-dialog input[type=text]#js_field_name.required');
+		$this->assertVisible('.edit-group-dialog label[for=js_field_name]');
 
 		// And I see a group members section.
 		$this->assertVisible('#js_group_members');
@@ -103,7 +103,7 @@ class GroupCreateTest extends PassboltTestCase {
 		// I should see the save button
 		// And I should see that it is disabled by default
 		// And I should see that the save button is still disabled
-		$saveButton = $this->find('.create-group-dialog a.button.primary');
+		$saveButton = $this->find('.edit-group-dialog a.button.primary');
 		$this->assertElementAttributeEquals(
 			$saveButton,
 			'disabled',
@@ -111,10 +111,10 @@ class GroupCreateTest extends PassboltTestCase {
 		);
 
 		// And I see the cancel button
-		$this->assertVisible('.create-group-dialog a.cancel');
+		$this->assertVisible('.edit-group-dialog a.cancel');
 
 		// And I see the close dialog button
-		$this->assertVisible('.create-group-dialog a.dialog-close');
+		$this->assertVisible('.edit-group-dialog a.dialog-close');
 	}
 
 	/**
@@ -136,12 +136,12 @@ class GroupCreateTest extends PassboltTestCase {
 	 * When     I press the keyboard escape key
 	 * Then     I should not see the create group dialog
 	 */
-	public function testCreatePasswordDialogOpenClose() {
+	public function testCreateGroupDialogOpenClose() {
 		// Given that I am Ada
 		$user = User::get('admin');
 		$this->setClientConfig($user);
 
-		// And I am logged in and on the password workspace
+		// And I am logged in and on the people workspace
 		$this->loginAs($user);
 
 		// Go to user workspace
@@ -150,39 +150,39 @@ class GroupCreateTest extends PassboltTestCase {
 		// Create a new group
 		$this->gotoCreateGroup();
 
-		// Then I see the create password dialog
-		$this->assertVisible('.create-group-dialog');
+		// Then I see the create group dialog
+		$this->assertVisible('.edit-group-dialog');
 
 		// When I click on the cancel button
-		$this->findByCss('.create-group-dialog a.cancel')->click();
+		$this->findByCss('.edit-group-dialog a.cancel')->click();
 
-		// Then I should not see the create password dialog
-		$this->assertNotVisible('.create-group-dialog');
+		// Then I should not see the create group dialog
+		$this->assertNotVisible('.edit-group-dialog');
 
 		// Create a new group
 		$this->gotoCreateGroup();
 
-		// Then I see the create password dialog
-		$this->assertVisible('.create-group-dialog');
+		// Then I see the create group dialog
+		$this->assertVisible('.edit-group-dialog');
 
 		// When I click on the close dialog button
-		$this->findByCss('.create-group-dialog a.dialog-close')->click();
+		$this->findByCss('.edit-group-dialog a.dialog-close')->click();
 
-		// Then I should not see the create password dialog
-		$this->assertNotVisible('.create-group-dialog');
+		// Then I should not see the create group dialog
+		$this->assertNotVisible('.edit-group-dialog');
 
 		// -- WITH ESCAPE --
 		// Create a new group
 		$this->gotoCreateGroup();
 
-		// Then I see the create password dialog
-		$this->assertVisible('.create-group-dialog');
+		// Then I see the create group dialog
+		$this->assertVisible('.edit-group-dialog');
 
 		// When I click on the escape key
 		$this->pressEscape();
 
-		// Then I should not see the create password dialog
-		$this->assertTrue($this->isNotVisible('.create-group-dialog'));
+		// Then I should not see the create group dialog
+		$this->assertTrue($this->isNotVisible('.edit-group-dialog'));
 
 	}
 
@@ -237,7 +237,7 @@ class GroupCreateTest extends PassboltTestCase {
 
 		// And I should see that the save button is still disabled
 		$this->assertElementAttributeEquals(
-			$this->find('.create-group-dialog a.button.primary'),
+			$this->find('.edit-group-dialog a.button.primary'),
 			'disabled',
 			'true'
 		);
@@ -279,7 +279,7 @@ class GroupCreateTest extends PassboltTestCase {
 		$this->addTemporaryGroupUser($ada);
 
 		// And I click submit.
-		$this->click('.create-group-dialog a.button.primary');
+		$this->click('.edit-group-dialog a.button.primary');
 
 		// Then I should see a success notification message saying the group couldn't be created
 		$this->assertNotification('app_groups_add_error');
@@ -335,7 +335,7 @@ class GroupCreateTest extends PassboltTestCase {
 
 		// And I should see that the save button is still disabled
 		$this->assertElementAttributeEquals(
-			$this->find('.create-group-dialog a.button.primary'),
+			$this->find('.edit-group-dialog a.button.primary'),
 			'disabled',
 			'true'
 		);
@@ -372,7 +372,7 @@ class GroupCreateTest extends PassboltTestCase {
 
 		// And I should see that the save button is now enabled
 		$this->assertElementAttributeEquals(
-			$this->find('.create-group-dialog a.button.primary'),
+			$this->find('.edit-group-dialog a.button.primary'),
 			'disabled',
 			null
 		);
@@ -425,7 +425,7 @@ class GroupCreateTest extends PassboltTestCase {
 
 		// And I should see that the save button is still enabled
 		$this->assertElementAttributeEquals(
-			$this->find('.create-group-dialog a.button.primary'),
+			$this->find('.edit-group-dialog a.button.primary'),
 			'disabled',
 			null
 		);
@@ -459,7 +459,7 @@ class GroupCreateTest extends PassboltTestCase {
 
 		// And I should see that the save button is still disabled
 		$this->assertElementAttributeEquals(
-			$this->find('.create-group-dialog a.button.primary'),
+			$this->find('.edit-group-dialog a.button.primary'),
 			'disabled',
 			'true'
 		);
@@ -543,13 +543,13 @@ class GroupCreateTest extends PassboltTestCase {
 		$this->addTemporaryGroupUser($ada);
 
 		// And I click submit.
-		$this->click('.create-group-dialog a.button.primary');
+		$this->click('.edit-group-dialog a.button.primary');
 
 		// Assert that I see a notification
 		$this->assertNotification('app_groups_add_success');
 
 		// And I shouldn't see the create group dialog anymore.
-		$this->waitUntilIDontSee('.create-group-dialog');
+		$this->waitUntilIDontSee('.edit-group-dialog');
 
 		// Wait until I see a group called jean kevin in the list.
 		$this->waitUntilISee("js_wsp_users_groups_list", '/jeankevin/');
