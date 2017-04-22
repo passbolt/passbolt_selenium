@@ -773,6 +773,7 @@ class PassboltTestCase extends WebDriverTestCase {
 			$this->click("#js_contextual_menu #js_group_browser_menu_edit a");
 			$this->waitUntilISee('.edit-group-dialog');
 			$this->waitUntilISee('#js_edit_group.ready');
+			$this->waitUntilISee('#passbolt-iframe-group-edit.ready');
 		}
 	}
 
