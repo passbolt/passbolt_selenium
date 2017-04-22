@@ -512,7 +512,7 @@ class AdminGroupCreateTest extends PassboltTestCase {
 	 *  And         I should see that the group has been created in the groups list (on the left)
 	 */
 	public function testCreateGroupSuccess() {
-		$this->resetDatabaseWhenComplete = true;
+		$this->resetDatabaseWhenComplete();
 
 		// Given I am an administrator.
 		$user = User::get('admin');

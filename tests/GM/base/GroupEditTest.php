@@ -94,7 +94,7 @@ class GMGroupEditTest extends PassboltTestCase {
 	 * Then 	I should be able to add users to the new group that I manage
 	 */
 	public function testEditGroupPromoteMember() {
-		$this->resetDatabaseWhenComplete = true;
+		$this->resetDatabaseWhenComplete();
 		$promotedUser = User::get('ursula');
 
 		// Given I am logged in as a group manager
@@ -163,7 +163,6 @@ class GMGroupEditTest extends PassboltTestCase {
 	 * Then		I should not be able to change the role of this user
 	 */
 	public function testAtLeastOneGroupManager() {
-		$this->resetDatabaseWhenComplete = true;
 		// Given I am logged in as a group manager
 		$user = User::get('ping');
 		$this->setClientConfig($user);
@@ -200,7 +199,7 @@ class GMGroupEditTest extends PassboltTestCase {
 	 * Then		I filter the list of users with the group
 	 */
 	public function testAddGroupMember() {
-		$this->resetDatabaseWhenComplete = true;
+		$this->resetDatabaseWhenComplete();
 
 		// Given I am logged in as a group manager
 		$user = User::get('ping');
@@ -273,7 +272,7 @@ class GMGroupEditTest extends PassboltTestCase {
 	 * Then 	I filter by the group the user has been removed
 	 */
 	public function testRemoveGroupMember() {
-		$this->resetDatabaseWhenComplete = true;
+		$this->resetDatabaseWhenComplete();
 		$removedUser = User::get('wang');
 
 		// Given I am logged in as an group manager

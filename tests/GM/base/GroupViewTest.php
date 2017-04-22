@@ -30,7 +30,7 @@ class GMGroupViewTest extends PassboltTestCase {
 
 		// Then I should see the list of users that are members of a given group
 		$groupMember = User::get('irene');
-		$this->assertGroupMemberInEditDialog($group['id'], $groupMember, false);
+		$this->assertGroupMemberInEditDialog($group['id'], $groupMember, true);
 	}
 
 }
