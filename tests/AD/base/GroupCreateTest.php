@@ -18,7 +18,7 @@ use Facebook\WebDriver\WebDriverSelect;
  * @copyright (c) 2017-present Passbolt SARL
  * @licence GNU Affero General Public License http://www.gnu.org/licenses/agpl-3.0.en.html
  */
-class GroupCreateTest extends PassboltTestCase {
+class AdminGroupCreateTest extends PassboltTestCase {
 
 	/**
 	 * Scenario :   As an administrator I can click on create group and see that the create group dialog exists.
@@ -186,7 +186,6 @@ class GroupCreateTest extends PassboltTestCase {
 
 	}
 
-
 	/**
 	 * Scenario:    As an administrator I should not be able to create a group with an incorrect name
 	 * Given that   I am a logged in administrator
@@ -241,7 +240,6 @@ class GroupCreateTest extends PassboltTestCase {
 			'disabled',
 			'true'
 		);
-
 	}
 
 	/**
@@ -431,7 +429,6 @@ class GroupCreateTest extends PassboltTestCase {
 		);
 	}
 
-
 	/**
 	 * Scenario:    As an administrator I should be able to delete a group user while creating a group
 	 * Given that   I am logged in as an administrator
@@ -501,7 +498,6 @@ class GroupCreateTest extends PassboltTestCase {
 		$this->searchGroupUserToAdd($carol, $user);
 	}
 
-
 	/**
 	 * Scenario:    As an administrator I should be able to create a group successfully
 	 * Given that   I am a logged in administrator
@@ -542,7 +538,7 @@ class GroupCreateTest extends PassboltTestCase {
 		$this->searchGroupUserToAdd($ada, $user);
 		$this->addTemporaryGroupUser($ada);
 
-		// And I click submit.
+		// And I click save.
 		$this->click('.edit-group-dialog a.button.primary');
 
 		// Assert that I see a notification

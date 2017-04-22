@@ -564,7 +564,6 @@ class PassboltTestCase extends WebDriverTestCase {
 		}
 	}
 
-
 	/**
 	 * go To Recover page.
 	 * @throws Exception
@@ -758,6 +757,26 @@ class PassboltTestCase extends WebDriverTestCase {
 	}
 
 	/**
+	 * Goto the edit group dialog for a given group id
+	 * @param $id string
+	 * @throws Exception
+	 */
+	public function gotoEditGroup($id) {
+		if(!$this->isVisible('.page.people')) {
+			$this->getUrl('');
+			$this->waitUntilISee('.page.password');
+			$this->gotoWorkspace('user');
+			$this->waitUntilISee('.page.people');
+		}
+		if(!$this->isVisible('.edit-group-dialog')) {
+			$this->click("#group_${id} .right-cell a");
+			$this->click("#js_contextual_menu #js_group_browser_menu_edit a");
+			$this->waitUntilISee('.edit-group-dialog');
+			$this->waitUntilISee('#js_edit_group.ready');
+		}
+	}
+
+	/**
 	 * Put the focus inside the login iframe
 	 */
 	public function goIntoLoginIframe() {
@@ -897,6 +916,28 @@ class PassboltTestCase extends WebDriverTestCase {
 
 		// And I should see the notification.
 		$this->assertNotification('app_resources_edit_success');
+	}
+
+	/**
+	 * Helper to create a group
+	 */
+	public function createGroup($group, $users, $creator) {
+		$this->gotoWorkspace('user');
+		$this->gotoCreateGroup();
+
+		// Fill group name
+		$this->click('js_field_name');
+		$this->inputText('js_field_name', $group['name']);
+
+		// Insert group users
+		foreach ($users as $userAlias) {
+			$user = User::get($userAlias);
+			$this->searchGroupUserToAdd($user, $creator);
+			$this->addTemporaryGroupUser($user);
+		}
+		$this->click('.edit-group-dialog a.button.primary');
+		$this->assertNotification('app_groups_add_success');
+		$this->waitUntilIDontSee('.edit-group-dialog');
 	}
 
 	/**
@@ -1134,6 +1175,17 @@ class PassboltTestCase extends WebDriverTestCase {
 		return $elt;
 	}
 
+	/**
+	 * Edit temporary a group user role.
+	 * @param $user
+	 * @param $isAdmin
+	 * @return HTML element added in the list
+	 */
+	public function editTemporaryGroupUserRole($user, $isAdmin) {
+		$groupUserElement = $this->getTemporaryGroupUserElement($user);
+		$select = new WebDriverSelect($groupUserElement->findElement(WebDriverBy::cssSelector('select')));
+		$select->selectByVisibleText($isAdmin ? 'Group manager' : 'Member');
+	}
 
 	/**
 	 * Get temporary group user properties
@@ -1180,7 +1232,6 @@ class PassboltTestCase extends WebDriverTestCase {
 
 		return $rowElement;
 	}
-
 
 	/**
 	 * Delete temporary group user
@@ -1273,7 +1324,6 @@ class PassboltTestCase extends WebDriverTestCase {
 
 		$this->goOutOfIframe();
 	}
-
 
 	/**
 	 * Copy a password to clipboard
@@ -1387,11 +1437,12 @@ class PassboltTestCase extends WebDriverTestCase {
 	public function gotoEditUser($id) {
 		if(!$this->isVisible('.page.people')) {
 			$this->getUrl('');
+			$this->waitUntilISee('.page.password');
 			$this->gotoWorkspace('user');
 			$this->waitUntilISee('.page.people');
 			$this->waitUntilISee('#js_user_wk_menu_edition_button');
 		}
-		$this->releaseFocus(); // we click somewhere in case the password is already active
+		$this->releaseFocus(); // we click somewhere in case the user is already active
 		$this->clickUser($id);
 		$this->click('js_user_wk_menu_edition_button');
 		$this->waitCompletion();
@@ -1981,6 +2032,19 @@ class PassboltTestCase extends WebDriverTestCase {
 			$this->findByCss('#js_permissions_list'),
 			$username
 		);
+	}
+
+	/**
+	 * Assert group member from edit dialog
+	 * @param $groupId
+	 * @param $user
+	 * @param $isAdmin
+	 */
+	public function assertGroupMemberInEditDialog($groupId, $user, $isAdmin = false) {
+		$this->gotoEditGroup($groupId);
+		$rowElement = $this->getTemporaryGroupUserElement($user);
+		$select = new WebDriverSelect($rowElement->findElement(WebDriverBy::cssSelector('select')));
+		$this->assertEquals($isAdmin ? 'Group manager' : 'Member', $select->getFirstSelectedOption()->getText());
 	}
 
 	/**

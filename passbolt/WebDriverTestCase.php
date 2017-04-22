@@ -1056,11 +1056,11 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
 	 * Check if Meta title contains the given title.
 	 * @param $title
 	 */
-		public function assertMetaTitleContains($title) {
-			$source = $this->driver->getPageSource();
-			$contains = preg_match("/<title>$title<\\/title>/", $source);
-			$this->assertTrue($contains == 1, sprintf("Failed asserting that meta title contains '%s'", $title));
-		}
+	public function assertMetaTitleContains($title) {
+		$source = $this->driver->getPageSource();
+		$contains = preg_match("/<title>$title<\\/title>/", $source);
+		$this->assertTrue($contains == 1, sprintf("Failed asserting that meta title contains '%s'", $title));
+	}
 
     /**
      * Assert if the page contains the given element
