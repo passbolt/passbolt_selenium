@@ -1368,6 +1368,7 @@ class PassboltTestCase extends WebDriverTestCase {
 
 		$this->click('.main-action-wrapper ul.dropdown-content li.create-group');
 		$this->waitUntilISee('.edit-group-dialog');
+		$this->waitUntilISee('#passbolt-iframe-group-edit.ready');
 	}
 
 	/**
