@@ -76,7 +76,7 @@ class GMGroupEditTest extends PassboltTestCase {
 		$this->clickGroup($group['id']);
 
 		// Then I should see that there is no dropdown button next to the groups
-		$this->assertNotVisible("#group_${$group['id']} .right-cell a");
+		$this->assertNotVisible("#group_{$group['id']} .right-cell a");
 	}
 
 	/**
