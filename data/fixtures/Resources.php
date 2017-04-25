@@ -46,15 +46,24 @@ class Resource {
             'complexity' => 'very weak',
             'description' => 'The CentOS Linux distribution is a platform derived from Red Hat Enterprise Linux (RHEL).'
         );
-	    $r[] = array(
-		    'id' => Uuid::get('resource.id.canjs'),
-		    'username' => 'yeswecan',
-		    'name' => 'Canjs',
-		    'password' => 'princess',
-		    'uri' => 'canjs.com',
-		    'complexity' => 'very weak',
-		    'description' => 'CanJS is a JavaScript library that makes developing complex applications simple and fast.'
-	    );
+		$r[] = array(
+			'id' => Uuid::get('resource.id.canjs'),
+			'username' => 'yeswecan',
+			'name' => 'Canjs',
+			'password' => 'princess',
+			'uri' => 'canjs.com',
+			'complexity' => 'very weak',
+			'description' => 'CanJS is a JavaScript library that makes developing complex applications simple and fast.'
+		);
+		$r[] = array(
+			'id' => Uuid::get('resource.id.enlightenment'),
+			'username' => 'efl',
+			'name' => 'Enlightenment',
+			'password' => 'azertyuiop',
+			'uri' => 'https://www.enlightenment.org/',
+			'complexity' => 'very weak',
+			'description' => 'Party like it\'s 1996.'
+		);
 	    $r[] = array(
 		    'id' => Uuid::get('resource.id.gnupg'),
 		    'username' => 'gpg',
