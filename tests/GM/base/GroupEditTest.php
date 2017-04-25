@@ -126,7 +126,7 @@ class GMGroupEditTest extends PassboltTestCase {
 		$this->gotoWorkspace('user');
 
 		// When I click a group name
-		$group = Group::get(['id' => Uuid::get('group.id.ergonom')]);
+		$group = Group::get(['id' => Uuid::get('group.id.accounting')]);
 		$this->clickGroup($group['id']);
 
 		// Then I should not see a “edit” button next to the Information section
