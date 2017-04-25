@@ -1,25 +1,25 @@
 <?php
 /**
- * Feature :  As a logged in used I shouldn't be able to create groups
+ * Feature :  As a group manager I shouldn't be able to create groups
  *
  * Scenarios :
- *  - As a logged in user I shouldn't be able to create groups from the users workspace
+ *  - As a group manager I shouldn't be able to create groups from the users workspace
  *
  * @copyright (c) 2017-present Passbolt SARL
  * @licence GNU Affero General Public License http://www.gnu.org/licenses/agpl-3.0.en.html
  */
-class GroupCreateTest extends PassboltTestCase {
+class GMGroupCreateTest extends PassboltTestCase {
 
 	/**
-	 * Scenario :   As a logged in user I shouldn't be able to create groups from the users workspace
-	 * Given        I am a user
+	 * Scenario :   As a group manager I shouldn't be able to create groups from the users workspace
+	 * Given        I am a group manager
 	 * And          I am logged in
 	 * When         I go to user workspace
 	 * Then         I shouldn't see a button create in the users workspace
 	 */
 	public function testCantCreateGroup() {
-		// Given I am LU.
-		$user = User::get('ada');
+		// Given I am a group manager
+		$user = User::get('ping');
 		$this->setClientConfig($user);
 
 		// I am logged in as admin

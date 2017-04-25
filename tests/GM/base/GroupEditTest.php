@@ -7,6 +7,8 @@ use Facebook\WebDriver\WebDriverSelect;
  *
  * Scenarios :
  *  - As a group manager I can edit a group using the right click contextual menu
+ *  - As a group manager I shouldn't be able to edit a group I don't manager from the contextual menu
+ *  - As a group manager As a GM I can edit a group from the sidebar
  *  - As a group manager I shouldn’t be able to edit the group name
  *  - As a group manager I can edit the existing group members and promote a group member to group manager
  *  - As a group manager I cannot change the latest group manager role
@@ -48,6 +50,88 @@ class GMGroupEditTest extends PassboltTestCase {
 
 		// Then I should see the Edit group dialog
 		$this->waitUntilISee('.edit-group-dialog');
+	}
+
+	/**
+	 * Scenario :   As a group manager I shouldn't be able to edit groups from the users workspace
+	 *
+	 * Given        I am a group manager
+	 * And          I am on the user workspace
+	 * When         I select a group
+	 * Then         I should see that there is no dropdown button next to the groups
+	 */
+	public function testCantEditGroup() {
+		// Given I am a group manager
+		$user = User::get('ping');
+		$this->setClientConfig($user);
+
+		// I am logged in as admin
+		$this->loginAs($user);
+
+		// I am on the user workspace
+		$this->gotoWorkspace('user');
+
+		// When I select a group
+		$group = Group::get(['id' => Uuid::get('group.id.ergonom')]);
+		$this->clickGroup($group['id']);
+
+		// Then I should see that there is no dropdown button next to the groups
+		$this->assertNotVisible("#group_${$group['id']} .right-cell a");
+	}
+
+	/**
+	 * Scenario: As a GM I can edit a group from the sidebar
+	 *
+	 * Given	I am logged in as administrator
+	 * And		I am on the user workspace
+	 * And		I should see a “edit” button next to the Information section
+	 * When		I press the “Edit” button
+	 * Then 	I should see the Edit group dialog
+	 */
+	public function testEditGroupFromSidebar() {
+		// Given I am logged in as an administrator
+		$user = User::get('irene');
+		$this->setClientConfig($user);
+		$this->loginAs($user);
+		$this->gotoWorkspace('user');
+
+		// When I click a group name
+		$group = Group::get(['id' => Uuid::get('group.id.ergonom')]);
+		$this->clickGroup($group['id']);
+
+		// Then I should see a “edit” button next to the Information section
+		$editButtonSelector = '#js_group_details #js_group_details_members #js_edit_members_button';
+		$this->waitUntilISee($editButtonSelector);
+
+		// When I press the “Edit” button
+		$this->click($editButtonSelector);
+
+		// Then I should see the Edit group dialog
+		$this->waitUntilISee('.edit-group-dialog');
+	}
+
+	/**
+	 * Scenario: As a GM I shouldn't be able to edit a group I don't manager from the sidebar
+	 *
+	 * Given	I am logged in as administrator
+	 * And		I am on the user workspace
+	 * When		I click a group name
+	 * And		I should not see a “edit” button next to the Information section
+	 */
+	public function testCantEditGroupDontManageFromSidebar() {
+		// Given I am logged in as an administrator
+		$user = User::get('irene');
+		$this->setClientConfig($user);
+		$this->loginAs($user);
+		$this->gotoWorkspace('user');
+
+		// When I click a group name
+		$group = Group::get(['id' => Uuid::get('group.id.ergonom')]);
+		$this->clickGroup($group['id']);
+
+		// Then I should not see a “edit” button next to the Information section
+		$editButtonSelector = '#js_group_details #js_group_details_members #js_edit_members_button';
+		$this->assertNotVisible($editButtonSelector);
 	}
 
 	/**
@@ -324,4 +408,5 @@ class GMGroupEditTest extends PassboltTestCase {
 			$removedUser['FirstName'] . ' ' . $removedUser['LastName']
 		);
 	}
+
 }
