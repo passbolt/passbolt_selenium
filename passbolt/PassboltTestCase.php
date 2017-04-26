@@ -1029,7 +1029,7 @@ class PassboltTestCase extends WebDriverTestCase {
 	 */
 	public function sharePassword($password, $aroName, $user) {
 		$this->addTemporaryPermission($password, $aroName, $user);
-		$this->saveShareChanges();
+		$this->saveShareChanges($user);
 	}
 
 	public function saveShareChanges($user) {
