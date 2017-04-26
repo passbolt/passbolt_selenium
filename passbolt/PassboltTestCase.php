@@ -782,6 +782,23 @@ class PassboltTestCase extends WebDriverTestCase {
 	}
 
 	/**
+	 * Click on remove in the contextual menu of a group.
+	 * @param $id
+	 * @throws Exception
+	 */
+	public function goToRemoveGroup($id) {
+		if(!$this->isVisible('.page.people')) {
+			$this->getUrl('');
+			$this->waitUntilISee('.page.password');
+			$this->gotoWorkspace('user');
+			$this->waitUntilISee('.page.people');
+		}
+		$this->click("#group_${id} .right-cell a");
+		$this->click("#js_contextual_menu #js_group_browser_menu_remove a");
+		$this->waitUntilISee('.dialog.confirm');
+	}
+
+	/**
 	 * Put the focus inside the login iframe
 	 */
 	public function goIntoLoginIframe() {
@@ -871,6 +888,17 @@ class PassboltTestCase extends WebDriverTestCase {
 		$this->click('.create-password-dialog input[type=submit]');
 		$this->waitUntilIDontSee('#passbolt-iframe-progress-dialog');
 		$this->assertNotification('app_resources_add_success');
+	}
+
+	/**
+	 * Find a password id by name in the interface.
+	 * @param $name
+	 * @return uuid id
+	 */
+	public function findPasswordIdByName($name) {
+		$xpathSelector = "//div[contains(@class, 'tableview-content')]//tr[.//*[contains(text(),'" . $name . "')]]";
+		$resource = $this->findByXpath($xpathSelector);
+		return str_replace('resource_', '', $resource->getAttribute('id'));
 	}
 
 	/**
@@ -1001,7 +1029,10 @@ class PassboltTestCase extends WebDriverTestCase {
 	 */
 	public function sharePassword($password, $aroName, $user) {
 		$this->addTemporaryPermission($password, $aroName, $user);
+		$this->saveShareChanges();
+	}
 
+	public function saveShareChanges($user) {
 		// When I click on the save button
 		$this->click('js_rs_share_save');
 
@@ -1562,6 +1593,15 @@ class PassboltTestCase extends WebDriverTestCase {
 		$button = $this->find('confirm-button');
 		$button->click();
 	}
+
+	/**
+	 * Assert the action text of the confirmation dialog.
+	 */
+	public function assertActionNameInConfirmationDialog($text) {
+		$button = $this->find('confirm-button');
+		$this->assertEquals($button->getAttribute('value'), $text);
+	}
+
 	/**
 	 *
 	 * Click on the cancel button in the confirm dialog.
