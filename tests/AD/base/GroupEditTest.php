@@ -12,7 +12,7 @@ use Facebook\WebDriver\WebDriverSelect;
  * @copyright (c) 2017-present Passbolt SARL
  * @licence GNU Affero General Public License http://www.gnu.org/licenses/agpl-3.0.en.html
  */
-class AdminGroupEditTest extends PassboltTestCase {
+class ADGroupEditTest extends PassboltTestCase {
 
 	/**
 	 * Scenario: As an administrator I can edit a group using the right click contextual menu

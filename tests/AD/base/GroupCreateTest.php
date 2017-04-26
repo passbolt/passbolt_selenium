@@ -18,7 +18,7 @@ use Facebook\WebDriver\WebDriverSelect;
  * @copyright (c) 2017-present Passbolt SARL
  * @licence GNU Affero General Public License http://www.gnu.org/licenses/agpl-3.0.en.html
  */
-class AdminGroupCreateTest extends PassboltTestCase {
+class ADGroupCreateTest extends PassboltTestCase {
 
 	/**
 	 * Scenario :   As an administrator I can click on create group and see that the create group dialog exists.

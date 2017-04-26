@@ -15,7 +15,7 @@
  * @copyright (c) 2017-present Passbolt SARL
  * @licence GNU Affero General Public License http://www.gnu.org/licenses/agpl-3.0.en.html
  */
-class GroupDeleteTest extends PassboltTestCase {
+class ADGroupDeleteTest extends PassboltTestCase {
 
 	/**
 	 * Scenario: As an administrator I can delete a group that doesn't have any passwords shared with it.
