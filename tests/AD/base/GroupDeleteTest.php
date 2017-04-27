@@ -186,7 +186,7 @@ class ADGroupDeleteTest extends PassboltTestCase {
 		sleep(2);
 
 		// Assert that the group name is still there.
-		$this->waitUntilIDontSee("#js_wsp_users_groups_list #group_${groupId}");
+		$this->waitUntilISee("#js_wsp_users_groups_list #group_${groupId}");
 	}
 
 	/**
