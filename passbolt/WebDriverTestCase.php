@@ -789,7 +789,9 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
         $backtrace = debug_backtrace();
 	    $id = is_array($ids) ? implode(",", $ids) : $ids;
 	    $regexp = is_array($regexps) ? implode (",", $regexps) : $regexps;
-        throw new Exception( "waitUntilISee $id, $regexp\nTimeout thrown by " . $backtrace[1]['class'] . "::" . $backtrace[1]['function'] . "()\n . element(s): $id ($regexp)");
+
+	    // Fail if not found.
+	    $this->fail("waitUntilISee $id, $regexp\nTimeout thrown by " . $backtrace[1]['class'] . "::" . $backtrace[1]['function'] . "()\n . element(s): $id ($regexp)");
     }
 
 	/**
@@ -876,7 +878,7 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
 		}
 
 		$backtrace = debug_backtrace();
-		throw new Exception( "waitUntilIDontSee $id, $regexp : Timeout thrown by " . $backtrace[1]['class'] . "::" . $backtrace[1]['function'] . "()\n . element: $id ($regexp)");
+		$this->fail("waitUntilIDontSee $id, $regexp : Timeout thrown by " . $backtrace[1]['class'] . "::" . $backtrace[1]['function'] . "()\n . element: $id ($regexp)");
 	}
 
 	/**
@@ -922,7 +924,7 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
 		$i = 0;
 		while (!(sizeof($this->driver->getWindowHandles()) > $windowsCount)) {
 			if ($i > $loops) {
-				throw new Exception("Couldn't open a new window");
+				$this->fail("Couldn't open a new window");
 			}
 			$second = 1000000;
 			usleep(($second * $timeout) / $loops);
@@ -947,7 +949,7 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
 	public function switchToWindow($windowId) {
 		$windowHandles = $this->driver->getWindowHandles();
 		if (!isset($windowHandles[$windowId])) {
-			throw new Exception("Couldn't switch to window/tab " . $windowId);
+			$this->fail("Couldn't switch to window/tab " . $windowId);
 		}
 		$this->driver->switchTo()->window($windowHandles[$windowId]);
 	}
