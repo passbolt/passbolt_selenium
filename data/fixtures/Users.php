@@ -79,16 +79,16 @@ class User {
 					'PrivateKey' => 'edith_private.key'
 				));
 				break;
-			case 'frances':
+			case 'grace':
 				return array_merge($conf,array(
-					'id' => Uuid::get('user.id.frances'),
-					'name' => 'frances',
-					'FirstName' => 'Frances',
-					'LastName' => 'Allen',
-					'Username' => 'frances@passbolt.com',
-					'MasterPassword' => 'frances@passbolt.com',
-					'TokenCode' => 'FRA',
-					'PrivateKey' => 'frances_private.key'
+					'id' => Uuid::get('user.id.grace'),
+					'name' => 'grace',
+					'FirstName' => 'Grace',
+					'LastName' => 'Hopper',
+					'Username' => 'grace@passbolt.com',
+					'MasterPassword' => 'grace@passbolt.com',
+					'TokenCode' => 'GRA',
+					'PrivateKey' => 'grace_private.key'
 				));
 				break;
 			case 'irene':
@@ -101,6 +101,18 @@ class User {
 					'MasterPassword' => 'irene@passbolt.com',
 					'TokenCode' => 'IRN',
 					'PrivateKey' => 'irene_private.key'
+				));
+				break;
+			case 'jean':
+				return array_merge($conf,array(
+					'id' => Uuid::get('user.id.jean'),
+					'name' => 'jean',
+					'FirstName' => 'Jean',
+					'LastName' => 'Bartik',
+					'Username' => 'jean@passbolt.com',
+					'MasterPassword' => 'jean@passbolt.com',
+					'TokenCode' => 'JEA',
+					'PrivateKey' => 'jean_private.key'
 				));
 				break;
 			case 'ping':

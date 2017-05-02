@@ -8,6 +8,7 @@ use Facebook\WebDriver\WebDriverSelect;
  * Scenarios :
  *  - As an administrator I can edit a group using the right click contextual menu
  *  - As an administrator I can edit the group name
+ *  - As an administrator I can edit a group from the sidebar
  *
  * @copyright (c) 2017-present Passbolt SARL
  * @licence GNU Affero General Public License http://www.gnu.org/licenses/agpl-3.0.en.html
@@ -88,6 +89,37 @@ class ADGroupEditTest extends PassboltTestCase {
 
 		// And I should see that the group name has been changed in the groups list
 		$this->waitUntilISee('js_wsp_users_groups_list', '/' . $groupNameUpdate . '/');
+	}
+
+	/**
+	 * Scenario: As an administrator I can edit a group from the sidebar
+	 *
+	 * Given	I am logged in as administrator
+	 * And		I am on the user workspace
+	 * And		I should see a “edit” button next to the Information section
+	 * When		I press the “Edit” button
+	 * Then 	I should see the Edit group dialog
+	 */
+	public function testEditGroupFromSidebar() {
+		// Given I am logged in as an administrator
+		$user = User::get('admin');
+		$this->setClientConfig($user);
+		$this->loginAs($user);
+		$this->gotoWorkspace('user');
+
+		// When I click a group name
+		$group = Group::get(['id' => Uuid::get('group.id.ergonom')]);
+		$this->clickGroup($group['id']);
+
+		// Then I should see a “edit” button next to the Information section
+		$editButtonSelector = '#js_group_details #js_group_details_members #js_edit_members_button';
+		$this->waitUntilISee($editButtonSelector);
+
+		// When I press the “Edit” button
+		$this->click($editButtonSelector);
+
+		// Then I should see the Edit group dialog
+		$this->waitUntilISee('.edit-group-dialog');
 	}
 
 }

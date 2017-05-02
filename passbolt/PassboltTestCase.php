@@ -2094,6 +2094,30 @@ class PassboltTestCase extends WebDriverTestCase {
 	}
 
 	/**
+	 * Assert group member from sidebar
+	 * @param $groupId
+	 * @param $user
+	 * @param $isAdmin
+	 */
+	public function assertGroupMemberInSidebar($groupId, $user, $isAdmin = false) {
+		$this->gotoWorkspace('user');
+		if (!$this->isGroupSelected($groupId)) {
+			$this->clickGroup($groupId);
+		}
+
+		// Then I should see that the sidebar contains a member section
+		$this->waitUntilISee('#js_group_details.ready #js_group_details_members');
+
+		// And I should see that the members sections contains the list of users that are members of this group
+		$userFullName = $user['FirstName'] . ' ' . $user['LastName'];
+		$rowElement = $this->findByXpath('//*[@id="js_group_details_members"]//*[contains(text(), "' . $userFullName . '")]//ancestor::li');
+
+		// And I should see that below each user I can see his membership type
+		$memberRoleElt = $rowElement->findElement(WebDriverBy::cssSelector('.subinfo'));
+		$this->assertEquals($isAdmin ? 'Group manager' : 'Member', $memberRoleElt->getText());
+	}
+
+	/**
 	 * Assert that the toggle button is in the given status (pressed or unpressed)
 	 * @param $id
 	 * @param int $status

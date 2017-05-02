@@ -16,6 +16,7 @@
  * As a user I can share a password with other users
  * As a user I can share a password with other users, and see them immediately in the sidebar
  * As a user I can share a password with a groups
+ * As a user I can unshare a password with a group
  * As a user I edit the permissions of a password I own
  * As a user I delete a permission of a password I own
  * As a user I should not let a resource without at least one owner
@@ -778,6 +779,66 @@ class PasswordShareTest extends PassboltTestCase
 
 		// And the content of the clipboard is valid
 		$this->assertClipboard($resource['password']);
+	}
+
+	/**
+	 * @group saucelabs
+	 * Scenario: As a user I can unshare a password with a group
+	 *
+	 * Given    I am Carol
+	 * And      I am logged in on the password workspace
+	 * When     I go to the sharing dialog of a password I own
+	 * And		I remove the access for a user
+	 * Then     I can see a success message
+	 * When     I logout and I login with the user who lost the access on the password
+	 * And      I go to the password workspace
+	 * And      I shouldn't see anymore the password in the list
+	 */
+	public function testUnsharePasswordWithGroupAndView() {
+		// Reset database at the end of test.
+		$this->resetDatabaseWhenComplete();
+
+		// Given I am Carol
+		$user = User::get('ada');
+		$this->setClientConfig($user);
+
+		// And I am logged in on the password workspace
+		$this->loginAs($user);
+
+		// When I go to the sharing dialog of a password I own
+		$resource = Resource::get(array(
+			'user' => 'ada',
+			'id' => Uuid::get('resource.id.enlightenment')
+		));
+		$this->gotoSharePassword($resource['id']);
+
+		// Then I can see freelancer has a permission on the password
+		$this->assertElementContainsText(
+			$this->findByCss('#js_permissions_list'),
+			'Freelancer'
+		);
+
+		// When I delete a group permission
+		$group = Group::get(['id' => Uuid::get('group.id.freelancer')]);
+		$this->deletePermission($resource, $group['name']);
+
+		// And I see a notice message that the operation was a success
+		$this->assertNotification('app_share_update_success');
+
+		// When I logout and I login with a user who is member of the group
+		$this->logout();
+		$user = User::get('jean');
+		$this->setClientConfig($user);
+		$this->loginAs($user);
+
+		// And I go to the password workspace
+		$this->gotoWorkspace('password');
+
+		// Then I shouldn't see anymore the password in the list
+		$this->assertElementNotContainText(
+			$this->find('#js_wsp_pwd_browser'),
+			$resource['name']
+		);
 	}
 
 	/**

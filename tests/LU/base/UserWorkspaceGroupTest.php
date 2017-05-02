@@ -1,11 +1,19 @@
 <?php
-
+/**
+ * Feature : User Workspace and group feature
+ *
+ * - As a user I can browse the list of all the groups in the groups section of the user workspace
+ * - As a user I can see the list users that are part of the group in the users grid by using the group filter
+ *
+ * @copyright (c) 2015-present Bolt Softwares Pvt Ltd
+ * @licence GNU Affero General Public License http://www.gnu.org/licenses/agpl-3.0.en.html
+ */
 class UserWorkspaceGroupTest extends PassboltTestCase {
 	/**
 	 * @group saucelabs
 	 * Scenario :   As a user I can browse the list of all the groups in the groups section of the user workspace
 	 *
-	 * Given        I am logged in as LU (Ada), and I go to the user workspace
+	 * Given        I am logged in as LU, and I go to the user workspace
 	 * Then			I should see the list of groups available in the left hand sidebar
 	 */
 	public function testGroupIndex() {
@@ -30,7 +38,8 @@ class UserWorkspaceGroupTest extends PassboltTestCase {
 	/**
 	 * @group saucelabs
 	 * Scenario :   As a user I can see the list users that are part of the group in the users grid by using the group filter
-	 * Given        I am logged in as Ada, and I go to the user workspace
+	 *
+	 * Given        I am logged in as LU, and I go to the user workspace
 	 * When         I click on a group name
 	 * Then         I should see that the given group is selected
 	 * And          I should see that the list of users display only the users that are part of this group.
