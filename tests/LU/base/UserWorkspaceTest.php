@@ -305,11 +305,9 @@ class UserWorkspaceTest extends PassboltTestCase {
 		$this->waitUntilISee('js_wsp_users_breadcrumb', "/Search : $searchUser/");
 
 		// I should see the view filtered with my search
+		$this->waitCompletion();
 		$userBrowser = $this->find('#js_wsp_users_browser .tableview-content');
-		$this->assertElementContainsText(
-			$userBrowser,
-			$searchUser
-		);
+		$this->assertElementContainsText($userBrowser, $searchUser);
 		for ($i=0; $i< count($hiddenUsers); $i++) {
 			$this->assertElementNotContainText(
 				$userBrowser,
