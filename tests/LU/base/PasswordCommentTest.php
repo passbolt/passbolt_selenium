@@ -107,7 +107,7 @@ class PasswordCommentTest extends PassboltTestCase {
 		$this->loginAs($user);
 
 		// When I click on a password I own
-		$resource = Resource::get(array('user' => 'ada', 'permission' => 'owner'));
+		$resource = Resource::get(array('user' => 'ada', 'id' => Uuid::get('resource.id.bower')));
 		$this->clickPassword($resource['id']);
 
 		// Make sure password field is visible
@@ -122,11 +122,6 @@ class PasswordCommentTest extends PassboltTestCase {
 		$this->assertVisible('#js_rs_details_comments .js_comment_content_feedback');
 		$this->assertElementContainsText(
 			$this->find('#js_rs_details_comments .js_comment_content_feedback'), 'This information is required'
-		);
-
-		$this->inputText('js_field_comment_content', 'aa');
-		$this->assertElementContainsText(
-			$this->find('#js_rs_details_comments .js_comment_content_feedback'), 'Comment should be between'
 		);
 
 		$this->inputText('js_field_comment_content', 'test<');

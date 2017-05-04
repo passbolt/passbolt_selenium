@@ -6,6 +6,16 @@
  * @copyright (c) 2015-present Bolt Softwares Pvt Ltd
  * @licence GNU Affero General Public License http://www.gnu.org/licenses/agpl-3.0.en.html
  */
+
+use Facebook\WebDriver\Firefox\FirefoxDriver;
+use Facebook\WebDriver\Firefox\FirefoxProfile;
+use Facebook\WebDriver\Chrome\ChromeOptions;
+use Facebook\WebDriver\Remote\DesiredCapabilities;
+use Facebook\WebDriver\Remote\RemoteWebDriver;
+use Facebook\WebDriver\WebDriverBy;
+use Facebook\WebDriver\WebDriverKeys;
+use Facebook\WebDriver\Exception\NoSuchElementException;
+
 class WebDriverTestCase extends PHPUnit_Framework_TestCase {
 
     public $driver;             // @var RemoteWebDriver $driver
@@ -125,11 +135,6 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
 			$this->_browserController = new FirefoxBrowserController($this->driver, $this);
 		} else {
 			$this->_browserController = new ChromeBrowserController($this->driver, $this);
-		}
-
-		// Redirect it immediately to an empty page, so we avoid the default firefox home page.
-		if ($this->_browser['type'] == 'firefox') {
-			$this->driver->get('');
 		}
 	}
 
@@ -336,6 +341,9 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
                 // Set download preferences for the browser.
                 $profile->setPreference("browser.download.folderList", 2);
 				$profile->setPreference("xpinstall.signatures.required", false);
+				$profile->setPreference("browser.startup.page", 0); // Empty start page
+				$profile->setPreference("browser.startup.homepage_override.mstone", "ignore"); // Suppress the "What's new" page
+
 
                 $capabilities->setCapability(FirefoxDriver::PROFILE, $profile);
             break;
@@ -558,6 +566,16 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
         return $this->driver->findElement(WebDriverBy::cssSelector($css));
     }
 
+	/**
+	 * Find all elements by a CSS selector
+	 * @param $css
+	 * @return mixed
+	 * @throws NoSuchElementException
+	 */
+	public function findAllByCss($css) {
+		return $this->driver->findElements(WebDriverBy::cssSelector($css));
+	}
+
     /**
      * Find an element by a XPath selector
      * @param $xpath
@@ -771,7 +789,9 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
         $backtrace = debug_backtrace();
 	    $id = is_array($ids) ? implode(",", $ids) : $ids;
 	    $regexp = is_array($regexps) ? implode (",", $regexps) : $regexps;
-        throw new Exception( "waitUntilISee $id, $regexp\nTimeout thrown by " . $backtrace[1]['class'] . "::" . $backtrace[1]['function'] . "()\n . element(s): $id ($regexp)");
+
+	    // Fail if not found.
+	    $this->fail("waitUntilISee $id, $regexp\nTimeout thrown by " . $backtrace[1]['class'] . "::" . $backtrace[1]['function'] . "()\n . element(s): $id ($regexp)");
     }
 
 	/**
@@ -858,7 +878,7 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
 		}
 
 		$backtrace = debug_backtrace();
-		throw new Exception( "waitUntilIDontSee $id, $regexp : Timeout thrown by " . $backtrace[1]['class'] . "::" . $backtrace[1]['function'] . "()\n . element: $id ($regexp)");
+		$this->fail("waitUntilIDontSee $id, $regexp : Timeout thrown by " . $backtrace[1]['class'] . "::" . $backtrace[1]['function'] . "()\n . element: $id ($regexp)");
 	}
 
 	/**
@@ -904,7 +924,7 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
 		$i = 0;
 		while (!(sizeof($this->driver->getWindowHandles()) > $windowsCount)) {
 			if ($i > $loops) {
-				throw new Exception("Couldn't open a new window");
+				$this->fail("Couldn't open a new window");
 			}
 			$second = 1000000;
 			usleep(($second * $timeout) / $loops);
@@ -929,7 +949,7 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
 	public function switchToWindow($windowId) {
 		$windowHandles = $this->driver->getWindowHandles();
 		if (!isset($windowHandles[$windowId])) {
-			throw new Exception("Couldn't switch to window/tab " . $windowId);
+			$this->fail("Couldn't switch to window/tab " . $windowId);
 		}
 		$this->driver->switchTo()->window($windowHandles[$windowId]);
 	}
@@ -1038,11 +1058,11 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
 	 * Check if Meta title contains the given title.
 	 * @param $title
 	 */
-		public function assertMetaTitleContains($title) {
-			$source = $this->driver->getPageSource();
-			$contains = preg_match("/<title>$title<\\/title>/", $source);
-			$this->assertTrue($contains == 1, sprintf("Failed asserting that meta title contains '%s'", $title));
-		}
+	public function assertMetaTitleContains($title) {
+		$source = $this->driver->getPageSource();
+		$contains = preg_match("/<title>$title<\\/title>/", $source);
+		$this->assertTrue($contains == 1, sprintf("Failed asserting that meta title contains '%s'", $title));
+	}
 
     /**
      * Assert if the page contains the given element

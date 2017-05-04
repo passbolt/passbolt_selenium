@@ -35,15 +35,18 @@
         "vendor-dir": "passbolt/vendor"
     },
     "require": {
-        "php": ">=5.3.19",
+        "php": ">=5.5",
         "nategood/httpful": "*",
-        "sauce/sausage": ">=0.15.2"
+        "sauce/sausage": ">=0.15.2",
+        "facebook/webdriver": ">=1.0.0"
     },
     "require-dev": {
         "phpunit/phpunit": "5.5.*",
         "brianium/paratest": "0.14.*"
     },
     "autoload": {
-        "classmap": ["lib/"]
+        "classmap": [
+            "passbolt/vendor/facebook/webdriver/lib/"
+        ]
     }
 }

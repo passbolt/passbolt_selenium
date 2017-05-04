@@ -20,7 +20,6 @@ require_once('Config.php');
 Config::get();
 
 // Vendor dependencies.
-require_once(ROOT . '/lib/__init__.php');
 require_once('vendor/autoload.php');
 
 // ImageCompare
@@ -52,5 +51,6 @@ require_once('FirefoxBrowserController.php');
 // Fixtures classes
 require_once(FIXTURES . 'Users.php');
 require_once(FIXTURES . 'Resources.php');
+require_once(FIXTURES . 'Groups.php');
 require_once(FIXTURES . 'Gpgkeys.php');
 require_once(FIXTURES . 'SystemDefaults.php');

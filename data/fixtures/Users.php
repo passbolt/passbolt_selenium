@@ -79,6 +79,90 @@ class User {
 					'PrivateKey' => 'edith_private.key'
 				));
 				break;
+			case 'grace':
+				return array_merge($conf,array(
+					'id' => Uuid::get('user.id.grace'),
+					'name' => 'grace',
+					'FirstName' => 'Grace',
+					'LastName' => 'Hopper',
+					'Username' => 'grace@passbolt.com',
+					'MasterPassword' => 'grace@passbolt.com',
+					'TokenCode' => 'GRA',
+					'PrivateKey' => 'grace_private.key'
+				));
+				break;
+			case 'irene':
+				return array_merge($conf,array(
+					'id' => Uuid::get('user.id.irene'),
+					'name' => 'irene',
+					'FirstName' => 'Irene',
+					'LastName' => 'Greif',
+					'Username' => 'irene@passbolt.com',
+					'MasterPassword' => 'irene@passbolt.com',
+					'TokenCode' => 'IRN',
+					'PrivateKey' => 'irene_private.key'
+				));
+				break;
+			case 'jean':
+				return array_merge($conf,array(
+					'id' => Uuid::get('user.id.jean'),
+					'name' => 'jean',
+					'FirstName' => 'Jean',
+					'LastName' => 'Bartik',
+					'Username' => 'jean@passbolt.com',
+					'MasterPassword' => 'jean@passbolt.com',
+					'TokenCode' => 'JEA',
+					'PrivateKey' => 'jean_private.key'
+				));
+				break;
+			case 'ping':
+				return array_merge($conf,array(
+					'id' => Uuid::get('user.id.ping'),
+					'name' => 'ping',
+					'FirstName' => 'Ping',
+					'LastName' => 'Fu',
+					'Username' => 'ping@passbolt.com',
+					'MasterPassword' => 'ping@passbolt.com',
+					'TokenCode' => 'PNG',
+					'PrivateKey' => 'ping_private.key'
+				));
+				break;
+			case 'thelma':
+				return array_merge($conf,array(
+					'id' => Uuid::get('user.id.thelma'),
+					'name' => 'thelma',
+					'FirstName' => 'Thelma',
+					'LastName' => 'Estrin',
+					'Username' => 'thelma@passbolt.com',
+					'MasterPassword' => 'thelma@passbolt.com',
+					'TokenCode' => 'THL',
+					'PrivateKey' => 'thelma_private.key'
+				));
+				break;
+			case 'ursula':
+				return array_merge($conf,array(
+					'id' => Uuid::get('user.id.ursula'),
+					'name' => 'ursula',
+					'FirstName' => 'Ursula',
+					'LastName' => 'Martin',
+					'Username' => 'ursula@passbolt.com',
+					'MasterPassword' => 'ursula@passbolt.com',
+					'TokenCode' => 'USL',
+					'PrivateKey' => 'ursula_private.key'
+				));
+				break;
+			case 'wang':
+				return array_merge($conf,array(
+					'id' => Uuid::get('user.id.wang'),
+					'name' => 'wang',
+					'FirstName' => 'Wang',
+					'LastName' => 'Xiaoyun',
+					'Username' => 'wang@passbolt.com',
+					'MasterPassword' => 'wang@passbolt.com',
+					'TokenCode' => 'WNG',
+					'PrivateKey' => 'wang_private.key'
+				));
+				break;
 	        case 'admin':
 		        return array_merge($conf,array(
 			        'id' => Uuid::get('user.id.admin'),

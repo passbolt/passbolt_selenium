@@ -2,6 +2,13 @@
 define('TOGGLE_BUTTON_PRESSED', 1);
 define('TOGGLE_BUTTON_UNPRESSED', 0);
 
+use Facebook\WebDriver\WebDriverBy;
+use Facebook\WebDriver\WebDriverKeys;
+use Facebook\WebDriver\WebDriverSelect;
+use Facebook\WebDriver\Exception\NoSuchElementException;
+use Facebook\WebDriver\Exception\StaleElementReferenceException;
+use Facebook\WebDriver\Remote\DriverCommand;
+
 /**
  * Passbolt Test Case
  * The base class for test cases related to passbolt.
@@ -557,7 +564,6 @@ class PassboltTestCase extends WebDriverTestCase {
 		}
 	}
 
-
 	/**
 	 * go To Recover page.
 	 * @throws Exception
@@ -751,6 +757,48 @@ class PassboltTestCase extends WebDriverTestCase {
 	}
 
 	/**
+	 * Goto the edit group dialog for a given group id
+	 * @param $id string
+	 * @throws Exception
+	 */
+	public function gotoEditGroup($id) {
+		if(!$this->isVisible('.page.people')) {
+			$this->getUrl('');
+			$this->waitUntilISee('.page.password');
+			$this->gotoWorkspace('user');
+			$this->waitUntilISee('.page.people');
+		}
+		if(!$this->isVisible('.edit-group-dialog')) {
+			$this->click("#group_${id} .right-cell a");
+			$this->click("#js_contextual_menu #js_group_browser_menu_edit a");
+			$this->waitUntilISee('.edit-group-dialog');
+			$this->waitUntilISee('#js_edit_group.ready');
+			try {
+				$this->find('#passbolt-iframe-group-edit');
+				$this->waitUntilISee('#passbolt-iframe-group-edit.ready');
+			} catch(Exception $e) {
+			}
+		}
+	}
+
+	/**
+	 * Click on remove in the contextual menu of a group.
+	 * @param $id
+	 * @throws Exception
+	 */
+	public function goToRemoveGroup($id) {
+		if(!$this->isVisible('.page.people')) {
+			$this->getUrl('');
+			$this->waitUntilISee('.page.password');
+			$this->gotoWorkspace('user');
+			$this->waitUntilISee('.page.people');
+		}
+		$this->click("#group_${id} .right-cell a");
+		$this->click("#js_contextual_menu #js_group_browser_menu_remove a");
+		$this->waitUntilISee('.dialog.confirm');
+	}
+
+	/**
 	 * Put the focus inside the login iframe
 	 */
 	public function goIntoLoginIframe() {
@@ -796,6 +844,20 @@ class PassboltTestCase extends WebDriverTestCase {
 	}
 
 	/**
+	 * Put the focus inside the add user iframe
+	 */
+	public function goIntoAddUserIframe() {
+		$this->driver->switchTo()->frame('passbolt-iframe-group-edit');
+	}
+
+	/**
+	 * Put the focus inside the add user autocomplete iframe
+	 */
+	public function goIntoAddUserAutocompleteIframe() {
+		$this->driver->switchTo()->frame('passbolt-iframe-group-edit-autocomplete');
+	}
+
+	/**
 	 * Put the focus back to the normal context
 	 */
 	public function goOutOfIframe() {
@@ -826,6 +888,17 @@ class PassboltTestCase extends WebDriverTestCase {
 		$this->click('.create-password-dialog input[type=submit]');
 		$this->waitUntilIDontSee('#passbolt-iframe-progress-dialog');
 		$this->assertNotification('app_resources_add_success');
+	}
+
+	/**
+	 * Find a password id by name in the interface.
+	 * @param $name
+	 * @return uuid id
+	 */
+	public function findPasswordIdByName($name) {
+		$xpathSelector = "//div[contains(@class, 'tableview-content')]//tr[.//*[contains(text(),'" . $name . "')]]";
+		$resource = $this->findByXpath($xpathSelector);
+		return str_replace('resource_', '', $resource->getAttribute('id'));
 	}
 
 	/**
@@ -879,19 +952,40 @@ class PassboltTestCase extends WebDriverTestCase {
 	}
 
 	/**
-	 * Search a user to share a password with.
+	 * Helper to create a group
+	 */
+	public function createGroup($group, $users, $creator) {
+		$this->gotoWorkspace('user');
+		$this->gotoCreateGroup();
+
+		// Fill group name
+		$this->click('js_field_name');
+		$this->inputText('js_field_name', $group['name']);
+
+		// Insert group users
+		foreach ($users as $userAlias) {
+			$user = User::get($userAlias);
+			$this->searchGroupUserToAdd($user, $creator);
+			$this->addTemporaryGroupUser($user);
+		}
+		$this->click('.edit-group-dialog a.button.primary');
+		$this->assertNotification('app_groups_add_success');
+		$this->waitUntilIDontSee('.edit-group-dialog');
+	}
+
+	/**
+	 * Search an aro (User or Group) to share a password with.
 	 * @param $password
-	 * @param $username
+	 * @param $aroName
 	 * @param $user
 	 */
-	public function searchUserToGrant($password, $username, $user) {
+	public function searchAroToGrant($password, $aroName, $user) {
 		$this->gotoSharePassword($password['id']);
-		$shareWithUser = User::get($username);
 
 		// I enter the username I want to share the password with in the autocomplete field
 		$this->goIntoShareIframe();
 		$this->assertSecurityToken($user, 'share');
-		$this->inputText('js_perm_create_form_aro_auto_cplt', $shareWithUser['FirstName'], true);
+		$this->inputText('js_perm_create_form_aro_auto_cplt', $aroName, true);
 		$this->click('.security-token');
 		$this->goOutOfIframe();
 
@@ -902,23 +996,21 @@ class PassboltTestCase extends WebDriverTestCase {
 	/**
 	 * Add a temporary permission helper
 	 * @param $password
-	 * @param $username
+	 * @param $aroName
 	 * @param $user
 	 * @throws Exception
 	 */
-	public function addTemporaryPermission($password, $username, $user) {
-		$shareWithUser = User::get($username);
-		$shareWithUserFullName = $shareWithUser['FirstName'] . ' ' . $shareWithUser['LastName'];
-
+	public function addTemporaryPermission($password, $aroName, $user) {
 		// Search the user to grant.
-		$this->searchUserToGrant($password, $username, $user);
+		$this->searchAroToGrant($password, $aroName, $user);
 
 		// I wait until I see the automplete field resolved
 		$this->goIntoShareAutocompleteIframe();
-		$this->waitUntilISee('.autocomplete-content', '/' . $shareWithUserFullName . '/i');
+		$this->waitUntilISee('.autocomplete-content', '/' . $aroName . '/i');
 
 		// I click on the username link the autocomplete field retrieved.
-		$this->click($shareWithUser['id']);
+		$element = $this->findByXpath('//*[contains(., "' . $aroName . '")]//ancestor::li[1]');
+		$element->click();
 		$this->goOutOfIframe();
 
 		// I can see that temporary changes are waiting to be saved
@@ -931,13 +1023,16 @@ class PassboltTestCase extends WebDriverTestCase {
 	/**
 	 * Share a password helper
 	 * @param $password
-	 * @param $username
+	 * @param $aroName
 	 * @param $user
 	 * @throws Exception
 	 */
-	public function sharePassword($password, $username, $user) {
-		$this->addTemporaryPermission($password, $username, $user);
+	public function sharePassword($password, $aroName, $user) {
+		$this->addTemporaryPermission($password, $aroName, $user);
+		$this->saveShareChanges($user);
+	}
 
+	public function saveShareChanges($user) {
 		// When I click on the save button
 		$this->click('js_rs_share_save');
 
@@ -1068,6 +1163,136 @@ class PassboltTestCase extends WebDriverTestCase {
 	}
 
 	/**
+	 * Search a user to add to a group.
+	 * @param $userToAdd
+	 * @param $user
+	 */
+	public function searchGroupUserToAdd($userToAdd, $user) {
+		// I enter the username I want to share the password with in the autocomplete field
+		$this->goIntoAddUserIframe();
+		$this->assertSecurityToken($user, 'group');
+		$this->inputText('js_group_edit_form_auto_cplt', strtolower($userToAdd['FirstName']), true);
+		$this->click('.security-token');
+		$this->goOutOfIframe();
+
+		// I wait the autocomplete box is loaded.
+		$this->waitCompletion(10, '#passbolt-iframe-group-edit-autocomplete.loaded');
+
+		$this->goIntoAddUserAutocompleteIframe();
+		$userFullName = $userToAdd['FirstName'] . ' ' . $userToAdd['LastName'];
+
+		try {
+			$this->waitUntilISee('.autocomplete-content', '/' . $userFullName . '/i');
+		} catch(Exception $e) {
+			$this->goOutOfIframe();
+			throw new Exception("Could not find the requested user '$userFullName' in the autocomplete list");
+		}
+
+		$this->goOutOfIframe();
+	}
+
+	/**
+	 * Add a temporary user to a gtoup.
+	 * @param $user
+	 * @return HTML element added in the list
+	 */
+	public function addTemporaryGroupUser($user) {
+		$userFullName = $user['FirstName'] . ' ' . $user['LastName'];
+		// I wait until I see the automplete field resolved
+		$this->goIntoAddUserAutocompleteIframe();
+		$this->waitUntilISee('.autocomplete-content', '/' . $userFullName . '/i');
+
+		// I click on the username link the autocomplete field retrieved.
+		$element = $this->findByXpath('//*[contains(., "' . $userFullName . '")]//ancestor::li[1]');
+		$element->click();
+		$this->goOutOfIframe();
+
+		$elt = $this->getTemporaryGroupUserElement($user);
+		return $elt;
+	}
+
+	/**
+	 * Edit temporary a group user role.
+	 * @param $user
+	 * @param $isAdmin
+	 * @return HTML element added in the list
+	 */
+	public function editTemporaryGroupUserRole($user, $isAdmin) {
+		$groupUserElement = $this->getTemporaryGroupUserElement($user);
+		$select = new WebDriverSelect($groupUserElement->findElement(WebDriverBy::cssSelector('select')));
+		$select->selectByVisibleText($isAdmin ? 'Group manager' : 'Member');
+	}
+
+	/**
+	 * Get temporary group user properties
+	 * @param $user
+	 * @return array $properties
+	 *  bool role_disabled
+	 *  bool delete_disabled
+	 *  bool role
+	 */
+	public function getTemporaryGroupUserProperties($user) {
+		$properties = [];
+
+		$userElt = $this->getTemporaryGroupUserElement($user);
+
+		// I should see that the user role for the group can't be changed.
+		$roleSelect = $userElt->findElement(WebDriverBy::cssSelector('.js_group_user_is_admin'));
+		$properties['role_disabled'] = $roleSelect->getAttribute('disabled') == 'true' ? true:false;
+		$properties['role'] = $roleSelect->getAttribute('value') == '1' ? 'Group manager' : 'Member';
+
+		// I should see that the user can't be deleted (because he is the only group manager
+		$deleteBtn = $userElt->findElement(WebDriverBy::cssSelector('.js_group_user_delete'));
+		$properties['delete_disabled'] = $deleteBtn->getAttribute('disabled') == 'true' ? true:false;
+
+		return $properties;
+	}
+
+	/**
+	 * Get a temporary user element from the list
+	 * @param $user
+	 * @throws Exception
+	 * @return Object $rowElement
+	 */
+	public function getTemporaryGroupUserElement($user) {
+		$userFullName = $user['FirstName'] . ' ' . $user['LastName'];
+
+		// I can see the user has a direct entry
+		$this->assertElementContainsText(
+			$this->findByCss('#js_permissions_list'),
+			$userFullName
+		);
+
+		// Find the permission row element
+		$rowElement = $this->findByXpath('//*[@id="js_permissions_list"]//*[.="' . $userFullName . '"]//ancestor::li[1]');
+
+		return $rowElement;
+	}
+
+	/**
+	 * Delete temporary group user
+	 *
+	 * @param $user
+	 */
+	public function deleteTemporaryGroupUser($user) {
+		$userElt = $this->getTemporaryGroupUserElement($user);
+		// I should see that the user can't be deleted (because he is the only group manager
+		$deleteBtn = $userElt->findElement(WebDriverBy::cssSelector('.js_group_user_delete'));
+		$deleteBtn->click();
+
+		// The entry should have disappeared from the list.
+		$elt = null;
+		try {
+			$elt = $this->getTemporaryGroupUserElement($user);
+		}
+		catch (Exception $e) {
+			// Do nothing. Element will remain null.
+		}
+		// Make sure that the element was not returned (because it doesn't exist).
+		$this->assertEquals($elt, null);
+	}
+
+	/**
 	 * Enter the password in the passphrase iframe
 	 * @param $pwd
 	 * @param $remember
@@ -1136,7 +1361,6 @@ class PassboltTestCase extends WebDriverTestCase {
 		$this->goOutOfIframe();
 	}
 
-
 	/**
 	 * Copy a password to clipboard
 	 * @param $resource
@@ -1161,7 +1385,26 @@ class PassboltTestCase extends WebDriverTestCase {
 			$this->waitUntilISee('#js_wsp_create_button');
 		}
 		$this->click('#js_wsp_create_button');
-		$this->assertVisible('.create-user-dialog');
+		$this->waitUntilISee('.main-action-wrapper ul.dropdown-content');
+		$this->click('.main-action-wrapper ul.dropdown-content li.create-user');
+		$this->waitUntilISee('.create-user-dialog');
+	}
+
+	/**
+	 * Go to the user workspace and click on the create group button
+	 */
+	public function gotoCreateGroup() {
+		if(!$this->isVisible('.page.people')) {
+			$this->getUrl('');
+			$this->waitUntilISee('.page.people');
+			$this->waitUntilISee('#js_wsp_create_button');
+		}
+		$this->click('#js_wsp_create_button');
+		$this->waitUntilISee('.main-action-wrapper ul.dropdown-content');
+
+		$this->click('.main-action-wrapper ul.dropdown-content li.create-group');
+		$this->waitUntilISee('.edit-group-dialog');
+		$this->waitUntilISee('#passbolt-iframe-group-edit.ready');
 	}
 
 	/**
@@ -1231,11 +1474,12 @@ class PassboltTestCase extends WebDriverTestCase {
 	public function gotoEditUser($id) {
 		if(!$this->isVisible('.page.people')) {
 			$this->getUrl('');
+			$this->waitUntilISee('.page.password');
 			$this->gotoWorkspace('user');
 			$this->waitUntilISee('.page.people');
 			$this->waitUntilISee('#js_user_wk_menu_edition_button');
 		}
-		$this->releaseFocus(); // we click somewhere in case the password is already active
+		$this->releaseFocus(); // we click somewhere in case the user is already active
 		$this->clickUser($id);
 		$this->click('js_user_wk_menu_edition_button');
 		$this->waitCompletion();
@@ -1275,6 +1519,45 @@ class PassboltTestCase extends WebDriverTestCase {
 	}
 
 	/**
+	 * Click on a group inside the user workspace.
+	 * @param string $id id of the group
+	 *
+	 * @throws Exception
+	 */
+	public function clickGroup($id) {
+		if(!$this->isVisible('.page.people')) {
+			$this->getUrl('');
+			$this->gotoWorkspace('user');
+			$this->waitUntilISee('.page.people');
+		}
+		$eltSelector = '#group_' . $id . ' .main-cell';
+		$this->click($eltSelector);
+		$this->waitCompletion();
+	}
+
+	/**
+	 * Check if the group has already been selected
+	 * @param $id string
+	 * @return bool
+	 */
+	public function isGroupSelected($id) {
+		$eltSelector = '#group_' . $id . ' .row';
+		if ($this->elementHasClass($eltSelector, 'selected')) {
+			return true;
+		}
+		return false;
+	}
+
+	/**
+	 * Check if the group has already been selected
+	 * @param $id string
+	 * @return bool
+	 */
+	public function isGroupNotSelected($id) {
+		return !$this->isGroupSelected($id);
+	}
+
+	/**
 	 * Empty a field like a user would do it.
 	 * Click on the field, go at the end of the text, and backspace to remove the whole text.
 	 * @param $id
@@ -1310,6 +1593,15 @@ class PassboltTestCase extends WebDriverTestCase {
 		$button = $this->find('confirm-button');
 		$button->click();
 	}
+
+	/**
+	 * Assert the action text of the confirmation dialog.
+	 */
+	public function assertActionNameInConfirmationDialog($text) {
+		$button = $this->find('confirm-button');
+		$this->assertEquals($button->getAttribute('value'), $text);
+	}
+
 	/**
 	 *
 	 * Click on the cancel button in the confirm dialog.
@@ -1589,6 +1881,10 @@ class PassboltTestCase extends WebDriverTestCase {
 					$this->waitUntilISee('js_perm_create_form_aro_auto_cplt');
 					$this->click('js_perm_create_form_aro_auto_cplt');
 					break;
+				case 'group':
+					$this->waitUntilISee('js_group_edit_form_auto_cplt');
+					$this->click('js_group_edit_form_auto_cplt');
+					break;
 				default:
 					$this->waitUntilISee('js_secret');
 					$this->click('js_secret');
@@ -1751,18 +2047,18 @@ class PassboltTestCase extends WebDriverTestCase {
 	 * @param $username
 	 * @param $permissionType
 	 */
-	public function assertPermissionInSidebar($username, $permissionType) {
+	public function assertPermissionInSidebar($aro_name, $permissionType) {
 		// Wait until the permissions are loaded. (ready state).
 		$this->waitUntilISee('#js_rs_details_permissions_list.ready');
 
 		// I can see the user has a direct permission
 		$this->assertElementContainsText(
 			$this->findByCss('#js_rs_details_permissions_list'),
-			$username
+			$aro_name
 		);
 
 		// Find the permission row element
-		$rowElement = $this->findByXpath('//*[@id="js_rs_details_permissions_list"]//*[contains(@class, "permission")]//*[contains(text(), "' . $username . '")]//ancestor::li');
+		$rowElement = $this->findByXpath('//*[@id="js_rs_details_permissions_list"]//*[contains(@class, "permission")]//*[contains(text(), "' . $aro_name . '")]//ancestor::li');
 
 		// I can see the permission is as expected
 		$permissionTypeElt = $rowElement->findElement(WebDriverBy::cssSelector('.subinfo'));
@@ -1782,6 +2078,43 @@ class PassboltTestCase extends WebDriverTestCase {
 			$this->findByCss('#js_permissions_list'),
 			$username
 		);
+	}
+
+	/**
+	 * Assert group member from edit dialog
+	 * @param $groupId
+	 * @param $user
+	 * @param $isAdmin
+	 */
+	public function assertGroupMemberInEditDialog($groupId, $user, $isAdmin = false) {
+		$this->gotoEditGroup($groupId);
+		$rowElement = $this->getTemporaryGroupUserElement($user);
+		$select = new WebDriverSelect($rowElement->findElement(WebDriverBy::cssSelector('select')));
+		$this->assertEquals($isAdmin ? 'Group manager' : 'Member', $select->getFirstSelectedOption()->getText());
+	}
+
+	/**
+	 * Assert group member from sidebar
+	 * @param $groupId
+	 * @param $user
+	 * @param $isAdmin
+	 */
+	public function assertGroupMemberInSidebar($groupId, $user, $isAdmin = false) {
+		$this->gotoWorkspace('user');
+		if (!$this->isGroupSelected($groupId)) {
+			$this->clickGroup($groupId);
+		}
+
+		// Then I should see that the sidebar contains a member section
+		$this->waitUntilISee('#js_group_details.ready #js_group_details_members');
+
+		// And I should see that the members sections contains the list of users that are members of this group
+		$userFullName = $user['FirstName'] . ' ' . $user['LastName'];
+		$rowElement = $this->findByXpath('//*[@id="js_group_details_members"]//*[contains(text(), "' . $userFullName . '")]//ancestor::li');
+
+		// And I should see that below each user I can see his membership type
+		$memberRoleElt = $rowElement->findElement(WebDriverBy::cssSelector('.subinfo'));
+		$this->assertEquals($isAdmin ? 'Group manager' : 'Member', $memberRoleElt->getText());
 	}
 
 	/**
@@ -1879,5 +2212,23 @@ class PassboltTestCase extends WebDriverTestCase {
 	 */
 	public function assertUserNotSelected($id) {
 		$this->assertTrue($this->isUserNotSelected($id));
+	}
+
+	/**
+	 * Assert a group is selected
+	 * @param $id string
+	 * @return bool
+	 */
+	public function assertGroupSelected($id) {
+		$this->assertTrue($this->isGroupSelected($id));
+	}
+
+	/**
+	 * Assert a group is selected
+	 * @param $id string
+	 * @return bool
+	 */
+	public function assertGroupNotSelected($id) {
+		$this->assertTrue($this->isGroupNotSelected($id));
 	}
 }
