@@ -143,6 +143,8 @@ class LoginTest extends PassboltTestCase {
 		}
 
 		$version = $versionElt->getAttribute('data-tooltip');
-		$this->assertRegExp('/^[0-9]{1,2}\.[0-9]{1,2}\.[0-9]{1,2}$/', $version);
+		$reg_version = '[0-9]{1,2}\.[0-9]{1,2}\.[0-9]{1,2}(-RC[0-9]){0,1}';
+		$reg = '/^' . $reg_version . '$/';
+		$this->assertRegExp($reg, $version);
 	}
 }

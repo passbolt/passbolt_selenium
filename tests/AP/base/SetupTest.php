@@ -411,7 +411,7 @@ class SetupTest extends PassboltSetupTestCase {
 
 		// Go to url remembered above.
 		$this->driver->get($setupUrl);
-		$this->waitUntilISee('h2', '/Invalid token/');
+		$this->waitUntilISee('h2', '/The authentication token is not valid/');
 	}
 
 	/**

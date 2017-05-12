@@ -88,6 +88,8 @@ class LoginTest extends PassboltTestCase {
 		}
 
 		$callback = array($this, 'assertElementAttributeMatches');
-		$this->waitUntil($callback, array($versionElt, 'data-tooltip', '/^[0-9]{1,2}\.[0-9]{1,2}\.[0-9]{1,2} \/ [0-9]{1,2}\.[0-9]{1,2}\.[0-9]{1,2}$/'));
+		$reg_version = '[0-9]{1,2}\.[0-9]{1,2}\.[0-9]{1,2}(-RC[0-9]){0,1}';
+		$reg = '/^' . $reg_version . ' \/ ' . $reg_version . '$/';
+		$this->waitUntil($callback, array($versionElt, 'data-tooltip', $reg));
 	}
 }
