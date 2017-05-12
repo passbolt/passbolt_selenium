@@ -76,7 +76,7 @@ $config = array (
 			'extensions' => array(
 				'data/extensions/passbolt-firefox-addon.xpi'
 			),
-			'base_url' => 'resource://passbolt-at-passbolt-dot-com'
+			'base_url' => 'resource://passbolt-firefox-addon-at-passbolt-dot-com'
 		),
 		'firefox_vanilla' => array(
 			'name' => 'Firefox with no extensions',
