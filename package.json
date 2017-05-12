@@ -6,7 +6,7 @@
   "license": "AGPL-3.0",
   "homepage": "https://www.passbolt.com",
   "repository": "https://github.com/passbolt",
-  "author": "Bolt Softwares Pvt Ltd <info@passbolt.com> (https://www.passbolt.com)",
+  "copyright": "Copyright 2017 Passbolt SARL",
   "developers": [
     "Kevin Muller <kevin@passbolt.com> (https://www.passbolt.com)",
     "Remy Bertot <remy@passbolt.com> (https://www.passbolt.com)",
