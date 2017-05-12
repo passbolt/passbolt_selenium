@@ -21,7 +21,7 @@ use Facebook\WebDriver\WebDriverKeys;
  * @TODO Move somewhere else
  * As a user I can open the url of a resource in a new tab
  *
- * @copyright (c) 2015-present Bolt Softwares Pvt Ltd
+ * @copyright (c) 2017 Passbolt SARL
  * @licence GNU Affero General Public License http://www.gnu.org/licenses/agpl-3.0.en.html
  */
 class PasswordCopyToClipboardTest extends PassboltTestCase

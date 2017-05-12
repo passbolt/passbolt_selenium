@@ -9,7 +9,7 @@
  *  - As a user I should'nt be able to edit the description of a password with read access only
  *
  *
- * @copyright (c) 2015-present Bolt Softwares Pvt Ltd
+ * @copyright (c) 2017 Passbolt SARL
  * @licence GNU Affero General Public License http://www.gnu.org/licenses/agpl-3.0.en.html
  */
 class PasswordEditDescriptionTest extends PassboltTestCase {

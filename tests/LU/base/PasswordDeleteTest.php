@@ -9,7 +9,7 @@
  * As a user I should not be able to delete a password when I have read access
  * As a user I should receive a notification email on password deletion
  *
- * @copyright (c) 2015-present Bolt Softwares Pvt Ltd
+ * @copyright (c) 2017 Passbolt SARL
  * @licence GNU Affero General Public License http://www.gnu.org/licenses/agpl-3.0.en.html
  */
 class PasswordDeleteTest extends PassboltTestCase

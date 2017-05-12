@@ -9,7 +9,7 @@
  * @TODO : Test a scenario where the key is not compatible with GPG on server side.
  * @TODO : Test scenario with a key that has matching information (same name and email).
  * @TODO : Test a scenario where the name of the user has to be altered.
- * @copyright (c) 2015-present Bolt Softwares Pvt Ltd
+ * @copyright (c) 2017 Passbolt SARL
  * @licence GNU Affero General Public License http://www.gnu.org/licenses/agpl-3.0.en.html
  */
 class SetupTest extends PassboltSetupTestCase {

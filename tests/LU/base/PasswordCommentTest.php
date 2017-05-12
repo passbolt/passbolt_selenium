@@ -7,7 +7,7 @@
  * - As a user I should be able to delete a comment
  * - As a user I should receive an email notification when I write a comment.
  *
- * @copyright (c) 2015-present Bolt Softwares Pvt Ltd
+ * @copyright (c) 2017 Passbolt SARL
  * @licence GNU Affero General Public License http://www.gnu.org/licenses/agpl-3.0.en.html
  */
 class PasswordCommentTest extends PassboltTestCase {

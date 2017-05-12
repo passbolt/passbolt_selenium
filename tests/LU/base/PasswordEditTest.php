@@ -23,7 +23,7 @@
  * As LU I should be able to edit a password after I restart the browser
  * As LU I should be able to edit a password after I close and restore the passbolt tab
  *
- * @copyright (c) 2015-present Bolt Softwares Pvt Ltd
+ * @copyright (c) 2017 Passbolt SARL
  * @licence GNU Affero General Public License http://www.gnu.org/licenses/agpl-3.0.en.html
  */
 class PasswordEditTest extends PassboltTestCase

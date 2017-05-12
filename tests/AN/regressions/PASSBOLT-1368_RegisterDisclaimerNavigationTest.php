@@ -3,7 +3,7 @@
  * Feature : Navigation
  * As an AN on the registration page I can click on the legal disclaimer links
  *
- * @copyright (c) 2015-present Bolt Softwares Pvt Ltd
+ * @copyright (c) 2017 Passbolt SARL
  * @licence GNU Affero General Public License http://www.gnu.org/licenses/agpl-3.0.en.html
  */
 class PASSBOLT1368 extends PassboltTestCase {

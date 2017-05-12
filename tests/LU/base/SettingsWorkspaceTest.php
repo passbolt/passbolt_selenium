@@ -4,7 +4,7 @@
  *
  * - As a user I should be able to search a user by keywords
  *
- * @copyright (c) 2015-present Bolt Softwares Pvt Ltd
+ * @copyright (c) 2017 Passbolt SARL
  * @licence GNU Affero General Public License http://www.gnu.org/licenses/agpl-3.0.en.html
  */
 class SettingsWorkspaceTest extends PassboltTestCase

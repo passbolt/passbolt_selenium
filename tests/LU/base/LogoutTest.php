@@ -5,7 +5,7 @@
  * As LU I should be logged out when I quit the browser and restart it after my session expired
  * As LU I should be logged out when I close the passbolt tab and restore it after my session expired
  *
- * @copyright (c) 2015-present Bolt Softwares Pvt Ltd
+ * @copyright (c) 2017 Passbolt SARL
  * @licence GNU Affero General Public License http://www.gnu.org/licenses/agpl-3.0.en.html
  */
 class LogoutTest extends PassboltTestCase {

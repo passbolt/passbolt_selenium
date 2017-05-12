@@ -5,7 +5,7 @@
  * - As a LU I should be able to see my keys info in the settings workspace, keys section
  * - As a LU I should be able to download my public and private key
  *
- * @copyright (c) 2015-present Bolt Softwares Pvt Ltd
+ * @copyright (c) 2017 Passbolt SARL
  * @licence GNU Affero General Public License http://www.gnu.org/licenses/agpl-3.0.en.html
  */
 

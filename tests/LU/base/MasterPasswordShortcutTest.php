@@ -9,7 +9,7 @@
  * As a user I can edit the secret of a password I have own, and enter my passphrase from keyboard only, using tab first
  *
  *
- * @copyright (c) 2015-present Bolt Softwares Pvt Ltd
+ * @copyright (c) 2017 Passbolt SARL
  * @licence GNU Affero General Public License http://www.gnu.org/licenses/agpl-3.0.en.html
  */
 class MasterPasswordShortcutTest extends PassboltTestCase {

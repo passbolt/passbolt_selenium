@@ -11,7 +11,7 @@
  * - As AP, I should be able to recover my account and log in.
  * - As AP, I should not be able to recover my account with a key that doesn't exist on server
  *
- * @copyright (c) 2015-present Bolt Softwares Pvt Ltd
+ * @copyright (c) 2017 Passbolt SARL
  * @licence GNU Affero General Public License http://www.gnu.org/licenses/agpl-3.0.en.html
  */
 

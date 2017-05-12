@@ -6,7 +6,7 @@
  * As a user with a non configured plugin I should be recognized as such on the login page
  * As a user using the client in debug mode the information I enter should be persistent
  *
- * @copyright (c) 2015-present Bolt Softwares Pvt Ltd
+ * @copyright (c) 2017 Passbolt SARL
  * @licence GNU Affero General Public License http://www.gnu.org/licenses/agpl-3.0.en.html
  */
 class DebugTest extends PassboltTestCase {

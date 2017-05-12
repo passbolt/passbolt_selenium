@@ -2,7 +2,7 @@
 /**
  * Passbolt Selenium Config
  *
- * @copyright (c) 2015-present Bolt Software Pvt. Ltd.
+ * @copyright (c) 2017 Passbolt SARL
  * @licence GPLv3 onwards www.gnu.org/licenses/gpl-3.0.en.html
  */
 $config = array (
