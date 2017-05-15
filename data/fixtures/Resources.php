@@ -73,6 +73,15 @@ class Resource {
 		    'complexity' => 'very weak',
 		    'description' => 'GnuPG is a complete and free implementation of the OpenPGP standard as defined by RFC4880',
 	    );
+	    $r[] = array(
+		    'id' => Uuid::get('resource.id.chai'),
+		    'username' => 'masala',
+		    'name' => 'chai',
+		    'password' => 'iloveyou',
+		    'uri' => 'http://chaijs.com/',
+		    'complexity' => 'very weak',
+		    'description' => 'Chai is a BDD / TDD assertion library for node and the browser',
+	    );
         return $r;
     }
 
@@ -128,7 +137,22 @@ class Resource {
         return $r;
     }
 
-    /**
+	/**
+	 * Get one resource by name.
+	 * @param $name the name
+	 * @return mixed
+	 */
+	static function _getByName($name) {
+		foreach (self::_get() as $i => $resource ) {
+			if ($resource['name'] == $name) {
+				return $resource;
+			}
+		}
+		return false;
+	}
+
+
+	/**
      * Get one resource for a given permission
      * @param $r array resources
      * @param $permission string read|share|admin|deny

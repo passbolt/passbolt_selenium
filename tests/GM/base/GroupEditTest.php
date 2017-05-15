@@ -12,7 +12,8 @@ use Facebook\WebDriver\WebDriverSelect;
  *  - As a group manager I shouldn’t be able to edit the group name
  *  - As a group manager I can edit the existing group members and promote a group member to group manager
  *  - As a group manager I cannot change the latest group manager role
- *  - As a group manager I can add a user to a group using the edit group dialog
+ *  - As a group manager I can add a user to a group that doesn't have any password using the edit group dialog
+ *  - As a group manager I can add a user to a group that accesses passwords using the edit group dialog
  *  - As an group manager I can remove a user from a group I manage using the edit group dialog
  *
  * @copyright (c) 2017-present Passbolt SARL
@@ -269,7 +270,7 @@ class GMGroupEditTest extends PassboltTestCase {
 	}
 
 	/**
-	 * Scenario: As a group manager I can add a user to a group using the edit group dialog
+	 * Scenario: As a group manager I can add a user to a group that doesn't access any password using the edit group dialog
 	 *
 	 * Given	I am logged in as a group manager
 	 * And		I am on the users workspace
@@ -286,7 +287,7 @@ class GMGroupEditTest extends PassboltTestCase {
 	 * And		I go to the users workspace
 	 * Then		I filter the list of users with the group
 	 */
-	public function testAddGroupMember() {
+	public function testAddGroupMemberWithoutPasswordsEncryption() {
 		$this->resetDatabaseWhenComplete();
 
 		// Given I am logged in as a group manager
@@ -341,6 +342,111 @@ class GMGroupEditTest extends PassboltTestCase {
 		$this->assertElementContainsText(
 			$this->findByCss('#js_wsp_users_browser .tableview-content'),
 			$ada['FirstName'] . ' ' . $ada['LastName']
+		);
+	}
+
+
+	/**
+	 * Scenario: As a group manager I can add a user to a group that accesses passwords using the edit group dialog
+	 *
+	 * Given	I am logged in as a group manager
+	 * And		I am on the users workspace
+	 * And		I edit a group
+	 * When 	I add a member to the group
+	 * Then		I should see that the user is added in the list of group members
+	 * And		I should see that the list of users automatically scrolled down so I can see the last user that was added
+	 * And		I should see that his group role is “group member”
+	 * And		I should see a warning message saying that the changes will be applied after clicking on save
+	 * When		I press the save button
+	 * Then		I should see that the dialog disappears
+	 * And		I should see a confirmation message saying that the group members have been edited
+	 * When		I log in as the user that was newly added to the group
+	 * And      I go to the passwords workspace
+	 * Then     I should see that the group passwords are now accessible
+	 * When     I click on the "chai" password
+	 * And      I click on the button "copy password to clipboard"
+	 * And      I enter the appropriate master key
+	 * Then     I should see that the password copied in the clipboard is the one corresponding to chai
+	 * When		I go to the users workspace
+	 * And		I filter the list of users with the group
+	 * Then     I should see that Ping appears in the list of group members.
+	 */
+	public function testAddGroupMemberWithPasswordsEncryption() {
+		$this->resetDatabaseWhenComplete();
+
+		// Given I am logged in as a group manager
+		$user = User::get('irene');
+		$this->setClientConfig($user);
+		$this->loginAs($user);
+
+		// And I am on the users workspace
+		// When I am editing a group that I manage
+		$group = Group::get(['id' => Uuid::get('group.id.creative')]);
+		$this->gotoEditGroup($group['id']);
+
+		// When I add a member to the group
+		$ping = User::get('ping');
+		$this->searchGroupUserToAdd($ping, $user);
+		$this->addTemporaryGroupUser($ping);
+
+		// Then I should see that the user is added in the list of group members
+		// And I should see that his group role is “group member”
+		$this->assertGroupMemberInEditDialog($group['id'], $ping);
+
+		// And I should see a warning message saying that the changes will be applied after clicking on save
+		$this->assertElementContainsText(
+			$this->getTemporaryGroupUserElement($ping),
+			'Will be added'
+		);
+
+		// And I see a warning message saying that I need to save changes before they can take effect.
+		$this->assertElementContainsText('#js_group_members .message.warning', 'You need to click save for the changes to take place.');
+
+		// When I press the save button
+		$this->click('.edit-group-dialog a.button.primary');
+
+		$this->assertMasterPasswordDialog($user);
+		$this->enterMasterPassword($user['MasterPassword']);
+
+		// Then I should see that the dialog disappears
+		$this->waitUntilIDontSee('.edit-group-dialog');
+
+		// And I should see a confirmation message saying that the group members have been edited
+		$this->assertNotification('app_groups_edit_success');
+
+		// When I log in as the user that was newly added to the group
+		$this->logout();
+		$this->setClientConfig($ping);
+		$this->loginAs($ping);
+
+		// When I click on chai, a newly accessible password.
+		$this->clickPassword(Uuid::get('resource.id.chai'));
+
+		// When I click on the link 'copy password'
+		$this->click('js_wk_menu_secretcopy_button');
+
+		// Then I can see the master key dialog
+		$this->assertMasterPasswordDialog($ping);
+
+		// When I enter my passphrase and click submit
+		$this->enterMasterPassword($ping['MasterPassword']);
+
+		// Then I can see a success message telling me the password was copied to clipboard
+		$this->assertNotification('plugin_secret_copy_success');
+
+		// And the content of the clipboard is valid
+		$this->assertClipboard(Resource::_getByName('chai')['password']);
+
+		// And I go to the users workspace
+		$this->gotoWorkspace('user');
+
+		// And I filter the list of users with the group
+		$this->clickGroup($group['id']);
+
+		// Then I should see me in the list
+		$this->assertElementContainsText(
+			$this->findByCss('#js_wsp_users_browser .tableview-content'),
+			$ping['FirstName'] . ' ' . $ping['LastName']
 		);
 	}
 
