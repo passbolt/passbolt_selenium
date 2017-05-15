@@ -170,6 +170,7 @@ class GMGroupEditTest extends PassboltTestCase {
 	 * And 		I should see next to each user the role that he has in the group in a select box
 	 * When 	I change the role of one simple group member to group manager
 	 * Then		I should see the member marked as going to be updated next to it
+	 * And		I should see a warning message saying that the changes will be applied after clicking on save
 	 * When		I click on save
 	 * Then 	I should see a confirmation message saying that the group was edited
 	 * And 		A notification should be sent to the user that was promoted group manager
@@ -210,6 +211,9 @@ class GMGroupEditTest extends PassboltTestCase {
 			$this->getTemporaryGroupUserElement($promotedUser),
 			'Will be updated'
 		);
+
+		// And I see a warning message saying that I need to save changes before they can take effect.
+		$this->assertElementContainsText('#js_group_members .message.warning', 'You need to click save for the changes to take place.');
 
 		// When I click on save
 		$this->click('.edit-group-dialog a.button.primary');
@@ -310,6 +314,9 @@ class GMGroupEditTest extends PassboltTestCase {
 			'Will be added'
 		);
 
+		// And I see a warning message saying that I need to save changes before they can take effect.
+		$this->assertElementContainsText('#js_group_members .message.warning', 'You need to click save for the changes to take place.');
+
 		// When I press the save button
 		$this->click('.edit-group-dialog a.button.primary');
 
@@ -379,8 +386,8 @@ class GMGroupEditTest extends PassboltTestCase {
 		// Then I should see that the user disappears from the list of group members
 		$this->assertNotVisible("#$groupUserId");
 
-		// @todo
 		// And I should see a warning message saying that the changes will be applied only after save
+		$this->assertElementContainsText('#js_group_members .message.warning', 'You need to click save for the changes to take place.');
 
 		// When I press the “save” button
 		$this->click('.edit-group-dialog a.button.primary');

@@ -122,4 +122,27 @@ class ADGroupEditTest extends PassboltTestCase {
 		$this->waitUntilISee('.edit-group-dialog');
 	}
 
+	/**
+	 * Scenario: As an administrator I cannot add people to a group I am not a group manager of.
+	 *
+	 * Given	I am logged in as administrator
+	 * And		I am editing a group that I am not the group manager of
+	 * When		I observe the content of the edit group dialog
+	 * Then     I should not see a Add people section
+	 *  And     I should see a warning message saying that "Only the group manager can add new people to a group."
+	 */
+	public function testEditGroupAsNotGroupManager() {
+		// Given I am logged in as an administrator
+		$user = User::get('admin');
+		$this->setClientConfig($user);
+		$this->loginAs($user);
+		$group = Group::get(['id' => Uuid::get('group.id.accounting')]);
+		$this->gotoEditGroup($group['id']);
+
+		// And I shouldn't see the Add people iframe.
+		$this->assertNotVisible('#js_group_members_add #passbolt-iframe-group-edit');
+
+		// And I see a warning message saying that only the group manager can add new people to a group.
+		$this->assertElementContainsText('#js_group_members .message.warning', 'Only the group manager can add new people to a group.');
+	}
 }
