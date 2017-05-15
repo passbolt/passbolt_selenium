@@ -165,6 +165,8 @@ class ADGroupEditTest extends PassboltTestCase {
 		$this->setClientConfig($user);
 		$this->loginAs($user);
 		$group = Group::get(['id' => Uuid::get('group.id.accounting')]);
+
+		// When I edit a the group "accounting".
 		$this->gotoEditGroup($group['id']);
 
 		// When I enter board as a name (the name is already used).
