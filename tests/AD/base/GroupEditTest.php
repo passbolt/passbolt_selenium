@@ -9,6 +9,8 @@ use Facebook\WebDriver\WebDriverSelect;
  *  - As an administrator I can edit a group using the right click contextual menu
  *  - As an administrator I can edit the group name
  *  - As an administrator I can edit a group from the sidebar
+ *  - As an administrator I cannot add people to a group I am not a group manager of
+ *  - As an administrator I can't change a group with a name for a name already used by another group
  *
  * @copyright (c) 2017-present Passbolt SARL
  * @licence GNU Affero General Public License http://www.gnu.org/licenses/agpl-3.0.en.html
@@ -144,5 +146,42 @@ class ADGroupEditTest extends PassboltTestCase {
 
 		// And I see a warning message saying that only the group manager can add new people to a group.
 		$this->assertElementContainsText('#js_group_members .message.warning', 'Only the group manager can add new people to a group.');
+	}
+
+	/**
+	 * Scenario:    As an administrator I can't change a group with a name for a name already used by another group.
+	 * Given that   I am logged in as an administrator
+	 * And          I am on the users workspace
+	 * When         I edit the "accounting" group
+	 *  And         I fill 'Board' for name
+	 *  And         I click on submit
+	 * Then         I should see a notification saying that the group couldn't be updated
+	 *  And         I should see an error message under the name field
+	 *  And         I should see that this error message says that the group name is already in use
+	 */
+	public function testEditGroupNameValidation() {
+		// Given I am logged in as an administrator
+		$user = User::get('admin');
+		$this->setClientConfig($user);
+		$this->loginAs($user);
+		$group = Group::get(['id' => Uuid::get('group.id.accounting')]);
+		$this->gotoEditGroup($group['id']);
+
+		// When I enter board as a name (the name is already used).
+		$this->inputText('js_field_name', $group = Group::get(['id' => Uuid::get('group.id.board')])['name']);
+
+		// And I click on “save”
+		$this->click('.edit-group-dialog a.button.primary');
+
+		// Then I should see a success notification message saying the group couldn't be created
+		$this->assertNotification('app_groups_add_error');
+
+		// Then I see an error message saying that the name contain invalid characters
+		$this->waitUntilISee('#js_field_name_feedback.error.message');
+
+		$this->assertElementContainsText(
+			$this->find('js_field_name_feedback'), 'The group name provided is already used by another group'
+		);
+
 	}
 }
