@@ -112,6 +112,12 @@ class Resource {
 				$r[5] = array_merge($r[5], array(
 					'permission' => 'read'
 				));
+				$r[6] = array_merge($r[5], array(
+					'permission' => 'read'
+				));
+				$r[7] = array_merge($r[7], array(
+					'permission' => 'deny'
+				));
                 break;
 			case 'betty' :
                 $r[0] = array_merge($r[0], array(
@@ -131,6 +137,12 @@ class Resource {
 				));
 				$r[5] = array_merge($r[5], array(
 					'permission' => 'deny'
+				));
+				$r[6] = array_merge($r[5], array(
+					'permission' => 'deny'
+				));
+				$r[7] = array_merge($r[7], array(
+					'permission' => 'owner'
 				));
                 break;
         }
