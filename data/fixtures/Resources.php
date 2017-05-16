@@ -112,7 +112,7 @@ class Resource {
 				$r[5] = array_merge($r[5], array(
 					'permission' => 'read'
 				));
-				$r[6] = array_merge($r[5], array(
+				$r[6] = array_merge($r[6], array(
 					'permission' => 'read'
 				));
 				$r[7] = array_merge($r[7], array(
@@ -138,7 +138,7 @@ class Resource {
 				$r[5] = array_merge($r[5], array(
 					'permission' => 'deny'
 				));
-				$r[6] = array_merge($r[5], array(
+				$r[6] = array_merge($r[6], array(
 					'permission' => 'deny'
 				));
 				$r[7] = array_merge($r[7], array(
