@@ -77,7 +77,7 @@ class PassboltTestCase extends WebDriverTestCase {
 		$ip = $ip[0];
 		//exec("$vncSnapshotBin $ip $screenshotPath/{$this->testName}.jpg > /dev/null 2>&1");
 		echo "$vncSnapshotBin $ip $screenshotPath/{$this->testName}.jpg";
-		exec("$vncSnapshotBin $ip $screenshotPath/{$this->testName}.jpg", $output, $return_var);
+		exec("/bin/bash -c \"$vncSnapshotBin $ip $screenshotPath/{$this->testName}.jpg\"", $output, $return_var);
 		echo "output";
 		print_r($output);
 		var_dump($return_var);
