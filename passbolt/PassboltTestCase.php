@@ -81,6 +81,7 @@ class PassboltTestCase extends WebDriverTestCase {
 		echo "output";
 		print_r($output);
 		var_dump($return_var);
+		sleep(10);
 	}
 
 	/********************************************************************************
