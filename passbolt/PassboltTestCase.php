@@ -48,6 +48,9 @@ class PassboltTestCase extends WebDriverTestCase {
 	 * Executed after every tests
 	 */
 	protected function tearDown() {
+		if ($this->getStatus() == PHPUnit_Runner_BaseTestRunner::STATUS_FAILURE && Config::read('testserver.selenium.screenshotOnFail')) {
+			$this->takeScreenshot();
+		}
 		// Reset the database if mentioned.
 		if ($this->resetDatabaseWhenComplete) {
 			PassboltServer::resetDatabase(Config::read('passbolt.url'));
@@ -61,6 +64,18 @@ class PassboltTestCase extends WebDriverTestCase {
 	 */
 	public function resetDatabaseWhenComplete() {
 		$this->resetDatabaseWhenComplete = true;
+	}
+
+	/**
+	 * Take screenshot of what's happening on the vnc console of the selenium server.
+	 */
+	public function takeScreenshot() {
+		$vncSnapshotBin = Config::read('testserver.selenium.screenshots.binary');
+		$screenshotPath = Config::read('testserver.selenium.screenshots.path');
+		$seleniumServerUrl = Config::read('testserver.selenium.url');
+		preg_match('/\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}/', $seleniumServerUrl, $ip);
+		$ip = $ip[0];
+		exec("$vncSnapshotBin $ip $screenshotPath/{$this->testName}.jpg > /dev/null 2>&1");
 	}
 
 	/********************************************************************************

@@ -61,12 +61,17 @@ $config = array (
 		'selenium' => array (
 			'url' => 'http://{APP_URL}:4444/wd/hub',
 			'instances' => [/* selenium instances */],
+			'screenshotOnFail' => true,
+            'screenshots' => [
+                'path' => '/var/www/selenium_screenshots',
+                'binary' => '/usr/bin/vncsnapshot'
+            ],
 			// Extra capabilities.
 			'capabilities' => array(),
 		),
 	),
 	'browsers' => array (
-		'default' => 'firefox_with_passbolt_extension',
+		'default' => 'firefox_ with_passbolt_extension',
 		'common' => array(
 			'downloads_path' => 'file:///home/application/Downloads'
 		),
