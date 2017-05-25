@@ -76,8 +76,8 @@ class PassboltTestCase extends WebDriverTestCase {
 		preg_match('/\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}/', $seleniumServerUrl, $ip);
 		$ip = $ip[0];
 		//exec("$vncSnapshotBin $ip $screenshotPath/{$this->testName}.jpg > /dev/null 2>&1");
-		echo "$vncSnapshotBin $ip /home/www-data//{$this->testName}.jpg";
-		exec("/bin/bash -c \"$vncSnapshotBin $ip /home/www-data/{$this->testName}.jpg\"", $output, $return_var);
+		echo "$vncSnapshotBin $ip $screenshotPath/{$this->testName}.jpg";
+		exec("/bin/bash -c \"$vncSnapshotBin $ip $screenshotPath/{$this->testName}.jpg\"", $output, $return_var);
 		var_dump($return_var);
 	}
 
