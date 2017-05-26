@@ -48,20 +48,16 @@ class PassboltTestCase extends WebDriverTestCase {
 	 * Executed after every tests
 	 */
 	protected function tearDown() {
+		if ($this->getStatus() == PHPUnit_Runner_BaseTestRunner::STATUS_FAILURE && Config::read('testserver.selenium.screenshotOnFail')) {
+			$this->takeScreenshot();
+			sleep(10);
+		}
 		// Reset the database if mentioned.
 		if ($this->resetDatabaseWhenComplete) {
 			PassboltServer::resetDatabase(Config::read('passbolt.url'));
 		}
 
 		parent::tearDown();
-	}
-
-
-	protected function onNotSuccessfulTest( $e ) {
-		if (Config::read('testserver.selenium.screenshotOnFail')) {
-			$this->takeScreenshot();
-		}
-		parent::onNotSuccessfulTest( $e );
 	}
 
 
