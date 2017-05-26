@@ -61,10 +61,10 @@ $config = array (
 		'selenium' => array (
 			'url' => 'http://{APP_URL}:4444/wd/hub',
 			'instances' => [/* selenium instances */],
-			'screenshotOnFail' => true,
+			'screenshotOnFail' => false,
             'screenshots' => [
-                'path' => '/var/www/selenium_screenshots',
-                'binary' => '/usr/bin/vncsnapshot'
+                'path' => '/* screenshot path */',
+                'binary' => '/* screenshot tool path */'
             ],
 			// Extra capabilities.
 			'capabilities' => array(),
