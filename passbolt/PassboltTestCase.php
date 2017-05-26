@@ -50,7 +50,6 @@ class PassboltTestCase extends WebDriverTestCase {
 	protected function tearDown() {
 		if ($this->getStatus() == PHPUnit_Runner_BaseTestRunner::STATUS_FAILURE && Config::read('testserver.selenium.screenshotOnFail')) {
 			$this->takeScreenshot();
-			sleep(10);
 		}
 		// Reset the database if mentioned.
 		if ($this->resetDatabaseWhenComplete) {
@@ -78,10 +77,8 @@ class PassboltTestCase extends WebDriverTestCase {
 		echo "\n take screenshot from $seleniumServerUrl\n";
 		preg_match('/\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}/', $seleniumServerUrl, $ip);
 		$ip = $ip[0];
-		exec("$vncSnapshotBin $ip:0 $screenshotPath/{$this->testName}.jpg > /dev/null 2>&1");
-		exec("$vncSnapshotBin $ip:1 $screenshotPath/{$this->testName}_1.jpg > /dev/null 2>&1");
-		exec("$vncSnapshotBin $ip:2 $screenshotPath/{$this->testName}_2.jpg > /dev/null 2>&1");
-		exec("$vncSnapshotBin $ip:3 $screenshotPath/{$this->testName}_3.jpg > /dev/null 2>&1");
+		exec("$vncSnapshotBin $ip $screenshotPath/{$this->testName}.jpg > /dev/null 2>&1");
+		exec("$vncSnapshotBin $ip $screenshotPath/{$this->testName}_1.jpg > /dev/null 2>&1");
 	}
 
 	/********************************************************************************
