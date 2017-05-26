@@ -270,7 +270,6 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
 		elseif ($type == 'selenium') {
 			Config::write('testserver.selenium.url', $freeInstance['address']);
 		}
-		echo "\nreserved {$freeInstance['address']}\n";
 
 		// Return it.
 		return $freeInstance['address'];
