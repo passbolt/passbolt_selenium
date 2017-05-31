@@ -15,7 +15,6 @@ class LoginTest extends PassboltTestCase {
     public function testLogin() {
         $this->getUrl('login');
         $this->waitUntIlISee('.plugin-check.' . $this->_browser['type'] . '.warning', null, 2);
-	    $this->fail("yo man. it fails.");
     }
 
 	/**
