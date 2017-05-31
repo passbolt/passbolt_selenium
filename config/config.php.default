@@ -66,6 +66,13 @@ $config = array (
                 'path' => '/* screenshot path */',
                 'binary' => '/* screenshot tool path */'
             ],
+            'videoRecord' => false,
+            'videos' => [
+                // When to record a video: always, or onFail
+                'when' => 'onFail',
+                'path' => '/* video path */',
+                'binary' => '/* video tool path */', // usually /usr/local/bin/flvrec.py
+            ],
 			// Extra capabilities.
 			'capabilities' => array(),
 		),
