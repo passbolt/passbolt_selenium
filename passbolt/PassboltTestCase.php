@@ -59,7 +59,10 @@ class PassboltTestCase extends WebDriverTestCase {
 			if (Config::read('testserver.selenium.videos.when') == 'onFail' && $this->getStatus() != PHPUnit_Runner_BaseTestRunner::STATUS_FAILURE) {
 				// If test is not a failure, we delete the video. We don't need to keep it.
 				$videoPath = Config::read('testserver.selenium.videos.path');
-				unlink("$videoPath/{$this->testName}.flv");
+				$filePath = "$videoPath/{$this->testName}.flv";
+				if (file_exists($filePath)) {
+					unlink($filePath);
+				}
 			}
 		}
 		// Reset the database if mentioned.
@@ -114,8 +117,12 @@ class PassboltTestCase extends WebDriverTestCase {
 		$pidFile = "/tmp/flvrec_{$this->testName}_pid.txt";
 
 		exec("kill -9 $pid");
-		unlink($outputFile);
-		unlink($pidFile);
+		if (file_exists($outputFile)) {
+			unlink($outputFile);
+		}
+		if (file_exists($pidFile)) {
+			unlink($pidFile);
+		}
 	}
 
 	/**
