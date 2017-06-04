@@ -61,12 +61,24 @@ $config = array (
 		'selenium' => array (
 			'url' => 'http://{APP_URL}:4444/wd/hub',
 			'instances' => [/* selenium instances */],
+			'screenshotOnFail' => false,
+            'screenshots' => [
+                'path' => '/* screenshot path */',
+                'binary' => '/* screenshot tool path */'
+            ],
+            'videoRecord' => false,
+            'videos' => [
+                // When to record a video: always, or onFail
+                'when' => 'onFail',
+                'path' => '/* video path */',
+                'binary' => '/* video tool path */', // usually /usr/local/bin/flvrec.py
+            ],
 			// Extra capabilities.
 			'capabilities' => array(),
 		),
 	),
 	'browsers' => array (
-		'default' => 'firefox_with_passbolt_extension',
+		'default' => 'firefox_ with_passbolt_extension',
 		'common' => array(
 			'downloads_path' => 'file:///home/application/Downloads'
 		),

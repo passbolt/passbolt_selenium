@@ -41,6 +41,9 @@ class PassboltTestCase extends WebDriverTestCase {
 	protected function setUp() {
 		// Setup test.
 		parent::setUp();
+		if (Config::read('testserver.selenium.videoRecord')) {
+			$this->startVideo();
+		}
 	}
 
 
@@ -48,6 +51,20 @@ class PassboltTestCase extends WebDriverTestCase {
 	 * Executed after every tests
 	 */
 	protected function tearDown() {
+		if ($this->getStatus() == PHPUnit_Runner_BaseTestRunner::STATUS_FAILURE && Config::read('testserver.selenium.screenshotOnFail')) {
+			$this->takeScreenshot();
+		}
+		if (Config::read('testserver.selenium.videoRecord')) {
+			$this->stopVideo();
+			if (Config::read('testserver.selenium.videos.when') == 'onFail' && $this->getStatus() != PHPUnit_Runner_BaseTestRunner::STATUS_FAILURE) {
+				// If test is not a failure, we delete the video. We don't need to keep it.
+				$videoPath = Config::read('testserver.selenium.videos.path');
+				$filePath = "$videoPath/{$this->testName}.flv";
+				if (file_exists($filePath)) {
+					unlink($filePath);
+				}
+			}
+		}
 		// Reset the database if mentioned.
 		if ($this->resetDatabaseWhenComplete) {
 			PassboltServer::resetDatabase(Config::read('passbolt.url'));
@@ -56,11 +73,70 @@ class PassboltTestCase extends WebDriverTestCase {
 		parent::tearDown();
 	}
 
+
+	/**
+	 * Get IP address of the current selenium server.
+	 * @return mixed
+	 */
+	private function __getSeleniumServerIp() {
+		$seleniumServerUrl = Config::read('testserver.selenium.url');
+		preg_match('/\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}/', $seleniumServerUrl, $ip);
+		return $ip[0];
+	}
+
 	/**
 	 * Mark the database to be reset at the end of the test
 	 */
 	public function resetDatabaseWhenComplete() {
 		$this->resetDatabaseWhenComplete = true;
+	}
+
+	/**
+	 * Start recording a video of a test through vnc.
+	 */
+	public function startVideo() {
+		$ip = $this->__getSeleniumServerIp();
+		$videoPath = Config::read('testserver.selenium.videos.path');
+
+		$cmd = "flvrec.py -o $videoPath/{$this->testName}.flv $ip";
+		$outputFile = "/tmp/flvrec_{$this->testName}_output.log";
+		$pidFile = "/tmp/flvrec_{$this->testName}_pid.txt";
+
+		exec(sprintf("%s > %s 2>&1 & echo $! > %s", $cmd, $outputFile, $pidFile));
+		$pid = file_get_contents("/tmp/flvrec_{$this->testName}_pid.txt");
+
+		$this->videoPid = $pid;
+	}
+
+	/**
+	 * Stop video recording.
+	 */
+	public function stopVideo() {
+		$pid = $this->videoPid;
+		$outputFile = "/tmp/flvrec_{$this->testName}_output.log";
+		$pidFile = "/tmp/flvrec_{$this->testName}_pid.txt";
+
+		exec("kill -9 $pid");
+		if (file_exists($outputFile)) {
+			unlink($outputFile);
+		}
+		if (file_exists($pidFile)) {
+			unlink($pidFile);
+		}
+	}
+
+	/**
+	 * Take screenshot of what's happening on the vnc console of the selenium server.
+	 */
+	public function takeScreenshot() {
+		$ip = $this->__getSeleniumServerIp();
+		$vncSnapshotBin = Config::read('testserver.selenium.screenshots.binary');
+		$screenshotPath = Config::read('testserver.selenium.screenshots.path');
+
+		// Execute command 2 times. The first time, the screen is always blank.
+		// I know...
+		exec("$vncSnapshotBin $ip $screenshotPath/{$this->testName}.jpg > /dev/null 2>&1");
+		exec("$vncSnapshotBin $ip $screenshotPath/{$this->testName}.jpg > /dev/null 2>&1");
 	}
 
 	/********************************************************************************

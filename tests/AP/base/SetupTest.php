@@ -203,6 +203,7 @@ class SetupTest extends PassboltSetupTestCase {
 		$this->waitForSection('login_redirect');
 		// Assert menu is selected.
 		$this->assertMenuIsSelected($this->getSectionInfo('login_redirect', 'menu_item'));
+		$this->fail();
 	}
 
 	/**
