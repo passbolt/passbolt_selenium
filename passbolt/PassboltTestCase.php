@@ -285,9 +285,9 @@ class PassboltTestCase extends WebDriverTestCase {
 	/**
 	 * Login on the application with the given user.
 	 * @param user
-	 * @param useCache {bool} (optional) default true
+	 * @param useCache {bool} (optional) default false
 	 */
-	public function loginAs($user, $useCache = true) {
+	public function loginAs($user, $useCache = false) {
 		if (!is_array($user)) {
 			$user = [
 				'Username' => $user,

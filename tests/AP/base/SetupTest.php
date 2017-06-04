@@ -203,7 +203,6 @@ class SetupTest extends PassboltSetupTestCase {
 		$this->waitForSection('login_redirect');
 		// Assert menu is selected.
 		$this->assertMenuIsSelected($this->getSectionInfo('login_redirect', 'menu_item'));
-		$this->fail();
 	}
 
 	/**
@@ -624,8 +623,8 @@ class SetupTest extends PassboltSetupTestCase {
 		$this->gotoWorkspace('user');
 
 		// When I right click on a user
-		$user = User::get('ada');
-		$this->rightClickUser($user['id']);
+		$userF = User::get('frances');
+		$this->rightClickUser($userF['id']);
 
 		// Then I select the delete option in the contextual menu
 		$this->click('#js_user_browser_menu_delete a');
@@ -642,7 +641,7 @@ class SetupTest extends PassboltSetupTestCase {
 		$this->logout();
 
 		$john = User::get('john');
-		$john['PrivateKey'] = 'ada_private_nopassphrase.key';
+		$john['PrivateKey'] = 'frances_private.key';
 
 		// Register John Doe as a user.
 		$this->registerUser($john['FirstName'], $john['LastName'], $john['Username']);
