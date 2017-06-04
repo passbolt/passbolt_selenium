@@ -7,6 +7,7 @@
  *  - As admin I should be able to delete a user using the delete button
  *  - As Admin I should'nt be able to delete my own user account
  *  - As LU I should be able to get a clear feedback at login if my account has been deleted.
+ *  - As Admin I should'nt be able to delete a user who is the sole owner of some shared passwords
  *
  * @copyright (c) 2017 Passbolt SARL
  * @licence GNU Affero General Public License http://www.gnu.org/licenses/agpl-3.0.en.html
@@ -41,7 +42,7 @@ class UserDeleteTest extends PassboltTestCase {
 		$this->gotoWorkspace('user');
 
 		// When I right click on a user
-		$user = User::get('betty');
+		$user = User::get('frances');
 		$this->rightClickUser($user['id']);
 
 		// Then I select the delete option in the contextual menu
@@ -96,11 +97,11 @@ class UserDeleteTest extends PassboltTestCase {
 		// Go to user workspace
 		$this->gotoWorkspace('user');
 
-		// When I right click on a user
-		$user = User::get('betty');
+		// When I click on the user
+		$user = User::get('frances');
 		$this->clickUser($user['id']);
 
-		// Then I select the delete option in the contextual menu
+		// Then I click on delete button
 		$this->click('js_user_wk_menu_deletion_button');
 
 		// Assert that the confirmation dialog is displayed.
@@ -171,7 +172,7 @@ class UserDeleteTest extends PassboltTestCase {
 	 * When         I click ok in the confirmation dialog
 	 * Then         I should see a confirmation message
 	 * When         I log out
-	 * And          I become betty
+	 * And          I become the user I deleted
 	 * And          I go to the login page
 	 * Then         I should see a feedback telling me that my account doesn't exist on server
 	 */
@@ -190,8 +191,8 @@ class UserDeleteTest extends PassboltTestCase {
 		$this->gotoWorkspace('user');
 
 		// When I right click on a user
-		$user = User::get('betty');
-		$this->clickUser($user['id']);
+		$userF = User::get('frances');
+		$this->clickUser($userF['id']);
 
 		// Then I select the delete option in the contextual menu
 		$this->click('js_user_wk_menu_deletion_button');
@@ -208,9 +209,8 @@ class UserDeleteTest extends PassboltTestCase {
 		// Log out.
 		$this->logout();
 
-		// I become betty.
-		$betty = User::get('betty');
-		$this->setClientConfig($betty);
+		// I become the user I deleted.
+		$this->setClientConfig($userF);
 
 		// When I go to login.
 		$this->getUrl('login');
@@ -219,6 +219,49 @@ class UserDeleteTest extends PassboltTestCase {
 		$this->waitUntilISee('html.server-not-verified.server-no-user');
 		$this->waitUntilISee('.plugin-check.gpg.error', '/There is no user associated with this key/');
 		$this->waitUntilISee('.users.login.form .feedback', '/The supplied account does not exist/');
+	}
+
+	/**
+	 * Scenario :   As Admin I should'nt be able to delete a user who is the sole owner of some shared passwords
+	 * Given        I am logged in as admin in the user workspace
+	 * And          I click on the user
+	 * And          I click on delete button
+	 * Then         I should see a confirmation dialog
+	 * When         I click ok in the confirmation dialog
+	 * Then         I should see a message explaining me why the user can't be deleted
+	 * When 		I click on the dialog main action
+	 * Then			I should see that the dialog disappears
+	 */
+	public function testDeletedUserSoleOwner() {
+		// Reset database at the end of test.
+		$this->resetDatabaseWhenComplete();
+
+		// Given I am Admin
+		$user = User::get('admin');
+		$this->setClientConfig($user);
+
+		// And I am logged in on the user workspace
+		$this->loginAs($user);
+
+		// Go to user workspace
+		$this->gotoWorkspace('user');
+
+		// When I click on a user
+		$userA = User::get('ada');
+		$this->clickUser($userA['id']);
+
+		// And I click on delete button
+		$this->click('js_user_wk_menu_deletion_button');
+
+		// Then I should see a message explaining me why the user can't be deleted
+		$this->assertConfirmationDialog('You cannot delete this user!');
+
+		// When I click on the dialog main action
+		$this->confirmActionInConfirmationDialog();
+
+		// Then I should see that the dialog disappears
+		$this->waitUntilIDontSee('.mad_component_confirm');
+
 	}
 
 }
