@@ -115,6 +115,18 @@ class User {
 					'PrivateKey' => 'jean_private.key'
 				));
 				break;
+			case 'orna':
+				return array_merge($conf,array(
+					'id' => Uuid::get('user.id.orna'),
+					'name' => 'orna',
+					'FirstName' => 'Orna',
+					'LastName' => 'Berry',
+					'Username' => 'orna@passbolt.com',
+					'MasterPassword' => 'orna@passbolt.com',
+					'TokenCode' => 'ORA',
+					'PrivateKey' => 'orna_private.key'
+				));
+				break;
 			case 'ping':
 				return array_merge($conf,array(
 					'id' => Uuid::get('user.id.ping'),

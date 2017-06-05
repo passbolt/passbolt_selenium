@@ -1240,8 +1240,9 @@ class PassboltTestCase extends WebDriverTestCase {
 
 	/**
 	 * Search a user to add to a group.
-	 * @param $userToAdd
-	 * @param $user
+	 * @param $userToAdd The user to add. See the User helper class.
+	 * @param $user The user who request the add.
+	 * @throws Exception
 	 */
 	public function searchGroupUserToAdd($userToAdd, $user) {
 		// I enter the username I want to share the password with in the autocomplete field

@@ -13,6 +13,7 @@ use Facebook\WebDriver\WebDriverSelect;
  *  - As an administrator I can edit the group members while creating a group.
  *  - As an administrator I should be able to delete a group user while creating a group
  *  - As an administrator I should be able to create a group successfully.
+ *  - As an administrator while creating a group I can't choose inactive users as new members
  *
  *
  * @copyright (c) 2017-present Passbolt SARL
@@ -549,6 +550,39 @@ class ADGroupCreateTest extends PassboltTestCase {
 
 		// Wait until I see a group called jean kevin in the list.
 		$this->waitUntilISee("js_wsp_users_groups_list", '/jeankevin/');
+	}
 
+	/**
+	 * Scenario:    As an administrator while creating a group I can't choose inactive users as new members
+	 * Given that   I am logged in as an administrator
+	 * And          I am on the user workspace
+	 * When         I am creating a new group
+	 *  And         I enter the name of an inactive user
+	 * Then         I shouldn't see it in the list of proposed users
+	 */
+	public function testCreateGroupInactiveUsers() {
+		// Given I am logged in as an administrator
+		$user = User::get('admin');
+		$this->setClientConfig($user);
+		$this->loginAs($user);
+
+		// And I am on the user workspace
+		$this->gotoWorkspace('user');
+
+		// When I am creating a new group
+		$this->gotoCreateGroup();
+
+		// And I enter the name of an inactive user
+		$userO = User::get('orna');
+		$this->goIntoAddUserIframe();
+		$this->assertSecurityToken($user, 'group');
+		$this->inputText('js_group_edit_form_auto_cplt', strtolower($userO['FirstName']), true);
+		$this->click('.security-token');
+		$this->goOutOfIframe();
+
+		// Then I shouldn't see it in the list of proposed users
+		$this->goIntoAddUserAutocompleteIframe();
+		$this->waitUntilISee('.autocomplete-content', '/No user found/i');
+		$this->goOutOfIframe();
 	}
 }
