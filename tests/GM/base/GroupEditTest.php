@@ -597,4 +597,55 @@ class GMGroupEditTest extends PassboltTestCase {
 		$this->assertElementNotContainText('bodyTable', 'And as group manager');
 	}
 
+
+	/**
+	 * Scenario: As a user I should receive a notification when I am added to a group
+	 *
+	 * Given		I am logged in as a group manager
+	 * And			I am on the users workspace
+	 * And			I am editing a group that I manage
+	 * When         I remove a user from the group
+	 *  And         I click on save
+	 * Then         I should see a success notification message
+	 * When 		I access last email sent to the user
+	 * Then 		I should see the expected email title
+	 * 	And			I should see the expected email content
+	 */
+	public function testEditGroupDeleteUserEmailNotification() {
+		$this->resetDatabaseWhenComplete();
+
+		// Given I am an administrator.
+		$user = User::get('frances');
+		$this->setClientConfig($user);
+
+		// I am logged in as admin
+		$this->loginAs($user);
+
+		// And I am on the users workspace
+		// And I am editing a group that I manage
+		$group = Group::get(['id' => Uuid::get('group.id.accounting')]);
+		$this->gotoEditGroup($group['id']);
+
+		// When I remove a user from the group
+		$grace = User::get('grace');
+		$groupUserId = Uuid::get('group_user.id.accounting-grace');
+		$this->click("#js_group_user_delete_$groupUserId");
+
+		// And I click save.
+		$this->click('.edit-group-dialog a.button.primary');
+
+		// And I should see a success notification message
+		$this->assertNotification('app_groups_edit_success');
+
+		// When I access last email sent to the group manager.
+		$this->getUrl('seleniumTests/showLastEmail/' . $grace['Username']);
+
+		// Then I should see the expected email title
+		$this->assertMetaTitleContains(sprintf('%s removed you from the group %s', $user['FirstName'], $group['name']));
+
+		// And I should see the expected email content
+		$this->assertElementContainsText('bodyTable', 'Name: ' . $group['name']);
+		$this->assertElementContainsText('bodyTable', 'You are no longer a member of this group');
+	}
+
 }
