@@ -1102,6 +1102,9 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
      * @param $needle
      */
     public function assertElementNotContainText($elt, $needle) {
+		if(!is_object($elt)) {
+			$elt = $this->find($elt);
+		}
         $eltText = $elt->getText();
         $contains = strpos($eltText, $needle) !== false;
         $this->assertFalse($contains, sprintf("Failed asserting that element does not contain '%s'", $needle));

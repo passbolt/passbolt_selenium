@@ -14,7 +14,7 @@ use Facebook\WebDriver\WebDriverSelect;
  *  - As an administrator I should be able to delete a group user while creating a group
  *  - As an administrator I should be able to create a group successfully.
  *  - As an administrator while creating a group I can't choose inactive users as new members
- *
+ *  - As a user I should receive a notification when I am added to a group
  *
  * @copyright (c) 2017-present Passbolt SARL
  * @licence GNU Affero General Public License http://www.gnu.org/licenses/agpl-3.0.en.html
@@ -584,5 +584,88 @@ class ADGroupCreateTest extends PassboltTestCase {
 		$this->goIntoAddUserAutocompleteIframe();
 		$this->waitUntilISee('.autocomplete-content', '/No user found/i');
 		$this->goOutOfIframe();
+	}
+
+	/**
+	 * Scenario: As a user I should receive a notification when I am added to a group
+	 *
+	 * Given that   I am a logged in administrator
+	 * When         I click on create button
+	 *  And         I select create a group
+	 * Then         I should see the create group dialog
+	 * When         I enter a group name
+	 *  And         I add Ada as group manager
+	 *  And         I add Betty as member
+	 *  And         I click on save
+	 * Then         I should see a success notification message
+	 * When 		I access last email sent to the group manager
+	 * Then 		I should see the expected email title
+	 * 	And			I should see the expected email content
+	 * When 		I access last email sent to the group member
+	 * Then 		I should see the expected email title
+	 * 	And			I should see the expected email content
+	 */
+	public function testCreateGroupAddUserEmailNotification() {
+		$this->resetDatabaseWhenComplete();
+
+		// Given I am an administrator.
+		$user = User::get('admin');
+		$this->setClientConfig($user);
+
+		// I am logged in as admin
+		$this->loginAs($user);
+
+		// Go to user workspace
+		$this->gotoWorkspace('user');
+
+		// Create a new group
+		$this->gotoCreateGroup();
+
+		// When I click on the name input field
+		$this->click('js_field_name');
+
+		// When I enter a group name
+		$groupName = 'World citizen';
+		$this->inputText('js_field_name', $groupName);
+
+		// And I add Ada as group manager
+		$ada = User::get('ada');
+		$this->searchGroupUserToAdd($ada, $user);
+		$this->addTemporaryGroupUser($ada);
+
+		// And I add Betty as member
+		$betty = User::get('betty');
+		$this->searchGroupUserToAdd($betty, $user);
+		$this->addTemporaryGroupUser($betty);
+
+		// And I click save.
+		$this->click('.edit-group-dialog a.button.primary');
+
+		// And I should see a success notification message
+		$this->assertNotification('app_groups_add_success');
+
+		// When I access last email sent to the group manager.
+		$this->getUrl('seleniumTests/showLastEmail/' . $ada['Username']);
+
+		// Then I should see the expected email title
+		$this->assertMetaTitleContains(sprintf('%s added you to the group %s', $user['FirstName'], $groupName));
+
+		// And I should see the expected email content
+		$this->assertElementContainsText('bodyTable', 'Name: World citizen');
+		$this->assertElementContainsText('bodyTable', 'Your role: Group manager');
+		$this->assertElementContainsText('bodyTable', 'As member of the group');
+		$this->assertElementContainsText('bodyTable', 'And as group manager');
+
+		// When I access last email sent to the group manager.
+		$this->getUrl('seleniumTests/showLastEmail/' . $betty['Username']);
+
+		// Then I should see the expected email title
+		$this->assertMetaTitleContains(sprintf('%s added you to the group %s', $user['FirstName'], $groupName));
+
+		// And I should see the expected email content
+		$this->assertElementContainsText('bodyTable', 'Name: World citizen');
+		$this->assertElementContainsText('bodyTable', 'Your role: Member');
+		$this->assertElementContainsText('bodyTable', 'As member of the group');
+		$this->assertElementNotContainText('bodyTable', 'And as group manager');
 	}
 }
