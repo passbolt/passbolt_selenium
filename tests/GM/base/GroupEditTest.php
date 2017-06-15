@@ -16,6 +16,8 @@ use Facebook\WebDriver\WebDriverSelect;
  *  - As a group manager I can add a user to a group that accesses passwords using the edit group dialog
  *  - As an group manager I can remove a user from a group I manage using the edit group dialog
  *  - As a user I should receive a notification when I am added to a group
+ *  - As a user I should receive a notification when I am deleted from a group
+ *  - As a group manager I should receive a notification when another group manager updated the members of a group I manage
  *
  * @copyright (c) 2017-present Passbolt SARL
  * @licence GNU Affero General Public License http://www.gnu.org/licenses/agpl-3.0.en.html
@@ -543,7 +545,7 @@ class GMGroupEditTest extends PassboltTestCase {
 	public function testEditGroupAddUserEmailNotification() {
 		$this->resetDatabaseWhenComplete();
 
-		// Given I am an administrator.
+		// Given I am a group manager.
 		$user = User::get('frances');
 		$this->setClientConfig($user);
 
@@ -597,9 +599,8 @@ class GMGroupEditTest extends PassboltTestCase {
 		$this->assertElementNotContainText('bodyTable', 'And as group manager');
 	}
 
-
 	/**
-	 * Scenario: As a user I should receive a notification when I am added to a group
+	 * Scenario: As a user I should receive a notification when I am deleted from a group
 	 *
 	 * Given		I am logged in as a group manager
 	 * And			I am on the users workspace
@@ -614,7 +615,7 @@ class GMGroupEditTest extends PassboltTestCase {
 	public function testEditGroupDeleteUserEmailNotification() {
 		$this->resetDatabaseWhenComplete();
 
-		// Given I am an administrator.
+		// Given I am a group manager.
 		$user = User::get('frances');
 		$this->setClientConfig($user);
 
@@ -646,6 +647,87 @@ class GMGroupEditTest extends PassboltTestCase {
 		// And I should see the expected email content
 		$this->assertElementContainsText('bodyTable', 'Name: ' . $group['name']);
 		$this->assertElementContainsText('bodyTable', 'You are no longer a member of this group');
+	}
+
+	/**
+	 * Scenario: As a group manager I should receive a notification when another group manager updated the members of a group I manage
+	 *
+	 * Given		I am logged in as a group manager
+	 * And			I am on the users workspace
+	 * And			I am editing a group that I manage
+	 * When         I add some users to a group
+	 *  And			I remove some users from the group
+	 *  And			I update the role of some users
+	 *  And         I click on save
+	 * Then         I should see a success notification message
+	 * When			I access last email sent to me
+	 * Then			I shouldn't see any email
+	 * When 		I access last email sent to the other group manager
+	 * Then 		I should see the expected email title
+	 * 	And			I should see the expected email content
+	 */
+	public function testEditGroupGroupUpdatedSummaryEmailNotification() {
+		$this->resetDatabaseWhenComplete();
+
+		// Given I am an administrator.
+		$user = User::get('ping');
+		$this->setClientConfig($user);
+
+		// I am logged in as admin
+		$this->loginAs($user);
+
+		// And I am on the users workspace
+		// And I am editing a group that I manage
+		$group = Group::get(['id' => Uuid::get('group.id.human_resource')]);
+		$this->gotoEditGroup($group['id']);
+
+		// When I add some users to the groups
+		$ada = User::get('ada');
+		$this->searchGroupUserToAdd($ada, $user);
+		$this->addTemporaryGroupUser($ada);
+		$this->editTemporaryGroupUserRole($ada, true);
+
+		$betty = User::get('betty');
+		$this->searchGroupUserToAdd($betty, $user);
+		$this->addTemporaryGroupUser($betty);
+
+		// And I remove some users from the group
+		$ursula = User::get('ursula');
+		$groupUserId = Uuid::get('group_user.id.human_resource-ursula');
+		$this->click("#js_group_user_delete_$groupUserId");
+
+		// And I update the role of some users
+		$wang = User::get('wang');
+		$this->editTemporaryGroupUserRole($wang, true);
+
+		// And I click save.
+		$this->click('.edit-group-dialog a.button.primary');
+
+		// And I should see a success notification message
+		$this->assertNotification('app_groups_edit_success');
+
+		// When I access last email sent to me
+		$this->getUrl('seleniumTests/showLastEmail/' . $user['Username']);
+
+		// Then I shouldn't see any email
+		$this->assertElementContainsText('body', 'No email was sent to this user');
+
+		// When I access last email sent to the other group manager
+		$thelma = User::get('thelma');
+		$this->getUrl('seleniumTests/showLastEmail/' . $thelma['Username']);
+
+		// Then I should see the expected email title
+		$this->assertMetaTitleContains(sprintf('%s updated members of the group %s', $user['FirstName'], $group['name']));
+
+		// And I should see the expected email content
+		$this->assertElementContainsText('bodyTable', 'Name: ' . $group['name']);
+		$this->assertElementContainsText('bodyTable', 'Added members');
+		$this->assertElementContainsText('#added_users', "{$ada['FirstName']} {$ada['LastName']} (Group manager)");
+		$this->assertElementContainsText('#added_users', "{$betty['FirstName']} {$betty['LastName']} (Member)");
+		$this->assertElementContainsText('bodyTable', 'Removed members');
+		$this->assertElementContainsText('#deleted_users', "{$ursula['FirstName']} {$ursula['LastName']} (Member)");
+		$this->assertElementContainsText('bodyTable', 'Updated roles');
+		$this->assertElementContainsText('#updated_roles', "{$wang['FirstName']} {$wang['LastName']} is now group manager");
 	}
 
 }
