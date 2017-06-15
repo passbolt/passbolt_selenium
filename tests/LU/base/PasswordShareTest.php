@@ -660,6 +660,49 @@ class PasswordShareTest extends PassboltTestCase
 	}
 
 	/**
+	 * @group saucelabs
+	 * Scenario: As a user I should receive a notification when another user share a password with me
+	 *
+	 * Given    I am Carol
+	 * And      I am logged in on the password workspace
+	 * When     I go to the sharing dialog of a password I own
+	 * When     I give read access to betty for a password I own
+	 * And      I access last email sent to betty
+	 * Then 	I should see the expected email title
+	 * 	And	    I should see the expected email content
+	 */
+	public function testSharePasswordWithUserNotification() {
+		// Reset database at the end of test.
+		$this->resetDatabaseWhenComplete();
+
+		// Given I am Carol
+		$user = User::get('carol');
+		$this->setClientConfig($user);
+
+		// And I am logged in on the password workspace
+		$this->loginAs($user);
+
+		// When I go to the sharing dialog of a password I own
+		$resource = Resource::get(array(
+			'user' => 'carol',
+			'id' => Uuid::get('resource.id.gnupg')
+		));
+
+		// And I give read access to betty for a password I own
+		$betty = User::get('betty');
+		$this->sharePassword($resource, $betty['Username'], $user);
+
+		// When I access last email sent to the other group manager
+		$this->getUrl('seleniumTests/showLastEmail/' . $betty['Username']);
+
+		// Then I should see the expected email title
+		$this->assertMetaTitleContains(sprintf('%s shared %s with you', $user['FirstName'], $resource['name']));
+
+		// And I should see the expected email content
+		$this->assertElementContainsText('bodyTable', '-----BEGIN PGP MESSAGE-----');
+	}
+
+	/**
 	 * Scenario: As a user I can share a password with other users, and see them immediately in the sidebar
 	 *
 	 * Given    I am Carol
@@ -779,6 +822,50 @@ class PasswordShareTest extends PassboltTestCase
 
 		// And the content of the clipboard is valid
 		$this->assertClipboard($resource['password']);
+	}
+
+	/**
+	 * @group saucelabs
+	 * Scenario: As a user I should receive a notification when another user share a password with me
+	 *
+	 * Given    I am Carol
+	 * And      I am logged in on the password workspace
+	 * When     I go to the sharing dialog of a password I own
+	 * When     I give read access to the group Freelance for a password I own
+	 * And      I access last email sent to a member of the group
+	 * Then 	I should see the expected email title
+	 * 	And	    I should see the expected email content
+	 */
+	public function testSharePasswordWithGroupNotification() {
+		// Reset database at the end of test.
+		$this->resetDatabaseWhenComplete();
+
+		// Given I am Carol
+		$user = User::get('ada');
+		$this->setClientConfig($user);
+
+		// And I am logged in on the password workspace
+		$this->loginAs($user);
+
+		// When I go to the sharing dialog of a password I own
+		$resource = Resource::get(array(
+			'user' => 'ada',
+			'id' => Uuid::get('resource.id.apache')
+		));
+
+		// And I give read access to a group for a password I own
+		$freelancer = Group::get(['id' => Uuid::get('group.id.freelancer')]);
+		$jean = User::get('jean');
+		$this->sharePassword($resource, $freelancer['name'], $user);
+
+		// When I access last email sent to the other group manager
+		$this->getUrl('seleniumTests/showLastEmail/' . $jean['Username']);
+
+		// Then I should see the expected email title
+		$this->assertMetaTitleContains(sprintf('%s shared %s with you', $user['FirstName'], $resource['name']));
+
+		// And I should see the expected email content
+		$this->assertElementContainsText('bodyTable', '-----BEGIN PGP MESSAGE-----');
 	}
 
 	/**
