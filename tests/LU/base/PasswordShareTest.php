@@ -1249,7 +1249,7 @@ class PasswordShareTest extends PassboltTestCase
 	 * And 		I give read access to betty for a password I own
 	 * Then 	I can see Betty has read access on the password
 	 *
-	 * When 	I loggin as Admin
+	 * When 	I login as Admin
 	 * And 		I go on the user workspace
 	 * When 	I click on a user
 	 * And 		I click on the delete button
@@ -1268,7 +1268,7 @@ class PasswordShareTest extends PassboltTestCase
 		$this->resetDatabaseWhenComplete();
 
 		// The user to share a resource with and also the user to delete
-		$userF = User::get('frances');
+		$userU = User::get('ursula');
 
 		// Given I am Ada
 		$userA = User::get('ada');
@@ -1285,12 +1285,12 @@ class PasswordShareTest extends PassboltTestCase
 		$this->gotoSharePassword($resource['id']);
 
 		// And I give read access to betty for a password I own
-		$this->sharePassword($resource, $userF['Username'], $userA);
+		$this->sharePassword($resource, $userU['Username'], $userA);
 
 		// Then I can see Betty has read access on the password
-		$this->assertPermission($resource, $userF['Username'], 'can read');
+		$this->assertPermission($resource, $userU['Username'], 'can read');
 
-		// When I loggin as Admin
+		// When I login as Admin
 		$this->logout();
 		$admin = User::get('admin');
 		$this->setClientConfig($admin);
@@ -1300,7 +1300,7 @@ class PasswordShareTest extends PassboltTestCase
 		$this->gotoWorkspace('user');
 
 		// When I click on a user
-		$this->clickUser($userF['id']);
+		$this->clickUser($userU['id']);
 
 		// Then I click on the delete button
 		$this->click('js_user_wk_menu_deletion_button');
@@ -1329,7 +1329,7 @@ class PasswordShareTest extends PassboltTestCase
 		$this->assertPermission($resource, $userA['Username'], 'is owner', ['closeDialog' => false]);
 
 		// And I don't see France in the list of permissions
-		$this->assertNoPermission($resource, $userF['Username'], ['closeDialog' => false]);
+		$this->assertNoPermission($resource, $userU['Username'], ['closeDialog' => false]);
 	}
 
 	/**

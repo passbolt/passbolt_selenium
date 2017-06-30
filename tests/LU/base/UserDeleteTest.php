@@ -8,6 +8,7 @@
  *  - As Admin I should'nt be able to delete my own user account
  *  - As LU I should be able to get a clear feedback at login if my account has been deleted.
  *  - As Admin I should'nt be able to delete a user who is the sole owner of some shared passwords
+ *  - As Admin I should'nt be able to delete a user who is the sole group manager of groups
  *
  * @copyright (c) 2017 Passbolt SARL
  * @licence GNU Affero General Public License http://www.gnu.org/licenses/agpl-3.0.en.html
@@ -42,7 +43,7 @@ class UserDeleteTest extends PassboltTestCase {
 		$this->gotoWorkspace('user');
 
 		// When I right click on a user
-		$user = User::get('frances');
+		$user = User::get('ursula');
 		$this->rightClickUser($user['id']);
 
 		// Then I select the delete option in the contextual menu
@@ -98,7 +99,7 @@ class UserDeleteTest extends PassboltTestCase {
 		$this->gotoWorkspace('user');
 
 		// When I click on the user
-		$user = User::get('frances');
+		$user = User::get('ursula');
 		$this->clickUser($user['id']);
 
 		// Then I click on delete button
@@ -191,8 +192,8 @@ class UserDeleteTest extends PassboltTestCase {
 		$this->gotoWorkspace('user');
 
 		// When I right click on a user
-		$userF = User::get('frances');
-		$this->clickUser($userF['id']);
+		$userU = User::get('ursula');
+		$this->clickUser($userU['id']);
 
 		// Then I select the delete option in the contextual menu
 		$this->click('js_user_wk_menu_deletion_button');
@@ -210,7 +211,7 @@ class UserDeleteTest extends PassboltTestCase {
 		$this->logout();
 
 		// I become the user I deleted.
-		$this->setClientConfig($userF);
+		$this->setClientConfig($userU);
 
 		// When I go to login.
 		$this->getUrl('login');
@@ -261,7 +262,49 @@ class UserDeleteTest extends PassboltTestCase {
 
 		// Then I should see that the dialog disappears
 		$this->waitUntilIDontSee('.mad_component_confirm');
+	}
 
+
+	/**
+	 * Scenario :   As Admin I should'nt be able to delete a user who is the sole group manager of groups
+	 * Given        I am logged in as admin in the user workspace
+	 * And          I click on the user
+	 * And          I click on delete button
+	 * Then         I should see a confirmation dialog
+	 * When         I click ok in the confirmation dialog
+	 * Then         I should see a message explaining me why the user can't be deleted
+	 * When 		I click on the dialog main action
+	 * Then			I should see that the dialog disappears
+	 */
+	public function testDeletedUserSoleGroupManager() {
+		// Reset database at the end of test.
+		$this->resetDatabaseWhenComplete();
+
+		// Given I am Admin
+		$user = User::get('admin');
+		$this->setClientConfig($user);
+
+		// And I am logged in on the user workspace
+		$this->loginAs($user);
+
+		// Go to user workspace
+		$this->gotoWorkspace('user');
+
+		// When I click on a user
+		$userF = User::get('frances');
+		$this->clickUser($userF['id']);
+
+		// And I click on delete button
+		$this->click('js_user_wk_menu_deletion_button');
+
+		// Then I should see a message explaining me why the user can't be deleted
+		$this->assertConfirmationDialog('You cannot delete this user!');
+
+		// When I click on the dialog main action
+		$this->confirmActionInConfirmationDialog();
+
+		// Then I should see that the dialog disappears
+		$this->waitUntilIDontSee('.mad_component_confirm');
 	}
 
 }
