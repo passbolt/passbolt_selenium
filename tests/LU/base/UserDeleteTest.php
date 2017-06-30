@@ -42,7 +42,7 @@ class UserDeleteTest extends PassboltTestCase {
 		$this->gotoWorkspace('user');
 
 		// When I right click on a user
-		$user = User::get('frances');
+		$user = User::get('ursula');
 		$this->rightClickUser($user['id']);
 
 		// Then I select the delete option in the contextual menu
@@ -98,7 +98,7 @@ class UserDeleteTest extends PassboltTestCase {
 		$this->gotoWorkspace('user');
 
 		// When I click on the user
-		$user = User::get('frances');
+		$user = User::get('ursula');
 		$this->clickUser($user['id']);
 
 		// Then I click on delete button
@@ -191,8 +191,8 @@ class UserDeleteTest extends PassboltTestCase {
 		$this->gotoWorkspace('user');
 
 		// When I right click on a user
-		$userF = User::get('frances');
-		$this->clickUser($userF['id']);
+		$userU = User::get('ursula');
+		$this->clickUser($userU['id']);
 
 		// Then I select the delete option in the contextual menu
 		$this->click('js_user_wk_menu_deletion_button');
@@ -210,7 +210,7 @@ class UserDeleteTest extends PassboltTestCase {
 		$this->logout();
 
 		// I become the user I deleted.
-		$this->setClientConfig($userF);
+		$this->setClientConfig($userU);
 
 		// When I go to login.
 		$this->getUrl('login');
