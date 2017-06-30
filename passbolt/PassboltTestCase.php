@@ -564,7 +564,7 @@ class PassboltTestCase extends WebDriverTestCase {
 		$this->waitUntilISee('#js_setup_submit_step.enabled');
 		$this->clickLink("Next");
 		// Wait until we see the title Master password.
-		$this->waitUntilISee('#js_step_title', '/Success! Your secret key is ready./i');
+		$this->waitUntilISee('#js_step_title', '/Success! Your secret key is ready./i', 20);
 		// Press Next.
 		$this->clickLink("Next");
 		// Wait.
