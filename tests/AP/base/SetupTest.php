@@ -623,8 +623,8 @@ class SetupTest extends PassboltSetupTestCase {
 		$this->gotoWorkspace('user');
 
 		// When I right click on a user
-		$userF = User::get('frances');
-		$this->rightClickUser($userF['id']);
+		$userU = User::get('ursula');
+		$this->rightClickUser($userU['id']);
 
 		// Then I select the delete option in the contextual menu
 		$this->click('#js_user_browser_menu_delete a');
@@ -641,7 +641,7 @@ class SetupTest extends PassboltSetupTestCase {
 		$this->logout();
 
 		$john = User::get('john');
-		$john['PrivateKey'] = 'frances_private.key';
+		$john['PrivateKey'] = 'ursula_private.key';
 
 		// Register John Doe as a user.
 		$this->registerUser($john['FirstName'], $john['LastName'], $john['Username']);
