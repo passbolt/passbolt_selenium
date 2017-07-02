@@ -1196,16 +1196,16 @@ class PasswordEditTest extends PassboltTestCase
 		$this->goOutOfIframe();
 
         // When I enter & as a name
-        $this->inputText('js_field_name', '&');
+        $this->inputText('js_field_name', '<');
 
         // And I enter & as a username
-        $this->inputText('js_field_username', '&');
+        $this->inputText('js_field_username', '<');
 
         // And I enter & as a url
-        $this->inputText('js_field_uri', '&');
+        $this->inputText('js_field_uri', '<');
 
         // And I enter & as a description
-        $this->inputText('js_field_description', '&');
+        $this->inputText('js_field_description', '<');
 
         // And I click save
         $this->click('.edit-password-dialog input[type=submit]');

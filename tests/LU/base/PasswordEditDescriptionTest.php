@@ -197,7 +197,7 @@ class PasswordEditDescriptionTest extends PassboltTestCase {
 		$this->waitUntilISee("#js_rs_details_edit_description textarea.js_resource_description");
 
 		// I input ###
-		$this->inputText("#js_rs_details_edit_description textarea.js_resource_description", '###');
+		$this->inputText("#js_rs_details_edit_description textarea.js_resource_description", '<<>');
 
 		// Click on submit.
 		$this->click('#js_rs_details_edit_description input[type=submit]');
