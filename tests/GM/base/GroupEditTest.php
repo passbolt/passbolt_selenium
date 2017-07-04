@@ -17,6 +17,7 @@ use Facebook\WebDriver\WebDriverSelect;
  *  - As an group manager I can remove a user from a group I manage using the edit group dialog
  *  - As a user I should receive a notification when I am added to a group
  *  - As a user I should receive a notification when I am deleted from a group
+ *  - As a group member I should receive a notification when my role in the group has changed
  *  - As a group manager I should receive a notification when another group manager updated the members of a group I manage
  *
  * @copyright (c) 2017-present Passbolt SARL
@@ -647,6 +648,69 @@ class GMGroupEditTest extends PassboltTestCase {
 		// And I should see the expected email content
 		$this->assertElementContainsText('bodyTable', 'Name: ' . $group['name']);
 		$this->assertElementContainsText('bodyTable', 'You are no longer a member of this group');
+	}
+
+	/**
+	 * Scenario: As a group member I should receive a notification when my role in the group has changed
+	 *
+	 * Given		I am logged in as a group manager
+	 * And			I am on the users workspace
+	 * And			I am editing a group that I manage
+	 * When         I change a user role to group manager
+	 *  And         I change a user role to member
+	 *  And         I click on save
+	 * Then         I should see a success notification message
+	 * When 		When I access last email sent to the group manager
+	 * Then 		I should see the expected email
+	 * When 		When I access last email sent to the member
+	 * Then 		I should see the expected email
+	 */
+	public function testEditGroupUpdateUserEmailNotification() {
+		$this->resetDatabaseWhenComplete();
+
+		// Given I am a group manager.
+		$user = User::get('ping');
+		$this->setClientConfig($user);
+
+		// I am logged in as admin
+		$this->loginAs($user);
+
+		// And I am on the users workspace
+		// And I am editing a group that I manage
+		$group = Group::get(['id' => Uuid::get('group.id.human_resource')]);
+		$this->gotoEditGroup($group['id']);
+
+		// When I change a user role to group manager
+		$userW = User::get('wang');
+		$this->editTemporaryGroupUserRole($userW, true);
+
+		// And I change a user role to member
+		$userT = User::get('thelma');
+		$this->editTemporaryGroupUserRole($userT, false);
+
+		// And I click save.
+		$this->click('.edit-group-dialog a.button.primary');
+
+		// And I should see a success notification message
+		$this->assertNotification('app_groups_edit_success');
+
+		// When I access last email sent to the group manager.
+		$this->getUrl('seleniumTests/showLastEmail/' . $userW['Username']);
+
+		// Then I should see the expected email
+		$this->assertMetaTitleContains(sprintf('%s updated your group membership', $user['FirstName'], $group['name']));
+		$this->assertElementContainsText('bodyTable', 'Group name: ' . $group['name']);
+		$this->assertElementContainsText('bodyTable', 'New role: Group manager');
+		$this->assertElementContainsText('bodyTable', 'You are now a group manager of this group');
+
+		// When I access last email sent to the member
+		$this->getUrl('seleniumTests/showLastEmail/' . $userT['Username']);
+
+		// Then I should see the expected email
+		$this->assertMetaTitleContains(sprintf('%s updated your group membership', $user['FirstName'], $group['name']));
+		$this->assertElementContainsText('bodyTable', 'Group name: ' . $group['name']);
+		$this->assertElementContainsText('bodyTable', 'New role: Member');
+		$this->assertElementContainsText('bodyTable', 'You are no longer a group manager of this group');
 	}
 
 	/**
