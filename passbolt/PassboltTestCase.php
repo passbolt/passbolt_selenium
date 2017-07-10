@@ -684,7 +684,7 @@ class PassboltTestCase extends WebDriverTestCase {
 	 */
 	public function clickPassword($id) {
 		if(!$this->isVisible('.page.password')) {
-			throw new Exception("click password requires to be on the password workspace");
+			$this->fail("click password requires to be on the password workspace");
 		}
 		$this->click('#resource_' . $id . ' .cell_name');
 	}
@@ -697,7 +697,7 @@ class PassboltTestCase extends WebDriverTestCase {
 	 */
 	public function rightClickPassword($id) {
 		if(!$this->isVisible('.page.password')) {
-			throw new Exception("right click password requires to be on the password workspace");
+			$this->fail("right click password requires to be on the password workspace");
 		}
 		$eltSelector = '#resource_' . $id . ' .cell_name';
 		//$this->rightClick('#resource_' . $id . ' .cell_name');
@@ -762,6 +762,34 @@ class PassboltTestCase extends WebDriverTestCase {
 			return false;
 		}
 		return true;
+	}
+
+	/**
+	 * Assert that a password is visible in the password workspace
+	 * @param $name
+	 *   name of the password (lowercase)
+	 */
+	public function assertICanSeePassword($name) {
+		try {
+			$this->waitUntilISee('resource_' . Uuid::get('resource.id.' . $name), '/' . $name . '/i');
+		}
+		catch(Exception $e) {
+			$this->fail("Failed to assert that the password " . $name . " is visible");
+		}
+	}
+
+	/**
+	 * Assert that a password is not visible in the password workspace
+	 * @param $name
+	 *   name of the password (lowercase)
+	 */
+	public function assertICannotSeePassword($name) {
+		try {
+			$this->waitUntilIDontSee('resource_' . Uuid::get('resource.id.' . $name), '/' . $name . '/i');
+		}
+		catch(Exception $e) {
+			$this->fail("Failed to assert that the password " . $name . " is visible");
+		}
 	}
 
 	/**
@@ -996,7 +1024,7 @@ class PassboltTestCase extends WebDriverTestCase {
 		}
 		if (isset($password['password'])) {
 			if (empty($user)) {
-				throw new Exception("a user must be provided to the function in order to update the secret");
+				$this->fail("a user must be provided to the function in order to update the secret");
 			}
 			$this->goIntoSecretIframe();
 			$this->click('js_secret');
@@ -1262,7 +1290,7 @@ class PassboltTestCase extends WebDriverTestCase {
 			$this->waitUntilISee('.autocomplete-content', '/' . $userFullName . '/i');
 		} catch(Exception $e) {
 			$this->goOutOfIframe();
-			throw new Exception("Could not find the requested user '$userFullName' in the autocomplete list");
+			$this->fail("Could not find the requested user '$userFullName' in the autocomplete list");
 		}
 
 		$this->goOutOfIframe();
@@ -1507,7 +1535,7 @@ class PassboltTestCase extends WebDriverTestCase {
 	 */
 	public function clickUser($user) {
 		if(!$this->isVisible('.page.people')) {
-			throw new Exception("click user requires to be on the user workspace");
+			$this->fail("click user requires to be on the user workspace");
 		}
 		// if user is not an array, then it is a uuid.
 		if (!is_array($user)) {
@@ -1530,7 +1558,7 @@ class PassboltTestCase extends WebDriverTestCase {
 	 */
 	public function rightClickUser($id) {
 		if(!$this->isVisible('.page.people')) {
-			throw new Exception("right click user requires to be on the user workspace");
+			$this->fail("right click user requires to be on the user workspace");
 		}
 		$eltSelector = '#user_' . $id . ' .cell_name';
 		$this->driver->executeScript("
@@ -1598,19 +1626,27 @@ class PassboltTestCase extends WebDriverTestCase {
 	/**
 	 * Click on a group inside the user workspace.
 	 * @param string $id id of the group
+	 * @param string $workspace name of the workspace (password or user. Default=user)
 	 *
 	 * @throws Exception
 	 */
-	public function clickGroup($id) {
-		if(!$this->isVisible('.page.people')) {
+	public function clickGroup($id, $workspace='user') {
+		if($workspace == 'user' && !$this->isVisible('.page.people')) {
 			$this->getUrl('');
 			$this->gotoWorkspace('user');
 			$this->waitUntilISee('.page.people');
+		}
+		elseif($workspace == 'password' && !$this->isVisible('.page.password')) {
+			$this->getUrl('');
+			$this->gotoWorkspace('password');
+			$this->waitUntilISee('.page.password');
 		}
 		$eltSelector = '#group_' . $id . ' .main-cell';
 		$this->click($eltSelector);
 		$this->waitCompletion();
 	}
+
+
 
 	/**
 	 * Check if the group has already been selected
@@ -1632,6 +1668,19 @@ class PassboltTestCase extends WebDriverTestCase {
 	 */
 	public function isGroupNotSelected($id) {
 		return !$this->isGroupSelected($id);
+	}
+
+	/**
+	 * Assert that I can see a group.
+	 * @param $name
+	 */
+	public function assertICanSeeGroup($name) {
+		try {
+			$this->waitUntilISee("#group_" . Uuid::get('group.id.' . strtolower($name)), '/' . $name . '/i');
+		}
+		catch (Exception $e) {
+			$this->fail('Failed asserting that group ' . $name . ' is visible');
+		}
 	}
 
 	/**
@@ -1747,7 +1796,7 @@ class PassboltTestCase extends WebDriverTestCase {
 
 		$backtrace = debug_backtrace();
 		$currentUrl = $this->driver->getCurrentURL();
-		throw new Exception( "waitUntilURLMatches $url : Timeout thrown by " . $backtrace[1]['class'] . "::" . $backtrace[1]['function'] . "()\n . element: $url \n . current url : $currentUrl \n");
+		$this->fail( "waitUntilURLMatches $url : Timeout thrown by " . $backtrace[1]['class'] . "::" . $backtrace[1]['function'] . "()\n . element: $url \n . current url : $currentUrl \n");
 	}
 
 	/**
@@ -1775,7 +1824,7 @@ class PassboltTestCase extends WebDriverTestCase {
 		}
 
 		$backtrace = debug_backtrace();
-		throw new Exception("waitUntilCssValueEqual $name: $expectedValue Timeout thrown by " . $backtrace[1]['class'] . "::" . $backtrace[1]['function'] . "() \n");
+		$this->fail("waitUntilCssValueEqual $name: $expectedValue Timeout thrown by " . $backtrace[1]['class'] . "::" . $backtrace[1]['function'] . "() \n");
 	}
 
 	/**
@@ -1798,7 +1847,7 @@ class PassboltTestCase extends WebDriverTestCase {
 		}
 
 		$backtrace = debug_backtrace();
-		throw new Exception("waitUntilElementHasFocus $id Timeout thrown by " . $backtrace[1]['class'] . "::" . $backtrace[1]['function'] . "() \n");
+		$this->fail("waitUntilElementHasFocus $id Timeout thrown by " . $backtrace[1]['class'] . "::" . $backtrace[1]['function'] . "() \n");
 	}
 
 	/**
