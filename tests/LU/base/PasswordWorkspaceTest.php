@@ -13,6 +13,7 @@
  * - As a user, I should be able to control the sidebar visibility through the sidebar button
  * - As a user, I should see a welcome message when I am on an empty password workspace
  * - As a user I should be able to sort the passwords browser by column
+ * - As a user I should be able to filter my passwords by group
  *
  * @copyright (c) 2017 Passbolt SARL
  * @licence GNU Affero General Public License http://www.gnu.org/licenses/agpl-3.0.en.html
@@ -750,5 +751,100 @@ class PasswordWorkspaceTest extends PassboltTestCase
 		$this->assertElementHasClass($columnHeaderModifiedElement, 'sort-asc');
 		$this->assertElementHasNotClass($columnHeaderUriElement, 'sorted');
 		$this->assertElementHasNotClass($columnHeaderUriElement, 'sort-asc');
+	}
+
+	/**
+	 * Scenario :   As a user I should be able to filter my passwords by group
+	 * Given        I am logged in as Irene on the password workspace
+	 * When 		I edit the group "ergonom"
+	 * And          I add "kathleen" as a member of the group
+	 * And          I save the changes
+	 * Then         I should see a notification message saying that the changes have been taken into account
+	 * When         I log out
+	 * And          I log in again as Kathleen
+	 * Then         I should see a section called "Filter by groups" in the sidebar
+	 * And          I should see that there is a group called "ergonom" in this section
+	 * And          I should see that there is a group called "freelancer" in this section
+	 * When         I click on the group "freelancer"
+	 * And          I wait the the password workspace to reload
+	 * Then         I should see the password "framasoft" in the list
+	 * And          I shouldn't see the password "debian" in the list
+	 * When         I click on the group "ergonom"
+	 * And          I wait the the password workspace to reload
+	 * Then         I should see the password "debian" in the list
+	 * And          I shouldn't see the password "framasoft" in the list
+	 */
+	public function testFilterByGroups() {
+		$this->resetDatabaseWhenComplete();
+
+		// Log in as Irene (group manager of ergonom) and add Kathleen to the group "marketing".
+		// Given I am an administrator.
+		$user = User::get('irene');
+		$this->setClientConfig($user);
+
+		// I am logged in as irene.
+		$this->loginAs($user);
+
+		// I edit the group "ergonom".
+		$group = Group::get(['id' => Uuid::get('group.id.ergonom')]);
+		$this->gotoEditGroup($group['id']);
+
+		// When I add a the user "kathleen" to the group.
+		$kathleen = User::get('kathleen');
+		$this->searchGroupUserToAdd($kathleen, $user);
+		$this->addTemporaryGroupUser($kathleen);
+
+		// And I save the changes.
+		$this->click('.edit-group-dialog a.button.primary');
+
+		// And I enter my master password.
+		$this->assertMasterPasswordDialog($user);
+		$this->enterMasterPassword($user['MasterPassword']);
+
+		// Then I should see that the dialog disappears
+		$this->waitUntilIDontSee('.edit-group-dialog');
+
+		// And I should see a confirmation message saying that the group members changes have been saved.
+		$this->assertNotification('app_groups_edit_success');
+
+		// When I log out.
+		$this->logout();
+
+		// And I log in again as Kathleen.
+		$user = User::get('kathleen');
+		$this->setClientConfig($user);
+		$this->loginAs($user);
+
+		// I should see a section called "Filter by groups".
+		$this->waitUntilISee("#js_wsp_pwd_password_categories", '/Filter by groups/');
+
+		// I should see a group "Ergonom".
+		$this->assertICanSeeGroup('Ergonom');
+
+		// And I should see a group "Freelancer".
+		$this->assertICanSeeGroup('Freelancer');
+
+		// Assert that the filters function properly.
+		// In freelancer group, debian shouldn't be there but framasoft should be
+		// In ergonom group, debian should be there but not framasoft
+
+		// I Click on the group "freelancer".
+		$this->clickGroup(Uuid::get('group.id.freelancer'), 'password');
+		$this->waitCompletion();
+
+		// I should see the password "framasoft".
+		$this->assertICanSeePassword('framasoft');
+		// And I shouldn't see the password "debian".
+		$this->assertICannotSeePassword('debian');
+
+		// When I click on the group "ergonom".
+		$this->clickGroup(Uuid::get('group.id.ergonom'), 'password');
+		$this->waitCompletion();
+
+		// I should see the password "debian".
+		$this->assertICanSeePassword('debian');
+
+		// And I shouldn't see the password "framasoft".
+		$this->assertICannotSeePassword('framasoft');
 	}
 }

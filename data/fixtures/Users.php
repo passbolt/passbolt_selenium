@@ -175,6 +175,19 @@ class User {
 					'PrivateKey' => 'wang_private.key'
 				));
 				break;
+	        case 'kathleen':
+		        return array_merge($conf,array(
+			        'id' => Uuid::get('user.id.kathleen'),
+			        'name' => 'kathleen',
+			        'FirstName' => 'Kathleen',
+			        'LastName' => 'Antonelli',
+			        'Username' => 'kathleen@passbolt.com',
+			        'MasterPassword' => 'kathleen@passbolt.com',
+			        'TokenCode' => 'KAT',
+			        'PrivateKey' => 'kathleen_private.key',
+			        'PublicKey'  => 'kathleen_public.key',
+		        ));
+		        break;
 	        case 'admin':
 		        return array_merge($conf,array(
 			        'id' => Uuid::get('user.id.admin'),
