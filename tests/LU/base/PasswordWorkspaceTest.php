@@ -14,6 +14,7 @@
  * - As a user, I should see a welcome message when I am on an empty password workspace
  * - As a user I should be able to sort the passwords browser by column
  * - As a user I should be able to filter my passwords by group
+ * - As a user who doesn't belong to any group, I should'nt see the "Filter by group" section on the passwords workspace
  *
  * @copyright (c) 2017 Passbolt SARL
  * @licence GNU Affero General Public License http://www.gnu.org/licenses/agpl-3.0.en.html
@@ -846,5 +847,25 @@ class PasswordWorkspaceTest extends PassboltTestCase
 
 		// And I shouldn't see the password "framasoft".
 		$this->assertICannotSeePassword('framasoft');
+	}
+
+	/**
+	 * Scenario :   As a user who doesn't belong to any group, I should'nt see the "Filter by group" section on the passwords workspace
+	 * Given        I am logged in as Ada on the passwords workspace
+	 * Then         I should'nt see the "Filter by groups" section
+	 */
+	public function testFilterByGroupsNoGroups() {
+		// Given I am logged in as Ada.
+		$user = User::get('ada');
+		$this->setClientConfig($user);
+
+		// I am logged in as irene.
+		$this->loginAs($user);
+
+		// Force wait.
+		sleep(3);
+
+		// I should see a section called "Filter by groups".
+		$this->waitUntilIDontSee("#js_wsp_pwd_password_categories", '/Filter by groups/');
 	}
 }
