@@ -192,9 +192,9 @@ class ADGroupEditTest extends PassboltTestCase {
 	/**
 	 * Scenario: As a user I should receive a notification when I am deleted from a group
 	 *
-	 * Given		I am logged in as a group manager
+	 * Given		I am logged in as an admin
 	 * And			I am on the users workspace
-	 * And			I am editing a group that I manage
+	 * And			I am editing a group
 	 * When         I remove a user from the group
 	 *  And         I click on save
 	 * Then         I should see a success notification message
@@ -205,15 +205,13 @@ class ADGroupEditTest extends PassboltTestCase {
 	public function testEditGroupDeleteUserEmailNotification() {
 		$this->resetDatabaseWhenComplete();
 
-		// Given I am an administrator.
+		// Given I am logged in as an admin
 		$user = User::get('admin');
 		$this->setClientConfig($user);
-
-		// I am logged in as admin
 		$this->loginAs($user);
 
 		// And I am on the users workspace
-		// And I am editing a group that I manage
+		// And I am editing a group
 		$group = Group::get(['id' => Uuid::get('group.id.accounting')]);
 		$this->gotoEditGroup($group['id']);
 
