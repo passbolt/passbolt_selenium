@@ -1059,7 +1059,6 @@ class PassboltTestCase extends WebDriverTestCase {
 	 * Helper to create a group
 	 */
 	public function createGroup($group, $users, $creator) {
-		$this->gotoWorkspace('user');
 		$this->gotoCreateGroup();
 
 		// Fill group name
@@ -2169,8 +2168,7 @@ class PassboltTestCase extends WebDriverTestCase {
 
 	/**
 	 * Assert that the password has a specific permission for a target user, inside the sidebar
-	 * @param $password
-	 * @param $username
+	 * @param $aro_name
 	 * @param $permissionType
 	 */
 	public function assertPermissionInSidebar($aro_name, $permissionType) {
@@ -2241,6 +2239,31 @@ class PassboltTestCase extends WebDriverTestCase {
 		// And I should see that below each user I can see his membership type
 		$memberRoleElt = $rowElement->findElement(WebDriverBy::cssSelector('.subinfo'));
 		$this->assertEquals($isAdmin ? 'Group manager' : 'Member', $memberRoleElt->getText());
+	}
+
+	/**
+	 * Assert a user is member of a group from the user sidebar
+	 * @param $groupName
+	 * @param $isGroupManager
+	 */
+	public function assertGroupUserInSidebar($groupName, $isGroupManager = false) {
+		// Wait until the groups list is loaded. (ready state).
+		$this->waitUntilISee('#js_user_groups_list.ready');
+
+		// Retrieve the group details information
+		$rowElement = $rowElement = $this->findByXpath('//*[@id="js_user_groups_list"]//*[contains(text(), "' . $groupName . '")]//ancestor::li');
+
+		// I can see the group is in the list
+		$this->assertElementContainsText(
+			$rowElement->findElement(WebDriverBy::cssSelector('.name')),
+			$groupName
+		);
+
+		// I can see the user has the expected role.
+		$this->assertElementContainsText(
+			$rowElement->findElement(WebDriverBy::cssSelector('.subinfo')),
+			$isGroupManager ? 'Group manager' : 'Member'
+		);
 	}
 
 	/**

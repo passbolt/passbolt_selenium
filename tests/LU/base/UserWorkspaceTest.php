@@ -6,7 +6,6 @@
  * - As a user I should be able to see the users workspace
  * - As a user I should be able to browse the users
  * - As a user I should be able to use the navigation filters
- * - As a user I should be able to view the user details
  * - As a user I should be able to search a user by keywords
  * - As a user when I filter the user workspace all users should be unselected
  * - As a user when I filter by keywords the user workspace the global filter "All users" should be selected
@@ -179,86 +178,6 @@ class UserWorkspaceTest extends PassboltTestCase {
 		// 	| All users
 		//	| Search : Recently modified
 		$this->assertBreadcrumb('users', ['All users', 'Recently modified']);
-	}
-
-	/**
-	 * @group saucelabs
-	 * Scenario :   As a user I should be able to view the user details
-	 *
-	 * Given        I am logged in as Ada, and I go to the user workspace
-	 * When			I click on a user
-	 * Then 		I should see a secondary side bar appearing
-	 * And			I should the details of the selected user
-	 */
-	public function testUsersDetails() {
-		// Given I am Ada
-		$user = User::get('ada');
-		$this->setClientConfig($user);
-
-		// And I am logged in on the user workspace
-		$this->loginAs($user);
-		$this->gotoWorkspace('user');
-
-		// I click on a user
-		$this->click("#js_wsp_users_browser .tableview-content div[title='Betty Holberton']");
-		$this->waitCompletion();
-
-		// I should see a secondary side bar appearing
-		$this->assertPageContainsElement('#js_user_details');
-
-		// I should see the details of the selected user
-		$userDetails = [
-			'role' 			=> 'User',
-			'modified' 		=> '7 days ago',
-			'keyid' 		=> 'E61D7009',
-			'type'		 	=> 'RSA',
-			'created'		=> '/[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}/',
-			'expires'		=> '/[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}/',
-		];
-		$userDetails['key'] = file_get_contents(GPG_FIXTURES . DS . 'betty_public.key' );
-
-		// I should see the user's role
-		$cssSelector = '#js_user_details .detailed-information li.role';
-		$this->assertElementContainsText(
-			$this->findByCss($cssSelector),
-			$userDetails['role']
-		);
-		// I should see the user's modified time
-		$cssSelector = '#js_user_details .detailed-information li.modified';
-		$this->assertElementContainsText(
-			$this->findByCss($cssSelector),
-			$userDetails['modified']
-		);
-		// I should see the user's key id
-		$cssSelector = '#js_user_details .key-information li.keyid';
-		$this->assertElementContainsText(
-			$this->findByCss($cssSelector),
-			$userDetails['keyid']
-		);
-		// I should see the user's key type
-		$cssSelector = '#js_user_details .key-information li.type';
-		$this->assertElementContainsText(
-			$this->findByCss($cssSelector),
-			$userDetails['type']
-		);
-		// I should see the user's key created time
-		$cssSelector = '#js_user_details .key-information li.created';
-		$this->assertElementContainsText(
-			$this->findByCss($cssSelector),
-			$userDetails['created']
-		);
-		// I should see the user's key expires time
-		$cssSelector = '#js_user_details .key-information li.expires';
-		$this->assertElementContainsText(
-			$this->findByCss($cssSelector),
-			$userDetails['expires']
-		);
-		// I should see the user's key public key
-		$cssSelector = '#js_user_details .key-information li.gpgkey';
-		$this->assertElementContainsText(
-			$this->findByCss($cssSelector),
-			$userDetails['key']
-		);
 	}
 
 	/**
