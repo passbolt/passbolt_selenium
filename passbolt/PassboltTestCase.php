@@ -1280,8 +1280,9 @@ class PassboltTestCase extends WebDriverTestCase {
 		$this->goOutOfIframe();
 
 		// I wait the autocomplete box is loaded.
-		$this->waitCompletion(10, '#passbolt-iframe-group-edit-autocomplete.loaded');
+		$this->waitUntilISee('#passbolt-iframe-group-edit-autocomplete.loaded');
 
+		// I check that the user I was looking for is in the autocomplete list.
 		$this->goIntoAddUserAutocompleteIframe();
 		$userFullName = $userToAdd['FirstName'] . ' ' . $userToAdd['LastName'];
 
