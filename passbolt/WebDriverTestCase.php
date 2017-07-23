@@ -751,47 +751,20 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
 
     /**
      * Wait until I see.
-     * @param $ids array of ids (success if only one of them is found), or string representing one id
-     * @param array or string $regexps (follows $ids)
-     * @param int timeout timeout in seconds
+     * @param string $selector the element I want to see
+     * @param string $regex (optional) The regex the element text should match
+     * @param int timeout (optional) timeout in seconds
      * @return bool if element is found
      * @throws Exception if element is not found after a given timeout
      */
-    public function waitUntilISee($ids, $regexps = null, $timeout = 10) {
-        // Number of loops to do.
-	    $loops = 50;
+    public function waitUntilISee($selector, $regex = null, $timeout = 10) {
+		$callback = array($this, '_assertISeeElement');
 
-	    for ($i = 0; $i < $loops; $i++) {
-	        if (is_array($ids)) {
-		        foreach($ids as $k => $id) {
-			        $regexp = null;
-			        if (!is_null($regexps) && is_string($regexps)) {
-						$regexp = $regexps;
-			        }
-			        elseif (!is_null($regexps) && is_array($regexps)) {
-				        $regexp = $regexps[$k];
-			        }
-			        $visible = $this->_assertISeeElement($id, $regexp);
-			        if ($visible === true) {
-				        return true;
-			        }
-		        }
-	        }
-	        else {
-		        $visible = $this->_assertISeeElement($ids, $regexps);
-		        if ($visible === true) {
-			        return true;
-		        }
-	        }
-	        $second = 1000000;
-	        usleep(($second * $timeout) / $loops);
-        }
-        $backtrace = debug_backtrace();
-	    $id = is_array($ids) ? implode(",", $ids) : $ids;
-	    $regexp = is_array($regexps) ? implode (",", $regexps) : $regexps;
-
-	    // Fail if not found.
-	    $this->fail("waitUntilISee $id, $regexp\nTimeout thrown by " . $backtrace[1]['class'] . "::" . $backtrace[1]['function'] . "()\n . element(s): $id ($regexp)");
+		try {
+			$this->waitUntil($callback, array($selector, $regex), $timeout);
+		} catch (Exception $e) {
+			$this->fail("waitUntilISee timeout thrown, cannot find selector : {$selector}, regex : {$regex}");
+		}
     }
 
 	/**

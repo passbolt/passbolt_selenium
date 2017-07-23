@@ -1477,7 +1477,7 @@ class PassboltTestCase extends WebDriverTestCase {
 		$this->clickLink('Copy password');
 		$this->assertMasterPasswordDialog($user);
 		$this->enterMasterPassword($user['MasterPassword']);
-		$this->assertNotification('plugin_secret_copy_success');
+		$this->assertNotification('plugin_clipboard_copy_success');
 	}
 
 	/**
@@ -1952,11 +1952,12 @@ class PassboltTestCase extends WebDriverTestCase {
 	 * @param string $msg
 	 */
 	public function assertNotification($notificationId, $msg = null) {
-		$notificationId = 'notification_' . Uuid::get($notificationId);
+		$notificationId = '#notification_' . Uuid::get($notificationId);
 		$this->waitUntilISee($notificationId);
-		$text = $this->find($notificationId)->getText();
 		if (isset($msg)) {
 			$contain = false;
+			$elt = $this->find($notificationId);
+			$text = $elt->getText();
 			if(preg_match('/^\/.+\/[a-z]*$/i', $msg)) {
 				$contain = preg_match($msg, $text) != false;
 			} else {

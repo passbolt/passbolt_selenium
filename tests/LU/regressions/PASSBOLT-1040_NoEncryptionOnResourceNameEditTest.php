@@ -42,11 +42,13 @@ class PASSBOLT1040 extends PassboltTestCase
         // And I click the submit button
         $this->click('.edit-password-dialog input[type=submit]');
 
-	    // For one second, every 1/10 seconds, check that the popup is not visible.
-	    for ($i = 0; $i < 10; $i++) {
-		    $this->assertNotVisible('passbolt-iframe-progress-dialog');
-		    usleep(100000);
-	    }
+	    // And I wait until I'm sure the progress dialog didn't appear
+        try {
+            $this->waitUntilISee('#passbolt-iframe-progress-dialog', null, 2);
+            $this->assertFalse(true, 'I should not be here, that means the progress dialog appeared');
+        } catch(Exception $e) {
+            //
+        }
 
 	    // Then I should see a success notification message saying the password is updated.
 	    $this->assertNotification('app_resources_edit_success');
