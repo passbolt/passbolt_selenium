@@ -2131,10 +2131,14 @@ class PassboltTestCase extends WebDriverTestCase {
 		// trick: we create a temporary textarea in the page.
 		// and check its content match the content given
 		$this->appendHtmlInPage('container', '<textarea id="webdriver-clipboard-content" style="position:absolute; top:0; left:0; z-index:999;"></textarea>');
-		$e = $this->findById('webdriver-clipboard-content');
-		$e->click();
-		$e->sendKeys(array(WebDriverKeys::CONTROL, 'v'));
-		$this->assertTrue($e->getAttribute('value') == $content);
+		$this->waitUntilISee('#webdriver-clipboard-content');
+		$this->waitUntil(function() use(&$content) {
+			$e = $this->findById('webdriver-clipboard-content');
+			$e->clear();
+			$e->click();
+			$e->sendKeys(array(WebDriverKeys::CONTROL, 'v'));
+			$this->assertTrue($e->getAttribute('value') == $content);
+		});
 		$this->removeElementFromPage('webdriver-clipboard-content');
 	}
 
