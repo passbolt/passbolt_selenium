@@ -730,7 +730,7 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
 	 * @return bool
 	 * @throws
 	 */
-	public function waitUntil($callback, $args = array(), $timeout = 10) {
+	public function waitUntil($callback, $args = array(), $timeout = 15) {
 		// Number of loops to do.
 		$loops = 50;
 		// The last exception caught.
@@ -761,9 +761,9 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
 	 * @return bool if element is found
 	 * @throws Exception if element is not found after a given timeout
 	 */
-	public function waitUntilISee($ids, $regexps = null, $timeout = 10) {
+	public function waitUntilISee($ids, $regexps = null, $timeout = 15) {
 		// Test internal clock, test every maximum clock second.
-		$clock = 0.250;
+		$clock = 0.500;
 		// When we go over the timeout, change the state of this variable.
 		$continue = true;
 		// Start time.

@@ -39,7 +39,7 @@ class SetupTest extends PassboltSetupTestCase {
 		$this->waitForSection('domain_check');
 
 		// Test that the plugin confirmation message is displayed.
-		$this->waitUntilISee('.plugin-check.success', '/Nice one! The plugin is installed and up to date plugin is installed and up to date/i');
+		$this->waitUntilISee('.plugin-check.success', '/Nice one! The plugin is installed and up to date/i');
 
 		// Test that the domain in the url check textbox is the same as the one configured.
 		$domain = $this->findById('js_setup_domain')->getAttribute('value');
