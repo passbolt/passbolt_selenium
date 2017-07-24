@@ -80,7 +80,7 @@ $config = array (
 	'browsers' => array (
 		'default' => 'firefox_ with_passbolt_extension',
 		'common' => array(
-			'downloads_path' => 'file:///home/application/Downloads'
+			'downloads_path' => 'file:///home/seluser/Downloads'
 		),
 		'firefox_with_passbolt_extension' => array(
 			'name' => 'Firefox with Passbolt extension',
