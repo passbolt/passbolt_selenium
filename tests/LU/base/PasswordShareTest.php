@@ -1089,7 +1089,7 @@ class PasswordShareTest extends PassboltTestCase
 	 * When 	I click on the save button
 	 * Then 	I see the passphrase dialog
 	 * When 	I enter the passphrase and click submit
-	 * Then 	I see a dialog telling me encryption is in progress
+	 * Then 	I wait until I don't see the encryption dialog anymore.
 	 * And 		I see a notice message that the operation was a success
 	 */
 	public function testAtLeastOneOwner() {
@@ -1181,8 +1181,8 @@ class PasswordShareTest extends PassboltTestCase
 		// When I enter the passphrase and click submit
 		$this->enterMasterPassword($userAda['MasterPassword']);
 
-		// Then I see a dialog telling me encryption is in progress
-		$this->waitUntilISee('#passbolt-iframe-progress-dialog');
+		// Then wait until I don't see  the encryption dialog anymore.
+		$this->waitUntilIDontSee('#passbolt-iframe-progress-dialog');
 		$this->waitCompletion();
 
 		// And I see a notice message that the operation was a success

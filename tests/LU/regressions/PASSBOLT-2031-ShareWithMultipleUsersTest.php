@@ -19,7 +19,7 @@ class PASSBOLT2031 extends PassboltTestCase {
 	 * And		I click on the save button
 	 * And		I see the passphrase dialog
 	 * And		I enter the passphrase and click submit
-	 * And		I see a dialog telling me encryption is in progress
+	 * Then 	I wait until I don't see  the encryption dialog anymore.
 	 * And		I can see the new permissions in sidebar
 	 */
 	public function testShareWithMultipleUsers() {
@@ -55,11 +55,11 @@ class PASSBOLT2031 extends PassboltTestCase {
 		// And I enter the passphrase and click submit
 		$this->enterMasterPassword($user['MasterPassword']);
 
-		// And I see a dialog telling me encryption is in progress
-		$this->waitUntilISee('#passbolt-iframe-progress-dialog');
+		// Then I wait until I don't see  the encryption dialog anymore.
+		$this->waitUntilIDontSee('#passbolt-iframe-progress-dialog');
 		$this->waitCompletion();
 
-		// Then I can see the new permissions in sidebar
+		// And I can see the new permissions in sidebar
 		$this->assertPermissionInSidebar('Accounting', 'can read');
 		$this->assertPermissionInSidebar('Freelancer', 'can read');
 		$this->assertPermissionInSidebar('grace', 'can read');
