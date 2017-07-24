@@ -22,12 +22,7 @@ class OpenPassboltTest extends PassboltSetupTestCase {
 	 */
 	public function testOpenPassboltNoConfig() {
 		$this->waitUntilISee('body');
-		$this->findByCss('body')->sendKeys(array(WebDriverKeys::SHIFT, WebDriverKeys::ALT, 'p'));
-		// Ensure the selenium works on the new tab.
-		$handles=$this->driver->getWindowHandles();
-		$last_window = next($handles);
-		$this->driver->switchTo()->window($last_window);
- 		//$this->waitUntilUrlMatches('https://www.passbolt.com/start', false);
+		$this->clickToolbarIcon();
 		$this->waitUntilUrlMatches('https://demo.passbolt.com/auth/login', false);
 	}
 
@@ -53,8 +48,7 @@ class OpenPassboltTest extends PassboltSetupTestCase {
 		$this->goToSetup($key['owner_email']);
 
 		// Simulate click on the passbolt toolbar icon
-		$this->findByCss('body')->sendKeys(array(WebDriverKeys::SHIFT, WebDriverKeys::ALT, 'p'));
-		sleep(1);
+		$this->clickToolbarIcon();
 
 		// Test that the url is the plugin one.
 		$this->assertUrlMatch('/' . preg_quote($this->getExtensionBaseUrl(), '/') . '\/data\/setup.html/');
@@ -83,8 +77,7 @@ class OpenPassboltTest extends PassboltSetupTestCase {
 		$this->completeRegistration();
 
 		// Simulate click on the passbolt toolbar icon
-		$this->findByCss('body')->sendKeys(array(WebDriverKeys::SHIFT, WebDriverKeys::ALT, 'p'));
-		sleep(1);
+		$this->clickToolbarIcon();
 
 		// I should be on the login page.
 		$this->waitUntilISee('.information h2', '/Welcome back!/');

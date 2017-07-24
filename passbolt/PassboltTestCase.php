@@ -1646,8 +1646,6 @@ class PassboltTestCase extends WebDriverTestCase {
 		$this->waitCompletion();
 	}
 
-
-
 	/**
 	 * Check if the group has already been selected
 	 * @param $id string
@@ -1710,6 +1708,19 @@ class PassboltTestCase extends WebDriverTestCase {
 		for ($i = 0; $i < $sizeStr; $i++) {
 			$this->driver->getKeyboard()->pressKey($text[$i]);
 		}
+	}
+
+	/**
+	 * Simulate click on the toolbar passbolt icon.
+	 */
+	public function clickToolbarIcon() {
+		$this->goToDebug();
+		$this->click('#simulateToolbarIcon');
+		sleep(1);
+		// Ensure the selenium works on the new tab.
+		$handles=$this->driver->getWindowHandles();
+		$last_window = next($handles);
+		$this->driver->switchTo()->window($last_window);
 	}
 
 	/**
