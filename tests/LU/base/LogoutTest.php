@@ -170,6 +170,9 @@ class LogoutTest extends PassboltTestCase {
 	}
 
 	/**
+	 * @group firefox-only
+	 * @todo PASSBOLT-2263 close and restore doesn't work with the latest chrome driver
+	 *
 	 * Scenario:  As LU I should be logged out when I close the passbolt tab and restore it after my session expired
 	 * Given    I am Ada
 	 * And      I am logged in on the passwords workspace

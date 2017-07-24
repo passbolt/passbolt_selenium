@@ -1461,6 +1461,9 @@ class PasswordShareTest extends PassboltTestCase
 	}
 
 	/**
+	 * @group firefox-only
+	 * @todo PASSBOLT-2263 close and restore doesn't work with the latest chrome driver
+	 *
 	 * Scenario: As a user I can share a password with other users after I close and restore the passbolt tab
 	 *
 	 * Given    I am Carol

@@ -1454,6 +1454,8 @@ class PasswordEditTest extends PassboltTestCase
 
 	/**
 	 * @group no-saucelabs
+	 * @group firefox-only
+	 * @todo PASSBOLT-2263 close and restore doesn't work with the latest chrome driver
 	 *
 	 * Scenario:  As LU I should be able to edit a password after I close and restore the passbolt tab
 	 * Given    I am Ada
