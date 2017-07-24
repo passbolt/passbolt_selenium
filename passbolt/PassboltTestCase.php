@@ -636,7 +636,7 @@ class PassboltTestCase extends WebDriverTestCase {
 
 		// Test that the plugin confirmation message is displayed.
 		if ($checkPluginSuccess) {
-			$this->waitUntilISee('.plugin-check-wrapper .plugin-check.success', '/' . $this->_browser['type'] . ' plugin is installed and up to date/i');
+			$this->waitUntilISee('.plugin-check-wrapper .plugin-check.success', '/Nice one! The plugin is installed and up to date/i');
 		}
 	}
 
@@ -2139,7 +2139,7 @@ class PassboltTestCase extends WebDriverTestCase {
 			$e->click();
 			$e->sendKeys(array(WebDriverKeys::CONTROL, 'v'));
 			$this->assertTrue($e->getAttribute('value') == $content);
-		});
+		}, null, 5);
 		$this->removeElementFromPage('webdriver-clipboard-content');
 	}
 

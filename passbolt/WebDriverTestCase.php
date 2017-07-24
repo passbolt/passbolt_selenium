@@ -735,6 +735,10 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
 		$loops = 50;
 		// The last exception caught.
 		$caughtException = null;
+		// Args to be an array.
+		if(is_null($args)) {
+			$args = array();
+		}
 
 		for ($i = 0; $i < $loops; $i++) {
 			try {
@@ -758,10 +762,17 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
 	 * @throws Exception if element is not found after a given timeout
 	 */
 	public function waitUntilISee($ids, $regexps = null, $timeout = 10) {
-		// Number of loops to do.
-		$loops = 50;
+		// Test internal clock, test every maximum clock second.
+		$clock = 0.250;
+		// When we go over the timeout, change the state of this variable.
+		$continue = true;
+		// Start time.
+		$testStart = microtime(true);
 
-		for ($i = 0; $i < $loops; $i++) {
+		do {
+			// Store the loop start time.
+			$loopStart = microtime(true);
+
 			if (is_array($ids)) {
 				foreach($ids as $k => $id) {
 					$regexp = null;
@@ -783,9 +794,20 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
 					return true;
 				}
 			}
-			$second = 1000000;
-			usleep(($second * $timeout) / $loops);
-		}
+
+			// Store the loop end time.
+			$loopEnd = microtime(true);
+			// Should we wait more ?
+			$loopElapsed = $loopStart - $loopEnd;
+			if ($loopElapsed < $clock) {
+				usleep(($clock - $loopElapsed) * 1000000);
+			}
+			// Does the timeout overlapped.
+			if (($loopEnd - $testStart) > $timeout) {
+				$continue = false;
+			}
+		} while ($continue);
+
 		$backtrace = debug_backtrace();
 		$id = is_array($ids) ? implode(",", $ids) : $ids;
 		$regexp = is_array($regexps) ? implode (",", $regexps) : $regexps;
