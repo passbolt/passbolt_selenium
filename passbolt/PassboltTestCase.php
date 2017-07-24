@@ -659,7 +659,7 @@ class PassboltTestCase extends WebDriverTestCase {
 
 		// Test that the plugin confirmation message is displayed.
 		if ($checkPluginSuccess) {
-			$this->waitUntilISee('.plugin-check-wrapper .plugin-check.success', '/' . $this->_browser['type'] . ' plugin is installed and up to date/i');
+			$this->waitUntilISee('.plugin-check-wrapper .plugin-check.success', '/Nice one! The plugin is installed and up to date/i');
 		}
 	}
 
