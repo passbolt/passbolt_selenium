@@ -9,6 +9,7 @@ return array(
     'Facebook\\WebDriver\\Chrome\\ChromeDriver' => $vendorDir . '/facebook/webdriver/lib/Chrome/ChromeDriver.php',
     'Facebook\\WebDriver\\Chrome\\ChromeDriverService' => $vendorDir . '/facebook/webdriver/lib/Chrome/ChromeDriverService.php',
     'Facebook\\WebDriver\\Chrome\\ChromeOptions' => $vendorDir . '/facebook/webdriver/lib/Chrome/ChromeOptions.php',
+    'Facebook\\WebDriver\\Cookie' => $vendorDir . '/facebook/webdriver/lib/Cookie.php',
     'Facebook\\WebDriver\\Exception\\ElementNotSelectableException' => $vendorDir . '/facebook/webdriver/lib/Exception/ElementNotSelectableException.php',
     'Facebook\\WebDriver\\Exception\\ElementNotVisibleException' => $vendorDir . '/facebook/webdriver/lib/Exception/ElementNotVisibleException.php',
     'Facebook\\WebDriver\\Exception\\ExpectedException' => $vendorDir . '/facebook/webdriver/lib/Exception/ExpectedException.php',
