@@ -1131,10 +1131,10 @@ class PasswordEditTest extends PassboltTestCase
      * Then     I see an error message saying that the name is required
 	 * And		I see an error message saying that the password is required
      * Then     I don't see an error message saying that the username is required
-     * When     I enter & as a name
-     * And      I enter & as a username
-     * And      I enter & as a url
-     * And      I enter & as a description
+     * When     I enter < as a name
+     * And      I enter < as a username
+     * And      I enter < as a url
+     * And      I enter < as a description
      * And      I click save
      * Then     I see an error message saying that the name contain invalid characters
      * Then     I see an error message saying that the username contain invalid characters
@@ -1195,16 +1195,16 @@ class PasswordEditTest extends PassboltTestCase
 		);
 		$this->goOutOfIframe();
 
-        // When I enter & as a name
+        // When I enter < as a name
         $this->inputText('js_field_name', '<');
 
-        // And I enter & as a username
+        // And I enter < as a username
         $this->inputText('js_field_username', '<');
 
-        // And I enter & as a url
+        // And I enter < as a url
         $this->inputText('js_field_uri', '<');
 
-        // And I enter & as a description
+        // And I enter < as a description
         $this->inputText('js_field_description', '<');
 
         // And I click save
