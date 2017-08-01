@@ -75,9 +75,10 @@ class MasterPasswordRememberTest extends PassboltTestCase {
 		// When I enter my passphrase from keyboard only
 		// And I check the remember checkbox
 		$this->enterMasterPassword($user['MasterPassword'], true);
+		$this->waitUntilIDontSee('#passbolt-iframe-progress-dialog');
+		$this->waitCompletion();
 
 		// Then The password should have been copied to clipboard
-		$this->waitCompletion();
 		$this->assertClipboard($rsB['password']);
 
 		// When I click on another password in the list

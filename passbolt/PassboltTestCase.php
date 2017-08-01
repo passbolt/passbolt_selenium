@@ -65,6 +65,19 @@ class PassboltTestCase extends WebDriverTestCase {
 				}
 			}
 		}
+		// Retrieve the plugin logs
+		if ($this->getStatus() == PHPUnit_Runner_BaseTestRunner::STATUS_FAILURE) {
+			// Retrieve the plugin logs
+			$this->goToDebug();
+			$logsElt = $this->find('#logsContent');
+			$logs = $logsElt->getText();
+
+			// Store the logs on the server.
+			$logPath = Config::read('testserver.selenium.videos.path');
+			$filePath = "$logPath/{$this->testName}_plugin.json";
+			file_put_contents($filePath, $logs);
+		}
+
 		// Reset the database if mentioned.
 		if ($this->resetDatabaseWhenComplete) {
 			PassboltServer::resetDatabase(Config::read('passbolt.url'));
@@ -543,7 +556,7 @@ class PassboltTestCase extends WebDriverTestCase {
 	 */
 	public function completeSetupWithKeyGeneration($data) {
 		// Check that we are on the setup page.
-		$this->assertPageContainsText('Plugin check');
+		$this->waitUntilISee('.plugin-check-wrapper', '/Plugin check/');
 		// Wait for the checkbox to appear.
 		$this->waitUntilISee('#js_setup_domain_check');
 		// Check box domain check.
@@ -586,7 +599,7 @@ class PassboltTestCase extends WebDriverTestCase {
 	 */
 	public function completeSetupWithKeyImport($data) {
 		// Check that we are on the setup page.
-		$this->assertPageContainsText('Plugin check');
+		$this->waitUntilISee('.plugin-check-wrapper', '/Plugin check/');
 		// Wait for the checkbox to appear.
 		$this->waitUntilISee('#js_setup_domain_check');
 		// Check box domain check.
@@ -1901,12 +1914,7 @@ class PassboltTestCase extends WebDriverTestCase {
 	 * Check that there is a plugin
 	 */
 	public function assertPlugin() {
-		try {
-			$e = $this->findByCSS('html.passboltplugin');
-			$this->assertTrue(count($e) === 1);
-		} catch (NoSuchElementException $e) {
-			$this->fail('A passbolt plugin was not found');
-		}
+		$this->waitUntilISee('html.passboltplugin');
 	}
 
 	/**
