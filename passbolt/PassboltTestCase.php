@@ -160,20 +160,31 @@ class PassboltTestCase extends WebDriverTestCase {
 	 * Go to debug page.
 	 */
 	public function goToDebug() {
-		$this->getUrl('debug');
+		$addonUrl = $this->getAddonBaseUrl();
+		$this->getUrl($addonUrl . 'data/config-debug.html');
 		$this->waitUntilISee('.config.page.ready');
 	}
 
 	/**
-	 * Get the extension url
+	 * Get the addon url
 	 * @return {string}
 	 * @throws Exception
 	 */
-	public function getExtensionBaseUrl() {
-		if (isset($this->_browser['base_url'])) {
-			return $this->_browser['base_url'];
+	public function getAddonBaseUrl() {
+		// A passbolt debug meta data is required to build the debug url.
+		$headElement = $this->find('head');
+		$addonUrl = $headElement->getAttribute('data-passbolt-addon-url');
+
+		// If the debut meta data not found, go to a passbolt page first.
+		// The data is available only on passbolt page.
+		if(empty($addonUrl)) {
+			$this->getUrl('');
+			$this->waitUntilISee('.passbolt');
+			$headElement = $this->find('head');
+			$addonUrl = $headElement->getAttribute('data-passbolt-addon-url');
 		}
-		throw new Exception("This browser configuration has no passbolt extension. ");
+
+		return $addonUrl;
 	}
 
 	/**
@@ -181,10 +192,7 @@ class PassboltTestCase extends WebDriverTestCase {
 	 * @param $url
 	 */
 	public function getUrl($url = null) {
-		if ($url == 'debug') {
-			$baseUrl = $this->getExtensionBaseUrl();
-			$url = $baseUrl . DS . 'data' . DS . 'config-debug.html';
-		} else {
+		if (!preg_match('/^(moz-extension|chrome-extension|http|https)/', $url)) {
 			$url = Config::read('passbolt.url') . DS . $url;
 		}
 		$this->driver->get($url);
@@ -531,18 +539,16 @@ class PassboltTestCase extends WebDriverTestCase {
 			$this->inputText('serverKeyAscii', $key);
 		}
 
-		$this->click('js_save_conf');
-		// Assert it has been saved.
-		$this->assertElementContainsText(
-			$this->findbyCss('.user.settings.feedback'),
-			'User and settings have been saved!'
-		);
+		// Save the profile.
+		$this->click('#js_save_conf');
+		$this->waitUntilISee('.user.settings.feedback', '/User and settings have been saved!/');
 
-		$this->click('saveKey');
-		// Assert it has been saved.
+		// Save the user private key.
+		$this->click('#saveKey');
 		$this->waitUntilISee('.my.key-import.feedback', '/The key has been imported succesfully/');
 
-		$this->click('saveServerKey');
+		// Save the server public key.
+		$this->click('#saveServerKey');
 		$this->waitUntilISee('.server.key-import.feedback', '/The key has been imported successfully/');
 	}
 

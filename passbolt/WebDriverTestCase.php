@@ -311,7 +311,8 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
     /********************************************************************************
      * Protected methods
      ********************************************************************************/
-    /**
+
+	/**
      * Get desired capabilities from config
      * @return DesiredCapabilities|null
      * @throws error browser type not supported
@@ -344,8 +345,13 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
 				$profile->setPreference("browser.startup.page", 0); // Empty start page
 				$profile->setPreference("browser.startup.homepage_override.mstone", "ignore"); // Suppress the "What's new" page
 
-
                 $capabilities->setCapability(FirefoxDriver::PROFILE, $profile);
+				$capabilities->setCapability('moz:firefoxOptions', array(
+//					'binary' => '/Applications/FirefoxDeveloperEdition.app/Contents/MacOS/firefox-bin'
+//					'binary' => '/Applications/FirefoxNightly.app/Contents/MacOS/firefox-bin'
+//					'binary' => '/Applications/Nightly.app/Contents/MacOS/firefox-bin'
+					'binary' => '/tmp/firefox/firefox-bin'
+				));
             break;
 
             case 'chrome':
