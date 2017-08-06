@@ -1706,11 +1706,12 @@ class PassboltTestCase extends WebDriverTestCase {
 		$val = $field->getAttribute('value');
 		$sizeStr = strlen($val);
 		$field->click();
+		$activeElt = $this->driver->switchTo()->activeElement();
 		for ($i = 0; $i < $sizeStr; $i++) {
-			$this->driver->getKeyboard()->pressKey(WebDriverKeys::ARROW_RIGHT);
+			$activeElt->sendKeys(WebDriverKeys::ARROW_RIGHT);
 		}
 		for ($i = 0; $i < $sizeStr; $i++) {
-			$this->driver->getKeyboard()->pressKey(WebDriverKeys::BACKSPACE);
+			$activeElt->sendKeys(WebDriverKeys::BACKSPACE);
 		}
 	}
 
@@ -1720,8 +1721,9 @@ class PassboltTestCase extends WebDriverTestCase {
 	 */
 	public function typeTextLikeAUser($text) {
 		$sizeStr = strlen($text);
+		$activeElt = $this->driver->switchTo()->activeElement();
 		for ($i = 0; $i < $sizeStr; $i++) {
-			$this->driver->getKeyboard()->pressKey($text[$i]);
+			$activeElt->sendKeys($text[$i]);
 		}
 	}
 
