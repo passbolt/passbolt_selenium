@@ -51,9 +51,12 @@ class PassboltTestCase extends WebDriverTestCase {
 	 * Executed after every tests
 	 */
 	protected function tearDown() {
+		// Take a screenshot.
 		if ($this->getStatus() == PHPUnit_Runner_BaseTestRunner::STATUS_FAILURE && Config::read('testserver.selenium.screenshotOnFail')) {
 			$this->takeScreenshot();
 		}
+
+		// Retrieve the recorded video.
 		if (Config::read('testserver.selenium.videoRecord')) {
 			$this->stopVideo();
 			if (Config::read('testserver.selenium.videos.when') == 'onFail' && $this->getStatus() != PHPUnit_Runner_BaseTestRunner::STATUS_FAILURE) {
@@ -65,21 +68,22 @@ class PassboltTestCase extends WebDriverTestCase {
 				}
 			}
 		}
-		// Retrieve the plugin logs
+
+		// Retrieve the plugin logs.
 		if ($this->getStatus() == PHPUnit_Runner_BaseTestRunner::STATUS_FAILURE
-				&& !empty($this->_browser['extensions'])) {
-			// Retrieve the plugin logs
+				&& !empty($this->_browser['extensions'])
+				&& Config::read('testserver.selenium.logs.plugin')) {
+			// Retrieve the logs.
 			$this->goToDebug();
 			$logsElt = $this->find('#logsContent');
 			$logs = $logsElt->getText();
-
 			// Store the logs on the server.
 			$logPath = Config::read('testserver.selenium.videos.path');
 			$filePath = "$logPath/{$this->testName}_plugin.json";
 			file_put_contents($filePath, $logs);
 		}
 
-		// Reset the database if mentioned.
+		// Reset the database.
 		if ($this->resetDatabaseWhenComplete) {
 			PassboltServer::resetDatabase(Config::read('passbolt.url'));
 		}
