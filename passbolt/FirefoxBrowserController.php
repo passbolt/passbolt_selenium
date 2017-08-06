@@ -4,6 +4,7 @@ use Facebook\WebDriver\WebDriverBy;
 use Facebook\WebDriver\WebDriverKeys;
 
 class FirefoxBrowserController {
+
     protected $driver;
     protected $testCase;
 
@@ -14,7 +15,8 @@ class FirefoxBrowserController {
 
     public function _openNewTabOpened($initialUrl) {
         // Give the focus to the new tab.
-        $this->driver->switchTo()->defaultContent();
+        $windowHandles = $this->driver->getWindowHandles();
+        $this->driver->switchTo()->window($windowHandles[$this->testCase->currentTabIndex]);
 
         // Check if the new tab is open.
         if ($this->driver->getCurrentURL() == $initialUrl) {
@@ -35,9 +37,9 @@ class FirefoxBrowserController {
             ->sendKeys([WebDriverKeys::CONTROL, 't']);
 
         // Wait until tab is opened. A new tab should have a different url.
-        $callback = [$this, '_openNewTabOpened'];
+        $callback = array($this, '_openNewTabOpened');
         try {
-            $this->testCase->waitUntil($callback, [$initialUrl]);
+            $this->testCase->waitUntil($callback, array($initialUrl));
         } catch (Exception $e){
             throw new Exception("Couldn't open a new tab");
         }
@@ -46,25 +48,32 @@ class FirefoxBrowserController {
     public function closeTab() {
         $this->testCase->findByCss('body')
             ->sendKeys(array(WebDriverKeys::CONTROL, 'w'));
-        $this->driver->switchTo()->defaultContent();
+        $windowHandles = $this->driver->getWindowHandles();
+        $this->driver->switchTo()->window($windowHandles[$this->testCase->currentTabIndex]);
     }
 
     public function restoreTab() {
         $this->testCase->findByCss('body')
             ->sendKeys(array(WebDriverKeys::SHIFT, WebDriverKeys::CONTROL, 't'));
-        $this->driver->switchTo()->defaultContent();
+        // Give the focus to the selected tab window.
+        $windowHandles = $this->driver->getWindowHandles();
+        $this->driver->switchTo()->window($windowHandles[$this->testCase->currentTabIndex]);
     }
 
     public function switchToPreviousTab() {
         $this->testCase->findByCss('body')
-            ->sendKeys([WebDriverKeys::CONTROL, WebDriverKeys::PAGE_DOWN]);
-        $this->driver->switchTo()->defaultContent();
+            ->sendKeys(array(WebDriverKeys::CONTROL, WebDriverKeys::PAGE_DOWN));
+        // Give the focus to the selected tab window.
+        $windowHandles = $this->driver->getWindowHandles();
+        $this->driver->switchTo()->window($windowHandles[$this->testCase->currentTabIndex]);
     }
 
     public function switchToNextTab() {
         $this->testCase->findByCss('body')
-            ->sendKeys([WebDriverKeys::CONTROL, WebDriverKeys::PAGE_UP]);
-        $this->driver->switchTo()->defaultContent();
+            ->sendKeys(array(WebDriverKeys::CONTROL, WebDriverKeys::PAGE_UP));
+        // Give the focus to the selected tab window.
+        $windowHandles = $this->driver->getWindowHandles();
+        $this->driver->switchTo()->window($windowHandles[$this->testCase->currentTabIndex]);
     }
 
 }
