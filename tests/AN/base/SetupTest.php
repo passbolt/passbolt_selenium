@@ -21,7 +21,7 @@ class SetupTest extends PassboltSetupTestCase {
 		$this->inputText('ProfileLastName','Doe');
 		$this->inputText('UserUsername','johndoe@passbolt.com');
 		$this->pressEnter();
-		$this->assertCurrentUrl('register' . DS . 'thankyou');
+		$this->waitUntilUrlMatches('register' . DS . 'thankyou');
 		// Get last email.
 		$this->getUrl('seleniumTests/showLastEmail/' . urlencode('johndoe@passbolt.com'));
 		// Assert the title of the email is "Welcome to passbolt, john!"
@@ -52,7 +52,7 @@ class SetupTest extends PassboltSetupTestCase {
 		$this->inputText('ProfileLastName','Doe');
 		$this->inputText('UserUsername','johndoe@passbolt.com');
 		$this->pressEnter();
-		$this->assertCurrentUrl('register' . DS . 'thankyou');
+		$this->waitUntilUrlMatches('register' . DS . 'thankyou');
 		// Get last email.
 		$this->getUrl('seleniumTests/showLastEmail/' . urlencode('johndoe@passbolt.com'));
 		// Follow the link in the email.

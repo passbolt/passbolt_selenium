@@ -487,7 +487,8 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
      * Emulate escape key press
      */
     public function pressEscape() {
-        $this->driver->getKeyboard()->sendKeys(WebDriverKeys::ESCAPE);
+		$activeElt = $this->driver->switchTo()->activeElement();
+		$activeElt->sendKeys(WebDriverKeys::ESCAPE);
     }
 
     /**
@@ -503,22 +504,24 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
      * Press enter on keyboard
      */
     public function pressEnter() {
-        $this->driver->getKeyboard()->pressKey(WebDriverKeys::ENTER);
+		$activeElt = $this->driver->switchTo()->activeElement();
+		$activeElt->sendKeys(WebDriverKeys::ENTER);
     }
 
     /**
      * Press tab key
      */
     public function pressTab() {
-        $this->driver->getKeyboard()->pressKey(WebDriverKeys::TAB);
+		$activeElt = $this->driver->switchTo()->activeElement();
+		$activeElt->sendKeys(WebDriverKeys::TAB);
     }
 
     /**
      * Press backtab key
      */
     public function pressBacktab() {
-        $this->driver->getKeyboard()
-            ->sendKeys([WebDriverKeys::SHIFT, WebDriverKeys::TAB]);
+		$activeElt = $this->driver->switchTo()->activeElement();
+		$activeElt->sendKeys(WebDriverKeys::TAB);
     }
 
     /**
@@ -1052,14 +1055,24 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
     /********************************************************************************
      * ASSERT HELPERS
      ********************************************************************************/
-    /**
-     * Check if the given title is contain in the one of the page
+
+	/**
+     * Check the title contains.
      * @param $title
      */
     public function assertTitleContain($title) {
         $t = $this->driver->getTitle();
         $this->assertContains($title,$t);
     }
+
+	/**
+	 * Wait until the title contains.
+	 * @param $title
+	 */
+	public function waitUntilTitleContain($title) {
+		$callback = array($this, 'assertTitleContain');
+		$this->waitUntil($callback, array($title));
+	}
 
     /**
      * Check if the current url match the regexp given in parameter

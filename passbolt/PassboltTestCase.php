@@ -66,7 +66,8 @@ class PassboltTestCase extends WebDriverTestCase {
 			}
 		}
 		// Retrieve the plugin logs
-		if ($this->getStatus() == PHPUnit_Runner_BaseTestRunner::STATUS_FAILURE) {
+		if ($this->getStatus() == PHPUnit_Runner_BaseTestRunner::STATUS_FAILURE
+				&& !empty($this->_browser['extensions'])) {
 			// Retrieve the plugin logs
 			$this->goToDebug();
 			$logsElt = $this->find('#logsContent');

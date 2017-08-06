@@ -18,14 +18,13 @@ class PASSBOLT1368 extends PassboltTestCase {
 	 */
 	public function testLegalDisclaimerNavigation() {
 		$this->getUrl('/register');
-		$this->assertTitleContain('Register');
+		$this->waitUntilTitleContain('Register');
 		$this->clickLink('Privacy Policy');
-		$this->assertTitleContain('Privacy');
-
+		$this->waitUntilTitleContain('Privacy');
 		$this->getUrl('/register');
-		$this->assertTitleContain('Register');
+		$this->waitUntilTitleContain('Register');
 		$this->clickLink('Terms of Service');
-		$this->assertTitleContain('Terms');
+		$this->waitUntilTitleContain('Terms');
 	}
 
 }
