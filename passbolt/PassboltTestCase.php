@@ -1818,22 +1818,12 @@ class PassboltTestCase extends WebDriverTestCase {
 	 * @throws Exception
 	 */
 	public function waitUntilCssValueEqual($selector, $name, $expectedValue, $timeout = 10) {
-		$elt = $this->find($selector);
-
-		for ($i = 0; $i < $timeout * 10 * 10; $i++) {
-			try {
-				$value = $elt->getCssValue($name);
-				$this->assertEquals($value, $expectedValue);
-				return true;
-			}
-			catch (Exception $e) {}
-
-			// If none of the above was found, wait for 1/10 seconds, and try again.
-			usleep(100000);
-		}
-
-		$backtrace = debug_backtrace();
-		$this->fail("waitUntilCssValueEqual $name: $expectedValue Timeout thrown by " . $backtrace[1]['class'] . "::" . $backtrace[1]['function'] . "() \n");
+		$this->waitUntil(function() use(&$selector, &$name, &$expectedValue) {
+			$e = $this->find($selector);
+			$value = $e->getCssValue($name);
+			$rgba = Color::rgbToRgba($value);
+			$this->assertEquals($rgba, $expectedValue);
+		}, null, $timeout);
 	}
 
 	/**
@@ -1988,13 +1978,13 @@ class PassboltTestCase extends WebDriverTestCase {
 	 * @param $user array see fixtures
 	 * @param $context where is the security token (master or else)
 	 */
-	public function assertSecurityToken($user, $context = null)
-	{
+	public function assertSecurityToken($user, $context = null) {
 		// check base color
+		$this->waitUntilISee('.security-token');
 		$securityTokenElt = $this->findByCss('.security-token');
 		$this->assertElementContainsText($securityTokenElt, $user['TokenCode']);
-		$this->waitUntilCssValueEqual($securityTokenElt, 'background-color', Color::toRgba($user['TokenColor']), 2);
-		$this->waitUntilCssValueEqual($securityTokenElt, 'color', Color::toRgba($user['TokenTextColor']), 2);
+		$this->waitUntilCssValueEqual($securityTokenElt, 'background-color', Color::hexToRgba($user['TokenColor']), 2);
+		$this->waitUntilCssValueEqual($securityTokenElt, 'color', Color::hexToRgba($user['TokenTextColor']), 2);
 
 		if ($context != 'has_encrypted_secret') {
 			// check color switch when input is selected
@@ -2022,8 +2012,8 @@ class PassboltTestCase extends WebDriverTestCase {
 					break;
 			}
 
-			$this->waitUntilCssValueEqual($securityTokenElt, 'background-color', Color::toRgba($user['TokenTextColor']), 2);
-			$this->waitUntilCssValueEqual($securityTokenElt, 'color', Color::toRgba($user['TokenColor']), 2);
+			$this->waitUntilCssValueEqual($securityTokenElt, 'background-color', Color::hexToRgba($user['TokenTextColor']), 2);
+			$this->waitUntilCssValueEqual($securityTokenElt, 'color', Color::hexToRgba($user['TokenColor']), 2);
 
 			// back to normal
 			$securityTokenElt->click('.security-token');

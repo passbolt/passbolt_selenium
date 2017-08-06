@@ -14,7 +14,7 @@ class Color {
 	 * @param string $rgba value
 	 * @return false|string if successful
 	 */
-	static public function toHex($rgba) {
+	static public function rgbaToHex($rgba) {
 		if (!preg_match_all("/[0-9]{1,3}/", $rgba, $matches) || count($matches[0]) != 4) {
 			return false;
 		}
@@ -26,13 +26,33 @@ class Color {
 	}
 
 	/**
+	 * Convert a rgb value like rgb(255, 58, 58) to its rgba value e.g rgba(255, 58, 58, 1)
+	 *
+	 * @param string $rgb value
+	 * @param int $opacity opacity
+	 * @return false|string if successful
+	 */
+	static public function rgbToRgba($rgb, $opacity = 1) {
+		$matches = [];
+		if (!preg_match_all("/\(\s*([0-9]{1,3}),\s*([0-9]{1,3}),\s*([0-9]{1,3})/", $rgb, $matches)) {
+			return false;
+		}
+
+		// Build the rgb string
+		$output = 'rgba(' . $matches[1][0] . ', ' . $matches[2][0] . ', ' . $matches[3][0] . ', ' . $opacity . ')';
+
+		//Return rgb(a) color string
+		return $output;
+	}
+
+	/**
 	 * Convert a hexadecimal color value like #FF3A3A to its rgba value e.g rgba(255, 58, 58, 1)
 	 *
 	 * @param string $hex value
 	 * @param int $opacity opacity
 	 * @return false|string if successful
 	 */
-	static public function toRgba($hex, $opacity = 1) {
+	static public function hexToRgba($hex, $opacity = 1) {
 		$default = 'rgba(0, 0, 0, 1)';
 
 		//Return default if no color provided
