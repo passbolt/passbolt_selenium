@@ -320,26 +320,6 @@ class PassboltTestCase extends WebDriverTestCase {
 		// Store the current username.
 		$this->currentUser = $user;
 
-		if ($useCache && isset(self::$loginCookies[$this->currentUser['Username']])) {
-			$this->getUrl('login');
-			foreach(self::$loginCookies[$this->currentUser['Username']] as $cookie) {
-				$this->driver->manage()->addCookie($cookie);
-			}
-			// The application page mode needs to be restarted manually.
-			$this->goToDebug();
-			$this->click('initAppPagemod');
-			$this->getUrl('');
-			try {
-				$this->findbyCss('.logout');
-				$this->waitCompletion();
-				return;
-			} catch (Exception $e) {
-				// If not logged in, maybe the session expired.
-				// Or a test logged the user out.
-				// Try to login the normal way.
-			}
-		}
-
 		// If not on the login page, we redirect to it.
 		try {
 			$this->find('.users.login.form');
@@ -363,6 +343,7 @@ class PassboltTestCase extends WebDriverTestCase {
 		// wait for redirection trigger
 		$this->waitUntilISee('.logout');
 		$this->waitCompletion();
+		$this->waitUntilISee('html.passboltplugin-ready');
 
 		// save the cookie
 		self::$loginCookies[$this->currentUser['Username']] = $this->driver->manage()->getCookies();
