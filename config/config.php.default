@@ -74,7 +74,7 @@ $config = array (
                 'binary' => '/* video tool path */', // usually /usr/local/bin/flvrec.py
             ],
             'logs' => [
-                'plugin' => false
+                'plugin' => true
             ],
 			// Extra capabilities.
 			'capabilities' => array(),

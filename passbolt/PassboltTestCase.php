@@ -73,12 +73,16 @@ class PassboltTestCase extends WebDriverTestCase {
 		if ($this->getStatus() == PHPUnit_Runner_BaseTestRunner::STATUS_FAILURE
 				&& !empty($this->_browser['extensions'])
 				&& Config::read('testserver.selenium.logs.plugin')) {
+			// If the log folder doesn't exist yet.
+			$logPath = Config::read('testserver.selenium.videos.path');
+			if(!file_exists($logPath)) {
+				mkdir($logPath);
+			}
 			// Retrieve the logs.
 			$this->goToDebug();
 			$logsElt = $this->find('#logsContent');
 			$logs = $logsElt->getText();
 			// Store the logs on the server.
-			$logPath = Config::read('testserver.selenium.videos.path');
 			$filePath = "$logPath/{$this->testName}_plugin.json";
 			file_put_contents($filePath, $logs);
 		}
