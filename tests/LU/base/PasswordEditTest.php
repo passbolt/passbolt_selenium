@@ -376,10 +376,12 @@ class PasswordEditTest extends PassboltTestCase
         $this->waitUntilISee('#passbolt-iframe-master-password.ready');
 
         // I type the passphrase using keyboard only
-        $this->typeTextLikeAUser($user['MasterPassword']);
+		$this->goIntoMasterPasswordIframe();
+		$this->typeTextLikeAUser($user['MasterPassword']);
 
-        // And I press enter
-        $this->pressEnter();
+		// And I press enter
+		$this->pressEnter();
+		$this->goOutOfIframe();
 
         // Then the passphrase dialog should disappear
         $this->waitUntilIDontSee('#passbolt-iframe-master-password');
@@ -476,10 +478,12 @@ class PasswordEditTest extends PassboltTestCase
         $this->waitUntilISee('#passbolt-iframe-master-password.ready');
 
         // I type the passphrase using keyboard only
+		$this->goIntoMasterPasswordIframe();
         $this->typeTextLikeAUser($user['MasterPassword']);
 
         // And I press enter
         $this->pressEnter();
+		$this->goOutOfIframe();
 
         // Then the passphrase dialog should disappear
         $this->waitUntilIDontSee('#passbolt-iframe-master-password');

@@ -1716,7 +1716,8 @@ class PassboltTestCase extends WebDriverTestCase {
 	public function typeTextLikeAUser($text) {
 		$sizeStr = strlen($text);
 		for ($i = 0; $i < $sizeStr; $i++) {
-			$this->driver->getKeyboard()->pressKey($text[$i]);
+			$activeElt = $this->driver->switchTo()->activeElement();
+			$activeElt->sendKeys($text[$i]);
 		}
 	}
 

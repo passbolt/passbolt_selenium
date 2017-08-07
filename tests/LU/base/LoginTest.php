@@ -87,6 +87,7 @@ class LoginTest extends PassboltTestCase {
 		$this->assertInputValue('UserUsername', $user['Username']);
 
 		$this->click('js_master_password');
+		$this->waitUntilElementHasFocus('js_master_password');
 		$this->typeTextLikeAUser($user['MasterPassword']);
 		$this->pressEnter();
 
