@@ -521,7 +521,7 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
      */
     public function pressBacktab() {
 		$activeElt = $this->driver->switchTo()->activeElement();
-		$activeElt->sendKeys(WebDriverKeys::TAB);
+		$activeElt->sendKeys([WebDriverKeys::SHIFT, WebDriverKeys::TAB]);
     }
 
     /**

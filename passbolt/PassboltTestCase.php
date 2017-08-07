@@ -1448,20 +1448,25 @@ class PassboltTestCase extends WebDriverTestCase {
 	public function enterMasterPasswordWithKeyboardShortcuts($pwd, $tabFirst = false) {
 		$this->waitUntilISee('#passbolt-iframe-master-password.ready');
 
-		if ($tabFirst) {
-			$this->pressTab();
-			$this->goIntoMasterPasswordIframe();
-			$this->assertElementHasFocus('js_master_password');
-			$this->goOutOfIframe();
-		}
-		$this->typeTextLikeAUser($pwd);
-		$this->pressEnter();
 		$this->goIntoMasterPasswordIframe();
+
+		// The scenario using tab can only be tested on chrome.
+		// Firefox cannot use keyboard on element not visible.
+		// The element we use to hold the user focus is hidden.
+		if ($this->_browser['type'] == 'chrome') {
+			if ($tabFirst) {
+				$this->pressTab();
+				$this->assertElementHasFocus('js_master_password');
+			}
+			$this->typeTextLikeAUser($pwd);
+			$this->pressEnter();
+		} else {
+			$this->inputText('js_master_password', $pwd);
+			$this->pressEnter();
+		}
+
 		try {
-			$this->assertElementHasClass(
-				$this->find('master-password-submit'),
-				'processing'
-			);
+			$this->waitUntilISee('#master-password-submit.processing');
 		} catch (StaleElementReferenceException $e) {
 			// Do nothing.
 			// This happens sometimes when the master password decryption is too fast
@@ -1710,9 +1715,8 @@ class PassboltTestCase extends WebDriverTestCase {
 	 */
 	public function typeTextLikeAUser($text) {
 		$sizeStr = strlen($text);
-		$activeElt = $this->driver->switchTo()->activeElement();
 		for ($i = 0; $i < $sizeStr; $i++) {
-			$activeElt->sendKeys($text[$i]);
+			$this->driver->getKeyboard()->pressKey($text[$i]);
 		}
 	}
 
