@@ -57,10 +57,12 @@ class MasterPasswordRememberTest extends PassboltTestCase {
 
 		// When I enter my passphrase from keyboard only
 		$this->enterMasterPassword($user['MasterPassword'], false);
+		$this->waitCompletion();
 
 		// Then The password should have been copied to clipboard
-		$this->waitCompletion();
+		$this->assertNotification('plugin_clipboard_copy_success');
 		$this->assertClipboard($rsA['password']);
+		$this->waitUntilNotificationDisappears('plugin_clipboard_copy_success');
 
 		// When I click on another password in the list
 		$rsB = Resource::get(array('user' => 'ada', 'id' => Uuid::get('resource.id.bower')));
@@ -79,7 +81,9 @@ class MasterPasswordRememberTest extends PassboltTestCase {
 		$this->waitCompletion();
 
 		// Then The password should have been copied to clipboard
+		$this->assertNotification('plugin_clipboard_copy_success');
 		$this->assertClipboard($rsB['password']);
+		$this->waitUntilNotificationDisappears('plugin_clipboard_copy_success');
 
 		// When I click on another password in the list
 		$rsC = Resource::get(array('user' => 'ada', 'id' => Uuid::get('resource.id.centos')));
@@ -87,10 +91,10 @@ class MasterPasswordRememberTest extends PassboltTestCase {
 
 		// And I click on the link 'copy password'
 		$this->click('js_wk_menu_secretcopy_button');
+		$this->waitCompletion();
 
 		// Then The password should have been copied to clipboard
-		$this->waitCompletion();
+		$this->assertNotification('plugin_clipboard_copy_success');
 		$this->assertClipboard($rsC['password']);
-
 	}
 }
