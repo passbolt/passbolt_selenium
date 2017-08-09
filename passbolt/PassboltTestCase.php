@@ -1727,6 +1727,7 @@ class PassboltTestCase extends WebDriverTestCase {
 	 * @param $text
 	 */
 	public function typeMasterPasswordLikeAUser($text) {
+		$activeElementIsMasterPasswordFocus = false;
 		$activeElt = $this->driver->switchTo()->activeElement();
 
 		// With the Firefox driver we cannot use the sendKeys function on invisible elements.
