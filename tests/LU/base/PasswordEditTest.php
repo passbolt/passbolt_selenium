@@ -377,7 +377,7 @@ class PasswordEditTest extends PassboltTestCase
 
         // I type the passphrase using keyboard only
 		$this->goIntoMasterPasswordIframe();
-		$this->typeTextLikeAUser($user['MasterPassword']);
+		$this->typeMasterPasswordLikeAUser($user['MasterPassword']);
 
 		// And I press enter
 		$this->pressEnter();
@@ -456,19 +456,19 @@ class PasswordEditTest extends PassboltTestCase
         $this->gotoEditPassword($resource['id']);
 
         // I should see that the field name has the focus.
-        $this-> assertElementHasFocus('js_field_name');
+        $this->assertElementHasFocus('js_field_name');
 
         // Press tab key.
         $this->pressTab();
 
         // I should see that the field name has the focus.
-        $this-> assertElementHasFocus('js_field_uri');
+        $this->assertElementHasFocus('js_field_uri');
 
         // Press tab key.
         $this->pressTab();
 
         // I should see that the field name has the focus.
-        $this-> assertElementHasFocus('js_field_username');
+        $this->assertElementHasFocus('js_field_username');
 
         // Press tab key.
         $this->pressTab();
@@ -479,7 +479,7 @@ class PasswordEditTest extends PassboltTestCase
 
         // I type the passphrase using keyboard only
 		$this->goIntoMasterPasswordIframe();
-        $this->typeTextLikeAUser($user['MasterPassword']);
+        $this->typeMasterPasswordLikeAUser($user['MasterPassword']);
 
         // And I press enter
         $this->pressEnter();
@@ -491,21 +491,21 @@ class PasswordEditTest extends PassboltTestCase
         // The field password should have the focus (inside the iframe).
         $this->goIntoSecretIframe();
 	    $this->waitUntilSecretIsDecryptedInField();
-        $this-> assertElementHasFocus('js_secret');
+        $this->assertElementHasFocus('js_secret');
 
         // Press tab key.
         $this->pressTab();
         $this->goOutOfIframe();
 
         // Then the field description should have the focus.
-        $this-> assertElementHasFocus('js_field_description');
+        $this->assertElementHasFocus('js_field_description');
 
         // Press backtab.
         $this->pressBacktab();
 
         // The field password should have the focus (inside the iframe).
         $this->goIntoSecretIframe();
-        $this-> assertElementHasFocus('js_secret');
+        $this->assertElementHasFocus('js_secret');
 
         // Press tab key.
         // TODO (PASSBOLT-1295) : fix the below part of the test.
@@ -515,19 +515,19 @@ class PasswordEditTest extends PassboltTestCase
         $this->goOutOfIframe();
 
         // I should see that the field name has the focus.
-//        $this-> assertElementHasFocus('js_field_username');
+//        $this->assertElementHasFocus('js_field_username');
 //
 //        // Press backtab key.
 //        $this->pressBacktab();
 //
 //        // I should see that the field name has the focus.
-//        $this-> assertElementHasFocus('js_field_uri');
+//        $this->assertElementHasFocus('js_field_uri');
 //
 //        // Press backtab key.
 //        $this->pressBacktab();
 //
 //        // I should see that the field name has the focus.
-//        $this-> assertElementHasFocus('js_field_name');
+//        $this->assertElementHasFocus('js_field_name');
     }
 
 	/**

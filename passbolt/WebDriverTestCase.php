@@ -1209,10 +1209,13 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
      * Assert if an element identified via its id is visible
      * @param $id
      */
-    public function assertVisible($id) {
+    public function assertVisible($id, $message = '') {
+		if (empty($message)) {
+			$message = 'Failed to assert that the element ' . $id .' is visible';
+		}
         $this->assertTrue(
             $this->isVisible($id),
-            'Failed to assert that the element ' . $id .' is visible'
+            $message
         );
     }
 

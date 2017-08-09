@@ -1722,6 +1722,34 @@ class PassboltTestCase extends WebDriverTestCase {
 	}
 
 	/**
+	 * Type master password like a user would do, pressing key after key.
+	 * Take in account that with firefox we cannot sendKeys to invisible element.
+	 * @param $text
+	 */
+	public function typeMasterPasswordLikeAUser($text) {
+		$activeElt = $this->driver->switchTo()->activeElement();
+
+		// With the Firefox driver we cannot use the sendKeys function on invisible elements.
+		// If the current active element is the "focus first" element, make it visible first.
+		if ($this->_browser['type'] == 'firefox') {
+			$activeElementIsMasterPasswordFocus = false;
+			$activeEltId = $activeElt->getAttribute('id');
+			if($activeEltId == 'js_master_password_focus_first') {
+				$activeElementIsMasterPasswordFocus = true;
+				$this->driver->executeScript("$('#$activeEltId').css('line-height', '1px');");
+			}
+		}
+
+		// Type each character
+		$this->typeTextLikeAUser($text);
+
+		// Hide the "focus first" element if required.
+		if ($activeElementIsMasterPasswordFocus) {
+			$this->driver->executeScript("$('#$activeEltId').css('line-height', '0');");
+		}
+	}
+
+	/**
 	 * Simulate click on the toolbar passbolt icon.
 	 */
 	public function clickToolbarIcon() {
