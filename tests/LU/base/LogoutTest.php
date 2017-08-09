@@ -2,6 +2,8 @@
 /**
  * Feature : Logout
  *
+ * As LU I should be logged out when I click on the logout link in the navigation
+ * As LU I should be logged out when the session expires
  * As LU I should be logged out when I quit the browser and restart it after my session expired
  * As LU I should be logged out when I close the passbolt tab and restore it after my session expired
  *
@@ -22,6 +24,12 @@ class LogoutTest extends PassboltTestCase {
 	/**
 	 * @group saucelabs
 	 *
+     * Scenario: As LU I should be logged out when I click on the logout link in the navigation
+     * Given    I am Ada
+     * And      I am logged in on the password workspace
+     * When     I click on the logout button
+     * Then     Then I should see the login page
+     *
 	 * @throws Exception
 	 */
 	public function testLogout() {
@@ -46,6 +54,15 @@ class LogoutTest extends PassboltTestCase {
 		$this->waitUntilISee('.plugin-check.' . $this->_browser['type'] . '.success');
 	}
 
+    /**
+     * Scenario: As LU I should be logged out when the session expires (auto redirect)
+     * Given    I am Ada
+     * And      I am logged in on the password workspace
+     * And      I wait until the session expires
+     * When     I click on a password I own
+     * Then     I should see the session expired dialog
+     * And      I should be redirected to the login page in 60 seconds
+     */
 	public function testOnClickSessionExpiredAutoRedirect() {
 		// Given I am Ada
 		$user = User::get('ada');
@@ -61,9 +78,10 @@ class LogoutTest extends PassboltTestCase {
 		// And I am logged in on the password workspace
 		$this->loginAs($user);
 
+        // And I wait until the session expires
 		sleep(15);
 
-		// When I click on a password I own
+		// And I click on a password I own
 		$resource = Resource::get(array('user' => 'ada', 'permission' => 'owner'));
 		$this->clickPassword($resource['id']);
 
@@ -74,6 +92,16 @@ class LogoutTest extends PassboltTestCase {
 		$this->waitUntilISee('.plugin-check.' . $this->_browser['type'] . '.success', null, 7);
 	}
 
+    /**
+     * Scenario: As LU I should be logged out when the session expires (manual redirect)
+     * Given    I am Ada
+     * And      I am logged in on the passwords workspace
+     * When     I wait until the session timeout
+     * And      I click on a password I own
+     * Then     I should see the session expired dialog
+     * When     I click on the 'Redirect now' button
+     * Then     I should see the login page
+     */
 	public function testOnClickSessionExpiredManualRedirect() {
 		// Given I am Ada
 		$user = User::get('ada');
@@ -89,9 +117,10 @@ class LogoutTest extends PassboltTestCase {
 		// And I am logged in on the password workspace
 		$this->loginAs($user);
 
+        // When I wait until the session timeout
 		sleep(15);
 
-		// When I click on a password I own
+		// And I click on a password I own
 		$resource = Resource::get(array('user' => 'ada', 'permission' => 'owner'));
 		$this->clickPassword($resource['id']);
 
@@ -106,7 +135,16 @@ class LogoutTest extends PassboltTestCase {
 	}
 
 	/**
-	 * @group saucelabs
+     * @group saucelabs
+     *
+     * Scenario: As LU I should be logged out when I quit the browser and restart it after my session expired
+     * Given    I am Ada
+     * And      I am logged in on the passwords workspace
+     * When     I wait until the session timeout
+     * Then     I should see the session expired dialog
+     * When     I click on the 'Redirect now' button
+     * Then     I should see the login page
+     *
 	 * @throws Exception
 	 */
 	public function testSessionExpired() {
@@ -127,7 +165,7 @@ class LogoutTest extends PassboltTestCase {
 		// Then I should see the session expired dialog
 		$this->assertSessionExpiredDialog();
 
-		// When I click on Redirect now
+		// When I click on Redirect now button
 		$this->click('confirm-button');
 
 		// Then I should see the login page
@@ -170,6 +208,9 @@ class LogoutTest extends PassboltTestCase {
 	}
 
 	/**
+	 * @group firefox-only
+	 * @todo PASSBOLT-2263 close and restore doesn't work with the latest chrome driver
+	 *
 	 * Scenario:  As LU I should be logged out when I close the passbolt tab and restore it after my session expired
 	 * Given    I am Ada
 	 * And      I am logged in on the passwords workspace

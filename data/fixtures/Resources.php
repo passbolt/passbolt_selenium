@@ -56,14 +56,23 @@ class Resource {
 			'description' => 'CanJS is a JavaScript library that makes developing complex applications simple and fast.'
 		);
 		$r[] = array(
-			'id' => Uuid::get('resource.id.enlightenment'),
-			'username' => 'efl',
-			'name' => 'Enlightenment',
-			'password' => 'azertyuiop',
-			'uri' => 'https://www.enlightenment.org/',
-			'complexity' => 'very weak',
-			'description' => 'Party like it\'s 1996.'
-		);
+            'id' => Uuid::get('resource.id.enlightenment'),
+            'username' => 'efl',
+            'name' => 'Enlightenment',
+            'password' => 'azertyuiop',
+            'uri' => 'https://www.enlightenment.org/',
+            'complexity' => 'very weak',
+            'description' => 'Party like it\'s 1996.'
+        );
+        $r[] = array(
+            'id' => Uuid::get('resource.id.cakephp'),
+            'username' => 'cake',
+            'name' => 'cakephp',
+            'password' => 'admin',
+            'uri' => 'cakephp.org',
+            'complexity' => 'very weak',
+            'description' => 'The rapid and tasty php development framework'
+        );
 	    $r[] = array(
 		    'id' => Uuid::get('resource.id.gnupg'),
 		    'username' => 'gpg',

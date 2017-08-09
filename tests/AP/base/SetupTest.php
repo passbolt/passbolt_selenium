@@ -20,7 +20,7 @@ class SetupTest extends PassboltSetupTestCase {
 	 * And        I follow the registration process and click on submit
 	 * And        I click on the link get started in the email I received
 	 * Then       Wait until I see the first page of setup.
-	 * And        I should see the text "Nice one! Firefox/Chrome plugin is installed and up to date. You are good to go!"
+	 * And        I should see the text "Nice one! The plugin is installed and up to date. You are good to go!"
 	 * And        I should see that the domain in the url check textbox is the same as the one configured.
 	 */
 	public function testCanSeeSetupPageWithFirstPluginSection() {
@@ -39,7 +39,7 @@ class SetupTest extends PassboltSetupTestCase {
 		$this->waitForSection('domain_check');
 
 		// Test that the plugin confirmation message is displayed.
-		$this->waitUntilISee('.plugin-check.success', '/' . $this->_browser['type'] . ' plugin is installed and up to date/i');
+		$this->waitUntilISee('.plugin-check.success', '/Nice one! The plugin is installed and up to date/i');
 
 		// Test that the domain in the url check textbox is the same as the one configured.
 		$domain = $this->findById('js_setup_domain')->getAttribute('value');

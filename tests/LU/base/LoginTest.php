@@ -87,6 +87,7 @@ class LoginTest extends PassboltTestCase {
 		$this->assertInputValue('UserUsername', $user['Username']);
 
 		$this->click('js_master_password');
+		$this->waitUntilElementHasFocus('js_master_password');
 		$this->typeTextLikeAUser($user['MasterPassword']);
 		$this->pressEnter();
 
@@ -174,6 +175,9 @@ class LoginTest extends PassboltTestCase {
 	}
 
 	/**
+	 * @group firefox-only
+	 * @todo PASSBOLT-2263 close and restore doesn't work with the latest chrome driver
+	 *
 	 * Scenario:  As LU I should still be logged in after I close and restore the passbolt tab
 	 * Given    I am Ada
 	 * And 		I am on second tab
