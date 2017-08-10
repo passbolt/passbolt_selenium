@@ -877,6 +877,7 @@ class PassboltTestCase extends WebDriverTestCase {
 	public function gotoEditGroup($id) {
 		if(!$this->isVisible('.page.people')) {
 			$this->getUrl('');
+            $this->waitUntilISee('html.passboltplugin-ready');
 			$this->waitUntilISee('.page.password');
 			$this->gotoWorkspace('user');
 			$this->waitUntilISee('.page.people');
