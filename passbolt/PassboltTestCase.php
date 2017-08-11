@@ -180,17 +180,21 @@ class PassboltTestCase extends WebDriverTestCase {
 	 * @throws Exception
 	 */
 	public function getAddonBaseUrl() {
-		// A passbolt debug meta data is required to build the debug url.
-		$headElement = $this->find('head');
-		$addonUrl = $headElement->getAttribute('data-passbolt-addon-url');
+		static $addonUrl = '';
 
-		// If the debut meta data not found, go to a passbolt page first.
-		// The data is available only on passbolt page.
-		if(empty($addonUrl)) {
-			$this->getUrl('');
-			$this->waitUntilISee('.passbolt');
+		// A passbolt debug meta data is required to build the debug url.
+		if (empty($addonUrl)) {
 			$headElement = $this->find('head');
 			$addonUrl = $headElement->getAttribute('data-passbolt-addon-url');
+
+			// If the debut meta data not found, go to a passbolt page first.
+			// The data is available only on passbolt page.
+			if(empty($addonUrl)) {
+				$this->getUrl('');
+				$this->waitUntilISee('.passbolt');
+				$headElement = $this->find('head');
+				$addonUrl = $headElement->getAttribute('data-passbolt-addon-url');
+			}
 		}
 
 		return $addonUrl;
@@ -1760,7 +1764,7 @@ class PassboltTestCase extends WebDriverTestCase {
 		sleep(1);
 		// Ensure the selenium works on the new tab.
 		$handles=$this->driver->getWindowHandles();
-		$last_window = next($handles);
+		$last_window = end($handles);
 		$this->driver->switchTo()->window($last_window);
 	}
 
@@ -1835,20 +1839,9 @@ class PassboltTestCase extends WebDriverTestCase {
 	 * @throws Exception
 	 */
 	public function waitUntilUrlMatches($url, $addBase = true, $timeout = 10) {
-		for ($i = 0; $i < $timeout * 10; $i++) {
-			try {
-				$this->assertCurrentUrl($url, $addBase);
-				return true;
-			}
-			catch (Exception $e) {}
-
-			// If none of the above was found, wait for 1/10 seconds, and try again.
-			usleep(100000); // Sleep 1/10 seconds
-		}
-
-		$backtrace = debug_backtrace();
-		$currentUrl = $this->driver->getCurrentURL();
-		$this->fail( "waitUntilURLMatches $url : Timeout thrown by " . $backtrace[1]['class'] . "::" . $backtrace[1]['function'] . "()\n . element: $url \n . current url : $currentUrl \n");
+		$this->waitUntil(function() use(&$url, &$addBase, &$expectedValue) {
+			$this->assertCurrentUrl($url, $addBase);
+		}, null, $timeout);
 	}
 
 	/**
