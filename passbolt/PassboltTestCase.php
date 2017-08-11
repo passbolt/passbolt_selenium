@@ -400,6 +400,7 @@ class PassboltTestCase extends WebDriverTestCase {
 		// Restart the brower
 		$this->initBrowser();
 		$this->driver->manage()->window()->maximize();
+		$this->waitUntilISee('body');
 
 		// As the browser local storage has been cleaned.
 		// Set the client config has it was before quitting.
