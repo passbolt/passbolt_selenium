@@ -1,3 +1,4 @@
+
 <?php
 /**
  * Feature : Settings Workspace
@@ -14,7 +15,7 @@ class SettingsWorkspaceTest extends PassboltTestCase
 	 * @group saucelabs
      * Scenario :   As a user I should be able to search a password by keywords from the settings workspace
      * Given        I am logged in as Ada, and I go to the password workspace
-     * When         I fill the "app search" field with "shared resource"
+     * When         I fill the "app search" field with "Betty"
      * And          I click "search"
      * Then         I should see the view filtered with my search
      * And          I should see the breadcrumb with the following:
@@ -44,24 +45,21 @@ class SettingsWorkspaceTest extends PassboltTestCase
 		$user = User::get('ada');
 		$this->setClientConfig($user);
 
-
 		// And I am logged in on the user workspace
 		$this->loginAs($user);
 
 		// Go to user workspace
 		$this->gotoWorkspace('settings');
 
-		// I fill the "app search" field with "tetris license"
+		// I fill the "app search" field with "Betty"
 		$this->inputText('js_app_filter_keywords', $searchUser);
 		$this->click("#js_app_filter_form button[value='search']");
+        $this->waitUntilISee('#js_passbolt_people_workspace_controller');
 		$this->waitCompletion();
 
 		// I should see the view filtered with my search
 		$userBrowser = $this->findByCss('#js_wsp_users_browser .tableview-content');
-		$this->assertElementContainsText(
-			$userBrowser,
-			$searchUser
-		);
+		$this->waitUntilISee($userBrowser, "/$searchUser/");
 		for ($i=0; $i< count($hiddenUsers); $i++) {
 			$this->assertElementNotContainText(
 				$userBrowser,

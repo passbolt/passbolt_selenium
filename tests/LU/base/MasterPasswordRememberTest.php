@@ -57,9 +57,11 @@ class MasterPasswordRememberTest extends PassboltTestCase {
 
 		// When I enter my passphrase from keyboard only
 		$this->enterMasterPassword($user['MasterPassword'], false);
+		$this->waitCompletion();
 
 		// Then The password should have been copied to clipboard
-		$this->waitCompletion();
+		$this->assertNotification('plugin_clipboard_copy_success');
+		$this->waitUntilNotificationDisappears('plugin_clipboard_copy_success');
 		$this->assertClipboard($rsA['password']);
 
 		// When I click on another password in the list
@@ -75,9 +77,12 @@ class MasterPasswordRememberTest extends PassboltTestCase {
 		// When I enter my passphrase from keyboard only
 		// And I check the remember checkbox
 		$this->enterMasterPassword($user['MasterPassword'], true);
+		$this->waitUntilIDontSee('#passbolt-iframe-progress-dialog');
+		$this->waitCompletion();
 
 		// Then The password should have been copied to clipboard
-		$this->waitCompletion();
+		$this->assertNotification('plugin_clipboard_copy_success');
+		$this->waitUntilNotificationDisappears('plugin_clipboard_copy_success');
 		$this->assertClipboard($rsB['password']);
 
 		// When I click on another password in the list
@@ -86,10 +91,11 @@ class MasterPasswordRememberTest extends PassboltTestCase {
 
 		// And I click on the link 'copy password'
 		$this->click('js_wk_menu_secretcopy_button');
+		$this->waitCompletion();
 
 		// Then The password should have been copied to clipboard
-		$this->waitCompletion();
+		$this->assertNotification('plugin_clipboard_copy_success');
+		$this->waitUntilNotificationDisappears('plugin_clipboard_copy_success');
 		$this->assertClipboard($rsC['password']);
-
 	}
 }

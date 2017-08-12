@@ -142,7 +142,7 @@ class PasswordShareTest extends PassboltTestCase
 		$this->click('#js_rs_details_permissions a#js_edit_permissions_button');
 
 		// Then I can see the share password dialog
-		$this->assertVisible('.share-password-dialog');
+		$this->waitUntilISee('.share-password-dialog');
 	}
 
 	/**
@@ -509,7 +509,6 @@ class PasswordShareTest extends PassboltTestCase
 		$this->gotoSharePassword($resource['id']);
 
 		// And I try share the password with a user that does not exist
-
 		$this->goIntoShareIframe();
 		$this->inputText('js_perm_create_form_aro_auto_cplt', 'not.a.user@something.com', true);
 		$this->goOutOfIframe();
@@ -653,7 +652,7 @@ class PasswordShareTest extends PassboltTestCase
 		$this->enterMasterPassword($user['MasterPassword']);
 
 		// Then I can see a success message telling me the password was copied to clipboard
-		$this->assertNotification('plugin_secret_copy_success');
+		$this->assertNotification('plugin_clipboard_copy_success');
 
 		// And the content of the clipboard is valid
 		$this->assertClipboard($resource['password']);
@@ -818,7 +817,7 @@ class PasswordShareTest extends PassboltTestCase
 		$this->enterMasterPassword($user['MasterPassword']);
 
 		// Then I can see a success message telling me the password was copied to clipboard
-		$this->assertNotification('plugin_secret_copy_success');
+		$this->assertNotification('plugin_clipboard_copy_success');
 
 		// And the content of the clipboard is valid
 		$this->assertClipboard($resource['password']);
@@ -895,7 +894,7 @@ class PasswordShareTest extends PassboltTestCase
 		// When I go to the sharing dialog of a password I own
 		$resource = Resource::get(array(
 			'user' => 'ada',
-			'id' => Uuid::get('resource.id.enlightenment')
+			'id' => Uuid::get('resource.id.cakephp')
 		));
 		$this->gotoSharePassword($resource['id']);
 
@@ -1089,7 +1088,7 @@ class PasswordShareTest extends PassboltTestCase
 	 * When 	I click on the save button
 	 * Then 	I see the passphrase dialog
 	 * When 	I enter the passphrase and click submit
-	 * Then 	I see a dialog telling me encryption is in progress
+	 * Then 	I wait until I don't see the encryption dialog anymore.
 	 * And 		I see a notice message that the operation was a success
 	 */
 	public function testAtLeastOneOwner() {
@@ -1144,10 +1143,10 @@ class PasswordShareTest extends PassboltTestCase
 		$this->deleteTemporaryPermission($resource, 'betty@passbolt.com');
 
 		// Then I can see the permission type dropdown of the owner Ada is disabled
-		$this->assertDisabled('#js_share_perm_type_' . $permissionAdaId);
+		$this->waitUntilDisabled('#js_share_perm_type_' . $permissionAdaId);
 
 		// And I can see the permission delete button of the owner Ada is disabled
-		$this->assertDisabled('#js_share_perm_delete_' . $permissionAdaId);
+		$this->waitUntilDisabled('#js_share_perm_delete_' . $permissionAdaId);
 
 		// When I add a temporary permission for Frances
 		$this->addTemporaryPermission($resource, $userFrances['name'], $userAda);
@@ -1181,8 +1180,8 @@ class PasswordShareTest extends PassboltTestCase
 		// When I enter the passphrase and click submit
 		$this->enterMasterPassword($userAda['MasterPassword']);
 
-		// Then I see a dialog telling me encryption is in progress
-		$this->waitUntilISee('#passbolt-iframe-progress-dialog');
+		// Then wait until I don't see  the encryption dialog anymore.
+		$this->waitUntilIDontSee('#passbolt-iframe-progress-dialog');
 		$this->waitCompletion();
 
 		// And I see a notice message that the operation was a success
@@ -1461,6 +1460,9 @@ class PasswordShareTest extends PassboltTestCase
 	}
 
 	/**
+	 * @group firefox-only
+	 * @todo PASSBOLT-2263 close and restore doesn't work with the latest chrome driver
+	 *
 	 * Scenario: As a user I can share a password with other users after I close and restore the passbolt tab
 	 *
 	 * Given    I am Carol

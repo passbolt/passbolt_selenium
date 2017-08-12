@@ -110,7 +110,6 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
 		$capabilities = $this->_getCapabilities();
 
 		if ($this->_saucelabs) {
-
 			// Set build name.
 			$capabilities->setCapability('build', $this->_build);
 
@@ -311,7 +310,8 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
     /********************************************************************************
      * Protected methods
      ********************************************************************************/
-    /**
+
+	/**
      * Get desired capabilities from config
      * @return DesiredCapabilities|null
      * @throws error browser type not supported
@@ -340,12 +340,18 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
 
                 // Set download preferences for the browser.
                 $profile->setPreference("browser.download.folderList", 2);
+				$profile->setPreference("browser.helperApps.neverAsk.saveToDisk", "text/plain");
 				$profile->setPreference("xpinstall.signatures.required", false);
 				$profile->setPreference("browser.startup.page", 0); // Empty start page
 				$profile->setPreference("browser.startup.homepage_override.mstone", "ignore"); // Suppress the "What's new" page
 
-
                 $capabilities->setCapability(FirefoxDriver::PROFILE, $profile);
+				$capabilities->setCapability('moz:firefoxOptions', array(
+//					'binary' => '/Applications/FirefoxDeveloperEdition.app/Contents/MacOS/firefox-bin'
+//					'binary' => '/Applications/FirefoxNightly.app/Contents/MacOS/firefox-bin'
+//					'binary' => '/Applications/Nightly.app/Contents/MacOS/firefox-bin'
+					'binary' => '/tmp/firefox/firefox-bin'
+				));
             break;
 
             case 'chrome':
@@ -481,7 +487,8 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
      * Emulate escape key press
      */
     public function pressEscape() {
-        $this->driver->getKeyboard()->sendKeys(WebDriverKeys::ESCAPE);
+		$activeElt = $this->driver->switchTo()->activeElement();
+		$activeElt->sendKeys(WebDriverKeys::ESCAPE);
     }
 
     /**
@@ -497,22 +504,24 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
      * Press enter on keyboard
      */
     public function pressEnter() {
-        $this->driver->getKeyboard()->pressKey(WebDriverKeys::ENTER);
+		$activeElt = $this->driver->switchTo()->activeElement();
+		$activeElt->sendKeys(WebDriverKeys::ENTER);
     }
 
     /**
      * Press tab key
      */
     public function pressTab() {
-        $this->driver->getKeyboard()->pressKey(WebDriverKeys::TAB);
+		$activeElt = $this->driver->switchTo()->activeElement();
+		$activeElt->sendKeys(WebDriverKeys::TAB);
     }
 
     /**
      * Press backtab key
      */
     public function pressBacktab() {
-        $this->driver->getKeyboard()
-            ->sendKeys([WebDriverKeys::SHIFT, WebDriverKeys::TAB]);
+		$activeElt = $this->driver->switchTo()->activeElement();
+		$activeElt->sendKeys([WebDriverKeys::SHIFT, WebDriverKeys::TAB]);
     }
 
     /**
@@ -730,11 +739,15 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
 	 * @return bool
 	 * @throws
 	 */
-	public function waitUntil($callback, $args = array(), $timeout = 10) {
+	public function waitUntil($callback, $args = array(), $timeout = 15) {
 		// Number of loops to do.
 		$loops = 50;
 		// The last exception caught.
 		$caughtException = null;
+		// Args to be an array.
+		if(is_null($args)) {
+			$args = array();
+		}
 
 		for ($i = 0; $i < $loops; $i++) {
 			try {
@@ -749,50 +762,68 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
 		throw $caughtException;
 	}
 
-    /**
-     * Wait until I see.
-     * @param $ids array of ids (success if only one of them is found), or string representing one id
-     * @param array or string $regexps (follows $ids)
-     * @param int timeout timeout in seconds
-     * @return bool if element is found
-     * @throws Exception if element is not found after a given timeout
-     */
-    public function waitUntilISee($ids, $regexps = null, $timeout = 10) {
-        // Number of loops to do.
-	    $loops = 50;
+	/**
+	 * Wait until I see.
+	 * @param $ids array of ids (success if only one of them is found), or string representing one id
+	 * @param array or string $regexps (follows $ids)
+	 * @param int timeout timeout in seconds
+	 * @return bool if element is found
+	 * @throws Exception if element is not found after a given timeout
+	 */
+	public function waitUntilISee($ids, $regexps = null, $timeout = 15) {
+		// Test internal clock, test every maximum clock second.
+		$clock = 0.500;
+		// When we go over the timeout, change the state of this variable.
+		$continue = true;
+		// Start time.
+		$testStart = microtime(true);
 
-	    for ($i = 0; $i < $loops; $i++) {
-	        if (is_array($ids)) {
-		        foreach($ids as $k => $id) {
-			        $regexp = null;
-			        if (!is_null($regexps) && is_string($regexps)) {
+		do {
+			// Store the loop start time.
+			$loopStart = microtime(true);
+
+			if (is_array($ids)) {
+				foreach($ids as $k => $id) {
+					$regexp = null;
+					if (!is_null($regexps) && is_string($regexps)) {
 						$regexp = $regexps;
-			        }
-			        elseif (!is_null($regexps) && is_array($regexps)) {
-				        $regexp = $regexps[$k];
-			        }
-			        $visible = $this->_assertISeeElement($id, $regexp);
-			        if ($visible === true) {
-				        return true;
-			        }
-		        }
-	        }
-	        else {
-		        $visible = $this->_assertISeeElement($ids, $regexps);
-		        if ($visible === true) {
-			        return true;
-		        }
-	        }
-	        $second = 1000000;
-	        usleep(($second * $timeout) / $loops);
-        }
-        $backtrace = debug_backtrace();
-	    $id = is_array($ids) ? implode(",", $ids) : $ids;
-	    $regexp = is_array($regexps) ? implode (",", $regexps) : $regexps;
+					}
+					elseif (!is_null($regexps) && is_array($regexps)) {
+						$regexp = $regexps[$k];
+					}
+					$visible = $this->_assertISeeElement($id, $regexp);
+					if ($visible === true) {
+						return true;
+					}
+				}
+			}
+			else {
+				$visible = $this->_assertISeeElement($ids, $regexps);
+				if ($visible === true) {
+					return true;
+				}
+			}
 
-	    // Fail if not found.
-	    $this->fail("waitUntilISee $id, $regexp\nTimeout thrown by " . $backtrace[1]['class'] . "::" . $backtrace[1]['function'] . "()\n . element(s): $id ($regexp)");
-    }
+			// Store the loop end time.
+			$loopEnd = microtime(true);
+			// Should we wait more ?
+			$loopElapsed = $loopStart - $loopEnd;
+			if ($loopElapsed < $clock) {
+				usleep(($clock - $loopElapsed) * 1000000);
+			}
+			// Does the timeout overlapped.
+			if (($loopEnd - $testStart) > $timeout) {
+				$continue = false;
+			}
+		} while ($continue);
+
+		$backtrace = debug_backtrace();
+		$id = is_array($ids) ? implode(",", $ids) : $ids;
+		$regexp = is_array($regexps) ? implode (",", $regexps) : $regexps;
+
+		// Fail if not found.
+		$this->fail("waitUntilISee $id, $regexp\nTimeout thrown by " . $backtrace[1]['class'] . "::" . $backtrace[1]['function'] . "()\n . element(s): $id ($regexp)");
+	}
 
 	/**
 	 * Wait until the expired dialog appears.
@@ -1024,14 +1055,24 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
     /********************************************************************************
      * ASSERT HELPERS
      ********************************************************************************/
-    /**
-     * Check if the given title is contain in the one of the page
+
+	/**
+     * Check the title contains.
      * @param $title
      */
     public function assertTitleContain($title) {
         $t = $this->driver->getTitle();
         $this->assertContains($title,$t);
     }
+
+	/**
+	 * Wait until the title contains.
+	 * @param $title
+	 */
+	public function waitUntilTitleContain($title) {
+		$callback = array($this, 'assertTitleContain');
+		$this->waitUntil($callback, array($title));
+	}
 
     /**
      * Check if the current url match the regexp given in parameter
@@ -1168,10 +1209,13 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
      * Assert if an element identified via its id is visible
      * @param $id
      */
-    public function assertVisible($id) {
+    public function assertVisible($id, $message = '') {
+		if (empty($message)) {
+			$message = 'Failed to assert that the element ' . $id .' is visible';
+		}
         $this->assertTrue(
             $this->isVisible($id),
-            'Failed to assert that the element ' . $id .' is visible'
+            $message
         );
     }
 
@@ -1206,4 +1250,12 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
         $a = $this->find($id)->getAttribute('disabled');
         $this->assertTrue(($a === 'true'), 'Failed to assert the element '.$id . 'is disabled');
     }
+
+	/**
+	 * Wait until an HTML Element has the attribute disabled
+	 * @param $id
+	 */
+	public function waitUntilDisabled($id) {
+		$this->waitUntil(array($this, 'assertDisabled'), array($id));
+	}
 }

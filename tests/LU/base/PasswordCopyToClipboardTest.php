@@ -62,7 +62,7 @@ class PasswordCopyToClipboardTest extends PassboltTestCase
 		$this->enterMasterPassword($user['MasterPassword']);
 
 		// Then I can see a success message telling me the password was copied to clipboard
-		$this->assertNotification('plugin_secret_copy_success');
+		$this->assertNotification('plugin_clipboard_copy_success');
 
 		// And the content of the clipboard is valid
 		$this->assertClipboard($resource['password']);
@@ -146,7 +146,7 @@ class PasswordCopyToClipboardTest extends PassboltTestCase
         $this->enterMasterPassword($user['MasterPassword']);
 
         // Then I can see a success message telling me the password was copied to clipboard
-        $this->assertNotification('plugin_secret_copy_success');
+        $this->assertNotification('plugin_clipboard_copy_success');
 
         // And the content of the clipboard is valid
         $this->assertClipboard($resource['password']);
@@ -198,7 +198,7 @@ class PasswordCopyToClipboardTest extends PassboltTestCase
 		$this->goOutOfIframe();
 
 		// Then I can see a success message telling me the password was copied to clipboard
-		$this->assertNotification('plugin_secret_copy_success');
+		$this->assertNotification('plugin_clipboard_copy_success');
 
 		// And the content of the clipboard is valid
 		$this->assertClipboard($resource['password']);
@@ -293,7 +293,7 @@ class PasswordCopyToClipboardTest extends PassboltTestCase
         $this->enterMasterPassword($user['MasterPassword']);
 
 	    // Then I can see a success message saying the username was copied to clipboard
-	    $this->assertNotification('plugin_secret_copy_success');
+	    $this->assertNotification('plugin_clipboard_copy_success');
 
         // Then the password is copied to clipboard
         $this->assertClipboard($resource['password']);
@@ -329,7 +329,7 @@ class PasswordCopyToClipboardTest extends PassboltTestCase
         $this->enterMasterPassword($user['MasterPassword']);
 
 	    // Then I can see a success message saying the username was copied to clipboard
-	    $this->assertNotification('plugin_secret_copy_success');
+	    $this->assertNotification('plugin_clipboard_copy_success');
 
         // Then the password is copied to clipboard
         $this->assertClipboard($resource['password']);

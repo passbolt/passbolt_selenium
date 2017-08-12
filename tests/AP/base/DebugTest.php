@@ -82,82 +82,82 @@ class DebugTest extends PassboltTestCase {
         $this->click('js_save_conf');
         $feedback = '.user.settings.feedback .message.error';
         $this->waitUntilISee($feedback);
-        $this->assertElementContainsText($feedback, 'The user id cannot be empty');
+        $this->waitUntilISee($feedback, '/The user id cannot be empty/');
 
         // Check user id is not uuid
         $this->inputText('UserId', 'test');
         $this->click('js_save_conf');
-        $this->assertElementContainsText($feedback, 'The user id should be a valid UUID');
+        $this->waitUntilISee($feedback, '/The user id should be a valid UUID/');
 
         // Check empty username name
         $this->inputText('UserId', $user['id']);
         $this->click('js_save_conf');
-        $this->assertElementContainsText($feedback, 'The username cannot be empty');
+        $this->waitUntilISee($feedback, '/The username cannot be empty/');
 
         // Check empty username name
         $this->inputText('UserUsername', 'notanemail');
         $this->click('js_save_conf');
-        $this->assertElementContainsText($feedback, 'The username should be a valid email address');
+        $this->waitUntilISee($feedback, '/The username should be a valid email address/');
 
         // Check empty first name
         $this->inputText('UserUsername', $user['Username']);
         $this->click('js_save_conf');
-        $this->assertElementContainsText($feedback, 'The first name cannot be empty');
+        $this->waitUntilISee($feedback, '/The first name cannot be empty/');
         $this->click('js_save_conf');
-        $this->assertElementContainsText($feedback, 'The first name cannot be empty');
+        $this->waitUntilISee($feedback, '/The first name cannot be empty/');
 
         // Check first name is not alphanumeric
         $this->inputText('ProfileFirstName', '?');
         $this->click('js_save_conf');
-        $this->assertElementContainsText($feedback, 'The first name should only contain alphabetical and numeric characters');
+        $this->waitUntilISee($feedback, '/The first name should only contain alphabetical and numeric characters/');
 
         // Check empty last name
         $this->inputText('ProfileFirstName', $user['FirstName']);
         $this->click('js_save_conf');
-        $this->assertElementContainsText($feedback, 'The last name cannot be empty');
+        $this->waitUntilISee($feedback, '/The last name cannot be empty/');
 
         // Check last name is not alphanumeric
         $this->inputText('ProfileLastName', '?');
         $this->click('js_save_conf');
-        $this->assertElementContainsText($feedback, 'The last name should only contain alphabetical and numeric characters');
+        $this->waitUntilISee($feedback, '/The last name should only contain alphabetical and numeric characters/');
 
         // Check empty security token
         $this->inputText('ProfileLastName', $user['LastName']);
         $this->click('js_save_conf');
-        $this->assertElementContainsText($feedback, 'A token code cannot be empty');
+        $this->waitUntilISee($feedback, '/A token code cannot be empty/');
 
         // Check security token code is not alpha numeric
         $this->inputText('securityTokenCode', '?');
         $this->click('js_save_conf');
-        $this->assertElementContainsText($feedback, 'The token code should only contain alphabetical and numeric characters');
+        $this->waitUntilISee($feedback, '/The token code should only contain alphabetical and numeric characters/');
 
         // Check security token code length is exactly 3 characters in length
         $this->inputText('securityTokenCode', '12');
         $this->click('js_save_conf');
-        $this->assertElementContainsText($feedback, 'The token code should only contain 3 characters');
+        $this->waitUntilISee($feedback, '/The token code should only contain 3 characters/');
         $this->inputText('securityTokenCode', '1234');
         $this->click('js_save_conf');
-        $this->assertElementContainsText($feedback, 'The token code should only contain 3 characters');
+        $this->waitUntilISee($feedback, '/The token code should only contain 3 characters/');
 
         // Check empty token color
         $this->inputText('securityTokenCode', $user['TokenCode']);
         $this->click('js_save_conf');
-        $this->assertElementContainsText($feedback, 'The token color cannot be empty');
+        $this->waitUntilISee($feedback, '/The token color cannot be empty/');
 
         // Check wrong token color
         $this->inputText('securityTokenColor', '#acolor');
         $this->click('js_save_conf');
-        $this->assertElementContainsText($feedback, 'This is not a valid token color');
+        $this->waitUntilISee($feedback, '/This is not a valid token color/');
 
         // Check empty token text color
         $this->inputText('securityTokenColor', $user['TokenColor']);
         $this->click('js_save_conf');
-        $this->assertElementContainsText($feedback, 'The token text color cannot be empty');
+        $this->waitUntilISee($feedback, '/The token text color cannot be empty/');
 
         // Check wrong token text color
         $this->inputText('securityTokenTextColor', '#acolor');
         $this->click('js_save_conf');
-        $this->assertElementContainsText($feedback, 'This is not a valid token text color');
+        $this->waitUntilISee($feedback, '/This is not a valid token text color/');
 
         // @TODO Domain
         // @TODO success

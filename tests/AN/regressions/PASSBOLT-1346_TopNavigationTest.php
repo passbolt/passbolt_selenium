@@ -24,13 +24,13 @@ class PASSBOLT1346 extends PassboltTestCase {
 		$this->getUrl('/');
 		$this->assertTitleContain('Login');
 		$this->click('.top.navigation.primary .home a');
-		$this->assertTitleContain('Login');
+		$this->waitUntilTitleContain('Login');
 		$this->clickLink('home');
-		$this->assertTitleContain('Login');
+		$this->waitUntilTitleContain('Login');
 		$this->clickLink('login');
-		$this->assertTitleContain('Login');
+		$this->waitUntilTitleContain('Login');
 		$this->clickLink('register');
-		$this->assertTitleContain('Register');
+		$this->waitUntilTitleContain('Register');
 	}
 
 }

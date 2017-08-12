@@ -56,14 +56,14 @@ class Resource {
 			'description' => 'CanJS is a JavaScript library that makes developing complex applications simple and fast.'
 		);
 		$r[] = array(
-			'id' => Uuid::get('resource.id.enlightenment'),
-			'username' => 'efl',
-			'name' => 'Enlightenment',
-			'password' => 'azertyuiop',
-			'uri' => 'https://www.enlightenment.org/',
-			'complexity' => 'very weak',
-			'description' => 'Party like it\'s 1996.'
-		);
+            'id' => Uuid::get('resource.id.enlightenment'),
+            'username' => 'efl',
+            'name' => 'Enlightenment',
+            'password' => 'azertyuiop',
+            'uri' => 'https://www.enlightenment.org/',
+            'complexity' => 'very weak',
+            'description' => 'Party like it\'s 1996.'
+        );
 	    $r[] = array(
 		    'id' => Uuid::get('resource.id.gnupg'),
 		    'username' => 'gpg',
@@ -82,6 +82,15 @@ class Resource {
 		    'complexity' => 'very weak',
 		    'description' => 'Chai is a BDD / TDD assertion library for node and the browser',
 	    );
+		$r[] = array(
+			'id' => Uuid::get('resource.id.cakephp'),
+			'username' => 'cake',
+			'name' => 'cakephp',
+			'password' => 'admin',
+			'uri' => 'cakephp.org',
+			'complexity' => 'very weak',
+			'description' => 'The rapid and tasty php development framework'
+		);
         return $r;
     }
 
@@ -118,6 +127,9 @@ class Resource {
 				$r[7] = array_merge($r[7], array(
 					'permission' => 'deny'
 				));
+				$r[8] = array_merge($r[8], array(
+					'permission' => 'owner'
+				));
                 break;
 			case 'betty' :
                 $r[0] = array_merge($r[0], array(
@@ -143,6 +155,9 @@ class Resource {
 				));
 				$r[7] = array_merge($r[7], array(
 					'permission' => 'owner'
+				));
+				$r[8] = array_merge($r[8], array(
+					'permission' => 'deny'
 				));
                 break;
         }

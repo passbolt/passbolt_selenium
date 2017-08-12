@@ -37,8 +37,11 @@ class PASSBOLT1494 extends PassboltSetupTestCase
 		// Complete registration.
 		$this->completeRegistration($john);
 
-		// Switch config to secondary domain.
-		$this->switchToSecondaryDomain();
+		// I should be able to login
+		$this->loginAs($john);
+
+		// I logout.
+		$this->logout();
 
 		// Register Curtis Mayfield as a user.
 		$curtis = User::get('curtis');

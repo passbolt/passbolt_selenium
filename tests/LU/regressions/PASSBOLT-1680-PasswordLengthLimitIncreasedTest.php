@@ -57,7 +57,7 @@ class PASSBOLT1680 extends PassboltTestCase {
         $elt->click();
         $this->click('js_wk_menu_secretcopy_button');
         $this->enterMasterPassword($user['MasterPassword']);
-        $this->assertNotification('plugin_secret_copy_success');
+        $this->assertNotification('plugin_clipboard_copy_success');
         $this->assertClipboard($secret);
         $this->assertEquals(strlen($secret), $length);
     }

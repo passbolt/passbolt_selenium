@@ -11,6 +11,9 @@ use Facebook\WebDriver\Exception\NoSuchElementException;
 class LoginTest extends PassboltTestCase {
 
 	/**
+	 * @group chrome-only
+	 * @todo PASSBOLT-2253 Disabled for FF, certificate issue.
+	 * 
 	 * Scenario: As AN, I should be redirected to https if ssl.force parameter is set to true.
 	 * Given    I am an anonymous user
 	 * When     I am trying to access the login page

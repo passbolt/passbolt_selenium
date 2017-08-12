@@ -73,6 +73,9 @@ $config = array (
                 'path' => '/* video path */',
                 'binary' => '/* video tool path */', // usually /usr/local/bin/flvrec.py
             ],
+            'logs' => [
+                'plugin' => true
+            ],
 			// Extra capabilities.
 			'capabilities' => array(),
 		),
@@ -80,7 +83,7 @@ $config = array (
 	'browsers' => array (
 		'default' => 'firefox_ with_passbolt_extension',
 		'common' => array(
-			'downloads_path' => 'file:///home/application/Downloads'
+			'downloads_path' => 'file:///home/seluser/Downloads'
 		),
 		'firefox_with_passbolt_extension' => array(
 			'name' => 'Firefox with Passbolt extension',

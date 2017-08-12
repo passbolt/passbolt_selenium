@@ -189,6 +189,7 @@ class PasswordEditDescriptionTest extends PassboltTestCase {
 		// When I click on a password I own.
 		$resource = Resource::get(array('user' => 'ada', 'permission' => 'owner'));
 		$this->clickPassword($resource['id']);
+		$this->waitUntilISee('#js_pwd_details.ready');
 
 		// Click on the edit button.
 		$this->click("#js_edit_description_button i");

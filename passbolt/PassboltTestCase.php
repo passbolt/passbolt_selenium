@@ -28,6 +28,13 @@ class PassboltTestCase extends WebDriverTestCase {
 	protected static $loginCookies = array();
 
 	/**
+	 * The addon url.
+	 * It will be initialized the first the test access the function getAddonUrl.
+	 * @var string
+	 */
+	public $addonUrl = '';
+
+	/**
 	 * Called before the first test of the test case class is run
 	 */
 	public static function setUpBeforeClass() {
@@ -51,9 +58,12 @@ class PassboltTestCase extends WebDriverTestCase {
 	 * Executed after every tests
 	 */
 	protected function tearDown() {
+		// Take a screenshot.
 		if ($this->getStatus() == PHPUnit_Runner_BaseTestRunner::STATUS_FAILURE && Config::read('testserver.selenium.screenshotOnFail')) {
 			$this->takeScreenshot();
 		}
+
+		// Retrieve the recorded video.
 		if (Config::read('testserver.selenium.videoRecord')) {
 			$this->stopVideo();
 			if (Config::read('testserver.selenium.videos.when') == 'onFail' && $this->getStatus() != PHPUnit_Runner_BaseTestRunner::STATUS_FAILURE) {
@@ -65,7 +75,26 @@ class PassboltTestCase extends WebDriverTestCase {
 				}
 			}
 		}
-		// Reset the database if mentioned.
+
+		// Retrieve the plugin logs.
+		if ($this->getStatus() == PHPUnit_Runner_BaseTestRunner::STATUS_FAILURE
+				&& !empty($this->_browser['extensions'])
+				&& Config::read('testserver.selenium.logs.plugin')) {
+			// If the log folder doesn't exist yet.
+			$logPath = Config::read('testserver.selenium.videos.path');
+			if(!file_exists($logPath)) {
+				mkdir($logPath);
+			}
+			// Retrieve the logs.
+			$this->goToDebug();
+			$logsElt = $this->find('#logsContent');
+			$logs = $logsElt->getText();
+			// Store the logs on the server.
+			$filePath = "$logPath/{$this->testName}_plugin.json";
+			file_put_contents($filePath, $logs);
+		}
+
+		// Reset the database.
 		if ($this->resetDatabaseWhenComplete) {
 			PassboltServer::resetDatabase(Config::read('passbolt.url'));
 		}
@@ -147,20 +176,33 @@ class PassboltTestCase extends WebDriverTestCase {
 	 * Go to debug page.
 	 */
 	public function goToDebug() {
-		$this->getUrl('debug');
+		$addonUrl = $this->getAddonBaseUrl();
+		$this->getUrl($addonUrl . 'data/config-debug.html');
 		$this->waitUntilISee('.config.page.ready');
 	}
 
 	/**
-	 * Get the extension url
+	 * Get the addon url
 	 * @return {string}
 	 * @throws Exception
 	 */
-	public function getExtensionBaseUrl() {
-		if (isset($this->_browser['base_url'])) {
-			return $this->_browser['base_url'];
+	public function getAddonBaseUrl() {
+		// A passbolt debug meta data is required to build the debug url.
+		if (empty($this->addonUrl)) {
+			$headElement = $this->find('head');
+			$this->addonUrl = $headElement->getAttribute('data-passbolt-addon-url');
+
+			// If the debut meta data not found, go to a passbolt page first.
+			// The data is available only on passbolt page.
+			if(empty($this->addonUrl)) {
+				$this->getUrl('');
+				$this->waitUntilISee('.passbolt');
+				$headElement = $this->find('head');
+				$this->addonUrl = $headElement->getAttribute('data-passbolt-addon-url');
+			}
 		}
-		throw new Exception("This browser configuration has no passbolt extension. ");
+
+		return $this->addonUrl;
 	}
 
 	/**
@@ -168,10 +210,7 @@ class PassboltTestCase extends WebDriverTestCase {
 	 * @param $url
 	 */
 	public function getUrl($url = null) {
-		if ($url == 'debug') {
-			$baseUrl = $this->getExtensionBaseUrl();
-			$url = $baseUrl . DS . 'data' . DS . 'config-debug.html';
-		} else {
+		if (!preg_match('/^(moz-extension|chrome-extension|http|https)/', $url)) {
 			$url = Config::read('passbolt.url') . DS . $url;
 		}
 		$this->driver->get($url);
@@ -298,26 +337,6 @@ class PassboltTestCase extends WebDriverTestCase {
 		// Store the current username.
 		$this->currentUser = $user;
 
-		if ($useCache && isset(self::$loginCookies[$this->currentUser['Username']])) {
-			$this->getUrl('login');
-			foreach(self::$loginCookies[$this->currentUser['Username']] as $cookie) {
-				$this->driver->manage()->addCookie($cookie);
-			}
-			// The application page mode needs to be restarted manually.
-			$this->goToDebug();
-			$this->click('initAppPagemod');
-			$this->getUrl('');
-			try {
-				$this->findbyCss('.logout');
-				$this->waitCompletion();
-				return;
-			} catch (Exception $e) {
-				// If not logged in, maybe the session expired.
-				// Or a test logged the user out.
-				// Try to login the normal way.
-			}
-		}
-
 		// If not on the login page, we redirect to it.
 		try {
 			$this->find('.users.login.form');
@@ -341,6 +360,7 @@ class PassboltTestCase extends WebDriverTestCase {
 		// wait for redirection trigger
 		$this->waitUntilISee('.logout');
 		$this->waitCompletion();
+		$this->waitUntilISee('html.passboltplugin-ready');
 
 		// save the cookie
 		self::$loginCookies[$this->currentUser['Username']] = $this->driver->manage()->getCookies();
@@ -378,6 +398,8 @@ class PassboltTestCase extends WebDriverTestCase {
 		// Quit the browser.
 		$this->driver->close();
 		$this->driver->quit();
+		// Reset the addon url, as for firefox it will change after a browser restart.
+		$this->addonUrl = '';
 
 		// If a wait before restart option has been given.
 		sleep($waitBeforeRestart);
@@ -518,18 +540,16 @@ class PassboltTestCase extends WebDriverTestCase {
 			$this->inputText('serverKeyAscii', $key);
 		}
 
-		$this->click('js_save_conf');
-		// Assert it has been saved.
-		$this->assertElementContainsText(
-			$this->findbyCss('.user.settings.feedback'),
-			'User and settings have been saved!'
-		);
+		// Save the profile.
+		$this->click('#js_save_conf');
+		$this->waitUntilISee('.user.settings.feedback', '/User and settings have been saved!/');
 
-		$this->click('saveKey');
-		// Assert it has been saved.
+		// Save the user private key.
+		$this->click('#saveKey');
 		$this->waitUntilISee('.my.key-import.feedback', '/The key has been imported succesfully/');
 
-		$this->click('saveServerKey');
+		// Save the server public key.
+		$this->click('#saveServerKey');
 		$this->waitUntilISee('.server.key-import.feedback', '/The key has been imported successfully/');
 	}
 
@@ -543,7 +563,7 @@ class PassboltTestCase extends WebDriverTestCase {
 	 */
 	public function completeSetupWithKeyGeneration($data) {
 		// Check that we are on the setup page.
-		$this->assertPageContainsText('Plugin check');
+		$this->waitUntilISee('.plugin-check-wrapper', '/Plugin check/');
 		// Wait for the checkbox to appear.
 		$this->waitUntilISee('#js_setup_domain_check');
 		// Check box domain check.
@@ -586,7 +606,7 @@ class PassboltTestCase extends WebDriverTestCase {
 	 */
 	public function completeSetupWithKeyImport($data) {
 		// Check that we are on the setup page.
-		$this->assertPageContainsText('Plugin check');
+		$this->waitUntilISee('.plugin-check-wrapper', '/Plugin check/');
 		// Wait for the checkbox to appear.
 		$this->waitUntilISee('#js_setup_domain_check');
 		// Check box domain check.
@@ -636,7 +656,7 @@ class PassboltTestCase extends WebDriverTestCase {
 
 		// Test that the plugin confirmation message is displayed.
 		if ($checkPluginSuccess) {
-			$this->waitUntilISee('.plugin-check-wrapper .plugin-check.success', '/' . $this->_browser['type'] . ' plugin is installed and up to date/i');
+			$this->waitUntilISee('.plugin-check-wrapper .plugin-check.success', '/Nice one! The plugin is installed and up to date/i');
 		}
 	}
 
@@ -659,7 +679,7 @@ class PassboltTestCase extends WebDriverTestCase {
 
 		// Test that the plugin confirmation message is displayed.
 		if ($checkPluginSuccess) {
-			$this->waitUntilISee('.plugin-check-wrapper .plugin-check.success', '/' . $this->_browser['type'] . ' plugin is installed and up to date/i');
+			$this->waitUntilISee('.plugin-check-wrapper .plugin-check.success', '/Nice one! The plugin is installed and up to date/i');
 		}
 	}
 
@@ -857,6 +877,7 @@ class PassboltTestCase extends WebDriverTestCase {
 			}
 			$this->click('js_wk_menu_sharing_button');
 			$this->waitUntilISee('.share-password-dialog #js_rs_permission.ready');
+			$this->waitUntilISee('#passbolt-iframe-password-share.ready');
 		}
 	}
 
@@ -868,6 +889,7 @@ class PassboltTestCase extends WebDriverTestCase {
 	public function gotoEditGroup($id) {
 		if(!$this->isVisible('.page.people')) {
 			$this->getUrl('');
+            $this->waitUntilISee('html.passboltplugin-ready');
 			$this->waitUntilISee('.page.password');
 			$this->gotoWorkspace('user');
 			$this->waitUntilISee('.page.people');
@@ -1146,11 +1168,6 @@ class PassboltTestCase extends WebDriverTestCase {
 		$this->enterMasterPassword($user['MasterPassword']);
 
 		// Then I see a dialog telling me encryption is in progress
-		// The test below sometimes fail because of selenium latency.
-		// Commenting it for the time being.
-		// TODO: find a way to test this.
-		//$this->waitUntilISee('#passbolt-iframe-progress-dialog');
-
 		// Assert that the progress dialog is not displayed anymore (if it was displayed).
 		$this->waitUntilIDontSee('#passbolt-iframe-progress-dialog');
 
@@ -1444,20 +1461,25 @@ class PassboltTestCase extends WebDriverTestCase {
 	public function enterMasterPasswordWithKeyboardShortcuts($pwd, $tabFirst = false) {
 		$this->waitUntilISee('#passbolt-iframe-master-password.ready');
 
-		if ($tabFirst) {
-			$this->pressTab();
-			$this->goIntoMasterPasswordIframe();
-			$this->assertElementHasFocus('js_master_password');
-			$this->goOutOfIframe();
-		}
-		$this->typeTextLikeAUser($pwd);
-		$this->pressEnter();
 		$this->goIntoMasterPasswordIframe();
+
+		// The scenario using tab can only be tested on chrome.
+		// Firefox cannot use keyboard on element not visible.
+		// The element we use to hold the user focus is hidden.
+		if ($this->_browser['type'] == 'chrome') {
+			if ($tabFirst) {
+				$this->pressTab();
+				$this->assertElementHasFocus('js_master_password');
+			}
+			$this->typeTextLikeAUser($pwd);
+			$this->pressEnter();
+		} else {
+			$this->inputText('js_master_password', $pwd);
+			$this->pressEnter();
+		}
+
 		try {
-			$this->assertElementHasClass(
-				$this->find('master-password-submit'),
-				'processing'
-			);
+			$this->waitUntilISee('#master-password-submit.processing');
 		} catch (StaleElementReferenceException $e) {
 			// Do nothing.
 			// This happens sometimes when the master password decryption is too fast
@@ -1477,7 +1499,7 @@ class PassboltTestCase extends WebDriverTestCase {
 		$this->clickLink('Copy password');
 		$this->assertMasterPasswordDialog($user);
 		$this->enterMasterPassword($user['MasterPassword']);
-		$this->assertNotification('plugin_secret_copy_success');
+		$this->assertNotification('plugin_clipboard_copy_success');
 	}
 
 	/**
@@ -1646,8 +1668,6 @@ class PassboltTestCase extends WebDriverTestCase {
 		$this->waitCompletion();
 	}
 
-
-
 	/**
 	 * Check if the group has already been selected
 	 * @param $id string
@@ -1693,11 +1713,12 @@ class PassboltTestCase extends WebDriverTestCase {
 		$val = $field->getAttribute('value');
 		$sizeStr = strlen($val);
 		$field->click();
+		$activeElt = $this->driver->switchTo()->activeElement();
 		for ($i = 0; $i < $sizeStr; $i++) {
-			$this->driver->getKeyboard()->pressKey(WebDriverKeys::ARROW_RIGHT);
+			$activeElt->sendKeys(WebDriverKeys::ARROW_RIGHT);
 		}
 		for ($i = 0; $i < $sizeStr; $i++) {
-			$this->driver->getKeyboard()->pressKey(WebDriverKeys::BACKSPACE);
+			$activeElt->sendKeys(WebDriverKeys::BACKSPACE);
 		}
 	}
 
@@ -1708,8 +1729,51 @@ class PassboltTestCase extends WebDriverTestCase {
 	public function typeTextLikeAUser($text) {
 		$sizeStr = strlen($text);
 		for ($i = 0; $i < $sizeStr; $i++) {
-			$this->driver->getKeyboard()->pressKey($text[$i]);
+			$activeElt = $this->driver->switchTo()->activeElement();
+			$activeElt->sendKeys($text[$i]);
 		}
+	}
+
+	/**
+	 * Type master password like a user would do, pressing key after key.
+	 * Take in account that with firefox we cannot sendKeys to invisible element.
+	 * @param $text
+	 */
+	public function typeMasterPasswordLikeAUser($text) {
+		$activeElementIsMasterPasswordFocus = false;
+		$activeElt = $this->driver->switchTo()->activeElement();
+
+		// With the Firefox driver we cannot use the sendKeys function on invisible elements.
+		// If the current active element is the "focus first" element, make it visible first.
+		if ($this->_browser['type'] == 'firefox') {
+			$activeElementIsMasterPasswordFocus = false;
+			$activeEltId = $activeElt->getAttribute('id');
+			if($activeEltId == 'js_master_password_focus_first') {
+				$activeElementIsMasterPasswordFocus = true;
+				$this->driver->executeScript("$('#$activeEltId').css('line-height', '1px');");
+			}
+		}
+
+		// Type each character
+		$this->typeTextLikeAUser($text);
+
+		// Hide the "focus first" element if required.
+		if ($activeElementIsMasterPasswordFocus) {
+			$this->driver->executeScript("$('#$activeEltId').css('line-height', '0');");
+		}
+	}
+
+	/**
+	 * Simulate click on the toolbar passbolt icon.
+	 */
+	public function clickToolbarIcon() {
+		$this->goToDebug();
+		$this->click('#simulateToolbarIcon');
+		sleep(1);
+		// Ensure the selenium works on the new tab.
+		$handles=$this->driver->getWindowHandles();
+		$last_window = end($handles);
+		$this->driver->switchTo()->window($last_window);
 	}
 
 	/**
@@ -1783,20 +1847,9 @@ class PassboltTestCase extends WebDriverTestCase {
 	 * @throws Exception
 	 */
 	public function waitUntilUrlMatches($url, $addBase = true, $timeout = 10) {
-		for ($i = 0; $i < $timeout * 10; $i++) {
-			try {
-				$this->assertCurrentUrl($url, $addBase);
-				return true;
-			}
-			catch (Exception $e) {}
-
-			// If none of the above was found, wait for 1/10 seconds, and try again.
-			usleep(100000); // Sleep 1/10 seconds
-		}
-
-		$backtrace = debug_backtrace();
-		$currentUrl = $this->driver->getCurrentURL();
-		$this->fail( "waitUntilURLMatches $url : Timeout thrown by " . $backtrace[1]['class'] . "::" . $backtrace[1]['function'] . "()\n . element: $url \n . current url : $currentUrl \n");
+		$this->waitUntil(function() use(&$url, &$addBase, &$expectedValue) {
+			$this->assertCurrentUrl($url, $addBase);
+		}, null, $timeout);
 	}
 
 	/**
@@ -1809,22 +1862,12 @@ class PassboltTestCase extends WebDriverTestCase {
 	 * @throws Exception
 	 */
 	public function waitUntilCssValueEqual($selector, $name, $expectedValue, $timeout = 10) {
-		$elt = $this->find($selector);
-
-		for ($i = 0; $i < $timeout * 10 * 10; $i++) {
-			try {
-				$value = $elt->getCssValue($name);
-				$this->assertEquals($value, $expectedValue);
-				return true;
-			}
-			catch (Exception $e) {}
-
-			// If none of the above was found, wait for 1/10 seconds, and try again.
-			usleep(100000);
-		}
-
-		$backtrace = debug_backtrace();
-		$this->fail("waitUntilCssValueEqual $name: $expectedValue Timeout thrown by " . $backtrace[1]['class'] . "::" . $backtrace[1]['function'] . "() \n");
+		$this->waitUntil(function() use(&$selector, &$name, &$expectedValue) {
+			$e = $this->find($selector);
+			$value = $e->getCssValue($name);
+			$rgba = Color::rgbToRgba($value);
+			$this->assertEquals($rgba, $expectedValue);
+		}, null, $timeout);
 	}
 
 	/**
@@ -1895,12 +1938,7 @@ class PassboltTestCase extends WebDriverTestCase {
 	 * Check that there is a plugin
 	 */
 	public function assertPlugin() {
-		try {
-			$e = $this->findByCSS('html.passboltplugin');
-			$this->assertTrue(count($e) === 1);
-		} catch (NoSuchElementException $e) {
-			$this->fail('A passbolt plugin was not found');
-		}
+		$this->waitUntilISee('html.passboltplugin');
 	}
 
 	/**
@@ -1952,11 +1990,12 @@ class PassboltTestCase extends WebDriverTestCase {
 	 * @param string $msg
 	 */
 	public function assertNotification($notificationId, $msg = null) {
-		$notificationId = 'notification_' . Uuid::get($notificationId);
+		$notificationId = '#notification_' . Uuid::get($notificationId);
 		$this->waitUntilISee($notificationId);
-		$text = $this->find($notificationId)->getText();
 		if (isset($msg)) {
 			$contain = false;
+			$elt = $this->find($notificationId);
+			$text = $elt->getText();
 			if(preg_match('/^\/.+\/[a-z]*$/i', $msg)) {
 				$contain = preg_match($msg, $text) != false;
 			} else {
@@ -1983,13 +2022,13 @@ class PassboltTestCase extends WebDriverTestCase {
 	 * @param $user array see fixtures
 	 * @param $context where is the security token (master or else)
 	 */
-	public function assertSecurityToken($user, $context = null)
-	{
+	public function assertSecurityToken($user, $context = null) {
 		// check base color
+		$this->waitUntilISee('.security-token');
 		$securityTokenElt = $this->findByCss('.security-token');
 		$this->assertElementContainsText($securityTokenElt, $user['TokenCode']);
-		$this->waitUntilCssValueEqual($securityTokenElt, 'background-color', Color::toRgba($user['TokenColor']), 2);
-		$this->waitUntilCssValueEqual($securityTokenElt, 'color', Color::toRgba($user['TokenTextColor']), 2);
+		$this->waitUntilCssValueEqual($securityTokenElt, 'background-color', Color::hexToRgba($user['TokenColor']), 2);
+		$this->waitUntilCssValueEqual($securityTokenElt, 'color', Color::hexToRgba($user['TokenTextColor']), 2);
 
 		if ($context != 'has_encrypted_secret') {
 			// check color switch when input is selected
@@ -2017,8 +2056,8 @@ class PassboltTestCase extends WebDriverTestCase {
 					break;
 			}
 
-			$this->waitUntilCssValueEqual($securityTokenElt, 'background-color', Color::toRgba($user['TokenTextColor']), 2);
-			$this->waitUntilCssValueEqual($securityTokenElt, 'color', Color::toRgba($user['TokenColor']), 2);
+			$this->waitUntilCssValueEqual($securityTokenElt, 'background-color', Color::hexToRgba($user['TokenTextColor']), 2);
+			$this->waitUntilCssValueEqual($securityTokenElt, 'color', Color::hexToRgba($user['TokenColor']), 2);
 
 			// back to normal
 			$securityTokenElt->click('.security-token');
@@ -2138,7 +2177,7 @@ class PassboltTestCase extends WebDriverTestCase {
 			$e->click();
 			$e->sendKeys(array(WebDriverKeys::CONTROL, 'v'));
 			$this->assertTrue($e->getAttribute('value') == $content);
-		});
+		}, null, 5);
 		$this->removeElementFromPage('webdriver-clipboard-content');
 	}
 
