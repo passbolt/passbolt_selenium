@@ -110,7 +110,6 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
 		$capabilities = $this->_getCapabilities();
 
 		if ($this->_saucelabs) {
-
 			// Set build name.
 			$capabilities->setCapability('build', $this->_build);
 
