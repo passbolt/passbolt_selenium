@@ -28,6 +28,13 @@ class PassboltTestCase extends WebDriverTestCase {
 	protected static $loginCookies = array();
 
 	/**
+	 * The addon url.
+	 * It will be initialized the first the test access the function getAddonUrl.
+	 * @var string
+	 */
+	public $addonUrl = '';
+
+	/**
 	 * Called before the first test of the test case class is run
 	 */
 	public static function setUpBeforeClass() {
@@ -180,24 +187,22 @@ class PassboltTestCase extends WebDriverTestCase {
 	 * @throws Exception
 	 */
 	public function getAddonBaseUrl() {
-		static $addonUrl = '';
-
 		// A passbolt debug meta data is required to build the debug url.
-		if (empty($addonUrl)) {
+		if (empty($this->addonUrl)) {
 			$headElement = $this->find('head');
-			$addonUrl = $headElement->getAttribute('data-passbolt-addon-url');
+			$this->addonUrl = $headElement->getAttribute('data-passbolt-addon-url');
 
 			// If the debut meta data not found, go to a passbolt page first.
 			// The data is available only on passbolt page.
-			if(empty($addonUrl)) {
+			if(empty($this->addonUrl)) {
 				$this->getUrl('');
 				$this->waitUntilISee('.passbolt');
 				$headElement = $this->find('head');
-				$addonUrl = $headElement->getAttribute('data-passbolt-addon-url');
+				$this->addonUrl = $headElement->getAttribute('data-passbolt-addon-url');
 			}
 		}
 
-		return $addonUrl;
+		return $this->addonUrl;
 	}
 
 	/**
@@ -393,6 +398,8 @@ class PassboltTestCase extends WebDriverTestCase {
 		// Quit the browser.
 		$this->driver->close();
 		$this->driver->quit();
+		// Reset the addon url, as for firefox it will change after a browser restart.
+		$this->addonUrl = '';
 
 		// If a wait before restart option has been given.
 		sleep($waitBeforeRestart);
@@ -400,7 +407,6 @@ class PassboltTestCase extends WebDriverTestCase {
 		// Restart the brower
 		$this->initBrowser();
 		$this->driver->manage()->window()->maximize();
-		sleep(1);
 
 		// As the browser local storage has been cleaned.
 		// Set the client config has it was before quitting.
