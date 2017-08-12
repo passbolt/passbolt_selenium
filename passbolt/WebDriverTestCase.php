@@ -340,6 +340,7 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
 
                 // Set download preferences for the browser.
                 $profile->setPreference("browser.download.folderList", 2);
+				$profile->setPreference("browser.helperApps.neverAsk.saveToDisk", "text/plain");
 				$profile->setPreference("xpinstall.signatures.required", false);
 				$profile->setPreference("browser.startup.page", 0); // Empty start page
 				$profile->setPreference("browser.startup.homepage_override.mstone", "ignore"); // Suppress the "What's new" page
