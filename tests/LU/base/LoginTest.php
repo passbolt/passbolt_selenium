@@ -149,7 +149,7 @@ class LoginTest extends PassboltTestCase {
 	}
 
 	/**
-	 * @group no-saucelabs
+	 * @group chrome-only no-saucelabs
 	 *
 	 * Scenario:  As LU I should still be logged in after I restart the browser
 	 * Given    I am Ada
