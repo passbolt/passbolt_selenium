@@ -1289,6 +1289,8 @@ class PassboltTestCase extends WebDriverTestCase {
 	 * @throws Exception
 	 */
 	public function searchGroupUserToAdd($userToAdd, $user) {
+		$this->waitUntilISee('#passbolt-iframe-group-edit.ready');
+
 		// I enter the username I want to share the password with in the autocomplete field
 		$this->goIntoAddUserIframe();
 		$this->assertSecurityToken($user, 'group');
