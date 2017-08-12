@@ -1,3 +1,4 @@
+
 <?php
 /**
  * Feature : Settings Workspace
@@ -58,10 +59,7 @@ class SettingsWorkspaceTest extends PassboltTestCase
 
 		// I should see the view filtered with my search
 		$userBrowser = $this->findByCss('#js_wsp_users_browser .tableview-content');
-		$this->assertElementContainsText(
-			$userBrowser,
-			$searchUser
-		);
+		$this->waitUntilISee($userBrowser, "/$searchUser/");
 		for ($i=0; $i< count($hiddenUsers); $i++) {
 			$this->assertElementNotContainText(
 				$userBrowser,
