@@ -1309,7 +1309,7 @@ class PassboltTestCase extends WebDriverTestCase {
 			$this->waitUntilISee('.autocomplete-content', '/' . $userFullName . '/i');
 		} catch(Exception $e) {
 			$this->goOutOfIframe();
-			$this->fail("Could not find the requested user '$userFullName' in the autocomplete list");
+			$this->assertTrue(false, "Could not find the requested user '$userFullName' in the autocomplete list");
 		}
 
 		$this->goOutOfIframe();
