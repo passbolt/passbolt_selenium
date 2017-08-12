@@ -1250,4 +1250,12 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
         $a = $this->find($id)->getAttribute('disabled');
         $this->assertTrue(($a === 'true'), 'Failed to assert the element '.$id . 'is disabled');
     }
+
+	/**
+	 * Wait until an HTML Element has the attribute disabled
+	 * @param $id
+	 */
+	public function waitUntilDisabled($id) {
+		$this->waitUntil(array($this, 'assertDisabled'), array($id));
+	}
 }

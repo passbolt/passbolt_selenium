@@ -877,6 +877,7 @@ class PassboltTestCase extends WebDriverTestCase {
 			}
 			$this->click('js_wk_menu_sharing_button');
 			$this->waitUntilISee('.share-password-dialog #js_rs_permission.ready');
+			$this->waitUntilISee('#passbolt-iframe-password-share.ready');
 		}
 	}
 

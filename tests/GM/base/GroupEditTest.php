@@ -162,7 +162,7 @@ class GMGroupEditTest extends PassboltTestCase {
 		$this->assertInputValue('js_field_name', $group['name']);
 
 		// And I should see that the group name field is disabled.
-		$this->assertDisabled('js_field_name');
+		$this->waitUntilDisabled('js_field_name');
 	}
 
 	/**
@@ -270,7 +270,7 @@ class GMGroupEditTest extends PassboltTestCase {
 
 		// Then I should not be able to change the role of this user
 		$groupUserId = Uuid::get('group_user.id.human_resource-ping');
-		$this->assertDisabled("#js_group_user_is_admin_$groupUserId");
+		$this->waitUntilDisabled("#js_group_user_is_admin_$groupUserId");
 	}
 
 	/**

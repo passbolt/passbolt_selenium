@@ -142,7 +142,7 @@ class PasswordShareTest extends PassboltTestCase
 		$this->click('#js_rs_details_permissions a#js_edit_permissions_button');
 
 		// Then I can see the share password dialog
-		$this->assertVisible('.share-password-dialog');
+		$this->waitUntilISee('.share-password-dialog');
 	}
 
 	/**
@@ -509,7 +509,6 @@ class PasswordShareTest extends PassboltTestCase
 		$this->gotoSharePassword($resource['id']);
 
 		// And I try share the password with a user that does not exist
-
 		$this->goIntoShareIframe();
 		$this->inputText('js_perm_create_form_aro_auto_cplt', 'not.a.user@something.com', true);
 		$this->goOutOfIframe();
@@ -1144,10 +1143,10 @@ class PasswordShareTest extends PassboltTestCase
 		$this->deleteTemporaryPermission($resource, 'betty@passbolt.com');
 
 		// Then I can see the permission type dropdown of the owner Ada is disabled
-		$this->assertDisabled('#js_share_perm_type_' . $permissionAdaId);
+		$this->waitUntilDisabled('#js_share_perm_type_' . $permissionAdaId);
 
 		// And I can see the permission delete button of the owner Ada is disabled
-		$this->assertDisabled('#js_share_perm_delete_' . $permissionAdaId);
+		$this->waitUntilDisabled('#js_share_perm_delete_' . $permissionAdaId);
 
 		// When I add a temporary permission for Frances
 		$this->addTemporaryPermission($resource, $userFrances['name'], $userAda);
