@@ -755,8 +755,6 @@ class PasswordWorkspaceTest extends PassboltTestCase
 	}
 
 	/**
-	 * @group chrome-only
-	 *
 	 * Scenario :   As a user I should be able to filter my passwords by group
 	 * Given        I am logged in as Irene on the password workspace
 	 * When 		I edit the group "ergonom"
