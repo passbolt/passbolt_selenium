@@ -40,7 +40,7 @@ class Resource {
         $r[] = array(
             'id' => Uuid::get('resource.id.centos'),
             'username' => 'centos',
-            'name' => 'root',
+            'name' => 'centos',
             'password' => 'this_23-04',
             'uri' => 'centos.org',
             'complexity' => 'very weak',
