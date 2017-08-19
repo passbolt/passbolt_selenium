@@ -839,6 +839,19 @@ class PassboltTestCase extends WebDriverTestCase {
 	}
 
 	/**
+	 * Check if the user is inactive.
+	 * @param $id
+	 * @return bool
+	 */
+	public function isUserInactive($id) {
+		$eltSelector = '#user_' . $id;
+		if ($this->elementHasClass($eltSelector, 'inactive')) {
+			return true;
+		}
+		return false;
+	}
+
+	/**
 	 * Goto the edit password dialog for a given resource id
 	 * @param $id string
 	 * @throws Exception
@@ -2407,6 +2420,15 @@ class PassboltTestCase extends WebDriverTestCase {
 	 */
 	public function assertUserNotSelected($id) {
 		$this->assertTrue($this->isUserNotSelected($id));
+	}
+
+	/**
+	 * Assert that a user is inactive
+	 * @param $id
+	 * @return bool
+	 */
+	public function assertUserInactive($id) {
+		$this->assertTrue($this->isUserInactive($id));
 	}
 
 	/**
