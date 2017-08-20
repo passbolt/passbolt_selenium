@@ -481,4 +481,76 @@ class ADGroupEditTest extends PassboltTestCase {
 		$this->waitUntilDisabled("#js_group_user_is_admin_$groupUserId");
 	}
 
+	/**
+	 * Scenario: As an administrator I can remove a user from a group I manage using the edit group dialog
+	 *
+	 * Given 	I am logged in as administrator
+	 * And 		I am editing a group I manager
+	 * When 	I observe the content of the edit group dialog
+	 * And 		I should see that next to each group member there is a cross icon to remove the membership
+	 * When 	I click on the cross next to the user I want to remove
+	 * Then 	I should see that the user disappears from the list of group members
+	 * And 		I should see a warning message saying that the changes will be applied only after save
+	 * When 	I press the “save” button
+	 * Then 	I should see that the dialog disappears
+	 * And 		I should see a confirmation message
+	 * When 	I log in as the user that was removed from the group
+	 * And 		I go to the users workspace
+	 * And 		I filter by the group the user has been removed
+	 * Then 	I filter by the group the user has been removed
+	 */
+	public function testRemoveGroupMember() {
+		$this->resetDatabaseWhenComplete();
+		$removedUser = User::get('wang');
+
+		// Given I am logged in as an group manager
+		$user = User::get('admin');
+		$this->setClientConfig($user);
+		$this->loginAs($user);
+
+		// And I am editing a group I manage
+		$group = Group::get(['id' => Uuid::get('group.id.human_resource')]);
+		$this->gotoEditGroup($group['id']);
+
+		// When I observe the content of the edit group dialog
+		// And I should see that next to each group member there is a cross icon to remove the membership
+		$this->assertVisible('.js_group_user_delete');
+
+		// When I click on the cross next to the user I want to remove
+		$groupUserId = Uuid::get('group_user.id.human_resource-wang');
+		$this->click("#js_group_user_delete_$groupUserId");
+
+		// Then I should see that the user disappears from the list of group members
+		$this->assertNotVisible("#$groupUserId");
+
+		// And I should see a warning message saying that the changes will be applied only after save
+		$this->assertElementContainsText('#js_group_members .message.warning', 'You need to click save for the changes to take place.');
+
+		// When I press the “save” button
+		$this->click('.edit-group-dialog a.button.primary');
+
+		// And I should see that the dialog disappears
+		$this->waitUntilIDontSee('.edit-group-dialog');
+
+		// And I should see a confirmation message saying that the group members have been edited
+		$this->assertNotification('app_groups_edit_success');
+
+		// When I log in as the user that was removed from the group
+		$this->logout();
+		$this->setClientConfig($removedUser);
+		$this->loginAs($removedUser);
+
+		// And I go to the users workspace
+		$this->gotoWorkspace('user');
+
+		// And I filter by the group the user has been removed
+		$this->clickGroup($group['id']);
+
+		// Then I filter by the group the user has been removed
+		$this->assertElementNotContainText(
+			$this->findByCss('#js_wsp_users_browser .tableview-content'),
+			$removedUser['FirstName'] . ' ' . $removedUser['LastName']
+		);
+	}
+
 }
