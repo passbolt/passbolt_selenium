@@ -11,7 +11,7 @@ if(!defined ('ROOT')) {
 }
 
 // Utility clases
-require_once('String.php');
+require_once('CakeText.php');
 require_once('Hash.php');
 require_once('Color.php');
 require_once('Uuid.php');

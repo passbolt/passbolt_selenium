@@ -311,6 +311,7 @@ class PassboltTestCase extends WebDriverTestCase {
 		$this->inputText('ProfileFirstName', $firstname);
 		$this->inputText('ProfileLastName', $lastname);
 		$this->inputText('UserUsername', $username);
+		$this->click('#disclaimer');
 		$this->pressEnter();
 		$this->waitUntilISee('.page.register.thank-you');
 		$this->assertCurrentUrl('register' . DS . 'thankyou');

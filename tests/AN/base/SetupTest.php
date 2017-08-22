@@ -20,6 +20,7 @@ class SetupTest extends PassboltSetupTestCase {
 		$this->inputText('ProfileFirstName','John');
 		$this->inputText('ProfileLastName','Doe');
 		$this->inputText('UserUsername','johndoe@passbolt.com');
+		$this->click('#disclaimer');
 		$this->pressEnter();
 		$this->waitUntilUrlMatches('register' . DS . 'thankyou');
 		// Get last email.
@@ -51,6 +52,7 @@ class SetupTest extends PassboltSetupTestCase {
 		$this->inputText('ProfileFirstName','John');
 		$this->inputText('ProfileLastName','Doe');
 		$this->inputText('UserUsername','johndoe@passbolt.com');
+        $this->click('#disclaimer');
 		$this->pressEnter();
 		$this->waitUntilUrlMatches('register' . DS . 'thankyou');
 		// Get last email.
