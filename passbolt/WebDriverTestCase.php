@@ -110,7 +110,6 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
 		$capabilities = $this->_getCapabilities();
 
 		if ($this->_saucelabs) {
-
 			// Set build name.
 			$capabilities->setCapability('build', $this->_build);
 
@@ -341,6 +340,7 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
 
                 // Set download preferences for the browser.
                 $profile->setPreference("browser.download.folderList", 2);
+				$profile->setPreference("browser.helperApps.neverAsk.saveToDisk", "text/plain");
 				$profile->setPreference("xpinstall.signatures.required", false);
 				$profile->setPreference("browser.startup.page", 0); // Empty start page
 				$profile->setPreference("browser.startup.homepage_override.mstone", "ignore"); // Suppress the "What's new" page
@@ -1250,4 +1250,12 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
         $a = $this->find($id)->getAttribute('disabled');
         $this->assertTrue(($a === 'true'), 'Failed to assert the element '.$id . 'is disabled');
     }
+
+	/**
+	 * Wait until an HTML Element has the attribute disabled
+	 * @param $id
+	 */
+	public function waitUntilDisabled($id) {
+		$this->waitUntil(array($this, 'assertDisabled'), array($id));
+	}
 }

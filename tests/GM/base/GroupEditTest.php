@@ -162,7 +162,7 @@ class GMGroupEditTest extends PassboltTestCase {
 		$this->assertInputValue('js_field_name', $group['name']);
 
 		// And I should see that the group name field is disabled.
-		$this->assertDisabled('js_field_name');
+		$this->waitUntilDisabled('js_field_name');
 	}
 
 	/**
@@ -270,7 +270,7 @@ class GMGroupEditTest extends PassboltTestCase {
 
 		// Then I should not be able to change the role of this user
 		$groupUserId = Uuid::get('group_user.id.human_resource-ping');
-		$this->assertDisabled("#js_group_user_is_admin_$groupUserId");
+		$this->waitUntilDisabled("#js_group_user_is_admin_$groupUserId");
 	}
 
 	/**
@@ -385,7 +385,7 @@ class GMGroupEditTest extends PassboltTestCase {
 
 		// And I am on the users workspace
 		// When I am editing a group that I manage
-		$group = Group::get(['id' => Uuid::get('group.id.creative')]);
+		$group = Group::get(['id' => Uuid::get('group.id.developer')]);
 		$this->gotoEditGroup($group['id']);
 
 		// When I add a member to the group
@@ -423,8 +423,12 @@ class GMGroupEditTest extends PassboltTestCase {
 		$this->setClientConfig($ping);
 		$this->loginAs($ping);
 
-		// When I click on chai, a newly accessible password.
-		$this->clickPassword(Uuid::get('resource.id.chai'));
+		// When I click on enligthenment, a newly accessible password.
+		$resource = Resource::get(array(
+			'user' => 'ada',
+			'id' => Uuid::get('resource.id.enlightenment')
+		));
+		$this->clickPassword($resource['id']);
 
 		// When I click on the link 'copy password'
 		$this->click('js_wk_menu_secretcopy_button');
@@ -439,7 +443,7 @@ class GMGroupEditTest extends PassboltTestCase {
 		$this->assertNotification('plugin_clipboard_copy_success');
 
 		// And the content of the clipboard is valid
-		$this->assertClipboard(Resource::_getByName('chai')['password']);
+		$this->assertClipboard($resource['password']);
 
 		// And I go to the users workspace
 		$this->gotoWorkspace('user');

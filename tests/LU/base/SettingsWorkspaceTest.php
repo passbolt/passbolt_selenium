@@ -1,3 +1,4 @@
+
 <?php
 /**
  * Feature : Settings Workspace
@@ -53,15 +54,12 @@ class SettingsWorkspaceTest extends PassboltTestCase
 		// I fill the "app search" field with "Betty"
 		$this->inputText('js_app_filter_keywords', $searchUser);
 		$this->click("#js_app_filter_form button[value='search']");
-		$this->waitCompletion();
         $this->waitUntilISee('#js_passbolt_people_workspace_controller');
+		$this->waitCompletion();
 
 		// I should see the view filtered with my search
 		$userBrowser = $this->findByCss('#js_wsp_users_browser .tableview-content');
-		$this->assertElementContainsText(
-			$userBrowser,
-			$searchUser
-		);
+		$this->waitUntilISee($userBrowser, "/$searchUser/");
 		for ($i=0; $i< count($hiddenUsers); $i++) {
 			$this->assertElementNotContainText(
 				$userBrowser,

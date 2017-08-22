@@ -203,10 +203,10 @@ class PasswordCreateTest extends PassboltTestCase
      * And      I am on the create password dialog
      * When     I press the enter key on the keyboard
      * Then     I see an error message saying that the name is required
-     * When     I enter '&' as a name
-     * And      I enter '&' as a username
-     * And      I enter '&' as a url
-     * And      I enter '&' as a description
+     * When     I enter '<' as a name
+     * And      I enter '<' as a username
+     * And      I enter '<' as a url
+     * And      I enter '<' as a description
      * And      I click on the save button
      * Then     I see an error message saying that the name contain invalid characters
      * Then     I see an error message saying that the username contain invalid characters
@@ -241,16 +241,16 @@ class PasswordCreateTest extends PassboltTestCase
         // I should not see an error message for username.
         $this->assertNotVisible('#js_field_username_feedback.error.message');
 
-        // When I enter & as a name
+        // When I enter < as a name
         $this->inputText('js_field_name', '<');
 
-        // And I enter & as a username
+        // And I enter < as a username
         $this->inputText('js_field_username', '<');
 
-        // And I enter & as a url
+        // And I enter < as a url
         $this->inputText('js_field_uri', '<');
 
-        // And I enter & as a description
+        // And I enter < as a description
         $this->inputText('js_field_description', '<');
 
         // And I click save

@@ -28,6 +28,13 @@ class PassboltTestCase extends WebDriverTestCase {
 	protected static $loginCookies = array();
 
 	/**
+	 * The addon url.
+	 * It will be initialized the first the test access the function getAddonUrl.
+	 * @var string
+	 */
+	public $addonUrl = '';
+
+	/**
 	 * Called before the first test of the test case class is run
 	 */
 	public static function setUpBeforeClass() {
@@ -180,24 +187,22 @@ class PassboltTestCase extends WebDriverTestCase {
 	 * @throws Exception
 	 */
 	public function getAddonBaseUrl() {
-		static $addonUrl = '';
-
 		// A passbolt debug meta data is required to build the debug url.
-		if (empty($addonUrl)) {
+		if (empty($this->addonUrl)) {
 			$headElement = $this->find('head');
-			$addonUrl = $headElement->getAttribute('data-passbolt-addon-url');
+			$this->addonUrl = $headElement->getAttribute('data-passbolt-addon-url');
 
 			// If the debut meta data not found, go to a passbolt page first.
 			// The data is available only on passbolt page.
-			if(empty($addonUrl)) {
+			if(empty($this->addonUrl)) {
 				$this->getUrl('');
 				$this->waitUntilISee('.passbolt');
 				$headElement = $this->find('head');
-				$addonUrl = $headElement->getAttribute('data-passbolt-addon-url');
+				$this->addonUrl = $headElement->getAttribute('data-passbolt-addon-url');
 			}
 		}
 
-		return $addonUrl;
+		return $this->addonUrl;
 	}
 
 	/**
@@ -394,6 +399,8 @@ class PassboltTestCase extends WebDriverTestCase {
 		// Quit the browser.
 		$this->driver->close();
 		$this->driver->quit();
+		// Reset the addon url, as for firefox it will change after a browser restart.
+		$this->addonUrl = '';
 
 		// If a wait before restart option has been given.
 		sleep($waitBeforeRestart);
@@ -401,7 +408,6 @@ class PassboltTestCase extends WebDriverTestCase {
 		// Restart the brower
 		$this->initBrowser();
 		$this->driver->manage()->window()->maximize();
-		$this->waitUntilISee('body');
 
 		// As the browser local storage has been cleaned.
 		// Set the client config has it was before quitting.
@@ -834,6 +840,19 @@ class PassboltTestCase extends WebDriverTestCase {
 	}
 
 	/**
+	 * Check if the user is inactive.
+	 * @param $id
+	 * @return bool
+	 */
+	public function isUserInactive($id) {
+		$eltSelector = '#user_' . $id;
+		if ($this->elementHasClass($eltSelector, 'inactive')) {
+			return true;
+		}
+		return false;
+	}
+
+	/**
 	 * Goto the edit password dialog for a given resource id
 	 * @param $id string
 	 * @throws Exception
@@ -872,6 +891,7 @@ class PassboltTestCase extends WebDriverTestCase {
 			}
 			$this->click('js_wk_menu_sharing_button');
 			$this->waitUntilISee('.share-password-dialog #js_rs_permission.ready');
+			$this->waitUntilISee('#passbolt-iframe-password-share.ready');
 		}
 	}
 
@@ -1283,6 +1303,8 @@ class PassboltTestCase extends WebDriverTestCase {
 	 * @throws Exception
 	 */
 	public function searchGroupUserToAdd($userToAdd, $user) {
+		$this->waitUntilISee('#passbolt-iframe-group-edit.ready');
+
 		// I enter the username I want to share the password with in the autocomplete field
 		$this->goIntoAddUserIframe();
 		$this->assertSecurityToken($user, 'group');
@@ -2399,6 +2421,15 @@ class PassboltTestCase extends WebDriverTestCase {
 	 */
 	public function assertUserNotSelected($id) {
 		$this->assertTrue($this->isUserNotSelected($id));
+	}
+
+	/**
+	 * Assert that a user is inactive
+	 * @param $id
+	 * @return bool
+	 */
+	public function assertUserInactive($id) {
+		$this->assertTrue($this->isUserInactive($id));
 	}
 
 	/**
