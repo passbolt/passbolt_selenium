@@ -1420,6 +1420,7 @@ class PasswordEditTest extends PassboltTestCase
 
 	/**
 	 * @group no-saucelabs
+	 * @group skip
 	 *
 	 * Scenario:  As LU I should be able to edit a password after I restart the browser
 	 * Given    I am Ada
@@ -1457,9 +1458,9 @@ class PasswordEditTest extends PassboltTestCase
 	}
 
 	/**
-	 * @group no-saucelabs
-	 * @group firefox-only
-	 * @todo PASSBOLT-2263 close and restore doesn't work with the latest chrome driver
+	 * @group skip
+	 * PASSBOLT-2263 close and restore doesn't work with the latest chrome driver
+	 * PASSBOLT-2419 close and restore doesn't work with the latest firefox driver
 	 *
 	 * Scenario:  As LU I should be able to edit a password after I close and restore the passbolt tab
 	 * Given    I am Ada

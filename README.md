@@ -110,12 +110,12 @@ Clone or rename config.php.default to
 
 *   Get the plugin by downloading the latest build from the repository and put it in data/extensions
 
-    https://github.com/passbolt/passbolt_ff/blob/develop/passbolt-firefox-addon.xpi?raw=true
+    https://github.com/passbolt/passbolt_ff/blob/develop/passbolt-firefox-addon.zip?raw=true
 
 *   Or if you are developing you can create a simlink to your addon project
 
 		cd data/extensions
-		ln -s ../../../passbolt_ff/passbolt-firefox-addon.xpi .
+		ln -s ../../../passbolt_ff/passbolt-firefox-addon.zip .
 
 ## PASSBOLT Fixtures
 

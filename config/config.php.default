@@ -74,7 +74,9 @@ $config = array (
                 'binary' => '/* video tool path */', // usually /usr/local/bin/flvrec.py
             ],
             'logs' => [
-                'plugin' => true
+                'debug' => false,
+                'plugin' => false,
+				'path' => '/* video path */',
             ],
 			// Extra capabilities.
 			'capabilities' => array(),
@@ -85,13 +87,15 @@ $config = array (
 		'common' => array(
 			'downloads_path' => 'file:///home/seluser/Downloads'
 		),
+		'firefox_common' => array(
+			'binary_path' => '/tmp/firefox/firefox-bin'
+		),
 		'firefox_with_passbolt_extension' => array(
 			'name' => 'Firefox with Passbolt extension',
 			'type' => 'firefox',
 			'extensions' => array(
-				'data/extensions/passbolt-firefox-addon.xpi'
+				'data/extensions/passbolt-firefox-addon.zip'
 			),
-			'base_url' => 'resource://passbolt-at-passbolt-dot-com'
 		),
 		'firefox_vanilla' => array(
 			'name' => 'Firefox with no extensions',
@@ -107,7 +111,6 @@ $config = array (
 			'extensions' => array(
 				'data/extensions/passbolt-chrome-addon.crx'
 			),
-			'base_url' => 'chrome-extension://ffgmdhmlbpemjfeejfgjidcpgmipkpen',
 		),
 	)
 );

@@ -510,7 +510,6 @@ class PassboltSetupTestCase extends PassboltTestCase {
 	 * @throws Exception
 	 */
 	protected function completeStepLoginRedirection() {
-
 		$this->waitForSection('login_redirect');
 
 		// I should see the subtitle.
@@ -523,6 +522,8 @@ class PassboltSetupTestCase extends PassboltTestCase {
 		);
 
 		// I should be on the login page.
+		sleep(5);
+		$this->driver->switchTo()->activeElement();
 		$this->waitUntilISee('.information h2', '/Welcome back!/');
 
 		try{

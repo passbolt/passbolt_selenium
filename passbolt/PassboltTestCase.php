@@ -78,11 +78,12 @@ class PassboltTestCase extends WebDriverTestCase {
 
 		// Retrieve the plugin logs.
 		if ($this->getStatus() == PHPUnit_Runner_BaseTestRunner::STATUS_FAILURE
-				&& !empty($this->_browser['extensions'])
-				&& Config::read('testserver.selenium.logs.plugin')) {
+			&& !empty($this->_browser['extensions'])
+			&& Config::read('testserver.selenium.logs.plugin')
+		) {
 			// If the log folder doesn't exist yet.
-			$logPath = Config::read('testserver.selenium.videos.path');
-			if(!file_exists($logPath)) {
+			$logPath = Config::read('testserver.selenium.logs.path');
+			if (!file_exists($logPath)) {
 				mkdir($logPath);
 			}
 			// Retrieve the logs.
@@ -214,6 +215,7 @@ class PassboltTestCase extends WebDriverTestCase {
 			$url = Config::read('passbolt.url') . DS . $url;
 		}
 		$this->driver->get($url);
+		$this->driver->switchTo()->activeElement();
 	}
 
 	/**
@@ -397,7 +399,6 @@ class PassboltTestCase extends WebDriverTestCase {
 		$waitBeforeRestart = isset($options['waitBeforeRestart']) ? $options['waitBeforeRestart'] : 0;
 
 		// Quit the browser.
-		$this->driver->close();
 		$this->driver->quit();
 		// Reset the addon url, as for firefox it will change after a browser restart.
 		$this->addonUrl = '';
@@ -407,7 +408,7 @@ class PassboltTestCase extends WebDriverTestCase {
 
 		// Restart the brower
 		$this->initBrowser();
-		$this->driver->manage()->window()->maximize();
+		$this->maximizeWindow();
 
 		// As the browser local storage has been cleaned.
 		// Set the client config has it was before quitting.
@@ -444,12 +445,17 @@ class PassboltTestCase extends WebDriverTestCase {
 	 * Trigger an event on a page.
 	 * @param $eventName
 	 */
-	public function triggerEvent($eventName) {
+	public function triggerEvent($eventName, $data = array()) {
+		$jsonData = '';
+		if (!empty($data)) {
+			$jsonData = ', ' . json_encode($data);
+		}
 		$fireEvent = 'function fireEvent(obj, evt, data){
 		     var fireOnThis = obj;
 		     if( document.createEvent ) {
-		       var evObj = document.createEvent("MouseEvents");
-		       evObj.initEvent( evt, true, false );
+		       var evObj = document.createEvent("CustomEvent");
+		       evObj.initEvent( evt, true, false, data );
+		       evObj.details = data;
 		       fireOnThis.dispatchEvent( evObj );
 		     }
 		      else if( document.createEventObject ) { //IE
@@ -457,7 +463,7 @@ class PassboltTestCase extends WebDriverTestCase {
 		       fireOnThis.fireEvent( "on" + evt, evObj );
 		     }
 		}
-		fireEvent(window, "' . $eventName . '");';
+		fireEvent(window, "' . $eventName . '" ' . $jsonData . ');';
 		$this->driver->executeScript($fireEvent);
 	}
 
@@ -594,6 +600,7 @@ class PassboltTestCase extends WebDriverTestCase {
 		$this->clickLink("Next");
 		// Fill up password.
 		$this->waitUntilISee('#js_step_content h3', '/Setup is complete/i');
+		$this->getUrl('login');
 		// Wait until I see the login page.
 		$this->waitUntilISee('.information h2', '/Welcome back!/i');
 	}
@@ -634,6 +641,7 @@ class PassboltTestCase extends WebDriverTestCase {
 		$this->clickLink("Next");
 		// Fill up password.
 		$this->waitUntilISee('#js_step_content h3', '/Setup is complete/i');
+		$this->getUrl('login');
 		// Wait until I see the login page.
 		$this->waitUntilISee('.information h2', '/Welcome back!/i');
 	}
@@ -653,7 +661,7 @@ class PassboltTestCase extends WebDriverTestCase {
 		$setupUrl = $linkElement->getAttribute('href');
 
 		// Go to url remembered above.
-		$this->driver->get($setupUrl);
+		$this->getUrl($setupUrl);
 
 		// Test that the plugin confirmation message is displayed.
 		if ($checkPluginSuccess) {
@@ -1459,6 +1467,9 @@ class PassboltTestCase extends WebDriverTestCase {
 		} catch(StaleElementReferenceException $e) {
 			// Everything alright.
 			// It's just that the element has already been removed from the dom.
+		} catch(UnknownServerException $e) {
+			// Everything alright.
+			// It's just that the element has already been removed and the selenium doesn't find it.
 		}
 
 		$this->goOutOfIframe();

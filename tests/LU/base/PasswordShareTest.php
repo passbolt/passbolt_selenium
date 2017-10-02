@@ -660,6 +660,7 @@ class PasswordShareTest extends PassboltTestCase
 
 	/**
 	 * @group saucelabs
+	 * @group skip
 	 * Scenario: As a user I should receive a notification when another user share a password with me
 	 *
 	 * Given    I am Carol
@@ -746,6 +747,7 @@ class PasswordShareTest extends PassboltTestCase
 
 	/**
 	 * @group saucelabs
+	 * @group skip
 	 * Scenario: As a user I can share a password with a groups
 	 *
 	 * Given    I am Carol
@@ -1420,6 +1422,7 @@ class PasswordShareTest extends PassboltTestCase
 
 	/**
 	 * @group no-saucelabs
+	 * @group skip
 	 *
 	 * Scenario: As a user I can share a password with other users after I restart the browser
 	 *
@@ -1460,8 +1463,9 @@ class PasswordShareTest extends PassboltTestCase
 	}
 
 	/**
-	 * @group firefox-only
-	 * @todo PASSBOLT-2263 close and restore doesn't work with the latest chrome driver
+	 * @group skip
+	 * PASSBOLT-2263 close and restore doesn't work with the latest chrome driver
+	 * PASSBOLT-2419 close and restore doesn't work with the latest firefox driver
 	 *
 	 * Scenario: As a user I can share a password with other users after I close and restore the passbolt tab
 	 *

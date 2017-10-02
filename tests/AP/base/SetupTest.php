@@ -303,6 +303,7 @@ class SetupTest extends PassboltSetupTestCase {
 		$this->clickLink("Next");
 		// Wait until sees next step.
 		$this->waitForSection('login_redirect');
+		$this->getUrl('/login');
 		// Wait until I reach the login page
 		$this->waitUntilISee('.information h2', '/Welcome back!/');
 

@@ -77,7 +77,7 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
 		$this->initBrowser();
 
 	    // Maximize window.
-	    $this->driver->manage()->window()->maximize();
+		$this->maximizeWindow();
 
 	    // SauceAPI.
 	    if ($this->_saucelabs) {
@@ -138,6 +138,18 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
 	}
 
 	/**
+	 * Maximize the window.
+	 */
+	public function maximizeWindow() {
+		$this->driver->manage()->window()->maximize();
+
+		// @deprecated, but keep it as example if it happens again.
+		// We set the dimension manually because the maximize function doesn't work anymore with the current unbranded
+		// version of FF we use (54.0.1) and geckodriver 0.19..
+//		$this->driver->manage()->window()->setSize(new WebDriverDimension(1920, 1080));
+	}
+
+	/**
 	 * Get Test server url as per config parameters.
 	 * @return array|string
 	 */
@@ -156,7 +168,6 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
      * This function is executed after a test is run
      */
     protected function tearDown() {
-
         if(isset($this->driver)) {
             if($this->_quit === '0') {
                 return;
@@ -167,23 +178,23 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
             }
         }
 
-	    // If test was running on saucelabs, we update the status.
+		// If test was running on saucelabs, we update the status.
 	    if ($this->_saucelabs) {
 		    $this->updateTestStatus();
 	    }
 
-	    // Display logs if any.
+		// Display logs if any.
 	    if(isset($this->_log) && !empty($this->_log)) {
 		    echo "\n\n"
 			    . "=== Webdriver Test Case Log ===" . "\n"
 			    . $this->_log;
 	    }
 
-	    // Release instance.
+		// Release instance.
 	    if ($this->__useMultiplePassboltInstances()) {
 		    $this->releaseInstance('passbolt');
 	    }
-	    if ($this->__useMultipleSeleniumInstances()) {
+		if ($this->__useMultipleSeleniumInstances()) {
 		    $this->releaseInstance('selenium');
 	    }
     }
@@ -346,12 +357,17 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
 				$profile->setPreference("browser.startup.homepage_override.mstone", "ignore"); // Suppress the "What's new" page
 
                 $capabilities->setCapability(FirefoxDriver::PROFILE, $profile);
-				$capabilities->setCapability('moz:firefoxOptions', array(
-//					'binary' => '/Applications/FirefoxDeveloperEdition.app/Contents/MacOS/firefox-bin'
-//					'binary' => '/Applications/FirefoxNightly.app/Contents/MacOS/firefox-bin'
-//					'binary' => '/Applications/Nightly.app/Contents/MacOS/firefox-bin'
-					'binary' => '/tmp/firefox/firefox-bin'
-				));
+
+				// If custom firefox binary to use.
+				$binaryPath = Config::read('browsers.firefox_common.binary_path');
+				if (!empty($binaryPath)) {
+					$capabilities->setCapability('moz:firefoxOptions', array(
+						'binary' => $binaryPath
+					));
+				}
+
+				// Accept insecure connections.
+				$capabilities->setCapability('acceptInsecureCerts', true);
             break;
 
             case 'chrome':
@@ -636,7 +652,7 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
     public function followLink($text) {
         $linkElement = $this->findLinkByText($text);
         $url = $linkElement->getAttribute('href');
-        $this->driver->get($url);
+        $this->getUrl($url);
     }
 
     /**
@@ -1032,6 +1048,10 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
 	/**
 	 * Close and restore the current tab.
 	 * Ensure the test run already on a second tab.
+	 *
+	 * Note :
+	 * PASSBOLT-2263 close and restore doesn't work with the latest chrome driver
+	 * PASSBOLT-2419 close and restore doesn't work with the latest firefox driver
 	 *
 	 * @param $options
 	 * 	waitBeforeRestore : Should the tab be restored after a sleep in seconds

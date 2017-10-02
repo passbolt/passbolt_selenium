@@ -174,6 +174,7 @@ class LogoutTest extends PassboltTestCase {
 
 	/**
 	 * @group no-saucelabs
+	 * @group skip
 	 *
 	 * Scenario:  As LU I should be logged out when I quit the browser and restart it after my session expired
 	 * Given    I am Ada
@@ -208,8 +209,9 @@ class LogoutTest extends PassboltTestCase {
 	}
 
 	/**
-	 * @group firefox-only
-	 * @todo PASSBOLT-2263 close and restore doesn't work with the latest chrome driver
+	 * @group skip
+	 * PASSBOLT-2263 close and restore doesn't work with the latest chrome driver
+	 * PASSBOLT-2419 close and restore doesn't work with the latest firefox driver
 	 *
 	 * Scenario:  As LU I should be logged out when I close the passbolt tab and restore it after my session expired
 	 * Given    I am Ada

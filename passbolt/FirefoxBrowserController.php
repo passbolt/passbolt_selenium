@@ -29,12 +29,8 @@ class FirefoxBrowserController {
         // The constraint here is that we have the hypothesis that the new tab will have a different url.
         $initialUrl = $this->driver->getCurrentURL();
 
-        // Ensure the page is loaded.
-        $this->testCase->waitUntilISee('body');
-
-        // Open a new tab.
-        $this->driver->findElement(WebDriverBy::cssSelector('body'))
-            ->sendKeys([WebDriverKeys::CONTROL, 't']);
+        // Send an event to the extension to open a new tab.
+        $this->testCase->triggerEvent('passbolt.addon.debug.open_tab');
 
         // Wait until tab is opened. A new tab should have a different url.
         $callback = array($this, '_openNewTabOpened');
