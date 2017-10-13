@@ -150,6 +150,9 @@ class PassboltTestCase extends WebDriverTestCase {
 	 * Stop video recording.
 	 */
 	public function stopVideo() {
+		if (!isset($this->videoPid)) {
+			return;
+		}
 		$pid = $this->videoPid;
 		$outputFile = "/tmp/flvrec_{$this->testName}_output.log";
 		$pidFile = "/tmp/flvrec_{$this->testName}_pid.txt";
