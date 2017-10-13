@@ -105,7 +105,8 @@ class PassboltTestCase extends WebDriverTestCase {
 		} catch (Exception $e) {
 			$logPath = Config::read('testserver.selenium.logs.path');
 			$log = $e->getMessage() . "\n" . $e->getTraceAsString();
-			file_put_contents($logPath . DS . 'tear_down_exception.log', $log);
+			$filePath = "$logPath/{$this->testName}_tear_down_exception.log";
+			file_put_contents($filePath, $log);
 		}
 
 	}
