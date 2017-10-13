@@ -27,34 +27,6 @@ class OpenPassboltTest extends PassboltSetupTestCase {
 	}
 
 	/**
-	 * Scenario :   As an AP with a plugin installed and partially configured, clicking on the passbolt toolbar icon or using
-	 * 				the passbolt shortcut, I should open the setup in a new tab
-	 * Given 		Wherever I am on the web
-	 * And			The passbolt plugin is installed
-	 * And			The passbolt plugin is partially configured
-	 * When			I click on the passbolt toolbar icon or I compose the passbolt shortcut
-	 * Then			I should reach the setup in a new tab
-	 */
-	public function testOpenPassboltPartialConfig() {
-		// Reset database at the end of test.
-		$this->resetDatabaseWhenComplete();
-
-		$key = Gpgkey::get(['name' => 'johndoe']);
-
-		// Register John Doe as a user.
-		$this->registerUser('John', 'Doe', $key['owner_email']);
-
-		// Go to setup page.
-		$this->goToSetup($key['owner_email']);
-
-		// Simulate click on the passbolt toolbar icon
-		$this->clickToolbarIcon();
-
-		// Test that the url is the plugin one.
-		$this->waitUntilUrlMatches($this->getAddonBaseUrl() . 'data/setup.html', false);
-	}
-
-	/**
 	 * Scenario :   As an AP with a plugin installed and configured, clicking on the passbolt toolbar icon or using
 	 * 				the passbolt shortcut, I should open the passbolt application in a new tab
 	 * Given 		Wherever I am on the web
