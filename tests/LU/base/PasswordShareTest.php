@@ -660,7 +660,6 @@ class PasswordShareTest extends PassboltTestCase
 
 	/**
 	 * @group saucelabs
-	 * @group skip
 	 * Scenario: As a user I should receive a notification when another user share a password with me
 	 *
 	 * Given    I am Carol
@@ -712,42 +711,41 @@ class PasswordShareTest extends PassboltTestCase
 	 * When     I give read access to betty for a password I own
 	 * Then     I can see Betty is in the sidebar, under the permissions section
 	 */
-//	public function testSharePasswordWithUserAndViewNewPermissionInSidebar() {
-//		// Reset database at the end of test.
-//		$this->resetDatabaseWhenComplete();
-//
-//		// Given I am Carol
-//		$user = User::get('carol');
-//		$this->setClientConfig($user);
-//
-//		// And I am logged in on the password workspace
-//		$this->loginAs($user);
-//
-//		// When I go to the sharing dialog of a password I own
-//		$resource = Resource::get(
-//			array(
-//				'user' => 'betty',
-//				'id'   => Uuid::get('resource.id.gnupg')
-//			)
-//		);
-//		$this->gotoSharePassword(Uuid::get('resource.id.gnupg'));
-//
-//		// Then I can see Betty has no right on the password
-//		$this->assertElementNotContainText(
-//			$this->findByCss('#js_permissions_list'),
-//			'betty@passbolt.com'
-//		);
-//
-//		// When I give read access to betty for a password I own
-//		$this->sharePassword($resource, 'betty@passbolt.com', $user);
-//
-//		// I can see the new permission in sidebar
-//		$this->assertPermissionInSidebar('betty@passbolt.com', 'can read');
-//	}
+	public function testSharePasswordWithUserAndViewNewPermissionInSidebar() {
+		// Reset database at the end of test.
+		$this->resetDatabaseWhenComplete();
+
+		// Given I am Carol
+		$user = User::get('carol');
+		$this->setClientConfig($user);
+
+		// And I am logged in on the password workspace
+		$this->loginAs($user);
+
+		// When I go to the sharing dialog of a password I own
+		$resource = Resource::get(
+			array(
+				'user' => 'betty',
+				'id'   => Uuid::get('resource.id.gnupg')
+			)
+		);
+		$this->gotoSharePassword(Uuid::get('resource.id.gnupg'));
+
+		// Then I can see Betty has no right on the password
+		$this->assertElementNotContainText(
+			$this->findByCss('#js_permissions_list'),
+			'betty@passbolt.com'
+		);
+
+		// When I give read access to betty for a password I own
+		$this->sharePassword($resource, 'betty@passbolt.com', $user);
+
+		// I can see the new permission in sidebar
+		$this->assertPermissionInSidebar('betty@passbolt.com', 'can read');
+	}
 
 	/**
 	 * @group saucelabs
-	 * @group skip
 	 * Scenario: As a user I can share a password with a groups
 	 *
 	 * Given    I am Carol
