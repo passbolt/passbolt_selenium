@@ -171,10 +171,11 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
         if(isset($this->driver)) {
             if($this->_quit === '0') {
                 return;
-            } else if(empty($this->_quit) || $this->_quit === '1') {
-                $this->driver->quit();
-            } else if($this->_quit === '2' && isset($this->_failing) && !$this->_failing) {
-                $this->driver->quit();
+            } else if((empty($this->_quit) || $this->_quit === '1')
+				|| ($this->_quit === '2' && isset($this->_failing) && !$this->_failing)) {
+                $this->waitUntil(function() {
+					$this->driver->quit();
+				});
             }
         }
 

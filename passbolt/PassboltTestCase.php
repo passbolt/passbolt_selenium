@@ -108,7 +108,6 @@ class PassboltTestCase extends WebDriverTestCase {
 			$filePath = "$logPath/{$this->testName}_tear_down_exception.log";
 			file_put_contents($filePath, $log);
 		}
-
 	}
 
 
