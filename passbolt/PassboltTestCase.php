@@ -58,49 +58,56 @@ class PassboltTestCase extends WebDriverTestCase {
 	 * Executed after every tests
 	 */
 	protected function tearDown() {
-		// Take a screenshot.
-		if ($this->getStatus() == PHPUnit_Runner_BaseTestRunner::STATUS_FAILURE && Config::read('testserver.selenium.screenshotOnFail')) {
-			$this->takeScreenshot();
-		}
+		try {
+			// Take a screenshot.
+			if ($this->getStatus() == PHPUnit_Runner_BaseTestRunner::STATUS_FAILURE && Config::read('testserver.selenium.screenshotOnFail')) {
+				$this->takeScreenshot();
+			}
 
-		// Retrieve the recorded video.
-		if (Config::read('testserver.selenium.videoRecord')) {
-			$this->stopVideo();
-			if (Config::read('testserver.selenium.videos.when') == 'onFail' && $this->getStatus() != PHPUnit_Runner_BaseTestRunner::STATUS_FAILURE) {
-				// If test is not a failure, we delete the video. We don't need to keep it.
-				$videoPath = Config::read('testserver.selenium.videos.path');
-				$filePath = "$videoPath/{$this->testName}.flv";
-				if (file_exists($filePath)) {
-					unlink($filePath);
+			// Retrieve the recorded video.
+			if (Config::read('testserver.selenium.videoRecord')) {
+				$this->stopVideo();
+				if (Config::read('testserver.selenium.videos.when') == 'onFail' && $this->getStatus() != PHPUnit_Runner_BaseTestRunner::STATUS_FAILURE) {
+					// If test is not a failure, we delete the video. We don't need to keep it.
+					$videoPath = Config::read('testserver.selenium.videos.path');
+					$filePath = "$videoPath/{$this->testName}.flv";
+					if (file_exists($filePath)) {
+						unlink($filePath);
+					}
 				}
 			}
-		}
 
-		// Retrieve the plugin logs.
-		if ($this->getStatus() == PHPUnit_Runner_BaseTestRunner::STATUS_FAILURE
-			&& !empty($this->_browser['extensions'])
-			&& Config::read('testserver.selenium.logs.plugin')
-		) {
-			// If the log folder doesn't exist yet.
-			$logPath = Config::read('testserver.selenium.logs.path');
-			if (!file_exists($logPath)) {
-				mkdir($logPath);
+			// Retrieve the plugin logs.
+			if ($this->getStatus() == PHPUnit_Runner_BaseTestRunner::STATUS_FAILURE
+				&& !empty($this->_browser['extensions'])
+				&& Config::read('testserver.selenium.logs.plugin')
+			) {
+				// If the log folder doesn't exist yet.
+				$logPath = Config::read('testserver.selenium.logs.path');
+				if (!file_exists($logPath)) {
+					mkdir($logPath);
+				}
+				// Retrieve the logs.
+				$this->goToDebug();
+				$logsElt = $this->find('#logsContent');
+				$logs = $logsElt->getText();
+				// Store the logs on the server.
+				$filePath = "$logPath/{$this->testName}_plugin.json";
+				file_put_contents($filePath, $logs);
 			}
-			// Retrieve the logs.
-			$this->goToDebug();
-			$logsElt = $this->find('#logsContent');
-			$logs = $logsElt->getText();
-			// Store the logs on the server.
-			$filePath = "$logPath/{$this->testName}_plugin.json";
-			file_put_contents($filePath, $logs);
+
+			// Reset the database.
+			if ($this->resetDatabaseWhenComplete) {
+				PassboltServer::resetDatabase(Config::read('passbolt.url'));
+			}
+
+			parent::tearDown();
+		} catch (Exception $e) {
+			$logPath = Config::read('testserver.selenium.logs.path');
+			$log = $e->getMessage() . "\n" . $e->getTraceAsString();
+			file_put_contents($logPath . DS . 'tear_down_exception.log', $log);
 		}
 
-		// Reset the database.
-		if ($this->resetDatabaseWhenComplete) {
-			PassboltServer::resetDatabase(Config::read('passbolt.url'));
-		}
-
-		parent::tearDown();
 	}
 
 
