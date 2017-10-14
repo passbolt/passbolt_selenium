@@ -171,11 +171,27 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
         if(isset($this->driver)) {
             if($this->_quit === '0') {
                 return;
-            } else if((empty($this->_quit) || $this->_quit === '1')
-				|| ($this->_quit === '2' && isset($this->_failing) && !$this->_failing)) {
-                $this->waitUntil(function() {
+            } else if(empty($this->_quit) && (
+					($this->_quit === '1') ||
+					($this->_quit === '2' && isset($this->_failing) && !$this->_failing)
+				)) {
+				/**
+				 * It can happen that the quit function throw a curl exception.
+				 * In that case the selenium node crashed, and to avoid the parallel execution
+				 * to be a total failure. We :
+				 * - catch the exception to avoid the parallel process to crash without finishing the tearDown
+				 * - complete the tearDown to release the selenium server instance and make it available for
+				 *   another execution.
+				 * - Don't forget to add the environment following variables to your docker run :
+				 *   > -e MAX_INSTANCES=5 -e MAX_SESSIONS=5
+				 *   It will allow the selenium server to accept more than one call, so even if one crash it does
+				 *   not lock the server.
+				 */
+				try {
 					$this->driver->quit();
-				});
+				} catch(Exception $e) {
+					// Do nothing
+				}
             }
         }
 
