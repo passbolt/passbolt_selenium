@@ -171,10 +171,10 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
         if(isset($this->driver)) {
             if($this->_quit === '0') {
                 return;
-            } else if(empty($this->_quit) && (
+            } else if(empty($this->_quit) ||
 					($this->_quit === '1') ||
 					($this->_quit === '2' && isset($this->_failing) && !$this->_failing)
-				)) {
+				) {
 				/**
 				 * It can happen that the quit function throw a curl exception.
 				 * In that case the selenium node crashed, and to avoid the parallel execution
