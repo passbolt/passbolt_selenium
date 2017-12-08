@@ -9,23 +9,25 @@
  * As LU I should still be logged in after I close and restore the passbolt tab
  *
  * @copyright (c) 2017 Passbolt SARL
- * @licence GNU Affero General Public License http://www.gnu.org/licenses/agpl-3.0.en.html
+ * @licence   GNU Affero General Public License http://www.gnu.org/licenses/agpl-3.0.en.html
  */
-class LoginTest extends PassboltTestCase {
+class LoginTest extends PassboltTestCase
+{
 
-	/**
-	 * @group saucelabs
-	 * Scenario:  As AN I can login to passbolt
-	 * @todo document the steps
-	 * @throws Exception
-	 */
-    public function testLogin() {
+    /**
+     * @group saucelabs
+     * Scenario:  As AN I can login to passbolt
+     * @todo document the steps
+     * @throws Exception
+     */
+    public function testLogin() 
+    {
         $this->getUrl('login');
-	    sleep(1);
+        sleep(1);
         $this->assertVisible('.plugin-check.' . $this->_browser['type'] . '.warning');
 
         $user = User::get('ada');
-        $this->setClientConfig($user);
+        
 
         $this->getUrl('login');
 
@@ -45,168 +47,172 @@ class LoginTest extends PassboltTestCase {
         $this->inputText('js_master_password', $user['MasterPassword']);
 
         $this->click('loginSubmit');
-        $this->assertElementContainsText('loginMessage','Please wait');
+        $this->assertElementContainsText('loginMessage', 'Please wait');
         $this->goOutOfIframe();
 
         $this->waitUntilISee('.login.form .feedback');
-        $this->assertElementContainsText('.login.form .feedback','Logging in');
+        $this->assertElementContainsText('.login.form .feedback', 'Logging in');
         $this->waitCompletion();
 
         // wait for redirection trigger
         sleep(1);
         $this->waitCompletion();
 
-	    $this->assertElementContainsText(
-		    $this->findByCss('.header .user.profile .details .name'),
-		    'Ada Lovelace'
-	    );
+        $this->assertElementContainsText(
+            $this->findByCss('.header .user.profile .details .name'),
+            'Ada Lovelace'
+        );
     }
 
-	/**
-	 * Scenario:  As AN I can login to passbolt by submitting the login form with the enter key
-	 * @todo document the steps
-	 * @throws Exception
-	 */
-	public function testLoginWithEnterKey() {
-		$this->getUrl('login');
-		sleep(1);
-		$this->assertVisible('.plugin-check.' . $this->_browser['type'] . '.warning');
+    /**
+     * Scenario:  As AN I can login to passbolt by submitting the login form with the enter key
+     *
+     * @todo   document the steps
+     * @throws Exception
+     */
+    public function testLoginWithEnterKey() 
+    {
+        $this->getUrl('login');
+        sleep(1);
+        $this->assertVisible('.plugin-check.' . $this->_browser['type'] . '.warning');
 
-		$user = User::get('ada');
-		$this->setClientConfig($user);
+        $user = User::get('ada');
+        
 
-		$this->getUrl('login');
+        $this->getUrl('login');
 
-		$this->waitUntilISee('.plugin-check.' . $this->_browser['type'] . '.success');
-		$this->waitUntilISee('.plugin-check.gpg.success');
+        $this->waitUntilISee('.plugin-check.' . $this->_browser['type'] . '.success');
+        $this->waitUntilISee('.plugin-check.gpg.success');
 
-		$this->assertVisible('passbolt-iframe-login-form');
-		$this->goIntoLoginIframe();
+        $this->assertVisible('passbolt-iframe-login-form');
+        $this->goIntoLoginIframe();
 
-		$this->assertVisible('.login-form.master-password');
-		$this->assertInputValue('UserUsername', $user['Username']);
+        $this->assertVisible('.login-form.master-password');
+        $this->assertInputValue('UserUsername', $user['Username']);
 
-		$this->click('js_master_password');
-		$this->waitUntilElementHasFocus('js_master_password');
-		$this->typeTextLikeAUser($user['MasterPassword']);
-		$this->pressEnter();
+        $this->click('js_master_password');
+        $this->waitUntilElementHasFocus('js_master_password');
+        $this->typeTextLikeAUser($user['MasterPassword']);
+        $this->pressEnter();
 
-		$this->assertElementContainsText('loginMessage','Please wait');
-		$this->goOutOfIframe();
+        $this->assertElementContainsText('loginMessage', 'Please wait');
+        $this->goOutOfIframe();
 
-		$this->waitUntilISee('.login.form .feedback');
-		$this->assertElementContainsText('.login.form .feedback','Logging in');
-		$this->waitCompletion();
+        $this->waitUntilISee('.login.form .feedback');
+        $this->assertElementContainsText('.login.form .feedback', 'Logging in');
+        $this->waitCompletion();
 
-		// wait for redirection trigger
-		sleep(1);
-		$this->waitCompletion();
+        // wait for redirection trigger
+        sleep(1);
+        $this->waitCompletion();
 
-		$this->assertElementContainsText(
-			$this->findByCss('.header .user.profile .details .name'),
-			'Ada Lovelace'
-		);
-	}
+        $this->assertElementContainsText(
+            $this->findByCss('.header .user.profile .details .name'),
+            'Ada Lovelace'
+        );
+    }
 
-	/**
-	 * Scenario:  As AN I can login to passbolt on different tabs without conflict between workers
-	 * Given 	As AN with plugin on the login page
-	 * When 	I open a new tab and go to the login page
-	 * And 		I switch back to the first tab
-	 * Then 	I should be able to login to passbolt from the first tab
-	 * When 	I logout
-	 * And 		I switch to the second tab
-	 * Then 	I should be able to login to passbolt from the second tab
-	 *
-	 * @throws Exception
-	 */
-	public function testMultipleTabsLogin() {
-		$user = User::get('ada');
-		$this->setClientConfig($user);
+    /**
+     * Scenario:  As AN I can login to passbolt on different tabs without conflict between workers
+     * Given     As AN with plugin on the login page
+     * When I open a new tab and go to the login page
+     * And I switch back to the first tab
+     * Then I should be able to login to passbolt from the first tab
+     * When I logout
+     * And I switch to the second tab
+     * Then I should be able to login to passbolt from the second tab
+     *
+     * @throws Exception
+     */
+    public function testMultipleTabsLogin() 
+    {
+        $user = User::get('ada');
 
-		// Given As AN with plugin on the login page
-		$this->getUrl('login');
-		$this->waitUntilISee('.plugin-check.gpg.success');
+        // Given As AN with plugin on the login page
+        $this->getUrl('login');
+        $this->waitUntilISee('.plugin-check.gpg.success');
 
-		// When I open a new tab and go to the login page
-		$this->openNewTab('login');
-		$this->waitUntilISee('.plugin-check.gpg.success');
+        // When I open a new tab and go to the login page
+        $this->openNewTab('login');
+        $this->waitUntilISee('.plugin-check.gpg.success');
 
-		// And I switch back to the first tab
-		$this->switchToPreviousTab();
+        // And I switch back to the first tab
+        $this->switchToPreviousTab();
 
-		// Then I should be able to login to passbolt from the first tab.
-		$this->loginAs($user, false);
+        // Then I should be able to login to passbolt from the first tab.
+        $this->loginAs($user);
 
-		// When I logout
-		$this->logout();
+        // When I logout
+        $this->logout();
 
-		// And I switch to the second tab
-		$this->switchToNextTab();
+        // And I switch to the second tab
+        $this->switchToNextTab();
 
-		// Then I should be able to login to passbolt from the second tab
-		$this->loginAs($user, false);
-	}
+        // Then I should be able to login to passbolt from the second tab
+        $this->loginAs($user);
+    }
 
-	/**
-	 * @group skip
-	 * @group chrome-only
+    /**
+     * @group skip
+     * @group chrome-only
      * @group no-saucelabs
-	 *
-	 * Scenario:  As LU I should still be logged in after I restart the browser
-	 * Given    I am Ada
-	 * And      I am logged in on the passwords workspace
-	 * When 	I restart the browser
-	 * Then 	I should still be logged in
-	 *
-	 * @throws Exception
-	 */
-	public function testRestartBrowserAndStillLoggedIn() {
-		// Given I am Ada
-		$user = User::get('ada');
-		$this->setClientConfig($user);
+     *
+     * Scenario:  As LU I should still be logged in after I restart the browser
+     * Given I am Ada
+     * And I am logged in on the passwords workspace
+     * When I restart the browser
+     * Then I should still be logged in
+     *
+     * @throws Exception
+     */
+    public function testRestartBrowserAndStillLoggedIn() 
+    {
+        // Given I am Ada
+        $user = User::get('ada');
+        
 
-		// And I am logged in
-		$this->loginAs($user, false);
+        // And I am logged in
+        $this->loginAs($user);
 
-		// When I restart the browser
-		$this->restartBrowser();
+        // When I restart the browser
+        $this->restartBrowser();
 
-		// Then I should still be logged in
-		$this->waitUntilISee('.logout');
-	}
+        // Then I should still be logged in
+        $this->waitUntilISee('.logout');
+    }
 
-	/**
-	 * @group skip
-	 * PASSBOLT-2263 close and restore doesn't work with the latest chrome driver
-	 * PASSBOLT-2419 close and restore doesn't work with the latest firefox driver
-	 *
-	 * Scenario:  As LU I should still be logged in after I close and restore the passbolt tab
-	 * Given    I am Ada
-	 * And 		I am on second tab
-	 * And      I am logged in on the passwords workspace
-	 * When 	I close and restore the tab
-	 * Then 	I should still be logged in
-	 *
-	 * @throws Exception
-	 */
-	public function testCloseRestoreTabAndStillLoggedIn() {
-		// Given I am Ada
-		$user = User::get('ada');
-		$this->setClientConfig($user);
+    /**
+     * @group skip
+     * PASSBOLT-2263 close and restore doesn't work with the latest chrome driver
+     * PASSBOLT-2419 close and restore doesn't work with the latest firefox driver
+     *
+     * Scenario:  As LU I should still be logged in after I close and restore the passbolt tab
+     * Given I am Ada
+     * And I am on second tab
+     * And I am logged in on the passwords workspace
+     * When I close and restore the tab
+     * Then I should still be logged in
+     *
+     * @throws Exception
+     */
+    public function testCloseRestoreTabAndStillLoggedIn() 
+    {
+        // Given I am Ada
+        $user = User::get('ada');
+        
 
-		// And I am on second tab
-		$this->openNewTab();
+        // And I am on second tab
+        $this->openNewTab();
 
-		// And I am logged in
-		$this->loginAs($user, false);
+        // And I am logged in
+        $this->loginAs($user);
 
-		// When I close and restore the tab
-		$this->closeAndRestoreTab();
-		$this->waitCompletion();
+        // When I close and restore the tab
+        $this->closeAndRestoreTab();
+        $this->waitCompletion();
 
-		// Then I should still be logged in
-		$this->waitUntilISee('.logout');
-	}
+        // Then I should still be logged in
+        $this->waitUntilISee('.logout');
+    }
 
 }

@@ -15,4 +15,5 @@ define('GPG_DUMMY', FIXTURES . 'gpg-dummy');
 define('GPG_SERVER', FIXTURES . 'gpg-server');
 define('IMG_FIXTURES', FIXTURES . 'img');
 
-require_once ROOT . '/passbolt/__init__.php';
+//require_once ROOT . '/v/__init__.php';
+require_once ROOT . DS . 'vendor' . DS . 'autoload.php';

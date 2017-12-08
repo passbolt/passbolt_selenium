@@ -3,7 +3,7 @@
  * Bug PASSBOLT-1040 - Regression test
  *
  * @copyright (c) 2017 Passbolt SARL
- * @licence GNU Affero General Public License http://www.gnu.org/licenses/agpl-3.0.en.html
+ * @licence   GNU Affero General Public License http://www.gnu.org/licenses/agpl-3.0.en.html
  */
 class PASSBOLT1041 extends PassboltTestCase
 {
@@ -17,14 +17,14 @@ class PASSBOLT1041 extends PassboltTestCase
      * When I click on the edit link
      * Then I cannot see the contextual menu
      */
-    public function testContextualMenuMustCloseAfterClick() {
-	    // Reset database at the end of test.
-	    $this->resetDatabaseWhenComplete();
+    public function testContextualMenuMustCloseAfterClick() 
+    {
+        // Reset database at the end of test.
+        $this->resetDatabaseWhenComplete();
 
         // Given I am Ada
         $user = User::get('ada');
         $resource = Resource::get(array('user' => 'ada'));
-        $this->setClientConfig($user);
 
         // And I am logged in on the password workspace
         $this->loginAs($user);
@@ -45,7 +45,8 @@ class PASSBOLT1041 extends PassboltTestCase
     /**
      * The context menu should open every time I right click
      */
-    public function testContextMenuOpenOnRightClick() {
+    public function testContextMenuOpenOnRightClick() 
+    {
         // @TODO: in selenium (level: hard :)
         // Repeat in a fast fashion:
         // Mouse right click down on an item

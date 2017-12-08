@@ -8,31 +8,32 @@
  * As a user I can edit the secret of a password I have own, and enter my passphrase from keyboard only
  * As a user I can edit the secret of a password I have own, and enter my passphrase from keyboard only, using tab first
  *
- *
  * @copyright (c) 2017 Passbolt SARL
- * @licence GNU Affero General Public License http://www.gnu.org/licenses/agpl-3.0.en.html
+ * @licence   GNU Affero General Public License http://www.gnu.org/licenses/agpl-3.0.en.html
  */
-class MasterPasswordShortcutTest extends PassboltTestCase {
+class MasterPasswordShortcutTest extends PassboltTestCase
+{
 
     /**
      * @group saucelabs
      * Scenario : As a user I can copy a password using the button in the action bar,
      * and enter my passphrase from keyboard only.
      *
-     * Given    I am Ada
-     * And      I am logged in on the password workspace
-     * When     I click a password
-     * When     I click on the copy button in the action bar
-     * Then     I can see the master key dialog
-     * When     I enter my passphrase by typing it on keyboard only
-     * Then     I can see a success message saying the password was 'copied to clipboard'
+     * Given I am Ada
+     * And I am logged in on the password workspace
+     * When I click a password
+     * When I click on the copy button in the action bar
+     * Then I can see the master key dialog
+     * When I enter my passphrase by typing it on keyboard only
+     * Then I can see a success message saying the password was 'copied to clipboard'
      * And      The content of the clipboard is valid
      */
-    function testMasterPasswordShortcutCopyPasswordButton() {
+    function testMasterPasswordShortcutCopyPasswordButton() 
+    {
         // Given I am Ada
         $user = User::get('ada');
         $resource = Resource::get(array('user' => 'ada'));
-        $this->setClientConfig($user);
+
 
         // And I am logged in on the password workspace
         $this->loginAs($user);
@@ -57,23 +58,24 @@ class MasterPasswordShortcutTest extends PassboltTestCase {
      * Scenario : As a user I can copy a password using the button in the action bar,
      * and enter my passphrase from keyboard only by pressing tab first.
      *
-     * Given    I am Ada
-     * And      I am logged in on the password workspace
-     * When     I click a password
-     * When     I click on the copy button in the action bar
-     * Then     I can see the master key dialog
-     * When     I press tab
-     * Then     I can see that the passphrase field gets the focus
-     * When     I type my passphrase on the keyboard
-     * And      I press enter
-     * Then     I can see a success message saying the password was 'copied to clipboard'
+     * Given I am Ada
+     * And I am logged in on the password workspace
+     * When I click a password
+     * When I click on the copy button in the action bar
+     * Then I can see the master key dialog
+     * When I press tab
+     * Then I can see that the passphrase field gets the focus
+     * When I type my passphrase on the keyboard
+     * And I press enter
+     * Then I can see a success message saying the password was 'copied to clipboard'
      * And      The content of the clipboard is valid
      */
-    function testMasterPasswordShortcutTabFirstCopyPasswordButton() {
+    function testMasterPasswordShortcutTabFirstCopyPasswordButton() 
+    {
         // Given I am Ada
         $user = User::get('ada');
         $resource = Resource::get(array('user' => 'ada'));
-        $this->setClientConfig($user);
+
 
         // And I am logged in on the password workspace
         $this->loginAs($user);
@@ -98,19 +100,20 @@ class MasterPasswordShortcutTest extends PassboltTestCase {
      * Scenario: As a user I can edit the secret of a password I have own,
      * and enter my passphrase from keyboard only.
      *
-     * Given    I am Ada
-     * And      I am logged in on the password workspace
-     * And      I am editing a password I own
-     * When     I click on the secret password field
-     * Then     I see the passphrase dialog
-     * When     I enter the passphrase from keyboard only
-     * And      I press enter
-     * Then     I can see the password decrypted in the secret field
+     * Given I am Ada
+     * And I am logged in on the password workspace
+     * And I am editing a password I own
+     * When I click on the secret password field
+     * Then I see the passphrase dialog
+     * When I enter the passphrase from keyboard only
+     * And I press enter
+     * Then I can see the password decrypted in the secret field
      */
-    function testMasterPasswordShortcutEditPasswordSecret() {
+    function testMasterPasswordShortcutEditPasswordSecret() 
+    {
         // Given I am Ada
         $user = User::get('ada');
-        $this->setClientConfig($user);
+
 
         // And I am logged in
         $this->loginAs($user);
@@ -131,10 +134,10 @@ class MasterPasswordShortcutTest extends PassboltTestCase {
 
         $this->goIntoSecretIframe();
 
-	    // Wait for password to be decrypted.
-	    $this->waitUntilSecretIsDecryptedInField();
+        // Wait for password to be decrypted.
+        $this->waitUntilSecretIsDecryptedInField();
 
-	    // Assert that password matches what we expect.
+        // Assert that password matches what we expect.
         $this->assertInputValue('js_secret', $resource['password']);
 
         $this->goOutOfIframe();
@@ -144,21 +147,22 @@ class MasterPasswordShortcutTest extends PassboltTestCase {
      * Scenario: As a user I can edit the secret of a password I have own,
      * and enter my passphrase from keyboard only, using tab first.
      *
-     * Given    I am Ada
-     * And      I am logged in on the password workspace
-     * And      I am editing a password I own
-     * When     I click on the secret password field
-     * Then     I see the passphrase dialog
-     * When     I press tab
-     * Then     I can see that the passphrase field gets the focus
-     * When     I type my passphrase on the keyboard
-     * And      I press enter
-     * Then     I can see the password decrypted in the secret field
+     * Given I am Ada
+     * And I am logged in on the password workspace
+     * And I am editing a password I own
+     * When I click on the secret password field
+     * Then I see the passphrase dialog
+     * When I press tab
+     * Then I can see that the passphrase field gets the focus
+     * When I type my passphrase on the keyboard
+     * And I press enter
+     * Then I can see the password decrypted in the secret field
      */
-    function testMasterPasswordShortcutTabFirstEditPasswordSecret() {
+    function testMasterPasswordShortcutTabFirstEditPasswordSecret() 
+    {
         // Given I am Ada
         $user = User::get('ada');
-        $this->setClientConfig($user);
+
 
         // And I am logged in
         $this->loginAs($user);
@@ -179,8 +183,8 @@ class MasterPasswordShortcutTest extends PassboltTestCase {
 
         $this->goIntoSecretIframe();
 
-	    // Wait for password to be decrypted.
-	    $this->waitUntilSecretIsDecryptedInField();
+        // Wait for password to be decrypted.
+        $this->waitUntilSecretIsDecryptedInField();
 
         $this->assertInputValue('js_secret', $resource['password']);
 

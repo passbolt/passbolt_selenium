@@ -3,20 +3,22 @@
  * Bug PASSBOLT-1680 - Regression test
  *
  * @copyright (c) 2017 Passbolt SARL
- * @licence GNU Affero General Public License http://www.gnu.org/licenses/agpl-3.0.en.html
+ * @licence   GNU Affero General Public License http://www.gnu.org/licenses/agpl-3.0.en.html
  */
-class PASSBOLT1680 extends PassboltTestCase {
+class PASSBOLT1680 extends PassboltTestCase
+{
 
     /**
      * Scenario: As a user I can view a password I just created on my list of passwords
      *
-     * Given    I am Ada
-     * And      I am logged in
-     * When     I create a new password with a secret of 4096 characters
-     * Then     I see the password I created in my password list
-     * And      I see the secret match the entry I made
+     * Given I am Ada
+     * And I am logged in
+     * When I create a new password with a secret of 4096 characters
+     * Then I see the password I created in my password list
+     * And I see the secret match the entry I made
      */
-    public function testCreatePasswordAndView() {
+    public function testCreatePasswordAndView() 
+    {
         // Reset database at the end of test.
         $this->resetDatabaseWhenComplete();
 
@@ -29,7 +31,6 @@ class PASSBOLT1680 extends PassboltTestCase {
 
         // Given I am Ada
         $user = User::get('ada');
-        $this->setClientConfig($user);
 
         // And I am logged in
         $this->loginAs($user);
