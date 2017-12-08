@@ -38,7 +38,7 @@ class Text_Template
     /**
      * Constructor.
      *
-     * @param string                   $file
+     * @param  string                   $file
      * @throws InvalidArgumentException
      */
     public function __construct($file = '', $openDelimiter = '{', $closeDelimiter = '}')
@@ -51,7 +51,7 @@ class Text_Template
     /**
      * Sets the template file.
      *
-     * @param string                   $file
+     * @param  string                   $file
      * @throws InvalidArgumentException
      */
     public function setFile($file)

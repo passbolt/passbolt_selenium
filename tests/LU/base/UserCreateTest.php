@@ -23,7 +23,7 @@ class UserCreateTest extends PassboltTestCase
 {
 
     /**
-     * Scenario :   As a user I can view the create user dialog
+     * Scenario: As a user I can view the create user dialog
      * Given        I am admin
      * And          I am logged in
      * When         I go to user workspace
@@ -51,7 +51,7 @@ class UserCreateTest extends PassboltTestCase
         // Go to user workspace
         $this->gotoWorkspace('user');
 
-        // then I see the create password button
+        // Then  I see the create password button
         $this->assertElementContainsText(
             $this->findByCss('.main-action-wrapper'),
             'create'
@@ -60,7 +60,7 @@ class UserCreateTest extends PassboltTestCase
         // Create a new user
         $this->gotoCreateUser();
 
-        // Then I see the create password dialog
+        // Then  I see the create password dialog
         $this->assertVisible('.create-user-dialog');
 
         // And I see the title is set to "Add user"
@@ -101,17 +101,17 @@ class UserCreateTest extends PassboltTestCase
      * And I am logged in
      * And I am on the user workspace
      * When I click on the create user button
-     * Then I see the create user dialog
+     * Then  I see the create user dialog
      * When I click on the cancel button
-     * Then I should not see the create user dialog
+     * Then  I should not see the create user dialog
      * When I click on the create user button
-     * Then I see the create user dialog
+     * Then  I see the create user dialog
      * When I click on the close dialog button
-     * Then I should not see the create user dialog
+     * Then  I should not see the create user dialog
      * When I click on the create user button
-     * Then I see the create user dialog
+     * Then  I see the create user dialog
      * When I press the keyboard escape key
-     * Then I should not see the create user dialog
+     * Then  I should not see the create user dialog
      */
     public function testCreateUserDialogOpenClose() 
     {
@@ -131,7 +131,7 @@ class UserCreateTest extends PassboltTestCase
         // When I click on the cancel button
         $this->findByCss('.create-user-dialog a.cancel')->click();
 
-        // Then I should not see the create password dialog
+        // Then  I should not see the create password dialog
         $this->assertNotVisible('.create-user-dialog');
 
         // -- WITH X BUTTON --
@@ -140,13 +140,13 @@ class UserCreateTest extends PassboltTestCase
         $this->waitUntilISee('.main-action-wrapper ul.dropdown-content');
         $this->click('.main-action-wrapper ul.dropdown-content li.create-user');
 
-        // Then I see the create password dialog
+        // Then  I see the create password dialog
         $this->assertVisible('.create-user-dialog');
 
         // When I click on the close dialog button
         $this->findByCss('.create-user-dialog a.dialog-close')->click();
 
-        // Then I should not see the create password dialog
+        // Then  I should not see the create password dialog
         $this->assertNotVisible('.create-user-dialog');
 
         // -- WITH ESCAPE --
@@ -155,13 +155,13 @@ class UserCreateTest extends PassboltTestCase
         $this->waitUntilISee('.main-action-wrapper ul.dropdown-content');
         $this->click('.main-action-wrapper ul.dropdown-content li.create-user');
 
-        // Then I see the create password dialog
+        // Then  I see the create password dialog
         $this->assertVisible('.create-user-dialog');
 
         // When I click on the escape key
         $this->pressEscape();
 
-        // Then I should not see the create password dialog
+        // Then  I should not see the create password dialog
         $this->assertTrue($this->isNotVisible('.create-user-dialog'));
     }
 
@@ -172,19 +172,19 @@ class UserCreateTest extends PassboltTestCase
      * And I am logged in
      * And I am on the create user dialog
      * When I press the enter key on the keyboard after clicking in the field first name
-     * Then I see an error message saying that the first name is required
+     * Then  I see an error message saying that the first name is required
      * And I see an error message saying that the last name is required
      * And I see an error message saying that the username is required
      * When I enter '&' as a first name
      * And I enter '&' as a last name
      * And I enter '&' as a username
      * And I click on the save button
-     * Then I see an error message saying that the first name contain invalid characters
+     * Then  I see an error message saying that the first name contain invalid characters
      * And I see an error message saying that the last name contain invalid characters
      * And I see an error message saying that the username should be an email
      * When I enter 'aa' as a first name
      * And I enter 'aa' as a last name
-     * Then I see an error message saying that the length of first name should be between x and x characters
+     * Then  I see an error message saying that the length of first name should be between x and x characters
      * And I see an error message saying that the length of last name should be between x and x characters
      */
     public function testCreateUserErrorMessages() 
@@ -208,19 +208,19 @@ class UserCreateTest extends PassboltTestCase
         // And I press enter
         $this->pressEnter();
 
-        // Then I see an error message saying that the first name is required
+        // Then  I see an error message saying that the first name is required
         $this->assertVisible('#js_field_first_name_feedback.error.message');
         $this->assertElementContainsText(
             $this->find('js_field_first_name_feedback'), 'is required'
         );
 
-        // Then I see an error message saying that the last name is required
+        // Then  I see an error message saying that the last name is required
         $this->assertVisible('#js_field_last_name_feedback.error.message');
         $this->assertElementContainsText(
             $this->find('js_field_last_name_feedback'), 'is required'
         );
 
-        // Then I see an error message saying that the username is required
+        // Then  I see an error message saying that the username is required
         $this->assertVisible('#js_field_username_feedback.error.message');
         $this->assertElementContainsText(
             $this->find('js_field_username_feedback'), 'is required'
@@ -238,19 +238,19 @@ class UserCreateTest extends PassboltTestCase
         // And I click save
         $this->click('.create-user-dialog input[type=submit]');
 
-        // Then I see an error message saying that the first name contain invalid characters
+        // Then  I see an error message saying that the first name contain invalid characters
         $this->assertVisible('#js_field_first_name_feedback.error.message');
         $this->assertElementContainsText(
             $this->find('js_field_first_name_feedback'), 'should only contain alphabets'
         );
 
-        // Then I see an error message saying that the first name contain invalid characters
+        // Then  I see an error message saying that the first name contain invalid characters
         $this->assertVisible('#js_field_last_name_feedback.error.message');
         $this->assertElementContainsText(
             $this->find('js_field_last_name_feedback'), 'should only contain alphabets'
         );
 
-        // Then I see an error message saying that the username should be an email
+        // Then  I see an error message saying that the username should be an email
         $this->assertVisible('#js_field_username_feedback.error.message');
         $this->assertElementContainsText(
             $this->find('js_field_username_feedback'), 'Only email format is allowed'
@@ -311,7 +311,7 @@ class UserCreateTest extends PassboltTestCase
         // And I click save
         $this->click('.create-user-dialog input[type=submit]');
 
-        // Then I see a notice message that the username is already taken
+        // Then  I see a notice message that the username is already taken
         $this->waitUntilISee('#js_field_username_feedback.error.message');
         $this->assertElementContainsText(
             $this->find('js_field_username_feedback'), 'The username has already been taken'
@@ -333,7 +333,7 @@ class UserCreateTest extends PassboltTestCase
      * And I see the user I created in my user list
      * When I refresh the page
      * And I go to user workspace
-     * Then I should still see the user I created in my user list
+     * Then  I should still see the user I created in my user list
      */
     public function testCreateUserAndView() 
     {
@@ -399,7 +399,7 @@ class UserCreateTest extends PassboltTestCase
 
     /**
      * @group saucelabs
-     * Scenario :   After creating a user, the given user can complete the setup and login with the chosen password
+     * Scenario: After creating a user, the given user can complete the setup and login with the chosen password
      * Given        I am admin
      * And          I am logged in
      * When         I go to user workspace
@@ -462,7 +462,7 @@ class UserCreateTest extends PassboltTestCase
     }
 
     /**
-     * Scenario :   After creating a non admin user, the given user shouldn't have access to the admin functionalities
+     * Scenario: After creating a non admin user, the given user shouldn't have access to the admin functionalities
      * Given        I am admin
      * And          I am logged in
      * When         I go to user workspace
@@ -537,7 +537,7 @@ class UserCreateTest extends PassboltTestCase
     }
 
     /**
-     * Scenario :   After creating an admin user, the given user should have access to the admin functionalities
+     * Scenario: After creating an admin user, the given user should have access to the admin functionalities
      * Given        I am admin
      * And          I am logged in
      * When         I go to user workspace
@@ -630,13 +630,13 @@ class UserCreateTest extends PassboltTestCase
      * When I logout
      * And I login again as a normal user (Ada)
      * And I go to user workspace
-     * Then I should not see the new user in the users list
+     * Then  I should not see the new user in the users list
      * When I complete the setup as the new created user
      * And I log out after being logged in at the end of setup
-     * Then I should be logged out
+     * Then  I should be logged out
      * When I log in again as normal user (Ada)
      * And I go to user workspace
-     * Then I should see the new user in the users list
+     * Then  I should see the new user in the users list
      */
     public function testCreateUserAdminCanViewNotUserUntilFirstLogin() 
     {
@@ -737,7 +737,7 @@ class UserCreateTest extends PassboltTestCase
     }
 
     /**
-     * Scenario : As LU, after an admin created an account for me, I should receive a confirmation email.
+     * Scenario: As LU, after an admin created an account for me, I should receive a confirmation email.
      * Given I am Admin
      * And I am logged in
      * And I am on the create user dialog
@@ -749,7 +749,7 @@ class UserCreateTest extends PassboltTestCase
      *
      * Given I log out
      * And I check the email box of johndoe@passbolt.com
-     * Then I should see an invitation email with subject "Admin created an account for you!"
+     * Then  I should see an invitation email with subject "Admin created an account for you!"
      */
     public function testCreateUserEmail() 
     {
@@ -788,11 +788,11 @@ class UserCreateTest extends PassboltTestCase
      * @group no-saucelabs
      * @group skip
      *
-     * Scenario:  As LU I should be able to create a user after I restart the browser
+     * Scenario: As LU I should be able to create a user after I restart the browser
      * Given I am Ada
      * And I am logged in on the users workspace
      * When I restart the browser
-     * Then I should be able to create a user
+     * Then  I should be able to create a user
      *
      * @throws Exception
      */
@@ -816,7 +816,7 @@ class UserCreateTest extends PassboltTestCase
         $this->waitCompletion();
         $this->gotoWorkspace('user');
 
-        // Then I should be able to create a user
+        // Then  I should be able to create a user
         $newUser = [
         'first_name' => 'john',
         'last_name'  => 'doe',
@@ -831,12 +831,12 @@ class UserCreateTest extends PassboltTestCase
      * PASSBOLT-2263 close and restore doesn't work with the latest chrome driver
      * PASSBOLT-2419 close and restore doesn't work with the latest firefox driver
      *
-     * Scenario:  As LU I should be able to create a user after I close and restore the passbolt tab
+     * Scenario: As LU I should be able to create a user after I close and restore the passbolt tab
      * Given I am Ada
      * And I am on second tab
      * And I am logged in on the users workspace
      * When I close and restore the tab
-     * Then I should be able to create a user
+     * Then  I should be able to create a user
      *
      * @throws Exception
      */
@@ -861,7 +861,7 @@ class UserCreateTest extends PassboltTestCase
         $this->waitCompletion();
         $this->gotoWorkspace('user');
 
-        // Then I should be able to create a user
+        // Then  I should be able to create a user
         $newUser = [
         'first_name' => 'john',
         'last_name'  => 'doe',

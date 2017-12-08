@@ -25,7 +25,7 @@ class PHPUnit_Framework_MockObject_Matcher_MethodName extends PHPUnit_Framework_
     protected $constraint;
 
     /**
-     * @param PHPUnit_Framework_Constraint|string
+     * @param  PHPUnit_Framework_Constraint|string
      *
      * @throws PHPUnit_Framework_Constraint
      */

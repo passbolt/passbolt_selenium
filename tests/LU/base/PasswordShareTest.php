@@ -40,11 +40,11 @@ class PasswordShareTest extends PassboltTestCase
      *
      * Given I am Ada
      * And I am logged in on the password workspace
-     * Then I can see the share password button is disabled
+     * Then  I can see the share password button is disabled
      * When I click on a password I own
-     * Then I can see the share button is enabled
+     * Then  I can see the share button is enabled
      * When I click on the share button
-     * Then I can see the share password dialog
+     * Then  I can see the share password dialog
      */
     public function testSharePasswordButton() 
     {
@@ -55,7 +55,7 @@ class PasswordShareTest extends PassboltTestCase
         // And I am logged in on the password workspace
         $this->loginAs($user);
 
-        // Then I can see the share password button is disabled
+        // Then  I can see the share password button is disabled
         $this->assertVisible('js_wk_menu_sharing_button');
         $this->assertVisible('#js_wk_menu_sharing_button.disabled');
 
@@ -63,14 +63,14 @@ class PasswordShareTest extends PassboltTestCase
         $resource = Resource::get(array('user' => 'ada', 'permission' => 'owner'));
         $this->clickPassword($resource['id']);
 
-        // Then I can see the share button is enabled
+        // Then  I can see the share button is enabled
         $this->assertNotVisible('#js_wk_menu_sharing_button.disabled');
         $this->assertVisible('js_wk_menu_sharing_button');
 
         // When I click on the share button
         $this->click('js_wk_menu_sharing_button');
 
-        // Then I can see the share password dialog
+        // Then  I can see the share password dialog
         $this->assertVisible('.share-password-dialog');
     }
 
@@ -80,10 +80,10 @@ class PasswordShareTest extends PassboltTestCase
      * Given I am Ada
      * And I am logged in on the password workspace
      * When I right click on a password I own
-     * Then I can see the contextual menu
+     * Then  I can see the contextual menu
      * And I can see the the share option is enabled
      * When I click on the share link in the contextual menu
-     * Then I can see the share password dialog
+     * Then  I can see the share password dialog
      */
     public function testSharePasswordRightClick() 
     {
@@ -98,7 +98,7 @@ class PasswordShareTest extends PassboltTestCase
         $resource = Resource::get(array('user' => 'ada', 'permission' => 'owner'));
         $this->rightClickPassword($resource['id']);
 
-        // Then I can see the contextual menu
+        // Then  I can see the contextual menu
         $this->assertVisible('js_contextual_menu');
 
         // I can see the the share option is enabled
@@ -107,7 +107,7 @@ class PasswordShareTest extends PassboltTestCase
         // When I click on the share link in the contextual menu
         $this->click('#js_password_browser_menu_share a');
 
-        // Then I can see the share password dialog
+        // Then  I can see the share password dialog
         $this->assertVisible('.share-password-dialog');
     }
 
@@ -117,10 +117,10 @@ class PasswordShareTest extends PassboltTestCase
      * Given I am Ada
      * And I am logged in on the password workspace
      * When I click on a password I own
-     * Then I can see the sidebar with a permissions section
+     * Then  I can see the sidebar with a permissions section
      * And I can see a edit permissions button
      * When I click on the edit permissions button
-     * Then I can see the share password dialog
+     * Then  I can see the share password dialog
      */
     public function testSharePasswordFromSidebar() 
     {
@@ -135,7 +135,7 @@ class PasswordShareTest extends PassboltTestCase
         $resource = Resource::get(array('user' => 'ada', 'permission' => 'owner'));
         $this->clickPassword($resource['id']);
 
-        // Then I can see the sidebar.
+        // Then  I can see the sidebar.
         $this->waitUntilISee('js_pwd_details');
 
         // And I can see the permission details in the sidebar.
@@ -144,7 +144,7 @@ class PasswordShareTest extends PassboltTestCase
         // When I click on the edit permissions button
         $this->click('#js_rs_details_permissions a#js_edit_permissions_button');
 
-        // Then I can see the share password dialog
+        // Then  I can see the share password dialog
         $this->waitUntilISee('.share-password-dialog');
     }
 
@@ -154,14 +154,14 @@ class PasswordShareTest extends PassboltTestCase
      * Given I am Ada
      * And I am logged in on the password workspace
      * When I click on a password I can read
-     * Then I can see the share button is not active
+     * Then  I can see the share button is not active
      * When I right click on a password I have only read access to
-     * Then I can see the contextual menu
+     * Then  I can see the contextual menu
      * And I can see the share option is disabled
      * When I click on a password I can update
-     * Then I can see the share button is not active
+     * Then  I can see the share button is not active
      * When I right click on a password I have only update access to
-     * Then I can see the contextual menu
+     * Then  I can see the contextual menu
      * And I can see the share option is disabled
      */
     public function testEditPasswordNoRightNoShare() 
@@ -182,13 +182,13 @@ class PasswordShareTest extends PassboltTestCase
         );
         $this->clickPassword($r['id']);
 
-        // Then I can see the share button is not active
+        // Then  I can see the share button is not active
         $this->assertDisabled('js_wk_menu_sharing_button');
 
         // When I right click on a password I have only update access to
         $this->rightClickPassword($r['id']);
 
-        // Then I can see the contextual menu
+        // Then  I can see the contextual menu
         $this->findById('js_contextual_menu');
 
         // And I can see the share option is disabled
@@ -204,13 +204,13 @@ class PasswordShareTest extends PassboltTestCase
         );
         $this->clickPassword($r['id']);
 
-        // Then I can see the share button is not active
+        // Then  I can see the share button is not active
         $this->assertDisabled('js_wk_menu_sharing_button');
 
         // When I right click on a password I have only update access to
         $this->rightClickPassword($r['id']);
 
-        // Then I can see the contextual menu
+        // Then  I can see the contextual menu
         $this->findById('js_contextual_menu');
 
         // And I can see the share option is disabled
@@ -225,7 +225,7 @@ class PasswordShareTest extends PassboltTestCase
      * And I am logged in on the password workspace
      * When I go to the sharing dialog of a password I own
      * And I can see the save button is disabled
-     * Then I can see that Ada is owner
+     * Then  I can see that Ada is owner
      * And I can see that Betty can update
      * And I can see that Carol can read
      * And I can see that Dame can read
@@ -248,7 +248,7 @@ class PasswordShareTest extends PassboltTestCase
         );
         $this->gotoSharePassword(Uuid::get('resource.id.apache'));
 
-        // Then I can see the save button is disabled
+        // Then  I can see the save button is disabled
         $this->assertVisible('#js_rs_share_save.disabled');
 
         // And I can see that Ada is owner
@@ -271,7 +271,7 @@ class PasswordShareTest extends PassboltTestCase
      * Given I am Ada
      * And I am logged in on the password workspace
      * When I click on a password I own
-     * Then I should see the sidebar with a section about the permissions
+     * Then  I should see the sidebar with a section about the permissions
      * And I can see that Ada is owner
      * And I can see that Betty can update
      * And I can see that Carol can read
@@ -300,7 +300,7 @@ class PasswordShareTest extends PassboltTestCase
         // Wait until I see the list of permissions.
         $this->waitUntilISee('js_rs_details_permissions');
 
-        // Then I can see that Ada is owner
+        // Then  I can see that Ada is owner
         $this->assertPermissionInSidebar('ada@passbolt.com', 'is owner');
 
         // And I can see that Betty can update
@@ -320,7 +320,7 @@ class PasswordShareTest extends PassboltTestCase
      * Given I am logged in user
      * And I am on the passwords workspace
      * When I select a password
-     * Then I should see the information sidebar opening
+     * Then  I should see the information sidebar opening
      * And I should see that it contains a “shared with” section
      * And I should see a user the password is shared with
      * And I should see a group the password is shared with
@@ -348,10 +348,10 @@ class PasswordShareTest extends PassboltTestCase
         // Wait until I see the list of permissions.
         $this->waitUntilISee('js_rs_details_permissions');
 
-        // Then I should see a user the password is shared with
+        // Then  I should see a user the password is shared with
         $this->assertPermissionInSidebar('ada@passbolt.com', 'can read');
 
-        // Then I should see a group the password is shared with
+        // Then  I should see a group the password is shared with
         $this->assertPermissionInSidebar('Board (group)', 'can update');
     }
 
@@ -362,7 +362,7 @@ class PasswordShareTest extends PassboltTestCase
      * And I am logged in on the password workspace
      * When I go to the edit dialog of a password I don't own
      * And I go to the share tab
-     * Then I can see that Ada is owner
+     * Then  I can see that Ada is owner
      * And I can see that Betty can update
      * And I can see that Carol can read
      * And I can see that Dame can read
@@ -394,7 +394,7 @@ class PasswordShareTest extends PassboltTestCase
         $this->findByCss('#js_tab_nav_js_rs_permission a')->click();
         $this->waitCompletion();
 
-        // Then I can see that Ada is owner
+        // Then  I can see that Ada is owner
         $permissionAdaId = Uuid::get('permission.id.' . $resource['id'] . '-' . $userAda['id']);
         $this->assertPermission($resource, 'ada@passbolt.com', 'can update', ['closeDialog' => false]);
         $this->assertDisabled('js_share_perm_type_' . $permissionAdaId);
@@ -427,7 +427,7 @@ class PasswordShareTest extends PassboltTestCase
      * Given I am Ada
      * And I am logged in on the password workspace
      * When I click on a password I own
-     * Then I should see the sidebar with a section about the permissions
+     * Then  I should see the sidebar with a section about the permissions
      * And I can see that Ada can update
      * And I can see that Betty can read
      * And I can see that Carol can read
@@ -456,7 +456,7 @@ class PasswordShareTest extends PassboltTestCase
         // Wait until I see the list of permissions.
         $this->waitUntilISee('js_rs_details_permissions');
 
-        // Then I can see that Ada is owner
+        // Then  I can see that Ada is owner
         $this->assertPermissionInSidebar('ada@passbolt.com', 'can update');
 
         // And I can see that Betty can update
@@ -476,7 +476,7 @@ class PasswordShareTest extends PassboltTestCase
      * And I am logged in on the password workspace
      * When I add a temporary permission for Betty
      * And I search again Betty
-     * Then        Then I should not see it in the autocomplete results
+     * Then        Then  I should not see it in the autocomplete results
      */
     public function testCannotAddTwiceAPermissionForTheSameUser() 
     {
@@ -503,7 +503,7 @@ class PasswordShareTest extends PassboltTestCase
         // And I search again Betty
         $this->searchAroToGrant($resource, $shareWithUser['name'], $user);
 
-        // Then I should not see her in the autocomplete results
+        // Then  I should not see her in the autocomplete results
         $this->goIntoShareAutocompleteIframe();
         $this->assertElementNotContainText($this->findByCss('ul'), $shareWithUserFullName);
         $this->goOutOfIframe();
@@ -516,7 +516,7 @@ class PasswordShareTest extends PassboltTestCase
      * And I am logged in on the password workspace
      * And I open the share dialog of a password I own
      * And I try to share the password with a user that does not exist
-     * Then        Then I should not see it in the autocomplete results
+     * Then        Then  I should not see it in the autocomplete results
      * And        The save button should be disabled
      */
     public function testCannotAddNonExistingUser() 
@@ -542,7 +542,7 @@ class PasswordShareTest extends PassboltTestCase
         $this->inputText('js_perm_create_form_aro_auto_cplt', 'not.a.user@something.com', true);
         $this->goOutOfIframe();
 
-        // Then I should not see her in the autocomplete results
+        // Then  I should not see her in the autocomplete results
         $this->goIntoShareAutocompleteIframe();
         $this->waitUntilISee('.autocomplete-content.loaded');
         $this->assertElementContainsText('.autocomplete-content.loaded', 'No user found');
@@ -596,7 +596,7 @@ class PasswordShareTest extends PassboltTestCase
         // And I can see the save button is disabled
         $this->assertVisible('#js_rs_share_save.disabled');
 
-        // Then I should not see anymore the changes feedback
+        // Then  I should not see anymore the changes feedback
         $this->assertElementNotContainText(
             $this->findByCss('.share-password-dialog #js_permissions_changes'),
             'You need to save to apply the changes'
@@ -605,7 +605,7 @@ class PasswordShareTest extends PassboltTestCase
         // When I search again Betty
         $this->searchAroToGrant($resource, $shareWithUser['name'], $user);
 
-        // Then I should see her in the autocomplete results
+        // Then  I should see her in the autocomplete results
         $this->goIntoShareAutocompleteIframe();
         $this->find($shareWithUser['id']);
         $this->goOutOfIframe();
@@ -618,17 +618,17 @@ class PasswordShareTest extends PassboltTestCase
      * Given I am Carol
      * And I am logged in on the password workspace
      * When I go to the sharing dialog of a password I own
-     * Then I can see Betty has no right on the password
+     * Then  I can see Betty has no right on the password
      * When I give read access to betty for a password I own
-     * Then I can see Betty has read access on the password
+     * Then  I can see Betty has read access on the password
      * When I logout
      * And I am Betty
      * And I am logged in on the password workspace
      * And I click on a password shared with me
      * And I click on the link 'copy password'
-     * Then I can see the master key dialog
+     * Then  I can see the master key dialog
      * When I enter my passphrase and click submit
-     * Then I can see a success message telling me the password was copied to clipboard
+     * Then  I can see a success message telling me the password was copied to clipboard
      * And      the content of the clipboard is valid
      */
     public function testSharePasswordWithUserAndView() 
@@ -652,7 +652,7 @@ class PasswordShareTest extends PassboltTestCase
         );
         $this->gotoSharePassword(Uuid::get('resource.id.april'));
 
-        // Then I can see Betty has no right on the password
+        // Then  I can see Betty has no right on the password
         $this->assertElementNotContainText(
             $this->findByCss('#js_permissions_list'),
             'ada@passbolt.com'
@@ -661,7 +661,7 @@ class PasswordShareTest extends PassboltTestCase
         // When I give read access to betty for a password I own
         $this->sharePassword($resource, 'ada@passbolt.com', $user);
 
-        // Then I can see Betty has read access on the password
+        // Then  I can see Betty has read access on the password
         $this->assertPermission($resource, 'ada@passbolt.com', 'can read');
 
         // When I logout
@@ -680,13 +680,13 @@ class PasswordShareTest extends PassboltTestCase
         // And I click on the link 'copy password'
         $this->click('js_wk_menu_secretcopy_button');
 
-        // Then I can see the master key dialog
+        // Then  I can see the master key dialog
         $this->assertMasterPasswordDialog($user);
 
         // When I enter my passphrase and click submit
         $this->enterMasterPassword($user['MasterPassword']);
 
-        // Then I can see a success message telling me the password was copied to clipboard
+        // Then  I can see a success message telling me the password was copied to clipboard
         $this->assertNotification('plugin_clipboard_copy_success');
 
         // And the content of the clipboard is valid
@@ -702,7 +702,7 @@ class PasswordShareTest extends PassboltTestCase
      * When I go to the sharing dialog of a password I own
      * When I give read access to betty for a password I own
      * And I access last email sent to betty
-     * Then I should see the expected email title
+     * Then  I should see the expected email title
      *     And I should see the expected email content
      */
     public function testSharePasswordWithUserNotification() 
@@ -732,7 +732,7 @@ class PasswordShareTest extends PassboltTestCase
         // When I access last email sent to the other group manager
         $this->getUrl('seleniumtests/showlastemail/' . $betty['Username']);
 
-        // Then I should see the expected email title
+        // Then  I should see the expected email title
         $this->assertMetaTitleContains(sprintf('%s shared %s with you', $user['FirstName'], $resource['name']));
 
         // And I should see the expected email content
@@ -745,9 +745,9 @@ class PasswordShareTest extends PassboltTestCase
      * Given I am Carol
      * And I am logged in on the password workspace
      * When I go to the sharing dialog of a password I own
-     * Then I can see Betty has no right on the password
+     * Then  I can see Betty has no right on the password
      * When I give read access to betty for a password I own
-     * Then I can see Betty is in the sidebar, under the permissions section
+     * Then  I can see Betty is in the sidebar, under the permissions section
      */
     public function testSharePasswordWithUserAndViewNewPermissionInSidebar() 
     {
@@ -770,7 +770,7 @@ class PasswordShareTest extends PassboltTestCase
         );
         $this->gotoSharePassword(Uuid::get('resource.id.gnupg'));
 
-        // Then I can see Betty has no right on the password
+        // Then  I can see Betty has no right on the password
         $this->assertElementNotContainText(
             $this->findByCss('#js_permissions_list'),
             'betty@passbolt.com'
@@ -790,17 +790,17 @@ class PasswordShareTest extends PassboltTestCase
      * Given I am Carol
      * And I am logged in on the password workspace
      * When I go to the sharing dialog of a password I own
-     * Then I can see Accounting has no right on the password
+     * Then  I can see Accounting has no right on the password
      * When I give read access to Accounting for a password I own
-     * Then I can see Accouning has read access on the password
+     * Then  I can see Accouning has read access on the password
      * When I logout
      * And I am Frances member of Accounting
      * And I am logged in on the password workspace
      * And I click on a password shared with me
      * And I click on the link 'copy password'
-     * Then I can see the master key dialog
+     * Then  I can see the master key dialog
      * When I enter my passphrase and click submit
-     * Then I can see a success message telling me the password was copied to clipboard
+     * Then  I can see a success message telling me the password was copied to clipboard
      * And      the content of the clipboard is valid
      */
     public function testSharePasswordWithGroupAndView() 
@@ -824,7 +824,7 @@ class PasswordShareTest extends PassboltTestCase
         );
         $this->gotoSharePassword($resource['id']);
 
-        // Then I can see accounting has no right on the password
+        // Then  I can see accounting has no right on the password
         $this->assertElementNotContainText(
             $this->findByCss('#js_permissions_list'),
             'Accounting'
@@ -833,7 +833,7 @@ class PasswordShareTest extends PassboltTestCase
         // When I give read access to Accounting for a password I own
         $this->sharePassword($resource, 'Accounting', $user);
 
-        // Then I can see Accounting has read access on the password
+        // Then  I can see Accounting has read access on the password
         $this->assertPermission($resource, 'Accounting', 'can read');
 
         // When I logout
@@ -852,13 +852,13 @@ class PasswordShareTest extends PassboltTestCase
         // And I click on the link 'copy password'
         $this->click('js_wk_menu_secretcopy_button');
 
-        // Then I can see the master key dialog
+        // Then  I can see the master key dialog
         $this->assertMasterPasswordDialog($user);
 
         // When I enter my passphrase and click submit
         $this->enterMasterPassword($user['MasterPassword']);
 
-        // Then I can see a success message telling me the password was copied to clipboard
+        // Then  I can see a success message telling me the password was copied to clipboard
         $this->assertNotification('plugin_clipboard_copy_success');
 
         // And the content of the clipboard is valid
@@ -874,7 +874,7 @@ class PasswordShareTest extends PassboltTestCase
      * When I go to the sharing dialog of a password I own
      * When I give read access to the group Freelance for a password I own
      * And I access last email sent to a member of the group
-     * Then I should see the expected email title
+     * Then  I should see the expected email title
      *     And I should see the expected email content
      */
     public function testSharePasswordWithGroupNotification() 
@@ -905,7 +905,7 @@ class PasswordShareTest extends PassboltTestCase
         // When I access last email sent to the other group manager
         $this->getUrl('seleniumtests/showlastemail/' . $jean['Username']);
 
-        // Then I should see the expected email title
+        // Then  I should see the expected email title
         $this->assertMetaTitleContains(sprintf('%s shared %s with you', $user['FirstName'], $resource['name']));
 
         // And I should see the expected email content
@@ -920,7 +920,7 @@ class PasswordShareTest extends PassboltTestCase
      * And I am logged in on the password workspace
      * When I go to the sharing dialog of a password I own
      * And I remove the access for a user
-     * Then I can see a success message
+     * Then  I can see a success message
      * When I logout and I login with the user who lost the access on the password
      * And I go to the password workspace
      * And I shouldn't see anymore the password in the list
@@ -946,7 +946,7 @@ class PasswordShareTest extends PassboltTestCase
         );
         $this->gotoSharePassword($resource['id']);
 
-        // Then I can see freelancer has a permission on the password
+        // Then  I can see freelancer has a permission on the password
         $this->assertElementContainsText(
             $this->findByCss('#js_permissions_list'),
             'Freelancer'
@@ -968,7 +968,7 @@ class PasswordShareTest extends PassboltTestCase
         // And I go to the password workspace
         $this->gotoWorkspace('password');
 
-        // Then I shouldn't see anymore the password in the list
+        // Then  I shouldn't see anymore the password in the list
         $this->assertElementNotContainText(
             $this->find('#js_wsp_pwd_browser'),
             $resource['name']
@@ -981,9 +981,9 @@ class PasswordShareTest extends PassboltTestCase
      * Given I am Ada
      * And I am logged in on the password workspace
      * When I go to the sharing dialog of a password I own
-     * Then I can see the group has no right on the password
+     * Then  I can see the group has no right on the password
      * When I give read access to a group for a password I own
-     * Then I can see the group is in the sidebar, under the permissions section
+     * Then  I can see the group is in the sidebar, under the permissions section
      */
     public function testSharePasswordWithGroupAndViewNewPermissionInSidebar() 
     {
@@ -1006,7 +1006,7 @@ class PasswordShareTest extends PassboltTestCase
         );
         $this->gotoSharePassword($resource['id']);
 
-        // Then I can see the group has no right on the password
+        // Then  I can see the group has no right on the password
         $this->assertElementNotContainText(
             $this->findByCss('#js_permissions_list'),
             'Accounting'
@@ -1025,10 +1025,10 @@ class PasswordShareTest extends PassboltTestCase
      * Given I am Carol
      * And I am logged in on the password workspace
      * When I go to the sharing dialog of a password I own
-     * Then I can see Betty has update right on the password
+     * Then  I can see Betty has update right on the password
      * When I change the permission of Betty to read access only
      * And I should see the password remains selected
-     * Then I can see Betty has read access on the password
+     * Then  I can see Betty has read access on the password
      */
     public function testEditPasswordPermission() 
     {
@@ -1052,7 +1052,7 @@ class PasswordShareTest extends PassboltTestCase
         );
         $this->gotoSharePassword(Uuid::get('resource.id.apache'));
 
-        // Then I can see Betty has update right on the password
+        // Then  I can see Betty has update right on the password
         $this->assertPermission($resource, 'betty@passbolt.com', 'can update');
 
         // When I change the permission of Betty to read access only
@@ -1071,10 +1071,10 @@ class PasswordShareTest extends PassboltTestCase
      * Given I am Carol
      * And I am logged in on the password workspace
      * When I go to the sharing dialog of a password I own
-     * Then I can see Betty has update right on the password
+     * Then  I can see Betty has update right on the password
      * When I delete the permission of Betty
      * And I should see the password remains selected
-     * Then I can see Betty has no right anymore
+     * Then  I can see Betty has no right anymore
      */
     public function testDeletePasswordPermission() 
     {
@@ -1098,7 +1098,7 @@ class PasswordShareTest extends PassboltTestCase
         );
         $this->gotoSharePassword($resourceId);
 
-        // Then I can see Betty has update right on the password
+        // Then  I can see Betty has update right on the password
         $this->assertPermission($resource, 'betty@passbolt.com', 'can update');
 
         // When I delete the permission of Betty
@@ -1110,7 +1110,7 @@ class PasswordShareTest extends PassboltTestCase
         // And I go to the sharing dialog of a password I update the permissions
         $this->gotoSharePassword(Uuid::get('resource.id.apache'));
 
-        // Then I can see Betty has no right anymore
+        // Then  I can see Betty has no right anymore
         $this->assertElementNotContainText(
             $this->findByCss('#js_permissions_list'),
             'betty@passbolt.com'
@@ -1124,26 +1124,26 @@ class PasswordShareTest extends PassboltTestCase
      * Given I am Ada
      * And I am logged in on the password workspace
      * When I go to the sharing dialog of a password I own
-     * Then I can see the permission type dropdown of the owner Ada is disabled
+     * Then  I can see the permission type dropdown of the owner Ada is disabled
      * And I can see the permission delete button of the owner Ada is disabled
      * When I change the permission of Betty to owner access
-     * Then I can see the permission type dropdown of the owner Ada is enabled
+     * Then  I can see the permission type dropdown of the owner Ada is enabled
      * And I can see the permission delete button of the owner Ada is enabled
      * And I can see the permission type dropdown of the owner Betty is enabled
      * And I can see the permission delete button of the owner Betty is enabled
      * When        I delete the permission of Betty
-     * Then I can see the permission type dropdown of the owner Ada is disabled
+     * Then  I can see the permission type dropdown of the owner Ada is disabled
      * And I can see the permission delete button of the owner Ada is disabled
      * When I add a temporary permission for Frances
      * And I change the permission of Frances to owner access
-     * Then I can see the permission type dropdown of the owner Ada is enabled
+     * Then  I can see the permission type dropdown of the owner Ada is enabled
      * And I can see the permission delete button of the owner Ada is enabled
      * And I can see the permission type dropdown of the owner Betty is enabled
      * And I can see the permission delete button of the owner Betty is enabled
      * When I click on the save button
-     * Then I see the passphrase dialog
+     * Then  I see the passphrase dialog
      * When I enter the passphrase and click submit
-     * Then I wait until I don't see the encryption dialog anymore.
+     * Then  I wait until I don't see the encryption dialog anymore.
      * And I see a notice message that the operation was a success
      */
     public function testAtLeastOneOwner() 
@@ -1170,7 +1170,7 @@ class PasswordShareTest extends PassboltTestCase
         );
         $this->gotoSharePassword($resourceId);
 
-        // Then I can see the permission type dropdown of the owner Ada is disabled
+        // Then  I can see the permission type dropdown of the owner Ada is disabled
         $permissionAdaId = Uuid::get('permission.id.' . $resourceId . '-' . $userAda['id']);
         $permissionBettyId = Uuid::get('permission.id.' . $resourceId . '-' . $userBetty['id']);
         $this->assertDisabled('js_share_perm_type_' . $permissionAdaId);
@@ -1181,7 +1181,7 @@ class PasswordShareTest extends PassboltTestCase
         // When I change the permission of Betty to owner access
         $this->editTemporaryPermission($resource, 'betty@passbolt.com', 'is owner', $userAda);
 
-        // Then I can see the permission type dropdown of the owner Ada is enabled
+        // Then  I can see the permission type dropdown of the owner Ada is enabled
         $this->assertVisible('#js_share_perm_type_' . $permissionAdaId);
         $this->assertNotVisible('#js_share_perm_type_' . $permissionAdaId . '.disabled');
 
@@ -1200,7 +1200,7 @@ class PasswordShareTest extends PassboltTestCase
         // When I delete the permission of Betty
         $this->deleteTemporaryPermission($resource, 'betty@passbolt.com');
 
-        // Then I can see the permission type dropdown of the owner Ada is disabled
+        // Then  I can see the permission type dropdown of the owner Ada is disabled
         $this->waitUntilDisabled('#js_share_perm_type_' . $permissionAdaId);
 
         // And I can see the permission delete button of the owner Ada is disabled
@@ -1213,7 +1213,7 @@ class PasswordShareTest extends PassboltTestCase
         // And I change the permission of Frances to owner access
         $this->editTemporaryPermission($resource, 'frances@passbolt.com', 'is owner', $userAda);
 
-        // Then I can see the permission type dropdown of the owner Ada is enabled
+        // Then  I can see the permission type dropdown of the owner Ada is enabled
         $this->assertVisible('#js_share_perm_type_' . $permissionAdaId);
         $this->assertNotVisible('#js_share_perm_type_' . $permissionAdaId . '.disabled');
 
@@ -1232,7 +1232,7 @@ class PasswordShareTest extends PassboltTestCase
         // When I click on the save button
         $this->click('js_rs_share_save');
 
-        // Then I see the passphrase dialog
+        // Then  I see the passphrase dialog
         $this->assertMasterPasswordDialog($userAda);
 
         // When I enter the passphrase and click submit
@@ -1293,7 +1293,7 @@ class PasswordShareTest extends PassboltTestCase
         $this->click('js_rs_share_save');
         $this->waitCompletion();
 
-        // Then I see a notice message that the operation was a success
+        // Then  I see a notice message that the operation was a success
         $this->assertNotification('app_share_update_success');
 
         // And I should not see the share password dialog
@@ -1307,7 +1307,7 @@ class PasswordShareTest extends PassboltTestCase
      * And I am logged in on the password workspace
      * When I go to the sharing dialog of a password I own
      * And I give read access to betty for a password I own
-     * Then I can see Betty has read access on the password
+     * Then  I can see Betty has read access on the password
      *
      * When I login as Admin
      * And I go on the user workspace
@@ -1315,7 +1315,7 @@ class PasswordShareTest extends PassboltTestCase
      * And I click on the delete button
      * Then        I should see confirmation dialog
      * When        I click ok in confirmation dialog.
-     * Then I should see a success notification message saying the user is deleted
+     * Then  I should see a success notification message saying the user is deleted
      *
      * When I logout
      * And I login as Ada
@@ -1350,7 +1350,7 @@ class PasswordShareTest extends PassboltTestCase
         // And I give read access to betty for a password I own
         $this->sharePassword($resource, $userU['Username'], $userA);
 
-        // Then I can see Betty has read access on the password
+        // Then  I can see Betty has read access on the password
         $this->assertPermission($resource, $userU['Username'], 'can read');
 
         // When I login as Admin
@@ -1365,16 +1365,16 @@ class PasswordShareTest extends PassboltTestCase
         // When I click on a user
         $this->clickUser($userU['id']);
 
-        // Then I click on the delete button
+        // Then  I click on the delete button
         $this->click('js_user_wk_menu_deletion_button');
 
-        // Then I should see confirmation dialog
+        // Then  I should see confirmation dialog
         $this->assertConfirmationDialog('Do you really want to delete user ?');
 
         // When	I click ok in confirmation dialog.
         $this->confirmActionInConfirmationDialog();
 
-        // Then I should see a success notification message saying the user is deleted
+        // Then  I should see a success notification message saying the user is deleted
         $this->assertNotification('app_users_delete_success');
 
         // When I logout
@@ -1388,7 +1388,7 @@ class PasswordShareTest extends PassboltTestCase
         // When I go to the sharing dialog of a password I own
         $this->gotoSharePassword($resource['id']);
 
-        // Then I can see that Ada is owner
+        // Then  I can see that Ada is owner
         $this->assertPermission($resource, $userA['Username'], 'is owner', ['closeDialog' => false]);
 
         // And I don't see France in the list of permissions
@@ -1403,19 +1403,19 @@ class PasswordShareTest extends PassboltTestCase
      * When I open a new tab and go to passbolt url
      * And I switch back to the first tab
      * And I go to the sharing dialog of a password I own
-     * Then I can see Betty has update right on the password
+     * Then  I can see Betty has update right on the password
      * When I change the permission of Betty to read access only
      * Then        I should see the password remains selected
      * And I can see Betty has read access on the password
      * When I switch to the second tab
      * And I go to the sharing dialog of a password I own
-     * Then I can see Betty has read access on the password
+     * Then  I can see Betty has read access on the password
      * When I change the permission of Betty to owner
-     * Then I should see the password remains selected
+     * Then  I should see the password remains selected
      * And I can see Betty has read access on the password
      * When I switch to the first tab
      * And I go to the sharing dialog of a password I own
-     * Then I can see Betty has read access on the password
+     * Then  I can see Betty has read access on the password
      */
     public function testMultipleTabsEditPasswordPermission() 
     {
@@ -1445,13 +1445,13 @@ class PasswordShareTest extends PassboltTestCase
         );
         $this->gotoSharePassword(Uuid::get('resource.id.apache'));
 
-        // Then I can see Betty has update right on the password
+        // Then  I can see Betty has update right on the password
         $this->assertPermission($resource, 'betty@passbolt.com', 'can update', ['closeDialog' => false]);
 
         // When I change the permission of Betty to read access only
         $this->editPermission($resource, 'betty@passbolt.com', 'can read', $user);
 
-        // Then I should see the password remains selected
+        // Then  I should see the password remains selected
         $this->assertTrue($this->isPasswordSelected($resourceId));
 
         // And I can see Betty has read access on the password
@@ -1463,13 +1463,13 @@ class PasswordShareTest extends PassboltTestCase
         // And I go to the sharing dialog of a password I own
         $this->gotoSharePassword(Uuid::get('resource.id.apache'));
 
-        // Then I can see Betty has read access on the password
+        // Then  I can see Betty has read access on the password
         $this->assertPermission($resource, 'betty@passbolt.com', 'can read', ['closeDialog' => false]);
 
         // When I change the permission of Betty to owner
         $this->editPermission($resource, 'betty@passbolt.com', 'is owner', $user);
 
-        // Then I should see the password remains selected
+        // Then  I should see the password remains selected
         $this->assertTrue($this->isPasswordSelected($resourceId));
 
         // And I can see Betty has read access on the password
@@ -1481,7 +1481,7 @@ class PasswordShareTest extends PassboltTestCase
         // And I go to the sharing dialog of a password I own
         $this->gotoSharePassword(Uuid::get('resource.id.apache'));
 
-        // Then I can see Betty has read access on the password
+        // Then  I can see Betty has read access on the password
         $this->assertPermission($resource, 'betty@passbolt.com', 'is owner');
     }
 
@@ -1496,7 +1496,7 @@ class PasswordShareTest extends PassboltTestCase
      * When        I restart the browser
      * And I go to the sharing dialog of a password I own
      * And I give read access to betty for a password I own
-     * Then I can see Betty has read access on the password
+     * Then  I can see Betty has read access on the password
      */
     public function testRestartBrowserAndSharePassword() 
     {
@@ -1526,7 +1526,7 @@ class PasswordShareTest extends PassboltTestCase
         // And I give read access to betty for a password I own
         $this->sharePassword($resource, 'betty@passbolt.com', $user);
 
-        // Then I can see Betty has read access on the password
+        // Then  I can see Betty has read access on the password
         $this->assertPermission($resource, 'betty@passbolt.com', 'can read');
     }
 
@@ -1543,7 +1543,7 @@ class PasswordShareTest extends PassboltTestCase
      * When        I close and restore the tab
      * And I go to the sharing dialog of a password I own
      * And I give read access to betty for a password I own
-     * Then I can see Betty has read access on the password
+     * Then  I can see Betty has read access on the password
      */
     public function testCloseRestoreTabAndSharePassword() 
     {
@@ -1576,7 +1576,7 @@ class PasswordShareTest extends PassboltTestCase
         // And I give read access to betty for a password I own
         $this->sharePassword($resource, 'betty@passbolt.com', $user);
 
-        // Then I can see Betty has read access on the password
+        // Then  I can see Betty has read access on the password
         $this->assertPermission($resource, 'betty@passbolt.com', 'can read');
     }
 

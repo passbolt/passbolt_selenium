@@ -1,19 +1,29 @@
 <?php
 /**
- * PassboltSetup Test Case
- * A specialized class to test the setup of passbolt.
- * It contains a set of functions useful to test specific elements of the setup.
+ * Passbolt ~ Open source password manager for teams
+ * Copyright (c) Passbolt SARL (https://www.passbolt.com)
  *
- * @copyright (c) 2017 Passbolt SARL
- * @licence   GNU Affero General Public License http://www.gnu.org/licenses/agpl-3.0.en.html
+ * Licensed under GNU Affero General Public License version 3 of the or any later version.
+ * For full copyright and license information, please see the LICENSE.txt
+ * Redistributions of files must retain the above copyright notice.
+ *
+ * @copyright Copyright (c) Passbolt SARL (https://www.passbolt.com)
+ * @license   https://opensource.org/licenses/AGPL-3.0 AGPL License
+ * @link      https://www.passbolt.com Passbolt(tm)
+ * @since     2.0.0
  */
 namespace App;
 
+use App\Common\Config;
 use Facebook\WebDriver\WebDriverBy;
+use PHPUnit_Framework_Assert;
+use Data\Fixtures\User;
 
 class PassboltSetupTestCase extends PassboltTestCase
 {
-
+    /**
+     * @var array various info to check for each section of the setup
+     */
     public $sections = [
         'domain_check' => [
             'title'     => 'Welcome to passbolt! Let\'s take 5 min to setup your system.',
@@ -95,8 +105,6 @@ class PassboltSetupTestCase extends PassboltTestCase
      * Wait until the requested section appears.
      *
      * @param $sectionName
-     *
-     * @throws Exception
      */
     protected function waitForSection($sectionName) 
     {
@@ -127,7 +135,7 @@ class PassboltSetupTestCase extends PassboltTestCase
                 );
             }
             catch (Exception $e) {
-                throw new Exception("Section $sectionName could not be found, and debug couldn't be retrieved");
+                PHPUnit_Framework_Assert::fail("Section $sectionName could not be found, and debug couldn't be retrieved");
             }
 
             // Retrieve debug info.
@@ -136,7 +144,8 @@ class PassboltSetupTestCase extends PassboltTestCase
             $this->waitUntilISee('#debug-info');
             $debug = $this->find('#debug-info')->getText();
 
-            throw new Exception("Section $sectionName could not be reached. \n Debug: ". print_r($debug, true));
+            $msg = "Section $sectionName could not be reached. \n Debug: ". print_r($debug, true);
+            PHPUnit_Framework_Assert::fail($msg);
         }
     }
 
@@ -146,20 +155,19 @@ class PassboltSetupTestCase extends PassboltTestCase
      * @param $sectionName
      *   name of the section
      *
-     * @param string      $info
+     * @param string $info
      *   information requested. (title, subtitle, etc..)
      *
      * @return mixed
-     * @throws Exception
      */
     protected function getSectionInfo($sectionName, $info = '') 
     {
         if (!isset($this->sections[$sectionName])) {
-            throw new Exception('The section name provided doesnt exist');
+            PHPUnit_Framework_Assert::fail('The section name provided doesnt exist');
         }
         if ($info != '') {
             if (!isset($this->sections[$sectionName][$info])) {
-                throw new Exception('The info requested doesnt exist in that section');
+                PHPUnit_Framework_Assert::fail('The info requested doesnt exist in that section');
             }
             return $this->sections[$sectionName][$info];
         }
@@ -167,13 +175,14 @@ class PassboltSetupTestCase extends PassboltTestCase
     }
 
     /**
-     * Scenario :   As an AP I should be able to use the domain verification step of the setup
-     * Given        I am an anonymous user with the plugin on the first page of the setup
-     * Then         the button Cancel should not be visible
-     * And          The button Next should be disabled
-     * And          The domain value should be same as the domain I enter initially
-     * When         I check the domain validation checkbox
-     * Then         the button Next should be enabled
+     * Scenario: As an AP I should be able to use the domain verification step of the setup
+     *
+     * Given I am an anonymous user with the plugin on the first page of the setup
+     * Then  the button Cancel should not be visible
+     * And   The button Next should be disabled
+     * And   The domain value should be same as the domain I enter initially
+     * When  I check the domain validation checkbox
+     * Then  the button Next should be enabled
      */
     protected function completeStepDomainVerification() 
     {
@@ -250,7 +259,7 @@ class PassboltSetupTestCase extends PassboltTestCase
         $this->findById('key-info-ok')
             ->click();
 
-        // Then I should not see the dialog anymore.
+        // Then  I should not see the dialog anymore.
         $this->assertNotVisible('dialog-server-key-info');
 
         // If I open the dialog again.
@@ -260,7 +269,7 @@ class PassboltSetupTestCase extends PassboltTestCase
         $this->findByCss('.dialog-wrapper a.dialog-close')
             ->click();
 
-        // Then I should not see the dialog anymore.
+        // Then  I should not see the dialog anymore.
         $this->assertNotVisible('dialog-server-key-info');
 
         // Check box domain check.
@@ -274,15 +283,14 @@ class PassboltSetupTestCase extends PassboltTestCase
     }
 
     /**
-     * Scenario :   As an AP I should be able to prepare the creation of my keys
-     * Given        I am on the step 2 "Create a new key" of the setup
-     * And          I should see the step 2 : create a new key
-     * And          I should see "John Doe" in the field Owner name
-     * And          I should see "johndoe@passbolt.com" in the field email
-     * And          I should see that the field email is disabled
-     * When         I enter a comment in the comment field of the page
+     * Scenario: As an AP I should be able to prepare the creation of my keys
      *
-     * @throws Exception
+     * Given I am on the step 2 "Create a new key" of the setup
+     * And   I should see the step 2 : create a new key
+     * And   I should see "John Doe" in the field Owner name
+     * And   I should see "johndoe@passbolt.com" in the field email
+     * And   I should see that the field email is disabled
+     * When  I enter a comment in the comment field of the page
      */
     protected function completeStepPrepareCreateKey($user) 
     {
@@ -314,16 +322,14 @@ class PassboltSetupTestCase extends PassboltTestCase
     }
 
     /**
-     * Scenario :      As an AP using the setup, I should be able to enter my passphrase for the protected key.
-     * Given           I am at the step asking me to enter my passphrase.
-     * When            I fill up a passphrase
-     * Then            I should see that the strength is getting updated
-     * And             I should see that the strength progress bar is getting updated
-     * And             I should not see the passphrase in clear
-     * When            I click on the show password button
-     * Then            I should see the password in clear
-     *
-     * @throws Exception
+     * Scenario: As an AP using the setup, I should be able to enter my passphrase for the protected key.
+     * Given I am at the step asking me to enter my passphrase.
+     * When  I fill up a passphrase
+     * Then  I should see that the strength is getting updated
+     * And   I should see that the strength progress bar is getting updated
+     * And   I should not see the passphrase in clear
+     * When  I click on the show password button
+     * Then  I should see the password in clear
      */
     protected function completeStepEnterMasterPassword($user) 
     {
@@ -357,7 +363,7 @@ class PassboltSetupTestCase extends PassboltTestCase
     }
 
     /**
-     * Scenario :   As an AP using the setup I should be able to import my own key.
+     * Scenario: As an AP using the setup I should be able to import my own key.
      * Given        I am at the step 2 and I select import my key, instead of generating one
      * Then         I should see a textarea to put the key content in it.
      * And          the Next button should be disabled
@@ -448,7 +454,7 @@ class PassboltSetupTestCase extends PassboltTestCase
     }
 
     /**
-     * Scenario :   As an AP using the setup I should be able to generate and download the key.
+     * Scenario: As an AP using the setup I should be able to generate and download the key.
      * Given        I am on the step that generates a private key
      * Then         I should see that the key is getting generated, and that the Next button is in processing state
      * When         The key has finished generating
@@ -489,7 +495,7 @@ class PassboltSetupTestCase extends PassboltTestCase
     }
 
     /**
-     * Scenario :   As an AP using the setup, I should be able to choose a security token
+     * Scenario: As an AP using the setup, I should be able to choose a security token
      * Given        I am at the security token step
      * Then         I should see that a security token code has been chosen for me
      * And          I should see that a security token bg color has been chosen for me
@@ -521,12 +527,11 @@ class PassboltSetupTestCase extends PassboltTestCase
     }
 
     /**
-     * Scenario :   As an AP using the setup, I should be redirected to the login page at the end of the setup.
-     * Given        I am at the last step
-     * Then         I should see a message telling me that I am being redirected.
-     * And          I should see the login form after I am redirected.
+     * Scenario: As an AP using the setup, I should be redirected to the login page at the end of the setup.
      *
-     * @throws Exception
+     * Given I am at the last step
+     * Then  I should see a message telling me that I am being redirected.
+     * And   I should see the login form after I am redirected.
      */
     protected function completeStepLoginRedirection() 
     {
@@ -549,14 +554,13 @@ class PassboltSetupTestCase extends PassboltTestCase
         try{
             $this->findByCss('.users.login.form');
         } catch(Exception $e) {
-            $this->fail('At the end of setup there should have been a redirection to the login page');
+            $msg = 'At the end of setup there should have been a redirection to the login page';
+            PHPUnit_Framework_Assert::fail($msg);
         }
     }
 
     /**
      * Register steps
-     *
-     * @throws Exception
      */
     protected function completeRegistration($user = null) 
     {

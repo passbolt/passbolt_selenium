@@ -14,12 +14,14 @@
  */
 namespace App;
 
+use App\Common\Actions\ScriptedActionsTrait;
 use App\Common\Config;
 use App\Common\RecordableTestCase;
 
 class AuthenticatedTestCase extends RecordableTestCase
 {
     public $currentUser;
+    use ScriptedActionsTrait;
 
     /**
      * Put the focus inside the login iframe

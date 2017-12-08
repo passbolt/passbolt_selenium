@@ -396,7 +396,7 @@ class Snapshot
     }
 
     /**
-     * @param mixed $variable
+     * @param  mixed $variable
      * @return bool
      * @todo   Implement this properly
      */

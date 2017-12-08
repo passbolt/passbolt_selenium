@@ -23,7 +23,7 @@ class ADGroupCreateTest extends PassboltTestCase
 {
 
     /**
-     * Scenario :   As an administrator I can click on create group and see that the create group dialog exists.
+     * Scenario: As an administrator I can click on create group and see that the create group dialog exists.
      * Given        I am admin
      * And          I am logged in
      * When         I go to user workspace
@@ -55,7 +55,7 @@ class ADGroupCreateTest extends PassboltTestCase
         // Go to user workspace
         $this->gotoWorkspace('user');
 
-        // Then I see the create button
+        // Then  I see the create button
         $this->assertElementContainsText(
             $this->findByCss('.main-action-wrapper'),
             'create'
@@ -64,7 +64,7 @@ class ADGroupCreateTest extends PassboltTestCase
         // Create a new group
         $this->gotoCreateGroup();
 
-        // Then I see the create group dialog
+        // Then  I see the create group dialog
         $this->assertVisible('.edit-group-dialog');
 
         // And I see the title is set to "Create group"
@@ -126,17 +126,17 @@ class ADGroupCreateTest extends PassboltTestCase
      * And I am logged in
      * And I am on the people workspace
      * When I click on the create group button
-     * Then I see the create group dialog
+     * Then  I see the create group dialog
      * When I click on the cancel button
-     * Then I should not see the create group dialog
+     * Then  I should not see the create group dialog
      * When I click on the create group button
-     * Then I see the create group dialog
+     * Then  I see the create group dialog
      * When I click on the close dialog button
-     * Then I should not see the create group dialog
+     * Then  I should not see the create group dialog
      * When I click on the create group button
-     * Then I see the create group dialog
+     * Then  I see the create group dialog
      * When I press the keyboard escape key
-     * Then I should not see the create group dialog
+     * Then  I should not see the create group dialog
      */
     public function testCreateGroupDialogOpenClose() 
     {
@@ -153,44 +153,44 @@ class ADGroupCreateTest extends PassboltTestCase
         // Create a new group
         $this->gotoCreateGroup();
 
-        // Then I see the create group dialog
+        // Then  I see the create group dialog
         $this->assertVisible('.edit-group-dialog');
 
         // When I click on the cancel button
         $this->findByCss('.edit-group-dialog a.cancel')->click();
 
-        // Then I should not see the create group dialog
+        // Then  I should not see the create group dialog
         $this->assertNotVisible('.edit-group-dialog');
 
         // Create a new group
         $this->gotoCreateGroup();
 
-        // Then I see the create group dialog
+        // Then  I see the create group dialog
         $this->assertVisible('.edit-group-dialog');
 
         // When I click on the close dialog button
         $this->findByCss('.edit-group-dialog a.dialog-close')->click();
 
-        // Then I should not see the create group dialog
+        // Then  I should not see the create group dialog
         $this->assertNotVisible('.edit-group-dialog');
 
         // -- WITH ESCAPE --
         // Create a new group
         $this->gotoCreateGroup();
 
-        // Then I see the create group dialog
+        // Then  I see the create group dialog
         $this->assertVisible('.edit-group-dialog');
 
         // When I click on the escape key
         $this->pressEscape();
 
-        // Then I should not see the create group dialog
+        // Then  I should not see the create group dialog
         $this->assertTrue($this->isNotVisible('.edit-group-dialog'));
 
     }
 
     /**
-     * Scenario:    As an administrator I should not be able to create a group with an incorrect name
+     * Scenario: As an administrator I should not be able to create a group with an incorrect name
      * Given that   I am a logged in administrator
      *   And I am on the create group dialog
      * When         I click on the group name field
@@ -222,7 +222,7 @@ class ADGroupCreateTest extends PassboltTestCase
         // And I press enter
         $this->pressEnter();
 
-        // Then I see an error message saying that the name is required
+        // Then  I see an error message saying that the name is required
         $this->assertVisible('#js_field_name_feedback.error.message');
         $this->assertElementContainsText(
             $this->find('js_field_name_feedback'), 'is required'
@@ -232,7 +232,7 @@ class ADGroupCreateTest extends PassboltTestCase
         $this->inputText('js_field_name', '&');
         // And I press enter
         $this->pressEnter();
-        // Then I see an error message saying that the name contain invalid characters
+        // Then  I see an error message saying that the name contain invalid characters
         $this->assertVisible('#js_field_name_feedback.error.message');
         $this->assertElementContainsText(
             $this->find('js_field_name_feedback'), 'Alphanumeric only'
@@ -247,7 +247,7 @@ class ADGroupCreateTest extends PassboltTestCase
     }
 
     /**
-     * Scenario:    As an administrator I can't create a group with a name already used by another group
+     * Scenario: As an administrator I can't create a group with a name already used by another group
      * Given that   I am logged in as an administrator
      * And          I am on the users workspace
      * When         I create a group
@@ -284,10 +284,10 @@ class ADGroupCreateTest extends PassboltTestCase
         // And I click submit.
         $this->click('.edit-group-dialog a.button.primary');
 
-        // Then I should see a success notification message saying the group couldn't be created
+        // Then  I should see a success notification message saying the group couldn't be created
         $this->assertNotification('app_groups_add_error');
 
-        // Then I see an error message saying that the name contain invalid characters
+        // Then  I see an error message saying that the name contain invalid characters
         $this->waitUntilISee('#js_field_name_feedback.error.message');
 
         $this->assertElementContainsText(
@@ -296,7 +296,7 @@ class ADGroupCreateTest extends PassboltTestCase
     }
 
     /**
-     * Scenario:    As an administrator I can edit the group members while creating a group
+     * Scenario: As an administrator I can edit the group members while creating a group
      * Given that   I am logged in as an administrator
      *  And         I am on the users workspace
      * When         I create a new group
@@ -436,7 +436,7 @@ class ADGroupCreateTest extends PassboltTestCase
     }
 
     /**
-     * Scenario:    As an administrator I should be able to delete a group user while creating a group
+     * Scenario: As an administrator I should be able to delete a group user while creating a group
      * Given that   I am logged in as an administrator
      * When         I create a new group
      *  And         I add ada as a first member
@@ -506,7 +506,7 @@ class ADGroupCreateTest extends PassboltTestCase
     }
 
     /**
-     * Scenario:    As an administrator I should be able to create a group successfully
+     * Scenario: As an administrator I should be able to create a group successfully
      * Given that   I am a logged in administrator
      * When         I click on create button
      *  And         I select create a group
@@ -560,7 +560,7 @@ class ADGroupCreateTest extends PassboltTestCase
     }
 
     /**
-     * Scenario:    As an administrator while creating a group I can't choose inactive users as new members
+     * Scenario: As an administrator while creating a group I can't choose inactive users as new members
      * Given that   I am logged in as an administrator
      * And          I am on the user workspace
      * When         I am creating a new group
@@ -588,7 +588,7 @@ class ADGroupCreateTest extends PassboltTestCase
         $this->click('.security-token');
         $this->goOutOfIframe();
 
-        // Then I shouldn't see it in the list of proposed users
+        // Then  I shouldn't see it in the list of proposed users
         $this->goIntoAddUserAutocompleteIframe();
         $this->waitUntilISee('.autocomplete-content', '/No user found/i');
         $this->goOutOfIframe();
@@ -656,7 +656,7 @@ class ADGroupCreateTest extends PassboltTestCase
         // When I access last email sent to the group manager.
         $this->getUrl('seleniumtests/showlastemail/' . $ada['Username']);
 
-        // Then I should see the expected email title
+        // Then  I should see the expected email title
         $this->assertMetaTitleContains(sprintf('%s added you to the group %s', $user['FirstName'], $groupName));
 
         // And I should see the expected email content
@@ -668,7 +668,7 @@ class ADGroupCreateTest extends PassboltTestCase
         // When I access last email sent to the group manager.
         $this->getUrl('seleniumtests/showlastemail/' . $betty['Username']);
 
-        // Then I should see the expected email title
+        // Then  I should see the expected email title
         $this->assertMetaTitleContains(sprintf('%s added you to the group %s', $user['FirstName'], $groupName));
 
         // And I should see the expected email content

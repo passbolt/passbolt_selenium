@@ -12,7 +12,7 @@ class LUUserDeleteTest extends PassboltTestCase
 {
 
     /**
-     * Scenario :   As LU I should be able to get a clear feedback at login if my account has been deleted.
+     * Scenario: As LU I should be able to get a clear feedback at login if my account has been deleted.
      * Given        I am logged in as admin in the user workspace
      * And          I click on the user
      * And          I click on delete button
@@ -43,7 +43,7 @@ class LUUserDeleteTest extends PassboltTestCase
         $userU = User::get('ursula');
         $this->clickUser($userU['id']);
 
-        // Then I select the delete option in the contextual menu
+        // Then  I select the delete option in the contextual menu
         $this->click('js_user_wk_menu_deletion_button');
 
         // Assert that the confirmation dialog is displayed.
@@ -52,7 +52,7 @@ class LUUserDeleteTest extends PassboltTestCase
         // Click ok in confirmation dialog.
         $this->confirmActionInConfirmationDialog();
 
-        // Then I should see a success notification message saying the user is deleted
+        // Then  I should see a success notification message saying the user is deleted
         $this->assertNotification('app_users_delete_success');
 
         // Log out.

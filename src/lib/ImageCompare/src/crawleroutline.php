@@ -192,7 +192,7 @@ class CrawlerOutline implements IteratorAggregate
             $intersections += $dist > 0;
         }
 
-        // If the number of edges we passed through is odd, then it's in the polygon. 
+        // If the number of edges we passed through is odd, Then  It's in the polygon. 
         return $intersections % 2 == 0 ? -1 : 1;
     }
 

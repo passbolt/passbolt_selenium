@@ -94,7 +94,7 @@ class File_Iterator extends FilterIterator
     }
 
     /**
-     * @param string $path
+     * @param  string $path
      * @return bool
      * @since  Method available since Release 1.1.0
      */
@@ -110,7 +110,7 @@ class File_Iterator extends FilterIterator
     }
 
     /**
-     * @param string $filename
+     * @param  string $filename
      * @return bool
      * @since  Method available since Release 1.1.0
      */
@@ -120,7 +120,7 @@ class File_Iterator extends FilterIterator
     }
 
     /**
-     * @param string $filename
+     * @param  string $filename
      * @return bool
      * @since  Method available since Release 1.1.0
      */
@@ -130,9 +130,9 @@ class File_Iterator extends FilterIterator
     }
 
     /**
-     * @param string $filename
-     * @param array  $subStrings
-     * @param int    $type
+     * @param  string $filename
+     * @param  array  $subStrings
+     * @param  int    $type
      * @return bool
      * @since  Method available since Release 1.1.0
      */

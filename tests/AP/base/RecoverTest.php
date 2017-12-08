@@ -50,7 +50,7 @@ class RecoverTest extends PassboltRecoverTestCase
         // When I go to login page
         $this->getUrl('login');
 
-        // Then I should see a link to recover my account
+        // Then  I should see a link to recover my account
         $this->waitUntilISee('.information', '/Almost there, please register!/');
         $this->waitUntilISee('.actions-wrapper', '/Have an account?/');
         $this->waitUntilISee('.information .message', '/recover your account/');
@@ -58,7 +58,7 @@ class RecoverTest extends PassboltRecoverTestCase
         // When I click on the recover my account link
         $this->clickLink('Have an account?');
 
-        // Then I should see the recovery my account page
+        // Then  I should see the recovery my account page
         $this->waitUntilUrlMatches('recover');
         $this->waitUntilISee('.information', '/Recover an existing account!/');
     }
@@ -425,7 +425,7 @@ class RecoverTest extends PassboltRecoverTestCase
         // And I click on the link "Next"
         $this->clickLink('Next');
 
-        // Then I should see an error message informing me that the key is not a valid private key.
+        // Then  I should see an error message informing me that the key is not a valid private key.
         $this->waitUntilISee('#KeyErrorMessage', '/This key is not a valid private key/');
 
         // When I import a not valid key.
@@ -434,7 +434,7 @@ class RecoverTest extends PassboltRecoverTestCase
         // And I click on the link "Next"
         $this->clickLink('Next');
 
-        // Then I should see an error message informing me that the format of the key is not known.
+        // Then  I should see an error message informing me that the format of the key is not known.
         $this->waitUntilISee('#KeyErrorMessage', '/Unknown ASCII armor type/');
     }
 }

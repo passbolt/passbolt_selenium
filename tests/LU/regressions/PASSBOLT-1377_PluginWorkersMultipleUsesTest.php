@@ -32,7 +32,7 @@ class PASSBOLT1377 extends PassboltTestCase
             // And I logout
             $this->logout();
 
-            // Then I should be redirected to the login page
+            // Then  I should be redirected to the login page
             $this->waitUntilISee('.plugin-check.' . $this->_browser['type'] . '.success');
         }
     }
@@ -59,7 +59,7 @@ class PASSBOLT1377 extends PassboltTestCase
 
         for ($i=0; $i<5; $i++) {
             // And I am creating the password
-            // Then I can see a success notification
+            // Then  I can see a success notification
             $password = array(
             'name' => 'name_' . $i,
             'username' => 'username_' . $i,
@@ -103,7 +103,7 @@ class PASSBOLT1377 extends PassboltTestCase
 
         for ($i=0; $i<5; $i++) {
             // And I am editing the secret of a password I own
-            // Then I can see a success notification
+            // Then  I can see a success notification
             $r['id'] = $resource['id'];
             $r['password'] = 'password_' . $i;
             $this->editPassword($r, $user);
@@ -147,7 +147,7 @@ class PASSBOLT1377 extends PassboltTestCase
 
         for ($i=0; $i<count($shareWith); $i++) {
             // And I am editing the secret of a password I own
-            // Then I can see a success notification
+            // Then  I can see a success notification
             $r['id'] = $resource['id'];
             $r['password'] = 'password_' . $i;
             $this->sharePassword($resource, $shareWith[$i], $user);

@@ -13,9 +13,9 @@ class PASSBOLT1041 extends PassboltTestCase
      * And the database is in the default state
      * And I am logged in on the password workspace
      * And I right click on an item I own
-     * Then I can see the contextual menu
+     * Then  I can see the contextual menu
      * When I click on the edit link
-     * Then I cannot see the contextual menu
+     * Then  I cannot see the contextual menu
      */
     public function testContextualMenuMustCloseAfterClick() 
     {
@@ -32,13 +32,13 @@ class PASSBOLT1041 extends PassboltTestCase
         // And I right click on an item I own
         $this->rightClickPassword($resource['id']);
 
-        // Then I can see the contextual menu
+        // Then  I can see the contextual menu
         $this->assertVisible('js_contextual_menu');
 
         // When I click on the edit link
         $this->click('#js_password_browser_menu_edit a');
 
-        // Then I cannot see the contextual menu
+        // Then  I cannot see the contextual menu
         $this->assertNotVisible('js_contextual_menu');
     }
 

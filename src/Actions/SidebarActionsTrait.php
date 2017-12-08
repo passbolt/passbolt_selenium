@@ -17,20 +17,6 @@ namespace App\actions;
 trait SidebarActionsTrait
 {
     /**
-     * Simulate click on the toolbar passbolt icon.
-     */
-    public function clickToolbarIcon() 
-    {
-        $this->goToDebug();
-        $this->click('#simulateToolbarIcon');
-        sleep(1);
-        // Ensure the selenium works on the new tab.
-        $handles=$this->getDriver()->getWindowHandles();
-        $last_window = end($handles);
-        $this->getDriver()->switchTo()->window($last_window);
-    }
-
-    /**
      * Scroll the sidebar to bottom.
      */
     public function scrollSidebarToBottom() 

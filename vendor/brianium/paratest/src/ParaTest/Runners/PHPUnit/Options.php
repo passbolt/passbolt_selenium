@@ -180,7 +180,7 @@ class Options
     /**
      * Filter options to distinguish between paratest
      * internal options and any other options
-     * @param array $options
+     * @param  array $options
      * @return array
      */
     protected function filterOptions($options)

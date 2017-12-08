@@ -12,7 +12,7 @@ class GroupCreateTest extends PassboltTestCase
 {
 
     /**
-     * Scenario :   As a logged in user I shouldn't be able to create groups from the users workspace
+     * Scenario: As a logged in user I shouldn't be able to create groups from the users workspace
      * Given        I am a user
      * And          I am logged in
      * When         I go to user workspace
@@ -30,7 +30,7 @@ class GroupCreateTest extends PassboltTestCase
         // Go to user workspace
         $this->gotoWorkspace('user');
 
-        // Then I shouldn't see the create button
+        // Then  I shouldn't see the create button
         $this->assertElementNotContainText(
             $this->findByCss('.main-action-wrapper'),
             'create'

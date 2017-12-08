@@ -31,7 +31,7 @@ class GMGroupEditTest extends PassboltTestCase
      *
      * Given I am logged in as a group manager and I am on the users workspace
      * When I click on the contextual menu button of a group on the right
-     * Then I should see the group contextual menu
+     * Then  I should see the group contextual menu
      * And I should see the “Edit group” option
      * When        I click on “Edit group”
      * Then        I should see the Edit group dialog
@@ -48,19 +48,19 @@ class GMGroupEditTest extends PassboltTestCase
         $groupId = Uuid::get('group.id.ergonom');
         $this->click("#group_$groupId .right-cell a");
 
-        // Then I should see the group contextual menu
+        // Then  I should see the group contextual menu
         $this->assertVisible('#js_contextual_menu');
         $this->assertVisible('js_group_browser_menu_edit');
 
         // When I click on “Edit group”
         $this->click("#js_contextual_menu #js_group_browser_menu_edit a");
 
-        // Then I should see the Edit group dialog
+        // Then  I should see the Edit group dialog
         $this->waitUntilISee('.edit-group-dialog');
     }
 
     /**
-     * Scenario :   As a group manager I shouldn't be able to edit groups from the users workspace
+     * Scenario: As a group manager I shouldn't be able to edit groups from the users workspace
      *
      * Given        I am a group manager
      * And          I am on the user workspace
@@ -83,7 +83,7 @@ class GMGroupEditTest extends PassboltTestCase
         $group = Group::get(['id' => Uuid::get('group.id.ergonom')]);
         $this->clickGroup($group['id']);
 
-        // Then I should see that there is no dropdown button next to the groups
+        // Then  I should see that there is no dropdown button next to the groups
         $this->assertNotVisible("#group_{$group['id']} .right-cell a");
     }
 
@@ -94,7 +94,7 @@ class GMGroupEditTest extends PassboltTestCase
      * And I am on the user workspace
      * And I should see a “edit” button next to the Information section
      * When        I press the “Edit” button
-     * Then I should see the Edit group dialog
+     * Then  I should see the Edit group dialog
      */
     public function testEditGroupFromSidebar() 
     {
@@ -108,14 +108,14 @@ class GMGroupEditTest extends PassboltTestCase
         $group = Group::get(['id' => Uuid::get('group.id.ergonom')]);
         $this->clickGroup($group['id']);
 
-        // Then I should see a “edit” button next to the Information section
+        // Then  I should see a “edit” button next to the Information section
         $editButtonSelector = '#js_group_details #js_group_details_members #js_edit_members_button';
         $this->waitUntilISee($editButtonSelector);
 
         // When I press the “Edit” button
         $this->click($editButtonSelector);
 
-        // Then I should see the Edit group dialog
+        // Then  I should see the Edit group dialog
         $this->waitUntilISee('.edit-group-dialog');
     }
 
@@ -139,7 +139,7 @@ class GMGroupEditTest extends PassboltTestCase
         $group = Group::get(['id' => Uuid::get('group.id.accounting')]);
         $this->clickGroup($group['id']);
 
-        // Then I should not see a “edit” button next to the Information section
+        // Then  I should not see a “edit” button next to the Information section
         $editButtonSelector = '#js_group_details #js_group_details_members #js_edit_members_button';
         $this->assertNotVisible($editButtonSelector);
     }
@@ -177,17 +177,17 @@ class GMGroupEditTest extends PassboltTestCase
      * Given I am logged in as a group manager
      * And I am on the users workspace
      * When I’m editing a group
-     * Then I should see the list of users that are part of this group in the edit group dialog
+     * Then  I should see the list of users that are part of this group in the edit group dialog
      * And I should see next to each user the role that he has in the group in a select box
      * When I change the role of one simple group member to group manager
      * Then        I should see the member marked as going to be updated next to it
      * And I should see a warning message saying that the changes will be applied after clicking on save
      * When        I click on save
-     * Then I should see a confirmation message saying that the group was edited
+     * Then  I should see a confirmation message saying that the group was edited
      * And         A notification should be sent to the user that was promoted group manager
      * When I log in as the user who was promoted group manager
      * And I go to the users workspace
-     * Then I should be able to add users to the new group that I manage
+     * Then  I should be able to add users to the new group that I manage
      */
     public function testEditGroupPromoteMember() 
     {
@@ -203,7 +203,7 @@ class GMGroupEditTest extends PassboltTestCase
         $group = Group::get(['id' => Uuid::get('group.id.human_resource')]);
         $this->gotoEditGroup($group['id']);
 
-        // Then I should see the list of users that are part of this group in the edit group dialog
+        // Then  I should see the list of users that are part of this group in the edit group dialog
         // And I should see next to each user the role that he has in the group in a select box
         $groupMembers = [
         ['user_id' => User::get('ping'), 'is_admin' => true],
@@ -218,7 +218,7 @@ class GMGroupEditTest extends PassboltTestCase
         // When I change the role of one simple group member to group manager
         $this->editTemporaryGroupUserRole($promotedUser, true);
 
-        // Then I should see the member marked as going to be updated next to it
+        // Then  I should see the member marked as going to be updated next to it
         $this->assertElementContainsText(
             $this->getTemporaryGroupUserElement($promotedUser),
             'Will be updated'
@@ -230,7 +230,7 @@ class GMGroupEditTest extends PassboltTestCase
         // When I click on save
         $this->click('.edit-group-dialog a.button.primary');
 
-        // Then I should see a confirmation message saying that the group was edited
+        // Then  I should see a confirmation message saying that the group was edited
         $this->assertNotification('app_groups_edit_success');
 
         // @todo
@@ -244,7 +244,7 @@ class GMGroupEditTest extends PassboltTestCase
         // And I go to the users workspace
         $this->gotoWorkspace('user');
 
-        // Then I should be able to add users to the new group that I manage
+        // Then  I should be able to add users to the new group that I manage
         $this->gotoEditGroup($group['id']);
         $ada = User::get('ada');
         $this->searchGroupUserToAdd($ada, $promotedUser);
@@ -276,7 +276,7 @@ class GMGroupEditTest extends PassboltTestCase
         // When I change the role of one simple group member to group manager
         $this->editTemporaryGroupUserRole(User::get('thelma'), false);
 
-        // Then I should not be able to change the role of this user
+        // Then  I should not be able to change the role of this user
         $groupUserId = Uuid::get('group_user.id.human_resource-ping');
         $this->waitUntilDisabled("#js_group_user_is_admin_$groupUserId");
     }
@@ -318,7 +318,7 @@ class GMGroupEditTest extends PassboltTestCase
         $this->searchGroupUserToAdd($ada, $user);
         $this->addTemporaryGroupUser($ada);
 
-        // Then I should see that the user is added in the list of group members
+        // Then  I should see that the user is added in the list of group members
         // And I should see that his group role is “group member”
         $this->assertGroupMemberInEditDialog($group['id'], $ada);
 
@@ -334,7 +334,7 @@ class GMGroupEditTest extends PassboltTestCase
         // When I press the save button
         $this->click('.edit-group-dialog a.button.primary');
 
-        // Then I should see that the dialog disappears
+        // Then  I should see that the dialog disappears
         $this->waitUntilIDontSee('.edit-group-dialog');
 
         // And I should see a confirmation message saying that the group members have been edited
@@ -351,7 +351,7 @@ class GMGroupEditTest extends PassboltTestCase
         // And I filter the list of users with the group
         $this->clickGroup($group['id']);
 
-        // Then I should see me in the list
+        // Then  I should see me in the list
         $this->assertElementContainsText(
             $this->findByCss('#js_wsp_users_browser .tableview-content'),
             $ada['FirstName'] . ' ' . $ada['LastName']
@@ -375,14 +375,14 @@ class GMGroupEditTest extends PassboltTestCase
      * And I should see a confirmation message saying that the group members have been edited
      * When        I log in as the user that was newly added to the group
      * And I go to the passwords workspace
-     * Then I should see that the group passwords are now accessible
+     * Then  I should see that the group passwords are now accessible
      * When I click on the "chai" password
      * And I click on the button "copy password to clipboard"
      * And I enter the appropriate master key
-     * Then I should see that the password copied in the clipboard is the one corresponding to chai
+     * Then  I should see that the password copied in the clipboard is the one corresponding to chai
      * When        I go to the users workspace
      * And I filter the list of users with the group
-     * Then I should see that Ping appears in the list of group members.
+     * Then  I should see that Ping appears in the list of group members.
      */
     public function testAddGroupMemberWithPasswordsEncryption() 
     {
@@ -403,7 +403,7 @@ class GMGroupEditTest extends PassboltTestCase
         $this->searchGroupUserToAdd($ping, $user);
         $this->addTemporaryGroupUser($ping);
 
-        // Then I should see that the user is added in the list of group members
+        // Then  I should see that the user is added in the list of group members
         // And I should see that his group role is “group member”
         $this->assertGroupMemberInEditDialog($group['id'], $ping);
 
@@ -422,7 +422,7 @@ class GMGroupEditTest extends PassboltTestCase
         $this->assertMasterPasswordDialog($user);
         $this->enterMasterPassword($user['MasterPassword']);
 
-        // Then I should see that the dialog disappears
+        // Then  I should see that the dialog disappears
         $this->waitUntilIDontSee('.edit-group-dialog');
 
         // And I should see a confirmation message saying that the group members have been edited
@@ -445,13 +445,13 @@ class GMGroupEditTest extends PassboltTestCase
         // When I click on the link 'copy password'
         $this->click('js_wk_menu_secretcopy_button');
 
-        // Then I can see the master key dialog
+        // Then  I can see the master key dialog
         $this->assertMasterPasswordDialog($ping);
 
         // When I enter my passphrase and click submit
         $this->enterMasterPassword($ping['MasterPassword']);
 
-        // Then I can see a success message telling me the password was copied to clipboard
+        // Then  I can see a success message telling me the password was copied to clipboard
         $this->assertNotification('plugin_clipboard_copy_success');
 
         // And the content of the clipboard is valid
@@ -463,7 +463,7 @@ class GMGroupEditTest extends PassboltTestCase
         // And I filter the list of users with the group
         $this->clickGroup($group['id']);
 
-        // Then I should see me in the list
+        // Then  I should see me in the list
         $this->assertElementContainsText(
             $this->findByCss('#js_wsp_users_browser .tableview-content'),
             $ping['FirstName'] . ' ' . $ping['LastName']
@@ -478,15 +478,15 @@ class GMGroupEditTest extends PassboltTestCase
      * When I observe the content of the edit group dialog
      * And I should see that next to each group member there is a cross icon to remove the membership
      * When I click on the cross next to the user I want to remove
-     * Then I should see that the user disappears from the list of group members
+     * Then  I should see that the user disappears from the list of group members
      * And I should see a warning message saying that the changes will be applied only after save
      * When I press the “save” button
-     * Then I should see that the dialog disappears
+     * Then  I should see that the dialog disappears
      * And I should see a confirmation message
      * When I log in as the user that was removed from the group
      * And I go to the users workspace
      * And I filter by the group the user has been removed
-     * Then I filter by the group the user has been removed
+     * Then  I filter by the group the user has been removed
      */
     public function testRemoveGroupMember() 
     {
@@ -510,7 +510,7 @@ class GMGroupEditTest extends PassboltTestCase
         $groupUserId = Uuid::get('group_user.id.human_resource-wang');
         $this->click("#js_group_user_delete_$groupUserId");
 
-        // Then I should see that the user disappears from the list of group members
+        // Then  I should see that the user disappears from the list of group members
         $this->assertNotVisible("#$groupUserId");
 
         // And I should see a warning message saying that the changes will be applied only after save
@@ -536,7 +536,7 @@ class GMGroupEditTest extends PassboltTestCase
         // And I filter by the group the user has been removed
         $this->clickGroup($group['id']);
 
-        // Then I filter by the group the user has been removed
+        // Then  I filter by the group the user has been removed
         $this->assertElementNotContainText(
             $this->findByCss('#js_wsp_users_browser .tableview-content'),
             $removedUser['FirstName'] . ' ' . $removedUser['LastName']
@@ -596,7 +596,7 @@ class GMGroupEditTest extends PassboltTestCase
         // When I access last email sent to the group manager.
         $this->getUrl('seleniumtests/showlastemail/' . $ada['Username']);
 
-        // Then I should see the expected email title
+        // Then  I should see the expected email title
         $this->assertMetaTitleContains(sprintf('%s added you to the group %s', $user['FirstName'], $group['name']));
 
         // And I should see the expected email content
@@ -608,7 +608,7 @@ class GMGroupEditTest extends PassboltTestCase
         // When I access last email sent to the group manager.
         $this->getUrl('seleniumtests/showlastemail/' . $betty['Username']);
 
-        // Then I should see the expected email title
+        // Then  I should see the expected email title
         $this->assertMetaTitleContains(sprintf('%s added you to the group %s', $user['FirstName'], $group['name']));
 
         // And I should see the expected email content
@@ -661,7 +661,7 @@ class GMGroupEditTest extends PassboltTestCase
         // When I access last email sent to the group manager.
         $this->getUrl('seleniumtests/showlastemail/' . $grace['Username']);
 
-        // Then I should see the expected email title
+        // Then  I should see the expected email title
         $this->assertMetaTitleContains(sprintf('%s removed you from the group %s', $user['FirstName'], $group['name']));
 
         // And I should see the expected email content
@@ -717,7 +717,7 @@ class GMGroupEditTest extends PassboltTestCase
         // When I access last email sent to the group manager.
         $this->getUrl('seleniumtests/showlastemail/' . $userW['Username']);
 
-        // Then I should see the expected email
+        // Then  I should see the expected email
         $this->assertMetaTitleContains(sprintf('%s updated your group membership', $user['FirstName'], $group['name']));
         $this->assertElementContainsText('bodyTable', 'Group name: ' . $group['name']);
         $this->assertElementContainsText('bodyTable', 'New role: Group manager');
@@ -726,7 +726,7 @@ class GMGroupEditTest extends PassboltTestCase
         // When I access last email sent to the member
         $this->getUrl('seleniumtests/showlastemail/' . $userT['Username']);
 
-        // Then I should see the expected email
+        // Then  I should see the expected email
         $this->assertMetaTitleContains(sprintf('%s updated your group membership', $user['FirstName'], $group['name']));
         $this->assertElementContainsText('bodyTable', 'Group name: ' . $group['name']);
         $this->assertElementContainsText('bodyTable', 'New role: Member');
@@ -794,14 +794,14 @@ class GMGroupEditTest extends PassboltTestCase
         // When I access last email sent to me
         $this->getUrl('seleniumtests/showlastemail/' . $user['Username']);
 
-        // Then I shouldn't see any email
+        // Then  I shouldn't see any email
         $this->assertElementContainsText('body', 'No email was sent to this user');
 
         // When I access last email sent to the other group manager
         $thelma = User::get('thelma');
         $this->getUrl('seleniumtests/showlastemail/' . $thelma['Username']);
 
-        // Then I should see the expected email title
+        // Then  I should see the expected email title
         $this->assertMetaTitleContains(sprintf('%s updated members of the group %s', $user['FirstName'], $group['name']));
 
         // And I should see the expected email content

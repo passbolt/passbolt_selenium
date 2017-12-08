@@ -15,7 +15,7 @@ class PASSBOLT1039 extends PassboltTestCase
      * And I am logged in on the password workspace
      * When I create a password with very strong complexity
      * And I edit the password I just created
-     * Then I can see the complexity is set to very strong in the edit password screen
+     * Then  I can see the complexity is set to very strong in the edit password screen
      */
     public function testEditPasswordComplexityCheck() 
     {
@@ -46,7 +46,7 @@ class PASSBOLT1039 extends PassboltTestCase
 
         //$this->assertVisible('.edit-password-dialog');
         $this->goIntoSecretIframe();
-        // Then I can see the complexity is set to very strong in the edit password screen
+        // Then  I can see the complexity is set to very strong in the edit password screen
         // TODO : modify this test and uncomment the line below once a solution will be found to store the strength of the passwords.
         //$this->assertComplexity('very strong');
         $this->assertComplexity('not available');
@@ -57,7 +57,7 @@ class PASSBOLT1039 extends PassboltTestCase
         // Leave IFrame.
         $this->goOutOfIframe();
 
-        // Then I see the passphrase dialog
+        // Then  I see the passphrase dialog
         $this->assertMasterPasswordDialog($user);
 
         // When I enter the passphrase and click submit

@@ -177,7 +177,7 @@ class PHPUnit_Framework_TestResult implements Countable
     /**
      * Registers a TestListener.
      *
-     * @param PHPUnit_Framework_TestListener
+     * @param  PHPUnit_Framework_TestListener
      */
     public function addListener(PHPUnit_Framework_TestListener $listener)
     {

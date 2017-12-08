@@ -91,7 +91,7 @@ class PHPUnit_Extensions_Selenium2TestCase_SessionCommand_File
     /**
      * Creates a zip archive with the given file
      *
-     * @param  string $file_path   FQ path to file
+     * @param   string $file_path   FQ path to file
      * @return  string              Generated zip file
      */
     protected function _zipArchiveFile( $file_path )

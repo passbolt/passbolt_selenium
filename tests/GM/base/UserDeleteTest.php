@@ -46,14 +46,14 @@ class GMUserDeleteTest extends PassboltTestCase
         $this->assertConfirmationDialog('Do you really want to delete user ?');
         $this->confirmActionInConfirmationDialog();
 
-        // Then I should see a success notification message
+        // Then  I should see a success notification message
         $this->assertNotification('app_users_delete_success');
 
         // When I access last email sent to one of the group manager
         $userP = User::get('ping');
         $this->getUrl('seleniumtests/showlastemail/' . $userP['Username']);
 
-        // Then I should see the expected email title
+        // Then  I should see the expected email title
         $this->assertMetaTitleContains(sprintf('%s deleted a user', $user['FirstName']));
 
         // And I should see the expected email content
@@ -66,7 +66,7 @@ class GMUserDeleteTest extends PassboltTestCase
         $userT = User::get('thelma');
         $this->getUrl('seleniumtests/showlastemail/' . $userT['Username']);
 
-        // Then I should see the expected email title
+        // Then  I should see the expected email title
         $this->assertMetaTitleContains(sprintf('%s deleted a user', $user['FirstName']));
 
         // And I should see the expected email content

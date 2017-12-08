@@ -20,7 +20,7 @@ class UserWorkspaceTest extends PassboltTestCase
 {
     /**
      * @group saucelabs
-     * Scenario :   As a user I should be able to see the user workspace
+     * Scenario: As a user I should be able to see the user workspace
      *
      * Given        I am logged in as Ada, and I go to the user workspace
      * Then            I should not see the workspace primary menu
@@ -95,7 +95,7 @@ class UserWorkspaceTest extends PassboltTestCase
 
     /**
      * @group saucelabs
-     * Scenario :   As a user I should be able to see the users using the app
+     * Scenario: As a user I should be able to see the users using the app
      * Given        I am logged in as Ada, and I go to the user workspace
      * Then         I should see rows representing the users
      */
@@ -140,7 +140,7 @@ class UserWorkspaceTest extends PassboltTestCase
 
     /**
      * @group saucelabs
-     * Scenario :   As a user I should be able to filter the users
+     * Scenario: As a user I should be able to filter the users
      *
      * Given        I am logged in as Ada, and I go to the user workspace
      * Then         I should see the filter "All users" is selected.
@@ -185,7 +185,7 @@ class UserWorkspaceTest extends PassboltTestCase
 
     /**
      * @group saucelabs
-     * Scenario :   As a user I should be able to search a user by keywords
+     * Scenario: As a user I should be able to search a user by keywords
      *
      * Given        I am logged in as Ada, and I go to the user workspace
      * When            I fill the "app search" field with "User Test"
@@ -245,7 +245,7 @@ class UserWorkspaceTest extends PassboltTestCase
     }
 
     /**
-     * Scenario :   As a user when I filter the user workspace all users should be unselected
+     * Scenario: As a user when I filter the user workspace all users should be unselected
      * Given        I am logged in as Ada, and I go to the user workspace
      * When         I select a user I own
      * And             I filter the workspace by keywords
@@ -272,12 +272,12 @@ class UserWorkspaceTest extends PassboltTestCase
         $this->click("#js_app_filter_form button[value='search']");
         $this->waitUntilISee('js_wsp_users_breadcrumb', "/Search : $searchUser/");
 
-        // Then I should see the password unselected
+        // Then  I should see the password unselected
         $this->assertUserNotSelected($userId);
     }
 
     /**
-     * Scenario :   As a user when I filter by keywords the user workspace the global filter "All users" should be selected
+     * Scenario: As a user when I filter by keywords the user workspace the global filter "All users" should be selected
      * Given        I am logged in as Ada, and I go to the user workspace
      * When         I click on the recently modified filter
      * Then         I should see that menu All users is not selected anymore
@@ -300,7 +300,7 @@ class UserWorkspaceTest extends PassboltTestCase
         $this->clickLink("Recently modified");
         $this->waitCompletion();
 
-        // Then I should see that menu All users is not selected anymore
+        // Then  I should see that menu All users is not selected anymore
         $this->assertFilterIsNotSelected('js_users_wsp_filter_all');
 
         // When I fill the "app search" field with "shared resource"
@@ -308,12 +308,12 @@ class UserWorkspaceTest extends PassboltTestCase
         $this->click("#js_app_filter_form button[value='search']");
         $this->waitUntilISee('js_wsp_users_breadcrumb', "/Search : $searchUser/");
 
-        // Then I should see the filter "All items" is selected.
+        // Then  I should see the filter "All items" is selected.
         $this->assertFilterIsSelected('js_users_wsp_filter_all');
     }
 
     /**
-     * Scenario :   As an admin user, I should have admin rights inside the user workspace
+     * Scenario: As an admin user, I should have admin rights inside the user workspace
      * Given        I am logged in as admin on the user workspace
      * Then         I should see the create button
      * And          I should see the edit button
@@ -335,7 +335,7 @@ class UserWorkspaceTest extends PassboltTestCase
         $this->loginAs($user);
         $this->gotoWorkspace('user');
 
-        // Then I should not see the create button
+        // Then  I should not see the create button
         $this->assertVisible('js_wsp_create_button');
 
         // And I should not see the edit button
@@ -348,7 +348,7 @@ class UserWorkspaceTest extends PassboltTestCase
         $betty = User::get('betty');
         $this->rightClickUser($betty['id']);
 
-        // Then I can see the contextual menu
+        // Then  I can see the contextual menu
         $this->assertVisible('js_contextual_menu');
 
         // And I should see the option Copy public key
@@ -367,7 +367,7 @@ class UserWorkspaceTest extends PassboltTestCase
 
 
     /**
-     * Scenario :   As a non admin user, I should not have admin rights inside the user workspace
+     * Scenario: As a non admin user, I should not have admin rights inside the user workspace
      * Given        I am logged in as ada on the user workspace
      * Then         I should not see the create button
      * And          I should not see the edit button
@@ -389,7 +389,7 @@ class UserWorkspaceTest extends PassboltTestCase
         $this->loginAs($user);
         $this->gotoWorkspace('user');
 
-        // Then I should not see the create button
+        // Then  I should not see the create button
         $this->assertNotVisible('js_wsp_create_button');
 
         // And I should not see the edit button
@@ -402,7 +402,7 @@ class UserWorkspaceTest extends PassboltTestCase
         $betty = User::get('betty');
         $this->rightClickUser($betty['id']);
 
-        // Then I can see the contextual menu
+        // Then  I can see the contextual menu
         $this->assertVisible('js_contextual_menu');
 
         // And I should see the option Copy public key
@@ -421,7 +421,7 @@ class UserWorkspaceTest extends PassboltTestCase
 
     /**
      * @group saucelabs
-     * Scenario:    As a logged in user, I should be able to control the sidebar visibility through the sidebar button
+     * Scenario: As a logged in user, I should be able to control the sidebar visibility through the sidebar button
      * Given        I am logged in as ada
      * And          I am on the user workspace
      * Then         I should see that the sidebar button is pressed
@@ -517,13 +517,13 @@ class UserWorkspaceTest extends PassboltTestCase
         // I click on the button close at the top of the dialogue.
         $this->click('#js_user_details .dialog-close');
 
-        // Then I should not see the sidebar anymore.
+        // Then  I should not see the sidebar anymore.
         $this->assertNotVisible('#js_user_details');
     }
 
     /**
      * @group saucelabs
-     * Scenario :   As a user I should be able to sort the users browser by column
+     * Scenario: As a user I should be able to sort the users browser by column
      * Given        I am logged in as Ada, and I go to the user workspace
      * When         I sort the users browser by name
      * Then         I should see it sorted by name
@@ -548,7 +548,7 @@ class UserWorkspaceTest extends PassboltTestCase
         $columnId = 'name';
         $this->click('.js_grid_column_' . $columnId);
 
-        // Then I should see it sorted by name
+        // Then  I should see it sorted by name
         $columnHeaderResourceElement = $this->find('#js_wsp_users_browser .tableview-header .js_grid_column_' . $columnId);
         $this->assertElementHasClass($columnHeaderResourceElement, 'sorted');
         $this->assertElementHasClass($columnHeaderResourceElement, 'sort-desc');
@@ -557,7 +557,7 @@ class UserWorkspaceTest extends PassboltTestCase
         $columnId = 'username';
         $this->click('.js_grid_column_' . $columnId);
 
-        // Then I should see it sorted by username
+        // Then  I should see it sorted by username
         $columnHeaderUsernameElement = $this->find('#js_wsp_users_browser .tableview-header .js_grid_column_' . $columnId);
         $this->assertElementHasClass($columnHeaderUsernameElement, 'sorted');
         $this->assertElementHasClass($columnHeaderUsernameElement, 'sort-asc');
@@ -568,7 +568,7 @@ class UserWorkspaceTest extends PassboltTestCase
         $columnId = 'modified';
         $this->click('.js_grid_column_' . $columnId);
 
-        // Then I should see it sorted by modified
+        // Then  I should see it sorted by modified
         $columnHeaderModifiedElement = $this->find('#js_wsp_users_browser .tableview-header .js_grid_column_' . $columnId);
         $this->assertElementHasClass($columnHeaderModifiedElement, 'sorted');
         $this->assertElementHasClass($columnHeaderModifiedElement, 'sort-asc');
@@ -579,7 +579,7 @@ class UserWorkspaceTest extends PassboltTestCase
         $columnId = 'last_logged_in';
         $this->click('.js_grid_column_' . $columnId);
 
-        // Then I should see it sorted by lasted logged in
+        // Then  I should see it sorted by lasted logged in
         $columnHeaderUriElement = $this->find('#js_wsp_users_browser .tableview-header .js_grid_column_' . $columnId);
         $this->assertElementHasClass($columnHeaderUriElement, 'sorted');
         $this->assertElementHasClass($columnHeaderUriElement, 'sort-asc');

@@ -53,7 +53,7 @@ class PHP_Timer
     /**
      * Formats the elapsed time as a string.
      *
-     * @param float  $time
+     * @param  float  $time
      * @return string
      */
     public static function secondsToTimeString($time)

@@ -16,7 +16,7 @@ namespace SebastianBergmann\GlobalState;
 class CodeExporter
 {
     /**
-     * @param Snapshot $snapshot
+     * @param  Snapshot $snapshot
      * @return string
      */
     public function constants(Snapshot $snapshot)
@@ -36,7 +36,7 @@ class CodeExporter
     }
 
     /**
-     * @param Snapshot $snapshot
+     * @param  Snapshot $snapshot
      * @return string
      */
     public function iniSettings(Snapshot $snapshot)
@@ -55,7 +55,7 @@ class CodeExporter
     }
 
     /**
-     * @param mixed  $variable
+     * @param  mixed  $variable
      * @return string
      */
     private function exportVariable($variable)
@@ -69,7 +69,7 @@ class CodeExporter
     }
 
     /**
-     * @param array $array
+     * @param  array $array
      * @return bool
      */
     private function arrayOnlyContainsScalars(array $array)

@@ -13,11 +13,11 @@ class LUUserViewTest extends PassboltTestCase
 
     /**
      * @group saucelabs
-     * Scenario :   As a user I should be able to view the user details
+     * Scenario: As a user I should be able to view the user details
      *
      * Given I am logged in as Ada, and I go to the user workspace
      * When        I click on a user
-     * Then I should see a secondary side bar appearing
+     * Then  I should see a secondary side bar appearing
      * And I should see the details of the selected user
      * And I should see the user's role
      * And I should see the user's modified time
@@ -43,7 +43,7 @@ class LUUserViewTest extends PassboltTestCase
         $userF = User::get('frances');
         $this->clickUser($userF);
 
-        // Then I should see a secondary side bar appearing
+        // Then  I should see a secondary side bar appearing
         $this->assertPageContainsElement('#js_user_details');
 
         // And I should see the details of the selected user

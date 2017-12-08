@@ -293,8 +293,8 @@ class ResultPrinter
     /**
      * Process reader feedback and print it.
      *
-     * @param Reader $reader
-     * @param int    $expectedTestCount
+     * @param  Reader $reader
+     * @param  int    $expectedTestCount
      */
     protected function processReaderFeedback($reader, $expectedTestCount)
     {
@@ -316,7 +316,7 @@ class ResultPrinter
     /**
      * Prints test warnings.
      *
-     * @param ExecutableTest $test
+     * @param  ExecutableTest $test
      */
     protected function printTestWarnings($test)
     {
@@ -351,8 +351,8 @@ class ResultPrinter
      *
      * @todo May be we need to throw Exception here instead of silent correction.
      *
-     * @param int $actualTestCount
-     * @param int $expectedTestCount
+     * @param  int $actualTestCount
+     * @param  int $expectedTestCount
      */
     protected function processTestOverhead($actualTestCount, $expectedTestCount)
     {
@@ -374,8 +374,8 @@ class ResultPrinter
      * If for some reason process return less tests than expected then we threat all remaining
      * as skipped or incomplete and print them as skipped (S letter)
      *
-     * @param int $actualTestCount
-     * @param int $expectedTestCount
+     * @param  int $actualTestCount
+     * @param  int $expectedTestCount
      */
     protected function printSkippedAndIncomplete($actualTestCount, $expectedTestCount)
     {

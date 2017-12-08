@@ -20,7 +20,7 @@ class Restorer
     /**
      * Deletes function definitions that are not defined in a snapshot.
      *
-     * @param Snapshot         $snapshot
+     * @param  Snapshot         $snapshot
      * @throws RuntimeException when the uopz_delete() function is not available
      * @see    https://github.com/krakjoe/uopz
      */

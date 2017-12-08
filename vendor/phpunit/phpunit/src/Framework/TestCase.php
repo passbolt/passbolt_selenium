@@ -1205,7 +1205,7 @@ abstract class PHPUnit_Framework_TestCase extends PHPUnit_Framework_Assert imple
     /**
      * Sets the name of a TestCase.
      *
-     * @param string
+     * @param  string
      */
     public function setName($name)
     {

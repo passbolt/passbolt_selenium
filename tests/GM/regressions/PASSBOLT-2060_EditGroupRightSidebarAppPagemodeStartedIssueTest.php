@@ -13,7 +13,7 @@ class PASSBOLT2060 extends PassboltSetupTestCase
      *
      * Given I register an account as John Doe
      * When I complete the setup with a passphrase longer than 50 char
-     * Then I am able to login
+     * Then  I am able to login
      */
     public function testSetupAndLoginWithLongPassphrase() 
     {
@@ -31,14 +31,14 @@ class PASSBOLT2060 extends PassboltSetupTestCase
         $group = Group::get(['id' => Uuid::get('group.id.it_support')]);
         $this->clickGroup($group['id']);
 
-        // Then I should see a “edit” button next to the Information section
+        // Then  I should see a “edit” button next to the Information section
         $editButtonSelector = '#js_group_details #js_group_details_members #js_edit_members_button';
         $this->waitUntilISee($editButtonSelector);
 
         // When I press the “Edit” button
         $this->click($editButtonSelector);
 
-        // Then I should see the Edit group dialog
+        // Then  I should see the Edit group dialog
         $this->waitUntilISee('.edit-group-dialog');
 
         // When I add a member to the group
@@ -46,7 +46,7 @@ class PASSBOLT2060 extends PassboltSetupTestCase
         $this->searchGroupUserToAdd($ada, $user);
         $this->addTemporaryGroupUser($ada);
 
-        // Then I should see that the user is added in the list of group members
+        // Then  I should see that the user is added in the list of group members
         // And I should see that his group role is “group member”
         $this->assertGroupMemberInEditDialog($group['id'], $ada);
 
@@ -59,7 +59,7 @@ class PASSBOLT2060 extends PassboltSetupTestCase
         // When I press the save button
         $this->click('.edit-group-dialog a.button.primary');
 
-        // Then I should see that the dialog disappears
+        // Then  I should see that the dialog disappears
         $this->waitUntilIDontSee('.edit-group-dialog');
 
         // And I should see a confirmation message saying that the group members have been edited

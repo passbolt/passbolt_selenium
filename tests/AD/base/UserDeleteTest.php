@@ -16,7 +16,7 @@ class ADUserDeleteTest extends PassboltTestCase
 {
 
     /**
-     * Scenario :   As admin I should be able to delete a user on a right click
+     * Scenario: As admin I should be able to delete a user on a right click
      * Given        I am logged in as admin in the user workspace
      * And          I right click on a user
      * Then         I should see a contextual menu with a delete option
@@ -47,7 +47,7 @@ class ADUserDeleteTest extends PassboltTestCase
         $user = User::get('ursula');
         $this->rightClickUser($user['id']);
 
-        // Then I select the delete option in the contextual menu
+        // Then  I select the delete option in the contextual menu
         $this->click('#js_user_browser_menu_delete a');
 
         // Assert that the confirmation dialog is displayed.
@@ -56,7 +56,7 @@ class ADUserDeleteTest extends PassboltTestCase
         // Click ok in confirmation dialog.
         $this->confirmActionInConfirmationDialog();
 
-        // Then I should see a success notification message saying the user is deleted
+        // Then  I should see a success notification message saying the user is deleted
         $this->assertNotification('app_users_delete_success');
 
         // And I should not see the user in the list anymore
@@ -68,13 +68,13 @@ class ADUserDeleteTest extends PassboltTestCase
         // And go to user workspace
         $this->gotoWorkspace('user');
 
-        // Then I should not see the user in the list anymore
+        // Then  I should not see the user in the list anymore
         $this->assertTrue($this->isNotVisible('#user_' . $user['id']));
     }
 
     /**
      * @group saucelabs
-     * Scenario :   As admin I should be able to delete a user using the delete button
+     * Scenario: As admin I should be able to delete a user using the delete button
      * Given        I am logged in as admin in the user workspace
      * And          I click on the user
      * And          I click on delete button
@@ -104,7 +104,7 @@ class ADUserDeleteTest extends PassboltTestCase
         $user = User::get('ursula');
         $this->clickUser($user['id']);
 
-        // Then I click on delete button
+        // Then  I click on delete button
         $this->click('js_user_wk_menu_deletion_button');
 
         // Assert that the confirmation dialog is displayed.
@@ -113,7 +113,7 @@ class ADUserDeleteTest extends PassboltTestCase
         // Click ok in confirmation dialog.
         $this->confirmActionInConfirmationDialog();
 
-        // Then I should see a success notification message saying the user is deleted
+        // Then  I should see a success notification message saying the user is deleted
         $this->assertNotification('app_users_delete_success');
 
         // And I should not see the user in the list anymore
@@ -125,12 +125,12 @@ class ADUserDeleteTest extends PassboltTestCase
         // And go to user workspace
         $this->gotoWorkspace('user');
 
-        // Then I should not see the user in the list anymore
+        // Then  I should not see the user in the list anymore
         $this->assertTrue($this->isNotVisible('#user_' . $user['id']));
     }
 
     /**
-     * Scenario :   As Admin I should not be able to delete my own user account
+     * Scenario: As Admin I should not be able to delete my own user account
      * Given        I am logged in as admin in the user workspace
      * And          I click on my own name in the user list
      * Then         I should see that the delete button is disabled
@@ -153,7 +153,7 @@ class ADUserDeleteTest extends PassboltTestCase
         // When I right click on a user
         $this->clickUser($user['id']);
 
-        // Then I should see that the delete button is disabled.
+        // Then  I should see that the delete button is disabled.
         $this->assertElementAttributeEquals(
             $this->find('js_user_wk_menu_deletion_button'),
             'disabled',
@@ -168,7 +168,7 @@ class ADUserDeleteTest extends PassboltTestCase
     }
 
     /**
-     * Scenario :   As Admin I should not be able to delete a user who is the sole owner of some shared passwords
+     * Scenario: As Admin I should not be able to delete a user who is the sole owner of some shared passwords
      * Given        I am logged in as admin in the user workspace
      * And          I click on the user
      * And          I click on delete button
@@ -200,18 +200,18 @@ class ADUserDeleteTest extends PassboltTestCase
         // And I click on delete button
         $this->click('js_user_wk_menu_deletion_button');
 
-        // Then I should see a message explaining me why the user can't be deleted
+        // Then  I should see a message explaining me why the user can't be deleted
         $this->assertConfirmationDialog('You cannot delete this user!');
 
         // When I click on the dialog main action
         $this->confirmActionInConfirmationDialog();
 
-        // Then I should see that the dialog disappears
+        // Then  I should see that the dialog disappears
         $this->waitUntilIDontSee('.mad_component_confirm');
     }
 
     /**
-     * Scenario :   As Admin I should not be able to delete a user who is the sole group manager of groups
+     * Scenario: As Admin I should not be able to delete a user who is the sole group manager of groups
      * Given        I am logged in as admin in the user workspace
      * And          I click on the user
      * And          I click on delete button
@@ -243,13 +243,13 @@ class ADUserDeleteTest extends PassboltTestCase
         // And I click on delete button
         $this->click('js_user_wk_menu_deletion_button');
 
-        // Then I should see a message explaining me why the user can't be deleted
+        // Then  I should see a message explaining me why the user can't be deleted
         $this->assertConfirmationDialog('You cannot delete this user!');
 
         // When I click on the dialog main action
         $this->confirmActionInConfirmationDialog();
 
-        // Then I should see that the dialog disappears
+        // Then  I should see that the dialog disappears
         $this->waitUntilIDontSee('.mad_component_confirm');
     }
 

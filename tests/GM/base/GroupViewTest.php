@@ -31,7 +31,7 @@ class GMGroupViewTest extends PassboltTestCase
         $group = Group::get(['id' => Uuid::get('group.id.ergonom')]);
         $this->gotoEditGroup($group['id']);
 
-        // Then I should see the list of users that are members of a given group
+        // Then  I should see the list of users that are members of a given group
         $groupMember = User::get('irene');
         $this->assertGroupMemberInEditDialog($group['id'], $groupMember, true);
     }
@@ -42,7 +42,7 @@ class GMGroupViewTest extends PassboltTestCase
      * Given I am a logged-in user
      * And I am on the users workspace
      * When I click on a group name
-     * Then I should see that the sidebar contains a member section
+     * Then  I should see that the sidebar contains a member section
      * And I should see that the members sections contains the list of users that are members of this group
      * And I should see that below each user I can see his membership type
      */

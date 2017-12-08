@@ -18,7 +18,7 @@ class LUGroupViewTest extends PassboltTestCase
      * Given I am a logged-in user
      * And I am on the users workspace
      * When I select a group
-     * Then I should see the sidebar opening on the right hand side
+     * Then  I should see the sidebar opening on the right hand side
      * And I should see a group information section
      * And I should see the created date
      * And I should see the modified date
@@ -40,7 +40,7 @@ class LUGroupViewTest extends PassboltTestCase
         $group = Group::get(['id' => Uuid::get('group.id.accounting')]);
         $this->clickGroup($group['id']);
 
-        // Then I should see the sidebar opening on the right hand side
+        // Then  I should see the sidebar opening on the right hand side
         $this->waitUntilISee('#js_group_details.ready');
 
         // And I should see a group information section
@@ -80,7 +80,7 @@ class LUGroupViewTest extends PassboltTestCase
      * Given I am a logged-in user
      * And I am on the users workspace
      * When I click on a group name
-     * Then I should see that the sidebar contains a member section
+     * Then  I should see that the sidebar contains a member section
      * And I should see that the members sections contains the list of users that are members of this group
      * And I should see that below each user I can see his membership type
      */

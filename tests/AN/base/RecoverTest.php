@@ -51,7 +51,7 @@ class RecoverTest extends PassboltRecoverTestCase
         // And I press enter
         $this->pressEnter();
 
-        // Then I should see an error message
+        // Then  I should see an error message
         $this->waitUntilISee('#username.form-error');
         $this->assertElementContainsText(
             $this->findByCss('#username + .error.message'),
@@ -64,7 +64,7 @@ class RecoverTest extends PassboltRecoverTestCase
         // And I click on the submit button
         $this->click('.button.primary.big');
 
-        // Then I can see the thank you page
+        // Then  I can see the thank you page
         $this->waitUntilISee('.page.recover.thank-you');
 
         // When  I click on the link in the email

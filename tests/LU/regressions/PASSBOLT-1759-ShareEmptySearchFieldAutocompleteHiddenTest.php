@@ -17,7 +17,7 @@ class PASSBOLT1759 extends PassboltTestCase
      * And I am logged in on the password workspace
      * When I go to the sharing dialog of a password I own
      * And I search a user
-     * Then I should see results
+     * Then  I should see results
      * When I empty the search field
      * Then     the autocomplete field should be hidden
      */
@@ -50,7 +50,7 @@ class PASSBOLT1759 extends PassboltTestCase
         // I wait the autocomplete box is loaded.
         $this->waitCompletion(10, '#passbolt-iframe-password-share-autocomplete.loaded');
 
-        // Then I should see results
+        // Then  I should see results
         $this->goIntoShareAutocompleteIframe();
         $listOfUsers = $this->driver->findElements(WebDriverBy::cssSelector('ul li'));
         $this->assertNotEquals(0, count($listOfUsers));

@@ -1,20 +1,32 @@
 <?php
 /**
- * Bug PASSBOLT-1494 - Regression test
+ * Passbolt ~ Open source password manager for teams
+ * Copyright (c) Passbolt SARL (https://www.passbolt.com)
  *
- * @copyright (c) 2017 Passbolt SARL
- * @licence   GNU Affero General Public License http://www.gnu.org/licenses/agpl-3.0.en.html
+ * Licensed under GNU Affero General Public License version 3 of the or any later version.
+ * For full copyright and license information, please see the LICENSE.txt
+ * Redistributions of files must retain the above copyright notice.
+ *
+ * @copyright Copyright (c) Passbolt SARL (https://www.passbolt.com)
+ * @license   https://opensource.org/licenses/AGPL-3.0 AGPL License
+ * @link      https://www.passbolt.com Passbolt(tm)
+ * @since     2.0.0
  */
+namespace Tests\AP\base;
+
+use App\PassboltSetupTestCase;
+use Data\Fixtures\User;
+
 class PASSBOLT1494 extends PassboltSetupTestCase
 {
 
     /**
      * @group no-saucelabs
      *
-     * Scenario:  As an AP going through the setup two times, I should be able to login at the end of the second setup.
+     * Scenario: As an AP going through the setup two times, I should be able to login at the end of the second setup.
      * Given I create an account as John Doe, and I proceed through the entire setup.
      * When I register again with another username, and proceed again through the entire setup
-     * Then I should be able to see the login form
+     * Then  I should be able to see the login form
      * And I should be able to login
      */
     public function testPluginShouldStartAfterTwoSetup() 

@@ -101,7 +101,7 @@ class Blacklist
     }
 
     /**
-     * @param string $variableName
+     * @param  string $variableName
      * @return bool
      */
     public function isGlobalVariableBlacklisted($variableName)
@@ -110,8 +110,8 @@ class Blacklist
     }
 
     /**
-     * @param string $className
-     * @param string $attributeName
+     * @param  string $className
+     * @param  string $attributeName
      * @return bool
      */
     public function isStaticAttributeBlacklisted($className, $attributeName)

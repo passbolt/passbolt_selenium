@@ -380,8 +380,8 @@ abstract class PHPUnit_Extensions_Selenium2TestCase extends PHPUnit_Framework_Te
     /**
      * Delegate method calls to the Session.
      *
-     * @param string $command
-     * @param array  $arguments
+     * @param  string $command
+     * @param  array  $arguments
      * @return mixed
      */
     public function __call($command, $arguments)
@@ -397,7 +397,7 @@ abstract class PHPUnit_Extensions_Selenium2TestCase extends PHPUnit_Framework_Te
     }
 
     /**
-     * @param string $host
+     * @param  string $host
      * @throws InvalidArgumentException
      */
     public function setHost($host)
@@ -415,7 +415,7 @@ abstract class PHPUnit_Extensions_Selenium2TestCase extends PHPUnit_Framework_Te
     }
 
     /**
-     * @param integer $port
+     * @param  integer $port
      * @throws InvalidArgumentException
      */
     public function setPort($port)
@@ -433,7 +433,7 @@ abstract class PHPUnit_Extensions_Selenium2TestCase extends PHPUnit_Framework_Te
     }
 
     /**
-     * @param string $browser
+     * @param  string $browser
      * @throws InvalidArgumentException
      */
     public function setBrowser($browserName)
@@ -451,7 +451,7 @@ abstract class PHPUnit_Extensions_Selenium2TestCase extends PHPUnit_Framework_Te
     }
 
     /**
-     * @param string $browserUrl
+     * @param  string $browserUrl
      * @throws InvalidArgumentException
      */
     public function setBrowserUrl($browserUrl)
@@ -526,7 +526,7 @@ abstract class PHPUnit_Extensions_Selenium2TestCase extends PHPUnit_Framework_Te
      * @param null $timeout
      * @return mixed
      */
-    public function waitUntil($callback, $timeout = null)
+    public function waitUntil($callback, $timeout = NULL)
     {
         $waitUntil = new PHPUnit_Extensions_Selenium2TestCase_WaitUntil($this);
         return $waitUntil->run($callback, $timeout);

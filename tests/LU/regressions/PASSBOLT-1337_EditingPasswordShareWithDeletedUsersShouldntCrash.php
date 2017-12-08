@@ -50,7 +50,7 @@ class PASSBOLT1337 extends PassboltTestCase
         $user = User::get('betty');
         $this->clickUser($user['id']);
 
-        // Then I select the delete option in the contextual menu
+        // Then  I select the delete option in the contextual menu
         $this->click('js_user_wk_menu_deletion_button');
 
         // Assert that the confirmation dialog is displayed.
@@ -59,7 +59,7 @@ class PASSBOLT1337 extends PassboltTestCase
         // Click ok in confirmation dialog.
         $this->confirmActionInConfirmationDialog();
 
-        // Then I should see a success notification message saying the user is deleted
+        // Then  I should see a success notification message saying the user is deleted
         $this->assertNotification('app_users_delete_success');
 
 
@@ -87,7 +87,7 @@ class PASSBOLT1337 extends PassboltTestCase
         // And I click save
         $this->click('.edit-password-dialog input[type=submit]');
 
-        // Then I can see a success notification
+        // Then  I can see a success notification
         $this->assertNotification('app_resources_edit_success');
 
         // And I can see that the password name have changed in the overview
@@ -100,7 +100,7 @@ class PASSBOLT1337 extends PassboltTestCase
         // When I click edit button
         $this->click('js_wk_menu_edition_button');
 
-        // Then I can see the new name in the edit password dialog
+        // Then  I can see the new name in the edit password dialog
         $this->assertInputValue('js_field_name', $newname);
     }
 }

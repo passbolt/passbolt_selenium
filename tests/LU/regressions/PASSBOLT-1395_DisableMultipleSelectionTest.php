@@ -31,14 +31,14 @@ class PASSBOLT1395 extends PassboltTestCase
         $rsA = Resource::get(array('user' => 'ada', 'id' => Uuid::get('resource.id.apache')));
         $this->click('multiple_select_checkbox_' . $rsA['id']);
 
-        // Then I should see it selected
+        // Then  I should see it selected
         $this->isPasswordSelected($rsA['id']);
 
         // When click on another user checkbox
         $rsG =Resource::get(array('user' => 'ada', 'id' => Uuid::get('resource.id.gnupg')));
         $this->click('multiple_select_checkbox_' . $rsG['id']);
 
-        // Then I should see only the last user selected
+        // Then  I should see only the last user selected
         $this->assertPasswordSelected($rsG['id']);
         $this->assertPasswordNotSelected($rsA['id']);
     }
@@ -68,14 +68,14 @@ class PASSBOLT1395 extends PassboltTestCase
         $userA = User::get('ada');
         $this->click('multiple_select_checkbox_' . $userA['id']);
 
-        // Then I should see it selected
+        // Then  I should see it selected
         $this->isUserSelected($userA['id']);
 
         // When click on another user checkbox
         $userB = User::get('betty');
         $this->click('multiple_select_checkbox_' . $userB['id']);
 
-        // Then I should see only the last user selected
+        // Then  I should see only the last user selected
         $this->isUserNotSelected($userB['id']);
         $this->isUserSelected($userB['id']);
     }

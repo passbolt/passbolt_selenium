@@ -11,7 +11,7 @@ if(!defined('ROOT')) {
 }
 
 // Vendor dependencies.
-require_once dirname(__DIR__) . '/vendor/autoload.php';
+require_once dirname(__DIR__) . '/vendor.olc/autoload.php';
 
 // Utility clases
 require_once 'lib/Cakephp/CakeText.php';

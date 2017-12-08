@@ -21,8 +21,8 @@ class PasswordDeleteTest extends PassboltTestCase
      * And I am Ada
      * And I am logged in on the password workspace
      * When I right click on a password I have update right on
-     * Then I select the delete option in the contextual menu
-     * Then I should see a success notification message saying the password is deleted
+     * Then  I select the delete option in the contextual menu
+     * Then  I should see a success notification message saying the password is deleted
      * And I should not see the password in the list anymore
      */
     public function testDeletePasswordRightClick() 
@@ -41,7 +41,7 @@ class PasswordDeleteTest extends PassboltTestCase
         $resource = Resource::get(array('user' => 'ada', 'permission' => 'update'));
         $this->rightClickPassword($resource['id']);
 
-        // Then I select the delete option in the contextual menu
+        // Then  I select the delete option in the contextual menu
         $this->click('#js_password_browser_menu_delete a');
 
         // Assert that the confirmation dialog is displayed.
@@ -50,7 +50,7 @@ class PasswordDeleteTest extends PassboltTestCase
         // Click ok in confirmation dialog.
         $this->confirmActionInConfirmationDialog();
 
-        // Then I should see a success notification message saying the password is deleted
+        // Then  I should see a success notification message saying the password is deleted
         $this->assertNotification('app_resources_delete_success');
 
         // And I should not see the password in the list anymore
@@ -66,7 +66,7 @@ class PasswordDeleteTest extends PassboltTestCase
      * When I click a password I have update right on
      * And I click on the more button
      * And I click on the delete link
-     * Then I should see a success notification message saying the password is deleted
+     * Then  I should see a success notification message saying the password is deleted
      * And I should not see the password in the list anymore
      */
     public function testDeletePasswordButton() 
@@ -97,7 +97,7 @@ class PasswordDeleteTest extends PassboltTestCase
         // Click ok in confirmation dialog.
         $this->confirmActionInConfirmationDialog();
 
-        // Then I should see a success notification message saying the password is deleted
+        // Then  I should see a success notification message saying the password is deleted
         $this->assertNotification('app_resources_delete_success');
 
         // And I should not see the password in the list anymore
@@ -109,19 +109,19 @@ class PasswordDeleteTest extends PassboltTestCase
      *
      * Given I am Betty
      * And I am logged in on the password worskpace
-     * Then I can see a password shared with ada in the list
+     * Then  I can see a password shared with ada in the list
      * When I logout
      * And I am Ada
      * And I am logged in on the password workspace
      * When I click on the password shared with betty
      * And I click on the more button
      * And I click on the delete link
-     * Then I should see a success notification message saying the password is deleted
+     * Then  I should see a success notification message saying the password is deleted
      * And I should not see the password deleted by ada in the list anymore
      * When I logout
      * And I am Betty
      * And I am logged in on the password worskpace
-     * Then I cannot see the password in the list anymore
+     * Then  I cannot see the password in the list anymore
      */
     public function testDeletePasswordShared() 
     {
@@ -135,7 +135,7 @@ class PasswordDeleteTest extends PassboltTestCase
         // And I am logged in on the password workspace
         $this->loginAs($userA);
 
-        // Then I can see a password shared with ada in the list
+        // Then  I can see a password shared with ada in the list
         $resource = Resource::get(array('user' => 'ada', 'id' => Uuid::get('resource.id.apache')));
         $this->assertVisible('resource_' . $resource['id']);
 
@@ -165,7 +165,7 @@ class PasswordDeleteTest extends PassboltTestCase
         // Click ok in confirmation dialog.
         $this->confirmActionInConfirmationDialog();
 
-        // Then I should see a success notification message saying the password is deleted
+        // Then  I should see a success notification message saying the password is deleted
         $this->assertNotification('app_resources_delete_success');
 
         // And I should not see the password in the list anymore
@@ -191,13 +191,13 @@ class PasswordDeleteTest extends PassboltTestCase
      * And I am logged in on the password workspace
      * When I click on a password I have view right
      * And I click on the more button
-     * Then I should see that the delete button is disabled
+     * Then  I should see that the delete button is disabled
      * And I click on the delete link
-     * Then I can still see the password in the list
+     * Then  I can still see the password in the list
      * When I right click on the password I have view right
-     * Then I should see the delete option is disabled in the contextual dialog
+     * Then  I should see the delete option is disabled in the contextual dialog
      * When I click on the delete option in the contextual dialog
-     * Then I can still see the password in the list
+     * Then  I can still see the password in the list
      */
     public function testDeletePasswordIDontOwn() 
     {
@@ -215,25 +215,25 @@ class PasswordDeleteTest extends PassboltTestCase
         // And I click on the more button
         $this->click('js_wk_menu_more_button');
 
-        // Then I should see that the delete button is disabled
+        // Then  I should see that the delete button is disabled
         $this->assertVisible('#js_wk_menu_delete_action.disabled');
 
         // When I click on the delete link
         $this->clickLink('delete');
 
-        // Then I can still see the password in the list
+        // Then  I can still see the password in the list
         $this->assertVisible('resource_' . $resource['id']);
 
         // When I right click on the password I have view right
         $this->rightClickPassword($resource['id']);
 
-        // Then I should see the delete option is disabled in the contextual dialog
+        // Then  I should see the delete option is disabled in the contextual dialog
         $this->assertElementContainsText($this->findByCss('#js_contextual_menu #js_password_browser_menu_delete.disabled'), 'Delete');
 
         // When I click on the delete option in the contextual dialog
         $this->click('#js_password_browser_menu_delete a');
 
-        // Then I can still see the password in the list
+        // Then  I can still see the password in the list
         $this->assertVisible('resource_' . $resource['id']);
     }
 
@@ -245,11 +245,11 @@ class PasswordDeleteTest extends PassboltTestCase
      * When I click a password I have update right on
      * And I click on the more button
      * And I click on the delete link
-     * Then I should see a success notification message saying the password is deleted
+     * Then  I should see a success notification message saying the password is deleted
      * When I access the last notification email for this user
-     * Then I should see a notification email stating that the password has been deleted
+     * Then  I should see a notification email stating that the password has been deleted
      * When I access the last notification email of a user the password was shared with
-     * Then I should see a notification email stating that the password has been deleted
+     * Then  I should see a notification email stating that the password has been deleted
      */
     public function testDeletePasswordEmailNotification() 
     {
@@ -279,7 +279,7 @@ class PasswordDeleteTest extends PassboltTestCase
         // Click ok in confirmation dialog.
         $this->confirmActionInConfirmationDialog();
 
-        // Then I should see a success notification message saying the password is deleted
+        // Then  I should see a success notification message saying the password is deleted
         $this->assertNotification('app_resources_delete_success');
 
         // Access last email sent to Betty.

@@ -29,15 +29,15 @@ class PasswordCopyToClipboardTest extends PassboltTestCase
 
     /**
      * @group saucelabs
-     * Scenario : As a user I can copy a password using the button in the action bar
+     * Scenario: As a user I can copy a password using the button in the action bar
      *
      * Given I am Ada
      * And I am logged in on the password workspace
      * When I click a password
      * When I click on the copy button in the action bar
-     * Then I can see the master key dialog
+     * Then  I can see the master key dialog
      * When I enter my passphrase and click submit
-     * Then I can see a success message saying the password was 'copied to clipboard'
+     * Then  I can see a success message saying the password was 'copied to clipboard'
      * And      The content of the clipboard is valid
      */
     function testCopyPasswordButton() 
@@ -56,13 +56,13 @@ class PasswordCopyToClipboardTest extends PassboltTestCase
         // When I click on the link 'copy password'
         $this->click('js_wk_menu_secretcopy_button');
 
-        // Then I can see the master key dialog
+        // Then  I can see the master key dialog
         $this->assertMasterPasswordDialog($user);
 
         // When I enter my passphrase and click submit
         $this->enterMasterPassword($user['MasterPassword']);
 
-        // Then I can see a success message telling me the password was copied to clipboard
+        // Then  I can see a success message telling me the password was copied to clipboard
         $this->assertNotification('plugin_clipboard_copy_success');
 
         // And the content of the clipboard is valid
@@ -70,12 +70,12 @@ class PasswordCopyToClipboardTest extends PassboltTestCase
     }
 
     /**
-     * Scenario : As a user I can see the list of copy options when clicking right on a password
+     * Scenario: As a user I can see the list of copy options when clicking right on a password
      *
      * Given I am Ada
      * And I am logged in on the password workspace
      * When I right click on the first password in the list
-     * Then I can see the contextual menu
+     * Then  I can see the contextual menu
      * And I can see the first option is 'Copy username' and is enabled
      * And I can see next option is 'Copy password' and is enabled
      * And I can see next option is 'Copy URI' and is enabled
@@ -93,7 +93,7 @@ class PasswordCopyToClipboardTest extends PassboltTestCase
         // When I right click on the first password in the list
         $this->rightClickPassword($resource['id']);
 
-        // Then I can see the contextual menu
+        // Then  I can see the contextual menu
         $e = $this->findById('js_contextual_menu');
 
         // And I can see the first option is 'Copy username' and is enabled
@@ -107,17 +107,17 @@ class PasswordCopyToClipboardTest extends PassboltTestCase
     }
 
     /**
-     * Scenario : As a user I can copy a password to clipboard using a right click
+     * Scenario: As a user I can copy a password to clipboard using a right click
      *
      * Given I am Ada
      * And I am logged in on the password workspace
      * When I select the first password in the list
      * And I right click
-     * Then I can see the contextual menu
+     * Then  I can see the contextual menu
      * When I click on the link 'copy password'
-     * Then I can see the master key dialog
+     * Then  I can see the master key dialog
      * When I enter my passphrase and click submit
-     * Then I can see a success message saying the password was 'copied to clipboard'
+     * Then  I can see a success message saying the password was 'copied to clipboard'
      * And      The content of the clipboard is valid
      */
     public function testCopyPasswordToClipboardViaContextualMenu() 
@@ -136,19 +136,19 @@ class PasswordCopyToClipboardTest extends PassboltTestCase
         // And I right click
         $this->rightClickPassword($resource['id']);
 
-        // Then I can see the contextual menu
+        // Then  I can see the contextual menu
         $this->assertVisible('js_contextual_menu');
 
         // When I click on the link 'copy password'
         $this->click('#js_password_browser_menu_copy_password a');
 
-        // Then I can see the master key dialog
+        // Then  I can see the master key dialog
         $this->assertMasterPasswordDialog($user);
 
         // When I enter my passphrase and click submit
         $this->enterMasterPassword($user['MasterPassword']);
 
-        // Then I can see a success message telling me the password was copied to clipboard
+        // Then  I can see a success message telling me the password was copied to clipboard
         $this->assertNotification('plugin_clipboard_copy_success');
 
         // And the content of the clipboard is valid
@@ -156,17 +156,17 @@ class PasswordCopyToClipboardTest extends PassboltTestCase
     }
 
     /**
-     * Scenario : As a user I can copy a password to clipboard using a right click, and by pressing enter in the master key dialog.
+     * Scenario: As a user I can copy a password to clipboard using a right click, and by pressing enter in the master key dialog.
      *
      * Given I am Ada
      * And I am logged in on the password workspace
      * When I select the first password in the list
      * And I right click
-     * Then I can see the contextual menu
+     * Then  I can see the contextual menu
      * When I click on the link 'copy password'
-     * Then I can see the master key dialog
+     * Then  I can see the master key dialog
      * When I enter my passphrase and press enter
-     * Then I can see a success message saying the password was 'copied to clipboard'
+     * Then  I can see a success message saying the password was 'copied to clipboard'
      * And      The content of the clipboard is valid
      */
     public function testCopyPasswordToClipboardViaContextualMenuAndEnterKey() 
@@ -185,13 +185,13 @@ class PasswordCopyToClipboardTest extends PassboltTestCase
         // And I right click
         $this->rightClickPassword($resource['id']);
 
-        // Then I can see the contextual menu
+        // Then  I can see the contextual menu
         $this->assertVisible('js_contextual_menu');
 
         // When I click on the link 'copy password'
         $this->click('#js_password_browser_menu_copy_password a');
 
-        // Then I can see the master key dialog
+        // Then  I can see the master key dialog
         $this->assertMasterPasswordDialog($user);
 
         // When I enter the master key.
@@ -201,7 +201,7 @@ class PasswordCopyToClipboardTest extends PassboltTestCase
         $this->find('js_master_password')->sendKeys(WebDriverKeys::ENTER);
         $this->goOutOfIframe();
 
-        // Then I can see a success message telling me the password was copied to clipboard
+        // Then  I can see a success message telling me the password was copied to clipboard
         $this->assertNotification('plugin_clipboard_copy_success');
 
         // And the content of the clipboard is valid
@@ -209,13 +209,13 @@ class PasswordCopyToClipboardTest extends PassboltTestCase
     }
 
     /**
-     * Scenario : As a user I can copy the URI of one resource to clipboard with a right click
+     * Scenario: As a user I can copy the URI of one resource to clipboard with a right click
      *
      * Given I am Ada
      * And I am logged in on the password workspace
      * When I right click on the first password in the list
      * And I click on the 'Copy URI' in the contextual menu
-     * Then I can see a success message saying the URI was copied to clipboard
+     * Then  I can see a success message saying the URI was copied to clipboard
      * And      The content of the clipboard is valid
      */
     function testCopyURIToClipboardViaContextualMenu() 
@@ -234,7 +234,7 @@ class PasswordCopyToClipboardTest extends PassboltTestCase
         // When I click on the 'Copy URI' in the contextual menu
         $this->click('#js_password_browser_menu_copy_uri a');
 
-        // Then I can see a success message saying the uri was copied to clipboard
+        // Then  I can see a success message saying the uri was copied to clipboard
         $this->assertNotification('plugin_clipboard_copy_success');
 
         // And the content of the clipboard is valid
@@ -242,13 +242,13 @@ class PasswordCopyToClipboardTest extends PassboltTestCase
     }
 
     /**
-     * Scenario : As a user I can copy the username of one resource to clipboard with a right click
+     * Scenario: As a user I can copy the username of one resource to clipboard with a right click
      *
      * Given I am Ada
      * And I am logged in on the password workspace
      * When I right click on the first password in the list
      * And I click on the 'Copy username' in the contextual menu
-     * Then I can see a success message saying the username was copied to clipboard
+     * Then  I can see a success message saying the username was copied to clipboard
      * And      The content of the clipboard is valid
      */
     function testCopyUsernameToClipboardViaContextualMenu() 
@@ -267,7 +267,7 @@ class PasswordCopyToClipboardTest extends PassboltTestCase
         // When I click on the link 'copy URI' in the contextual menu
         $this->click('#js_password_browser_menu_copy_username a');
 
-        // Then I can see a success message saying the username was copied to clipboard
+        // Then  I can see a success message saying the username was copied to clipboard
         $this->assertNotification('plugin_clipboard_copy_success');
 
         // And the content of the clipboard is valid
@@ -299,7 +299,7 @@ class PasswordCopyToClipboardTest extends PassboltTestCase
         // And I enter my passphrase
         $this->enterMasterPassword($user['MasterPassword']);
 
-        // Then I can see a success message saying the username was copied to clipboard
+        // Then  I can see a success message saying the username was copied to clipboard
         $this->assertNotification('plugin_clipboard_copy_success');
 
         // Then the password is copied to clipboard
@@ -336,7 +336,7 @@ class PasswordCopyToClipboardTest extends PassboltTestCase
         // And I enter my passphrase
         $this->enterMasterPassword($user['MasterPassword']);
 
-        // Then I can see a success message saying the username was copied to clipboard
+        // Then  I can see a success message saying the username was copied to clipboard
         $this->assertNotification('plugin_clipboard_copy_success');
 
         // Then the password is copied to clipboard

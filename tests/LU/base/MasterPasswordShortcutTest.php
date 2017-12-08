@@ -16,16 +16,16 @@ class MasterPasswordShortcutTest extends PassboltTestCase
 
     /**
      * @group saucelabs
-     * Scenario : As a user I can copy a password using the button in the action bar,
+     * Scenario: As a user I can copy a password using the button in the action bar,
      * and enter my passphrase from keyboard only.
      *
      * Given I am Ada
      * And I am logged in on the password workspace
      * When I click a password
      * When I click on the copy button in the action bar
-     * Then I can see the master key dialog
+     * Then  I can see the master key dialog
      * When I enter my passphrase by typing it on keyboard only
-     * Then I can see a success message saying the password was 'copied to clipboard'
+     * Then  I can see a success message saying the password was 'copied to clipboard'
      * And      The content of the clipboard is valid
      */
     function testMasterPasswordShortcutCopyPasswordButton() 
@@ -47,7 +47,7 @@ class MasterPasswordShortcutTest extends PassboltTestCase
         // When I enter my passphrase from keyboard only.
         $this->enterMasterPasswordWithKeyboardShortcuts($user['MasterPassword']);
 
-        // Then I can see a success message telling me the password was copied to clipboard
+        // Then  I can see a success message telling me the password was copied to clipboard
         $this->assertNotification('plugin_clipboard_copy_success');
 
         // And the content of the clipboard is valid
@@ -55,19 +55,19 @@ class MasterPasswordShortcutTest extends PassboltTestCase
     }
 
     /**
-     * Scenario : As a user I can copy a password using the button in the action bar,
+     * Scenario: As a user I can copy a password using the button in the action bar,
      * and enter my passphrase from keyboard only by pressing tab first.
      *
      * Given I am Ada
      * And I am logged in on the password workspace
      * When I click a password
      * When I click on the copy button in the action bar
-     * Then I can see the master key dialog
+     * Then  I can see the master key dialog
      * When I press tab
-     * Then I can see that the passphrase field gets the focus
+     * Then  I can see that the passphrase field gets the focus
      * When I type my passphrase on the keyboard
      * And I press enter
-     * Then I can see a success message saying the password was 'copied to clipboard'
+     * Then  I can see a success message saying the password was 'copied to clipboard'
      * And      The content of the clipboard is valid
      */
     function testMasterPasswordShortcutTabFirstCopyPasswordButton() 
@@ -89,7 +89,7 @@ class MasterPasswordShortcutTest extends PassboltTestCase
         // When I enter my passphrase from keyboard only, by pressing tab first.
         $this->enterMasterPasswordWithKeyboardShortcuts($user['MasterPassword'], true);
 
-        // Then I can see a success message telling me the password was copied to clipboard
+        // Then  I can see a success message telling me the password was copied to clipboard
         $this->assertNotification('plugin_clipboard_copy_success');
 
         // And the content of the clipboard is valid
@@ -104,10 +104,10 @@ class MasterPasswordShortcutTest extends PassboltTestCase
      * And I am logged in on the password workspace
      * And I am editing a password I own
      * When I click on the secret password field
-     * Then I see the passphrase dialog
+     * Then  I see the passphrase dialog
      * When I enter the passphrase from keyboard only
      * And I press enter
-     * Then I can see the password decrypted in the secret field
+     * Then  I can see the password decrypted in the secret field
      */
     function testMasterPasswordShortcutEditPasswordSecret() 
     {
@@ -151,12 +151,12 @@ class MasterPasswordShortcutTest extends PassboltTestCase
      * And I am logged in on the password workspace
      * And I am editing a password I own
      * When I click on the secret password field
-     * Then I see the passphrase dialog
+     * Then  I see the passphrase dialog
      * When I press tab
-     * Then I can see that the passphrase field gets the focus
+     * Then  I can see that the passphrase field gets the focus
      * When I type my passphrase on the keyboard
      * And I press enter
-     * Then I can see the password decrypted in the secret field
+     * Then  I can see the password decrypted in the secret field
      */
     function testMasterPasswordShortcutTabFirstEditPasswordSecret() 
     {

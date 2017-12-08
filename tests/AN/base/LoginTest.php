@@ -31,7 +31,7 @@ class LoginTest extends PassboltTestCase
      * Scenario: As AN, I should be redirected to https if ssl.force parameter is set to true.
      * Given I am an anonymous user
      * When I am trying to access the login page
-     * Then I should see that I am automatically redirected to the https version of it
+     * Then  I should see that I am automatically redirected to the https version of it
      *
      * @group chrome-only
      * @todo PASSBOLT-2253 Disabled for FF, certificate issue.
@@ -60,8 +60,8 @@ class LoginTest extends PassboltTestCase
      * Scenario: I can see an error message telling me I need a plugin
      * Given I am an anonymous user with no plugin on the login page
      * When     The page is loaded
-     * Then I can see the title of the page contain 'Login'
-     * Then I can see the error message telling me an add-on is required
+     * Then  I can see the title of the page contain 'Login'
+     * Then  I can see the error message telling me an add-on is required
      *
      * @group saucelabs
      */
@@ -84,7 +84,7 @@ class LoginTest extends PassboltTestCase
      * Scenario: I can see a login form on the login page
      * Given I am an anonymous user with no plugin on the login page
      * When        When the page is loaded
-     * Then I can see a box on the right
+     * Then  I can see a box on the right
      * And I can see a link download the plugin
      * And I cannot see an iframe inside the box
      * And I cannot see a username field (inside the iframe)

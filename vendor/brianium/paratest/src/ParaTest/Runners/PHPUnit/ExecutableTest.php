@@ -203,8 +203,8 @@ abstract class ExecutableTest
     /**
      * Generate command line with passed options suitable to handle through paratest.
      *
-     * @param string $binary  Executable binary name.
-     * @param array  $options Command line options.
+     * @param  string $binary  Executable binary name.
+     * @param  array  $options Command line options.
      * @return string          Command line.
      */
     public function command($binary, $options = array())
@@ -255,7 +255,7 @@ abstract class ExecutableTest
      * cases in single --filter arguments so it's better to show error regarding that to user
      * and propose him to decrease max batch size.
      *
-     * @param string $cmd Command line
+     * @param  string $cmd Command line
      * @throws \RuntimeException on too long command line
      */
     protected function assertValidCommandLineLength($cmd)
@@ -277,7 +277,7 @@ abstract class ExecutableTest
     /**
      * A template method that can be overridden to add necessary options for a test
      *
-     * @param array $options the options that are passed to the run method
+     * @param  array $options the options that are passed to the run method
      * @return array $options the prepared options
      */
     protected function prepareOptions($options)

@@ -16,7 +16,7 @@ class PasswordEditDescriptionTest extends PassboltTestCase
 
     /**
      * @group saucelabs
-     * Scenario :   As a user I should be able to edit the description of the passwords I own in the sidebar by clicking on the edit button
+     * Scenario: As a user I should be able to edit the description of the passwords I own in the sidebar by clicking on the edit button
      * Given        I am Ada and I am logged in on the password workspace
      * Then         I should not see the sidebar and the textarea to edit the description
      * When         I click on a password I own
@@ -89,7 +89,7 @@ class PasswordEditDescriptionTest extends PassboltTestCase
     }
 
     /**
-     * Scenario :   As a user I should be able to edit the description of the passwords I own in the sidebar by clicking on the description
+     * Scenario: As a user I should be able to edit the description of the passwords I own in the sidebar by clicking on the description
      * Given        I am Ada and I am logged in on the password workspace
      * Then         I should not see the sidebar and the textarea / form to edit the description
      * When         I click on a password I own
@@ -159,7 +159,7 @@ class PasswordEditDescriptionTest extends PassboltTestCase
     }
 
     /**
-     * Scenario :   As a user I should be able to see the validation error messages for the description
+     * Scenario: As a user I should be able to see the validation error messages for the description
      * Given        I am Ada and I am logged in on the password workspace
      * Then         I should not see the sidebar and the textarea to edit the description
      * When         I click on a password I own
@@ -229,7 +229,7 @@ class PasswordEditDescriptionTest extends PassboltTestCase
     }
 
     /**
-     * Scenario :   As a user I should'nt be able to edit the description of a password with read access only
+     * Scenario: As a user I should'nt be able to edit the description of a password with read access only
      * Given        I am Ada and I am logged in on the password workspace
      * When         I click on a password with read access only
      * Then         I should see the description in the sidebar

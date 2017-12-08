@@ -24,7 +24,7 @@ class PasswordWorkspaceTest extends PassboltTestCase
 
     /**
      * @group saucelabs
-     * Scenario :   As a user I should be able to see the passwords workspace
+     * Scenario: As a user I should be able to see the passwords workspace
      * Given        I am logged in as Ada, and I go to the password workspace
      * Then         I should see the workspace primary menu
      * And          I should see the workspace secondary menu
@@ -92,7 +92,7 @@ class PasswordWorkspaceTest extends PassboltTestCase
 
     /**
      * @group saucelabs
-     * Scenario :   As a user I should be able to see my passwords
+     * Scenario: As a user I should be able to see my passwords
      * Given        I am logged in as Ada, and I go to the password workspace
      * Then         I should see rows representing my passwords
      */
@@ -120,7 +120,7 @@ class PasswordWorkspaceTest extends PassboltTestCase
 
     /**
      * @group saucelabs
-     * Scenario :   As a user I should be able to filter my passwords
+     * Scenario: As a user I should be able to filter my passwords
      * Given        I am logged in as Ada, and I go to the password workspace
      * Then         I should see the filter "All items" is selected.
      * When         I click on the favorite filter
@@ -241,7 +241,7 @@ class PasswordWorkspaceTest extends PassboltTestCase
 
     /**
      * @group saucelabs
-     * Scenario :   As a user I should be able to view my password details
+     * Scenario: As a user I should be able to view my password details
      * Given        I am logged in as Ada, and I go to the password workspace
      * When         I click on a password
      * Then         I should see a secondary side bar appearing
@@ -309,7 +309,7 @@ class PasswordWorkspaceTest extends PassboltTestCase
 
     /**
      * @group saucelabs
-     * Scenario :   As a user I should be able to fav/unfav
+     * Scenario: As a user I should be able to fav/unfav
      * Given        I am Ada
      * And            I go to the password workspace
      * When         I click on the favorite star located before the password (the password shouldn't be a favorite)
@@ -351,7 +351,7 @@ class PasswordWorkspaceTest extends PassboltTestCase
         $this->clickPasswordFavorite($resourceId);
         $this->waitCompletion();
 
-        // Then I should see a confirmation of my action in the notification area
+        // Then  I should see a confirmation of my action in the notification area
         $this->assertNotification('app_favorites_add_success');
 
         // And I should see the star becoming red
@@ -361,7 +361,7 @@ class PasswordWorkspaceTest extends PassboltTestCase
         $this->clickLink("Favorite");
         $this->waitCompletion();
 
-        // Then I should see the password I just added to my favorites in the list of passwords
+        // Then  I should see the password I just added to my favorites in the list of passwords
         $this->assertElementContainsText(
             $this->findByCss('#js_wsp_pwd_browser .tableview-content'),
             $resource['name']
@@ -375,7 +375,7 @@ class PasswordWorkspaceTest extends PassboltTestCase
         $this->clickPasswordFavorite($resourceId);
         $this->waitCompletion();
 
-        // Then I should see a confirmation of my action in the notification area
+        // Then  I should see a confirmation of my action in the notification area
         $this->assertNotification('app_favorites_delete_success');
 
         // And I should see the star is white
@@ -385,7 +385,7 @@ class PasswordWorkspaceTest extends PassboltTestCase
         $this->clickLink("Favorite");
         $this->waitCompletion();
 
-        // Then I shouldn't see anymore the password in my list of favorite passwords
+        // Then  I shouldn't see anymore the password in my list of favorite passwords
         $this->assertElementNotContainText(
             $this->findByCss('#js_wsp_pwd_browser .tableview-content'),
             $resource['name']
@@ -394,7 +394,7 @@ class PasswordWorkspaceTest extends PassboltTestCase
 
     /**
      * @group saucelabs
-     * Scenario :   As a user I should be able to search a password by keywords
+     * Scenario: As a user I should be able to search a password by keywords
      * Given        I am logged in as Ada, and I go to the password workspace
      * When         I fill the "app search" field with "shared resource"
      * And          I click "search"
@@ -453,7 +453,7 @@ class PasswordWorkspaceTest extends PassboltTestCase
     }
 
     /**
-     * Scenario :   As a user when I filter the password workspace all passwords should be unselected
+     * Scenario: As a user when I filter the password workspace all passwords should be unselected
      * Given        I am logged in as Ada, and I go to the password workspace
      * When         I select a password I own
      * And             I filter the workspace by keywords
@@ -479,12 +479,12 @@ class PasswordWorkspaceTest extends PassboltTestCase
         $this->click("#js_app_filter_form button[value='search']");
         $this->waitUntilISee('js_wsp_password_breadcrumb', "/Search : $searchPwd/");
 
-        // Then I should see the password unselected
+        // Then  I should see the password unselected
         $this->assertPasswordNotSelected($resourceId);
     }
 
     /**
-     * Scenario :   As a user when I filter by keywords the password workspace the global filter "All items" should be selected
+     * Scenario: As a user when I filter by keywords the password workspace the global filter "All items" should be selected
      * Given        I am logged in as Ada, and I go to the password workspace
      * When         I click on the recently modified filter
      * Then         I should see that menu All items is not selected anymore
@@ -506,7 +506,7 @@ class PasswordWorkspaceTest extends PassboltTestCase
         $this->clickLink("Favorite");
         $this->waitCompletion();
 
-        // Then I should see that menu All items is not selected anymore
+        // Then  I should see that menu All items is not selected anymore
         $this->assertFilterIsNotSelected('js_pwd_wsp_filter_all');
 
         // When I fill the "app search" field with "shared resource"
@@ -514,13 +514,13 @@ class PasswordWorkspaceTest extends PassboltTestCase
         $this->click("#js_app_filter_form button[value='search']");
         $this->waitUntilISee('js_wsp_password_breadcrumb', "/Search : $searchPwd/");
 
-        // Then I should see the filter "All items" is selected.
+        // Then  I should see the filter "All items" is selected.
         $this->assertFilterIsSelected('js_pwd_wsp_filter_all');
     }
 
     /**
      * @group saucelabs
-     * Scenario:    As a logged in user, I should be able to control the sidebar visibility through the sidebar button
+     * Scenario: As a logged in user, I should be able to control the sidebar visibility through the sidebar button
      * Given        I am logged in as ada
      * And          I am on the password workspace
      * Then         I should see that the sidebar button is pressed
@@ -619,13 +619,13 @@ class PasswordWorkspaceTest extends PassboltTestCase
         // I should see that the sidebar button is deactivated
         $this->assertToggleButtonStatus('js_wk_secondary_menu_view_sidebar_button', TOGGLE_BUTTON_UNPRESSED);
 
-        // Then I should not see the sidebar anymore.
+        // Then  I should not see the sidebar anymore.
         $this->assertNotVisible('#js_pwd_details');
     }
 
     /**
      * @group saucelabs
-     * Scenario:    As a logged in user, I should see a welcome message when I am on an empty password workspace
+     * Scenario: As a logged in user, I should see a welcome message when I am on an empty password workspace
      * Given        I create a new account as John Doe, and I proceed with the setup.
      * When         I log in as John
      * Then         I should see the password workspace with the text 'Welcome to passbolt!)
@@ -710,7 +710,7 @@ class PasswordWorkspaceTest extends PassboltTestCase
 
     /**
      * @group saucelabs
-     * Scenario :   As a user I should be able to sort the passwords browser by column
+     * Scenario: As a user I should be able to sort the passwords browser by column
      * Given        I am logged in as Ada, and I go to the password workspace
      * When         I sort the passwords browser by resource name
      * Then         I should see it sorted by resource name
@@ -734,7 +734,7 @@ class PasswordWorkspaceTest extends PassboltTestCase
         $columnId = 'name';
         $this->click('.js_grid_column_' . $columnId);
 
-        // Then I should see it sorted by resource name
+        // Then  I should see it sorted by resource name
         $columnHeaderResourceElement = $this->find('#js_wsp_pwd_browser .tableview-header .js_grid_column_' . $columnId);
         $this->assertElementHasClass($columnHeaderResourceElement, 'sorted');
         $this->assertElementHasClass($columnHeaderResourceElement, 'sort-asc');
@@ -743,7 +743,7 @@ class PasswordWorkspaceTest extends PassboltTestCase
         $columnId = 'username';
         $this->click('.js_grid_column_' . $columnId);
 
-        // Then I should see it sorted by username
+        // Then  I should see it sorted by username
         $columnHeaderUsernameElement = $this->find('#js_wsp_pwd_browser .tableview-header .js_grid_column_' . $columnId);
         $this->assertElementHasClass($columnHeaderUsernameElement, 'sorted');
         $this->assertElementHasClass($columnHeaderUsernameElement, 'sort-asc');
@@ -754,7 +754,7 @@ class PasswordWorkspaceTest extends PassboltTestCase
         $columnId = 'uri';
         $this->click('.js_grid_column_' . $columnId);
 
-        // Then I should see it sorted by uri
+        // Then  I should see it sorted by uri
         $columnHeaderUriElement = $this->find('#js_wsp_pwd_browser .tableview-header .js_grid_column_' . $columnId);
         $this->assertElementHasClass($columnHeaderUriElement, 'sorted');
         $this->assertElementHasClass($columnHeaderUriElement, 'sort-asc');
@@ -765,7 +765,7 @@ class PasswordWorkspaceTest extends PassboltTestCase
         $columnId = 'modified';
         $this->click('.js_grid_column_' . $columnId);
 
-        // Then I should see it sorted by modified
+        // Then  I should see it sorted by modified
         $columnHeaderModifiedElement = $this->find('#js_wsp_pwd_browser .tableview-header .js_grid_column_' . $columnId);
         $this->assertElementHasClass($columnHeaderModifiedElement, 'sorted');
         $this->assertElementHasClass($columnHeaderModifiedElement, 'sort-asc');
@@ -774,7 +774,7 @@ class PasswordWorkspaceTest extends PassboltTestCase
     }
 
     /**
-     * Scenario :   As a user I should be able to filter my passwords by group
+     * Scenario: As a user I should be able to filter my passwords by group
      * Given        I am logged in as Irene on the password workspace
      * When         I edit the group "ergonom"
      * And          I add "kathleen" as a member of the group
@@ -822,7 +822,7 @@ class PasswordWorkspaceTest extends PassboltTestCase
         $this->assertMasterPasswordDialog($user);
         $this->enterMasterPassword($user['MasterPassword']);
 
-        // Then I should see that the dialog disappears
+        // Then  I should see that the dialog disappears
         $this->waitUntilIDontSee('.edit-group-dialog');
 
         // And I should see a confirmation message saying that the group members changes have been saved.
@@ -870,7 +870,7 @@ class PasswordWorkspaceTest extends PassboltTestCase
     }
 
     /**
-     * Scenario :   As a user who doesn't belong to any group, I should'nt see the "Filter by group" section on the passwords workspace
+     * Scenario: As a user who doesn't belong to any group, I should'nt see the "Filter by group" section on the passwords workspace
      * Given        I am logged in as Ada on the passwords workspace
      * Then         I should'nt see the "Filter by groups" section
      */

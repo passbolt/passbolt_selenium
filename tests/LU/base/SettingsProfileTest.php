@@ -21,7 +21,7 @@ class SettingsProfileTest extends PassboltTestCase
 
     /**
      * @group saucelabs
-     * Scenario :   As a LU I should be able to see my profile information in the profile section
+     * Scenario: As a LU I should be able to see my profile information in the profile section
      * Given        I am logged in as a LU in the settings workspace, profile section
      * Then         I should see the title Profile
      * And          I should see my name in the profile information
@@ -98,7 +98,7 @@ class SettingsProfileTest extends PassboltTestCase
     }
 
     /**
-     * Scenario :   As a LU I should be able to see and use the breadcrumb of the profile section.
+     * Scenario: As a LU I should be able to see and use the breadcrumb of the profile section.
      * Given        I am logged in as LU in the settings workspace, profile section.
      * Then         I should see a breadcrumb
      * And          I should see a breadcrumb section containing All users
@@ -152,7 +152,7 @@ class SettingsProfileTest extends PassboltTestCase
 
     /**
      * @group saucelabs
-     * Scenario :   As LU, I should be able to edit my avatar picture.
+     * Scenario: As LU, I should be able to edit my avatar picture.
      * Given        I am logged in as LU in the settings workspace, profile section.
      * When         I click on upload a new picture
      * Then         I should see a dialog window where I can select a file to upload
@@ -225,7 +225,7 @@ class SettingsProfileTest extends PassboltTestCase
 
         $this->click('.dialog input[type=submit]');
 
-        // Then I should see a success message.
+        // Then  I should see a success message.
         $this->assertNotification('app_users_editavatar_success');
 
         // And I should see that the profile picture has been replaced in the profile details.
@@ -239,12 +239,12 @@ class SettingsProfileTest extends PassboltTestCase
         // When I Refresh the window.
         $this->refresh();
 
-        // Then I should see that the profile drop down image is still there.
+        // Then  I should see that the profile drop down image is still there.
         $this->assertImagesAreSame($actualImage, $topProfileImage);
     }
 
     /**
-     * Scenario :   As LU, I shouldn't be able to upload a wrong file format as my avatar picture
+     * Scenario: As LU, I shouldn't be able to upload a wrong file format as my avatar picture
      * Given        I am logged in as LU in the settings workspace, profile section.
      * When         I click on upload a new picture
      * Then         I should see a dialog window where I can select a file to upload
@@ -284,7 +284,7 @@ class SettingsProfileTest extends PassboltTestCase
         $filebox->sendKeys(GPG_FIXTURES . DS . 'ada_private.key');
         $this->click('.dialog input[type=submit]');
 
-        // Then I should see a success message.
+        // Then  I should see a success message.
         $this->assertNotification('app_users_editavatar_error');
 
         // And I should see that the profile picture has been replaced in the profile details.
@@ -300,17 +300,17 @@ class SettingsProfileTest extends PassboltTestCase
         // When I Refresh the window.
         $this->refresh();
 
-        // Then I should see that the profile drop down image is still there.
+        // Then  I should see that the profile drop down image is still there.
         $this->assertImagesAreSame($actualImage, $topProfileImage);
     }
 
     /**
      * @group saucelabs
-     * Scenario :   As LU, I should be able to edit my profile and see the editable fields.
+     * Scenario: As LU, I should be able to edit my profile and see the editable fields.
      *
      * Given I am logged in as LU in the settings workspace, profile section.
      * And I click on the edit button
-     * Then I can see the edit profile dialog
+     * Then  I can see the edit profile dialog
      * And I can see the title is set to "edit profile"
      * And I can see the close dialog button
      * And I can see the first name input and label is marked as mandatory
@@ -379,20 +379,20 @@ class SettingsProfileTest extends PassboltTestCase
      *
      * Given I am logged in as LU in the settings workspace, profile section.
      * And I click on the edit button
-     * Then I can see the edit profile dialog
+     * Then  I can see the edit profile dialog
      * And I empty the field first name
      * And I empty the field last name
      * When I press the enter key on the keyboard
-     * Then I see an error message saying that the first name is required
+     * Then  I see an error message saying that the first name is required
      * And I see an error message saying that the last name is required
      * When I enter '&' as a first name
      * And I enter '&' as a last name
      * And I click on the save button
-     * Then I see an error message saying that the first name contain invalid characters
+     * Then  I see an error message saying that the first name contain invalid characters
      * And I see an error message saying that the last name contain invalid characters
      * When I enter 'aa' as a first name
      * And I enter 'aa' as a last name
-     * Then I see an error message saying that the length of first name should be between x and x characters
+     * Then  I see an error message saying that the length of first name should be between x and x characters
      * And I see an error message saying that the length of last name should be between x and x characters
      */
     public function testSettingsProfileUpdateCanSeeErrors() 
@@ -422,13 +422,13 @@ class SettingsProfileTest extends PassboltTestCase
         // And I press enter
         $this->pressEnter();
 
-        // Then I see an error message saying that the first name is required
+        // Then  I see an error message saying that the first name is required
         $this->assertVisible('#js_field_first_name_feedback.error.message');
         $this->assertElementContainsText(
             $this->find('js_field_first_name_feedback'), 'is required'
         );
 
-        // Then I see an error message saying that the last name is required
+        // Then  I see an error message saying that the last name is required
         $this->assertVisible('#js_field_last_name_feedback.error.message');
         $this->assertElementContainsText(
             $this->find('js_field_last_name_feedback'), 'is required'
@@ -443,13 +443,13 @@ class SettingsProfileTest extends PassboltTestCase
         // And I click save
         $this->click('.edit-profile-dialog input[type=submit]');
 
-        // Then I see an error message saying that the first name contain invalid characters
+        // Then  I see an error message saying that the first name contain invalid characters
         $this->assertVisible('#js_field_first_name_feedback.error.message');
         $this->assertElementContainsText(
             $this->find('js_field_first_name_feedback'), 'should only contain alphabets'
         );
 
-        // Then I see an error message saying that the first name contain invalid characters
+        // Then  I see an error message saying that the first name contain invalid characters
         $this->assertVisible('#js_field_last_name_feedback.error.message');
         $this->assertElementContainsText(
             $this->find('js_field_last_name_feedback'), 'should only contain alphabets'
@@ -476,12 +476,12 @@ class SettingsProfileTest extends PassboltTestCase
      *
      * Given I am logged in as LU in the settings workspace, profile section.
      * And I click on the edit button
-     * Then I can see the edit profile dialog
+     * Then  I can see the edit profile dialog
      * When I click on first name input text field
      * And I empty the first name input text field value
      * And I enter a new value
      * And I click save
-     * Then I can see a success notification
+     * Then  I can see a success notification
      * And I can see that the user first name has changed in the profile details
      * When I refresh
      * And I go to the settings workspace, profile section
@@ -519,7 +519,7 @@ class SettingsProfileTest extends PassboltTestCase
         // And I click save
         $this->click('.edit-profile-dialog input[type=submit]');
 
-        // Then I can see a success notification
+        // Then  I can see a success notification
         $this->assertNotification('app_users_edit_success');
 
         // I should see the new first name of the user in the table info
@@ -552,11 +552,11 @@ class SettingsProfileTest extends PassboltTestCase
      * And I empty the last name input text field value
      * And I enter a new value
      * And I click save
-     * Then I can see a success notification
+     * Then  I can see a success notification
      * And I can see that the user last name has changed in the profile details
      * When I refresh
      * And I go to the settings workspace, profile section
-     * Then I can see the new last name in my name
+     * Then  I can see the new last name in my name
      */
     public function testSettingsProfileUpdateEditLastName() 
     {
@@ -590,7 +590,7 @@ class SettingsProfileTest extends PassboltTestCase
         // And I click save
         $this->click('.edit-profile-dialog input[type=submit]');
 
-        // Then I can see a success notification
+        // Then  I can see a success notification
         $this->assertNotification('app_users_edit_success');
 
         // I should see the new first name of the user in the table info

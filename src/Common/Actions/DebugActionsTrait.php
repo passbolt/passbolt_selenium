@@ -54,15 +54,15 @@ trait DebugActionsTrait
         try {
             // A passbolt debug meta data is required to build the debug url.
             if (empty($this->addonUrl)) {
-                $headElement = $this->getDriver()->findElement(WebDriverBy::id('head'));
+                $headElement = $this->getDriver()->findElement(WebDriverBy::cssSelector('head'));
                 $this->addonUrl = $headElement->getAttribute('data-passbolt-addon-url');
 
                 // If the debut meta data not found, go to a passbolt page first.
                 // The data is available only on passbolt page.
                 if (empty($this->addonUrl)) {
-                    $this->getUrl('');
-                    $this->waitUntilISee('.passbolt');
-                    $headElement = $this->getDriver()->findElement(WebDriverBy::id('head'));
+                    $this->getUrl();
+                    $this->waitUntilISee('html.passboltplugin');
+                    $headElement = $this->getDriver()->findElement(WebDriverBy::cssSelector('head'));
                     $this->addonUrl = $headElement->getAttribute('data-passbolt-addon-url');
                 }
             }

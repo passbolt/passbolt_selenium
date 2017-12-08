@@ -17,14 +17,15 @@ namespace App\Common;
 use App\Common\Actions\KeyboardActionsTrait;
 use App\Common\Actions\BrowserActionsTrait;
 use App\Common\Actions\FormActionsTrait;
+use App\Common\Actions\UrlActionsTrait;
+use App\Common\Actions\MouseActionsTrait;
 use App\Common\Asserts\FormAssertionsTrait;
-use App\Common\TestTraits\ElementAssertTrait;
+use App\Common\Asserts\ElementAssertionsTrait;
+use App\Common\Asserts\PageAssertionsTrait;
+use App\Common\Asserts\UrlAssertionsTrait;
+use App\Common\Asserts\VisibilityAssertionsTrait;
+use App\Common\Asserts\WaitAssertionsTrait;
 use App\Common\TestTraits\FindHelperTrait;
-use App\Common\TestTraits\MouseTestTrait;
-use App\Common\TestTraits\PageTestTrait;
-use App\Common\TestTraits\UrlTestTrait;
-use App\Common\TestTraits\VisibilityTestTrait;
-use App\Common\TestTraits\WaitTestTrait;
 
 use Facebook\WebDriver\Remote\RemoteWebDriver;
 use PHPUnit_Framework_TestCase;
@@ -32,16 +33,17 @@ use PHPUnit_Framework_TestCase;
 abstract class SeleniumTestCase extends PHPUnit_Framework_TestCase
 {
     use BrowserActionsTrait;
-    use ElementAssertTrait;
+    use ElementAssertionsTrait;
     use FindHelperTrait;
     use FormAssertionsTrait;
     use FormActionsTrait;
     use KeyboardActionsTrait;
-    use MouseTestTrait;
-    use PageTestTrait;
-    use UrlTestTrait;
-    use VisibilityTestTrait;
-    use WaitTestTrait;
+    use MouseActionsTrait;
+    use PageAssertionsTrait;
+    use UrlActionsTrait;
+    use UrlAssertionsTrait;
+    use VisibilityAssertionsTrait;
+    use WaitAssertionsTrait;
 
     /**
      * @var RemoteWebDriver $driver

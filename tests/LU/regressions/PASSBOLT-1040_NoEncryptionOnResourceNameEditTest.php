@@ -54,7 +54,7 @@ class PASSBOLT1040 extends PassboltTestCase
             //
         }
 
-        // Then I should see a success notification message saying the password is updated.
+        // Then  I should see a success notification message saying the password is updated.
         $this->assertNotification('app_resources_edit_success');
     }
 }

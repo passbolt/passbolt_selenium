@@ -14,7 +14,7 @@ class PASSBOLT1680 extends PassboltTestCase
      * Given I am Ada
      * And I am logged in
      * When I create a new password with a secret of 4096 characters
-     * Then I see the password I created in my password list
+     * Then  I see the password I created in my password list
      * And I see the secret match the entry I made
      */
     public function testCreatePasswordAndView() 
@@ -48,7 +48,7 @@ class PASSBOLT1680 extends PassboltTestCase
         $this->click('.create-password-dialog input[type=submit]');
         $this->assertNotification('app_resources_add_success');
 
-        // Then I see the password I created in my password list
+        // Then  I see the password I created in my password list
         $this->assertElementContainsText(
             $this->find('js_wsp_pwd_browser'), $password['name']
         );

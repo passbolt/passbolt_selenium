@@ -12,7 +12,7 @@ class UserWorkspaceGroupTest extends PassboltTestCase
 {
     /**
      * @group saucelabs
-     * Scenario :   As a user I can browse the list of all the groups in the groups section of the user workspace
+     * Scenario: As a user I can browse the list of all the groups in the groups section of the user workspace
      *
      * Given        I am logged in as LU, and I go to the user workspace
      * Then            I should see the list of groups available in the left hand sidebar
@@ -39,7 +39,7 @@ class UserWorkspaceGroupTest extends PassboltTestCase
 
     /**
      * @group saucelabs
-     * Scenario :   As a user I can see the list users that are part of the group in the users grid by using the group filter
+     * Scenario: As a user I can see the list users that are part of the group in the users grid by using the group filter
      *
      * Given        I am logged in as LU, and I go to the user workspace
      * When         I click on a group name
@@ -60,7 +60,7 @@ class UserWorkspaceGroupTest extends PassboltTestCase
         $group = Group::get(['id' => Uuid::get('group.id.ergonom')]);
         $this->clickGroup($group['id']);
 
-        // Then I should see that the given group is selected
+        // Then  I should see that the given group is selected
         $this->assertGroupSelected($group['id']);
 
         // And I should see that the list of users display only the users that are part of this group.

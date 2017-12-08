@@ -32,7 +32,7 @@ class PHPUnit_Extensions_SeleniumCommon_RemoteCoverage
     }
 
     /**
-     * @param array $coverage
+     * @param  array $coverage
      * @return array
      * @author Mattis Stordalen Flister <mattis@xait.no>
      */
@@ -58,7 +58,7 @@ class PHPUnit_Extensions_SeleniumCommon_RemoteCoverage
     }
 
     /**
-     * @param string $path
+     * @param  string $path
      * @return string
      * @author Mattis Stordalen Flister <mattis@xait.no>
      */

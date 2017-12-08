@@ -15,7 +15,7 @@ class LUGroupEditTest extends PassboltTestCase
 {
 
     /**
-     * Scenario :   As LU I shouldn't be able to edit groups from the users workspace
+     * Scenario: As LU I shouldn't be able to edit groups from the users workspace
      *
      * Given        I am a LU
      * And          I am on the user workspace
@@ -38,7 +38,7 @@ class LUGroupEditTest extends PassboltTestCase
         $group = Group::get(['id' => Uuid::get('group.id.ergonom')]);
         $this->clickGroup($group['id']);
 
-        // Then I should see that there is no dropdown button next to the groups
+        // Then  I should see that there is no dropdown button next to the groups
         $this->assertNotVisible("#group_${group['id']} .right-cell a");
     }
 

@@ -25,14 +25,14 @@ trait ConfirmationDialogAssertionsTrait
     {
         // Assert I can see the confirm dialog.
         $this->waitUntilISee('.dialog.confirm');
-        // Then I can see the close dialog button
+        // Then  I can see the close dialog button
         $this->assertVisible('.dialog.confirm a.dialog-close');
-        // Then I can see the cancel link.
+        // Then  I can see the cancel link.
         $this->assertVisible('.dialog.confirm a.cancel');
-        // Then I can see the Ok button.
+        // Then  I can see the Ok button.
         $this->assertVisible('.dialog.confirm input#confirm-button');
         if ($title !== '') {
-            // Then I can see the title
+            // Then  I can see the title
             $this->assertElementContainsText('.dialog.confirm', $title);
         }
     }
@@ -46,13 +46,13 @@ trait ConfirmationDialogAssertionsTrait
     {
         // Assert I can see the confirm dialog.
         $this->waitUntilISee('.session-expired-dialog', null, 120);
-        // Then I can see the close dialog button
+        // Then  I can see the close dialog button
         $this->assertNotVisible('.session-expired-dialog a.dialog-close');
-        // Then I can see the cancel link.
+        // Then  I can see the cancel link.
         $this->assertNotVisible('.session-expired-dialog a.cancel');
-        // Then I can see the Ok button.
+        // Then  I can see the Ok button.
         $this->assertVisible('.session-expired-dialog input#confirm-button');
-        // Then I can see the title
+        // Then  I can see the title
         $this->assertElementContainsText('.session-expired-dialog', 'Session expired');
     }
 }

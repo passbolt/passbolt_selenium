@@ -16,7 +16,7 @@ class LoginTest extends PassboltTestCase
 
     /**
      * @group saucelabs
-     * Scenario:  As AN I can login to passbolt
+     * Scenario: As AN I can login to passbolt
      * @todo document the steps
      * @throws Exception
      */
@@ -65,7 +65,7 @@ class LoginTest extends PassboltTestCase
     }
 
     /**
-     * Scenario:  As AN I can login to passbolt by submitting the login form with the enter key
+     * Scenario: As AN I can login to passbolt by submitting the login form with the enter key
      *
      * @todo   document the steps
      * @throws Exception
@@ -113,14 +113,14 @@ class LoginTest extends PassboltTestCase
     }
 
     /**
-     * Scenario:  As AN I can login to passbolt on different tabs without conflict between workers
+     * Scenario: As AN I can login to passbolt on different tabs without conflict between workers
      * Given     As AN with plugin on the login page
      * When I open a new tab and go to the login page
      * And I switch back to the first tab
-     * Then I should be able to login to passbolt from the first tab
+     * Then  I should be able to login to passbolt from the first tab
      * When I logout
      * And I switch to the second tab
-     * Then I should be able to login to passbolt from the second tab
+     * Then  I should be able to login to passbolt from the second tab
      *
      * @throws Exception
      */
@@ -139,7 +139,7 @@ class LoginTest extends PassboltTestCase
         // And I switch back to the first tab
         $this->switchToPreviousTab();
 
-        // Then I should be able to login to passbolt from the first tab.
+        // Then  I should be able to login to passbolt from the first tab.
         $this->loginAs($user);
 
         // When I logout
@@ -148,7 +148,7 @@ class LoginTest extends PassboltTestCase
         // And I switch to the second tab
         $this->switchToNextTab();
 
-        // Then I should be able to login to passbolt from the second tab
+        // Then  I should be able to login to passbolt from the second tab
         $this->loginAs($user);
     }
 
@@ -157,11 +157,11 @@ class LoginTest extends PassboltTestCase
      * @group chrome-only
      * @group no-saucelabs
      *
-     * Scenario:  As LU I should still be logged in after I restart the browser
+     * Scenario: As LU I should still be logged in after I restart the browser
      * Given I am Ada
      * And I am logged in on the passwords workspace
      * When I restart the browser
-     * Then I should still be logged in
+     * Then  I should still be logged in
      *
      * @throws Exception
      */
@@ -177,7 +177,7 @@ class LoginTest extends PassboltTestCase
         // When I restart the browser
         $this->restartBrowser();
 
-        // Then I should still be logged in
+        // Then  I should still be logged in
         $this->waitUntilISee('.logout');
     }
 
@@ -186,12 +186,12 @@ class LoginTest extends PassboltTestCase
      * PASSBOLT-2263 close and restore doesn't work with the latest chrome driver
      * PASSBOLT-2419 close and restore doesn't work with the latest firefox driver
      *
-     * Scenario:  As LU I should still be logged in after I close and restore the passbolt tab
+     * Scenario: As LU I should still be logged in after I close and restore the passbolt tab
      * Given I am Ada
      * And I am on second tab
      * And I am logged in on the passwords workspace
      * When I close and restore the tab
-     * Then I should still be logged in
+     * Then  I should still be logged in
      *
      * @throws Exception
      */
@@ -211,7 +211,7 @@ class LoginTest extends PassboltTestCase
         $this->closeAndRestoreTab();
         $this->waitCompletion();
 
-        // Then I should still be logged in
+        // Then  I should still be logged in
         $this->waitUntilISee('.logout');
     }
 

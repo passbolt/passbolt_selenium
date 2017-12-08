@@ -14,12 +14,12 @@
 class UserCopyToClipboardTest extends PassboltTestCase
 {
     /**
-     * Scenario : As a admin I can see the list of copy options when clicking right on a user
+     * Scenario: As a admin I can see the list of copy options when clicking right on a user
      *
      * Given I am Admin
      * And I am logged in on the user workspace
      * When I right click on the user betty.
-     * Then I can see the contextual menu
+     * Then  I can see the contextual menu
      * And I can see the first option is 'Copy public key' and is enabled
      * And I can see next option is 'Copy email address' and is enabled
      */
@@ -38,7 +38,7 @@ class UserCopyToClipboardTest extends PassboltTestCase
         // When I right click on the first password in the list
         $this->rightClickUser($betty['id']);
 
-        // Then I can see the contextual menu
+        // Then  I can see the contextual menu
         $e = $this->findById('js_contextual_menu');
 
         // And I can see the first option is 'Copy public key' and is enabled
@@ -50,15 +50,15 @@ class UserCopyToClipboardTest extends PassboltTestCase
 
     /**
      * @group saucelabs
-     * Scenario : As a admin I can copy the public key to clipboard with a right click
+     * Scenario: As a admin I can copy the public key to clipboard with a right click
      *
      * Given I am Admin
      * And I am logged in on the user workspace
      * When I select the user betty@passbolt.com
      * And I right click
-     * Then I can see the contextual menu
+     * Then  I can see the contextual menu
      * When I click on the link 'copy public key'
-     * Then I can see a success message saying the public key was 'copied to clipboard'
+     * Then  I can see a success message saying the public key was 'copied to clipboard'
      * And      The content of the clipboard is valid
      */
     public function testCopyPublicKeyToClipboardViaContextualMenu() 
@@ -76,13 +76,13 @@ class UserCopyToClipboardTest extends PassboltTestCase
         // When I right click on the user betty in the list
         $this->rightClickUser($betty['id']);
 
-        // Then I can see the contextual menu
+        // Then  I can see the contextual menu
         $e = $this->findById('js_contextual_menu');
 
         // When I click on the link 'copy public key'
         $this->click('#js_user_browser_menu_copy_key a');
 
-        // Then I can see a success message telling me the public key was copied to clipboard
+        // Then  I can see a success message telling me the public key was copied to clipboard
         $this->assertNotification('plugin_clipboard_copy_success');
 
         // And the content of the clipboard is valid
@@ -91,15 +91,15 @@ class UserCopyToClipboardTest extends PassboltTestCase
 
     /**
      * @group saucelabs
-     * Scenario : As a admin I can copy the public key to clipboard with a right click
+     * Scenario: As a admin I can copy the public key to clipboard with a right click
      *
      * Given I am Admin
      * And I am logged in on the user workspace
      * When I select the user betty@passbolt.com
      * And I right click
-     * Then I can see the contextual menu
+     * Then  I can see the contextual menu
      * When I click on the link 'copy email address'
-     * Then I can see a success message saying the email was 'copied to clipboard'
+     * Then  I can see a success message saying the email was 'copied to clipboard'
      * And      The content of the clipboard is valid
      */
     public function testCopyEmailToClipboardViaContextualMenu() 
@@ -117,13 +117,13 @@ class UserCopyToClipboardTest extends PassboltTestCase
         // When I right click on the user betty
         $this->rightClickUser($betty['id']);
 
-        // Then I can see the contextual menu
+        // Then  I can see the contextual menu
         $e = $this->findById('js_contextual_menu');
 
         // When I click on the link 'copy password'
         $this->click('#js_user_browser_menu_copy_email a');
 
-        // Then I can see a success message telling me the email was copied to clipboard
+        // Then  I can see a success message telling me the email was copied to clipboard
         $this->assertNotification('plugin_clipboard_copy_success');
 
         // And the content of the clipboard is valid
@@ -160,7 +160,7 @@ class UserCopyToClipboardTest extends PassboltTestCase
         // And I click on a the copy secret password link in the sidebar
         $this->click('#js_user_details a.copy-public-key');
 
-        // Then I can see a success message telling me the public key was copied to clipboard
+        // Then  I can see a success message telling me the public key was copied to clipboard
         $this->assertNotification('plugin_clipboard_copy_success');
 
         // And the content of the clipboard is valid

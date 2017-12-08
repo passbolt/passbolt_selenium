@@ -22,7 +22,7 @@ class PasswordCreateTest extends PassboltTestCase
 {
 
     /**
-     * Scenario :   As a user I can view the create password dialog
+     * Scenario: As a user I can view the create password dialog
      *
      * Given        I am Ada
      * And          I am logged in as Ada
@@ -58,7 +58,7 @@ class PasswordCreateTest extends PassboltTestCase
         // I am logged in as Carol, and I go to the user workspace
         $this->loginAs($user);
 
-        // then I see the create password button
+        // Then  I see the create password button
         $this->assertElementContainsText(
             $this->find('.main-action-wrapper'), 'create'
         );
@@ -66,7 +66,7 @@ class PasswordCreateTest extends PassboltTestCase
         // When I click on create button
         $this->click('js_wsp_create_button');
 
-        // Then I see the create password dialog
+        // Then  I see the create password dialog
         $this->assertVisible('.create-password-dialog');
 
         // And I see the title is set to "create password"
@@ -135,17 +135,17 @@ class PasswordCreateTest extends PassboltTestCase
      * And I am logged in
      * And I am on the password workspace
      * When I click on the create password button
-     * Then I see the create password dialog
+     * Then  I see the create password dialog
      * When I click on the cancel button
-     * Then I should not see the create password dialog
+     * Then  I should not see the create password dialog
      * When I click on the create password button
-     * Then I see the create password dialog
+     * Then  I see the create password dialog
      * When I click on the close dialog button
-     * Then I should not see the create password dialog
+     * Then  I should not see the create password dialog
      * When I click on the create password button
-     * Then I see the create password dialog
+     * Then  I see the create password dialog
      * When I press the keyboard escape key
-     * Then I should not see the create password dialog
+     * Then  I should not see the create password dialog
      */
     public function testCreatePasswordDialogOpenClose() 
     {
@@ -159,39 +159,39 @@ class PasswordCreateTest extends PassboltTestCase
         // When I click on the create password button
         $this->click('js_wsp_create_button');
 
-        // Then I see the create password dialog
+        // Then  I see the create password dialog
         $this->assertVisible('.create-password-dialog');
 
         // When I click on the cancel button
         $this->findByCss('.create-password-dialog a.cancel')->click();
 
-        // Then I should not see the create password dialog
+        // Then  I should not see the create password dialog
         $this->assertNotVisible('.create-password-dialog');
 
         // -- WITH X BUTTON --
         // When I click on the create password button
         $this->click('js_wsp_create_button');
 
-        // Then I see the create password dialog
+        // Then  I see the create password dialog
         $this->assertVisible('.create-password-dialog');
 
         // When I click on the close dialog button
         $this->findByCss('.create-password-dialog a.dialog-close')->click();
 
-        // Then I should not see the create password dialog
+        // Then  I should not see the create password dialog
         $this->assertNotVisible('.create-password-dialog');
 
         // -- WITH ESCAPE --
         // When I click on the create password button
         $this->click('js_wsp_create_button');
 
-        // Then I see the create password dialog
+        // Then  I see the create password dialog
         $this->assertVisible('.create-password-dialog');
 
         // When I click on the escape key
         $this->pressEscape();
 
-        // Then I should not see the create password dialog
+        // Then  I should not see the create password dialog
         $this->assertTrue($this->isNotVisible('.create-password-dialog'));
 
     }
@@ -203,18 +203,18 @@ class PasswordCreateTest extends PassboltTestCase
      * And I am logged in
      * And I am on the create password dialog
      * When I press the enter key on the keyboard
-     * Then I see an error message saying that the name is required
+     * Then  I see an error message saying that the name is required
      * When I enter '<' as a name
      * And I enter '<' as a username
      * And I enter '<' as a url
      * And I enter '<' as a description
      * And I click on the save button
-     * Then I see an error message saying that the name contain invalid characters
-     * Then I see an error message saying that the username contain invalid characters
-     * Then I see an error message saying that the url is not valid
-     * Then I see an error message saying that the description contain invalid characters
+     * Then  I see an error message saying that the name contain invalid characters
+     * Then  I see an error message saying that the username contain invalid characters
+     * Then  I see an error message saying that the url is not valid
+     * Then  I see an error message saying that the description contain invalid characters
      * When I enter 'aa' as a url
-     * Then I see an error message saying that the length should be between x and x characters
+     * Then  I see an error message saying that the length should be between x and x characters
      */
     public function testCreatePasswordErrorMessages() 
     {
@@ -234,7 +234,7 @@ class PasswordCreateTest extends PassboltTestCase
         // And I press enter
         $this->pressEnter();
 
-        // Then I see an error message saying that the name is required
+        // Then  I see an error message saying that the name is required
         $this->assertVisible('#js_field_name_feedback.error.message');
         $this->assertElementContainsText(
             $this->find('js_field_name_feedback'), 'is required'
@@ -258,7 +258,7 @@ class PasswordCreateTest extends PassboltTestCase
         // And I click save
         $this->click('.create-password-dialog input[type=submit]');
 
-        // Then I see an error message saying that the name contain invalid characters
+        // Then  I see an error message saying that the name contain invalid characters
         $this->assertVisible('#js_field_name_feedback.error.message');
         $this->assertElementContainsText(
             $this->find('js_field_name_feedback'), 'should only contain alphabets, numbers'
@@ -293,7 +293,7 @@ class PasswordCreateTest extends PassboltTestCase
         // When I enter aa as a url
         $this->inputText('js_field_uri', 'aa');
 
-        // Then I see an error message saying that the length should be between x and x characters
+        // Then  I see an error message saying that the length should be between x and x characters
         $this->assertVisible('#js_field_uri_feedback.error.message');
         $this->assertElementContainsText(
             $this->find('js_field_uri_feedback'), 'URI should be between'
@@ -313,7 +313,7 @@ class PasswordCreateTest extends PassboltTestCase
      * And I enter 'localhost ftp test account' as the description
      * And I enter 'ftp-password-test' as password
      * And I click on the save button
-     * Then I see a dialog telling me encryption is in progress
+     * Then  I see a dialog telling me encryption is in progress
      * And I see a notice message that the operation was a success
      * And I see the password I created in my password list
      */
@@ -368,22 +368,22 @@ class PasswordCreateTest extends PassboltTestCase
      * Given I am Ada
      * And I am logged in
      * And I am on the create password dialog
-     * Then I can see that the field name has the focus
+     * Then  I can see that the field name has the focus
      * When I enter 'localhost ftp' as the name
      * And I press the tab key
-     * Then I should see that the field username has the focus
+     * Then  I should see that the field username has the focus
      * When I enter 'test' as the username
      * And I press the tab key
-     * Then I should see that the field uri has the focus
+     * Then  I should see that the field uri has the focus
      * When I enter 'ftp://passbolt.com' as the uri
      * And I press the tab key
-     * Then I should see that the password field is selected
+     * Then  I should see that the password field is selected
      * When I enter 'ftp-password-test' as password
      * And I press the tab key
-     * Then I should see that the field description is selected
+     * Then  I should see that the field description is selected
      * When I enter 'localhost ftp test account' as the description
      * And I press enter
-     * Then I see a dialog telling me encryption is in progress
+     * Then  I see a dialog telling me encryption is in progress
      * And I see a notice message that the operation was a success
      * And I see the password I created in my password list
      */
@@ -470,23 +470,23 @@ class PasswordCreateTest extends PassboltTestCase
      * Given I am Ada
      * And I am logged in
      * And I am on the create password dialog
-     * Then I can see that the field name has the focus
+     * Then  I can see that the field name has the focus
      * When I press the tab key
-     * Then I should see that the field username has the focus
+     * Then  I should see that the field username has the focus
      * When I press the tab key
-     * Then I should see that the field uri has the focus
+     * Then  I should see that the field uri has the focus
      * When I press the tab key
-     * Then I should see that the password field has the focus
+     * Then  I should see that the password field has the focus
      * When I press the tab key
-     * Then I should see that the field description has the focus
+     * Then  I should see that the field description has the focus
      * When I press backtab key
-     * Then I should see that the password field has the focus
+     * Then  I should see that the password field has the focus
      * When I press the backtab key
-     * Then I should see that the uri field has the focus
+     * Then  I should see that the uri field has the focus
      * When I press the backtab key
-     * Then I should see that the username field has the focus
+     * Then  I should see that the username field has the focus
      * When I press the backtab key
-     * Then I should see that the name field has the focus.
+     * Then  I should see that the name field has the focus.
      */
     public function testCreatePasswordKeyboardShortcuts() 
     {
@@ -567,7 +567,7 @@ class PasswordCreateTest extends PassboltTestCase
      * And I am logged in
      * And I am on the create password dialog
      * When I click the button to generate a new random password automatically
-     * Then I see the secret field populated
+     * Then  I see the secret field populated
      * And I see that the password complexity is set to fair
      */
     public function testCreatePasswordGenerateButton() 
@@ -587,7 +587,7 @@ class PasswordCreateTest extends PassboltTestCase
         $this->assertComplexity('not available');
         $this->click('js_secret_generate');
 
-        // Then I see the secret field populated
+        // Then  I see the secret field populated
         $s = $this->findById('js_secret')->getAttribute('value');
         $this->assertNotEmpty($s);
 
@@ -604,11 +604,11 @@ class PasswordCreateTest extends PassboltTestCase
      * And I am logged in
      * And I am on the create password dialog
      * When I enter a password value
-     * Then I should not see the input field with the password in clear text
+     * Then  I should not see the input field with the password in clear text
      * When I click on the show password
-     * Then I see the input field with the password in clear text
+     * Then  I see the input field with the password in clear text
      * When I click on the show password
-     * Then I should not see the input field with the password in clear text
+     * Then  I should not see the input field with the password in clear text
      */
     public function testCreatePasswordViewButton() 
     {
@@ -625,14 +625,14 @@ class PasswordCreateTest extends PassboltTestCase
         // When I enter a password value
         $this->inputSecret('ftp-password-test');
 
-        // Then I should not see the input field with the password in clear text
+        // Then  I should not see the input field with the password in clear text
         $this->goIntoSecretIframe();
         $this->assertTrue($this->isNotVisible('#js_secret_clear'));
 
         // When I click on the view password
         $this->click('js_secret_view');
 
-        // Then I see the input field with the password in clear text
+        // Then  I see the input field with the password in clear text
         $this->assertNotVisible('js_secret');
         $this->assertVisible('js_secret_clear');
         $this->assertTrue($this->findById('js_secret_clear')->getAttribute('value') == 'ftp-password-test');
@@ -640,7 +640,7 @@ class PasswordCreateTest extends PassboltTestCase
         // When I click on the view password
         $this->click('js_secret_view');
 
-        // Then I should not see the input field with the password in clear text
+        // Then  I should not see the input field with the password in clear text
         $this->assertNotVisible('js_secret_clear');
     }
 
@@ -656,11 +656,11 @@ class PasswordCreateTest extends PassboltTestCase
      * And I enter 'localhost ftp test account' as the description
      * And I enter 'ftp-password-test' as password
      * And I click on the save button
-     * Then I see a dialog telling me encryption is in progress
+     * Then  I see a dialog telling me encryption is in progress
      * And I see a notice message that the operation was a success
      * And I see the password I created in my password list
      * When I access the last notification email sent
-     * Then I should see an email informing me that I have saved a new password
+     * Then  I should see an email informing me that I have saved a new password
      */
     public function testCreatePasswordEmailNotification() 
     {
@@ -714,20 +714,20 @@ class PasswordCreateTest extends PassboltTestCase
     /**
      * @group no-saucelabs
      *
-     * Scenario:  As LU I can use passbolt on multiple tabs and create password
+     * Scenario: As LU I can use passbolt on multiple tabs and create password
      * Given I am Ada
      * And I am logged in
      * When I open a new tab and go to passbolt url
      * And I switch back to the first tab
      * And I create a password
-     * Then I should see my newly created password
+     * Then  I should see my newly created password
      * When I switch to the second tab
      * And I create a password
-     * Then I should see my newly created password
+     * Then  I should see my newly created password
      * When I refresh the second tab
-     * Then I should see the password I created on the first tab
+     * Then  I should see the password I created on the first tab
      * When I switch to the first tab and I refresh it
-     * Then I should see the password I created on the second tab
+     * Then  I should see the password I created on the second tab
      * @throws Exception
      */
     public function testMultipleTabsCreatePassword() 
@@ -756,7 +756,7 @@ class PasswordCreateTest extends PassboltTestCase
         );
         $this->createPassword($password);
 
-        // Then I should see my newly created password
+        // Then  I should see my newly created password
         $this->assertElementContainsText(
             $this->find('js_wsp_pwd_browser'), 'password_tab_1'
         );
@@ -772,7 +772,7 @@ class PasswordCreateTest extends PassboltTestCase
         );
         $this->createPassword($password);
 
-        // Then I should see my newly created password
+        // Then  I should see my newly created password
         $this->assertElementContainsText(
             $this->find('js_wsp_pwd_browser'), 'password_tab_2'
         );
@@ -781,7 +781,7 @@ class PasswordCreateTest extends PassboltTestCase
         $this->driver->navigate()->refresh();
         $this->waitCompletion();
 
-        // Then I should see the password I created on the first tab
+        // Then  I should see the password I created on the first tab
         $this->assertElementContainsText(
             $this->find('js_wsp_pwd_browser'), 'password_tab_1'
         );
@@ -791,7 +791,7 @@ class PasswordCreateTest extends PassboltTestCase
         $this->driver->navigate()->refresh();
         $this->waitCompletion();
 
-        // Then I should see the password I created on the second tab
+        // Then  I should see the password I created on the second tab
         $this->assertElementContainsText(
             $this->find('js_wsp_pwd_browser'), 'password_tab_2'
         );
@@ -801,11 +801,11 @@ class PasswordCreateTest extends PassboltTestCase
      * @group no-saucelabs
      * @group skip
      *
-     * Scenario:  As LU I should be able to create a password after I restart the browser
+     * Scenario: As LU I should be able to create a password after I restart the browser
      * Given I am Ada
      * And I am logged in on the passwords workspace
      * When I restart the browser
-     * Then I should be able to create a password
+     * Then  I should be able to create a password
      *
      * @throws Exception
      */
@@ -825,7 +825,7 @@ class PasswordCreateTest extends PassboltTestCase
         $this->restartBrowser();
         $this->waitCompletion();
 
-        // Then I should be able to create a password
+        // Then  I should be able to create a password
         $password = array(
             'name' => 'password_create_after_leaving_browser',
             'username' => 'password_create_after_leaving_browser',
@@ -839,12 +839,12 @@ class PasswordCreateTest extends PassboltTestCase
      * PASSBOLT-2263 close and restore doesn't work with the latest chrome driver
      * PASSBOLT-2419 close and restore doesn't work with the latest firefox driver
      *
-     * Scenario:  As LU I should be able to create a password after I close and restore the passbolt tab
+     * Scenario: As LU I should be able to create a password after I close and restore the passbolt tab
      * Given I am Ada
      * And I am on second tab
      * And I am logged in on the passwords workspace
      * When I close and restore the tab
-     * Then I should be able to create a password
+     * Then  I should be able to create a password
      *
      * @throws Exception
      */
@@ -867,7 +867,7 @@ class PasswordCreateTest extends PassboltTestCase
         $this->closeAndRestoreTab();
         $this->waitCompletion();
 
-        // Then I should be able to create a password
+        // Then  I should be able to create a password
         $password = array(
             'name' => 'password_create_after_leaving_browser',
             'username' => 'password_create_after_leaving_browser',

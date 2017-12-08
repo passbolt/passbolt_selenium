@@ -19,11 +19,11 @@
 class File_Iterator_Facade
 {
     /**
-     * @param array|string $paths
-     * @param array|string $suffixes
-     * @param array|string $prefixes
-     * @param array        $exclude
-     * @param bool         $commonPath
+     * @param  array|string $paths
+     * @param  array|string $suffixes
+     * @param  array|string $prefixes
+     * @param  array        $exclude
+     * @param  bool         $commonPath
      * @return array
      */
     public function getFilesAsArray($paths, $suffixes = '', $prefixes = '', array $exclude = array(), $commonPath = FALSE)
@@ -69,7 +69,7 @@ class File_Iterator_Facade
     /**
      * Returns the common path of a set of files.
      *
-     * @param array  $files
+     * @param  array  $files
      * @return string
      */
     protected function getCommonPath(array $files)

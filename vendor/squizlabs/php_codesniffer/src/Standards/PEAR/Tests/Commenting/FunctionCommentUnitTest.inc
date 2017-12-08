@@ -120,7 +120,7 @@ class PHP_CodeSniffer_File
      * Param not immediate
      *
      * @return
-     * @param  int   $threeSpaces
+     * @param   int   $threeSpaces
      * @param int     $superfluous
      * @param missing
      * @param

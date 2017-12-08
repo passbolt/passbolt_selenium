@@ -113,7 +113,7 @@ trait GroupAssertionsTrait
             $this->clickGroup($groupId);
         }
 
-        // Then I should see that the sidebar contains a member section
+        // Then  I should see that the sidebar contains a member section
         $this->waitUntilISee('#js_group_details.ready #js_group_details_members');
 
         // And I should see that the members sections contains the list of users that are members of this group

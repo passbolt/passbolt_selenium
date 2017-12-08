@@ -17,7 +17,7 @@ class PASSBOLT1758 extends PassboltTestCase
      * And I am logged in on the password workspace
      * When I go to the sharing dialog of a password I own
      * And I search a user by his lastname
-     * Then I should see only one result
+     * Then  I should see only one result
      * And I should see only the user Edit Clarke in the autocomplete list
      */
     public function testShareSearchUsersFiltersOnName() 
@@ -50,7 +50,7 @@ class PASSBOLT1758 extends PassboltTestCase
         // I wait the autocomplete box is loaded.
         $this->waitCompletion(10, '#passbolt-iframe-password-share-autocomplete.loaded');
 
-        // Then I should see only one result
+        // Then  I should see only one result
         $this->goIntoShareAutocompleteIframe();
         $listOfUsers = $this->driver->findElements(WebDriverBy::cssSelector('ul li'));
         $this->assertEquals(1, count($listOfUsers));

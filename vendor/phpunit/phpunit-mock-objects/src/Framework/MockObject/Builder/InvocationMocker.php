@@ -223,7 +223,7 @@ class PHPUnit_Framework_MockObject_Builder_InvocationMocker implements PHPUnit_F
     }
 
     /**
-     * @param array ...$arguments
+     * @param  array ...$arguments
      *
      * @return PHPUnit_Framework_MockObject_Builder_InvocationMocker
      */
@@ -237,7 +237,7 @@ class PHPUnit_Framework_MockObject_Builder_InvocationMocker implements PHPUnit_F
     }
 
     /**
-     * @param array ...$arguments
+     * @param  array ...$arguments
      *
      * @return PHPUnit_Framework_MockObject_Builder_InvocationMocker
      */

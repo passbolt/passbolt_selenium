@@ -38,7 +38,7 @@ class PASSBOLT1606 extends PassboltTestCase
         // When I am logged in on the password workspace
         $this->loginAs($user);
 
-        // Then I should see the session expired dialog
+        // Then  I should see the session expired dialog
         $this->assertSessionExpiredDialog();
 
         // And I switch to the previous
@@ -50,7 +50,7 @@ class PASSBOLT1606 extends PassboltTestCase
         // And I switch to the passbolt tab
         $this->switchToNextTab();
 
-        // Then I should see the login page
+        // Then  I should see the login page
         $this->waitUntilISee('.plugin-check.' . $this->_browser['type'] . '.success');
     }
 

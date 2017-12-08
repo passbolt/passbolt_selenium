@@ -30,7 +30,7 @@ class LogoutTest extends PassboltTestCase
      * Given I am Ada
      * And I am logged in on the password workspace
      * When I click on the logout button
-     * Then     Then I should see the login page
+     * Then     Then  I should see the login page
      *
      * @throws Exception
      */
@@ -55,7 +55,7 @@ class LogoutTest extends PassboltTestCase
         // When I click on the logout button
         $this->click('#js_app_navigation_right .logout a');
 
-        // Then I should see the login page
+        // Then  I should see the login page
         $this->waitUntilISee('.plugin-check.' . $this->_browser['type'] . '.success');
     }
 
@@ -65,7 +65,7 @@ class LogoutTest extends PassboltTestCase
      * And I am logged in on the password workspace
      * And I wait until the session expires
      * When I click on a password I own
-     * Then I should see the session expired dialog
+     * Then  I should see the session expired dialog
      * And I should be redirected to the login page in 60 seconds
      */
     public function testOnClickSessionExpiredAutoRedirect() 
@@ -93,7 +93,7 @@ class LogoutTest extends PassboltTestCase
         $resource = Resource::get(array('user' => 'ada', 'permission' => 'owner'));
         $this->clickPassword($resource['id']);
 
-        // Then I should see the session expired dialog
+        // Then  I should see the session expired dialog
         $this->assertSessionExpiredDialog();
 
         // And I should be redirected to the login page in 60 seconds
@@ -106,9 +106,9 @@ class LogoutTest extends PassboltTestCase
      * And I am logged in on the passwords workspace
      * When I wait until the session timeout
      * And I click on a password I own
-     * Then I should see the session expired dialog
+     * Then  I should see the session expired dialog
      * When I click on the 'Redirect now' button
-     * Then I should see the login page
+     * Then  I should see the login page
      */
     public function testOnClickSessionExpiredManualRedirect() 
     {
@@ -135,13 +135,13 @@ class LogoutTest extends PassboltTestCase
         $resource = Resource::get(array('user' => 'ada', 'permission' => 'owner'));
         $this->clickPassword($resource['id']);
 
-        // Then I should see the session expired dialog
+        // Then  I should see the session expired dialog
         $this->assertSessionExpiredDialog();
 
         // When I click on Redirect now
         $this->click('confirm-button');
 
-        // Then I should see the login page
+        // Then  I should see the login page
         $this->waitUntilISee('.plugin-check.' . $this->_browser['type'] . '.success');
     }
 
@@ -152,9 +152,9 @@ class LogoutTest extends PassboltTestCase
      * Given I am Ada
      * And I am logged in on the passwords workspace
      * When I wait until the session timeout
-     * Then I should see the session expired dialog
+     * Then  I should see the session expired dialog
      * When I click on the 'Redirect now' button
-     * Then I should see the login page
+     * Then  I should see the login page
      *
      * @throws Exception
      */
@@ -176,13 +176,13 @@ class LogoutTest extends PassboltTestCase
         // And I am logged in on the password workspace
         $this->loginAs($user);
 
-        // Then I should see the session expired dialog
+        // Then  I should see the session expired dialog
         $this->assertSessionExpiredDialog();
 
         // When I click on Redirect now button
         $this->click('confirm-button');
 
-        // Then I should see the login page
+        // Then  I should see the login page
         $this->waitUntilISee('.plugin-check.' . $this->_browser['type'] . '.success');
     }
 
@@ -190,11 +190,11 @@ class LogoutTest extends PassboltTestCase
      * @group no-saucelabs
      * @group skip
      *
-     * Scenario:  As LU I should be logged out when I quit the browser and restart it after my session expired
+     * Scenario: As LU I should be logged out when I quit the browser and restart it after my session expired
      * Given I am Ada
      * And I am logged in on the passwords workspace
      * When I quit the browser and restart it after my session is expired
-     * Then I should be logged out
+     * Then  I should be logged out
      *
      * @throws Exception
      */
@@ -223,7 +223,7 @@ class LogoutTest extends PassboltTestCase
             )
         );
 
-        // Then I should be logged out
+        // Then  I should be logged out
         $this->assertUrlMatch('/\/auth\/login/');
     }
 
@@ -232,11 +232,11 @@ class LogoutTest extends PassboltTestCase
      * PASSBOLT-2263 close and restore doesn't work with the latest chrome driver
      * PASSBOLT-2419 close and restore doesn't work with the latest firefox driver
      *
-     * Scenario:  As LU I should be logged out when I close the passbolt tab and restore it after my session expired
+     * Scenario: As LU I should be logged out when I close the passbolt tab and restore it after my session expired
      * Given I am Ada
      * And I am logged in on the passwords workspace
      * When I close the tab and restore it after my session is expired
-     * Then I should be logged out
+     * Then  I should be logged out
      *
      * @throws Exception
      */
@@ -268,7 +268,7 @@ class LogoutTest extends PassboltTestCase
             )
         );
 
-        // Then I should be logged out
+        // Then  I should be logged out
         $this->waitUntilUrlMatches('auth/login', 120);
     }
 

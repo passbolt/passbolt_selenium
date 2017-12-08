@@ -138,7 +138,7 @@ class SuiteLoader
      * Identify method dependencies, and group dependents and dependees on a single methodBatch.
      * Use max batch size to fill batches.
      *
-     * @param ParsedClass $class
+     * @param  ParsedClass $class
      * @return array of MethodBatches. Each MethodBatch has an array of method names
      */
     private function getMethodBatches($class)
@@ -194,9 +194,9 @@ class SuiteLoader
      * With empty filter this method returns single test if doesnt' have data provider or
      * data provider is not used and return all test if has data provider and data provider is used.
      *
-     * @param ParsedClass  $class            Parsed class.
-     * @param ParsedObject $method           Parsed method.
-     * @param bool         $useDataProvider  Try to use data provider or not.
+     * @param  ParsedClass  $class            Parsed class.
+     * @param  ParsedObject $method           Parsed method.
+     * @param  bool         $useDataProvider  Try to use data provider or not.
      * @return string[]     Array of test names.
      */
     private function getMethodTests($class, $method, $useDataProvider = false)

@@ -13,13 +13,13 @@ class ADUserViewTest extends PassboltTestCase
 
     /**
      * @group saucelabs
-     * Scenario :   As an admin I should be able to distinguish visually inactive users
+     * Scenario: As an admin I should be able to distinguish visually inactive users
      *
      * Given I am logged in as Admin, and I go to the user workspace
      * When        I look at Orna who is a deactivated user
-     * Then I should see that the user is shown in a different color
+     * Then  I should see that the user is shown in a different color
      * When I click on the user Orna
-     * Then I should see that the sidebar opens
+     * Then  I should see that the sidebar opens
      * And I shouldn't see the group details in the sidebar
      * And I shouldn't see the gpg key in the sidebar
      */
@@ -58,12 +58,12 @@ class ADUserViewTest extends PassboltTestCase
 
     /**
      * @group saucelabs
-     * Scenario :   As an admin I should see the sidebar groups section updated when I create a group
+     * Scenario: As an admin I should see the sidebar groups section updated when I create a group
      *
      * Given I am logged in as Admin, and I go to the user workspace
      * When        I click on a user
      * And I create a group where the user I selected is member of
-     * Then I should see the groups membership list updated with the new group
+     * Then  I should see the groups membership list updated with the new group
      */
     public function testUpdateSidebarGroupsListWhenCreateGroup() 
     {
@@ -87,7 +87,7 @@ class ADUserViewTest extends PassboltTestCase
         $users = ['frances'];
         $this->createGroup($group, $users, $user);
 
-        // Then I should see a success notification
+        // Then  I should see a success notification
         $this->assertNotification('app_groups_add_success');
 
         // I should see the groups membership list updated with the new group

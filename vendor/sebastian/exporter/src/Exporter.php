@@ -38,8 +38,8 @@ class Exporter
      *  - Carriage returns and newlines are normalized to \n
      *  - Recursion and repeated rendering is treated properly
      *
-     * @param mixed  $value
-     * @param int    $indentation The indentation level of the 2nd+ line
+     * @param  mixed  $value
+     * @param  int    $indentation The indentation level of the 2nd+ line
      * @return string
      */
     public function export($value, $indentation = 0)
@@ -48,8 +48,8 @@ class Exporter
     }
 
     /**
-     * @param mixed   $data
-     * @param Context $context
+     * @param  mixed   $data
+     * @param  Context $context
      * @return string
      */
     public function shortenedRecursiveExport(&$data, Context $context = null)
@@ -94,7 +94,7 @@ class Exporter
      * Newlines are replaced by the visible string '\n'.
      * Contents of arrays and objects (if any) are replaced by '...'.
      *
-     * @param mixed  $value
+     * @param  mixed  $value
      * @return string
      * @see    SebastianBergmann\Exporter\Exporter::export
      */
@@ -138,7 +138,7 @@ class Exporter
      * Converts an object to an array containing all of its private, protected
      * and public properties.
      *
-     * @param mixed $value
+     * @param  mixed $value
      * @return array
      */
     public function toArray($value)
@@ -196,9 +196,9 @@ class Exporter
     /**
      * Recursive implementation of export
      *
-     * @param mixed                                       $value       The value to export
-     * @param int                                         $indentation The indentation level of the 2nd+ line
-     * @param \SebastianBergmann\RecursionContext\Context $processed   Previously processed objects
+     * @param  mixed                                       $value       The value to export
+     * @param  int                                         $indentation The indentation level of the 2nd+ line
+     * @param  \SebastianBergmann\RecursionContext\Context $processed   Previously processed objects
      * @return string
      * @see    SebastianBergmann\Exporter\Exporter::export
      */

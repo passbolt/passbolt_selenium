@@ -60,7 +60,7 @@ trait UserActionsTrait
         if(!$this->isVisible('.page.people')) {
             $this->fail("click user requires to be on the user workspace");
         }
-        // if user is not an array, then it is a uuid.
+        // if user is not an array, Then  It is a uuid.
         if (!is_array($user)) {
             $user = ['id' => $user];
         }

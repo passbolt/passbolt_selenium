@@ -27,11 +27,11 @@ class UserEditTest extends PassboltTestCase
      *
      * Given I am Admin
      * And I am logged in on the user workspace
-     * Then I can see the edit user button is disabled
+     * Then  I can see the edit user button is disabled
      * When I click on a user
-     * Then I can see the edit button is enabled
+     * Then  I can see the edit button is enabled
      * When I click on the edit button
-     * Then I can see the edit user dialog
+     * Then  I can see the edit user dialog
      */
     public function testEditUserButton() 
     {
@@ -45,7 +45,7 @@ class UserEditTest extends PassboltTestCase
         // Go to user workspace
         $this->gotoWorkspace('user');
 
-        // Then I can see the edit user button is disabled
+        // Then  I can see the edit user button is disabled
         $this->assertVisible('js_user_wk_menu_edition_button');
         $this->assertVisible('#js_user_wk_menu_edition_button.disabled');
 
@@ -53,14 +53,14 @@ class UserEditTest extends PassboltTestCase
         $user = User::get('betty');
         $this->clickUser($user['id']);
 
-        // Then I can see the edit user button is disabled
+        // Then  I can see the edit user button is disabled
         $this->assertVisible('js_user_wk_menu_edition_button');
         $this->assertNotVisible('#js_user_wk_menu_edition_button.disabled');
 
         // When I click on the edit button
         $this->click('js_user_wk_menu_edition_button');
 
-        // Then I can see the edit user dialog
+        // Then  I can see the edit user dialog
         $this->assertVisible('.edit-user-dialog');
     }
 
@@ -70,10 +70,10 @@ class UserEditTest extends PassboltTestCase
      * Given I am Admin
      * And I am logged in on the user workspace
      * When I right click on the user I want to edit
-     * Then I can see the contextual menu
+     * Then  I can see the contextual menu
      * And I can see the the edit option is enabled
      * When I click on the edit link in the contextual menu
-     * Then I can see the edit user dialog
+     * Then  I can see the edit user dialog
      */
     public function testEditUserRightClick() 
     {
@@ -90,13 +90,13 @@ class UserEditTest extends PassboltTestCase
         $user = User::get('betty');
         $this->rightClickUser($user['id']);
 
-        // Then I can see the contextual menu
+        // Then  I can see the contextual menu
         $this->assertVisible('js_contextual_menu');
 
         // When I click on the edit link in the contextual menu
         $this->click('#js_user_browser_menu_edit a');
 
-        // Then I can see the edit user dialog
+        // Then  I can see the edit user dialog
         $this->assertVisible('.edit-user-dialog');
     }
 
@@ -108,13 +108,13 @@ class UserEditTest extends PassboltTestCase
      * And I am logged in on the user workspace
      * And I am editing a user
      * When I click on the cancel button
-     * Then I do not see the edit user dialog
+     * Then  I do not see the edit user dialog
      * When I reopen the edit user dialog
      * And I click on the close dialog button (in the top right corner)
-     * Then I do not see the edit user dialog
+     * Then  I do not see the edit user dialog
      * When I reopen the edit user dialog
      * And I press the escape button
-     * Then I do not see the edit user dialog
+     * Then  I do not see the edit user dialog
      */
     public function testEditUserDialogOpenClose() 
     {
@@ -133,7 +133,7 @@ class UserEditTest extends PassboltTestCase
         // When I click on the cancel button
         $this->click('.edit-user-dialog .js-dialog-cancel');
 
-        // Then I do not see the edit user dialog
+        // Then  I do not see the edit user dialog
         $this->assertNotVisible('.edit-user-dialog');
 
         // When I reopen the edit user dialog
@@ -144,7 +144,7 @@ class UserEditTest extends PassboltTestCase
         // And I click on the close dialog button (in the top right corner)
         $this->click('.edit-user-dialog .dialog-close');
 
-        // Then I do not see the edit user dialog
+        // Then  I do not see the edit user dialog
         $this->assertNotVisible('.edit-user-dialog');
 
         // When I reopen the edit user dialog
@@ -155,7 +155,7 @@ class UserEditTest extends PassboltTestCase
         // And I press the escape button
         $this->pressEscape();
 
-        // Then I do not see the edit user dialog
+        // Then  I do not see the edit user dialog
         $this->assertTrue($this->isNotVisible('.edit-user-dialog'));
     }
 
@@ -165,7 +165,7 @@ class UserEditTest extends PassboltTestCase
      * Given I am Admin
      * And I am logged on the user workspace
      * And I am editing a user
-     * Then I can see the edit user dialog
+     * Then  I can see the edit user dialog
      * And I can see the title is set to "edit xxx"
      * And I can see the close dialog button
      * And I can see the first name input and label is marked as mandatory
@@ -237,11 +237,11 @@ class UserEditTest extends PassboltTestCase
      * And I empty the first name input text field value
      * And I enter a new value
      * And I click save
-     * Then I can see a success notification
+     * Then  I can see a success notification
      * And I can see that the user first name has changed in the overview
      * And I can see the new first name value in the sidebar
      * When I click edit button
-     * Then I can see the new first name in the edit user dialog
+     * Then  I can see the new first name in the edit user dialog
      */
     public function testEditUserFirstName() 
     {
@@ -271,7 +271,7 @@ class UserEditTest extends PassboltTestCase
         // And I click save
         $this->click('.edit-user-dialog input[type=submit]');
 
-        // Then I can see a success notification
+        // Then  I can see a success notification
         $this->assertNotification('app_users_edit_success');
 
         // And I can see that the user first name have changed in the overview
@@ -283,7 +283,7 @@ class UserEditTest extends PassboltTestCase
         // When I click edit button
         $this->click('js_user_wk_menu_edition_button');
 
-        // Then I can see the new name in the edit user dialog
+        // Then  I can see the new name in the edit user dialog
         $this->assertInputValue('js_field_first_name', $newname);
     }
 
@@ -298,11 +298,11 @@ class UserEditTest extends PassboltTestCase
      * And I empty the last name input text field value
      * And I enter a new value
      * And I click save
-     * Then I can see a success notification
+     * Then  I can see a success notification
      * And I can see that the user last name has changed in the overview
      * And I can see the new last name value in the sidebar
      * When I click edit button
-     * Then I can see the new last name in the edit user dialog
+     * Then  I can see the new last name in the edit user dialog
      */
     public function testEditUserLastName() 
     {
@@ -332,7 +332,7 @@ class UserEditTest extends PassboltTestCase
         // And I click save
         $this->click('.edit-user-dialog input[type=submit]');
 
-        // Then I can see a success notification
+        // Then  I can see a success notification
         $this->assertNotification('app_users_edit_success');
 
         // And I can see that the user last name have changed in the overview
@@ -344,22 +344,22 @@ class UserEditTest extends PassboltTestCase
         // When I click edit button
         $this->click('js_user_wk_menu_edition_button');
 
-        // Then I can see the new name in the edit user dialog
+        // Then  I can see the new name in the edit user dialog
         $this->assertInputValue('js_field_last_name', $newname);
     }
 
     /**
-     * Scenario : As an admin I can modify the role of a non admin user to admin
+     * Scenario: As an admin I can modify the role of a non admin user to admin
      *
      * Given I am admin
      * And I am logged in on the user workspace
      * And I am editing a user who is not an admin
      * When I check the admin role
      * And I click save
-     * Then I can see a success notification
+     * Then  I can see a success notification
      * And I can see the admin role is visible in the sidebar
      * When I click edit button
-     * Then I can see the new last name in the edit user dialog
+     * Then  I can see the new last name in the edit user dialog
      */
     public function testEditUserRoleChangeToAdmin() 
     {
@@ -390,7 +390,7 @@ class UserEditTest extends PassboltTestCase
         // When I click edit button
         $this->click('js_user_wk_menu_edition_button');
 
-        // Then I can see the admin role checked in the role checkboxes
+        // Then  I can see the admin role checked in the role checkboxes
         $this->find('#js_field_role_id .role-admin input[type=checkbox][checked=checked]');
 
         // When I log out
@@ -416,7 +416,7 @@ class UserEditTest extends PassboltTestCase
     }
 
     /**
-     * Scenario : As an admin I can modify the role of an admin user to non admin
+     * Scenario: As an admin I can modify the role of an admin user to non admin
      *
      * Given I am admin
      * And I am logged in on the user workspace
@@ -430,12 +430,12 @@ class UserEditTest extends PassboltTestCase
      * And I edit the newly created user
      * And I uncheck the admin role
      * And I click save
-     * Then I can see a success notification
+     * Then  I can see a success notification
      * And I can see the user role is visible in the sidebar, and not admin role
      * When I log out
      * And I log in as the newly created user
      * And I go to user workspace
-     * Then I should not see the create button
+     * Then  I should not see the create button
      * And I should not see the edit button
      * And I should not see the delete button
      */
@@ -493,7 +493,7 @@ class UserEditTest extends PassboltTestCase
         // And I submit the changes
         $this->click('.edit-user-dialog input[type=submit]');
 
-        // Then I should see a success message
+        // Then  I should see a success message
         $this->assertNotification('app_users_edit_success');
 
         // And I should see that the user is marked as admin in the sidebar
@@ -523,7 +523,7 @@ class UserEditTest extends PassboltTestCase
     }
 
     /**
-     * Scenario :   As a admin I shouldn't be able to edit my own role
+     * Scenario: As a admin I shouldn't be able to edit my own role
      * Given        I am logged in as admin in the user workspace
      * When         I click on my own name in the users list
      * And          I click on the edit button
@@ -563,7 +563,7 @@ class UserEditTest extends PassboltTestCase
      * And I logout
      * And I am Ada
      * And I am logged in on the user workspace
-     * Then I can see the user with the new name
+     * Then  I can see the user with the new name
      */
     public function testEditUserUserAEditUserBCanSee() 
     {
@@ -601,7 +601,7 @@ class UserEditTest extends PassboltTestCase
         // And I go to user workspace
         $this->gotoWorkspace('user');
 
-        // Then I could see
+        // Then  I could see
         $this->assertElementContainsText('#js_wsp_users_browser .tableview-content', $u1['first_name'] . ' ' . $betty['LastName']);
     }
 
@@ -614,16 +614,16 @@ class UserEditTest extends PassboltTestCase
      * And I empty the field first name
      * And I empty the field last name
      * When I press the enter key on the keyboard
-     * Then I see an error message saying that the first name is required
+     * Then  I see an error message saying that the first name is required
      * And I see an error message saying that the last name is required
      * When I enter '&' as a first name
      * And I enter '&' as a last name
      * And I click on the save button
-     * Then I see an error message saying that the first name contain invalid characters
+     * Then  I see an error message saying that the first name contain invalid characters
      * And I see an error message saying that the last name contain invalid characters
      * When I enter 'aa' as a first name
      * And I enter 'aa' as a last name
-     * Then I see an error message saying that the length of first name should be between x and x characters
+     * Then  I see an error message saying that the length of first name should be between x and x characters
      * And I see an error message saying that the length of last name should be between x and x characters
      */
     public function testEditUserErrorMessages() 
@@ -651,13 +651,13 @@ class UserEditTest extends PassboltTestCase
         // And I press enter
         $this->pressEnter();
 
-        // Then I see an error message saying that the first name is required
+        // Then  I see an error message saying that the first name is required
         $this->assertVisible('#js_field_first_name_feedback.error.message');
         $this->assertElementContainsText(
             $this->find('js_field_first_name_feedback'), 'is required'
         );
 
-        // Then I see an error message saying that the last name is required
+        // Then  I see an error message saying that the last name is required
         $this->assertVisible('#js_field_last_name_feedback.error.message');
         $this->assertElementContainsText(
             $this->find('js_field_last_name_feedback'), 'is required'
@@ -672,13 +672,13 @@ class UserEditTest extends PassboltTestCase
         // And I click save
         $this->click('.edit-user-dialog input[type=submit]');
 
-        // Then I see an error message saying that the first name contain invalid characters
+        // Then  I see an error message saying that the first name contain invalid characters
         $this->assertVisible('#js_field_first_name_feedback.error.message');
         $this->assertElementContainsText(
             $this->find('js_field_first_name_feedback'), 'should only contain alphabets'
         );
 
-        // Then I see an error message saying that the first name contain invalid characters
+        // Then  I see an error message saying that the first name contain invalid characters
         $this->assertVisible('#js_field_last_name_feedback.error.message');
         $this->assertElementContainsText(
             $this->find('js_field_last_name_feedback'), 'should only contain alphabets'

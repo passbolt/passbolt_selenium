@@ -9,7 +9,7 @@ class PASSBOLT1783 extends PassboltTestCase
 {
 
     /**
-     * Scenario :   After creating a user, the given user can complete the setup and login with the chosen password
+     * Scenario: After creating a user, the given user can complete the setup and login with the chosen password
      * Given        I am admin
      * And          I am logged in
      * When         I go to user workspace
@@ -42,7 +42,7 @@ class PASSBOLT1783 extends PassboltTestCase
         }
         $this->click('.create-user-dialog input[type=submit]');
 
-        // Then I should a well formed error message
+        // Then  I should a well formed error message
         $this->assertElementContainsText(
             $this->find('js_field_first_name_feedback'),
             'First name should be between 2 and 64 characters long'

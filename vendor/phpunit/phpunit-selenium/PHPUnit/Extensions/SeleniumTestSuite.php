@@ -164,8 +164,8 @@ class PHPUnit_Extensions_SeleniumTestSuite extends PHPUnit_Framework_TestSuite
     }
 
     /**
-     * @param string $directory
-     * @param string $suffix
+     * @param  string $directory
+     * @param  string $suffix
      * @return array
      */
     private static function getSeleneseFiles($directory, $suffix)

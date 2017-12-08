@@ -40,7 +40,7 @@ class PASSBOLT1620 extends PassboltTestCase
         $this->clickLink("All users");
         $this->waitCompletion();
 
-        // Then I shouldn't see duplicated users in the list
+        // Then  I shouldn't see duplicated users in the list
         $carol = User::get('carol');
 
         $duplicatesCarolUsername = $this->findAllByXpath('//*[@id="js_wsp_users_browser"]//*[contains(text(), "' . $carol['Username'] . '")]');

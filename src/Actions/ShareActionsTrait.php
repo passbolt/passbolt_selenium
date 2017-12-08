@@ -111,13 +111,13 @@ trait ShareActionsTrait
         // When I click on the save button
         $this->click('js_rs_share_save');
 
-        // Then I see the passphrase dialog
+        // Then  I see the passphrase dialog
         $this->assertMasterPasswordDialog($user);
 
         // When I enter the passphrase and click submit
         $this->enterMasterPassword($user['MasterPassword']);
 
-        // Then I see a dialog telling me encryption is in progress
+        // Then  I see a dialog telling me encryption is in progress
         // Assert that the progress dialog is not displayed anymore (if it was displayed).
         $this->waitUntilIDontSee('#passbolt-iframe-progress-dialog');
 

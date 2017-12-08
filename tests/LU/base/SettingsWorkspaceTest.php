@@ -13,7 +13,7 @@ class SettingsWorkspaceTest extends PassboltTestCase
 
     /**
      * @group saucelabs
-     * Scenario :   As a user I should be able to search a password by keywords from the settings workspace
+     * Scenario: As a user I should be able to search a password by keywords from the settings workspace
      * Given        I am logged in as Ada, and I go to the password workspace
      * When         I fill the "app search" field with "Betty"
      * And          I click "search"

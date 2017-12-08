@@ -13,19 +13,19 @@ class MasterPasswordRememberTest extends PassboltTestCase
 
     /**
      * @group saucelabs
-     * Scenario : As a user I can have my passphrase remembered by the system.
+     * Scenario: As a user I can have my passphrase remembered by the system.
      *
      * Given I am Ada
      * And I am logged in on the password workspace
      * When I click on a password in the list
      * And I click on the link 'copy password'
-     * Then I should see the passphrase dialog.
+     * Then  I should see the passphrase dialog.
      * And I should see a checkbox remember my passphrase.
      * When I enter my passphrase from keyboard only
      * Then     The password should have been copied to clipboard
      * When I click on another password in the list
      * And I click on the link 'copy password'
-     * Then I should see the passphrase dialog
+     * Then  I should see the passphrase dialog
      * When I enter my passphrase from keyboard only
      * And I check the remember checkbox
      * Then     The password should have been copied to clipboard
@@ -49,7 +49,7 @@ class MasterPasswordRememberTest extends PassboltTestCase
         // And I click on the link 'copy password'
         $this->click('js_wk_menu_secretcopy_button');
 
-        // Then I should see the passphrase dialog.
+        // Then  I should see the passphrase dialog.
         $this->assertMasterPasswordDialog($user);
 
         // And I should see a checkbox remember my passphrase
@@ -73,7 +73,7 @@ class MasterPasswordRememberTest extends PassboltTestCase
         // And I click on the link 'copy password'
         $this->click('js_wk_menu_secretcopy_button');
 
-        // Then I should see the passphrase dialog
+        // Then  I should see the passphrase dialog
         $this->assertMasterPasswordDialog($user);
 
         // When I enter my passphrase from keyboard only

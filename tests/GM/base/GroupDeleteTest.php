@@ -35,7 +35,7 @@ class GMGroupDeleteTest extends PassboltTestCase
         $groupId = Uuid::get('group.id.ergonom');
         $this->click("#group_$groupId .right-cell a");
 
-        // Then I should see the group contextual menu
+        // Then  I should see the group contextual menu
         $this->assertVisible('#js_contextual_menu');
         $this->assertVisible('js_group_browser_menu_edit');
         $this->assertNotVisible('js_group_browser_menu_remove');

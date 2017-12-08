@@ -75,14 +75,14 @@ class PASSBOLT1380_Login extends PassboltTestCase
         // Go to setup page and register
         $this->goToSetup('johndoe@passbolt.com', false);
 
-        // Then I can see a block saying that I need an addon
+        // Then  I can see a block saying that I need an addon
         $this->assertVisible('.plugin-check.firefox.error');
 
         // ThenI can see "Download it here" link in the plugin check box
         // When I click on the link
         $this->followLink('Download it here');
 
-        // Then I am redirected to https://addons.mozilla.org
+        // Then  I am redirected to https://addons.mozilla.org
         $this->waitUntilUrlMatches('https://addons.mozilla.org/en-US/firefox/addon/passbolt/', false);
         $this->assertTitleContain('Add-ons for Firefox');
     }

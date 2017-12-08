@@ -1,10 +1,22 @@
 <?php
-
+/**
+ * Passbolt ~ Open source password manager for teams
+ * Copyright (c) Passbolt SARL (https://www.passbolt.com)
+ *
+ * Licensed under GNU Affero General Public License version 3 of the or any later version.
+ * For full copyright and license information, please see the LICENSE.txt
+ * Redistributions of files must retain the above copyright notice.
+ *
+ * @copyright Copyright (c) Passbolt SARL (https://www.passbolt.com)
+ * @license   https://opensource.org/licenses/AGPL-3.0 AGPL License
+ * @link      https://www.passbolt.com Passbolt(tm)
+ * @since     2.0.0
+ */
 /**
  * Feature : Setup
- * As an anonymous user, I need to be able to see the setup page with an invitation to install the plugin.
- * As AP doing the setup, I should not be able to import a key already used by another user.
- * As an AP I should be able to download my private key after it is generated
+ * - As an anonymous user, I need to be able to see the setup page with an invitation to install the plugin.
+ * - As AP doing the setup, I should not be able to import a key already used by another user.
+ * - As an AP I should be able to download my private key after it is generated
  *
  * @TODO      : Test a scenario where the key is not compatible with GPG on server side.
  * @TODO      : Test scenario with a key that has matching information (same name and email).
@@ -12,17 +24,27 @@
  * @copyright (c) 2017 Passbolt SARL
  * @licence   GNU Affero General Public License http://www.gnu.org/licenses/agpl-3.0.en.html
  */
+namespace Tests\AP\base;
+
+use App\PassboltSetupTestCase;
+use App\Common\Config;
+use Data\Fixtures\User;
+
 class SetupTest extends PassboltSetupTestCase
 {
 
     /**
-     * Scenario:  I can see the setup page with instructions to install the plugin
-     * Given      I am an anonymous user with no plugin on the registration page
-     * And I follow the registration process and click on submit
-     * And I click on the link get started in the email I received
-     * Then       Wait until I see the first page of setup.
-     * And I should see the text "Nice one! The plugin is installed and up to date. You are good to go!"
-     * And I should see that the domain in the url check textbox is the same as the one configured.
+     * Scenario: I can see the setup page with instructions to install the plugin
+     *
+     * Given I am an anonymous user with no plugin on the registration page
+     * And   I follow the registration process and click on submit
+     * And   I click on the link get started in the email I received
+     * Then  Wait until I see the first page of setup.
+     * And   I should see the text "Nice one! The plugin is installed and up to date. You are good to go!"
+     * And   I should see that the domain in the url check textbox is the same as the one configured.
+     *
+     * @group AP
+     * @group setup
      */
     public function testCanSeeSetupPageWithFirstPluginSection() 
     {
@@ -50,7 +72,7 @@ class SetupTest extends PassboltSetupTestCase
     }
 
     /**
-     * Scenario :   I go through the setup and I make sure the navigation buttons and menu items are working properly.
+     * Scenario: I go through the setup and I make sure the navigation buttons and menu items are working properly.
      * Given        I am an anonymous user with the plugin on the first page of the setup
      * Then         the menu "1. get the plugin" should be selected
      * When         I check the domain validation checkbox
@@ -92,7 +114,8 @@ class SetupTest extends PassboltSetupTestCase
      * Then         I should reach the final step where I am being redirected
      * And          The "Login !" menu should be selected
      *
-     * @throws Exception
+     * @group AN
+     * @group setup
      */
     public function testNavigation() 
     {
@@ -226,7 +249,9 @@ class SetupTest extends PassboltSetupTestCase
      * When         I click "Next"
      * Then         I should observe that I am logged in inside the app
      * And          I should see my name and email in the account section
-     * @throws Exception
+     *
+     * @group AN
+     * @group setup
      */
     public function testCanFollowSetupWithDefaultSteps() 
     {
@@ -263,8 +288,8 @@ class SetupTest extends PassboltSetupTestCase
     }
 
     /**
-     * Scenario :  As an AP I should be able to import my own key during the setup
-     * Given       I am registered as John Doe, and I go to the setup
+     * Scenario: As an AP I should be able to import my own key during the setup
+     * Given I am registered as John Doe, and I go to the setup
      * When        I go through the setup until the import key step
      * And I test that I can import my key
      * Then        I should see that the setup behaves as it should (defined in function testStepImportKey)
@@ -272,7 +297,8 @@ class SetupTest extends PassboltSetupTestCase
      * Then        I should be logged in inside the app
      * And I should be able to visually confirm my account information
      *
-     * @throws Exception
+     * @group AN
+     * @group setup
      */
     public function testFollowSetupWithImportKey() 
     {
@@ -341,12 +367,14 @@ class SetupTest extends PassboltSetupTestCase
     /**
      * @group no-saucelabs
      *
-     * Scenario :  As an AP I should be able to download my private key after it is generated
-     * Given       I am registered as John Doe, and I go to the setup
-     * When        I go through the setup until the key backup step
-     * And I click on download
-     * Then        I should see that the key downloaded is in a valid PGP format
-     * @throws Exception
+     * Scenario: As an AP I should be able to download my private key after it is generated
+     * Given I am registered as John Doe, and I go to the setup
+     * When  I go through the setup until the key backup step
+     * And   I click on download
+     * Then  I should see that the key downloaded is in a valid PGP format
+     *
+     * @group AN
+     * @group setup
      */
     public function testSetupDownloadKeyAfterGenerate() 
     {
@@ -398,12 +426,13 @@ class SetupTest extends PassboltSetupTestCase
     }
 
     /**
-     * Scenario :   As an AP, I should not be able to do the setup after my account has been activated
+     * Scenario: As an AP, I should not be able to do the setup after my account has been activated
      * Given I click again on the link in the invitation email
      * Then  I should not see the setup again
      * And   I should see a page with a "Token not found" error
      *
-     * @throws Exception
+     * @group AN
+     * @group setup
      */
     public function testSetupNotAccessibleAfterAccountValidation() 
     {
@@ -429,12 +458,13 @@ class SetupTest extends PassboltSetupTestCase
     }
 
     /**
-     * Scenario :   As an AP, I should be able to complete 2 setup consecutively.
+     * Scenario: As an AP, I should be able to complete 2 setup consecutively.
      * Given I have completed already one registration + setup successfully.
      * When  I register again with a different username
      * Then  I should be able to complete the setup another time without error.
      *
-     * @throws Exception
+     * @group AN
+     * @group setup
      */
     public function testSetupMultipleTimes() 
     {
@@ -465,14 +495,15 @@ class SetupTest extends PassboltSetupTestCase
 
 
     /**
-     * Scenario :   As an AP, I should be able to restart the setup where I left it.
+     * Scenario: As an AP, I should be able to restart the setup where I left it.
      * Given I have completed already one registration and setup, but left the setup in the middle.
      * When  I click again on the setup link in the email I received
      * Then  I should see that the setup is restarting at the same screen where I was last time.
      * When  I press Cancel
      * Then  I should see that the setup is at the step before.
      *
-     * @throws Exception
+     * @group AN
+     * @group setup
      */
     public function testSetupRestartWhereItWasLeft() 
     {
@@ -520,13 +551,14 @@ class SetupTest extends PassboltSetupTestCase
     }
 
     /**
-     * Scenario :   As an AP trying to complete the setup a second time, I should see a warning informing me that the plugin is already configured.
+     * Scenario: As an AP trying to complete the setup a second time, I should see a warning informing me that the plugin is already configured.
      * Given I have completed already one registration + setup successfully (without seeing a warning)
      * When  I register again with a different username
      * And   I begin the setup process
      * Then  I should see a warning informing me that the plugin is already configured.
      *
-     * @throws Exception
+     * @group AN
+     * @group setup
      */
     public function testSetupDisplayWarningIfAlreadyConfigured() 
     {
@@ -567,12 +599,13 @@ class SetupTest extends PassboltSetupTestCase
     }
 
     /**
-     * Scenario:    As AP doing the setup, I should not be able to import a key already used by another user.
+     * Scenario: As AP doing the setup, I should not be able to import a key already used by another user.
      * Given I have registered and I am following the setup
      * When I am at the import step, and I try to import a key that is already in use by another user (example: Ada).
-     * Then I should see an error message informing me that this key is already in use.
+     * Then  I should see an error message informing me that this key is already in use.
      *
-     * @throws Exception
+     * @group AN
+     * @group setup
      */
     public function testFollowSetupWithImportNonUniqueKey() 
     {
@@ -621,13 +654,14 @@ class SetupTest extends PassboltSetupTestCase
     }
 
     /**
-     * Scenario:    As AP doing the setup, I should be able to import a key already used by another user who is soft deleted.
+     * Scenario: As AP doing the setup, I should be able to import a key already used by another user who is soft deleted.
      * Given I first login as admin and I delete Ada
      * When I have registered as a new user and I am following the setup
      * When I am at the import step, and I try to import a key that was already used by a deleted user.
-     * Then I should see that the key is imported normally.
+     * Then  I should see that the key is imported normally.
      *
-     * @throws Exception
+     * @group AN
+     * @group setup
      */
     public function testFollowSetupWithImportNonUniqueKeyBelongingToDeletedUser() 
     {
@@ -648,7 +682,7 @@ class SetupTest extends PassboltSetupTestCase
         $userU = User::get('ursula');
         $this->rightClickUser($userU['id']);
 
-        // Then I select the delete option in the contextual menu
+        // Then  I select the delete option in the contextual menu
         $this->click('#js_user_browser_menu_delete a');
 
         // Assert that the confirmation dialog is displayed.
@@ -657,7 +691,7 @@ class SetupTest extends PassboltSetupTestCase
         // Click ok in confirmation dialog.
         $this->confirmActionInConfirmationDialog();
 
-        // Then I should see a success notification message saying the user is deleted
+        // Then  I should see a success notification message saying the user is deleted
         $this->assertNotification('app_users_delete_success');
 
         $this->logout();

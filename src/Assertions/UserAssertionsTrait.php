@@ -100,27 +100,4 @@ trait UserAssertionsTrait
         $this->assertTrue($this->isUserInactive($id));
     }
 
-    /**
-     * Check if the given role is matching the one advertised on the app side
-     *
-     * @param  $role
-     * @throws PHPUnit_Framework_AssertionFailedError
-     */
-    public function assertCurrentRole($role) 
-    {
-        try {
-            $selector = 'html.' . $role;
-            $e =  $this->getDriver()->findElement(WebDriverBy::cssSelector($selector));
-            if(count($e)) {
-                $this->assertTrue(true);
-            } else {
-                $msg = 'The current user role is not ';
-                throw new PHPUnit_Framework_AssertionFailedError($msg);
-            }
-        } catch (NoSuchElementException $e) {
-            $msg = 'The current user role is not ' . $role;
-            throw new PHPUnit_Framework_AssertionFailedError($msg);
-        }
-    }
-
 }

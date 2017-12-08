@@ -17,7 +17,7 @@ class PasswordCommentTest extends PassboltTestCase
 
     /**
      * @group saucelabs
-     * Scenario :   As a user I should be able to add comments
+     * Scenario: As a user I should be able to add comments
      * Given        I am Ada
      * And          I am logged in
      * And          I click on a password
@@ -88,7 +88,7 @@ class PasswordCommentTest extends PassboltTestCase
     }
 
     /**
-     * Scenario :   As a user I should see error messages if the content entered is not alright
+     * Scenario: As a user I should see error messages if the content entered is not alright
      * Given        I am Ada
      * And          I am logged in
      * And          I click on a password
@@ -121,7 +121,7 @@ class PasswordCommentTest extends PassboltTestCase
 
         // Click on submit.
         $this->click('#js_rs_details_comments a.comment-submit');
-        // Then I see an error message saying that the field should not be empty
+        // Then  I see an error message saying that the field should not be empty
         $this->assertVisible('#js_rs_details_comments .js_comment_content_feedback');
         $this->assertElementContainsText(
             $this->find('#js_rs_details_comments .js_comment_content_feedback'), 'This information is required'
@@ -134,7 +134,7 @@ class PasswordCommentTest extends PassboltTestCase
     }
 
     /**
-     * Scenario :       As a user I should be able to delete a comment
+     * Scenario: As a user I should be able to delete a comment
      * Given            I am Ada
      * And              I am logged in
      * And              I click password
@@ -197,7 +197,7 @@ class PasswordCommentTest extends PassboltTestCase
     }
 
     /**
-     * Scenario :       As a user I should be able to delete a comment
+     * Scenario: As a user I should be able to delete a comment
      * Given            I am Ada
      * And              I am logged in
      * And              I click password
@@ -252,7 +252,7 @@ class PasswordCommentTest extends PassboltTestCase
     }
 
     /**
-     * Scenario :   As a user I should receive an email notification when I write a comment.
+     * Scenario: As a user I should receive an email notification when I write a comment.
      * Given        I am Ada
      * And          I am logged in
      * And          I click on a password

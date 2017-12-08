@@ -28,17 +28,17 @@ trait MasterPasswordAssertionsTrait
         $this->waitUntilISee('#passbolt-iframe-master-password.ready');
         // When I can go into the iframe
         $this->goIntoMasterPasswordIframe();
-        // Then I can see the security token is valid
+        // Then  I can see the security token is valid
         $this->assertSecurityToken($user, 'master');
-        // Then I can see the title
+        // Then  I can see the title
         $this->assertElementContainsText('.master-password.dialog', 'Please enter your passphrase');
-        // Then I can see the close dialog button
+        // Then  I can see the close dialog button
         $this->assertVisible('a.dialog-close');
-        // Then I can see the OK button
+        // Then  I can see the OK button
         $this->assertVisible('master-password-submit');
-        // Then I can see the cancel button
+        // Then  I can see the cancel button
         $this->assertVisible('a.js-dialog-close.cancel');
-        // Then I go out of the iframe
+        // Then  I go out of the iframe
         $this->goOutOfIframe();
     }
 

@@ -17,7 +17,7 @@ class SettingsKeyTest extends PassboltTestCase
      * Scenario  :  As a LU I should be able to see my keys info in the settings workspace, keys section
      * Given I am logged in as LU on the settings workspace
      * And I click on Manage your keys menu
-     * Then I should see the keys section
+     * Then  I should see the keys section
      * And      The menu "Manage your keys should be selected"
      * And      The breadcrumb should be in this order : 'All users', 'Ada Lovelace', 'Keys management'
      * And I should see a button Download public key
@@ -110,7 +110,7 @@ class SettingsKeyTest extends PassboltTestCase
 
     /**
      * @group saucelabs
-     * Scenario :    As a LU I should be able to download my public and private key
+     * Scenario: As a LU I should be able to download my public and private key
      * Given I am logged in as LU on the settings workspace, keys section
      * And I click on download public key button
      * Then     the public key should download on my computer
