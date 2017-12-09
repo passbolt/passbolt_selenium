@@ -236,9 +236,11 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
 			Config::read('database.password'),
 			Config::read('database.name')
 		);
+
 		// Check for errors
-		if(mysqli_connect_errno()){
-			echo mysqli_connect_error();
+		if($db->connect_errno){
+			echo $db->connect_errno;
+			die();
 		}
 		return $db;
 	}
@@ -268,7 +270,7 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
 		if (!$freeInstance) {
 			$db->query("UNLOCK TABLES");
 			$db->close();
-			throw new Exception('error in select query: ' . $freeInstance->error);
+			throw new Exception('error in select query: ' . $db->error);
 		}
 		elseif($freeInstance->num_rows == 0) {
 			$db->query("UNLOCK TABLES");
