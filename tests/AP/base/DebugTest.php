@@ -24,8 +24,8 @@ namespace Tests\AP\base;
 
 use App\assertions\PluginsAssertionsTrait;
 use App\Common\Actions\DebugActionsTrait;
-use App\Common\Config;
 use App\Common\Actions\ScriptedActionsTrait;
+use App\Common\Config;
 use App\PassboltTestCase;
 use Data\Fixtures\User;
 
@@ -42,6 +42,7 @@ class DebugTest extends PassboltTestCase
      * And   I can see that the plugin was detected
      * And   I can see that no plugin configuration was found
      *
+     * @group v2
      * @group AP
      * @group debug
      */
@@ -63,6 +64,7 @@ class DebugTest extends PassboltTestCase
      * And   I go to the debug screen again
      * Then  I should see the information I previously entered are still there
      *
+     * @group v2
      * @group AP
      * @group debug
      */
@@ -104,6 +106,7 @@ class DebugTest extends PassboltTestCase
      * And   I press the save button in the profile and settings section
      * etc...
      *
+     * @group v2
      * @group AP
      * @group debug
      */
@@ -192,8 +195,5 @@ class DebugTest extends PassboltTestCase
         $this->inputText('securityTokenTextColor', '#acolor');
         $this->click('js_save_conf');
         $this->waitUntilISee($feedback, '/This is not a valid token text color/');
-
-        // @TODO Domain
-        // @TODO success
     }
 }

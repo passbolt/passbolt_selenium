@@ -30,6 +30,7 @@
 namespace Tests\AP\base;
 
 use App\PassboltRecoverTestCase;
+use Data\Fixtures\User;
 
 class RecoverTest extends PassboltRecoverTestCase
 {
@@ -42,6 +43,7 @@ class RecoverTest extends PassboltRecoverTestCase
      * When  I click on the recover my account link
      * Then  I should see the recovery my account page
      *
+     * @group AP
      * @group recover
      */
     public function testRecoverFromLogin() 
@@ -73,6 +75,7 @@ class RecoverTest extends PassboltRecoverTestCase
      * When  I click on the recover my account link
      * Then  I should access a page where I can start the recovery procedure
      *
+     * @group AP
      * @group recover
      */
     public function testRecoverFromWrongDomain() 
@@ -102,6 +105,7 @@ class RecoverTest extends PassboltRecoverTestCase
      * When  I click on the recover my account link
      * Then  I should access a page where I can start the recovery procedure
      *
+     * @group AP
      * @group recover
      */
     public function testRecoverFromStage0VerifyNoAccountA() 
@@ -124,12 +128,13 @@ class RecoverTest extends PassboltRecoverTestCase
      * And   I click on recover
      * Then  I should see an error message saying that the email provided doesn't belong to an existing user
      *
+     * @group AP
      * @group recover
      */
     public function testRecoverNonExistingUser() 
     {
         $this->getUrl('recover');
-        $this->inputText('UserUsername', 'idontexist@passbolt.com');
+        $this->inputText('username', 'idontexist@passbolt.com');
         $this->pressEnter();
         $this->waitUntilISee('form .error.message', '/This user does not exist/');
     }
@@ -142,12 +147,13 @@ class RecoverTest extends PassboltRecoverTestCase
      * And   I click on recover
      * Then  I should see an error message saying that I should complete the setup first
      *
+     * @group AP
      * @group recover
      */
     public function testRecoverNonActiveUser() 
     {
         $this->getUrl('recover');
-        $this->inputText('UserUsername', 'orna@passbolt.com');
+        $this->inputText('username', 'orna@passbolt.com');
         $this->pressEnter();
         $this->waitUntilISee('form .error.message', '/Please complete the setup first/');
     }
@@ -160,6 +166,7 @@ class RecoverTest extends PassboltRecoverTestCase
      * And   I click on recover my account
      * Then  I should see a thank you page
      *
+     * @group AP
      * @group recover
      */
     public function testRecoverThankYouPage() 
@@ -171,7 +178,7 @@ class RecoverTest extends PassboltRecoverTestCase
         $this->getUrl('recover');
 
         // Enter Ada's email.
-        $this->inputText('UserUsername', 'ada@passbolt.com');
+        $this->inputText('username', 'ada@passbolt.com');
 
         // Submit form.
         $this->pressEnter();
@@ -192,6 +199,7 @@ class RecoverTest extends PassboltRecoverTestCase
      * When  I check the last email sent by passbolt to me
      * Then  I should see a notification email with an invite to recover my account
      *
+     * @group AP
      * @group recover
      */
     public function testRecoverEmailNotification() 
@@ -203,7 +211,7 @@ class RecoverTest extends PassboltRecoverTestCase
         $this->getUrl('recover');
 
         // Enter Ada's email.
-        $this->inputText('UserUsername', 'ada@passbolt.com');
+        $this->inputText('username', 'ada@passbolt.com');
 
         // Submit form.
         $this->pressEnter();
@@ -239,6 +247,7 @@ class RecoverTest extends PassboltRecoverTestCase
      * Then  I should be logged in as Ada
      * And   I should see Ada Lovelace in the profile drop down menu
      *
+     * @group AP
      * @group recover
      * @group saucelabs
      */
@@ -251,7 +260,7 @@ class RecoverTest extends PassboltRecoverTestCase
         $this->getUrl('recover');
 
         // Enter the username ada@passbolt.com
-        $this->inputText('UserUsername', 'ada@passbolt.com');
+        $this->inputText('username', 'ada@passbolt.com');
 
         // Press enter to submit the form.
         $this->pressEnter();
@@ -316,6 +325,7 @@ class RecoverTest extends PassboltRecoverTestCase
      * And   I click on the link "Next"
      * Then  I should see an error message informing me that the key is not associated to a user.
      *
+     * @group AP
      * @group recover
      */
     public function testRecoverKeyDoesntExist() 
@@ -327,7 +337,7 @@ class RecoverTest extends PassboltRecoverTestCase
         $this->getUrl('recover');
 
         // Enter the username ada@passbolt.com
-        $this->inputText('UserUsername', 'ada@passbolt.com');
+        $this->inputText('username', 'ada@passbolt.com');
 
         // Press enter to submit the form.
         $this->pressEnter();
@@ -381,6 +391,7 @@ class RecoverTest extends PassboltRecoverTestCase
      * And   I click on the link "Next"
      * Then  I should see an error message informing me that the format of the key is not known.
      *
+     * @group AP
      * @group recover
      */
     public function testRecoverKeyNotValid() 
@@ -392,7 +403,7 @@ class RecoverTest extends PassboltRecoverTestCase
         $this->getUrl('recover');
 
         // Enter the username ada@passbolt.com
-        $this->inputText('UserUsername', 'ada@passbolt.com');
+        $this->inputText('username', 'ada@passbolt.com');
 
         // Press enter to submit the form.
         $this->pressEnter();

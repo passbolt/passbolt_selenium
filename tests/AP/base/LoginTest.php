@@ -13,7 +13,10 @@
  * @since     2.0.0
  */
 /**
- * Anonymous user with plugin but no config login test
+ * Feature: Warnings on login
+ * - As a user with a non configured plugin I should see see a warning on the login page
+ * - As a user with a plugin configured for a different domain  I should see a warning on the login page
+ * - As a user with plugin configured with the wrong server key I can see a warning on the login page
  */
 namespace Tests\AP\base;
 
@@ -26,39 +29,46 @@ class LoginTest extends PassboltTestCase
     use VersionAssertionsTrait;
 
     /**
+     * Scenario: As a user with a non configured plugin I should see see a warning on the login page
+     *
+     * @group v2
+     * @group AP
+     * @group login
      * @group saucelabs
-     * Test that if not registered I should see a warning
-     * @throws Exception
      */
-    public function testLogin() 
+    public function testAPLoginNoConfigWarning()
     {
         $this->getUrl('login');
         $this->waitUntIlISee('.plugin-check.' . $this->_browser['type'] . '.warning', null, 2);
     }
 
     /**
-     * Scenario: As an anonymous user
-     * Test that if the wrong domain is configured, we will see a page explaining that
-     * the domain is not known.
+     * Scenario: As a user with a plugin configured for a different domain  I should see a warning on the login page
      *
+     * @group v2
+     * @group AP
+     * @group login
      * @group saucelabs
      */
-    public function testWrongDomain() 
+    public function testAPLoginWrongDomainWarning()
     {
         $user = User::get('ada');
+        $user['domain'] = 'https://custom.passbolt.com';
         $this->setClientConfig($user);
 
-        $user['domain'] = 'https://custom.passbolt.com';
         $this->getUrl('login');
         $this->waitUntilISee('html.domain-unknown');
         $this->waitUntilISee('a.trusteddomain', '/https:\/\/custom\.passbolt\.com/');
     }
 
     /**
-     * Test that if the server verification failed, we will see a page explaining that
-     * something went wrong with a message explaining what happened
+     * Scenario: As a user with plugin configured with the wrong server key I can see a warning on the login page
+     *
+     * @group AP
+     * @group login
+     * @group saucelabs
      */
-    public function testStage0VerifyError() 
+    public function testAPLoginStage0VerifyError()
     {
         $user = User::get('ada');
         $this->setClientConfig($user);
@@ -76,11 +86,13 @@ class LoginTest extends PassboltTestCase
     }
 
     /**
-     * Test that if the account doesn't exist on server, we get a proper feedback.
+     * Scenario: As a user with a plugin configured for a deleted account I can see a warning on the login page
      *
-     * @throws Exception
+     * @group AP
+     * @group login
+     * @group saucelabs
      */
-    public function testStage0VerifyNoAccount() 
+    public function testAPLoginStage0VerifyNoAccount()
     {
         $user = User::get('john');
         $this->setClientConfig($user);
@@ -100,8 +112,12 @@ class LoginTest extends PassboltTestCase
      * When  I am on the login page
      * Then  I can see the app version number in the footer
      * And   I can see the plugin version number
+     *
+     * @group AP
+     * @group login
+     * @group saucelabs
      */
-    public function testCanSeeVersionNumber() 
+    public function testAPLoginCanSeeVersionNumber()
     {
         $this->getUrl('login');
         $this->assertVersionVisible();
