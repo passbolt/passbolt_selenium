@@ -418,20 +418,20 @@ class WebDriverTestCase extends PHPUnit_Framework_TestCase {
      * @throws error No browser config found
      */
     private function _setBrowserConfig() {
-        $browser = getenv('BROWSER');
+		$browsers = Config::read('browsers');
+		$browserName = getenv('BROWSER');
+		$requireExtension = getenv('REQUIRE_EXTENSION');
+		$browserConfig = $browserName . '_vanilla';
 
-        // Sanity checks
-        if(empty($browser)) {
-            $browser = Config::read('browsers.default');
+		// If the extension is required.
+		if ($requireExtension) {
+			$browserConfig = $browserName . '_with_passbolt_extension';
+		}
+		// No settings found.
+        if(!isset($browsers) || !isset($browsers[$browserConfig])) {
+            $this->_error('ERROR No browser config found for the browser: ' . $browserName . ', and the config: ' .$browserConfigType);
         }
-        if(!isset($browser)) {
-            $this->_error('ERROR No browser defined either in testsuite or config.');
-        }
-        $browsers = Config::read('browsers');
-        if(!isset($browsers) || !isset($browsers[$browser])) {
-            $this->_error('ERROR No browser config found for: ' . $browser);
-        }
-        $this->_browser = $browsers[$browser];
+        $this->_browser = $browsers[$browserConfig];
     }
 
     /**

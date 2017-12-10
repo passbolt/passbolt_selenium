@@ -13,7 +13,6 @@ composer.lock
 reports/
 
 # plugins
-data/extensions/
 *.xpi
 node_modules/
 

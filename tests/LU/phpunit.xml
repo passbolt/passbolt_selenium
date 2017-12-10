@@ -14,7 +14,7 @@
         bootstrap                   = "../../bootstrap.php" >
 
     <php>
-        <env name="BROWSER" value="firefox_with_passbolt_extension"/>
+        <env name="REQUIRE_EXTENSION" value="1"/>
         <env name="QUIT" value="1" />
     </php>
 
