@@ -16,9 +16,6 @@ namespace App\actions;
 
 trait WorkspaceActionsTrait
 {
-
-    use BaseTestTrait;
-
     /**
      * Goto workspace
      *
@@ -32,15 +29,18 @@ trait WorkspaceActionsTrait
             $this->click('#js_app_profile_dropdown');
             $this->clickLink('my profile');
             $this->waitUntilISee('.page.settings.profile');
-            return;
-                break;
+            break;
+        case 'user':
+            $this->click('#js_app_nav_left_user_wsp_link a');
+            $this->waitUntilISee('.page.user');
+            $this->waitCompletion();
+            break;
         default:
             $linkCssSelector = '#js_app_nav_left_' . $name . '_wsp_link a';
+            $this->waitUntilISee($linkCssSelector);
+            $this->click($linkCssSelector);
+            $this->waitCompletion();
             break;
         }
-        $this->waitUntilISee($linkCssSelector);
-        $this->click($linkCssSelector);
-        $this->waitCompletion();
     }
-
 }

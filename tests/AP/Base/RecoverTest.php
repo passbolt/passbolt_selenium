@@ -45,6 +45,7 @@ class RecoverTest extends PassboltRecoverTestCase
      *
      * @group AP
      * @group recover
+     * @group v2
      */
     public function testRecoverFromLogin() 
     {
@@ -61,7 +62,7 @@ class RecoverTest extends PassboltRecoverTestCase
         $this->clickLink('Have an account?');
 
         // Then  I should see the recovery my account page
-        $this->waitUntilUrlMatches('recover');
+        $this->waitUntilUrlMatches('users/recover');
         $this->waitUntilISee('.information', '/Recover an existing account!/');
     }
 
@@ -77,11 +78,13 @@ class RecoverTest extends PassboltRecoverTestCase
      *
      * @group AP
      * @group recover
+     * @group v2
      */
     public function testRecoverFromWrongDomain() 
     {
         $user = User::get('ada');
         $user['domain'] = 'https://custom.passbolt.com';
+        $this->setClientConfig($user);
 
         $this->getUrl('login');
         $this->waitUntilISee('html.domain-unknown');
@@ -91,7 +94,7 @@ class RecoverTest extends PassboltRecoverTestCase
         $this->waitUntilISee('.information', '/recover an existing account/');
 
         $this->clickLink('or recover an existing account');
-        $this->waitUntilUrlMatches('recover');
+        $this->waitUntilUrlMatches('users/recover');
         $this->waitUntilISee('.information', '/Recover an existing account!/');
     }
 
@@ -107,16 +110,18 @@ class RecoverTest extends PassboltRecoverTestCase
      *
      * @group AP
      * @group recover
+     * @group v2
      */
     public function testRecoverFromStage0VerifyNoAccountA() 
     {
         $user = User::get('john');
+        $this->setClientConfig($user);
 
         $this->getUrl('login');
         $this->waitUntilISee('html.server-not-verified.server-no-user');
         $this->waitUntilISee('.actions-wrapper', '/or recover an existing account/');
         $this->clickLink('or recover an existing account');
-        $this->waitUntilUrlMatches('recover');
+        $this->waitUntilUrlMatches('users/recover');
         $this->waitUntilISee('.information', '/Recover an existing account!/');
     }
 
@@ -130,6 +135,7 @@ class RecoverTest extends PassboltRecoverTestCase
      *
      * @group AP
      * @group recover
+     * @group v2
      */
     public function testRecoverNonExistingUser() 
     {
@@ -140,22 +146,23 @@ class RecoverTest extends PassboltRecoverTestCase
     }
 
     /**
-     * Scenario: As a user with a non configured plugin I shouldn't be able to start an account recovery procedure for a user who didn't complete setup
+     * Scenario: As a user with a non configured plugin I should be able to use account recovery to restart the setup
      *
      * Given I am a user with a plugin on the recover page
      * When  I enter the email of a user that registered but did not complete setup in the username field
      * And   I click on recover
-     * Then  I should see an error message saying that I should complete the setup first
+     * Then  I see a message telling to check my mailbox
      *
      * @group AP
      * @group recover
+     * @group v2
      */
     public function testRecoverNonActiveUser() 
     {
         $this->getUrl('recover');
         $this->inputText('username', 'orna@passbolt.com');
         $this->pressEnter();
-        $this->waitUntilISee('form .error.message', '/Please complete the setup first/');
+        $this->waitUntilISee('.information', '/See you in your mailbox!/');
     }
 
     /**
@@ -168,6 +175,7 @@ class RecoverTest extends PassboltRecoverTestCase
      *
      * @group AP
      * @group recover
+     * @group v2
      */
     public function testRecoverThankYouPage() 
     {
@@ -186,7 +194,6 @@ class RecoverTest extends PassboltRecoverTestCase
         // I should see a thank you page.
         $this->waitUntilISee('.page.recover.thank-you');
         $this->waitUntilISee('.information', '/See you in your mailbox!/');
-        $this->assertCurrentUrl('recover' . DS . 'thankyou');
     }
 
     /**
@@ -201,6 +208,7 @@ class RecoverTest extends PassboltRecoverTestCase
      *
      * @group AP
      * @group recover
+     * @group v2
      */
     public function testRecoverEmailNotification() 
     {
@@ -222,9 +230,9 @@ class RecoverTest extends PassboltRecoverTestCase
         // I should receive a recovery email.
         $this->getUrl('seleniumtests/showlastemail/' . urlencode('ada@passbolt.com'));
 
-        $this->waitUntilISee('emailBody', '/have initiated an account recovery/');
-        $this->waitUntilISee('emailBody', '/ada@passbolt.com/');
-        $this->waitUntilISee('emailBody', '/Welcome back Ada,/');
+        $this->waitUntilISee('#emailBody', '/have initiated an account recovery/');
+        $this->waitUntilISee('#emailBody', '/ada@passbolt.com/');
+        $this->waitUntilISee('#emailBody', '/Welcome back/');
         $this->waitUntilISee('.buttonContent', '/start recovery/');
     }
 
@@ -249,6 +257,7 @@ class RecoverTest extends PassboltRecoverTestCase
      *
      * @group AP
      * @group recover
+     * @group v2
      * @group saucelabs
      */
     public function testRecoverDefaultSteps() 
@@ -300,10 +309,10 @@ class RecoverTest extends PassboltRecoverTestCase
         $this->clickLink('Next');
 
         // I should be redirected to login page.
-        $this->completeStepLoginRedirection();
+        $this->waitUntilUrlMatches('auth/login');
 
         // Attempt to log in as ada.
-        $this->loginAs(User::get('ada'));
+        $this->loginAs(User::get('ada'), false);
 
         // Assert I am logged in as Ada.
         $this->assertElementContainsText(
@@ -327,6 +336,7 @@ class RecoverTest extends PassboltRecoverTestCase
      *
      * @group AP
      * @group recover
+     * @group v2
      */
     public function testRecoverKeyDoesntExist() 
     {
@@ -393,6 +403,7 @@ class RecoverTest extends PassboltRecoverTestCase
      *
      * @group AP
      * @group recover
+     * @group v2
      */
     public function testRecoverKeyNotValid() 
     {

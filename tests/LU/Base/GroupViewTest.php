@@ -37,7 +37,7 @@ class LUGroupViewTest extends PassboltTestCase
         $this->gotoWorkspace('user');
 
         // When I select a group
-        $group = Group::get(['id' => Uuid::get('group.id.accounting')]);
+        $group = Group::get(['id' => UuidFactory::uuid('group.id.accounting')]);
         $this->clickGroup($group['id']);
 
         // Then  I should see the sidebar opening on the right hand side
@@ -95,7 +95,7 @@ class LUGroupViewTest extends PassboltTestCase
         $this->gotoWorkspace('user');
 
         // Assert group members in sidebar
-        $group = Group::get(['id' => Uuid::get('group.id.accounting')]);
+        $group = Group::get(['id' => UuidFactory::uuid('group.id.accounting')]);
         $groupMember = User::get('frances');
         $this->assertGroupMemberInSidebar($group['id'], $groupMember, true);
         $groupMember = User::get('grace');

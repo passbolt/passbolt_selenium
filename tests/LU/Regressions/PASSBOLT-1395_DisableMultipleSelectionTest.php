@@ -28,14 +28,14 @@ class PASSBOLT1395 extends PassboltTestCase
         $this->loginAs($user);
 
         // When I click on a user checkbox
-        $rsA = Resource::get(array('user' => 'ada', 'id' => Uuid::get('resource.id.apache')));
+        $rsA = Resource::get(array('user' => 'ada', 'id' => UuidFactory::uuid('resource.id.apache')));
         $this->click('multiple_select_checkbox_' . $rsA['id']);
 
         // Then  I should see it selected
         $this->isPasswordSelected($rsA['id']);
 
         // When click on another user checkbox
-        $rsG =Resource::get(array('user' => 'ada', 'id' => Uuid::get('resource.id.gnupg')));
+        $rsG =Resource::get(array('user' => 'ada', 'id' => UuidFactory::uuid('resource.id.gnupg')));
         $this->click('multiple_select_checkbox_' . $rsG['id']);
 
         // Then  I should see only the last user selected

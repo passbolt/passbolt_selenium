@@ -14,13 +14,16 @@
  */
 namespace App;
 
+use App\Actions\SetupActionsTrait;
 use App\Common\Config;
 use Facebook\WebDriver\WebDriverBy;
 use PHPUnit_Framework_Assert;
 use Data\Fixtures\User;
 
-class PassboltSetupTestCase extends PassboltTestCase
+abstract class PassboltSetupTestCase extends PassboltTestCase
 {
+    use SetupActionsTrait;
+
     /**
      * @var array various info to check for each section of the setup
      */
@@ -77,7 +80,7 @@ class PassboltSetupTestCase extends PassboltTestCase
      *
      * @param $title
      */
-    public function assertTitleEquals($title) 
+    public function assertTitleEquals($title)
     {
         $elt = $this->findById('js_step_title');
         $this->assertEquals($elt->getText(), $title);
@@ -88,7 +91,7 @@ class PassboltSetupTestCase extends PassboltTestCase
      *
      * @param $text
      */
-    public function assertMenuIsSelected($text) 
+    public function assertMenuIsSelected($text)
     {
         $elt = $this->getDriver()->findElement(
             WebDriverBy::xpath(
@@ -106,7 +109,7 @@ class PassboltSetupTestCase extends PassboltTestCase
      *
      * @param $sectionName
      */
-    protected function waitForSection($sectionName) 
+    protected function waitForSection($sectionName)
     {
         $timeout = 10;
         if ($sectionName == 'generate_key_done') {
@@ -211,7 +214,7 @@ class PassboltSetupTestCase extends PassboltTestCase
         $this->clickLink('More');
 
         // Assert that the dialog window is opened.
-        $this->waitUntilISee('dialog-server-key-info');
+        $this->waitUntilISee('#dialog-server-key-info');
 
         // I should see the title "Please verify the server key"
         $this->assertElementContainsText(

@@ -35,10 +35,10 @@ class PASSBOLT1758 extends PassboltTestCase
         Resource::get(
             array(
             'user' => 'ada',
-            'id' => Uuid::get('resource.id.apache')
+            'id' => UuidFactory::uuid('resource.id.apache')
             )
         );
-        $this->gotoSharePassword(Uuid::get('resource.id.apache'));
+        $this->gotoSharePassword(UuidFactory::uuid('resource.id.apache'));
 
         // And I search a user by his lastname
         $userC = User::get('edith');

@@ -50,7 +50,7 @@ trait GroupAssertionsTrait
     public function assertICanSeeGroup($name) 
     {
         try {
-            $this->waitUntilISee("#group_" . Uuid::get('group.id.' . strtolower($name)), '/' . $name . '/i');
+            $this->waitUntilISee("#group_" . UuidFactory::uuid('group.id.' . strtolower($name)), '/' . $name . '/i');
         }
         catch (Exception $e) {
             $this->fail('Failed asserting that group ' . $name . ' is visible');

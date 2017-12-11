@@ -14,13 +14,8 @@
  */
 namespace App\actions;
 
-use App\BaseTestTrait;
-
 trait ConfirmationDialogActionsTrait
 {
-
-    use BaseTestTrait;
-
     /**
      * Assert the action text of the confirmation dialog.
      */
@@ -47,5 +42,4 @@ trait ConfirmationDialogActionsTrait
         $button = $this->find('confirm-button');
         $button->click();
     }
-
 }

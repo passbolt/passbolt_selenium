@@ -14,7 +14,7 @@
  */
 namespace App;
 
-class PassboltRecoverTestCase extends PassboltTestCase
+abstract class PassboltRecoverTestCase extends PassboltTestCase
 {
     /**
      * go to recover setup page.

@@ -136,7 +136,7 @@ class PasswordDeleteTest extends PassboltTestCase
         $this->loginAs($userA);
 
         // Then  I can see a password shared with ada in the list
-        $resource = Resource::get(array('user' => 'ada', 'id' => Uuid::get('resource.id.apache')));
+        $resource = Resource::get(array('user' => 'ada', 'id' => UuidFactory::uuid('resource.id.apache')));
         $this->assertVisible('resource_' . $resource['id']);
 
         // When I logout

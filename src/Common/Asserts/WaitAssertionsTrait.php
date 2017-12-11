@@ -14,7 +14,7 @@
  */
 namespace App\Common\Asserts;
 
-use App\Lib\Uuid;
+use App\lib\UuidFactory;
 use App\Common\Config;
 use Color;
 use Exception;
@@ -345,7 +345,7 @@ trait WaitAssertionsTrait
      */
     public function waitUntilNotificationDisappears($notificationId) 
     {
-        $notificationId = 'notification_' . Uuid::get($notificationId);
+        $notificationId = 'notification_' . UuidFactory::uuid($notificationId);
         $this->waitUntilIDontSee($notificationId);
     }
 

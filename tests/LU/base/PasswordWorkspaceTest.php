@@ -332,7 +332,7 @@ class PasswordWorkspaceTest extends PassboltTestCase
         // Reset database at the end of test.
         $this->resetDatabaseWhenComplete();
 
-        $resourceId = Uuid::get('resource.id.apache');
+        $resourceId = UuidFactory::uuid('resource.id.apache');
         $resource = Resource::get(
             array(
             'user' => 'betty',
@@ -462,7 +462,7 @@ class PasswordWorkspaceTest extends PassboltTestCase
     public function testSearchByKeywordsUnselectPasswords() 
     {
         $searchPwd = 'Apache';
-        $resourceId = Uuid::get('resource.id.apache');
+        $resourceId = UuidFactory::uuid('resource.id.apache');
 
         // Given I am Ada
         $user = User::get('ada');
@@ -807,7 +807,7 @@ class PasswordWorkspaceTest extends PassboltTestCase
         $this->loginAs($user);
 
         // I edit the group "ergonom".
-        $group = Group::get(['id' => Uuid::get('group.id.ergonom')]);
+        $group = Group::get(['id' => UuidFactory::uuid('group.id.ergonom')]);
         $this->gotoEditGroup($group['id']);
 
         // When I add a the user "kathleen" to the group.
@@ -850,7 +850,7 @@ class PasswordWorkspaceTest extends PassboltTestCase
         // In ergonom group, debian should be there but not framasoft
 
         // I Click on the group "freelancer".
-        $this->clickGroup(Uuid::get('group.id.freelancer'), 'password');
+        $this->clickGroup(UuidFactory::uuid('group.id.freelancer'), 'password');
         $this->waitCompletion();
 
         // I should see the password "framasoft".
@@ -859,7 +859,7 @@ class PasswordWorkspaceTest extends PassboltTestCase
         $this->assertICannotSeePassword('debian');
 
         // When I click on the group "ergonom".
-        $this->clickGroup(Uuid::get('group.id.ergonom'), 'password');
+        $this->clickGroup(UuidFactory::uuid('group.id.ergonom'), 'password');
         $this->waitCompletion();
 
         // I should see the password "debian".

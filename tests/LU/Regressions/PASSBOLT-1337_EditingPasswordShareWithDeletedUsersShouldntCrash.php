@@ -74,7 +74,7 @@ class PASSBOLT1337 extends PassboltTestCase
         $this->loginAs($user);
 
         // And I am editing a password that was shared with betty
-        $this->gotoEditPassword(Uuid::get('resource.id.apache'));
+        $this->gotoEditPassword(UuidFactory::uuid('resource.id.apache'));
 
         // When I click on name input text field
         $this->click('js_field_name');

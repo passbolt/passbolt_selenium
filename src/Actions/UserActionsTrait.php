@@ -21,9 +21,9 @@ trait UserActionsTrait
      */
     public function gotoCreateUser() 
     {
-        if(!$this->isVisible('.page.people')) {
+        if(!$this->isVisible('.page.user')) {
             $this->getUrl('');
-            $this->waitUntilISee('.page.people');
+            $this->waitUntilISee('.page.user');
             $this->waitUntilISee('#js_wsp_create_button');
         }
         $this->click('#js_wsp_create_button');
@@ -57,7 +57,7 @@ trait UserActionsTrait
      */
     public function clickUser($user) 
     {
-        if(!$this->isVisible('.page.people')) {
+        if(!$this->isVisible('.page.user')) {
             $this->fail("click user requires to be on the user workspace");
         }
         // if user is not an array, Then  It is a uuid.
@@ -82,12 +82,13 @@ trait UserActionsTrait
      */
     public function rightClickUser($id) 
     {
-        if(!$this->isVisible('.page.people')) {
+        if(!$this->isVisible('.page.user')) {
             $this->fail("right click user requires to be on the user workspace");
         }
         $eltSelector = '#user_' . $id . ' .cell_name';
         $this->getDriver()->executeScript(
-            "
+        "
+            console.log('execute...');
 			jQuery('$eltSelector').trigger({
 				type:'mousedown',
 				which:3
@@ -106,11 +107,11 @@ trait UserActionsTrait
      */
     public function gotoEditUser($id) 
     {
-        if(!$this->isVisible('.page.people')) {
+        if(!$this->isVisible('.page.user')) {
             $this->getUrl('');
             $this->waitUntilISee('.page.password');
             $this->gotoWorkspace('user');
-            $this->waitUntilISee('.page.people');
+            $this->waitUntilISee('.page.user');
             $this->waitUntilISee('#js_user_wk_menu_edition_button');
         }
         $this->releaseFocus(); // we click somewhere in case the user is already active

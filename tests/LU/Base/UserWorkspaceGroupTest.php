@@ -57,7 +57,7 @@ class UserWorkspaceGroupTest extends PassboltTestCase
         $this->gotoWorkspace('user');
 
         // When I click on a group name
-        $group = Group::get(['id' => Uuid::get('group.id.ergonom')]);
+        $group = Group::get(['id' => UuidFactory::uuid('group.id.ergonom')]);
         $this->clickGroup($group['id']);
 
         // Then  I should see that the given group is selected

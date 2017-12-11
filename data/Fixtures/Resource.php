@@ -7,7 +7,7 @@
  */
 namespace Data\Fixtures;
 
-use App\Lib\Uuid;
+use App\lib\UuidFactory;
 
 class Resource {
     /**
@@ -15,7 +15,7 @@ class Resource {
      */
     static function _get() {
         $r[] = array(
-            'id' => Uuid::get('resource.id.apache'),
+            'id' => UuidFactory::uuid('resource.id.apache'),
             'username' => 'www-data',
             'name' => 'apache',
             'password' => '_upjvh-p@wAHP18D}OmY05M',
@@ -24,7 +24,7 @@ class Resource {
             'description' => 'Apache is the world\'s most used web server software.'
         );
         $r[] = array(
-            'id' => Uuid::get('resource.id.april'),
+            'id' => UuidFactory::uuid('resource.id.april'),
             'username' => 'support',
             'name' => 'april',
             'password' => 'z"(-1s]3&Itdno:vPt',
@@ -33,7 +33,7 @@ class Resource {
             'description' => 'L\'association pionnière du logiciel libre en France'
         );
         $r[] = array(
-            'id' => Uuid::get('resource.id.bower'),
+            'id' => UuidFactory::uuid('resource.id.bower'),
             'username' => 'bower',
             'name' => 'bower',
             'password' => 'CL]m]x(o{sA#QW',
@@ -42,7 +42,7 @@ class Resource {
             'description' => 'A package manager for the web!'
         );
         $r[] = array(
-            'id' => Uuid::get('resource.id.centos'),
+            'id' => UuidFactory::uuid('resource.id.centos'),
             'username' => 'centos',
             'name' => 'centos',
             'password' => 'this_23-04',
@@ -51,7 +51,7 @@ class Resource {
             'description' => 'The CentOS Linux distribution is a platform derived from Red Hat Enterprise Linux (RHEL).'
         );
 		$r[] = array(
-			'id' => Uuid::get('resource.id.canjs'),
+			'id' => UuidFactory::uuid('resource.id.canjs'),
 			'username' => 'yeswecan',
 			'name' => 'Canjs',
 			'password' => 'princess',
@@ -60,7 +60,7 @@ class Resource {
 			'description' => 'CanJS is a JavaScript library that makes developing complex applications simple and fast.'
 		);
 		$r[] = array(
-            'id' => Uuid::get('resource.id.enlightenment'),
+            'id' => UuidFactory::uuid('resource.id.enlightenment'),
             'username' => 'efl',
             'name' => 'Enlightenment',
             'password' => 'azertyuiop',
@@ -69,7 +69,7 @@ class Resource {
             'description' => 'Party like it\'s 1996.'
         );
 	    $r[] = array(
-		    'id' => Uuid::get('resource.id.gnupg'),
+		    'id' => UuidFactory::uuid('resource.id.gnupg'),
 		    'username' => 'gpg',
 		    'name' => 'Gnupg',
 		    'password' => 'iamgod',
@@ -78,7 +78,7 @@ class Resource {
 		    'description' => 'GnuPG is a complete and free implementation of the OpenPGP standard as defined by RFC4880',
 	    );
 	    $r[] = array(
-		    'id' => Uuid::get('resource.id.chai'),
+		    'id' => UuidFactory::uuid('resource.id.chai'),
 		    'username' => 'masala',
 		    'name' => 'chai',
 		    'password' => 'iloveyou',
@@ -87,7 +87,7 @@ class Resource {
 		    'description' => 'Chai is a BDD / TDD assertion library for node and the browser',
 	    );
 		$r[] = array(
-			'id' => Uuid::get('resource.id.cakephp'),
+			'id' => UuidFactory::uuid('resource.id.cakephp'),
 			'username' => 'cake',
 			'name' => 'cakephp',
 			'password' => 'admin',

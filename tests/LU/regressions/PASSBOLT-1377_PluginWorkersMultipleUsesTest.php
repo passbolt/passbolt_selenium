@@ -135,7 +135,7 @@ class PASSBOLT1377 extends PassboltTestCase
 
         $resource = Resource::get(
             array(
-            'id' => Uuid::get('resource.id.apache'),
+            'id' => UuidFactory::uuid('resource.id.apache'),
             'user' => 'ada',
             )
         );

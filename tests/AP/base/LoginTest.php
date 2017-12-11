@@ -67,6 +67,7 @@ class LoginTest extends PassboltTestCase
      * @group AP
      * @group login
      * @group saucelabs
+     * @group v2
      */
     public function testAPLoginStage0VerifyError()
     {
@@ -91,6 +92,7 @@ class LoginTest extends PassboltTestCase
      * @group AP
      * @group login
      * @group saucelabs
+     * @group v2
      */
     public function testAPLoginStage0VerifyNoAccount()
     {
@@ -116,6 +118,7 @@ class LoginTest extends PassboltTestCase
      * @group AP
      * @group login
      * @group saucelabs
+     * @group v2
      */
     public function testAPLoginCanSeeVersionNumber()
     {

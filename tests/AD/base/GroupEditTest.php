@@ -41,7 +41,7 @@ class ADGroupEditTest extends PassboltTestCase
         $this->gotoWorkspace('user');
 
         // When I click on the contextual menu button of a group on the right
-        $groupId = Uuid::get('group.id.ergonom');
+        $groupId = UuidFactory::uuid('group.id.ergonom');
         $this->click("#group_$groupId .right-cell a");
 
         // Then  I should see the group contextual menu
@@ -76,7 +76,7 @@ class ADGroupEditTest extends PassboltTestCase
         $user = User::get('admin');
         
         $this->loginAs($user);
-        $group = Group::get(['id' => Uuid::get('group.id.ergonom')]);
+        $group = Group::get(['id' => UuidFactory::uuid('group.id.ergonom')]);
         $this->gotoEditGroup($group['id']);
 
         // When	I observe the content of the edit group dialog
@@ -118,7 +118,7 @@ class ADGroupEditTest extends PassboltTestCase
         $this->gotoWorkspace('user');
 
         // When I click a group name
-        $group = Group::get(['id' => Uuid::get('group.id.ergonom')]);
+        $group = Group::get(['id' => UuidFactory::uuid('group.id.ergonom')]);
         $this->clickGroup($group['id']);
 
         // Then  I should see a “edit” button next to the Information section
@@ -147,7 +147,7 @@ class ADGroupEditTest extends PassboltTestCase
         $user = User::get('admin');
         
         $this->loginAs($user);
-        $group = Group::get(['id' => Uuid::get('group.id.accounting')]);
+        $group = Group::get(['id' => UuidFactory::uuid('group.id.accounting')]);
         $this->gotoEditGroup($group['id']);
 
         // And I shouldn't see the Add people iframe.
@@ -174,13 +174,13 @@ class ADGroupEditTest extends PassboltTestCase
         $user = User::get('admin');
         
         $this->loginAs($user);
-        $group = Group::get(['id' => Uuid::get('group.id.accounting')]);
+        $group = Group::get(['id' => UuidFactory::uuid('group.id.accounting')]);
 
         // When I edit a the group "accounting".
         $this->gotoEditGroup($group['id']);
 
         // When I enter board as a name (the name is already used).
-        $this->inputText('js_field_name', $group = Group::get(['id' => Uuid::get('group.id.board')])['name']);
+        $this->inputText('js_field_name', $group = Group::get(['id' => UuidFactory::uuid('group.id.board')])['name']);
 
         // And I click on “save”
         $this->click('.edit-group-dialog a.button.primary');
@@ -220,12 +220,12 @@ class ADGroupEditTest extends PassboltTestCase
 
         // And I am on the users workspace
         // And I am editing a group
-        $group = Group::get(['id' => Uuid::get('group.id.accounting')]);
+        $group = Group::get(['id' => UuidFactory::uuid('group.id.accounting')]);
         $this->gotoEditGroup($group['id']);
 
         // When I remove a user from the group
         $grace = User::get('grace');
-        $groupUserId = Uuid::get('group_user.id.accounting-grace');
+        $groupUserId = UuidFactory::uuid('group_user.id.accounting-grace');
         $this->click("#js_group_user_delete_$groupUserId");
 
         // And I click save.
@@ -273,7 +273,7 @@ class ADGroupEditTest extends PassboltTestCase
 
         // And I am on the users workspace
         // And I am editing a group that I manage
-        $group = Group::get(['id' => Uuid::get('group.id.human_resource')]);
+        $group = Group::get(['id' => UuidFactory::uuid('group.id.human_resource')]);
         $this->gotoEditGroup($group['id']);
 
         // When I change a user role to group manager
@@ -339,12 +339,12 @@ class ADGroupEditTest extends PassboltTestCase
 
         // And I am on the users workspace
         // And I am editing a group that I manage
-        $group = Group::get(['id' => Uuid::get('group.id.human_resource')]);
+        $group = Group::get(['id' => UuidFactory::uuid('group.id.human_resource')]);
         $this->gotoEditGroup($group['id']);
 
         // When I remove some users from the group
         $ursula = User::get('ursula');
-        $groupUserId = Uuid::get('group_user.id.human_resource-ursula');
+        $groupUserId = UuidFactory::uuid('group_user.id.human_resource-ursula');
         $this->click("#js_group_user_delete_$groupUserId");
 
         // And I update the role of some users
@@ -411,7 +411,7 @@ class ADGroupEditTest extends PassboltTestCase
         $this->loginAs($user);
 
         // When I am editing a group that I manage
-        $group = Group::get(['id' => Uuid::get('group.id.human_resource')]);
+        $group = Group::get(['id' => UuidFactory::uuid('group.id.human_resource')]);
         $this->gotoEditGroup($group['id']);
 
         // Then  I should see the list of users that are part of this group in the edit group dialog
@@ -481,14 +481,14 @@ class ADGroupEditTest extends PassboltTestCase
         $this->loginAs($user);
 
         // When I am editing a group that I manage
-        $group = Group::get(['id' => Uuid::get('group.id.human_resource')]);
+        $group = Group::get(['id' => UuidFactory::uuid('group.id.human_resource')]);
         $this->gotoEditGroup($group['id']);
 
         // When I change the role of one simple group member to group manager
         $this->editTemporaryGroupUserRole(User::get('thelma'), false);
 
         // Then  I should not be able to change the role of this user
-        $groupUserId = Uuid::get('group_user.id.human_resource-ping');
+        $groupUserId = UuidFactory::uuid('group_user.id.human_resource-ping');
         $this->waitUntilDisabled("#js_group_user_is_admin_$groupUserId");
     }
 
@@ -521,7 +521,7 @@ class ADGroupEditTest extends PassboltTestCase
         $this->loginAs($user);
 
         // And I am editing a group I manage
-        $group = Group::get(['id' => Uuid::get('group.id.human_resource')]);
+        $group = Group::get(['id' => UuidFactory::uuid('group.id.human_resource')]);
         $this->gotoEditGroup($group['id']);
 
         // When I observe the content of the edit group dialog
@@ -529,7 +529,7 @@ class ADGroupEditTest extends PassboltTestCase
         $this->assertVisible('.js_group_user_delete');
 
         // When I click on the cross next to the user I want to remove
-        $groupUserId = Uuid::get('group_user.id.human_resource-wang');
+        $groupUserId = UuidFactory::uuid('group_user.id.human_resource-wang');
         $this->click("#js_group_user_delete_$groupUserId");
 
         // Then  I should see that the user disappears from the list of group members

@@ -28,7 +28,7 @@ class PASSBOLT2060 extends PassboltSetupTestCase
         $this->gotoWorkspace('user');
 
         // When I click a group name
-        $group = Group::get(['id' => Uuid::get('group.id.it_support')]);
+        $group = Group::get(['id' => UuidFactory::uuid('group.id.it_support')]);
         $this->clickGroup($group['id']);
 
         // Then  I should see a “edit” button next to the Information section

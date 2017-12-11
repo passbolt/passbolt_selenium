@@ -35,7 +35,7 @@ class LUGroupEditTest extends PassboltTestCase
         $this->gotoWorkspace('user');
 
         // When I select a group
-        $group = Group::get(['id' => Uuid::get('group.id.ergonom')]);
+        $group = Group::get(['id' => UuidFactory::uuid('group.id.ergonom')]);
         $this->clickGroup($group['id']);
 
         // Then  I should see that there is no dropdown button next to the groups

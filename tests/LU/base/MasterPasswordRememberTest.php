@@ -43,7 +43,7 @@ class MasterPasswordRememberTest extends PassboltTestCase
         $this->loginAs($user);
 
         // When I click on a password in the list
-        $rsA = Resource::get(array('user' => 'ada', 'id' => Uuid::get('resource.id.apache')));
+        $rsA = Resource::get(array('user' => 'ada', 'id' => UuidFactory::uuid('resource.id.apache')));
         $this->clickPassword($rsA['id']);
 
         // And I click on the link 'copy password'
@@ -67,7 +67,7 @@ class MasterPasswordRememberTest extends PassboltTestCase
         $this->assertClipboard($rsA['password']);
 
         // When I click on another password in the list
-        $rsB = Resource::get(array('user' => 'ada', 'id' => Uuid::get('resource.id.bower')));
+        $rsB = Resource::get(array('user' => 'ada', 'id' => UuidFactory::uuid('resource.id.bower')));
         $this->clickPassword($rsB['id']);
 
         // And I click on the link 'copy password'
@@ -88,7 +88,7 @@ class MasterPasswordRememberTest extends PassboltTestCase
         $this->assertClipboard($rsB['password']);
 
         // When I click on another password in the list
-        $rsC = Resource::get(array('user' => 'ada', 'id' => Uuid::get('resource.id.centos')));
+        $rsC = Resource::get(array('user' => 'ada', 'id' => UuidFactory::uuid('resource.id.centos')));
         $this->clickPassword($rsC['id']);
 
         // And I click on the link 'copy password'

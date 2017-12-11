@@ -38,7 +38,7 @@ class LoginTest extends PassboltTestCase
         $this->goIntoLoginIframe();
 
         $this->assertVisible('.login-form.master-password');
-        $this->assertInputValue('UserUsername', $user['Username']);
+        $this->assertInputValue('username', $user['Username']);
 
         $this->inputText('js_master_password', 'somethingwrong');
         $this->click('loginSubmit');
@@ -88,7 +88,7 @@ class LoginTest extends PassboltTestCase
         $this->goIntoLoginIframe();
 
         $this->assertVisible('.login-form.master-password');
-        $this->assertInputValue('UserUsername', $user['Username']);
+        $this->assertInputValue('username', $user['Username']);
 
         $this->click('js_master_password');
         $this->waitUntilElementHasFocus('js_master_password');

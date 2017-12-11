@@ -254,7 +254,7 @@ class UserWorkspaceTest extends PassboltTestCase
     public function testSearchByKeywordsUnselectUsers() 
     {
         $searchUser = 'Betty';
-        $userId = Uuid::get('user.id.betty');
+        $userId = UuidFactory::uuid('user.id.betty');
 
         // Given I am Ada
         $user = User::get('ada');
