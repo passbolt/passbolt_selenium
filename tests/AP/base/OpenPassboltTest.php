@@ -27,6 +27,7 @@ class ToolbarTest extends PassboltSetupTestCase
 {
     use DebugActionsTrait;
 
+
     /**
      * Simulate click on the toolbar passbolt icon.
      */
@@ -51,6 +52,7 @@ class ToolbarTest extends PassboltSetupTestCase
      *
      * @group AP
      * @group toolbar
+     * @group v2
      */
     public function testToolbarIconOpenPassboltNoConfig()
     {
@@ -75,6 +77,7 @@ class ToolbarTest extends PassboltSetupTestCase
      *
      * @group AP
      * @group toolbar
+     * @group v2
      */
     public function testToolbarIconOpenPassboltConfig()
     {

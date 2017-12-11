@@ -18,7 +18,7 @@ use App\Common\Actions\ScriptedActionsTrait;
 use App\Common\Config;
 use App\Common\RecordableTestCase;
 
-class AuthenticatedTestCase extends RecordableTestCase
+abstract class AuthenticatedTestCase extends RecordableTestCase
 {
     public $currentUser;
     use ScriptedActionsTrait;

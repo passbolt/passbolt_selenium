@@ -42,6 +42,7 @@
     ],
     "require": {
         "php": ">=7.0",
+        "ramsey/uuid": "^3.7",
         "nategood/httpful": "*",
         "sauce/sausage": ">=0.15.2",
         "facebook/webdriver": "dev-community"

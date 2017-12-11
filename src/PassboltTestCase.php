@@ -20,7 +20,7 @@ use Facebook\WebDriver\Exception\WebDriverException;
 
 use PHPUnit_Runner_BaseTestRunner;
 
-class PassboltTestCase extends AuthenticatedTestCase
+abstract class PassboltTestCase extends AuthenticatedTestCase
 {
     use SauceLabTestTrait;
 

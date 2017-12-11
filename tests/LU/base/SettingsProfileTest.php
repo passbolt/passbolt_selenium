@@ -147,7 +147,7 @@ class SettingsProfileTest extends PassboltTestCase
         $this->clickLink('All users');
 
         // I should be on the users workspace.
-        $this->waitUntilISee('#container.page.people');
+        $this->waitUntilISee('#container.page.user');
     }
 
     /**

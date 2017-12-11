@@ -26,12 +26,21 @@
  */
 namespace Tests\AP\base;
 
+use App\actions\ConfirmationDialogActionsTrait;
+use App\actions\UserActionsTrait;
+use App\actions\WorkspaceActionsTrait;
+use App\assertions\ConfirmationDialogAssertionsTrait;
 use App\PassboltSetupTestCase;
 use App\Common\Config;
 use Data\Fixtures\User;
+use Data\Fixtures\Gpgkey;
 
 class SetupTest extends PassboltSetupTestCase
 {
+    use WorkspaceActionsTrait;
+    use ConfirmationDialogActionsTrait;
+    use ConfirmationDialogAssertionsTrait;
+    use UserActionsTrait;
 
     /**
      * Scenario: I can see the setup page with instructions to install the plugin
@@ -45,6 +54,7 @@ class SetupTest extends PassboltSetupTestCase
      *
      * @group AP
      * @group setup
+     * @group v2
      */
     public function testCanSeeSetupPageWithFirstPluginSection() 
     {
@@ -73,6 +83,7 @@ class SetupTest extends PassboltSetupTestCase
 
     /**
      * Scenario: I go through the setup and I make sure the navigation buttons and menu items are working properly.
+     *
      * Given        I am an anonymous user with the plugin on the first page of the setup
      * Then         the menu "1. get the plugin" should be selected
      * When         I check the domain validation checkbox
@@ -116,6 +127,7 @@ class SetupTest extends PassboltSetupTestCase
      *
      * @group AN
      * @group setup
+     * @group v2
      */
     public function testNavigation() 
     {
@@ -232,26 +244,29 @@ class SetupTest extends PassboltSetupTestCase
     }
 
     /**
-     * @group saucelabs
      * Scenario     As an AP using the setup, I should be able to go through all the steps of the setup
-     * Given        I am registered and on the first page of the setup
-     * Then         I should be able to verify the domain
-     * When         I click "Next"
-     * Then         I should be able to prepare the generation of my key
-     * When         I click "Next"
-     * Then         I should be able to enter a passphrase
-     * When         I click "Next"
-     * Then         The key should be generated and I should be able to download it
-     * When         I click "Next"
-     * Then         I should be able to choose a security token
-     * When         I click "Next"
-     * Then         I should be able to enter a password for my account
-     * When         I click "Next"
-     * Then         I should observe that I am logged in inside the app
-     * And          I should see my name and email in the account section
+     *
+     * Given I am registered and on the first page of the setup
+     * Then  I should be able to verify the domain
+     * When  I click "Next"
+     * Then  I should be able to prepare the generation of my key
+     * When  I click "Next"
+     * Then  I should be able to enter a passphrase
+     * When  I click "Next"
+     * Then  I can see the key was generated
+     * And   I should be able to download it
+     * When  I click "Next"
+     * Then  I should be able to choose a security token
+     * When  I click "Next"
+     * Then  I should be able to enter a password for my account
+     * When  I click "Next"
+     * Then  I should observe that I am logged in inside the app
+     * And   I should see my name and email in the account section
      *
      * @group AN
      * @group setup
+     * @group v2
+     * @group saucelabs
      */
     public function testCanFollowSetupWithDefaultSteps() 
     {
@@ -266,11 +281,10 @@ class SetupTest extends PassboltSetupTestCase
         $this->goToSetup($john['Username']);
         $this->completeRegistration();
 
-        $this->loginAs(
-            [
+        $this->loginAs([
             'Username' => $john['Username'],
             'MasterPassword' => $john['MasterPassword']
-            ]
+            ], false
         );
         // Check we are logged in.
         $this->waitCompletion();
@@ -289,16 +303,18 @@ class SetupTest extends PassboltSetupTestCase
 
     /**
      * Scenario: As an AP I should be able to import my own key during the setup
+     *
      * Given I am registered as John Doe, and I go to the setup
-     * When        I go through the setup until the import key step
-     * And I test that I can import my key
-     * Then        I should see that the setup behaves as it should (defined in function testStepImportKey)
-     * When        I complete the setup
-     * Then        I should be logged in inside the app
-     * And I should be able to visually confirm my account information
+     * When  I go through the setup until the import key step
+     * And   I test that I can import my key
+     * Then  I should see that the setup behaves as it should (defined in function testStepImportKey)
+     * When  I complete the setup
+     * Then  I should be logged in inside the app
+     * And   I should be able to visually confirm my account information
      *
      * @group AN
      * @group setup
+     * @group v2
      */
     public function testFollowSetupWithImportKey() 
     {
@@ -346,7 +362,7 @@ class SetupTest extends PassboltSetupTestCase
             [
             'Username' => $key['owner_email'],
             'MasterPassword' => $key['masterpassword']
-            ]
+            ], false
         );
 
         $this->waitCompletion();
@@ -365,9 +381,8 @@ class SetupTest extends PassboltSetupTestCase
     }
 
     /**
-     * @group no-saucelabs
-     *
      * Scenario: As an AP I should be able to download my private key after it is generated
+     *
      * Given I am registered as John Doe, and I go to the setup
      * When  I go through the setup until the key backup step
      * And   I click on download
@@ -375,6 +390,8 @@ class SetupTest extends PassboltSetupTestCase
      *
      * @group AN
      * @group setup
+     * @group v2
+     * @group no-saucelabs
      */
     public function testSetupDownloadKeyAfterGenerate() 
     {
@@ -427,12 +444,14 @@ class SetupTest extends PassboltSetupTestCase
 
     /**
      * Scenario: As an AP, I should not be able to do the setup after my account has been activated
+     *
      * Given I click again on the link in the invitation email
      * Then  I should not see the setup again
      * And   I should see a page with a "Token not found" error
      *
      * @group AN
      * @group setup
+     * @group v2
      */
     public function testSetupNotAccessibleAfterAccountValidation() 
     {
@@ -459,12 +478,14 @@ class SetupTest extends PassboltSetupTestCase
 
     /**
      * Scenario: As an AP, I should be able to complete 2 setup consecutively.
+     *
      * Given I have completed already one registration + setup successfully.
      * When  I register again with a different username
      * Then  I should be able to complete the setup another time without error.
      *
      * @group AN
      * @group setup
+     * @group v2
      */
     public function testSetupMultipleTimes() 
     {
@@ -493,9 +514,9 @@ class SetupTest extends PassboltSetupTestCase
         $this->completeRegistration($curtis);
     }
 
-
     /**
      * Scenario: As an AP, I should be able to restart the setup where I left it.
+     *
      * Given I have completed already one registration and setup, but left the setup in the middle.
      * When  I click again on the setup link in the email I received
      * Then  I should see that the setup is restarting at the same screen where I was last time.
@@ -504,6 +525,7 @@ class SetupTest extends PassboltSetupTestCase
      *
      * @group AN
      * @group setup
+     * @group v2
      */
     public function testSetupRestartWhereItWasLeft() 
     {
@@ -552,6 +574,7 @@ class SetupTest extends PassboltSetupTestCase
 
     /**
      * Scenario: As an AP trying to complete the setup a second time, I should see a warning informing me that the plugin is already configured.
+     *
      * Given I have completed already one registration + setup successfully (without seeing a warning)
      * When  I register again with a different username
      * And   I begin the setup process
@@ -559,6 +582,7 @@ class SetupTest extends PassboltSetupTestCase
      *
      * @group AN
      * @group setup
+     * @group v2
      */
     public function testSetupDisplayWarningIfAlreadyConfigured() 
     {
@@ -600,12 +624,14 @@ class SetupTest extends PassboltSetupTestCase
 
     /**
      * Scenario: As AP doing the setup, I should not be able to import a key already used by another user.
+     *
      * Given I have registered and I am following the setup
      * When I am at the import step, and I try to import a key that is already in use by another user (example: Ada).
      * Then  I should see an error message informing me that this key is already in use.
      *
      * @group AN
      * @group setup
+     * @group v2
      */
     public function testFollowSetupWithImportNonUniqueKey() 
     {
@@ -650,11 +676,12 @@ class SetupTest extends PassboltSetupTestCase
         $this->clickLink('Next');
 
         // I should see an error message.
-        $this->waitUntilISee('KeyErrorMessage', '/This key is already used by another user/');
+        $this->waitUntilISee('#KeyErrorMessage', '/This key is already used by another user/');
     }
 
     /**
      * Scenario: As AP doing the setup, I should be able to import a key already used by another user who is soft deleted.
+     *
      * Given I first login as admin and I delete Ada
      * When I have registered as a new user and I am following the setup
      * When I am at the import step, and I try to import a key that was already used by a deleted user.
@@ -670,7 +697,6 @@ class SetupTest extends PassboltSetupTestCase
 
         // And I am Admin
         $user = User::get('admin');
-        
 
         // And I am logged in on the user workspace
         $this->loginAs($user);
@@ -679,7 +705,10 @@ class SetupTest extends PassboltSetupTestCase
         $this->gotoWorkspace('user');
 
         // When I right click on a user
-        $userU = User::get('ursula');
+        $userU = User::get('frances');
+        echo 'loaded';
+        $this->click('#user_' . $userU['id']);
+        $this->clickUser($userU['id']);
         $this->rightClickUser($userU['id']);
 
         // Then  I select the delete option in the contextual menu

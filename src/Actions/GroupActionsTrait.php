@@ -195,9 +195,9 @@ trait GroupActionsTrait
      */
     public function gotoCreateGroup() 
     {
-        if(!$this->isVisible('.page.people')) {
+        if(!$this->isVisible('.page.user')) {
             $this->getUrl('');
-            $this->waitUntilISee('.page.people');
+            $this->waitUntilISee('.page.user');
             $this->waitUntilISee('#js_wsp_create_button');
         }
         $this->click('#js_wsp_create_button');
@@ -234,10 +234,10 @@ trait GroupActionsTrait
      */
     public function clickGroup($id, $workspace='user') 
     {
-        if($workspace == 'user' && !$this->isVisible('.page.people')) {
+        if($workspace == 'user' && !$this->isVisible('.page.user')) {
             $this->getUrl('');
             $this->gotoWorkspace('user');
-            $this->waitUntilISee('.page.people');
+            $this->waitUntilISee('.page.user');
         }
         elseif($workspace == 'password' && !$this->isVisible('.page.password')) {
             $this->getUrl('');
@@ -257,12 +257,12 @@ trait GroupActionsTrait
      */
     public function gotoEditGroup($id) 
     {
-        if(!$this->isVisible('.page.people')) {
+        if(!$this->isVisible('.page.user')) {
             $this->getUrl('');
             $this->waitUntilISee('html.passboltplugin-ready');
             $this->waitUntilISee('.page.password');
             $this->gotoWorkspace('user');
-            $this->waitUntilISee('.page.people');
+            $this->waitUntilISee('.page.user');
         }
         if(!$this->isVisible('.edit-group-dialog')) {
             $this->click("#group_${id} .right-cell a");
@@ -285,11 +285,11 @@ trait GroupActionsTrait
      */
     public function goToRemoveGroup($id) 
     {
-        if(!$this->isVisible('.page.people')) {
+        if(!$this->isVisible('.page.user')) {
             $this->getUrl('');
             $this->waitUntilISee('.page.password');
             $this->gotoWorkspace('user');
-            $this->waitUntilISee('.page.people');
+            $this->waitUntilISee('.page.user');
         }
         $this->click("#group_${id} .right-cell a");
         $this->click("#js_contextual_menu #js_group_browser_menu_remove a");
