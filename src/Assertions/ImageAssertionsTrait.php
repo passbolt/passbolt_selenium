@@ -14,7 +14,7 @@
  */
 namespace App\assertions;
 
-use App\lib\Image;
+use App\Lib\Image;
 use PHPUnit_Framework_Assert;
 
 trait ImageAssertionsTrait

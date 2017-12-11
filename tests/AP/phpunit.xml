@@ -20,8 +20,8 @@
 
     <testsuites>
         <testsuite name="Anonymous user with plugin and no config with firefox">
-            <directory>./base</directory>
-            <directory>./regressions</directory>
+            <directory>./Base</directory>
+            <directory>./Regressions</directory>
         </testsuite>
     </testsuites>
 

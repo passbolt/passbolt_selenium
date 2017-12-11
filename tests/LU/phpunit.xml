@@ -20,8 +20,8 @@
 
     <testsuites>
         <testsuite name="Logged in user with firefox">
-            <directory>./base</directory>
-            <directory>./regressions</directory>
+            <directory>./Base</directory>
+            <directory>./Regressions</directory>
         </testsuite>
     </testsuites>
 

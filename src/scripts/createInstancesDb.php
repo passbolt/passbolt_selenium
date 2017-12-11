@@ -10,7 +10,11 @@
  *
  * The database will be pre-populated by the instances listed in the configuration file.
  */
+namespace App\Scripts;
+
 require_once __DIR__ . '/../../bootstrap.php';
+use App\Common\Config;
+
 Config::get();
 
 /**
@@ -67,7 +71,7 @@ function populateTable(&$db)
 }
 
 // Open or create DB.
-$db = new mysqli(
+$db = new \mysqli(
     Config::read('database.host'),
     Config::read('database.username'),
     Config::read('database.password'),

@@ -20,7 +20,7 @@
 
     <testsuites>
         <testsuite name="Logged in admin with firefox">
-            <directory>./base</directory>
+            <directory>./Base</directory>
         </testsuite>
     </testsuites>
 

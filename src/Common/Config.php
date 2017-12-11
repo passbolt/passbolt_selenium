@@ -9,7 +9,7 @@
  */
 namespace App\Common;
 
-use App\lib\Cakephp\Hash;
+use App\Lib\Cakephp\Hash;
 use InvalidArgumentException;
 
 class Config

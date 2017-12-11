@@ -14,8 +14,8 @@
  */
 namespace App\actions;
 
-use App\assertions\PasswordAssertionsTrait;
-use App\assertions\WorkspaceAssertionsTrait;
+use App\Assertions\PasswordAssertionsTrait;
+use App\Assertions\WorkspaceAssertionsTrait;
 use Color;
 
 trait PasswordActionsTrait
