@@ -31,7 +31,7 @@ trait SetupActionsTrait
         $this->inputText('profile-last-name', $lastname);
         $this->inputText('username', $username);
         $this->click('#disclaimer');
-        $this->pressEnter();
+        $this->click('.submit-wrapper input');
         $this->waitUntilISee('.page.register.thank-you');
     }
 
