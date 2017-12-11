@@ -14,7 +14,7 @@
  */
 namespace App\Common\Asserts;
 
-use App\lib\UuidFactory;
+use App\Lib\UuidFactory;
 use App\Common\Config;
 use Color;
 use Exception;

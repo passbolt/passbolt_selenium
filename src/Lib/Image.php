@@ -3,7 +3,7 @@
  * Image Comparing Function
  * (C) 2011-2014 Robert Lerner, All Rights Reserved
  */
-namespace App\lib;
+namespace App\Lib;
 
 class Image
 {

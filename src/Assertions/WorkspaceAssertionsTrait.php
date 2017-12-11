@@ -16,7 +16,7 @@ namespace App\Assertions;
 
 use Facebook\WebDriver\Remote\RemoteWebDriver;
 use Facebook\WebDriver\WebDriverBy;
-use App\lib\UuidFactory;
+use App\Lib\UuidFactory;
 
 trait WorkspaceAssertionsTrait
 {

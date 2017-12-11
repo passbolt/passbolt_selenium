@@ -6,7 +6,7 @@
  * @licence GNU Affero General Public License http://www.gnu.org/licenses/agpl-3.0.en.html
  */
 namespace Data\Fixtures;
-use App\lib\UuidFactory;
+use App\Lib\UuidFactory;
 
 class User {
 

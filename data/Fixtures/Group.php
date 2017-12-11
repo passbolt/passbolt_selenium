@@ -7,7 +7,7 @@
  */
 namespace Data\Fixtures;
 
-use App\lib\UuidFactory;
+use App\Lib\UuidFactory;
 
 class Group {
 	/**
