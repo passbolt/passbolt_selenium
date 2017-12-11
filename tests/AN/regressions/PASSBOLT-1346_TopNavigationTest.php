@@ -1,36 +1,52 @@
 <?php
 /**
- * Feature : Navigation
- * As an anonymous user I should be able to use the top navigation
+ * Passbolt ~ Open source password manager for teams
+ * Copyright (c) Passbolt SARL (https://www.passbolt.com)
  *
- * @copyright (c) 2017 Passbolt SARL
- * @licence GNU Affero General Public License http://www.gnu.org/licenses/agpl-3.0.en.html
+ * Licensed under GNU Affero General Public License version 3 of the or any later version.
+ * For full copyright and license information, please see the LICENSE.txt
+ * Redistributions of files must retain the above copyright notice.
+ *
+ * @copyright Copyright (c) Passbolt SARL (https://www.passbolt.com)
+ * @license   https://opensource.org/licenses/AGPL-3.0 AGPL License
+ * @link      https://www.passbolt.com Passbolt(tm)
+ * @since     2.0.0
  */
-class PASSBOLT1346 extends PassboltTestCase {
+/**
+ * Feature : Navigation
+ * - As an anonymous user I should be able to use the top navigation
+ */
+namespace Tests\AN\regressions;
 
-	/**
-	 * Scenario: As AN, passbolt logo at top left should not point to passbolt.com, but to the app url
-	 * Given	I am on the home page
-	 * When     I click on the logo on the top right corner
-	 * Then		I go to the login page
-	 * When		I click on the home link
-	 * Then		I go to the login page
-	 * When		I click on the login link
-	 * Then		I go to the login page
-	 * When		I click on the register link
-	 * Then		I go to the login page
-	 */
-	public function testTopNavigationLink() {
-		$this->getUrl('/');
-		$this->assertTitleContain('Login');
-		$this->click('.top.navigation.primary .home a');
-		$this->waitUntilTitleContain('Login');
-		$this->clickLink('home');
-		$this->waitUntilTitleContain('Login');
-		$this->clickLink('login');
-		$this->waitUntilTitleContain('Login');
-		$this->clickLink('register');
-		$this->waitUntilTitleContain('Register');
-	}
+use App\PassboltTestCase;
+
+class PASSBOLT1346 extends PassboltTestCase
+{
+
+    /**
+     * Scenario: As AN, passbolt logo at top left should not point to passbolt.com, but to the app url
+     * Given I am on the home page
+     * When I click on the logo on the top right corner
+     * Then        I go to the login page
+     * When        I click on the home link
+     * Then        I go to the login page
+     * When        I click on the login link
+     * Then        I go to the login page
+     * When        I click on the register link
+     * Then        I go to the login page
+     */
+    public function testTopNavigationLink() 
+    {
+        $this->getUrl('/');
+        $this->assertTitleContain('Login');
+        $this->click('.top.navigation.primary .home a');
+        $this->waitUntilTitleContain('Login');
+        $this->clickLink('home');
+        $this->waitUntilTitleContain('Login');
+        $this->clickLink('login');
+        $this->waitUntilTitleContain('Login');
+        $this->clickLink('register');
+        $this->waitUntilTitleContain('Register');
+    }
 
 }
