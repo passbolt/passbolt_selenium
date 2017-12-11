@@ -12,7 +12,7 @@
  * @link      https://www.passbolt.com Passbolt(tm)
  * @since     2.0.0
  */
-namespace App\actions;
+namespace App\Actions;
 
 trait ShareActionsTrait
 {

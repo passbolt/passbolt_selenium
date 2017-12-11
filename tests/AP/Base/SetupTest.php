@@ -26,11 +26,11 @@
  */
 namespace Tests\AP\Base;
 
-use App\actions\ConfirmationDialogActionsTrait;
-use App\actions\UserActionsTrait;
-use App\actions\WorkspaceActionsTrait;
-use App\assertions\ConfirmationDialogAssertionsTrait;
-use App\assertions\WorkspaceAssertionsTrait;
+use App\Actions\ConfirmationDialogActionsTrait;
+use App\Actions\UserActionsTrait;
+use App\Actions\WorkspaceActionsTrait;
+use App\Assertions\ConfirmationDialogAssertionsTrait;
+use App\Assertions\WorkspaceAssertionsTrait;
 use App\PassboltSetupTestCase;
 use App\Common\Config;
 use Data\Fixtures\User;

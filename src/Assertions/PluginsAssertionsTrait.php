@@ -12,7 +12,7 @@
  * @link      https://www.passbolt.com Passbolt(tm)
  * @since     2.0.0
  */
-namespace App\assertions;
+namespace App\Assertions;
 
 use Facebook\WebDriver\WebDriverBy;
 use Facebook\WebDriver\Remote\RemoteWebDriver;
