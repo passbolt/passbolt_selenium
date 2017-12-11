@@ -57,6 +57,7 @@
         "psr-4": {
             "App\\": "src",
             "Data\\": "data",
+            "Data\\Fixtures\\": "data/fixtures",
             "Tests\\": "test"
         }
     }
