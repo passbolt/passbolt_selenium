@@ -16,6 +16,7 @@ namespace App\assertions;
 
 use Facebook\WebDriver\Remote\RemoteWebDriver;
 use Facebook\WebDriver\WebDriverBy;
+use App\lib\UuidFactory;
 
 trait WorkspaceAssertionsTrait
 {
@@ -45,13 +46,13 @@ trait WorkspaceAssertionsTrait
      * Check if a notification is displayed
      *
      * @see   in passbolt/app/webroot/js/app/config/notification.json for notification uuid seed
-     *         example: Uuid::get('app_resources_index_success') is how to create the id from the seed
+     *         example: UuidFactory::uuid('app_resources_index_success') is how to create the id from the seed
      * @param $notificationId
      * @param string         $msg
      */
     public function assertNotification($notificationId, $msg = null) 
     {
-        $notificationId = '#notification_' . Uuid::get($notificationId);
+        $notificationId = '#notification_' . UuidFactory::uuid($notificationId);
         $this->waitUntilISee($notificationId);
         if (isset($msg)) {
             $contain = false;

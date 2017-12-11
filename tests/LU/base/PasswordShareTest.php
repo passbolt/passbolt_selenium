@@ -243,10 +243,10 @@ class PasswordShareTest extends PassboltTestCase
         $resource = Resource::get(
             array(
             'user' => 'ada',
-            'id' => Uuid::get('resource.id.apache')
+            'id' => UuidFactory::uuid('resource.id.apache')
             )
         );
-        $this->gotoSharePassword(Uuid::get('resource.id.apache'));
+        $this->gotoSharePassword(UuidFactory::uuid('resource.id.apache'));
 
         // Then  I can see the save button is disabled
         $this->assertVisible('#js_rs_share_save.disabled');
@@ -290,7 +290,7 @@ class PasswordShareTest extends PassboltTestCase
         $resource = Resource::get(
             array(
             'user' => 'ada',
-            'id' => Uuid::get('resource.id.apache')
+            'id' => UuidFactory::uuid('resource.id.apache')
             )
         );
 
@@ -338,7 +338,7 @@ class PasswordShareTest extends PassboltTestCase
         $resource = Resource::get(
             array(
             'user' => 'ada',
-            'id' => Uuid::get('resource.id.gnupg')
+            'id' => UuidFactory::uuid('resource.id.gnupg')
             )
         );
 
@@ -385,32 +385,32 @@ class PasswordShareTest extends PassboltTestCase
         $resource = Resource::get(
             array(
             'user' => 'ada',
-            'id' => Uuid::get('resource.id.canjs')
+            'id' => UuidFactory::uuid('resource.id.canjs')
             )
         );
-        $this->gotoEditPassword(Uuid::get('resource.id.canjs'));
+        $this->gotoEditPassword(UuidFactory::uuid('resource.id.canjs'));
 
         // And I go to the share tab
         $this->findByCss('#js_tab_nav_js_rs_permission a')->click();
         $this->waitCompletion();
 
         // Then  I can see that Ada is owner
-        $permissionAdaId = Uuid::get('permission.id.' . $resource['id'] . '-' . $userAda['id']);
+        $permissionAdaId = UuidFactory::uuid('permission.id.' . $resource['id'] . '-' . $userAda['id']);
         $this->assertPermission($resource, 'ada@passbolt.com', 'can update', ['closeDialog' => false]);
         $this->assertDisabled('js_share_perm_type_' . $permissionAdaId);
 
         // And I can see that Betty can update
-        $permissionBettyId = Uuid::get('permission.id.' . $resource['id'] . '-' . $userBetty['id']);
+        $permissionBettyId = UuidFactory::uuid('permission.id.' . $resource['id'] . '-' . $userBetty['id']);
         $this->assertPermission($resource, 'betty@passbolt.com', 'can read', ['closeDialog' => false]);
         $this->assertDisabled('js_share_perm_type_' . $permissionBettyId);
 
         // And I can see that Carol can read
-        $permissionCaroleId = Uuid::get('permission.id.' . $resource['id'] . '-' . $userCarole['id']);
+        $permissionCaroleId = UuidFactory::uuid('permission.id.' . $resource['id'] . '-' . $userCarole['id']);
         $this->assertPermission($resource, 'carol@passbolt.com', 'can read', ['closeDialog' => false]);
         $this->assertDisabled('js_share_perm_type_' . $permissionCaroleId);
 
         // And I can see that Dame can read
-        $permissionEdithId = Uuid::get('permission.id.' . $resource['id'] . '-' . $userEdith['id']);
+        $permissionEdithId = UuidFactory::uuid('permission.id.' . $resource['id'] . '-' . $userEdith['id']);
         $this->assertPermission($resource, 'edith@passbolt.com', 'is owner', ['closeDialog' => false]);
         $this->assertDisabled('js_share_perm_type_' . $permissionEdithId);
 
@@ -446,7 +446,7 @@ class PasswordShareTest extends PassboltTestCase
         $resource = Resource::get(
             array(
             'user' => 'carol',
-            'id' => Uuid::get('resource.id.canjs')
+            'id' => UuidFactory::uuid('resource.id.canjs')
             )
         );
 
@@ -495,7 +495,7 @@ class PasswordShareTest extends PassboltTestCase
         $resource = Resource::get(
             array(
             'user' => 'carol',
-            'id' => Uuid::get('resource.id.gnupg')
+            'id' => UuidFactory::uuid('resource.id.gnupg')
             )
         );
         $this->addTemporaryPermission($resource, $shareWithUser['name'], $user);
@@ -582,7 +582,7 @@ class PasswordShareTest extends PassboltTestCase
         $resource = Resource::get(
             array(
             'user' => 'carol',
-            'id' => Uuid::get('resource.id.gnupg')
+            'id' => UuidFactory::uuid('resource.id.gnupg')
             )
         );
         $this->addTemporaryPermission($resource, $shareWithUser['name'], $user);
@@ -647,10 +647,10 @@ class PasswordShareTest extends PassboltTestCase
         $resource = Resource::get(
             array(
             'user' => 'ada',
-            'id' => Uuid::get('resource.id.april')
+            'id' => UuidFactory::uuid('resource.id.april')
             )
         );
-        $this->gotoSharePassword(Uuid::get('resource.id.april'));
+        $this->gotoSharePassword(UuidFactory::uuid('resource.id.april'));
 
         // Then  I can see Betty has no right on the password
         $this->assertElementNotContainText(
@@ -721,7 +721,7 @@ class PasswordShareTest extends PassboltTestCase
         $resource = Resource::get(
             array(
             'user' => 'carol',
-            'id' => Uuid::get('resource.id.gnupg')
+            'id' => UuidFactory::uuid('resource.id.gnupg')
             )
         );
 
@@ -765,10 +765,10 @@ class PasswordShareTest extends PassboltTestCase
         $resource = Resource::get(
             array(
             'user' => 'betty',
-            'id'   => Uuid::get('resource.id.gnupg')
+            'id'   => UuidFactory::uuid('resource.id.gnupg')
             )
         );
-        $this->gotoSharePassword(Uuid::get('resource.id.gnupg'));
+        $this->gotoSharePassword(UuidFactory::uuid('resource.id.gnupg'));
 
         // Then  I can see Betty has no right on the password
         $this->assertElementNotContainText(
@@ -819,7 +819,7 @@ class PasswordShareTest extends PassboltTestCase
         $resource = Resource::get(
             array(
             'user' => 'ada',
-            'id' => Uuid::get('resource.id.apache')
+            'id' => UuidFactory::uuid('resource.id.apache')
             )
         );
         $this->gotoSharePassword($resource['id']);
@@ -893,12 +893,12 @@ class PasswordShareTest extends PassboltTestCase
         $resource = Resource::get(
             array(
             'user' => 'ada',
-            'id' => Uuid::get('resource.id.apache')
+            'id' => UuidFactory::uuid('resource.id.apache')
             )
         );
 
         // And I give read access to a group for a password I own
-        $freelancer = Group::get(['id' => Uuid::get('group.id.freelancer')]);
+        $freelancer = Group::get(['id' => UuidFactory::uuid('group.id.freelancer')]);
         $jean = User::get('jean');
         $this->sharePassword($resource, $freelancer['name'], $user);
 
@@ -941,7 +941,7 @@ class PasswordShareTest extends PassboltTestCase
         $resource = Resource::get(
             array(
             'user' => 'ada',
-            'id' => Uuid::get('resource.id.cakephp')
+            'id' => UuidFactory::uuid('resource.id.cakephp')
             )
         );
         $this->gotoSharePassword($resource['id']);
@@ -953,7 +953,7 @@ class PasswordShareTest extends PassboltTestCase
         );
 
         // When I delete a group permission
-        $group = Group::get(['id' => Uuid::get('group.id.freelancer')]);
+        $group = Group::get(['id' => UuidFactory::uuid('group.id.freelancer')]);
         $this->deletePermission($resource, $group['name']);
 
         // And I see a notice message that the operation was a success
@@ -1001,7 +1001,7 @@ class PasswordShareTest extends PassboltTestCase
         $resource = Resource::get(
             array(
             'user' => 'ada',
-            'id'   => Uuid::get('resource.id.apache')
+            'id'   => UuidFactory::uuid('resource.id.apache')
             )
         );
         $this->gotoSharePassword($resource['id']);
@@ -1043,14 +1043,14 @@ class PasswordShareTest extends PassboltTestCase
         $this->loginAs($user);
 
         // When I go to the sharing dialog of a password I own
-        $resourceId = Uuid::get('resource.id.apache');
+        $resourceId = UuidFactory::uuid('resource.id.apache');
         $resource = Resource::get(
             array(
             'user' => 'betty',
             'id' => $resourceId
             )
         );
-        $this->gotoSharePassword(Uuid::get('resource.id.apache'));
+        $this->gotoSharePassword(UuidFactory::uuid('resource.id.apache'));
 
         // Then  I can see Betty has update right on the password
         $this->assertPermission($resource, 'betty@passbolt.com', 'can update');
@@ -1089,7 +1089,7 @@ class PasswordShareTest extends PassboltTestCase
         $this->loginAs($user);
 
         // When I go to the sharing dialog of a password I own
-        $resourceId = Uuid::get('resource.id.apache');
+        $resourceId = UuidFactory::uuid('resource.id.apache');
         $resource = Resource::get(
             array(
             'user' => 'betty',
@@ -1108,7 +1108,7 @@ class PasswordShareTest extends PassboltTestCase
         $this->assertTrue($this->isPasswordSelected($resourceId));
 
         // And I go to the sharing dialog of a password I update the permissions
-        $this->gotoSharePassword(Uuid::get('resource.id.apache'));
+        $this->gotoSharePassword(UuidFactory::uuid('resource.id.apache'));
 
         // Then  I can see Betty has no right anymore
         $this->assertElementNotContainText(
@@ -1161,7 +1161,7 @@ class PasswordShareTest extends PassboltTestCase
         $this->loginAs($userAda);
 
         // When I go to the sharing dialog of a password I own
-        $resourceId = Uuid::get('resource.id.apache');
+        $resourceId = UuidFactory::uuid('resource.id.apache');
         $resource = Resource::get(
             array(
             'user' => 'ada',
@@ -1171,8 +1171,8 @@ class PasswordShareTest extends PassboltTestCase
         $this->gotoSharePassword($resourceId);
 
         // Then  I can see the permission type dropdown of the owner Ada is disabled
-        $permissionAdaId = Uuid::get('permission.id.' . $resourceId . '-' . $userAda['id']);
-        $permissionBettyId = Uuid::get('permission.id.' . $resourceId . '-' . $userBetty['id']);
+        $permissionAdaId = UuidFactory::uuid('permission.id.' . $resourceId . '-' . $userAda['id']);
+        $permissionBettyId = UuidFactory::uuid('permission.id.' . $resourceId . '-' . $userBetty['id']);
         $this->assertDisabled('js_share_perm_type_' . $permissionAdaId);
 
         // And I can see the permission delete button of the owner Ada is disabled
@@ -1274,7 +1274,7 @@ class PasswordShareTest extends PassboltTestCase
         $this->loginAs($userAda);
 
         // When I go to the sharing dialog of a password I own
-        $resourceId = Uuid::get('resource.id.apache');
+        $resourceId = UuidFactory::uuid('resource.id.apache');
         $resource = Resource::get(
             array(
             'user' => 'ada',
@@ -1342,7 +1342,7 @@ class PasswordShareTest extends PassboltTestCase
         $resource = Resource::get(
             array(
             'user' => $userA['name'],
-            'id' => Uuid::get('resource.id.apache')
+            'id' => UuidFactory::uuid('resource.id.apache')
             )
         );
         $this->gotoSharePassword($resource['id']);
@@ -1436,14 +1436,14 @@ class PasswordShareTest extends PassboltTestCase
         $this->switchToPreviousTab();
 
         // And I go to the sharing dialog of a password I own
-        $resourceId = Uuid::get('resource.id.apache');
+        $resourceId = UuidFactory::uuid('resource.id.apache');
         $resource = Resource::get(
             array(
             'user' => 'betty',
             'id' => $resourceId
             )
         );
-        $this->gotoSharePassword(Uuid::get('resource.id.apache'));
+        $this->gotoSharePassword(UuidFactory::uuid('resource.id.apache'));
 
         // Then  I can see Betty has update right on the password
         $this->assertPermission($resource, 'betty@passbolt.com', 'can update', ['closeDialog' => false]);
@@ -1461,7 +1461,7 @@ class PasswordShareTest extends PassboltTestCase
         $this->switchToNextTab();
 
         // And I go to the sharing dialog of a password I own
-        $this->gotoSharePassword(Uuid::get('resource.id.apache'));
+        $this->gotoSharePassword(UuidFactory::uuid('resource.id.apache'));
 
         // Then  I can see Betty has read access on the password
         $this->assertPermission($resource, 'betty@passbolt.com', 'can read', ['closeDialog' => false]);
@@ -1479,7 +1479,7 @@ class PasswordShareTest extends PassboltTestCase
         $this->switchToPreviousTab();
 
         // And I go to the sharing dialog of a password I own
-        $this->gotoSharePassword(Uuid::get('resource.id.apache'));
+        $this->gotoSharePassword(UuidFactory::uuid('resource.id.apache'));
 
         // Then  I can see Betty has read access on the password
         $this->assertPermission($resource, 'betty@passbolt.com', 'is owner');
@@ -1518,10 +1518,10 @@ class PasswordShareTest extends PassboltTestCase
         $resource = Resource::get(
             array(
             'user' => 'betty',
-            'id' => Uuid::get('resource.id.gnupg')
+            'id' => UuidFactory::uuid('resource.id.gnupg')
             )
         );
-        $this->gotoSharePassword(Uuid::get('resource.id.gnupg'));
+        $this->gotoSharePassword(UuidFactory::uuid('resource.id.gnupg'));
 
         // And I give read access to betty for a password I own
         $this->sharePassword($resource, 'betty@passbolt.com', $user);
@@ -1568,10 +1568,10 @@ class PasswordShareTest extends PassboltTestCase
         $resource = Resource::get(
             array(
             'user' => 'betty',
-            'id' => Uuid::get('resource.id.gnupg')
+            'id' => UuidFactory::uuid('resource.id.gnupg')
             )
         );
-        $this->gotoSharePassword(Uuid::get('resource.id.gnupg'));
+        $this->gotoSharePassword(UuidFactory::uuid('resource.id.gnupg'));
 
         // And I give read access to betty for a password I own
         $this->sharePassword($resource, 'betty@passbolt.com', $user);

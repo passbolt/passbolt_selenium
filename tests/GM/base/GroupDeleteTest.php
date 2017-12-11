@@ -32,7 +32,7 @@ class GMGroupDeleteTest extends PassboltTestCase
         $this->gotoWorkspace('user');
 
         // When I click on the contextual menu button of a group on the right
-        $groupId = Uuid::get('group.id.ergonom');
+        $groupId = UuidFactory::uuid('group.id.ergonom');
         $this->click("#group_$groupId .right-cell a");
 
         // Then  I should see the group contextual menu

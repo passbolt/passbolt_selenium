@@ -28,7 +28,7 @@ class GMGroupViewTest extends PassboltTestCase
 
         // And I am on the users workspace
         // When I edit a group
-        $group = Group::get(['id' => Uuid::get('group.id.ergonom')]);
+        $group = Group::get(['id' => UuidFactory::uuid('group.id.ergonom')]);
         $this->gotoEditGroup($group['id']);
 
         // Then  I should see the list of users that are members of a given group
@@ -57,7 +57,7 @@ class GMGroupViewTest extends PassboltTestCase
         $this->gotoWorkspace('user');
 
         // Assert group members in sidebar
-        $group = Group::get(['id' => Uuid::get('group.id.accounting')]);
+        $group = Group::get(['id' => UuidFactory::uuid('group.id.accounting')]);
         $groupMember = User::get('frances');
         $this->assertGroupMemberInSidebar($group['id'], $groupMember, true);
         $groupMember = User::get('grace');

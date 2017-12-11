@@ -119,7 +119,7 @@ trait PasswordAssertionsTrait
     public function assertICanSeePassword($name) 
     {
         try {
-            $this->waitUntilISee('resource_' . Uuid::get('resource.id.' . $name), '/' . $name . '/i');
+            $this->waitUntilISee('resource_' . UuidFactory::uuid('resource.id.' . $name), '/' . $name . '/i');
         }
         catch(Exception $e) {
             $this->fail("Failed to assert that the password " . $name . " is visible");
@@ -135,7 +135,7 @@ trait PasswordAssertionsTrait
     public function assertICannotSeePassword($name) 
     {
         try {
-            $this->waitUntilIDontSee('#resource_' . Uuid::get('resource.id.' . $name), '/' . $name . '/i');
+            $this->waitUntilIDontSee('#resource_' . UuidFactory::uuid('resource.id.' . $name), '/' . $name . '/i');
         }
         catch(Exception $e) {
             $this->fail("Failed to assert that the password " . $name . " is visible");

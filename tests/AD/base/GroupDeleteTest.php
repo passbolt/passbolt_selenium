@@ -46,7 +46,7 @@ class ADGroupDeleteTest extends PassboltTestCase
         $this->gotoWorkspace('user');
 
         // When I click on the contextual menu button of a group on the right
-        $groupId = Uuid::get('group.id.accounting');
+        $groupId = UuidFactory::uuid('group.id.accounting');
         $this->waitUntilISee("#js_wsp_users_groups_list #group_${groupId}");
         $this->goToRemoveGroup($groupId);
 
@@ -92,7 +92,7 @@ class ADGroupDeleteTest extends PassboltTestCase
         $this->gotoWorkspace('user');
 
         // When I click on the contextual menu button of a group on the right
-        $groupId = Uuid::get('group.id.board');
+        $groupId = UuidFactory::uuid('group.id.board');
         $this->waitUntilISee("#js_wsp_users_groups_list #group_${groupId}");
         $this->goToRemoveGroup($groupId);
 
@@ -173,7 +173,7 @@ class ADGroupDeleteTest extends PassboltTestCase
         $this->gotoWorkspace('user');
 
         // When I click on the contextual menu button of a group on the right
-        $groupId = Uuid::get('group.id.accounting');
+        $groupId = UuidFactory::uuid('group.id.accounting');
         $this->waitUntilISee("#js_wsp_users_groups_list #group_${groupId}");
         $this->goToRemoveGroup($groupId);
 
@@ -220,7 +220,7 @@ class ADGroupDeleteTest extends PassboltTestCase
         $user = User::get('admin');
         
 
-        $groupId = Uuid::get('group.id.accounting');
+        $groupId = UuidFactory::uuid('group.id.accounting');
 
         // I am logged in as admin
         $this->loginAs($user);

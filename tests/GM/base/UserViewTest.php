@@ -40,7 +40,7 @@ class GMUserViewTest extends PassboltTestCase
         $this->clickUser($userF);
 
         // And I edit a group I am group manager
-        $group = Group::get(['id' => Uuid::get('group.id.operations')]);
+        $group = Group::get(['id' => UuidFactory::uuid('group.id.operations')]);
         $this->gotoEditGroup($group['id']);
 
         // And I add the selected user to the group

@@ -7,7 +7,7 @@
  */
 namespace Data\Fixtures;
 
-use App\lib\Uuid;
+use App\lib\UuidFactory;
 
 class Group {
 	/**
@@ -16,75 +16,75 @@ class Group {
 	static function _get() {
 		$g = [];
 		$g[] = [
-			'id' =>  Uuid::get('group.id.sales'),
+			'id' =>  UuidFactory::uuid('group.id.sales'),
 			'name' => 'Sales',
 		];
 		$g[] = [
-			'id' =>  Uuid::get('group.id.it_support'),
+			'id' =>  UuidFactory::uuid('group.id.it_support'),
 			'name' => 'IT support',
 		];
 		$g[] = [
-			'id' =>  Uuid::get('group.id.management'),
+			'id' =>  UuidFactory::uuid('group.id.management'),
 			'name' => 'Management',
 		];
 		$g[] = [
-			'id' =>  Uuid::get('group.id.human_resource'),
+			'id' =>  UuidFactory::uuid('group.id.human_resource'),
 			'name' => 'Human resource',
 		];
 		$g[] = [
-			'id' =>  Uuid::get('group.id.creative'),
+			'id' =>  UuidFactory::uuid('group.id.creative'),
 			'name' => 'Creative',
 		];
 		$g[] = [
-			'id' =>  Uuid::get('group.id.operations'),
+			'id' =>  UuidFactory::uuid('group.id.operations'),
 			'name' => 'Operations',
 		];
 		$g[] = [
-			'id' =>  Uuid::get('group.id.accounting'),
+			'id' =>  UuidFactory::uuid('group.id.accounting'),
 			'name' => 'Accounting',
 		];
 		$g[] = [
-			'id' =>  Uuid::get('group.id.leadership_team'),
+			'id' =>  UuidFactory::uuid('group.id.leadership_team'),
 			'name' => 'Leadership team',
 		];
 		$g[] = [
-			'id' =>  Uuid::get('group.id.developer'),
+			'id' =>  UuidFactory::uuid('group.id.developer'),
 			'name' => 'Developer',
 		];
 		$g[] = [
-			'id' =>  Uuid::get('group.id.quality_assurance'),
+			'id' =>  UuidFactory::uuid('group.id.quality_assurance'),
 			'name' => 'Quality assurance',
 		];
 		$g[] = [
-			'id' =>  Uuid::get('group.id.traffic'),
+			'id' =>  UuidFactory::uuid('group.id.traffic'),
 			'name' => 'Traffic',
 		];
 		$g[] = [
-			'id' =>  Uuid::get('group.id.freelancer'),
+			'id' =>  UuidFactory::uuid('group.id.freelancer'),
 			'name' => 'Freelancer',
 		];
 		$g[] = [
-			'id' =>  Uuid::get('group.id.ergonom'),
+			'id' =>  UuidFactory::uuid('group.id.ergonom'),
 			'name' => 'Ergonom',
 		];
 		$g[] = [
-			'id' =>  Uuid::get('group.id.board'),
+			'id' =>  UuidFactory::uuid('group.id.board'),
 			'name' => 'Board',
 		];
 		$g[] = [
-			'id' =>  Uuid::get('group.id.marketing'),
+			'id' =>  UuidFactory::uuid('group.id.marketing'),
 			'name' => 'Marketing',
 		];
 		$g[] = [
-			'id' =>  Uuid::get('group.id.resource_planning'),
+			'id' =>  UuidFactory::uuid('group.id.resource_planning'),
 			'name' => 'Resource planning',
 		];
 		$g[] = [
-			'id' =>  Uuid::get('group.id.procurement'),
+			'id' =>  UuidFactory::uuid('group.id.procurement'),
 			'name' => 'Procurement',
 		];
 		$g[] = [
-			'id' =>  Uuid::get('group.id.network'),
+			'id' =>  UuidFactory::uuid('group.id.network'),
 			'name' => 'Network',
 		];
 

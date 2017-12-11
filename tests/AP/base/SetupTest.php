@@ -30,6 +30,7 @@ use App\actions\ConfirmationDialogActionsTrait;
 use App\actions\UserActionsTrait;
 use App\actions\WorkspaceActionsTrait;
 use App\assertions\ConfirmationDialogAssertionsTrait;
+use App\assertions\WorkspaceAssertionsTrait;
 use App\PassboltSetupTestCase;
 use App\Common\Config;
 use Data\Fixtures\User;
@@ -38,6 +39,7 @@ use Data\Fixtures\Gpgkey;
 class SetupTest extends PassboltSetupTestCase
 {
     use WorkspaceActionsTrait;
+    use WorkspaceAssertionsTrait;
     use ConfirmationDialogActionsTrait;
     use ConfirmationDialogAssertionsTrait;
     use UserActionsTrait;
@@ -705,10 +707,7 @@ class SetupTest extends PassboltSetupTestCase
         $this->gotoWorkspace('user');
 
         // When I right click on a user
-        $userU = User::get('frances');
-        echo 'loaded';
-        $this->click('#user_' . $userU['id']);
-        $this->clickUser($userU['id']);
+        $userU = User::get('ursula');
         $this->rightClickUser($userU['id']);
 
         // Then  I select the delete option in the contextual menu
@@ -721,7 +720,7 @@ class SetupTest extends PassboltSetupTestCase
         $this->confirmActionInConfirmationDialog();
 
         // Then  I should see a success notification message saying the user is deleted
-        $this->assertNotification('app_users_delete_success');
+        $this->waitCompletion();
 
         $this->logout();
 

@@ -54,7 +54,7 @@ class PasswordCommentTest extends PassboltTestCase
         $this->assertNotVisible($this->commentFormSelector);
 
         // When I click on a password I own.
-        $resource = Resource::get(array('user' => 'ada', 'id' => Uuid::get('resource.id.centos')));
+        $resource = Resource::get(array('user' => 'ada', 'id' => UuidFactory::uuid('resource.id.centos')));
         $this->clickPassword($resource['id']);
 
         // Enter comment and post.
@@ -110,7 +110,7 @@ class PasswordCommentTest extends PassboltTestCase
         $this->loginAs($user);
 
         // When I click on a password I own
-        $resource = Resource::get(array('user' => 'ada', 'id' => Uuid::get('resource.id.bower')));
+        $resource = Resource::get(array('user' => 'ada', 'id' => UuidFactory::uuid('resource.id.bower')));
         $this->clickPassword($resource['id']);
 
         // Make sure password field is visible
@@ -158,7 +158,7 @@ class PasswordCommentTest extends PassboltTestCase
         $this->loginAs($user);
 
         // When I click on a password I own
-        $resource = Resource::get(array('user' => 'ada', 'id' => Uuid::get('resource.id.bower')));
+        $resource = Resource::get(array('user' => 'ada', 'id' => UuidFactory::uuid('resource.id.bower')));
         $this->clickPassword($resource['id']);
 
         // Enter comment and submit.
@@ -222,7 +222,7 @@ class PasswordCommentTest extends PassboltTestCase
         $this->loginAs($user);
 
         // When I click the password centos
-        $this->clickPassword(Uuid::get('resource.id.centos'));
+        $this->clickPassword(UuidFactory::uuid('resource.id.centos'));
 
         // Enter and post comment.
         $this->postCommentInSidebar('this is a test comment');
@@ -241,7 +241,7 @@ class PasswordCommentTest extends PassboltTestCase
         $this->loginAs($user);
 
         // And I select the same centos password.
-        $this->clickPassword(Uuid::get('resource.id.centos'));
+        $this->clickPassword(UuidFactory::uuid('resource.id.centos'));
 
         // Check whether the comments list contain the new comment.
         $this->waitUntilISee('#js_rs_details_comments_list', '/this is a test comment/');
@@ -285,7 +285,7 @@ class PasswordCommentTest extends PassboltTestCase
         $this->assertNotVisible($this->commentFormSelector);
 
         // When I click on a password I own
-        $resource = Resource::get(array('user' => 'ada', 'id' => Uuid::get('resource.id.centos')));
+        $resource = Resource::get(array('user' => 'ada', 'id' => UuidFactory::uuid('resource.id.centos')));
         $this->clickPassword($resource['id']);
 
         // Enter comment and submit.
