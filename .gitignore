@@ -1,5 +1,6 @@
 composer.phar
 /vendor
+/data/extensions
 
 # generic files to ignore
 *.DS_Store
