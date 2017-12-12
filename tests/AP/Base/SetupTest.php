@@ -327,6 +327,7 @@ class SetupTest extends PassboltSetupTestCase
      * @group AP
      * @group setup
      * @group v2
+     * @group import-key
      */
     public function testFollowSetupWithImportKey() 
     {
@@ -645,6 +646,7 @@ class SetupTest extends PassboltSetupTestCase
      * @group AP
      * @group setup
      * @group v2
+     * @group import-key
      */
     public function testFollowSetupWithImportNonUniqueKey() 
     {
@@ -703,6 +705,7 @@ class SetupTest extends PassboltSetupTestCase
      * @group AP
      * @group setup
      * @group v2
+     * @group import-key
      */
     public function testFollowSetupWithImportNonUniqueKeyBelongingToDeletedUser() 
     {

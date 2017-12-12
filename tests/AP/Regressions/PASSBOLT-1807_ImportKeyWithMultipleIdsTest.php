@@ -34,6 +34,7 @@ class PASSBOLT1807 extends PassboltSetupTestCase
      * @group setup
      * @group regressions
      * @group v2
+     * @group import-key
      */
     public function testSetupImportKeyWithMultipleIds() 
     {
