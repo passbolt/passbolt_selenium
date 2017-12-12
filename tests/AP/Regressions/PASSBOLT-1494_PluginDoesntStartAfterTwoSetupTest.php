@@ -14,20 +14,27 @@
  */
 namespace Tests\AP\Regressions;
 
+use App\Actions\DomainActionsTrait;
 use App\PassboltSetupTestCase;
 use Data\Fixtures\User;
 
 class PASSBOLT1494 extends PassboltSetupTestCase
 {
+    use DomainActionsTrait;
 
     /**
-     * @group no-saucelabs
-     *
      * Scenario: As an AP going through the setup two times, I should be able to login at the end of the second setup.
+     *
      * Given I create an account as John Doe, and I proceed through the entire setup.
-     * When I register again with another username, and proceed again through the entire setup
+     * When  I register again with another username, and proceed again through the entire setup
      * Then  I should be able to see the login form
-     * And I should be able to login
+     * And   I should be able to login
+     *
+     * @group AP
+     * @group setup
+     * @group regression
+     * @group no-saucelabs
+     * @group v2
      */
     public function testPluginShouldStartAfterTwoSetup() 
     {
@@ -51,7 +58,7 @@ class PASSBOLT1494 extends PassboltSetupTestCase
         $this->completeRegistration($john);
 
         // I should be able to login
-        $this->loginAs($john);
+        $this->loginAs($john, false);
 
         // I logout.
         $this->logout();
@@ -71,7 +78,7 @@ class PASSBOLT1494 extends PassboltSetupTestCase
         $this->completeRegistration($curtis);
 
         // And I am logged in on the password workspace
-        $this->loginAs($curtis);
+        $this->loginAs($curtis, false);
 
         // wait for redirection trigger
         sleep(1);

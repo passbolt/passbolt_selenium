@@ -13,16 +13,24 @@
  * @since     2.0.0
  */
 /**
- * Feature : Setup
- * - As an anonymous user, I need to be able to see the setup page with an invitation to install the plugin.
+ * Feature: Setup
+ *
+ * - As a user without the plugin clicking on the registration link in my email I can see the setup page with instructions to install the plugin
+ * - As a user during the setup can I can use the navigation buttons and menu items are working properly.
+ * - As a user with a non configured plugin using the setup, I should be able to go through all the steps of the setup
+ * - As a user during the setup process I should be able to import my own key during the setup
+ * - As a user during the setup process I should be able to download my private key after it is generated
+ * - As an AP, I should not be able to do the setup after my account has been activated
+ * - As an AP, I should be able to complete 2 setup consecutively.
+ * - As an AP, I should be able to restart the setup where I left it.
+ * - As an AP trying to complete the setup a second time, I should see a warning informing me that the plugin is already configured.
  * - As AP doing the setup, I should not be able to import a key already used by another user.
- * - As an AP I should be able to download my private key after it is generated
+ * - As AP doing the setup, I should be able to import a key already used by another user who is soft deleted.
  *
  * @TODO      : Test a scenario where the key is not compatible with GPG on server side.
  * @TODO      : Test scenario with a key that has matching information (same name and email).
  * @TODO      : Test a scenario where the name of the user has to be altered.
- * @copyright (c) 2017 Passbolt SARL
- * @licence   GNU Affero General Public License http://www.gnu.org/licenses/agpl-3.0.en.html
+ *
  */
 namespace Tests\AP\Base;
 
@@ -86,48 +94,48 @@ class SetupTest extends PassboltSetupTestCase
     /**
      * Scenario: I go through the setup and I make sure the navigation buttons and menu items are working properly.
      *
-     * Given        I am an anonymous user with the plugin on the first page of the setup
-     * Then         the menu "1. get the plugin" should be selected
-     * When         I check the domain validation checkbox
-     * And          I click on the link "Next"
-     * Then         I should see a page with a title "Create a new key"
-     * And          the menu "2. Define your keys" should be selected
-     * When         I click on the link "Cancel"
-     * Then         I should be back on the 1st step.
-     * When         I check the domain validation checkbox.
-     * And          I click "Next"
-     * When         I click "Import"
-     * Then         I should see a page where I can import my keys
-     * When         I click "Create"
-     * Then         I should be back on the page to generate a key
-     * When         I click "Next" again
-     * Then         I should be at the step 3
-     * And          I should see a page with title "Now let's setup your passphrase"
-     * And          The menu "3. Set a passphrase" should be selected
-     * When         I click "Cancel"
-     * Then         I should be back at step 2
-     * And          the menu "2. Define your keys should be selected"
-     * When         I click "Next"
-     * Then         I should be back at step 3
-     * When         I fill up a passphrase in the password field
-     * And          I click "Next"
-     * Then         I should reach a page saying that the secret and public key is generating
-     * And          I should wait until the key is generated
-     * And          I should reach the next step saying that the secret key is ready.
-     * And          I should see that the menu "3. Set a passphrase" is selected
-     * When         I click "Cancel"
-     * Then         I should be back at the step "enter passphrase"
-     * When         I enter the passphrase and click Next
-     * Then         I should see that the key generates again
-     * When         The key is generated and I reach the next step "Success! Your secret key is ready"
-     * And          I click "Next"
-     * Then         I should reach the next step
-     * And          I should see "Set a security token" as the title
-     * When         I click "Next"
-     * Then         I should reach the final step where I am being redirected
-     * And          The "Login !" menu should be selected
+     * Given I am an anonymous user with the plugin on the first page of the setup
+     * Then  the menu "1. get the plugin" should be selected
+     * When  I check the domain validation checkbox
+     * And   I click on the link "Next"
+     * Then  I should see a page with a title "Create a new key"
+     * And   the menu "2. Define your keys" should be selected
+     * When  I click on the link "Cancel"
+     * Then  I should be back on the 1st step.
+     * When  I check the domain validation checkbox.
+     * And   I click "Next"
+     * When  I click "Import"
+     * Then  I should see a page where I can import my keys
+     * When  I click "Create"
+     * Then  I should be back on the page to generate a key
+     * When  I click "Next" again
+     * Then  I should be at the step 3
+     * And   I should see a page with title "Now let's setup your passphrase"
+     * And   The menu "3. Set a passphrase" should be selected
+     * When  I click "Cancel"
+     * Then  I should be back at step 2
+     * And   the menu "2. Define your keys should be selected"
+     * When  I click "Next"
+     * Then  I should be back at step 3
+     * When  I fill up a passphrase in the password field
+     * And   I click "Next"
+     * Then  I should reach a page saying that the secret and public key is generating
+     * And   I should wait until the key is generated
+     * And   I should reach the next step saying that the secret key is ready.
+     * And   I should see that the menu "3. Set a passphrase" is selected
+     * When  I click "Cancel"
+     * Then  I should be back at the step "enter passphrase"
+     * When  I enter the passphrase and click Next
+     * Then  I should see that the key generates again
+     * When  The key is generated and I reach the next step "Success! Your secret key is ready"
+     * And   I click "Next"
+     * Then  I should reach the next step
+     * And   I should see "Set a security token" as the title
+     * When  I click "Next"
+     * Then  I should reach the final step where I am being redirected
+     * And   The "Login !" menu should be selected
      *
-     * @group AN
+     * @group AP
      * @group setup
      * @group v2
      */
@@ -246,7 +254,7 @@ class SetupTest extends PassboltSetupTestCase
     }
 
     /**
-     * Scenario     As an AP using the setup, I should be able to go through all the steps of the setup
+     * Scenario: As an AP using the setup, I should be able to go through all the steps of the setup
      *
      * Given I am registered and on the first page of the setup
      * Then  I should be able to verify the domain
@@ -263,9 +271,9 @@ class SetupTest extends PassboltSetupTestCase
      * Then  I should be able to enter a password for my account
      * When  I click "Next"
      * Then  I should observe that I am logged in inside the app
-     * And   I should see my name and email in the account section
+     * And   That my name and email are matching
      *
-     * @group AN
+     * @group AP
      * @group setup
      * @group v2
      * @group saucelabs
@@ -288,9 +296,11 @@ class SetupTest extends PassboltSetupTestCase
             'MasterPassword' => $john['MasterPassword']
             ], false
         );
+
         // Check we are logged in.
         $this->waitCompletion();
         $this->waitUntilISee('#js_app_controller.ready');
+
         // Check that the name is ok.
         $this->assertElementContainsText(
             $this->findByCss('.header .user.profile .details .name'),
@@ -314,7 +324,7 @@ class SetupTest extends PassboltSetupTestCase
      * Then  I should be logged in inside the app
      * And   I should be able to visually confirm my account information
      *
-     * @group AN
+     * @group AP
      * @group setup
      * @group v2
      */
@@ -390,7 +400,7 @@ class SetupTest extends PassboltSetupTestCase
      * And   I click on download
      * Then  I should see that the key downloaded is in a valid PGP format
      *
-     * @group AN
+     * @group AP
      * @group setup
      * @group v2
      * @group no-saucelabs
@@ -451,9 +461,10 @@ class SetupTest extends PassboltSetupTestCase
      * Then  I should not see the setup again
      * And   I should see a page with a "Token not found" error
      *
-     * @group AN
+     * @group AP
      * @group setup
      * @group v2
+     * @group broken-series
      */
     public function testSetupNotAccessibleAfterAccountValidation() 
     {
@@ -485,7 +496,7 @@ class SetupTest extends PassboltSetupTestCase
      * When  I register again with a different username
      * Then  I should be able to complete the setup another time without error.
      *
-     * @group AN
+     * @group AP
      * @group setup
      * @group v2
      */
@@ -525,7 +536,7 @@ class SetupTest extends PassboltSetupTestCase
      * When  I press Cancel
      * Then  I should see that the setup is at the step before.
      *
-     * @group AN
+     * @group AP
      * @group setup
      * @group v2
      */
@@ -582,7 +593,7 @@ class SetupTest extends PassboltSetupTestCase
      * And   I begin the setup process
      * Then  I should see a warning informing me that the plugin is already configured.
      *
-     * @group AN
+     * @group AP
      * @group setup
      * @group v2
      */
@@ -631,7 +642,7 @@ class SetupTest extends PassboltSetupTestCase
      * When I am at the import step, and I try to import a key that is already in use by another user (example: Ada).
      * Then  I should see an error message informing me that this key is already in use.
      *
-     * @group AN
+     * @group AP
      * @group setup
      * @group v2
      */
@@ -685,12 +696,13 @@ class SetupTest extends PassboltSetupTestCase
      * Scenario: As AP doing the setup, I should be able to import a key already used by another user who is soft deleted.
      *
      * Given I first login as admin and I delete Ada
-     * When I have registered as a new user and I am following the setup
-     * When I am at the import step, and I try to import a key that was already used by a deleted user.
+     * When  I have registered as a new user and I am following the setup
+     * When  I am at the import step, and I try to import a key that was already used by a deleted user.
      * Then  I should see that the key is imported normally.
      *
-     * @group AN
+     * @group AP
      * @group setup
+     * @group v2
      */
     public function testFollowSetupWithImportNonUniqueKeyBelongingToDeletedUser() 
     {

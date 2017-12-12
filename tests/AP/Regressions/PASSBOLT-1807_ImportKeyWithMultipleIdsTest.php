@@ -16,6 +16,7 @@ namespace Tests\AP\Regressions;
 
 use App\PassboltSetupTestCase;
 use Data\Fixtures\User;
+use Data\Fixtures\Gpgkey;
 
 class PASSBOLT1807 extends PassboltSetupTestCase
 {
@@ -23,10 +24,16 @@ class PASSBOLT1807 extends PassboltSetupTestCase
     /**
      * Scenario: As a user I should be able to import a key with multiple IDs
      *
-     * Given I register an account as Margaret
-     * When I import a key with multiple ids
+     * Given I am Margaret
+     * And   I register an account
+     * When  I import a key with multiple ids
      * Then  I am able to complete the setup
-     * And I can login
+     * And   I can login
+     *
+     * @group AP
+     * @group setup
+     * @group regressions
+     * @group v2
      */
     public function testSetupImportKeyWithMultipleIds() 
     {
@@ -41,11 +48,9 @@ class PASSBOLT1807 extends PassboltSetupTestCase
         $this->goToSetup($user['Username']);
 
         // Then  I am able to complete the setup
-        $this->completeSetupWithKeyImport(
-            [
+        $this->completeSetupWithKeyImport([
             'private_key' => file_get_contents(Gpgkey::get(['name' => 'margaret'])['filepath'])
-            ]
-        );
+        ]);
 
         // And I can login
         $this->loginAs($user);

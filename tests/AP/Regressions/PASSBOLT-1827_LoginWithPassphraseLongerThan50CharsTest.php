@@ -24,8 +24,13 @@ class PASSBOLT1827 extends PassboltSetupTestCase
      * Scenario: As a user I should be able to login with a passphrase longer than 50 char
      *
      * Given I register an account as John Doe
-     * When I complete the setup with a passphrase longer than 50 char
+     * When  I complete the setup with a passphrase longer than 50 char
      * Then  I am able to login
+     *
+     * @group AP
+     * @group setup
+     * @group regression
+     * @group v2
      */
     public function testSetupAndLoginWithLongPassphrase() 
     {
@@ -39,14 +44,12 @@ class PASSBOLT1827 extends PassboltSetupTestCase
         // When I complete the setup with a passphrase longer than 50 char
         $john['MasterPassword'] = 'As a AP I should be able to log in with a passphrase length that is longer than fifty character in length';
         $this->goToSetup($john['Username']);
-        $this->completeSetupWithKeyGeneration(
-            [
+        $this->completeSetupWithKeyGeneration([
             'username' => $john['Username'],
             'masterpassword' =>  $john['MasterPassword']
-            ]
-        );
+        ]);
 
         // Then  I am able to login
-        $this->loginAs($john);
+        $this->loginAs($john, false);
     }
 }

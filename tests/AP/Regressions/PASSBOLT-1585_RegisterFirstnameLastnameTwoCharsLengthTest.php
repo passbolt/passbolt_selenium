@@ -22,8 +22,16 @@ class PASSBOLT1585 extends PassboltSetupTestCase
 
     /**
      * Scenario: As an AP I should be able to register a user with 2 char length as firstname or lastname
-     * When I create an account as Chien Shiung, and I proceed through the entire setup.
+     *
+     * Given I am Chien Shiung
+     * And   I create and account
+     * And   I proceed through the entire setup.
      * Then  I should be able to login
+     *
+     * @group AP
+     * @group setup
+     * @group regression
+     * @group v2
      */
     public function testRegisterTwoCharsLengthFirstNameLastName() 
     {
