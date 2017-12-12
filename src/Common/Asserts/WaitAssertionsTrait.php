@@ -91,7 +91,6 @@ trait WaitAssertionsTrait
      * @param array $args An array of arguments to pass the callback function
      * @param int $timeout
      * @return bool
-     * @throws Exception
      */
     public function waitUntil($callback, $args = array(), $timeout = 15) 
     {
@@ -114,7 +113,9 @@ trait WaitAssertionsTrait
             $second = 1000000;
             usleep(($second * $timeout) / $loops);
         }
-        throw $caughtException;
+
+        PHPUnit_Framework_Assert::fail($caughtException->getMessage());
+        return false;
     }
 
     /**
@@ -124,7 +125,6 @@ trait WaitAssertionsTrait
      * @param string $name
      * @param string $expectedValue
      * @param int $timeout
-     * @throws Exception
      * @return void
      */
     public function waitUntilCssValueEqual($selector, $name, $expectedValue, $timeout = 10) 
@@ -194,7 +194,6 @@ trait WaitAssertionsTrait
      * @param string $id
      * @param int $timeout
      * @return bool
-     * @throws Exception
      */
     public function waitUntilElementHasFocus($id, $timeout = 10) 
     {
@@ -304,7 +303,6 @@ trait WaitAssertionsTrait
      * @param  string $url
      * @param  bool   $addBase
      * @param  int    $timeout
-     * @throws Exception
      * @return void
      */
     public function waitUntilUrlMatches($url, $addBase = true, $timeout = 10) 
@@ -330,7 +328,6 @@ trait WaitAssertionsTrait
      * Wait until an HTML Element has the attribute disabled
      *
      * @param  $id
-     * @throws Exception
      */
     public function waitUntilDisabled($id) 
     {
@@ -341,7 +338,6 @@ trait WaitAssertionsTrait
      * Wait until a notification disappears.
      *
      * @param  $notificationId
-     * @throws Exception
      */
     public function waitUntilNotificationDisappears($notificationId) 
     {
@@ -351,8 +347,6 @@ trait WaitAssertionsTrait
 
     /**
      * Wait until the secret is decrypted and inserted in the secret field.
-     *
-     * @throws Exception
      */
     public function waitUntilSecretIsDecryptedInField() 
     {

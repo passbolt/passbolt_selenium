@@ -1,5 +1,18 @@
 <?php
 /**
+ * Passbolt ~ Open source password manager for teams
+ * Copyright (c) Passbolt SARL (https://www.passbolt.com)
+ *
+ * Licensed under GNU Affero General Public License version 3 of the or any later version.
+ * For full copyright and license information, please see the LICENSE.txt
+ * Redistributions of files must retain the above copyright notice.
+ *
+ * @copyright Copyright (c) Passbolt SARL (https://www.passbolt.com)
+ * @license   https://opensource.org/licenses/AGPL-3.0 AGPL License
+ * @link      https://www.passbolt.com Passbolt(tm)
+ * @since     2.0.0
+ */
+/**
  * Feature : Login
  *
  * As AN I can login to passbolt
@@ -7,18 +20,22 @@
  * As AN I can login to passbol on different tabs without conflict between workers
  * As LU I should still be logged in after I restart the browser
  * As LU I should still be logged in after I close and restore the passbolt tab
- *
- * @copyright (c) 2017 Passbolt SARL
- * @licence   GNU Affero General Public License http://www.gnu.org/licenses/agpl-3.0.en.html
  */
+namespace Tests\LU\Base;
+
+use App\PassboltTestCase;
+use Data\Fixtures\User;
+
 class LoginTest extends PassboltTestCase
 {
 
     /**
-     * @group saucelabs
      * Scenario: As AN I can login to passbolt
      * @todo document the steps
-     * @throws Exception
+     *
+     * @group LU
+     * @group login
+     * @group saucelabs
      */
     public function testLogin() 
     {
@@ -27,7 +44,7 @@ class LoginTest extends PassboltTestCase
         $this->assertVisible('.plugin-check.' . $this->_browser['type'] . '.warning');
 
         $user = User::get('ada');
-        
+        $this->setClientConfig($user);
 
         $this->getUrl('login');
 
@@ -68,7 +85,8 @@ class LoginTest extends PassboltTestCase
      * Scenario: As AN I can login to passbolt by submitting the login form with the enter key
      *
      * @todo   document the steps
-     * @throws Exception
+     * @group LU
+     * @group login
      */
     public function testLoginWithEnterKey() 
     {
@@ -77,7 +95,7 @@ class LoginTest extends PassboltTestCase
         $this->assertVisible('.plugin-check.' . $this->_browser['type'] . '.warning');
 
         $user = User::get('ada');
-        
+        $this->setClientConfig($user);
 
         $this->getUrl('login');
 
@@ -114,19 +132,22 @@ class LoginTest extends PassboltTestCase
 
     /**
      * Scenario: As AN I can login to passbolt on different tabs without conflict between workers
-     * Given     As AN with plugin on the login page
-     * When I open a new tab and go to the login page
-     * And I switch back to the first tab
+     *
+     * Given As AN with plugin on the login page
+     * When  I open a new tab and go to the login page
+     * And   I switch back to the first tab
      * Then  I should be able to login to passbolt from the first tab
-     * When I logout
-     * And I switch to the second tab
+     * When  I logout
+     * And   I switch to the second tab
      * Then  I should be able to login to passbolt from the second tab
      *
-     * @throws Exception
+     * @group LU
+     * @group login
      */
     public function testMultipleTabsLogin() 
     {
         $user = User::get('ada');
+        $this->setClientConfig($user);
 
         // Given As AN with plugin on the login page
         $this->getUrl('login');
@@ -139,8 +160,8 @@ class LoginTest extends PassboltTestCase
         // And I switch back to the first tab
         $this->switchToPreviousTab();
 
-        // Then  I should be able to login to passbolt from the first tab.
-        $this->loginAs($user);
+        // Then I should be able to login to passbolt from the first tab.
+        $this->loginAs($user, false);
 
         // When I logout
         $this->logout();
@@ -148,28 +169,28 @@ class LoginTest extends PassboltTestCase
         // And I switch to the second tab
         $this->switchToNextTab();
 
-        // Then  I should be able to login to passbolt from the second tab
-        $this->loginAs($user);
+        // Then I should be able to login to passbolt from the second tab
+        $this->loginAs($user, false);
     }
 
     /**
+     * Scenario: As LU I should still be logged in after I restart the browser
+     *
+     * Given I am Ada
+     * And   I am logged in on the passwords workspace
+     * When  I restart the browser
+     * Then  I should still be logged in
+     *
+     * @group LU
+     * @group login
      * @group skip
      * @group chrome-only
      * @group no-saucelabs
-     *
-     * Scenario: As LU I should still be logged in after I restart the browser
-     * Given I am Ada
-     * And I am logged in on the passwords workspace
-     * When I restart the browser
-     * Then  I should still be logged in
-     *
-     * @throws Exception
      */
     public function testRestartBrowserAndStillLoggedIn() 
     {
         // Given I am Ada
         $user = User::get('ada');
-        
 
         // And I am logged in
         $this->loginAs($user);
@@ -177,42 +198,42 @@ class LoginTest extends PassboltTestCase
         // When I restart the browser
         $this->restartBrowser();
 
-        // Then  I should still be logged in
+        // Then I should still be logged in
         $this->waitUntilISee('.logout');
     }
 
     /**
-     * @group skip
+     * Scenario: As LU I should still be logged in after I close and restore the passbolt tab
      * PASSBOLT-2263 close and restore doesn't work with the latest chrome driver
      * PASSBOLT-2419 close and restore doesn't work with the latest firefox driver
      *
-     * Scenario: As LU I should still be logged in after I close and restore the passbolt tab
      * Given I am Ada
-     * And I am on second tab
-     * And I am logged in on the passwords workspace
-     * When I close and restore the tab
+     * And   I am on second tab
+     * And   I am logged in on the passwords workspace
+     * When  I close and restore the tab
      * Then  I should still be logged in
      *
-     * @throws Exception
+     * @group LU
+     * @group login
+     * @group skip
      */
     public function testCloseRestoreTabAndStillLoggedIn() 
     {
         // Given I am Ada
         $user = User::get('ada');
-        
+        $this->setClientConfig($user);
 
         // And I am on second tab
         $this->openNewTab();
 
         // And I am logged in
-        $this->loginAs($user);
+        $this->loginAs($user, false);
 
         // When I close and restore the tab
         $this->closeAndRestoreTab();
         $this->waitCompletion();
 
-        // Then  I should still be logged in
+        // Then I should still be logged in
         $this->waitUntilISee('.logout');
     }
-
 }

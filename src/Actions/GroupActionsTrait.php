@@ -15,16 +15,14 @@
 namespace App\Actions;
 
 use Exception;
-use User;
+use Facebook\WebDriver\WebDriverSelect;
+use Data\Fixtures\User;
 
 trait GroupActionsTrait
 {
-    use FormActionsTrait;
 
     /**
      * Helper to create a group
-     *
-     * @throws Exception
      */
     public function createGroup($group, $users, $creator) 
     {
@@ -227,10 +225,8 @@ trait GroupActionsTrait
     /**
      * Click on a group inside the user workspace.
      *
-     * @param string $id        id of the group
+     * @param string $id uuid of the group
      * @param string $workspace name of the workspace (password or user. Default=user)
-     *
-     * @throws Exception
      */
     public function clickGroup($id, $workspace='user') 
     {
@@ -252,8 +248,7 @@ trait GroupActionsTrait
     /**
      * Goto the edit group dialog for a given group id
      *
-     * @param  $id string
-     * @throws Exception
+     * @param string $id uuid of the group
      */
     public function gotoEditGroup($id) 
     {
@@ -269,19 +264,15 @@ trait GroupActionsTrait
             $this->click("#js_contextual_menu #js_group_browser_menu_edit a");
             $this->waitUntilISee('.edit-group-dialog');
             $this->waitUntilISee('#js_edit_group.ready');
-            try {
-                $this->find('#passbolt-iframe-group-edit');
-                $this->waitUntilISee('#passbolt-iframe-group-edit.ready');
-            } catch(Exception $e) {
-            }
+            $this->find('#passbolt-iframe-group-edit');
+            $this->waitUntilISee('#passbolt-iframe-group-edit.ready');
         }
     }
 
     /**
      * Click on remove in the contextual menu of a group.
      *
-     * @param  $id
-     * @throws Exception
+     * @param string $id uuid of the group
      */
     public function goToRemoveGroup($id) 
     {

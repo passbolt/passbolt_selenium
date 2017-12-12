@@ -1,17 +1,37 @@
 <?php
 /**
+ * Passbolt ~ Open source password manager for teams
+ * Copyright (c) Passbolt SARL (https://www.passbolt.com)
+ *
+ * Licensed under GNU Affero General Public License version 3 of the or any later version.
+ * For full copyright and license information, please see the LICENSE.txt
+ * Redistributions of files must retain the above copyright notice.
+ *
+ * @copyright Copyright (c) Passbolt SARL (https://www.passbolt.com)
+ * @license   https://opensource.org/licenses/AGPL-3.0 AGPL License
+ * @link      https://www.passbolt.com Passbolt(tm)
+ * @since     2.0.0
+ */
+/**
  * Feature : Logout
  *
  * As LU I should be logged out when I click on the logout link in the navigation
  * As LU I should be logged out when the session expires
  * As LU I should be logged out when I quit the browser and restart it after my session expired
  * As LU I should be logged out when I close the passbolt tab and restore it after my session expired
- *
- * @copyright (c) 2017 Passbolt SARL
- * @licence   GNU Affero General Public License http://www.gnu.org/licenses/agpl-3.0.en.html
  */
+namespace Tests\LU\Base;
+
+use App\Actions\PasswordActionsTrait;
+use App\Assertions\ConfirmationDialogAssertionsTrait;
+use App\PassboltTestCase;
+use App\Common\Servers\PassboltServer;
+use Data\Fixtures\User;
+
 class LogoutTest extends PassboltTestCase
 {
+    use PasswordActionsTrait;
+    use ConfirmationDialogAssertionsTrait;
 
     /**
      * Executed after every tests
@@ -24,29 +44,27 @@ class LogoutTest extends PassboltTestCase
     }
 
     /**
-     * @group saucelabs
-     *
      * Scenario: As LU I should be logged out when I click on the logout link in the navigation
-     * Given I am Ada
-     * And I am logged in on the password workspace
-     * When I click on the logout button
-     * Then     Then  I should see the login page
      *
-     * @throws Exception
+     * Given I am Ada
+     * And   I am logged in on the password workspace
+     * When  I click on the logout button
+     * Then  I should see the login page
+     *
+     * @group LU
+     * @group logout
+     * @group saucelabs
      */
     public function testLogout() 
     {
         // Given I am Ada
         $user = User::get('ada');
 
-
         // Reduce the session timeout to accelerate the test
-        PassboltServer::setExtraConfig(
-            [
+        PassboltServer::setExtraConfig([
             'Session' => [
-            'timeout' => 0.25
-            ]
-            ]
+                'timeout' => 0.25
+            ]]
         );
 
         // And I am logged in on the password workspace
@@ -61,18 +79,21 @@ class LogoutTest extends PassboltTestCase
 
     /**
      * Scenario: As LU I should be logged out when the session expires (auto redirect)
+     *
      * Given I am Ada
-     * And I am logged in on the password workspace
-     * And I wait until the session expires
-     * When I click on a password I own
+     * And   I am logged in on the password workspace
+     * And   I wait until the session expires
+     * When  I click on a password I own
      * Then  I should see the session expired dialog
-     * And I should be redirected to the login page in 60 seconds
+     * And  I should be redirected to the login page in 60 seconds
+     *
+     * @group LU
+     * @group logout
      */
     public function testOnClickSessionExpiredAutoRedirect() 
     {
         // Given I am Ada
         $user = User::get('ada');
-
 
         // Reduce the session timeout to accelerate the test
         PassboltServer::setExtraConfig(
@@ -102,27 +123,28 @@ class LogoutTest extends PassboltTestCase
 
     /**
      * Scenario: As LU I should be logged out when the session expires (manual redirect)
+     *
      * Given I am Ada
-     * And I am logged in on the passwords workspace
-     * When I wait until the session timeout
-     * And I click on a password I own
+     * And   I am logged in on the passwords workspace
+     * When  I wait until the session timeout
+     * And   I click on a password I own
      * Then  I should see the session expired dialog
-     * When I click on the 'Redirect now' button
+     * When  I click on the 'Redirect now' button
      * Then  I should see the login page
+     *
+     * @group LU
+     * @group logout
      */
     public function testOnClickSessionExpiredManualRedirect() 
     {
         // Given I am Ada
         $user = User::get('ada');
 
-
         // Reduce the session timeout to accelerate the test
-        PassboltServer::setExtraConfig(
-            [
+        PassboltServer::setExtraConfig([
             'Session' => [
             'timeout' => 0.25
-            ]
-            ]
+            ]]
         );
 
         // And I am logged in on the password workspace
@@ -146,32 +168,26 @@ class LogoutTest extends PassboltTestCase
     }
 
     /**
-     * @group saucelabs
-     *
      * Scenario: As LU I should be logged out when I quit the browser and restart it after my session expired
+     *
      * Given I am Ada
-     * And I am logged in on the passwords workspace
-     * When I wait until the session timeout
+     * And   I am logged in on the passwords workspace
+     * When  I wait until the session timeout
      * Then  I should see the session expired dialog
-     * When I click on the 'Redirect now' button
+     * When  I click on the 'Redirect now' button
      * Then  I should see the login page
      *
-     * @throws Exception
+     * @group LU
+     * @group logout
+     * @group saucelabs
      */
     public function testSessionExpired() 
     {
         // Given I am Ada
         $user = User::get('ada');
 
-
         // Reduce the session timeout to accelerate the test
-        PassboltServer::setExtraConfig(
-            [
-            'Session' => [
-            'timeout' => 0.25
-            ]
-            ]
-        );
+        PassboltServer::setExtraConfig(['Session' => ['timeout' => 0.25]]);
 
         // And I am logged in on the password workspace
         $this->loginAs($user);
@@ -187,86 +203,67 @@ class LogoutTest extends PassboltTestCase
     }
 
     /**
-     * @group no-saucelabs
-     * @group skip
-     *
      * Scenario: As LU I should be logged out when I quit the browser and restart it after my session expired
+     *
      * Given I am Ada
-     * And I am logged in on the passwords workspace
-     * When I quit the browser and restart it after my session is expired
+     * And   I am logged in on the passwords workspace
+     * When  I quit the browser and restart it after my session is expired
      * Then  I should be logged out
      *
-     * @throws Exception
+     * @group LU
+     * @group logout
+     * @group no-saucelabs
+     * @group skip
      */
     public function testRestartBrowserAndLoggedOutAfterSessionExpired() 
     {
         // Given I am Ada
         $user = User::get('ada');
 
-
         // Reduce the session timeout to accelerate the test
-        PassboltServer::setExtraConfig(
-            [
-            'Session' => [
-            'timeout' => 0.25
-            ]
-            ]
-        );
+        PassboltServer::setExtraConfig(['Session' => ['timeout' => 0.25]]);
 
         // And I am logged in on the password workspace
         $this->loginAs($user);
 
         // When I restart the browser
-        $this->restartBrowser(
-            array(
-            'waitBeforeRestart' => 15
-            )
-        );
+        $this->restartBrowser(['waitBeforeRestart' => 15]);
 
         // Then  I should be logged out
         $this->assertUrlMatch('/\/auth\/login/');
     }
 
     /**
-     * @group skip
+     * Scenario: As LU I should be logged out when I close the passbolt tab and restore it after my session expired
      * PASSBOLT-2263 close and restore doesn't work with the latest chrome driver
      * PASSBOLT-2419 close and restore doesn't work with the latest firefox driver
      *
-     * Scenario: As LU I should be logged out when I close the passbolt tab and restore it after my session expired
      * Given I am Ada
-     * And I am logged in on the passwords workspace
-     * When I close the tab and restore it after my session is expired
+     * And   I am logged in on the passwords workspace
+     * When  I close the tab and restore it after my session is expired
      * Then  I should be logged out
      *
-     * @throws Exception
+     * @group LU
+     * @group logout
+     * @group skip
      */
     public function testCloseRestoreTabAndLoggedOutAfterSessionExpired() 
     {
         // Given I am Ada
         $user = User::get('ada');
-
+        $this->setClientConfig($user);
 
         // And I am on second tab
         $this->openNewTab();
 
         // Reduce the session timeout to accelerate the test
-        PassboltServer::setExtraConfig(
-            [
-            'Session' => [
-            'timeout' => 0.25
-            ]
-            ]
-        );
+        PassboltServer::setExtraConfig(['Session' => ['timeout' => 0.25]]);
 
         // And I am logged in on the password workspace
-        $this->loginAs($user);
+        $this->loginAs($user, false);
 
         // When I close and restore the tab
-        $this->closeAndRestoreTab(
-            array(
-            'waitBeforeRestore' => 15
-            )
-        );
+        $this->closeAndRestoreTab(['waitBeforeRestore' => 15]);
 
         // Then  I should be logged out
         $this->waitUntilUrlMatches('auth/login', 120);

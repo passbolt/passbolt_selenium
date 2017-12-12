@@ -20,11 +20,7 @@ class FirefoxBrowserController extends BrowserController
 
         // Wait until tab is opened. A new tab should have a different url.
         $callback = array($this, 'onNewTabOpened');
-        try {
-            $this->testCase->waitUntil($callback, array($initialUrl));
-        } catch (Exception $e){
-            throw new Exception("Couldn't open a new tab");
-        }
+        $this->testCase->waitUntil($callback, array($initialUrl));
     }
 
 }

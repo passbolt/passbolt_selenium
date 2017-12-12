@@ -1,30 +1,56 @@
 <?php
 /**
+ * Passbolt ~ Open source password manager for teams
+ * Copyright (c) Passbolt SARL (https://www.passbolt.com)
+ *
+ * Licensed under GNU Affero General Public License version 3 of the or any later version.
+ * For full copyright and license information, please see the LICENSE.txt
+ * Redistributions of files must retain the above copyright notice.
+ *
+ * @copyright Copyright (c) Passbolt SARL (https://www.passbolt.com)
+ * @license   https://opensource.org/licenses/AGPL-3.0 AGPL License
+ * @link      https://www.passbolt.com Passbolt(tm)
+ * @since     2.0.0
+ */
+/**
  * Feature :  As LU I can view group information
  *
  * Scenarios :
  *  - As a user I can see a group information from the sidebar
  *  - As user I can see the list users that are part of the group in the sidebar
- *
- * @copyright (c) 2017-present Passbolt SARL
- * @licence   GNU Affero General Public License http://www.gnu.org/licenses/agpl-3.0.en.html
  */
-class LUGroupViewTest extends PassboltTestCase
+namespace Tests\LU\Base;
+
+use App\Actions\GroupActionsTrait;
+use App\Actions\WorkspaceActionsTrait;
+use App\Assertions\GroupAssertionsTrait;
+use App\PassboltTestCase;
+use Data\Fixtures\User;
+use Data\Fixtures\Group;
+
+class GroupViewTest extends PassboltTestCase
 {
+    use WorkspaceActionsTrait;
+    use GroupActionsTrait;
+    use GroupAssertionsTrait;
 
     /**
      * Scenario: As a user I can see a group information from the sidebar
      *
      * Given I am a logged-in user
-     * And I am on the users workspace
-     * When I select a group
+     * And   I am on the users workspace
+     * When  I select a group
      * Then  I should see the sidebar opening on the right hand side
-     * And I should see a group information section
-     * And I should see the created date
-     * And I should see the modified date
-     * And I should see the latest user who modified the group
-     * And I should see the number of members
-     * And I should see the number of passwords
+     * And   I should see a group information section
+     * And   I should see the created date
+     * And   I should see the modified date
+     * And   I should see the latest user who modified the group
+     * And   I should see the number of members
+     * And   I should see the number of passwords
+     *
+     * @group LU
+     * @group group
+     * @group view
      */
     function testViewGroupInfoFromSidebar() 
     {
@@ -78,11 +104,15 @@ class LUGroupViewTest extends PassboltTestCase
      * Scenario: As user I can see the list users that are part of the group in the sidebar
      *
      * Given I am a logged-in user
-     * And I am on the users workspace
-     * When I click on a group name
+     * And   I am on the users workspace
+     * When  I click on a group name
      * Then  I should see that the sidebar contains a member section
-     * And I should see that the members sections contains the list of users that are members of this group
-     * And I should see that below each user I can see his membership type
+     * And   I should see that the members sections contains the list of users that are members of this group
+     * And   I should see that below each user I can see his membership type
+     *
+     * @group LU
+     * @group group
+     * @group view
      */
     function testViewGroupMemberFromSidebar() 
     {
@@ -101,5 +131,4 @@ class LUGroupViewTest extends PassboltTestCase
         $groupMember = User::get('grace');
         $this->assertGroupMemberInSidebar($group['id'], $groupMember, false);
     }
-
 }

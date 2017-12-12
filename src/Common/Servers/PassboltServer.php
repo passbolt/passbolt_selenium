@@ -10,22 +10,25 @@ namespace App\Common\Servers;
 
 use App\Common\Config;
 use Exception;
+use Httpful\Exception\ConnectionErrorException;
 use Httpful\Mime;
 use Httpful\Request;
 
 class PassboltServer
 {
-
     /**
      * Reset passbolt installation
      *
-     * @throws Exception
      * @return bool
      */
     static public function resetDatabase($url, $dummy = 'tests') 
     {
-        $response = Request::get($url . '/seleniumtests/resetInstance/' . $dummy)
-                       ->send();
+        try {
+            $response = Request::get($url . '/seleniumtests/resetInstance/' . $dummy)
+                ->send();
+        } catch(ConnectionErrorException $exception) {
+            \PHPUnit_Framework_Assert::fail('Fail to reset the database. Connection error.');
+        }
         $seeCreated = preg_match('/created/', $response->body);
         sleep(2); // Wait for database to be imported (no visible output).
         return $seeCreated;
@@ -34,13 +37,16 @@ class PassboltServer
     /**
      * Add extra server configuration.
      *
-     * @throws Exception
      */
     static public function setExtraConfig($config = []) 
     {
         $url = Config::read('passbolt.url') . DS . '/seleniumtests/setExtraConfig';
         $request = Request::post($url, $config);
-        $request->sendsType(Mime::JSON)->send();
+        try {
+            $request->sendsType(Mime::JSON)->send();
+        } catch(Exception $exception) {
+            \PHPUnit_Framework_Assert::fail('Fail to set extra config.');
+        }
     }
 
     /**
@@ -52,6 +58,10 @@ class PassboltServer
     {
         $url = Config::read('passbolt.url') . DS . '/seleniumtests/resetExtraConfig';
         $request = Request::post($url);
-        $request->sendsType(Mime::JSON)->send();
+        try {
+            $request->sendsType(Mime::JSON)->send();
+        } catch(Exception $exception) {
+            \PHPUnit_Framework_Assert::fail('Fail to reset extra config.');
+        }
     }
 }
