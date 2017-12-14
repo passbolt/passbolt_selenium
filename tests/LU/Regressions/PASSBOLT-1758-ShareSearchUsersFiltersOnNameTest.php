@@ -1,10 +1,26 @@
 <?php
 /**
- * Bug PASSBOLT-1758 - Regression test
+ * Passbolt ~ Open source password manager for teams
+ * Copyright (c) Passbolt SARL (https://www.passbolt.com)
  *
- * @copyright (c) 2017 Passbolt SARL
- * @licence   GNU Affero General Public License http://www.gnu.org/licenses/agpl-3.0.en.html
+ * Licensed under GNU Affero General Public License version 3 of the or any later version.
+ * For full copyright and license information, please see the LICENSE.txt
+ * Redistributions of files must retain the above copyright notice.
+ *
+ * @copyright Copyright (c) Passbolt SARL (https://www.passbolt.com)
+ * @license   https://opensource.org/licenses/AGPL-3.0 AGPL License
+ * @link      https://www.passbolt.com Passbolt(tm)
+ * @since     2.0.0
  */
+/**
+ * Bug PASSBOLT-1758 - Regression test
+ */
+namespace Tests\LU\Regressions;
+
+use App\Lib\UuidFactory;
+use App\PassboltTestCase;
+use Data\Fixtures\User;
+use Data\Fixtures\Resource;
 use Facebook\WebDriver\WebDriverBy;
 
 class PASSBOLT1758 extends PassboltTestCase
@@ -14,11 +30,14 @@ class PASSBOLT1758 extends PassboltTestCase
      * Scenario: As a user I can share a password with other users
      *
      * Given I am Carol
-     * And I am logged in on the password workspace
-     * When I go to the sharing dialog of a password I own
-     * And I search a user by his lastname
+     * And   I am logged in on the password workspace
+     * When  I go to the sharing dialog of a password I own
+     * And   I search a user by his lastname
      * Then  I should see only one result
-     * And I should see only the user Edit Clarke in the autocomplete list
+     * And   I should see only the user Edit Clarke in the autocomplete list
+     *
+     * @group LU
+     * @group regression
      */
     public function testShareSearchUsersFiltersOnName() 
     {
@@ -50,7 +69,7 @@ class PASSBOLT1758 extends PassboltTestCase
         // I wait the autocomplete box is loaded.
         $this->waitCompletion(10, '#passbolt-iframe-password-share-autocomplete.loaded');
 
-        // Then  I should see only one result
+        // Then I should see only one result
         $this->goIntoShareAutocompleteIframe();
         $listOfUsers = $this->driver->findElements(WebDriverBy::cssSelector('ul li'));
         $this->assertEquals(1, count($listOfUsers));

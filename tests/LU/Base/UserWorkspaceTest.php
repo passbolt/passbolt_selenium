@@ -1,5 +1,17 @@
 <?php
-
+/**
+ * Passbolt ~ Open source password manager for teams
+ * Copyright (c) Passbolt SARL (https://www.passbolt.com)
+ *
+ * Licensed under GNU Affero General Public License version 3 of the or any later version.
+ * For full copyright and license information, please see the LICENSE.txt
+ * Redistributions of files must retain the above copyright notice.
+ *
+ * @copyright Copyright (c) Passbolt SARL (https://www.passbolt.com)
+ * @license   https://opensource.org/licenses/AGPL-3.0 AGPL License
+ * @link      https://www.passbolt.com Passbolt(tm)
+ * @since     2.0.0
+ */
 /**
  * Feature : User Workspace
  *
@@ -12,33 +24,50 @@
  * - As an admin user, I should have admin rights inside the user workspace
  * - As a non admin user, I should not have admin rights inside the user workspace
  * - As a logged in user, I should be able to control the sidebar visibility through the sidebar button
- *
- * @copyright (c) 2017 Passbolt SARL
- * @licence   GNU Affero General Public License http://www.gnu.org/licenses/agpl-3.0.en.html
  */
+namespace Tests\LU\Base;
+
+use App\Actions\UserActionsTrait;
+use App\Actions\WorkspaceActionsTrait;
+use App\Assertions\FilterAssertionsTrait;
+use App\Assertions\SidebarAssertionsTrait;
+use App\Assertions\UserAssertionsTrait;
+use App\Assertions\WorkspaceAssertionsTrait;
+use App\PassboltTestCase;
+use Data\Fixtures\User;
+use App\Lib\UuidFactory;
+
 class UserWorkspaceTest extends PassboltTestCase
 {
+    use WorkspaceActionsTrait;
+    use WorkspaceAssertionsTrait;
+    use UserAssertionsTrait;
+    use UserActionsTrait;
+    use FilterAssertionsTrait;
+    use SidebarAssertionsTrait;
+
     /**
-     * @group saucelabs
      * Scenario: As a user I should be able to see the user workspace
      *
-     * Given        I am logged in as Ada, and I go to the user workspace
-     * Then            I should not see the workspace primary menu
-     * And            I should see the workspace secondary menu
-     * And             I should see the workspace filters shortcuts
-     * And          I should see a grid and its columns
-     * And             I should see some grid columns are sortable
-     * And            I should see the breadcrumb with the following:
+     * Given I am logged in as Ada, and I go to the user workspace
+     * Then  I should not see the workspace primary menu
+     * And   I should see the workspace secondary menu
+     * And   I should see the workspace filters shortcuts
+     * And   I should see a grid and its columns
+     * And   I should see some grid columns are sortable
+     * And   I should see the breadcrumb with the following:
      *                 | All users
+     *
+     * @group LU
+     * @group user
+     * @group workspace
+     * @group saucelabs
      */
     public function testWorkspace() 
     {
         // Given I am Ada
-        $user = User::get('ada');
-        
-
         // And I am logged in on the user workspace
-        $this->loginAs($user);
+        $this->loginAs(User::get('ada'));
         $this->gotoWorkspace('user');
 
         // I should not see the workspace primary menu
@@ -94,36 +123,38 @@ class UserWorkspaceTest extends PassboltTestCase
     }
 
     /**
-     * @group saucelabs
      * Scenario: As a user I should be able to see the users using the app
-     * Given        I am logged in as Ada, and I go to the user workspace
-     * Then         I should see rows representing the users
+     *
+     * Given I am logged in as Ada, and I go to the user workspace
+     * Then  I should see rows representing the users
+     *
+     * @group LU
+     * @group user
+     * @group workspace
+     * @group saucelabs
      */
     public function testBrowseUsers()
     {
         // Given I am Ada
-        $user = User::get('ada');
-        
-
         // And I am logged in on the user workspace
-        $this->loginAs($user);
+        $this->loginAs(User::get('ada'));
         $this->gotoWorkspace('user');
 
         // I should see rows representing the users
         $users = [
-        'Ada Lovelace',
-        'Betty Holberton',
-        'Carol Shaw',
-        'Dame Steve Shirley',
-        'Edith Clarke',
-        'Frances Allen',
-        'Grace Hopper',
-        'Hedy Lamarr',
-        'Irene Greif',
-        'Jean Bartik',
-        'Kathleen Antonelli',
-        'Lynne Jolitz',
-        'Marlyn Wescoff'
+            'Ada Lovelace',
+            'Betty Holberton',
+            'Carol Shaw',
+            'Dame Steve Shirley',
+            'Edith Clarke',
+            'Frances Allen',
+            'Grace Hopper',
+            'Hedy Lamarr',
+            'Irene Greif',
+            'Jean Bartik',
+            'Kathleen Antonelli',
+            'Lynne Jolitz',
+            'Marlyn Wescoff'
         ];
         $browserElement = $this->findByCss('#js_wsp_users_browser .tableview-content');
         for ($i = 0; $i < count($users); $i++) {
@@ -133,33 +164,32 @@ class UserWorkspaceTest extends PassboltTestCase
             );
         }
 
-        // @todo Test de rows details
-
-
+        // @TODO Test de rows details
     }
 
     /**
-     * @group saucelabs
      * Scenario: As a user I should be able to filter the users
      *
-     * Given        I am logged in as Ada, and I go to the user workspace
-     * Then         I should see the filter "All users" is selected.
-     * When            I click on the recently modified filter
-     * Then            I should see the users ordered my modification date
-     * And          I should see that the filter "All users" is not selected anymore
-     * And          I should see that the filter "Recently modified" is selected.
-     * And            I should see the breadcrumb with the following:
+     * Given I am logged in as Ada, and I go to the user workspace
+     * Then  I should see the filter "All users" is selected.
+     * When  I click on the recently modified filter
+     * Then  I should see the users ordered my modification date
+     * And   I should see that the filter "All users" is not selected anymore
+     * And   I should see that the filter "Recently modified" is selected.
+     * And   I should see the breadcrumb with the following:
      *                    | All items
      *                    | Recently modified
+     *
+     * @group LU
+     * @group user
+     * @group workspace
+     * @group saucelabs
      */
     public function testFilterUsers() 
     {
         // Given I am Ada
-        $user = User::get('ada');
-        
-
         // And I am logged in on the user workspace
-        $this->loginAs($user);
+        $this->loginAs(User::get('ada'));
         $this->gotoWorkspace('user');
 
         // Assert menu All users is selected.
@@ -184,42 +214,43 @@ class UserWorkspaceTest extends PassboltTestCase
     }
 
     /**
-     * @group saucelabs
      * Scenario: As a user I should be able to search a user by keywords
      *
-     * Given        I am logged in as Ada, and I go to the user workspace
-     * When            I fill the "app search" field with "User Test"
-     * And            I click "search"
-     * Then         I should see the view filtered with my search
-     * And            I should see the breadcrumb with the following:
+     * Given I am logged in as Ada, and I go to the user workspace
+     * When  I fill the "app search" field with "User Test"
+     * And   I click "search"
+     * Then  I should see the view filtered with my search
+     * And   I should see the breadcrumb with the following:
      *                    | All users
      *                    | Search : User Test
+     *
+     * @group LU
+     * @group user
+     * @group workspace
+     * @group saucelabs
      */
     public function testSearchByKeywords() 
     {
         $searchUser = 'Betty';
         $hiddenUsers = [
-        'Betty Holbderton',
-        'Carol Shaw',
-        'Dame Steve Shirley',
-        'Edith Clarke',
-        'Frances Allen',
-        'Grace Hopper',
-        'Hedy Lamarr',
-        'Irene Greif',
-        'Jean Bartik',
-        'Kathleen Antonelli',
-        'Lynn Jolitz',
-        'Marlyn Wescoff'
+            'Betty Holbderton',
+            'Carol Shaw',
+            'Dame Steve Shirley',
+            'Edith Clarke',
+            'Frances Allen',
+            'Grace Hopper',
+            'Hedy Lamarr',
+            'Irene Greif',
+            'Jean Bartik',
+            'Kathleen Antonelli',
+            'Lynn Jolitz',
+            'Marlyn Wescoff'
         ];
         $breadcrumb = ['All users', 'Search : ' . $searchUser];
 
         // Given I am Ada
-        $user = User::get('ada');
-        
-
         // And I am logged in on the user workspace
-        $this->loginAs($user);
+        $this->loginAs(User::get('ada'));
         $this->gotoWorkspace('user');
 
         // I fill the "app search" field with "tetris license"
@@ -246,10 +277,16 @@ class UserWorkspaceTest extends PassboltTestCase
 
     /**
      * Scenario: As a user when I filter the user workspace all users should be unselected
-     * Given        I am logged in as Ada, and I go to the user workspace
-     * When         I select a user I own
-     * And             I filter the workspace by keywords
-     * Then         I should see the user unselected
+     *
+     * Given I am logged in as Ada, and I go to the user workspace
+     * When  I select a user I own
+     * And   I filter the workspace by keywords
+     * Then  I should see the user unselected
+     *
+     * @group LU
+     * @group user
+     * @group workspace
+     * @group saucelabs
      */
     public function testSearchByKeywordsUnselectUsers() 
     {
@@ -257,11 +294,8 @@ class UserWorkspaceTest extends PassboltTestCase
         $userId = UuidFactory::uuid('user.id.betty');
 
         // Given I am Ada
-        $user = User::get('ada');
-        
-
         // And I am logged in on the user workspace
-        $this->loginAs($user);
+        $this->loginAs(User::get('ada'));
         $this->gotoWorkspace('user');
 
         // When I select a user I own
@@ -272,35 +306,36 @@ class UserWorkspaceTest extends PassboltTestCase
         $this->click("#js_app_filter_form button[value='search']");
         $this->waitUntilISee('js_wsp_users_breadcrumb', "/Search : $searchUser/");
 
-        // Then  I should see the password unselected
+        // Then I should see the password unselected
         $this->assertUserNotSelected($userId);
     }
 
     /**
      * Scenario: As a user when I filter by keywords the user workspace the global filter "All users" should be selected
-     * Given        I am logged in as Ada, and I go to the user workspace
-     * When         I click on the recently modified filter
-     * Then         I should see that menu All users is not selected anymore
-     * When         I fill the "app search" field with "Betty"
-     * Then         I should see the filter "All users" is selected.
+     * Given I am logged in as Ada, and I go to the user workspace
+     * When  I click on the recently modified filter
+     * Then  I should see that menu All users is not selected anymore
+     * When  I fill the "app search" field with "Betty"
+     * Then  I should see the filter "All users" is selected.
+     *
+     * @group LU
+     * @group user
+     * @group workspace
      */
     public function testSearchByKeywordsChangesGlobalFilterToAllUsers() 
     {
         $searchUser = 'Betty';
 
         // Given I am Ada
-        $user = User::get('ada');
-        
-
         // And I am logged in on the user workspace
-        $this->loginAs($user);
+        $this->loginAs(User::get('ada'));
         $this->gotoWorkspace('user');
 
         // When I click on the recently modified filter
         $this->clickLink("Recently modified");
         $this->waitCompletion();
 
-        // Then  I should see that menu All users is not selected anymore
+        // Then I should see that menu All users is not selected anymore
         $this->assertFilterIsNotSelected('js_users_wsp_filter_all');
 
         // When I fill the "app search" field with "shared resource"
@@ -308,48 +343,49 @@ class UserWorkspaceTest extends PassboltTestCase
         $this->click("#js_app_filter_form button[value='search']");
         $this->waitUntilISee('js_wsp_users_breadcrumb', "/Search : $searchUser/");
 
-        // Then  I should see the filter "All items" is selected.
+        // Then I should see the filter "All items" is selected.
         $this->assertFilterIsSelected('js_users_wsp_filter_all');
     }
 
     /**
      * Scenario: As an admin user, I should have admin rights inside the user workspace
-     * Given        I am logged in as admin on the user workspace
-     * Then         I should see the create button
-     * And          I should see the edit button
-     * And          I should see the delete button
-     * when         I right click on a user in the users list
-     * Then         I should see a contextual menu
-     * And          I should see the option Copy public key inside contextual menu
-     * And          I should see the option Copy email address inside contextual menu
-     * And          I should see the option Edit inside contextual menu
-     * And          I should see the option Delete inside contextual menu
+     * Given I am logged in as admin on the user workspace
+     * Then  I should see the create button
+     * And   I should see the edit button
+     * And   I should see the delete button
+     * When  I right click on a user in the users list
+     * Then  I should see a contextual menu
+     * And   I should see the option Copy public key inside contextual menu
+     * And   I should see the option Copy email address inside contextual menu
+     * And   I should see the option Edit inside contextual menu
+     * And   I should see the option Delete inside contextual menu
+     *
+     * @group LU
+     * @group user
+     * @group workspace
      */
     public function testAdminUserHasAdminRights() 
     {
         // Given I am Admin
-        $user = User::get('admin');
-
         // And I am logged in on the user workspace
-        
-        $this->loginAs($user);
+        $this->loginAs(User::get('admin'));
         $this->gotoWorkspace('user');
 
-        // Then  I should not see the create button
-        $this->assertVisible('js_wsp_create_button');
+        // Then I should not see the create button
+        $this->assertVisibleByCss('js_wsp_create_button');
 
         // And I should not see the edit button
-        $this->assertVisible('js_user_wk_menu_edition_button');
+        $this->assertVisibleByCss('js_user_wk_menu_edition_button');
 
         // And I should not see the delete button
-        $this->assertVisible('js_user_wk_menu_deletion_button');
+        $this->assertVisibleByCss('js_user_wk_menu_deletion_button');
 
         // Right click on a user
         $betty = User::get('betty');
         $this->rightClickUser($betty['id']);
 
-        // Then  I can see the contextual menu
-        $this->assertVisible('js_contextual_menu');
+        // Then I can see the contextual menu
+        $this->assertVisibleByCss('js_contextual_menu');
 
         // And I should see the option Copy public key
         $contextualMenu = $this->find('#js_contextual_menu');
@@ -365,31 +401,32 @@ class UserWorkspaceTest extends PassboltTestCase
         $this->assertElementContainsText($contextualMenu, 'Delete');
     }
 
-
     /**
      * Scenario: As a non admin user, I should not have admin rights inside the user workspace
-     * Given        I am logged in as ada on the user workspace
-     * Then         I should not see the create button
-     * And          I should not see the edit button
-     * And          I should not see the delete button
-     * when         I right click on a user in the users list
-     * Then         I should see a contextual menu
-     * And          I should see the option Copy public key inside contextual menu
-     * And          I should see the option Copy email address inside contextual menu
-     * And          I should not see the option Edit inside contextual menu
-     * And          I should not see the option Delete inside contextual menu
+     *
+     * Given I am logged in as ada on the user workspace
+     * Then  I should not see the create button
+     * And   I should not see the edit button
+     * And   I should not see the delete button
+     * When  I right click on a user in the users list
+     * Then  I should see a contextual menu
+     * And   I should see the option Copy public key inside contextual menu
+     * And   I should see the option Copy email address inside contextual menu
+     * And   I should not see the option Edit inside contextual menu
+     * And   I should not see the option Delete inside contextual menu
+     *
+     * @group LU
+     * @group user
+     * @group workspace
      */
     public function testNonAdminUserHasNotAdminRights() 
     {
         // Given I am Ada
-        $user = User::get('ada');
-
         // And I am logged in on the user workspace
-        
-        $this->loginAs($user);
+        $this->loginAs(User::get('ada'));
         $this->gotoWorkspace('user');
 
-        // Then  I should not see the create button
+        // Then I should not see the create button
         $this->assertNotVisible('js_wsp_create_button');
 
         // And I should not see the edit button
@@ -402,8 +439,8 @@ class UserWorkspaceTest extends PassboltTestCase
         $betty = User::get('betty');
         $this->rightClickUser($betty['id']);
 
-        // Then  I can see the contextual menu
-        $this->assertVisible('js_contextual_menu');
+        // Then I can see the contextual menu
+        $this->assertVisibleByCss('js_contextual_menu');
 
         // And I should see the option Copy public key
         $contextualMenu = $this->find('#js_contextual_menu');
@@ -423,36 +460,37 @@ class UserWorkspaceTest extends PassboltTestCase
      * @group saucelabs
      * Scenario: As a logged in user, I should be able to control the sidebar visibility through the sidebar button
      * Given        I am logged in as ada
-     * And          I am on the user workspace
-     * Then         I should see that the sidebar button is pressed
-     * And          I should not see the sidebar
-     * When         I click on a user to select it
-     * Then         I should see the sidebar
-     * When         I click on the same user to deselect it
-     * Then         I should not see the sidebar anymore
-     * When         I click on the same user to select it
-     * Then         I should see that the sidebar is visible again
-     * When         I toggle off the sidebar button
-     * Then         I should see that the sidebar button is now deactivated
-     * And          I should not see the sidebar anymore
-     * When         I click on the user again to deselect it
-     * Then         I should see that the sidebar button is deactivated
-     * And          I should see that the sidebar is not visible
-     * When         I toggle in the sidebar button
-     * Then         I should see that the sidebar is not visible
-     * When         I click on the user again to select it
-     * Then         I should see that the sidebar is visible
-     * When         I click on the close button at the top of the sidebar
-     * Then         I should not see the sidebar anymore
+     * And   I am on the user workspace
+     * Then  I should see that the sidebar button is pressed
+     * And   I should not see the sidebar
+     * When  I click on a user to select it
+     * Then  I should see the sidebar
+     * When  I click on the same user to deselect it
+     * Then  I should not see the sidebar anymore
+     * When  I click on the same user to select it
+     * Then  I should see that the sidebar is visible again
+     * When  I toggle off the sidebar button
+     * Then  I should see that the sidebar button is now deactivated
+     * And   I should not see the sidebar anymore
+     * When  I click on the user again to deselect it
+     * Then  I should see that the sidebar button is deactivated
+     * And   I should see that the sidebar is not visible
+     * When  I toggle in the sidebar button
+     * Then  I should see that the sidebar is not visible
+     * When  I click on the user again to select it
+     * Then  I should see that the sidebar is visible
+     * When  I click on the close button at the top of the sidebar
+     * Then  I should not see the sidebar anymore
+     *
+     * @group LU
+     * @group user
+     * @group workspace
      */
     public function testSidebarVisibility() 
     {
         // Given I am Ada
-        $user = User::get('ada');
-        
-
         // And I am logged in on the password workspace
-        $this->loginAs($user);
+        $this->loginAs(User::get('ada'));
         $this->gotoWorkspace('user');
 
         $this->assertToggleButtonStatus('js_wk_secondary_menu_view_sidebar_button', TOGGLE_BUTTON_PRESSED);
@@ -467,7 +505,7 @@ class UserWorkspaceTest extends PassboltTestCase
         $this->clickUser($betty);
 
         // I should see a secondary side bar appearing
-        $this->assertVisible('#js_user_details');
+        $this->assertVisible('js_user_details');
 
         // Click on a password to deselect it
         $this->clickUser($betty);
@@ -479,7 +517,7 @@ class UserWorkspaceTest extends PassboltTestCase
         $this->clickUser($betty);
 
         // I should that the sidebar is visible again
-        $this->assertVisible('#js_user_details');
+        $this->assertVisible('js_user_details');
 
         // Click on the sidebar button.
         $this->click('js_wk_secondary_menu_view_sidebar_button');
@@ -512,43 +550,45 @@ class UserWorkspaceTest extends PassboltTestCase
         $this->clickUser($betty);
 
         // I should that the sidebar is visible
-        $this->assertVisible('#js_user_details');
+        $this->assertVisible('js_user_details');
 
         // I click on the button close at the top of the dialogue.
         $this->click('#js_user_details .dialog-close');
 
-        // Then  I should not see the sidebar anymore.
+        // Then I should not see the sidebar anymore.
         $this->assertNotVisible('#js_user_details');
     }
 
     /**
-     * @group saucelabs
      * Scenario: As a user I should be able to sort the users browser by column
-     * Given        I am logged in as Ada, and I go to the user workspace
-     * When         I sort the users browser by name
-     * Then         I should see it sorted by name
-     * When         I sort the users browser by username
-     * Then         I should see it sorted by username
-     * When         I sort the users browser by modified
-     * Then         I should see it sorted by modified
-     * When         I sort the users browser by lasted logged in
-     * Then         I should see it sorted by lasted logged in
+     *
+     * Given I am logged in as Ada, and I go to the user workspace
+     * When  I sort the users browser by name
+     * Then  I should see it sorted by name
+     * When  I sort the users browser by username
+     * Then  I should see it sorted by username
+     * When  I sort the users browser by modified
+     * Then  I should see it sorted by modified
+     * When  I sort the users browser by lasted logged in
+     * Then  I should see it sorted by lasted logged in
+     *
+     * @group LU
+     * @group user
+     * @group workspace
+     * @group saucelabs
      */
     public function testSortByColumn() 
     {
         // Given I am Ada
-        $user = User::get('ada');
-        
-
         // And I am logged in on the password workspace
-        $this->loginAs($user);
+        $this->loginAs(User::get('ada'));
         $this->gotoWorkspace('user');
 
         // When I sort the users browser by name
         $columnId = 'name';
         $this->click('.js_grid_column_' . $columnId);
 
-        // Then  I should see it sorted by name
+        // Then I should see it sorted by name
         $columnHeaderResourceElement = $this->find('#js_wsp_users_browser .tableview-header .js_grid_column_' . $columnId);
         $this->assertElementHasClass($columnHeaderResourceElement, 'sorted');
         $this->assertElementHasClass($columnHeaderResourceElement, 'sort-desc');
@@ -557,7 +597,7 @@ class UserWorkspaceTest extends PassboltTestCase
         $columnId = 'username';
         $this->click('.js_grid_column_' . $columnId);
 
-        // Then  I should see it sorted by username
+        // Then I should see it sorted by username
         $columnHeaderUsernameElement = $this->find('#js_wsp_users_browser .tableview-header .js_grid_column_' . $columnId);
         $this->assertElementHasClass($columnHeaderUsernameElement, 'sorted');
         $this->assertElementHasClass($columnHeaderUsernameElement, 'sort-asc');
@@ -568,7 +608,7 @@ class UserWorkspaceTest extends PassboltTestCase
         $columnId = 'modified';
         $this->click('.js_grid_column_' . $columnId);
 
-        // Then  I should see it sorted by modified
+        // Then I should see it sorted by modified
         $columnHeaderModifiedElement = $this->find('#js_wsp_users_browser .tableview-header .js_grid_column_' . $columnId);
         $this->assertElementHasClass($columnHeaderModifiedElement, 'sorted');
         $this->assertElementHasClass($columnHeaderModifiedElement, 'sort-asc');
@@ -579,7 +619,7 @@ class UserWorkspaceTest extends PassboltTestCase
         $columnId = 'last_logged_in';
         $this->click('.js_grid_column_' . $columnId);
 
-        // Then  I should see it sorted by lasted logged in
+        // Then I should see it sorted by lasted logged in
         $columnHeaderUriElement = $this->find('#js_wsp_users_browser .tableview-header .js_grid_column_' . $columnId);
         $this->assertElementHasClass($columnHeaderUriElement, 'sorted');
         $this->assertElementHasClass($columnHeaderUriElement, 'sort-asc');

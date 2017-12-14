@@ -1,23 +1,45 @@
 <?php
 /**
- * Bug PASSBOLT-1377 - Regression test
+ * Passbolt ~ Open source password manager for teams
+ * Copyright (c) Passbolt SARL (https://www.passbolt.com)
  *
- * @copyright (c) 2017 Passbolt SARL
- * @licence   GNU Affero General Public License http://www.gnu.org/licenses/agpl-3.0.en.html
+ * Licensed under GNU Affero General Public License version 3 of the or any later version.
+ * For full copyright and license information, please see the LICENSE.txt
+ * Redistributions of files must retain the above copyright notice.
+ *
+ * @copyright Copyright (c) Passbolt SARL (https://www.passbolt.com)
+ * @license   https://opensource.org/licenses/AGPL-3.0 AGPL License
+ * @link      https://www.passbolt.com Passbolt(tm)
+ * @since     2.0.0
  */
+/**
+ * Bug PASSBOLT-1377 - Regression test
+ */
+namespace Tests\LU\Regressions;
+
+use App\Actions\PasswordActionsTrait;
+use App\Actions\ShareActionsTrait;
+use App\PassboltTestCase;
+use Data\Fixtures\User;
+use Data\Fixtures\Resource;
+use App\Lib\UuidFactory;
 class PASSBOLT1377 extends PassboltTestCase
 {
+    use PasswordActionsTrait;
+    use ShareActionsTrait;
 
     /**
      * Scenario: As a user I can login & logout multiple times
      *
-     * Given        I am ada
-     *
+     * Given I am ada
      * [LOOP]
-     * When         I login
-     * And          I logout
-     * Then         I should see the login page
+     * When  I login
+     * And   I logout
+     * Then  I should see the login page
      * [END_LOOP]
+     *
+     * @group LU
+     * @group regression
      */
     public function testLoginLogoutMultipleTimes() 
     {
@@ -32,7 +54,7 @@ class PASSBOLT1377 extends PassboltTestCase
             // And I logout
             $this->logout();
 
-            // Then  I should be redirected to the login page
+            // Then I should be redirected to the login page
             $this->waitUntilISee('.plugin-check.' . $this->_browser['type'] . '.success');
         }
     }
@@ -40,12 +62,14 @@ class PASSBOLT1377 extends PassboltTestCase
     /**
      * Scenario: As LU I can create a password mutliple times
      *
-     * Given        I am logged in as ada in the user workspace
-     *
+     * Given I am logged in as ada in the user workspace
      * [LOOP]
-     * When         I am creating a password
-     * Then         I should expect the password has been created with success
+     * When  I am creating a password
+     * Then  I should expect the password has been created with success
      * [END_LOOP]
+     *
+     * @group LU
+     * @group regression
      */
     public function testCreatePasswordMultipleTimes() 
     {
@@ -59,7 +83,7 @@ class PASSBOLT1377 extends PassboltTestCase
 
         for ($i=0; $i<5; $i++) {
             // And I am creating the password
-            // Then  I can see a success notification
+            // Then I can see a success notification
             $password = array(
             'name' => 'name_' . $i,
             'username' => 'username_' . $i,
@@ -73,16 +97,17 @@ class PASSBOLT1377 extends PassboltTestCase
     }
 
     /**
-     * @group no-saucelabs
-     *
      * Scenario: As LU I can edit a password mutliple times
      *
-     * Given        I am logged in as ada in the user workspace
-     *
+     * Given I am logged in as ada in the user workspace
      * [LOOP]
-     * When         I am editing a password I own
-     * Then         I should expect the password has been edited with success
+     *   When  I am editing a password I own
+     *   Then  I should expect the password has been edited with success
      * [END_LOOP]
+     *
+     * @group no-saucelabs
+     * @group LU
+     * @group regression
      */
     public function testEditPasswordMultipleTimes() 
     {
@@ -103,7 +128,7 @@ class PASSBOLT1377 extends PassboltTestCase
 
         for ($i=0; $i<5; $i++) {
             // And I am editing the secret of a password I own
-            // Then  I can see a success notification
+            // Then I can see a success notification
             $r['id'] = $resource['id'];
             $r['password'] = 'password_' . $i;
             $this->editPassword($r, $user);
@@ -116,12 +141,14 @@ class PASSBOLT1377 extends PassboltTestCase
     /**
      * Scenario: As LU I can share a password mutliple times
      *
-     * Given        I am logged in as ada in the user workspace
-     *
+     * Given I am logged in as ada in the user workspace
      * [LOOP]
-     * When         I am sharing a password I own
-     * Then         I should expect the password has been shared with success
+     * When  I am sharing a password I own
+     * Then  I should expect the password has been shared with success
      * [END_LOOP]
+     *
+     * @group LU
+     * @group regression
      */
     public function testSharePasswordMultipleTimes() 
     {
@@ -147,7 +174,7 @@ class PASSBOLT1377 extends PassboltTestCase
 
         for ($i=0; $i<count($shareWith); $i++) {
             // And I am editing the secret of a password I own
-            // Then  I can see a success notification
+            // Then I can see a success notification
             $r['id'] = $resource['id'];
             $r['password'] = 'password_' . $i;
             $this->sharePassword($resource, $shareWith[$i], $user);

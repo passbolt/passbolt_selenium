@@ -1,44 +1,60 @@
 <?php
 /**
- * Bug PASSBOLT-1606 - Regression test
+ * Passbolt ~ Open source password manager for teams
+ * Copyright (c) Passbolt SARL (https://www.passbolt.com)
  *
- * @copyright (c) 2017 Passbolt SARL
- * @licence   GNU Affero General Public License http://www.gnu.org/licenses/agpl-3.0.en.html
+ * Licensed under GNU Affero General Public License version 3 of the or any later version.
+ * For full copyright and license information, please see the LICENSE.txt
+ * Redistributions of files must retain the above copyright notice.
+ *
+ * @copyright Copyright (c) Passbolt SARL (https://www.passbolt.com)
+ * @license   https://opensource.org/licenses/AGPL-3.0 AGPL License
+ * @link      https://www.passbolt.com Passbolt(tm)
+ * @since     2.0.0
  */
+/**
+ * Bug PASSBOLT-1606 - Regression test
+ */
+namespace Tests\LU\Regressions;
+
+use App\Assertions\ConfirmationDialogAssertionsTrait;
+use App\PassboltTestCase;
+use Data\Fixtures\User;
+use App\Common\Servers\PassboltServer;
+
 class PASSBOLT1606 extends PassboltTestCase
 {
+    use ConfirmationDialogAssertionsTrait;
 
     /**
      * Scenario: As LU I can't select multiple passwprd
      *
-     * Given        I am Ada
-     * And          I am logged in on the users workspace
-     * When         I select a user
-     * And            I click on the recently modified filter
-     * And             I click on the all users filter
-     * Then         I shouldn't see duplicated users in the list
+     * Given I am Ada
+     * And   I am logged in on the users workspace
+     * When  I select a user
+     * And   I click on the recently modified filter
+     * And   I click on the all users filter
+     * Then  I shouldn't see duplicated users in the list
+     *
+     * @group LU
+     * @group regression
      */
     public function testAutoLogoutFromAnotherTab() 
     {
         // Given I am Ada
         $user = User::get('ada');
+        $this->setClientConfig($user);
 
         // And I am on second tab
         $this->openNewTab();
 
         // Reduce the session timeout to accelerate the test
-        PassboltServer::setExtraConfig(
-            [
-            'Session' => [
-                'timeout' => 0.10
-            ]
-            ]
-        );
+        PassboltServer::setExtraConfig(['Session' => ['timeout' => 0.10]]);
 
         // When I am logged in on the password workspace
-        $this->loginAs($user);
+        $this->loginAs($user, false);
 
-        // Then  I should see the session expired dialog
+        // Then I should see the session expired dialog
         $this->assertSessionExpiredDialog();
 
         // And I switch to the previous
@@ -50,7 +66,7 @@ class PASSBOLT1606 extends PassboltTestCase
         // And I switch to the passbolt tab
         $this->switchToNextTab();
 
-        // Then  I should see the login page
+        // Then I should see the login page
         $this->waitUntilISee('.plugin-check.' . $this->_browser['type'] . '.success');
     }
 

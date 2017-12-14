@@ -108,9 +108,9 @@ class Group {
 
 	/**
 	 * Return one group based on the given conditions
+     *
 	 * @param array $conditions
 	 * @return array $group
-	 * @throws exception
 	 */
 	static function get($conditions = array()) {
 		$g = self::_get();
@@ -121,7 +121,7 @@ class Group {
 		}
 
 		if ($g === false) {
-			throw new Exception('a group fixture could not be found for these conditions, consider adding one');
+		    \PHPUnit_Framework_Assert::fail('a group fixture could not be found for these conditions, consider adding one');
 		}
 		return $g;
 	}

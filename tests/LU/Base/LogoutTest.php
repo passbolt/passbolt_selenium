@@ -27,6 +27,7 @@ use App\Assertions\ConfirmationDialogAssertionsTrait;
 use App\PassboltTestCase;
 use App\Common\Servers\PassboltServer;
 use Data\Fixtures\User;
+use Data\Fixtures\Resource;
 
 class LogoutTest extends PassboltTestCase
 {
@@ -73,7 +74,7 @@ class LogoutTest extends PassboltTestCase
         // When I click on the logout button
         $this->click('#js_app_navigation_right .logout a');
 
-        // Then  I should see the login page
+        // Then I should see the login page
         $this->waitUntilISee('.plugin-check.' . $this->_browser['type'] . '.success');
     }
 
@@ -85,7 +86,7 @@ class LogoutTest extends PassboltTestCase
      * And   I wait until the session expires
      * When  I click on a password I own
      * Then  I should see the session expired dialog
-     * And  I should be redirected to the login page in 60 seconds
+     * And   I should be redirected to the login page in 60 seconds
      *
      * @group LU
      * @group logout
@@ -114,7 +115,7 @@ class LogoutTest extends PassboltTestCase
         $resource = Resource::get(array('user' => 'ada', 'permission' => 'owner'));
         $this->clickPassword($resource['id']);
 
-        // Then  I should see the session expired dialog
+        // Then I should see the session expired dialog
         $this->assertSessionExpiredDialog();
 
         // And I should be redirected to the login page in 60 seconds
@@ -157,13 +158,13 @@ class LogoutTest extends PassboltTestCase
         $resource = Resource::get(array('user' => 'ada', 'permission' => 'owner'));
         $this->clickPassword($resource['id']);
 
-        // Then  I should see the session expired dialog
+        // Then I should see the session expired dialog
         $this->assertSessionExpiredDialog();
 
         // When I click on Redirect now
         $this->click('confirm-button');
 
-        // Then  I should see the login page
+        // Then I should see the login page
         $this->waitUntilISee('.plugin-check.' . $this->_browser['type'] . '.success');
     }
 
@@ -192,13 +193,13 @@ class LogoutTest extends PassboltTestCase
         // And I am logged in on the password workspace
         $this->loginAs($user);
 
-        // Then  I should see the session expired dialog
+        // Then I should see the session expired dialog
         $this->assertSessionExpiredDialog();
 
         // When I click on Redirect now button
         $this->click('confirm-button');
 
-        // Then  I should see the login page
+        // Then I should see the login page
         $this->waitUntilISee('.plugin-check.' . $this->_browser['type'] . '.success');
     }
 
@@ -229,7 +230,7 @@ class LogoutTest extends PassboltTestCase
         // When I restart the browser
         $this->restartBrowser(['waitBeforeRestart' => 15]);
 
-        // Then  I should be logged out
+        // Then I should be logged out
         $this->assertUrlMatch('/\/auth\/login/');
     }
 
@@ -265,7 +266,7 @@ class LogoutTest extends PassboltTestCase
         // When I close and restore the tab
         $this->closeAndRestoreTab(['waitBeforeRestore' => 15]);
 
-        // Then  I should be logged out
+        // Then I should be logged out
         $this->waitUntilUrlMatches('auth/login', 120);
     }
 

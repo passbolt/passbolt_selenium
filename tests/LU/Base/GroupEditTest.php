@@ -25,14 +25,15 @@ namespace Tests\LU\Base;
 
 use App\Actions\GroupActionsTrait;
 use App\Actions\WorkspaceActionsTrait;
+use App\Lib\UuidFactory;
 use App\PassboltTestCase;
 use Data\Fixtures\User;
 use Data\Fixtures\Group;
 
 class LUGroupEditTest extends PassboltTestCase
 {
-    use WorkspaceActionsTrait;
     use GroupActionsTrait;
+    use WorkspaceActionsTrait;
 
     /**
      * Scenario: As LU I shouldn't be able to edit groups from the users workspace
@@ -45,6 +46,7 @@ class LUGroupEditTest extends PassboltTestCase
      * @group LU
      * @group group
      * @group edit
+     * @group v2
      */
     public function testCantEditGroup() 
     {
@@ -61,7 +63,7 @@ class LUGroupEditTest extends PassboltTestCase
         $group = Group::get(['id' => UuidFactory::uuid('group.id.ergonom')]);
         $this->clickGroup($group['id']);
 
-        // Then  I should see that there is no dropdown button next to the groups
+        // Then I should see that there is no dropdown button next to the groups
         $this->assertNotVisible("#group_${group['id']} .right-cell a");
     }
 

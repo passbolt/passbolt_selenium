@@ -14,17 +14,20 @@
  */
 namespace App\Actions;
 
+use Facebook\WebDriver\Exception\NoSuchElementException;
+use Facebook\WebDriver\WebDriverBy;
+use Facebook\WebDriver\WebDriverSelect;
+
 trait PermissionActionsTrait
 {
 
     /**
      * Edit temporary a permission
      *
-     * @param  $password
-     * @param  $username
-     * @param  $permissionType
-     * @param  $user
-     * @throws Exception
+     * @param $password
+     * @param $username
+     * @param $permissionType
+     * @param $user
      */
     public function editTemporaryPermission($password, $username, $permissionType, $user) 
     {
@@ -37,11 +40,14 @@ trait PermissionActionsTrait
         );
 
         // Find the permission row element
-        $rowElement = $this->findByXpath('//*[@id="js_permissions_list"]//*[.="' . $username . '"]//ancestor::li[1]');
-
-        // I change the permission
-        $select = new WebDriverSelect($rowElement->findElement(WebDriverBy::cssSelector('.js_share_rs_perm_type')));
-        $select->selectByVisibleText($permissionType);
+        // and change the permission
+        try {
+            $rowElement = $this->findByXpath('//*[@id="js_permissions_list"]//*[.="' . $username . '"]//ancestor::li[1]');
+            $select = new WebDriverSelect($rowElement->findElement(WebDriverBy::cssSelector('.js_share_rs_perm_type')));
+            $select->selectByVisibleText($permissionType);
+        } catch (NoSuchElementException $exception) {
+            \PHPUnit_Framework_Assert::fail('Could not find the permission to edit');
+        }
 
         // I can see that temporary changes are waiting to be saved
         $this->assertElementContainsText(
@@ -53,11 +59,10 @@ trait PermissionActionsTrait
     /**
      * Edit a password permission helper
      *
-     * @param  $password
-     * @param  $username
-     * @param  $permissionType
-     * @param  $user
-     * @throws Exception
+     * @param $password
+     * @param $username
+     * @param $permissionType
+     * @param $user
      */
     public function editPermission($password, $username, $permissionType, $user) 
     {
@@ -78,9 +83,8 @@ trait PermissionActionsTrait
     /**
      * Delete temporary a permission helper
      *
-     * @param  $password
-     * @param  $username
-     * @throws Exception
+     * @param $password
+     * @param $username
      */
     public function deleteTemporaryPermission($password, $username) 
     {
@@ -93,19 +97,21 @@ trait PermissionActionsTrait
         );
 
         // Find the permission row element
-        $rowElement = $this->findByXpath('//*[@id="js_permissions_list"]//*[.="' . $username . '"]//ancestor::li[1]');
-
         // I delete the permission
-        $deleteButton = $rowElement->findElement(WebDriverBy::cssSelector('.js_perm_delete'));
+        try {
+            $rowElement = $this->findByXpath('//*[@id="js_permissions_list"]//*[.="' . $username . '"]//ancestor::li[1]');
+            $deleteButton = $rowElement->findElement(WebDriverBy::cssSelector('.js_perm_delete'));
+        } catch(NoSuchElementException $exception) {
+            \PHPUnit_Framework_Assert::fail('Could not find delete button');
+        }
         $deleteButton->click();
     }
 
     /**
      * Delete a password permission helper
      *
-     * @param  $password
-     * @param  $username
-     * @throws Exception
+     * @param $password
+     * @param $username
      */
     public function deletePermission($password, $username) 
     {

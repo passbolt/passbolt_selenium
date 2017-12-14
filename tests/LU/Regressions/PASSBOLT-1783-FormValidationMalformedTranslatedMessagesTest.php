@@ -1,20 +1,43 @@
 <?php
 /**
- * Bug PASSBOLT-1783 - Regression test
+ * Passbolt ~ Open source password manager for teams
+ * Copyright (c) Passbolt SARL (https://www.passbolt.com)
  *
- * @copyright (c) 2017 Passbolt SARL
- * @licence   GNU Affero General Public License http://www.gnu.org/licenses/agpl-3.0.en.html
+ * Licensed under GNU Affero General Public License version 3 of the or any later version.
+ * For full copyright and license information, please see the LICENSE.txt
+ * Redistributions of files must retain the above copyright notice.
+ *
+ * @copyright Copyright (c) Passbolt SARL (https://www.passbolt.com)
+ * @license   https://opensource.org/licenses/AGPL-3.0 AGPL License
+ * @link      https://www.passbolt.com Passbolt(tm)
+ * @since     2.0.0
  */
+/**
+ * Bug PASSBOLT-1783 - Regression test
+ */
+namespace Tests\LU\Regressions;
+
+use App\Actions\UserActionsTrait;
+use App\Actions\WorkspaceActionsTrait;
+use App\PassboltTestCase;
+use Data\Fixtures\User;
+
 class PASSBOLT1783 extends PassboltTestCase
 {
+    use WorkspaceActionsTrait;
+    use UserActionsTrait;
 
     /**
      * Scenario: After creating a user, the given user can complete the setup and login with the chosen password
-     * Given        I am admin
-     * And          I am logged in
-     * When         I go to user workspace
-     * And          I create a user with a first name of 1 character
-     * Then         I should a well formed error message
+     *
+     * Given I am admin
+     * And   I am logged in
+     * When  I go to user workspace
+     * And   I create a user with a first name of 1 character
+     * Then  I should a well formed error message
+     *
+     * @group LU
+     * @group regression
      */
     public function testCreateUserWrongDataWellformedErrorFeedback() 
     {
@@ -23,7 +46,6 @@ class PASSBOLT1783 extends PassboltTestCase
 
         // Given I am Ada
         $user = User::get('admin');
-
 
         // And I am logged in
         $this->loginAs($user);
@@ -42,7 +64,7 @@ class PASSBOLT1783 extends PassboltTestCase
         }
         $this->click('.create-user-dialog input[type=submit]');
 
-        // Then  I should a well formed error message
+        // Then I should a well formed error message
         $this->assertElementContainsText(
             $this->find('js_field_first_name_feedback'),
             'First name should be between 2 and 64 characters long'

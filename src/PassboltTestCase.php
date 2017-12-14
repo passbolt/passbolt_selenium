@@ -43,22 +43,23 @@ abstract class PassboltTestCase extends AuthenticatedTestCase
     /**
      * This function is executed before a test is run
      * It setup the capabilities and browser driver
-     *
-     * @throws Exception if database instance issue
      */
     protected function setUp() 
     {
         $this->_failing = null;
 
         // Bootstrap config
-        Config::get();
-
-        // Reserve instances for passbolt and selenium.
-        if ($this->_useMultiplePassboltInstances()) {
-            ServerRegistry::reserveInstance('passbolt');
-        }
-        if ($this->_useMultipleSeleniumInstances()) {
-            ServerRegistry::reserveInstance('selenium');
+        try {
+            Config::get();
+            // Reserve instances for passbolt and selenium.
+            if ($this->_useMultiplePassboltInstances()) {
+                ServerRegistry::reserveInstance('passbolt');
+            }
+            if ($this->_useMultipleSeleniumInstances()) {
+                ServerRegistry::reserveInstance('selenium');
+            }
+        } catch (\Exception $e) {
+            $this->fail('Config not found');
         }
 
         // Init browser.
@@ -79,8 +80,6 @@ abstract class PassboltTestCase extends AuthenticatedTestCase
 
     /**
      * Check selenium config
-     *
-     * @throws error No selenium config
      */
     protected function _checkSeleniumConfig() 
     {
@@ -131,8 +130,12 @@ abstract class PassboltTestCase extends AuthenticatedTestCase
         $this->_setVerbose();
         $this->_setBrowserConfig();
         $this->_checkSeleniumConfig();
-        $capabilities = $this->_getCapabilities();
-        $capabilities = $this->_setSauceLabCapabilities($capabilities);
+        try {
+            $capabilities = $this->_getCapabilities();
+            $capabilities = $this->_setSauceLabCapabilities($capabilities);
+        } catch(\Exception $exception) {
+            $this->fail('Browser capabilities not supported.');
+        }
 
         // Build end point url.
         $serverUrl = $this->getTestServerUrl();
@@ -212,7 +215,7 @@ abstract class PassboltTestCase extends AuthenticatedTestCase
                      */
                     try {
                         $this->getDriver()->quit();
-                    } catch(Exception $e) {
+                    } catch(\Exception $e) {
                         // Do nothing
                     }
                 }
@@ -226,14 +229,19 @@ abstract class PassboltTestCase extends AuthenticatedTestCase
             // Display logs if any.
             $this->displayLogs();
 
-            // Release instance.
-            if ($this->_useMultiplePassboltInstances()) {
-                ServerRegistry::releaseInstance('passbolt');
+            try {
+                // Release instance.
+                if ($this->_useMultiplePassboltInstances()) {
+                    ServerRegistry::releaseInstance('passbolt');
+                }
+                if ($this->_useMultipleSeleniumInstances()) {
+                    ServerRegistry::releaseInstance('selenium');
+                }
+            } catch (\Exception $exception) {
+                // TODO How do we recover from this?
             }
-            if ($this->_useMultipleSeleniumInstances()) {
-                ServerRegistry::releaseInstance('selenium');
-            }
-        } catch (Exception $e) {
+
+        } catch (\Exception $e) {
             $logPath = Config::read('testserver.selenium.logs.path');
             $log = $e->getMessage() . "\n" . $e->getTraceAsString();
             $filePath = "$logPath/{$this->testName}_tear_down_exception.log";
@@ -288,9 +296,7 @@ abstract class PassboltTestCase extends AuthenticatedTestCase
      * Get desired capabilities from config
      *
      * @return DesiredCapabilities|null
-     * @throws error browser type not supported
      * @throws WebDriverException is preference does not exist
-     * @throw  Exception
      */
     public function _getCapabilities()
     {

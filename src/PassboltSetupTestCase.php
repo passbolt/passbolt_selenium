@@ -145,7 +145,7 @@ abstract class PassboltSetupTestCase extends PassboltTestCase
             $this->waitUntilISee('#show-debug-info');
             $this->click('#show-debug-info');
             $this->waitUntilISee('#debug-info');
-            $debug = $this->find('#debug-info')->getText();
+            $debug = $this->findById('debug-info')->getText();
 
             $msg = "Section $sectionName could not be reached. \n Debug: ". print_r($debug, true);
             PHPUnit_Framework_Assert::fail($msg);
@@ -191,12 +191,12 @@ abstract class PassboltSetupTestCase extends PassboltTestCase
     {
         // Test that button cancel is hidden.
         $this->assertElementHasClass(
-            $this->find('js_setup_cancel_step'),
+            $this->findById('js_setup_cancel_step'),
             'hidden'
         );
         // Test that button Next is disabled.
         $this->assertElementHasClass(
-            $this->find('js_setup_submit_step'),
+            $this->findById('js_setup_submit_step'),
             'disabled'
         );
         // Test that the domain in the url check textbox is the same as the one configured.
@@ -262,7 +262,7 @@ abstract class PassboltSetupTestCase extends PassboltTestCase
         $this->findById('key-info-ok')
             ->click();
 
-        // Then  I should not see the dialog anymore.
+        // Then I should not see the dialog anymore.
         $this->assertNotVisible('dialog-server-key-info');
 
         // If I open the dialog again.
@@ -272,7 +272,7 @@ abstract class PassboltSetupTestCase extends PassboltTestCase
         $this->findByCss('.dialog-wrapper a.dialog-close')
             ->click();
 
-        // Then  I should not see the dialog anymore.
+        // Then I should not see the dialog anymore.
         $this->assertNotVisible('dialog-server-key-info');
 
         // Check box domain check.
@@ -354,34 +354,32 @@ abstract class PassboltSetupTestCase extends PassboltTestCase
 
         // Test that password in clear is hidden.
         $this->assertElementHasClass(
-            $this->find('js_field_password_clear'),
+            $this->findById('js_field_password_clear'),
             'hidden'
         );
         // Test that clicking on the view button shows the password in clear.
-        $this->find('js_show_pwd_button')->click();
+        $this->findById('js_show_pwd_button')->click();
         $this->assertElementHasNotClass(
-            $this->find('js_field_password_clear'),
+            $this->findById('js_field_password_clear'),
             'hidden'
         );
     }
 
     /**
      * Scenario: As an AP using the setup I should be able to import my own key.
-     * Given        I am at the step 2 and I select import my key, instead of generating one
-     * Then         I should see a textarea to put the key content in it.
-     * And          the Next button should be disabled
-     * When         I insert a random text in the key field
-     * Then         The next button should be enabled
-     * When         I click "Next"
-     * Then         I should see an error message saying that the key has an invalid format
-     * When         I delete the random text from the textarea
-     * And          I replace it with a protected key in a proper format
-     * And          I click "Next"
-     * Then         I should see a different confirmation page with my key information
-     * When         I observe this confirmation page
-     * Then         I should retrieve my key information
-     *
-     * @throws Exception
+     * Given I am at the step 2 and I select import my key, instead of generating one
+     * Then  I should see a textarea to put the key content in it.
+     * And   the Next button should be disabled
+     * When  I insert a random text in the key field
+     * Then  The next button should be enabled
+     * When  I click "Next"
+     * Then  I should see an error message saying that the key has an invalid format
+     * When  I delete the random text from the textarea
+     * And   I replace it with a protected key in a proper format
+     * And   I click "Next"
+     * Then  I should see a different confirmation page with my key information
+     * When  I observe this confirmation page
+     * Then  I should retrieve my key information
      */
     protected function completeStepImportKey($key = []) 
     {
@@ -394,7 +392,7 @@ abstract class PassboltSetupTestCase extends PassboltTestCase
         $this->waitForSection('import_key_form');
         // Test that button next is disabled by default.
         $this->assertElementHasClass(
-            $this->find('js_setup_submit_step'),
+            $this->findById('js_setup_submit_step'),
             'disabled'
         );
         // Enter an invalid key.
@@ -406,23 +404,23 @@ abstract class PassboltSetupTestCase extends PassboltTestCase
         );
         // Test that button next is disabled by default.
         $this->assertElementHasClass(
-            $this->find('js_setup_submit_step'),
+            $this->findById('js_setup_submit_step'),
             'enabled'
         );
         // Click Next
         $this->clickLink('Next');
         // Find element.
         $this->assertElementHasNotClass(
-            $this->find('KeyErrorMessage'),
+            $this->findById('KeyErrorMessage'),
             'hidden'
         );
         // Assert that error message contains the right text.
         $this->assertElementContainsText(
-            $this->find('KeyErrorMessage'),
+            $this->findById('KeyErrorMessage'),
             'Unknown ASCII armor type'
         );
         // Emtpy value.
-        $this->find('js_setup_import_key_text')->clear();
+        $this->findById('js_setup_import_key_text')->clear();
         // Paste a correct key.
         $keyData = file_get_contents($key['filepath']);
         $this->inputText('js_setup_import_key_text', $keyData);
@@ -458,15 +456,13 @@ abstract class PassboltSetupTestCase extends PassboltTestCase
 
     /**
      * Scenario: As an AP using the setup I should be able to generate and download the key.
-     * Given        I am on the step that generates a private key
-     * Then         I should see that the key is getting generated, and that the Next button is in processing state
-     * When         The key has finished generating
-     * Then         I should see that the next button is enabled
-     * And          I should see that the title says the key is ready
-     * And          There should be a confirmation message
-     * And          There should be a download button
-     *
-     * @throws Exception
+     * Given I am on the step that generates a private key
+     * Then  I should see that the key is getting generated, and that the Next button is in processing state
+     * When  The key has finished generating
+     * Then  I should see that the next button is enabled
+     * And   I should see that the title says the key is ready
+     * And   There should be a confirmation message
+     * And   There should be a download button
      */
     protected function completeStepGenerateAndDownloadKey() 
     {
@@ -492,19 +488,17 @@ abstract class PassboltSetupTestCase extends PassboltTestCase
             'download'
         );
         $this->assertElementHasClass(
-            $this->find('js_setup_submit_step'),
+            $this->findById('js_setup_submit_step'),
             'enabled'
         );
     }
 
     /**
      * Scenario: As an AP using the setup, I should be able to choose a security token
-     * Given        I am at the security token step
-     * Then         I should see that a security token code has been chosen for me
-     * And          I should see that a security token bg color has been chosen for me
-     * And          I should see that a security token text color has been chosen for me
-     *
-     * @throws Exception
+     * Given I am at the security token step
+     * Then  I should see that a security token code has been chosen for me
+     * And   I should see that a security token bg color has been chosen for me
+     * And   I should see that a security token text color has been chosen for me
      */
     protected function completeStepSecurityToken() 
     {
@@ -516,15 +510,15 @@ abstract class PassboltSetupTestCase extends PassboltTestCase
 
         // Test that default values are filled by default..
         $this->assertTrue(
-            $this->find('js_security_token_text')->getAttribute('value') != '',
+            $this->findById('js_security_token_text')->getAttribute('value') != '',
             'The token text should not be empty by default'
         );
         $this->assertTrue(
-            $this->find('js_security_token_background')->getAttribute('value') != '',
+            $this->findById('js_security_token_background')->getAttribute('value') != '',
             'The token background should not be empty by default'
         );
         $this->assertTrue(
-            $this->find('js_security_token_color')->getAttribute('value') != '',
+            $this->findById('js_security_token_color')->getAttribute('value') != '',
             'The token color should not be empty by default'
         );
     }
@@ -545,7 +539,7 @@ abstract class PassboltSetupTestCase extends PassboltTestCase
 
         // Test that a button is processing.
         $this->assertElementHasClass(
-            $this->find('js_spinner'),
+            $this->findById('js_spinner'),
             'processing'
         );
 
@@ -577,7 +571,7 @@ abstract class PassboltSetupTestCase extends PassboltTestCase
         $this->clickLink("Next");
         // Test that button Next is disabled.
         $this->assertElementHasClass(
-            $this->find('js_setup_submit_step'),
+            $this->findById('js_setup_submit_step'),
             'processing'
         );
         // test step that prepares key creation.

@@ -60,7 +60,7 @@ class RegisterTest extends PassboltTestCase
         // And press enter
         $this->pressEnter();
 
-        // Then  I should see an error message
+        // Then I should see an error message
         $this->waitUntilISee('#username.form-error');
         $this->assertElementContainsText(
             $this->findByCss('#username + .error.message'),
@@ -81,7 +81,7 @@ class RegisterTest extends PassboltTestCase
         // And I click on the submit button
         $this->click('.button.primary.big');
 
-        // Then  I should see the thank you page
+        // Then I should see the thank you page
         $this->waitUntilISee('.register.thank-you.form.feedback');
 
         // When I got to my mailbox
@@ -90,7 +90,7 @@ class RegisterTest extends PassboltTestCase
         // And follow the link in the registration email.
         $this->followLink('get started');
 
-        // Then  I can see the first setup step page
+        // Then I can see the first setup step page
         $this->waitUntilISee('.plugin-check-wrapper', '/Plugin check/');
         $this->assertUrlMatch('/\/setup\/install\/[a-z0-9\-]{36}\/[a-z0-9\-]{36}/');
         $this->assertElementContainsText(

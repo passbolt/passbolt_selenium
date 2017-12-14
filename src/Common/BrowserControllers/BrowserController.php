@@ -46,7 +46,7 @@ class BrowserController
     /**
      * Callback when new tab is opened
      *
-     * @param  $initialUrl
+     * @param $initialUrl
      * @throws Exception
      */
     public function onNewTabOpened($initialUrl)

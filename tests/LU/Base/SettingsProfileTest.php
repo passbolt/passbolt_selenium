@@ -1,5 +1,18 @@
 <?php
 /**
+ * Passbolt ~ Open source password manager for teams
+ * Copyright (c) Passbolt SARL (https://www.passbolt.com)
+ *
+ * Licensed under GNU Affero General Public License version 3 of the or any later version.
+ * For full copyright and license information, please see the LICENSE.txt
+ * Redistributions of files must retain the above copyright notice.
+ *
+ * @copyright Copyright (c) Passbolt SARL (https://www.passbolt.com)
+ * @license   https://opensource.org/licenses/AGPL-3.0 AGPL License
+ * @link      https://www.passbolt.com Passbolt(tm)
+ * @since     2.0.0
+ */
+/**
  * Feature : Settings Workspace, keys section
  *
  * - As a LU I should be able to see my profile information in the profile section
@@ -10,40 +23,46 @@
  * - As LU I can see validation error messages while editing my profile information.
  * - As LU I can edit my own last name.
  * - As LU I can edit my own first name.
- *
- * @copyright (c) 2017 Passbolt SARL
- * @licence   GNU Affero General Public License http://www.gnu.org/licenses/agpl-3.0.en.html
  */
+namespace Tests\LU\Base;
+
+use App\Actions\WorkspaceActionsTrait;
+use App\Assertions\ImageAssertionsTrait;
+use App\Assertions\WorkspaceAssertionsTrait;
+use App\PassboltTestCase;
+use Data\Fixtures\User;
 use Facebook\WebDriver\Remote\LocalFileDetector;
 
 class SettingsProfileTest extends PassboltTestCase
 {
 
+    use WorkspaceAssertionsTrait;
+    use WorkspaceActionsTrait;
+    use ImageAssertionsTrait;
+
     /**
-     * @group saucelabs
      * Scenario: As a LU I should be able to see my profile information in the profile section
-     * Given        I am logged in as a LU in the settings workspace, profile section
-     * Then         I should see the title Profile
-     * And          I should see my name in the profile information
-     * And          I should see my email in the profile information
-     * And          I should see my role in the profile information
-     * And          I should see my public key id in the profile information
-     * And          I should see my profile creation date in the profile information
-     * And          I should see my profile modification date in the profile information
-     * And          I should see my picture in the profile information
-     * And          I should see my picture in the drop down menu at the top
      *
-     * @throws Exception
+     * Given I am logged in as a LU in the settings workspace, profile section
+     * Then  I should see the title Profile
+     * And   I should see my name in the profile information
+     * And   I should see my email in the profile information
+     * And   I should see my role in the profile information
+     * And   I should see my public key id in the profile information
+     * And   I should see my profile creation date in the profile information
+     * And   I should see my profile modification date in the profile information
+     * And   I should see my picture in the profile information
+     * And   I should see my picture in the drop down menu at the top
+     *
+     * @group LU
+     * @group settings
+     * @group profile
      */
     public function testSettingsProfile() 
     {
         // Given I am Ada
-        $user = User::get('ada');
-        
-
-
         // And I am logged in on the user workspace
-        $this->loginAs($user);
+        $this->loginAs(User::get('ada'));
 
         // Go to user workspace
         $this->gotoWorkspace('settings');
@@ -53,37 +72,37 @@ class SettingsProfileTest extends PassboltTestCase
 
         // I should see the name of the user in the table info
         $this->assertElementContainsText(
-            $this->find('.table-info.profile .name'),
+            $this->findByCss('.table-info.profile .name'),
             'Ada Lovelace'
         );
 
         // I should see the email of the user in the table info
         $this->assertElementContainsText(
-            $this->find('.table-info.profile .email'),
+            $this->findByCss('.table-info.profile .email'),
             'ada@passbolt.com'
         );
 
         // I should see the email of the user in the table info
         $this->assertElementContainsText(
-            $this->find('.table-info.profile .role'),
+            $this->findByCss('.table-info.profile .role'),
             'user'
         );
 
         // I should see the public key id
         $this->assertElementContainsText(
-            $this->find('.table-info.profile .publickey_keyid'),
+            $this->findByCss('.table-info.profile .publickey_keyid'),
             '5D9B054F'
         );
 
         // And I should the created date in the ago format
         $this->assertElementContainsText(
-            $this->find('.table-info.profile .created'),
+            $this->findByCss('.table-info.profile .created'),
             '/(a|an|[0-9]{1,2}) (minute|minutes|hour|hours) ago/'
         );
 
         // And I should see the correct modified date in the ago format
         $this->assertElementContainsText(
-            $this->find('.table-info.profile .modified'),
+            $this->findByCss('.table-info.profile .modified'),
             '/(a|an|[0-9]{1,2}) (minute|minutes|hour|hours) ago/'
         );
 
@@ -100,30 +119,28 @@ class SettingsProfileTest extends PassboltTestCase
     /**
      * Scenario: As a LU I should be able to see and use the breadcrumb of the profile section.
      * Given        I am logged in as LU in the settings workspace, profile section.
-     * Then         I should see a breadcrumb
-     * And          I should see a breadcrumb section containing All users
-     * And          I should see a breadcrumb section containing my name
-     * And          I should see a breadcrumb section containing profile
-     * When         I click All users
-     * Then         I should be on the users workspace
+     * Then  I should see a breadcrumb
+     * And   I should see a breadcrumb section containing All users
+     * And   I should see a breadcrumb section containing my name
+     * And   I should see a breadcrumb section containing profile
+     * When  I click All users
+     * Then  I should be on the users workspace
      *
-     * @throws Exception
+     * @group LU
+     * @group settings
+     * @group profile
      */
     public function testSettingsProfileBreadcrumb() 
     {
         // Given I am Ada
-        $user = User::get('ada');
-        
-
-
         // And I am logged in on the user workspace
-        $this->loginAs($user);
+        $this->loginAs(User::get('ada'));
 
         // Go to user workspace
         $this->gotoWorkspace('settings');
 
         // I should see the breadcrumb.
-        $this->assertVisible('js_wsp_settings_breadcrumb');
+        $this->assertVisibleByCss('js_wsp_settings_breadcrumb');
 
         // I should see an element containing All users in the breadcrumb.
         $this->assertElementContainsText(
@@ -151,36 +168,36 @@ class SettingsProfileTest extends PassboltTestCase
     }
 
     /**
-     * @group saucelabs
      * Scenario: As LU, I should be able to edit my avatar picture.
-     * Given        I am logged in as LU in the settings workspace, profile section.
-     * When         I click on upload a new picture
-     * Then         I should see a dialog window where I can select a file to upload
-     * When         I click on the close button
-     * Then         I should'nt see the dialog anymore
-     * When         I click on upload a new picture
-     * And          I click on the cancel button in the dialog
-     * Then         I should'nt see the dialog anymore
-     * When         I click on upload a new picture
-     * And          I select a file to upload from the dialog
-     * And          I click on save
-     * Then         I should see a success message
-     * And          I should see the selected photo in the profile details
-     * And          I should see the selected photo in the profile drop down
      *
-     * @throws Exception
+     * Given I am logged in as Edith in the settings workspace, profile section.
+     * When  I click on upload a new picture
+     * Then  I should see a dialog window where I can select a file to upload
+     * When  I click on the close button
+     * Then  I should'nt see the dialog anymore
+     * When  I click on upload a new picture
+     * And   I click on the cancel button in the dialog
+     * Then  I should'nt see the dialog anymore
+     * When  I click on upload a new picture
+     * And   I select a file to upload from the dialog
+     * And   I click on save
+     * Then  I should see a success message
+     * And   I should see the selected photo in the profile details
+     * And   I should see the selected photo in the profile drop down
+     *
+     * @group LU
+     * @group settings
+     * @group profile
+     * @group saucelabs
      */
     public function testSettingsProfileAvatarEditOk() 
     {
         // Reset database at the end of test.
         $this->resetDatabaseWhenComplete();
 
-        // Given I am Ada
-        $user = User::get('edith');
-        
-
+        // Given I am Edith
         // And I am logged in on the user workspace
-        $this->loginAs($user);
+        $this->loginAs(User::get('edith'));
 
         // Go to user workspace
         $this->gotoWorkspace('settings');
@@ -225,7 +242,7 @@ class SettingsProfileTest extends PassboltTestCase
 
         $this->click('.dialog input[type=submit]');
 
-        // Then  I should see a success message.
+        // Then I should see a success message.
         $this->assertNotification('app_users_editavatar_success');
 
         // And I should see that the profile picture has been replaced in the profile details.
@@ -239,23 +256,25 @@ class SettingsProfileTest extends PassboltTestCase
         // When I Refresh the window.
         $this->refresh();
 
-        // Then  I should see that the profile drop down image is still there.
+        // Then I should see that the profile drop down image is still there.
         $this->assertImagesAreSame($actualImage, $topProfileImage);
     }
 
     /**
      * Scenario: As LU, I shouldn't be able to upload a wrong file format as my avatar picture
-     * Given        I am logged in as LU in the settings workspace, profile section.
-     * When         I click on upload a new picture
-     * Then         I should see a dialog window where I can select a file to upload
-     * When         I click on upload a new picture
-     * And          I select a file to upload from the dialog, with a wrong file type (.xpi, .pdf)
-     * And          I click on save
-     * Then         I should see an error message
-     * And          I should see that the photo in the profile details is still the same as before
-     * And          I should see that the photo in the profile dropdown is still the same as before
+     * Given I am logged in as LU in the settings workspace, profile section.
+     * When  I click on upload a new picture
+     * Then  I should see a dialog window where I can select a file to upload
+     * When  I click on upload a new picture
+     * And   I select a file to upload from the dialog, with a wrong file type (.xpi, .pdf)
+     * And   I click on save
+     * Then  I should see an error message
+     * And   I should see that the photo in the profile details is still the same as before
+     * And   I should see that the photo in the profile dropdown is still the same as before
      *
-     * @throws Exception
+     * @group LU
+     * @group settings
+     * @group profile
      */
     public function testSettingsProfileAvatarEditErrorFileType() 
     {
@@ -263,11 +282,8 @@ class SettingsProfileTest extends PassboltTestCase
         $this->resetDatabaseWhenComplete();
 
         // Given I am Ada
-        $user = User::get('ada');
-        
-
         // And I am logged in on the user workspace
-        $this->loginAs($user);
+        $this->loginAs(User::get('ada'));
 
         // Go to user workspace
         $this->gotoWorkspace('settings');
@@ -284,7 +300,7 @@ class SettingsProfileTest extends PassboltTestCase
         $filebox->sendKeys(GPG_FIXTURES . DS . 'ada_private.key');
         $this->click('.dialog input[type=submit]');
 
-        // Then  I should see a success message.
+        // Then I should see a success message.
         $this->assertNotification('app_users_editavatar_error');
 
         // And I should see that the profile picture has been replaced in the profile details.
@@ -300,34 +316,37 @@ class SettingsProfileTest extends PassboltTestCase
         // When I Refresh the window.
         $this->refresh();
 
-        // Then  I should see that the profile drop down image is still there.
+        // Then I should see that the profile drop down image is still there.
         $this->assertImagesAreSame($actualImage, $topProfileImage);
     }
 
     /**
-     * @group saucelabs
      * Scenario: As LU, I should be able to edit my profile and see the editable fields.
      *
      * Given I am logged in as LU in the settings workspace, profile section.
-     * And I click on the edit button
+     * And   I click on the edit button
      * Then  I can see the edit profile dialog
-     * And I can see the title is set to "edit profile"
-     * And I can see the close dialog button
-     * And I can see the first name input and label is marked as mandatory
-     * And I can see the user first name in the text input
-     * And I can see the last name input and label is marked as mandatory
-     * And I can see the user last name in the text input
-     * And I can see the username text input and label marked as mandatory
-     * And I can see the username text input is disabled
-     * And I can see the user username in the text input
-     * And I can see the save button
-     * And I can see the cancel button
+     * And   I can see the title is set to "edit profile"
+     * And   I can see the close dialog button
+     * And   I can see the first name input and label is marked as mandatory
+     * And   I can see the user first name in the text input
+     * And   I can see the last name input and label is marked as mandatory
+     * And   I can see the user last name in the text input
+     * And   I can see the username text input and label marked as mandatory
+     * And   I can see the username text input is disabled
+     * And   I can see the user username in the text input
+     * And   I can see the save button
+     * And   I can see the cancel button
+     *
+     * @group LU
+     * @group settings
+     * @group profile
+     * @group saucelabs
      */
     public function testSettingsProfileUpdateView() 
     {
         // Given I am Ada
         $user = User::get('ada');
-        
 
         // And I am logged in on the user workspace
         $this->loginAs($user);
@@ -342,23 +361,23 @@ class SettingsProfileTest extends PassboltTestCase
         $this->waitUntilISee('.dialog', '/Edit profile/');
 
         // And I can see the first name text input and label is marked as mandatory
-        $this->assertVisible('.edit-profile-dialog input[type=text]#js_field_first_name.required');
-        $this->assertVisible('.edit-profile-dialog label[for=js_field_first_name]');
+        $this->assertVisibleByCss('.edit-profile-dialog input[type=text]#js_field_first_name.required');
+        $this->assertVisibleByCss('.edit-profile-dialog label[for=js_field_first_name]');
 
         // And I can see the user first name in the text input
         $this->assertInputValue('js_field_first_name', $user['FirstName']);
 
         // And I can see the last name text input and label is marked as mandatory
-        $this->assertVisible('.edit-profile-dialog input[type=text]#js_field_last_name.required');
-        $this->assertVisible('.edit-profile-dialog label[for=js_field_last_name]');
+        $this->assertVisibleByCss('.edit-profile-dialog input[type=text]#js_field_last_name.required');
+        $this->assertVisibleByCss('.edit-profile-dialog label[for=js_field_last_name]');
 
         // And I can see the user last name in the text input
         $this->assertInputValue('js_field_last_name', $user['LastName']);
 
         // And I can see the last name text input and label is marked as mandatory
-        $this->assertVisible('.edit-profile-dialog input[type=text]#js_field_username.required');
-        $this->assertVisible('.edit-profile-dialog input[type=text][disabled]#js_field_username');
-        $this->assertVisible('.edit-profile-dialog label[for=js_field_username]');
+        $this->assertVisibleByCss('.edit-profile-dialog input[type=text]#js_field_username.required');
+        $this->assertVisibleByCss('.edit-profile-dialog input[type=text][disabled]#js_field_username');
+        $this->assertVisibleByCss('.edit-profile-dialog label[for=js_field_username]');
 
         // Assert I can't see the field role
         $this->assertNotVisible('.edit-profile-dialog #js_field_role_id');
@@ -368,41 +387,42 @@ class SettingsProfileTest extends PassboltTestCase
         $this->assertInputValue('js_field_username', $user['Username']);
 
         // And I can see the save button
-        $this->assertVisible('.edit-profile-dialog input[type=submit].button.primary');
+        $this->assertVisibleByCss('.edit-profile-dialog input[type=submit].button.primary');
 
         // And I can see the cancel button
-        $this->assertVisible('.edit-profile-dialog a.cancel');
+        $this->assertVisibleByCss('.edit-profile-dialog a.cancel');
     }
 
     /**
      * Scenario: As LU I can see validation error messages while editing my profile information
      *
      * Given I am logged in as LU in the settings workspace, profile section.
-     * And I click on the edit button
+     * And   I click on the edit button
      * Then  I can see the edit profile dialog
-     * And I empty the field first name
-     * And I empty the field last name
-     * When I press the enter key on the keyboard
+     * And   I empty the field first name
+     * And   I empty the field last name
+     * When  I press the enter key on the keyboard
      * Then  I see an error message saying that the first name is required
-     * And I see an error message saying that the last name is required
-     * When I enter '&' as a first name
-     * And I enter '&' as a last name
-     * And I click on the save button
+     * And   I see an error message saying that the last name is required
+     * When  I enter '&' as a first name
+     * And   I enter '&' as a last name
+     * And   I click on the save button
      * Then  I see an error message saying that the first name contain invalid characters
-     * And I see an error message saying that the last name contain invalid characters
-     * When I enter 'aa' as a first name
-     * And I enter 'aa' as a last name
+     * And   I see an error message saying that the last name contain invalid characters
+     * When  I enter 'aa' as a first name
+     * And   I enter 'aa' as a last name
      * Then  I see an error message saying that the length of first name should be between x and x characters
-     * And I see an error message saying that the length of last name should be between x and x characters
+     * And   I see an error message saying that the length of last name should be between x and x characters
+     *
+     * @group LU
+     * @group settings
+     * @group profile
      */
     public function testSettingsProfileUpdateCanSeeErrors() 
     {
         // Given I am Ada
-        $user = User::get('ada');
-        
-
         // And I am logged in on the user workspace
-        $this->loginAs($user);
+        $this->loginAs(User::get('ada'));
 
         // Go to user workspace
         $this->gotoWorkspace('settings');
@@ -422,14 +442,14 @@ class SettingsProfileTest extends PassboltTestCase
         // And I press enter
         $this->pressEnter();
 
-        // Then  I see an error message saying that the first name is required
-        $this->assertVisible('#js_field_first_name_feedback.error.message');
+        // Then I see an error message saying that the first name is required
+        $this->assertVisibleByCss('#js_field_first_name_feedback.error.message');
         $this->assertElementContainsText(
             $this->find('js_field_first_name_feedback'), 'is required'
         );
 
-        // Then  I see an error message saying that the last name is required
-        $this->assertVisible('#js_field_last_name_feedback.error.message');
+        // Then I see an error message saying that the last name is required
+        $this->assertVisibleByCss('#js_field_last_name_feedback.error.message');
         $this->assertElementContainsText(
             $this->find('js_field_last_name_feedback'), 'is required'
         );
@@ -443,49 +463,53 @@ class SettingsProfileTest extends PassboltTestCase
         // And I click save
         $this->click('.edit-profile-dialog input[type=submit]');
 
-        // Then  I see an error message saying that the first name contain invalid characters
-        $this->assertVisible('#js_field_first_name_feedback.error.message');
+        // Then I see an error message saying that the first name contain invalid characters
+        $this->assertVisibleByCss('#js_field_first_name_feedback.error.message');
         $this->assertElementContainsText(
             $this->find('js_field_first_name_feedback'), 'should only contain alphabets'
         );
 
-        // Then  I see an error message saying that the first name contain invalid characters
-        $this->assertVisible('#js_field_last_name_feedback.error.message');
+        // Then I see an error message saying that the first name contain invalid characters
+        $this->assertVisibleByCss('#js_field_last_name_feedback.error.message');
         $this->assertElementContainsText(
             $this->find('js_field_last_name_feedback'), 'should only contain alphabets'
         );
 
         // And I enter aa as a first name
         $this->inputText('js_field_first_name', 'a');
-        $this->assertVisible('#js_field_first_name_feedback.error.message');
+        $this->assertVisibleByCss('#js_field_first_name_feedback.error.message');
         $this->assertElementContainsText(
             $this->find('js_field_first_name_feedback'), 'First name should be between'
         );
 
         // And I enter aa as a last name
         $this->inputText('js_field_last_name', 'a');
-        $this->assertVisible('#js_field_last_name_feedback.error.message');
+        $this->assertVisibleByCss('#js_field_last_name_feedback.error.message');
         $this->assertElementContainsText(
             $this->find('js_field_last_name_feedback'), 'Last name should be between'
         );
     }
 
     /**
-     * @group saucelabs
      * Scenario: As LU I can edit my own first name
      *
      * Given I am logged in as LU in the settings workspace, profile section.
-     * And I click on the edit button
+     * And   I click on the edit button
      * Then  I can see the edit profile dialog
-     * When I click on first name input text field
-     * And I empty the first name input text field value
-     * And I enter a new value
-     * And I click save
+     * When  I click on first name input text field
+     * And   I empty the first name input text field value
+     * And   I enter a new value
+     * And   I click save
      * Then  I can see a success notification
-     * And I can see that the user first name has changed in the profile details
-     * When I refresh
-     * And I go to the settings workspace, profile section
-     * Then        I can see the new first name in my name
+     * And   I can see that the user first name has changed in the profile details
+     * When  I refresh
+     * And   I go to the settings workspace, profile section
+     * Then  I can see the new first name in my name
+     *
+     * @group LU
+     * @group settings
+     * @group profile
+     * @group saucelabs
      */
     public function testSettingsProfileUpdateEditFirstName() 
     {
@@ -493,11 +517,8 @@ class SettingsProfileTest extends PassboltTestCase
         $this->resetDatabaseWhenComplete();
 
         // Given I am Ada
-        $user = User::get('ada');
-        
-
         // And I am logged in on the user workspace
-        $this->loginAs($user);
+        $this->loginAs(User::get('ada'));
 
         // Go to settings workspace
         $this->gotoWorkspace('settings');
@@ -519,7 +540,7 @@ class SettingsProfileTest extends PassboltTestCase
         // And I click save
         $this->click('.edit-profile-dialog input[type=submit]');
 
-        // Then  I can see a success notification
+        // Then I can see a success notification
         $this->assertNotification('app_users_edit_success');
 
         // I should see the new first name of the user in the table info
@@ -542,21 +563,25 @@ class SettingsProfileTest extends PassboltTestCase
     }
 
     /**
-     * @group saucelabs
      * Scenario: As LU I can edit my own last name
      *
      * Given I am admin
-     * And I am logged in on the user workspace
-     * And I am editing a user
-     * When I click on last name input text field
-     * And I empty the last name input text field value
-     * And I enter a new value
-     * And I click save
+     * And   I am logged in on the user workspace
+     * And   I am editing a user
+     * When  I click on last name input text field
+     * And   I empty the last name input text field value
+     * And   I enter a new value
+     * And   I click save
      * Then  I can see a success notification
-     * And I can see that the user last name has changed in the profile details
-     * When I refresh
-     * And I go to the settings workspace, profile section
+     * And   I can see that the user last name has changed in the profile details
+     * When  I refresh
+     * And   I go to the settings workspace, profile section
      * Then  I can see the new last name in my name
+     *
+     * @group LU
+     * @group settings
+     * @group profile
+     * @group saucelabs
      */
     public function testSettingsProfileUpdateEditLastName() 
     {
@@ -564,11 +589,8 @@ class SettingsProfileTest extends PassboltTestCase
         $this->resetDatabaseWhenComplete();
 
         // Given I am Ada
-        $user = User::get('ada');
-        
-
         // And I am logged in on the user workspace
-        $this->loginAs($user);
+        $this->loginAs(User::get('ada'));
 
         // Go to settings workspace
         $this->gotoWorkspace('settings');
@@ -590,7 +612,7 @@ class SettingsProfileTest extends PassboltTestCase
         // And I click save
         $this->click('.edit-profile-dialog input[type=submit]');
 
-        // Then  I can see a success notification
+        // Then I can see a success notification
         $this->assertNotification('app_users_edit_success');
 
         // I should see the new first name of the user in the table info

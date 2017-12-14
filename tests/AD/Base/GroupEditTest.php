@@ -26,9 +26,9 @@ class ADGroupEditTest extends PassboltTestCase
      * Scenario: As an administrator I can edit a group using the right click contextual menu
      *
      * Given I am logged in as an administrator and I am on the users workspace
-     * When I click on the contextual menu button of a group on the right
+     * When  I click on the contextual menu button of a group on the right
      * Then  I should see the group contextual menu
-     * And I should see the “Edit group” option
+     * And   I should see the “Edit group” option
      * When        I click on “Edit group”
      * Then        I should see the Edit group dialog
      */
@@ -44,14 +44,14 @@ class ADGroupEditTest extends PassboltTestCase
         $groupId = UuidFactory::uuid('group.id.ergonom');
         $this->click("#group_$groupId .right-cell a");
 
-        // Then  I should see the group contextual menu
-        $this->assertVisible('#js_contextual_menu');
+        // Then I should see the group contextual menu
+        $this->assertVisible('js_contextual_menu');
         $this->assertVisible('js_group_browser_menu_edit');
 
         // When I click on “Edit group”
         $this->click("#js_contextual_menu #js_group_browser_menu_edit a");
 
-        // Then  I should see the Edit group dialog
+        // Then I should see the Edit group dialog
         $this->waitUntilISee('.edit-group-dialog');
     }
 
@@ -59,14 +59,14 @@ class ADGroupEditTest extends PassboltTestCase
      * Scenario: As an administrator I can edit the group name
      *
      * Given I am logged in as administrator
-     * And I am editing a group
+     * And   I am editing a group
      * When        I observe the content of the edit group dialog
      * Then        I should see a “group name” field containing the current group name.
      * When        I modify the group name
-     * And I click on “save”
+     * And   I click on “save”
      * Then        I should see that the dialog disappears
-     * And I should see a confirmation message saying that the group has been edited
-     * And I should see that the group name has been changed in the groups list
+     * And   I should see a confirmation message saying that the group has been edited
+     * And   I should see that the group name has been changed in the groups list
      */
     public function testEditGroupName() 
     {
@@ -104,8 +104,8 @@ class ADGroupEditTest extends PassboltTestCase
      * Scenario: As an administrator I can edit a group from the sidebar
      *
      * Given I am logged in as administrator
-     * And I am on the user workspace
-     * And I should see a “edit” button next to the Information section
+     * And   I am on the user workspace
+     * And   I should see a “edit” button next to the Information section
      * When        I press the “Edit” button
      * Then  I should see the Edit group dialog
      */
@@ -121,14 +121,14 @@ class ADGroupEditTest extends PassboltTestCase
         $group = Group::get(['id' => UuidFactory::uuid('group.id.ergonom')]);
         $this->clickGroup($group['id']);
 
-        // Then  I should see a “edit” button next to the Information section
+        // Then I should see a “edit” button next to the Information section
         $editButtonSelector = '#js_group_details #js_group_details_members #js_edit_members_button';
         $this->waitUntilISee($editButtonSelector);
 
         // When I press the “Edit” button
         $this->click($editButtonSelector);
 
-        // Then  I should see the Edit group dialog
+        // Then I should see the Edit group dialog
         $this->waitUntilISee('.edit-group-dialog');
     }
 
@@ -136,7 +136,7 @@ class ADGroupEditTest extends PassboltTestCase
      * Scenario: As an administrator I cannot add people to a group I am not a group manager of.
      *
      * Given I am logged in as administrator
-     * And I am editing a group that I am not the group manager of
+     * And   I am editing a group that I am not the group manager of
      * When        I observe the content of the edit group dialog
      * Then  I should not see a Add people section
      *  And     I should see a warning message saying that "Only the group manager can add new people to a group."
@@ -160,11 +160,11 @@ class ADGroupEditTest extends PassboltTestCase
     /**
      * Scenario: As an administrator I can't change a group with a name for a name already used by another group.
      * Given that   I am logged in as an administrator
-     * And          I am on the users workspace
-     * When         I edit the "accounting" group
+     * And   I am on the users workspace
+     * When  I edit the "accounting" group
      *  And         I fill 'Board' for name
      *  And         I click on submit
-     * Then         I should see a notification saying that the group couldn't be updated
+     * Then  I should see a notification saying that the group couldn't be updated
      *  And         I should see an error message under the name field
      *  And         I should see that this error message says that the group name is already in use
      */
@@ -185,10 +185,10 @@ class ADGroupEditTest extends PassboltTestCase
         // And I click on “save”
         $this->click('.edit-group-dialog a.button.primary');
 
-        // Then  I should see a success notification message saying the group couldn't be created
+        // Then I should see a success notification message saying the group couldn't be created
         $this->assertNotification('app_groups_add_error');
 
-        // Then  I see an error message saying that the name contain invalid characters
+        // Then I see an error message saying that the name contain invalid characters
         $this->waitUntilISee('#js_field_name_feedback.error.message');
 
         $this->assertElementContainsText(
@@ -200,14 +200,14 @@ class ADGroupEditTest extends PassboltTestCase
      * Scenario: As a user I should receive a notification when I am deleted from a group
      *
      * Given        I am logged in as an admin
-     * And            I am on the users workspace
-     * And            I am editing a group
-     * When         I remove a user from the group
+     * And   I am on the users workspace
+     * And   I am editing a group
+     * When  I remove a user from the group
      *  And         I click on save
-     * Then         I should see a success notification message
-     * When         I access last email sent to the user
-     * Then         I should see the expected email title
-     *     And            I should see the expected email content
+     * Then  I should see a success notification message
+     * When  I access last email sent to the user
+     * Then  I should see the expected email title
+     *     And   I should see the expected email content
      */
     public function testEditGroupDeleteUserEmailNotification() 
     {
@@ -237,7 +237,7 @@ class ADGroupEditTest extends PassboltTestCase
         // When I access last email sent to the group manager.
         $this->getUrl('seleniumtests/showlastemail/' . $grace['Username']);
 
-        // Then  I should see the expected email title
+        // Then I should see the expected email title
         $this->assertMetaTitleContains(sprintf('%s removed you from the group %s', $user['FirstName'], $group['name']));
 
         // And I should see the expected email content
@@ -249,16 +249,16 @@ class ADGroupEditTest extends PassboltTestCase
      * Scenario: As a group member I should receive a notification when my role in the group has changed
      *
      * Given        I am logged in as a group manager
-     * And            I am on the users workspace
-     * And            I am editing a group that I manage
-     * When         I change a user role to group manager
+     * And   I am on the users workspace
+     * And   I am editing a group that I manage
+     * When  I change a user role to group manager
      *  And         I change a user role to member
      *  And         I click on save
-     * Then         I should see a success notification message
+     * Then  I should see a success notification message
      * When         When I access last email sent to the group manager
-     * Then         I should see the expected email
+     * Then  I should see the expected email
      * When         When I access last email sent to the member
-     * Then         I should see the expected email
+     * Then  I should see the expected email
      */
     public function testEditGroupUpdateUserEmailNotification() 
     {
@@ -293,7 +293,7 @@ class ADGroupEditTest extends PassboltTestCase
         // When I access last email sent to the group manager.
         $this->getUrl('seleniumtests/showlastemail/' . $userW['Username']);
 
-        // Then  I should see the expected email
+        // Then I should see the expected email
         $this->assertMetaTitleContains(sprintf('%s updated your group membership', $user['FirstName'], $group['name']));
         $this->assertElementContainsText('bodyTable', 'Group name: ' . $group['name']);
         $this->assertElementContainsText('bodyTable', 'New role: Group manager');
@@ -302,7 +302,7 @@ class ADGroupEditTest extends PassboltTestCase
         // When I access last email sent to the member
         $this->getUrl('seleniumtests/showlastemail/' . $userT['Username']);
 
-        // Then  I should see the expected email
+        // Then I should see the expected email
         $this->assertMetaTitleContains(sprintf('%s updated your group membership', $user['FirstName'], $group['name']));
         $this->assertElementContainsText('bodyTable', 'Group name: ' . $group['name']);
         $this->assertElementContainsText('bodyTable', 'New role: Member');
@@ -313,18 +313,18 @@ class ADGroupEditTest extends PassboltTestCase
      * Scenario: As a group manager I should receive a notification when admin updated the members of a group I manage
      *
      * Given        I am logged in as a group manager
-     * And            I am on the users workspace
-     * And            I am editing a group that I manage
-     * When         I add some users to a group
-     *  And            I remove some users from the group
-     *  And            I update the role of some users
+     * And   I am on the users workspace
+     * And   I am editing a group that I manage
+     * When  I add some users to a group
+     *  And   I remove some users from the group
+     *  And   I update the role of some users
      *  And         I click on save
-     * Then         I should see a success notification message
+     * Then  I should see a success notification message
      * When            I access last email sent to me
      * Then            I shouldn't see any email
-     * When         I access last email sent to the other group manager
-     * Then         I should see the expected email title
-     *     And            I should see the expected email content
+     * When  I access last email sent to the other group manager
+     * Then  I should see the expected email title
+     *     And   I should see the expected email content
      */
     public function testEditGroupGroupUpdatedSummaryEmailNotification() 
     {
@@ -360,7 +360,7 @@ class ADGroupEditTest extends PassboltTestCase
         // When I access last email sent to me
         $this->getUrl('seleniumtests/showlastemail/' . $user['Username']);
 
-        // Then  I shouldn't see any email
+        // Then I shouldn't see any email
         $this->assertElementContainsText('body', 'No email was sent to this user');
 
         // When I access last email sent to the other group managers
@@ -369,7 +369,7 @@ class ADGroupEditTest extends PassboltTestCase
         foreach ($groupManagers as $groupManager) {
             $this->getUrl('seleniumtests/showlastemail/' . $groupManager['Username']);
 
-            // Then  I should see the expected email title
+            // Then I should see the expected email title
             $this->assertMetaTitleContains(sprintf('%s updated members of the group %s', $user['FirstName'], $group['name']));
 
             // And I should see the expected email content
@@ -386,18 +386,18 @@ class ADGroupEditTest extends PassboltTestCase
      * Scenario: As an administrator I can edit the existing group members and promote a group member to group manager
      *
      * Given I am logged in as administrator
-     * And I am on the users workspace
+     * And   I am on the users workspace
      * When I’m editing a group
      * Then  I should see the list of users that are part of this group in the edit group dialog
-     * And I should see next to each user the role that he has in the group in a select box
-     * When I change the role of one simple group member to group manager
+     * And   I should see next to each user the role that he has in the group in a select box
+     * When  I change the role of one simple group member to group manager
      * Then        I should see the member marked as going to be updated next to it
-     * And I should see a warning message saying that the changes will be applied after clicking on save
+     * And   I should see a warning message saying that the changes will be applied after clicking on save
      * When        I click on save
      * Then  I should see a confirmation message saying that the group was edited
      * And         A notification should be sent to the user that was promoted group manager
-     * When I log in as the user who was promoted group manager
-     * And I go to the users workspace
+     * When  I log in as the user who was promoted group manager
+     * And   I go to the users workspace
      * Then  I should be able to add users to the new group that I manage
      */
     public function testEditGroupPromoteMember() 
@@ -414,7 +414,7 @@ class ADGroupEditTest extends PassboltTestCase
         $group = Group::get(['id' => UuidFactory::uuid('group.id.human_resource')]);
         $this->gotoEditGroup($group['id']);
 
-        // Then  I should see the list of users that are part of this group in the edit group dialog
+        // Then I should see the list of users that are part of this group in the edit group dialog
         // And I should see next to each user the role that he has in the group in a select box
         $groupMembers = [
         ['user_id' => User::get('ping'), 'is_admin' => true],
@@ -429,7 +429,7 @@ class ADGroupEditTest extends PassboltTestCase
         // When I change the role of one simple group member to group manager
         $this->editTemporaryGroupUserRole($promotedUser, true);
 
-        // Then  I should see the member marked as going to be updated next to it
+        // Then I should see the member marked as going to be updated next to it
         $this->assertElementContainsText(
             $this->getTemporaryGroupUserElement($promotedUser),
             'Will be updated'
@@ -441,7 +441,7 @@ class ADGroupEditTest extends PassboltTestCase
         // When I click on save
         $this->click('.edit-group-dialog a.button.primary');
 
-        // Then  I should see a confirmation message saying that the group was edited
+        // Then I should see a confirmation message saying that the group was edited
         $this->assertNotification('app_groups_edit_success');
 
         // @todo
@@ -455,7 +455,7 @@ class ADGroupEditTest extends PassboltTestCase
         // And I go to the users workspace
         $this->gotoWorkspace('user');
 
-        // Then  I should be able to add users to the new group that I manage
+        // Then I should be able to add users to the new group that I manage
         $this->gotoEditGroup($group['id']);
         $ada = User::get('ada');
         $this->searchGroupUserToAdd($ada, $promotedUser);
@@ -468,8 +468,8 @@ class ADGroupEditTest extends PassboltTestCase
      * Scenario: As an administrator I cannot change the latest group manager role
      *
      * Given I am logged in as administrator
-     * And I am on the users workspace
-     * And I edit a group
+     * And   I am on the users workspace
+     * And   I edit a group
      * When        I change all the members roles to member (except one admin)
      * Then        I should not be able to change the role of this user
      */
@@ -487,7 +487,7 @@ class ADGroupEditTest extends PassboltTestCase
         // When I change the role of one simple group member to group manager
         $this->editTemporaryGroupUserRole(User::get('thelma'), false);
 
-        // Then  I should not be able to change the role of this user
+        // Then I should not be able to change the role of this user
         $groupUserId = UuidFactory::uuid('group_user.id.human_resource-ping');
         $this->waitUntilDisabled("#js_group_user_is_admin_$groupUserId");
     }
@@ -496,18 +496,18 @@ class ADGroupEditTest extends PassboltTestCase
      * Scenario: As an administrator I can remove a user from a group I manage using the edit group dialog
      *
      * Given I am logged in as administrator
-     * And I am editing a group I manager
-     * When I observe the content of the edit group dialog
-     * And I should see that next to each group member there is a cross icon to remove the membership
-     * When I click on the cross next to the user I want to remove
+     * And   I am editing a group I manager
+     * When  I observe the content of the edit group dialog
+     * And   I should see that next to each group member there is a cross icon to remove the membership
+     * When  I click on the cross next to the user I want to remove
      * Then  I should see that the user disappears from the list of group members
-     * And I should see a warning message saying that the changes will be applied only after save
-     * When I press the “save” button
+     * And   I should see a warning message saying that the changes will be applied only after save
+     * When  I press the “save” button
      * Then  I should see that the dialog disappears
-     * And I should see a confirmation message
-     * When I log in as the user that was removed from the group
-     * And I go to the users workspace
-     * And I filter by the group the user has been removed
+     * And   I should see a confirmation message
+     * When  I log in as the user that was removed from the group
+     * And   I go to the users workspace
+     * And   I filter by the group the user has been removed
      * Then  I filter by the group the user has been removed
      */
     public function testRemoveGroupMember() 
@@ -526,13 +526,13 @@ class ADGroupEditTest extends PassboltTestCase
 
         // When I observe the content of the edit group dialog
         // And I should see that next to each group member there is a cross icon to remove the membership
-        $this->assertVisible('.js_group_user_delete');
+        $this->assertVisibleByCss('.js_group_user_delete');
 
         // When I click on the cross next to the user I want to remove
         $groupUserId = UuidFactory::uuid('group_user.id.human_resource-wang');
         $this->click("#js_group_user_delete_$groupUserId");
 
-        // Then  I should see that the user disappears from the list of group members
+        // Then I should see that the user disappears from the list of group members
         $this->assertNotVisible("#$groupUserId");
 
         // And I should see a warning message saying that the changes will be applied only after save
@@ -558,7 +558,7 @@ class ADGroupEditTest extends PassboltTestCase
         // And I filter by the group the user has been removed
         $this->clickGroup($group['id']);
 
-        // Then  I filter by the group the user has been removed
+        // Then I filter by the group the user has been removed
         $this->assertElementNotContainText(
             $this->findByCss('#js_wsp_users_browser .tableview-content'),
             $removedUser['FirstName'] . ' ' . $removedUser['LastName']

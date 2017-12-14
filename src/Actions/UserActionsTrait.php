@@ -52,8 +52,7 @@ trait UserActionsTrait
     /**
      * Click on a user in the user workspace
      *
-     * @param  array $user array containing either id, or first name and last name or directly a uuid
-     * @throws Exception if not on the right workspace
+     * @param mixed $user array containing either id, or first name and last name or directly a uuid
      */
     public function clickUser($user) 
     {
@@ -77,8 +76,6 @@ trait UserActionsTrait
      * Right click on a user with a given id.
      *
      * @param string $id
-     *
-     * @throws Exception
      */
     public function rightClickUser($id) 
     {
@@ -102,8 +99,7 @@ trait UserActionsTrait
     /**
      * Goto the edit user dialog for a given user id
      *
-     * @param  $id string
-     * @throws Exception
+     * @param $id string
      */
     public function gotoEditUser($id) 
     {
@@ -118,14 +114,13 @@ trait UserActionsTrait
         $this->clickUser($id);
         $this->click('js_user_wk_menu_edition_button');
         $this->waitCompletion();
-        $this->assertVisible('.edit-user-dialog');
+        $this->assertVisibleByCss('.edit-user-dialog');
     }
 
     /**
      * Edit a user helper
      *
-     * @param  $user
-     * @throws Exception
+     * @param $user
      */
     public function editUser($user) 
     {
@@ -141,7 +136,7 @@ trait UserActionsTrait
             // Get current state of admin
             $el = null;
             try {
-                $el = $this->find('#js_field_role_id .role-admin input[type=checkbox][checked=checked]');
+                $el = $this->findByCss('#js_field_role_id .role-admin input[type=checkbox][checked=checked]');
             }
             catch(Exception $e) {
             }

@@ -64,7 +64,6 @@ class Gpgkey {
 	 * Return one gpg key based on the given conditions
 	 * @param array $conditions
 	 * @return array $resource
-	 * @throws Exception
 	 */
 	static function get($conditions) {
 		$gpg = self::_get();
@@ -75,8 +74,8 @@ class Gpgkey {
 		}
 
 		if ($g === false) {
-			throw new Exception('a gpg key fixture could not be found for these conditions, consider adding one');
-		}
+		    \PHPUnit_Framework_Assert::fail('a gpg key fixture could not be found for these conditions, consider adding one');
+        }
 		return $g;
 	}
 

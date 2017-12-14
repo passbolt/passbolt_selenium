@@ -46,9 +46,8 @@ trait GroupActionsTrait
     /**
      * Search a user to add to a group.
      *
-     * @param  $userToAdd The user to add. See the User helper class.
-     * @param  $user The user who request the add.
-     * @throws Exception
+     * @param array $userToAdd the user to add. See the User helper class.
+     * @param array $user the user who request the add.
      */
     public function searchGroupUserToAdd($userToAdd, $user) 
     {
@@ -81,7 +80,7 @@ trait GroupActionsTrait
     /**
      * Add a temporary user to a gtoup.
      *
-     * @param  $user
+     * @param $user
      * @return HTML element added in the list
      */
     public function addTemporaryGroupUser($user) 
@@ -103,8 +102,8 @@ trait GroupActionsTrait
     /**
      * Edit temporary a group user role.
      *
-     * @param  $user
-     * @param  $isAdmin
+     * @param $user
+     * @param $isAdmin
      * @return HTML element added in the list
      */
     public function editTemporaryGroupUserRole($user, $isAdmin) 
@@ -117,7 +116,7 @@ trait GroupActionsTrait
     /**
      * Get temporary group user properties
      *
-     * @param  $user
+     * @param $user
      * @return array $properties
      *  bool role_disabled
      *  bool delete_disabled
@@ -144,8 +143,7 @@ trait GroupActionsTrait
     /**
      * Get a temporary user element from the list
      *
-     * @param  $user
-     * @throws Exception
+     * @param $user
      * @return Object $rowElement
      */
     public function getTemporaryGroupUserElement($user) 
@@ -264,7 +262,7 @@ trait GroupActionsTrait
             $this->click("#js_contextual_menu #js_group_browser_menu_edit a");
             $this->waitUntilISee('.edit-group-dialog');
             $this->waitUntilISee('#js_edit_group.ready');
-            $this->find('#passbolt-iframe-group-edit');
+            $this->findById('#passbolt-iframe-group-edit');
             $this->waitUntilISee('#passbolt-iframe-group-edit.ready');
         }
     }

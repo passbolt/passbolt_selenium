@@ -14,9 +14,9 @@ class GMGroupCreateTest extends PassboltTestCase
     /**
      * Scenario: As a group manager I shouldn't be able to create groups from the users workspace
      * Given        I am a group manager
-     * And          I am logged in
-     * When         I go to user workspace
-     * Then         I shouldn't see a button create in the users workspace
+     * And   I am logged in
+     * When  I go to user workspace
+     * Then  I shouldn't see a button create in the users workspace
      */
     public function testCantCreateGroup() 
     {
@@ -30,7 +30,7 @@ class GMGroupCreateTest extends PassboltTestCase
         // Go to user workspace
         $this->gotoWorkspace('user');
 
-        // Then  I shouldn't see the create button
+        // Then I shouldn't see the create button
         $this->assertElementNotContainText(
             $this->findByCss('.main-action-wrapper'),
             'create'

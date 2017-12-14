@@ -1,27 +1,53 @@
 <?php
 /**
- * Bug PASSBOLT-2031 - Regression test
+ * Passbolt ~ Open source password manager for teams
+ * Copyright (c) Passbolt SARL (https://www.passbolt.com)
  *
- * @copyright (c) 2017 Passbolt SARL
- * @licence   GNU Affero General Public License http://www.gnu.org/licenses/agpl-3.0.en.html
+ * Licensed under GNU Affero General Public License version 3 of the or any later version.
+ * For full copyright and license information, please see the LICENSE.txt
+ * Redistributions of files must retain the above copyright notice.
+ *
+ * @copyright Copyright (c) Passbolt SARL (https://www.passbolt.com)
+ * @license   https://opensource.org/licenses/AGPL-3.0 AGPL License
+ * @link      https://www.passbolt.com Passbolt(tm)
+ * @since     2.0.0
  */
-use Facebook\WebDriver\WebDriverBy;
+/**
+ * Bug PASSBOLT-2031 - Regression test
+ */
+namespace Tests\LU\Regressions;
+
+use App\Actions\MasterPasswordActionsTrait;
+use App\Actions\ShareActionsTrait;
+use App\Assertions\MasterPasswordAssertionsTrait;
+use App\Assertions\PermissionAssertionsTrait;
+use App\PassboltTestCase;
+use Data\Fixtures\User;
+use Data\Fixtures\Resource;
+use App\Lib\UuidFactory;
 
 class PASSBOLT2031 extends PassboltTestCase
 {
+    use MasterPasswordAssertionsTrait;
+    use MasterPasswordActionsTrait;
+    use PermissionAssertionsTrait;
+    use ShareActionsTrait;
 
     /**
      * Scenario: As a user I can share a password with multiple users
      *
      * Given I am Carol
-     * And I am logged in on the password workspace
-     * When I go to the sharing dialog of a password I own
-     * And I give read access to multiple users/groups
-     * And I click on the save button
-     * And I see the passphrase dialog
-     * And I enter the passphrase and click submit
+     * And   I am logged in on the password workspace
+     * When  I go to the sharing dialog of a password I own
+     * And   I give read access to multiple users/groups
+     * And   I click on the save button
+     * And   I see the passphrase dialog
+     * And   I enter the passphrase and click submit
      * Then  I wait until I don't see  the encryption dialog anymore.
-     * And I can see the new permissions in sidebar
+     * And   I can see the new permissions in sidebar
+     *
+     * @group LU
+     * @group regression
      */
     public function testShareWithMultipleUsers() 
     {
@@ -30,7 +56,6 @@ class PASSBOLT2031 extends PassboltTestCase
 
         // Given I am Carol
         $user = User::get('ada');
-
 
         // And I am logged in on the password workspace
         $this->loginAs($user);
@@ -59,7 +84,7 @@ class PASSBOLT2031 extends PassboltTestCase
         // And I enter the passphrase and click submit
         $this->enterMasterPassword($user['MasterPassword']);
 
-        // Then  I wait until I don't see  the encryption dialog anymore.
+        // Then I wait until I don't see  the encryption dialog anymore.
         $this->waitUntilIDontSee('#passbolt-iframe-progress-dialog');
         $this->waitCompletion();
 

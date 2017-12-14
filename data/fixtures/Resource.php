@@ -217,13 +217,12 @@ class Resource {
      * Return one resource based on the given conditions
      * @param array $conditions
      * @return array $resource
-     * @throws exception
      */
     static function get($conditions) {
 
         // a user must always be specified
         if (!isset($conditions['user'])) {
-            throw new Exception('a user must be specified to get access to a resource fixture');
+            \PHPUnit_Framework_Assert::fail('A user must be specified to get access to a resource fixture');
         }
         $r = self::_getByUsername($conditions['user']);
 
@@ -240,7 +239,7 @@ class Resource {
         }
 
         if ($r === false) {
-            throw new Exception('a resource fixture could not be found for these conditions, consider adding one');
+            \PHPUnit_Framework_Assert::fail('A resource fixture could not be found for these conditions, consider adding one');
         }
         return $r;
     }
@@ -249,12 +248,11 @@ class Resource {
      * Get All the resources for a given user
      * @param $conditions array
      * @return array
-     * @throws Exception missing user
      */
     static function getAll($conditions) {
         // a user must always be specified
         if (!isset($conditions['user'])) {
-            throw new Exception('a user must be specified to get access to a resource fixture');
+            \PHPUnit_Framework_Assert::fail('A user must be specified to get access to a resource fixture');
         }
 	    $r = self::_getByUsername($conditions['user']);
 	    if (isset($conditions['return_deny']) && $conditions['return_deny'] == false) {

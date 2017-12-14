@@ -1,38 +1,56 @@
 <?php
 /**
+ * Passbolt ~ Open source password manager for teams
+ * Copyright (c) Passbolt SARL (https://www.passbolt.com)
+ *
+ * Licensed under GNU Affero General Public License version 3 of the or any later version.
+ * For full copyright and license information, please see the LICENSE.txt
+ * Redistributions of files must retain the above copyright notice.
+ *
+ * @copyright Copyright (c) Passbolt SARL (https://www.passbolt.com)
+ * @license   https://opensource.org/licenses/AGPL-3.0 AGPL License
+ * @link      https://www.passbolt.com Passbolt(tm)
+ * @since     2.0.0
+ */
+/**
  * Feature : Settings Workspace, keys section
  *
  * - As a LU I should be able to see my keys info in the settings workspace, keys section
  * - As a LU I should be able to download my public and private key
- *
- * @copyright (c) 2017 Passbolt SARL
- * @licence   GNU Affero General Public License http://www.gnu.org/licenses/agpl-3.0.en.html
  */
+namespace Tests\LU\Base;
+
+use App\Actions\WorkspaceActionsTrait;
+use App\Assertions\WorkspaceAssertionsTrait;
+use App\PassboltTestCase;
+use Data\Fixtures\User;
 
 class SettingsKeyTest extends PassboltTestCase
 {
+    use WorkspaceActionsTrait;
+    use WorkspaceAssertionsTrait;
 
     /**
-     * @group saucelabs
-     * Scenario  :  As a LU I should be able to see my keys info in the settings workspace, keys section
+     * Scenario: As a LU I should be able to see my keys info in the settings workspace, keys section
      * Given I am logged in as LU on the settings workspace
-     * And I click on Manage your keys menu
+     * And   I click on Manage your keys menu
      * Then  I should see the keys section
-     * And      The menu "Manage your keys should be selected"
-     * And      The breadcrumb should be in this order : 'All users', 'Ada Lovelace', 'Keys management'
-     * And I should see a button Download public key
-     * And I should see a button Download private key
-     * And I should see all the key information (uid, fingerprint, etc)
-     * And I should see a textarea with the public key unarmored inside
+     * And   The menu "Manage your keys should be selected"
+     * And   The breadcrumb should be in this order : 'All users', 'Ada Lovelace', 'Keys management'
+     * And   I should see a button Download public key
+     * And   I should see a button Download private key
+     * And   I should see all the key information (uid, fingerprint, etc)
+     * And   I should see a textarea with the public key unarmored inside
      *
-     * @throws Exception
+     * @group saucelabs
+     * @group LU
+     * @group settings
+     * @group key
      */
     public function testSettingsKeyInfo() 
     {
         // Given I am Ada
         $user = User::get('ada');
-        
-
 
         // And I am logged in on the user workspace
         $this->loginAs($user);
@@ -59,10 +77,10 @@ class SettingsKeyTest extends PassboltTestCase
         );
 
         // I should see a download public key button.
-        $this->assertVisible('js_settings_wk_menu_download_public_key');
+        $this->assertVisibleByCss('js_settings_wk_menu_download_public_key');
 
         // I should see a download private key button.
-        $this->assertVisible('js_settings_wk_menu_download_private_key');
+        $this->assertVisibleByCss('js_settings_wk_menu_download_private_key');
 
         // I should see the uid of the key.
         $this->assertElementContainsText(
@@ -109,27 +127,26 @@ class SettingsKeyTest extends PassboltTestCase
     }
 
     /**
-     * @group saucelabs
      * Scenario: As a LU I should be able to download my public and private key
-     * Given I am logged in as LU on the settings workspace, keys section
-     * And I click on download public key button
-     * Then     the public key should download on my computer
-     * And      the downloaded file should contain the corresponding public key
-     * When I click on download private key button
-     * Then     the private key should download on my computer
-     * And      the downloaded file should contain the corresponding private key
      *
-     * @throws Exception
+     * Given I am logged in as LU on the settings workspace, keys section
+     * And   I click on download public key button
+     * Then  the public key should download on my computer
+     * And   the downloaded file should contain the corresponding public key
+     * When  I click on download private key button
+     * Then  the private key should download on my computer
+     * And   the downloaded file should contain the corresponding private key
+     *
+     * @group LU
+     * @group settings
+     * @group key
+     * @group saucelabs
      */
     public function testSettingsKeyDownload() 
     {
         // Given I am Ada
-        $user = User::get('ada');
-        
-
-
         // And I am logged in on the user workspace
-        $this->loginAs($user);
+        $this->loginAs(User::get('ada'));
 
         // Go to user workspace
         $this->gotoWorkspace('settings');
@@ -143,11 +160,9 @@ class SettingsKeyTest extends PassboltTestCase
         // Download public key file.
         $this->click('js_settings_wk_menu_download_public_key');
 
-        //		// Compare the downloaded file with the key of the user.
-        //		$md5Downloaded = md5(file_get_contents(SELENIUM_TMP . DS . 'passbolt_public.asc'));
-        //		$md5ActualKey = md5(file_get_contents(GPG_FIXTURES . DS . $user['PublicKey']));
-
+        // Compare the downloaded file with the key of the user.
+        // $md5Downloaded = md5(file_get_contents(SELENIUM_TMP . DS . 'passbolt_public.asc'));
+        // $md5ActualKey = md5(file_get_contents(GPG_FIXTURES . DS . $user['PublicKey']));
         // TODO : #PASSBOLT-1253 modify docker container so mounted directories are writeable.
     }
-
 }

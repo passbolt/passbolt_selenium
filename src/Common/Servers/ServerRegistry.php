@@ -99,7 +99,7 @@ class ServerRegistry
     /**
      * Release an instance. (in case of parallelization).
      *
-     * @param  string $type passbolt|selenium
+     * @param string $type passbolt|selenium
      * @throws Exception if it cannot release the instance
      */
     static public function releaseInstance($type)

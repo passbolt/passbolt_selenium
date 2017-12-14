@@ -11,7 +11,7 @@ class Color
     /**
      * Convert a string like rgba(255, 58, 58, 1) to his hexadecimal value e.g #FF3A3A
      *
-     * @param  string $rgba value
+     * @param string $rgba value
      * @return false|string if successful
      */
     static public function rgbaToHex($rgba) 
@@ -29,8 +29,8 @@ class Color
     /**
      * Convert a rgb value like rgb(255, 58, 58) to its rgba value e.g rgba(255, 58, 58, 1)
      *
-     * @param  string $rgb     value
-     * @param  int    $opacity opacity
+     * @param string $rgb     value
+     * @param int    $opacity opacity
      * @return false|string if successful
      */
     static public function rgbToRgba($rgb, $opacity = 1) 
@@ -50,8 +50,8 @@ class Color
     /**
      * Convert a hexadecimal color value like #FF3A3A to its rgba value e.g rgba(255, 58, 58, 1)
      *
-     * @param  string $hex     value
-     * @param  int    $opacity opacity
+     * @param string $hex     value
+     * @param int    $opacity opacity
      * @return false|string if successful
      */
     static public function hexToRgba($hex, $opacity = 1) 

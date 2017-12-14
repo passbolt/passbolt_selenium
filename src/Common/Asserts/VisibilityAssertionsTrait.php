@@ -17,6 +17,7 @@ namespace App\Common\Asserts;
 use Facebook\WebDriver\Remote\RemoteWebDriver;
 use Facebook\WebDriver\Exception\NoSuchElementException;
 use Facebook\WebDriver\WebDriverBy;
+use PHP_CodeSniffer\Tokenizers\PHP;
 use PHPUnit_Framework_Assert;
 
 trait VisibilityAssertionsTrait
@@ -27,7 +28,7 @@ trait VisibilityAssertionsTrait
     /**
      * Tell if an element is visible
      *
-     * @param  string $cssSelector selector
+     * @param string $cssSelector selector
      * @return boolean
      */
     public function isVisible($cssSelector)
@@ -43,7 +44,7 @@ trait VisibilityAssertionsTrait
     /**
      * Tell if an element is not visible or not present
      *
-     * @param  string $cssSelector
+     * @param string $cssSelector
      * @return boolean
      */
     public function isNotVisible($cssSelector)
@@ -61,13 +62,37 @@ trait VisibilityAssertionsTrait
      *
      * @param $id
      */
-    public function assertVisible($id, $message = '')
+    public function assertVisibleByCss($id, $message = '')
     {
         if (empty($message)) {
             $message = 'Failed to assert that the element ' . $id . ' is visible';
         }
         PHPUnit_Framework_Assert::assertTrue(
             $this->isVisible($id),
+            $message
+        );
+    }
+
+    /**
+     * Assert if an element identified via its id is visible
+     *
+     * @param $id
+     */
+    public function assertVisible($id, $message = '')
+    {
+        if (empty($message)) {
+            $message = 'Failed to assert that the element ' . $id . ' is visible';
+        }
+        try {
+            $element = $this->getDriver()->findElement(WebDriverBy::id($id));
+        } catch (NoSuchElementException $exception) {
+            PHPUnit_Framework_Assert::fail($message);
+        }
+        if (!$element->isDisplayed()) {
+            PHPUnit_Framework_Assert::fail($message);
+        }
+        PHPUnit_Framework_Assert::assertTrue(
+            $element->isDisplayed(),
             $message
         );
     }

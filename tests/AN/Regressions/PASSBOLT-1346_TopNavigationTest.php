@@ -26,7 +26,7 @@ class PASSBOLT1346 extends PassboltTestCase
     /**
      * Scenario: As AN, passbolt logo at top left should not point to passbolt.com, but to the app url
      * Given I am on the home page
-     * When I click on the logo on the top right corner
+     * When  I click on the logo on the top right corner
      * Then        I go to the login page
      * When        I click on the home link
      * Then        I go to the login page

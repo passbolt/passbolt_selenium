@@ -27,6 +27,8 @@ use App\Assertions\GroupAssertionsTrait;
 use App\PassboltTestCase;
 use Data\Fixtures\User;
 use Data\Fixtures\Group;
+use App\Lib\UuidFactory;
+use Facebook\WebDriver\WebDriverBy;
 
 class GroupViewTest extends PassboltTestCase
 {
@@ -51,6 +53,7 @@ class GroupViewTest extends PassboltTestCase
      * @group LU
      * @group group
      * @group view
+     * @group broken
      */
     function testViewGroupInfoFromSidebar() 
     {
@@ -66,7 +69,7 @@ class GroupViewTest extends PassboltTestCase
         $group = Group::get(['id' => UuidFactory::uuid('group.id.accounting')]);
         $this->clickGroup($group['id']);
 
-        // Then  I should see the sidebar opening on the right hand side
+        // Then I should see the sidebar opening on the right hand side
         $this->waitUntilISee('#js_group_details.ready');
 
         // And I should see a group information section
@@ -74,7 +77,7 @@ class GroupViewTest extends PassboltTestCase
             '#js_group_details .header',
             $group['name']
         );
-        $this->assertVisible('#js_group_details .detailed-information');
+        $this->assertVisibleByCss('#js_group_details .detailed-information');
 
         // And I should see the created date
         $selector = '#js_group_details .detailed-information li.created .value';
@@ -113,6 +116,7 @@ class GroupViewTest extends PassboltTestCase
      * @group LU
      * @group group
      * @group view
+     * @group broken
      */
     function testViewGroupMemberFromSidebar() 
     {

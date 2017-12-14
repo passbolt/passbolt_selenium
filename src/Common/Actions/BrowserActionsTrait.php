@@ -129,7 +129,7 @@ trait BrowserActionsTrait
     /**
      * Open a new window.
      *
-     * @param  string $url url
+     * @param string $url url
      * @return object WindowHandle
      */
     public function openNewWindow($url = '')
@@ -228,7 +228,7 @@ trait BrowserActionsTrait
      * PASSBOLT-2263 close and restore doesn't work with the latest chrome driver
      * PASSBOLT-2419 close and restore doesn't work with the latest firefox driver
      *
-     * @param  array $options (optional)
+     * @param array $options (optional)
      *                        waitBeforeRestore : Should the tab be restored after a sleep in seconds
      * @return void
      */

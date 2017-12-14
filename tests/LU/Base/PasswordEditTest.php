@@ -1,5 +1,18 @@
 <?php
 /**
+ * Passbolt ~ Open source password manager for teams
+ * Copyright (c) Passbolt SARL (https://www.passbolt.com)
+ *
+ * Licensed under GNU Affero General Public License version 3 of the or any later version.
+ * For full copyright and license information, please see the LICENSE.txt
+ * Redistributions of files must retain the above copyright notice.
+ *
+ * @copyright Copyright (c) Passbolt SARL (https://www.passbolt.com)
+ * @license   https://opensource.org/licenses/AGPL-3.0 AGPL License
+ * @link      https://www.passbolt.com Passbolt(tm)
+ * @since     2.0.0
+ */
+/**
  * Feature: As a user I can edit a password
  *
  * Scenarios:
@@ -22,79 +35,103 @@
  * As LU I can use passbolt on multiple windows and edit password
  * As LU I should be able to edit a password after I restart the browser
  * As LU I should be able to edit a password after I close and restore the passbolt tab
- *
- * @copyright (c) 2017 Passbolt SARL
- * @licence   GNU Affero General Public License http://www.gnu.org/licenses/agpl-3.0.en.html
  */
+namespace Tests\LU\Base;
+
+use App\Actions\ConfirmationDialogActionsTrait;
+use App\Actions\MasterPasswordActionsTrait;
+use App\Actions\PasswordActionsTrait;
+use App\Actions\WorkspaceActionsTrait;
+use App\Assertions\ClipboardAssertions;
+use App\Assertions\ConfirmationDialogAssertionsTrait;
+use App\Assertions\MasterPasswordAssertionsTrait;
+use App\Assertions\PasswordAssertionsTrait;
+use App\Assertions\WorkspaceAssertionsTrait;
+use App\PassboltTestCase;
+use Data\Fixtures\User;
+use Data\Fixtures\Resource;
+
 class PasswordEditTest extends PassboltTestCase
 {
 
+    use WorkspaceActionsTrait;
+    use PasswordActionsTrait;
+    use MasterPasswordActionsTrait;
+    use MasterPasswordAssertionsTrait;
+    use ConfirmationDialogActionsTrait;
+    use ConfirmationDialogAssertionsTrait;
+    use ClipboardAssertions;
+    use WorkspaceAssertionsTrait;
+    use PasswordAssertionsTrait;
+
     /**
-     * @group saucelabs
      * Scenario: As a user I can edit a password using the edit button in the action bar
      *
      * Given I am Ada
-     * And I am logged in on the password workspace
+     * And   I am logged in on the password workspace
      * Then  I can see the edit password button is disabled
-     * When I click on a password I own
+     * When  I click on a password I own
      * Then  I can see the edit button is enabled
-     * When I click on the edit button
+     * When  I click on the edit button
      * Then  I can see the edit password dialog
+     *
+     * @group LU
+     * @group password
+     * @group edit
+     * @group saucelabs
      */
     public function testEditPasswordButton() 
     {
         // Given I am Ada
-        $user = User::get('ada');
-        
-
         // And I am logged in on the password workspace
-        $this->loginAs($user);
+        $this->loginAs(User::get('ada'));
 
-        // Then  I can see the edit password button is disabled
-        $this->assertVisible('js_wk_menu_edition_button');
-        $this->assertVisible('#js_wk_menu_edition_button.disabled');
+        // Then I can see the edit password button is disabled
+        $this->assertVisibleByCss('js_wk_menu_edition_button');
+        $this->assertVisibleByCss('#js_wk_menu_edition_button.disabled');
 
         // When I click on a password I own
         $resource = Resource::get(array('user' => 'ada', 'permission' => 'owner'));
         $this->clickPassword($resource['id']);
 
-        // Then  I can see the edit button is enabled
+        // Then I can see the edit button is enabled
         $this->assertNotVisible('#js_wk_menu_edition_button.disabled');
-        $this->assertVisible('js_wk_menu_edition_button');
+        $this->assertVisibleByCss('js_wk_menu_edition_button');
 
         // When I click on the edit button
         $this->click('js_wk_menu_edition_button');
 
-        // Then  I can see the edit password dialog
-        $this->assertVisible('.edit-password-dialog');
+        // Then I can see the edit password dialog
+        $this->assertVisibleByCss('.edit-password-dialog');
     }
 
     /**
      * Scenario: As a user I can edit a password using the right click contextual menu
      *
      * Given I am Ada
-     * And I am logged in on the password workspace
-     * When I right click on a password I own
+     * And   I am logged in on the password workspace
+     * When  I right click on a password I own
      * Then  I can see the contextual menu
-     * And I can see the the edit option is enabled
-     * When I click on the edit link in the contextual menu
+     * And   I can see the the edit option is enabled
+     * When  I click on the edit link in the contextual menu
      * Then  I can see the edit password dialog
+     *
+     * @group LU
+     * @group password
+     * @group edit
      */
     public function testEditPasswordRightClick() 
     {
         // Given I am Ada
-        $user = User::get('ada');
-        
-
         // And I am logged in on the password workspace
-        $this->loginAs($user);
+        $this->loginAs(User::get('ada'));
 
         // When I right click on a password I own
         $resource = Resource::get(array('user' => 'ada', 'permission' => 'owner'));
         $this->rightClickPassword($resource['id']);
 
-        // Then  I can see the contextual menu
-        $this->assertVisible('js_contextual_menu');
+        // Then I can see the contextual menu
+        $this->assertVisibleByCss('js_contextual_menu');
 
         // And I can see the the edit option is enabled
         // @TODO PASSBOLT-1028
@@ -102,33 +139,34 @@ class PasswordEditTest extends PassboltTestCase
         // When I click on the edit link in the contextual menu
         $this->click('#js_password_browser_menu_edit a');
 
-        // Then  I can see the edit password dialog
-        $this->assertVisible('.edit-password-dialog');
+        // Then I can see the edit password dialog
+        $this->assertVisibleByCss('.edit-password-dialog');
     }
 
     /**
      * Scenario: As a user I can open close the edit password dialog
      *
      * Given I am Ada
-     * And I am logged in on the password workspace
-     * And I am editing a password I own
-     * When I click on the cancel button
+     * And   I am logged in on the password workspace
+     * And   I am editing a password I own
+     * When  I click on the cancel button
      * Then  I do not see the edit password dialog
-     * When I reopen the edit password dialog
-     * And I click on the close dialog button (in the top right corner)
+     * When  I reopen the edit password dialog
+     * And   I click on the close dialog button (in the top right corner)
      * Then  I do not see the edit password dialog
-     * When I reopen the edit password dialog
-     * And I press the escape button
+     * When  I reopen the edit password dialog
+     * And   I press the escape button
      * Then  I do not see the edit password dialog
+     *
+     * @group LU
+     * @group password
+     * @group edit
      */
     public function testEditPasswordDialogOpenClose() 
     {
         // Given I am Ada
-        $user = User::get('ada');
-        
-
         // And I am logged in on the password workspace
-        $this->loginAs($user);
+        $this->loginAs(User::get('ada'));
 
         // And I am editing a password I own
         $resource = Resource::get(array('user' => 'ada', 'permission' => 'owner'));
@@ -138,29 +176,29 @@ class PasswordEditTest extends PassboltTestCase
         // When I click on the cancel button
         $this->click('.edit-password-dialog .js-dialog-cancel');
 
-        // Then  I do not see the edit password dialog
+        // Then I do not see the edit password dialog
         $this->assertNotVisible('.edit-password-dialog');
 
         // When I reopen the edit password dialog
         $this->click('js_wk_menu_edition_button');
         $this->waitCompletion();
-        $this->assertVisible('.edit-password-dialog');
+        $this->assertVisibleByCss('.edit-password-dialog');
 
         // And I click on the close dialog button (in the top right corner)
         $this->click('.edit-password-dialog .dialog-close');
 
-        // Then  I do not see the edit password dialog
+        // Then I do not see the edit password dialog
         $this->assertNotVisible('.edit-password-dialog');
 
         // When I reopen the edit password dialog
         $this->click('js_wk_menu_edition_button');
         $this->waitCompletion();
-        $this->assertVisible('.edit-password-dialog');
+        $this->assertVisibleByCss('.edit-password-dialog');
 
         // And I press the escape button
         $this->pressEscape();
 
-        // Then  I do not see the edit password dialog
+        // Then I do not see the edit password dialog
         $this->assertTrue($this->isNotVisible('.edit-password-dialog'));
     }
 
@@ -168,51 +206,53 @@ class PasswordEditTest extends PassboltTestCase
      * Scenario: As a user I can see the edit password dialog
      *
      * Given I am Ada
-     * And I am logged on the password workspace
-     * And I am editing a password I own
+     * And   I am logged on the password workspace
+     * And   I am editing a password I own
      * Then  I can see the edit password dialog
-     * And I can see the title is set to "edit password"
-     * And I can see the name of the resource after the title
-     * And I can see the close dialog button
-     * And I can see the edit tab is selected
-     * And I can see the share tab is not selected
-     * And I can see the name input and label is marked as mandatory
-     * And I can see the resource name in the text input
-     * And I can see the url text input and label
-     * And I can see the resource url in the text input
-     * And I can see the username text input and label marked as mandatory
-     * And I can see the resource ursername in the text input
-     * And I can see the password iframe
-     * And I can see the iframe label
-     * When I switch to the password iframe
-     * And I can see the password input
-     * And I can not see the password in cleartext
-     * And I can see the security token
-     * And I can see the view password button
-     * And I can see the generate password button
-     * And I can see the complexity meter
-     * And I can see the complexity textual indicator
-     * When I switch back out of the password iframe
-     * And I can see the description textarea and label
-     * And I can see the resource description in the textarea
-     * And I can see the save button
-     * And I can see the cancel button
+     * And   I can see the title is set to "edit password"
+     * And   I can see the name of the resource after the title
+     * And   I can see the close dialog button
+     * And   I can see the edit tab is selected
+     * And   I can see the share tab is not selected
+     * And   I can see the name input and label is marked as mandatory
+     * And   I can see the resource name in the text input
+     * And   I can see the url text input and label
+     * And   I can see the resource url in the text input
+     * And   I can see the username text input and label marked as mandatory
+     * And   I can see the resource ursername in the text input
+     * And   I can see the password iframe
+     * And   I can see the iframe label
+     * When  I switch to the password iframe
+     * And   I can see the password input
+     * And   I can not see the password in cleartext
+     * And   I can see the security token
+     * And   I can see the view password button
+     * And   I can see the generate password button
+     * And   I can see the complexity meter
+     * And   I can see the complexity textual indicator
+     * When  I switch back out of the password iframe
+     * And   I can see the description textarea and label
+     * And   I can see the resource description in the textarea
+     * And   I can see the save button
+     * And   I can see the cancel button
+     *
+     * @group LU
+     * @group password
+     * @group edit
      */
     public function testEditPasswordDialogView() 
     {
         // Given I am Ada
-        $user = User::get('ada');
-        
-
         // And I am logged in on the password workspace
+        $user = User::get('ada');
         $this->loginAs($user);
 
         // And I am editing a password I own
         $resource = Resource::get(array('user' => 'ada', 'permission' => 'owner'));
         $this->gotoEditPassword($resource['id']);
 
-        // Then  I can see the edit password dialog
-        $this->assertVisible('.edit-password-dialog');
+        // Then I can see the edit password dialog
+        $this->assertVisibleByCss('.edit-password-dialog');
 
         // And I can see the title is set to "edit password"
         $this->assertElementContainsText(
@@ -227,7 +267,7 @@ class PasswordEditTest extends PassboltTestCase
         );
 
         // And I can see the close dialog button
-        $this->assertVisible('.edit-password-dialog .dialog-close');
+        $this->assertVisibleByCss('.edit-password-dialog .dialog-close');
 
         // And I can see the edit tab is selected
         $this->assertElementContainsText(
@@ -243,37 +283,37 @@ class PasswordEditTest extends PassboltTestCase
         $this->assertNotVisible('.edit-password-dialog #js_tab_nav_js_rs_permission a.selected');
 
         // And I can see the name text input and label is marked as mandatory
-        $this->assertVisible('.edit-password-dialog input[type=text]#js_field_name.required');
-        $this->assertVisible('.edit-password-dialog label[for=js_field_name]');
+        $this->assertVisibleByCss('.edit-password-dialog input[type=text]#js_field_name.required');
+        $this->assertVisibleByCss('.edit-password-dialog label[for=js_field_name]');
 
         // And I can see the resource name in the text input
         $this->assertInputValue('js_field_name', $resource['name']);
 
         // And I can see the url text input and label
-        $this->assertVisible('.edit-password-dialog input[type=text]#js_field_uri');
-        $this->assertVisible('.edit-password-dialog label[for=js_field_uri]');
+        $this->assertVisibleByCss('.edit-password-dialog input[type=text]#js_field_uri');
+        $this->assertVisibleByCss('.edit-password-dialog label[for=js_field_uri]');
 
-        // And  I can see the resource url in the text input
+        // And   I can see the resource url in the text input
         $this->assertInputValue('js_field_uri', $resource['uri']);
 
         // And I can see the username field
-        $this->assertVisible('.edit-password-dialog input[type=text]#js_field_username');
-        $this->assertVisible('.edit-password-dialog label[for=js_field_username]');
+        $this->assertVisibleByCss('.edit-password-dialog input[type=text]#js_field_username');
+        $this->assertVisibleByCss('.edit-password-dialog label[for=js_field_username]');
 
         // And I can see the resource ursername in the text input
         $this->assertInputValue('js_field_username', $resource['username']);
 
         // And I can see the password iframe
-        $this->assertVisible('.edit-password-dialog #passbolt-iframe-secret-edition');
+        $this->assertVisibleByCss('.edit-password-dialog #passbolt-iframe-secret-edition');
 
         // And I can see the iframe label
-        $this->assertVisible('.edit-password-dialog label[for=js_field_secret_data_0]');
+        $this->assertVisibleByCss('.edit-password-dialog label[for=js_field_secret_data_0]');
 
         // When I switch to the password iframe
         $this->goIntoSecretIframe();
 
         // And I can see the password input
-        $this->assertVisible('input[type=password]#js_secret');
+        $this->assertVisibleByCss('input[type=password]#js_secret');
 
         // And I can not see the password in cleartext
         $this->assertNotVisible('input[type=password]#js_secret_clear');
@@ -284,9 +324,9 @@ class PasswordEditTest extends PassboltTestCase
         $this->assertSecurityToken($user, 'has_encrypted_secret');
 
         // And I can see the view password button
-        $this->assertVisible('js_secret_view');
+        $this->assertVisibleByCss('js_secret_view');
         // And I can see the generate password button
-        $this->assertVisible('js_secret_generate');
+        $this->assertVisibleByCss('js_secret_generate');
 
         // And I can see the complexity meter
         // And I can see the complexity textual indicator
@@ -296,17 +336,17 @@ class PasswordEditTest extends PassboltTestCase
         $this->goOutOfIframe();
 
         // And I can see the description field and label
-        $this->assertVisible('.edit-password-dialog textarea#js_field_description');
-        $this->assertVisible('.edit-password-dialog label[for=js_field_description]');
+        $this->assertVisibleByCss('.edit-password-dialog textarea#js_field_description');
+        $this->assertVisibleByCss('.edit-password-dialog label[for=js_field_description]');
 
-        // And  I can see the resource description in the textarea
+        // And   I can see the resource description in the textarea
         $this->assertInputValue('js_field_description', $resource['description']);
 
         // And I can see the save button
-        $this->assertVisible('.edit-password-dialog input[type=submit].button.primary');
+        $this->assertVisibleByCss('.edit-password-dialog input[type=submit].button.primary');
 
         // And I can see the cancel button
-        $this->assertVisible('.edit-password-dialog a.cancel');
+        $this->assertVisibleByCss('.edit-password-dialog a.cancel');
 
     }
 
@@ -314,27 +354,31 @@ class PasswordEditTest extends PassboltTestCase
      * Scenario: As a user I can edit a password by using keyboard shortcuts only
      *
      * Given I am Ada
-     * And I am logged in
-     * And I am on the edit password dialog
+     * And   I am logged in
+     * And   I am on the edit password dialog
      * Then  I can see that the field name has the focus
-     * When I type a new name on the keyboard to modify the current one already selected
-     * And I press the tab key
+     * When  I type a new name on the keyboard to modify the current one already selected
+     * And   I press the tab key
      * Then  I should see that the field username has the focus
-     * When I press the tab key
+     * When  I press the tab key
      * Then  I should see that the field uri has the focus
-     * When I press the tab key
+     * When  I press the tab key
      * Then  I should see the passphrase dialog opening
-     * When I type the passphrase on keyboard (without clicking anywhere first)
-     * And I press enter
-     * And I wait for a few seconds
+     * When  I type the passphrase on keyboard (without clicking anywhere first)
+     * And   I press enter
+     * And   I wait for a few seconds
      * Then  I should see the password field populated with my password
-     * And I should see that the password field has the focus
-     * When I press the tab key
+     * And   I should see that the password field has the focus
+     * When  I press the tab key
      * Then  I should see that the field description has the focus
-     * When I press tab
-     * And I press enter
+     * When  I press tab
+     * And   I press enter
      * Then  I should see a notice message saying that the password was edited succesfully
-     * And I see the password updated with the new name I just entered in my password list
+     * And   I see the password updated with the new name I just entered in my password list
+     *
+     * @group LU
+     * @group password
+     * @group edit
      */
     public function testEditPasswordWithKeyboardShortcutAndView() 
     {
@@ -343,7 +387,6 @@ class PasswordEditTest extends PassboltTestCase
 
         // Given I am Ada
         $user = User::get('ada');
-        
 
         // And I am logged in on the password workspace
         $this->loginAs($user);
@@ -352,8 +395,8 @@ class PasswordEditTest extends PassboltTestCase
         $resource = Resource::get(array('user' => 'ada', 'permission' => 'owner'));
         $this->gotoEditPassword($resource['id']);
 
-        // Then  I can see the edit password dialog
-        $this->assertVisible('.edit-password-dialog');
+        // Then I can see the edit password dialog
+        $this->assertVisibleByCss('.edit-password-dialog');
 
         // The field name should have the focus
         $this->assertElementHasFocus('js_field_name');
@@ -376,7 +419,7 @@ class PasswordEditTest extends PassboltTestCase
         // Press tab key.
         $this->pressTab();
 
-        // Then  I see the passphrase dialog
+        // Then I see the passphrase dialog
         // Given I can see the iframe
         $this->waitUntilISee('#passbolt-iframe-master-password.ready');
 
@@ -391,8 +434,8 @@ class PasswordEditTest extends PassboltTestCase
         // Then the passphrase dialog should disappear
         $this->waitUntilIDontSee('#passbolt-iframe-master-password');
 
-        // Then  I can see the password edit dialog
-        $this->assertVisible('.edit-password-dialog');
+        // Then I can see the password edit dialog
+        $this->assertVisibleByCss('.edit-password-dialog');
 
         // The field password should have the focus (inside the iframe).
         $this->goIntoSecretIframe();
@@ -412,7 +455,7 @@ class PasswordEditTest extends PassboltTestCase
         // Press enter.
         $this->pressEnter();
 
-        // Then  I can see a success notification
+        // Then I can see a success notification
         $this->assertNotification('app_resources_edit_success');
 
         // And I can see that the password name have changed in the overview
@@ -423,36 +466,39 @@ class PasswordEditTest extends PassboltTestCase
      * Scenario: As a user I can go to next / previous field in the edit password form by using the keyboard tabs
      *
      * Given I am Ada
-     * And I am logged in
-     * And I am on the edit password dialog
+     * And   I am logged in
+     * And   I am on the edit password dialog
      * Then  I can see that the field name has the focus
-     * When I press the tab key
+     * When  I press the tab key
      * Then  I should see that the field username has the focus
-     * When I press the tab key
+     * When  I press the tab key
      * Then  I should see that the field uri has the focus
-     * When I press the tab key
+     * When  I press the tab key
      * Then  I should see the passphrase dialog opening
-     * When I type the passphrase on keyboard (without clicking anywhere first)
-     * And I press enter
-     * And I wait for a few seconds
+     * When  I type the passphrase on keyboard (without clicking anywhere first)
+     * And   I press enter
+     * And   I wait for a few seconds
      * Then  I should see the password field populated with my password
-     * And I should see that the password field has the focus
-     * When I press the tab key
+     * And   I should see that the password field has the focus
+     * When  I press the tab key
      * Then  I should see that the field description has the focus
-     * When I press backtab key
+     * When  I press backtab key
      * Then  I should see that the password field has the focus
-     * When I press the backtab key
+     * When  I press the backtab key
      * Then  I should see that the uri field has the focus
-     * When I press the backtab key
+     * When  I press the backtab key
      * Then  I should see that the username field has the focus
-     * When I press the backtab key
+     * When  I press the backtab key
      * Then  I should see that the name field has the focus.
+     *
+     * @group LU
+     * @group password
+     * @group edit
      */
     public function testEditPasswordKeyboardShortcuts() 
     {
         // Given I am Ada
         $user = User::get('ada');
-        
 
         // And I am logged in
         $this->loginAs($user);
@@ -479,7 +525,7 @@ class PasswordEditTest extends PassboltTestCase
         // Press tab key.
         $this->pressTab();
 
-        // Then  I see the passphrase dialog
+        // Then I see the passphrase dialog
         // Given I can see the iframe
         $this->waitUntilISee('#passbolt-iframe-master-password.ready');
 
@@ -540,28 +586,27 @@ class PasswordEditTest extends PassboltTestCase
      * Scenario: As a user I should be notified I will lose my changes on the edit password dialog after editing a field
      *
      * Given I am Ada
-     * And I am logged in on the password workspace
-     * And I am editing a password I own
-     * When I click on name input text field
-     * And I empty the name input text field value
-     * And I switch to the share screen
+     * And   I am logged in on the password workspace
+     * And   I am editing a password I own
+     * When  I click on name input text field
+     * And   I empty the name input text field value
+     * And   I switch to the share screen
      * Then  I should see a confirmation dialog notifying me regarding the changes I'm going to lose
-     *
-     * When I click cancel in confirmation dialog
-     * Then        I should stay on the edit dialog
-     * 
-     * When I switch to the share screen
-     * And I click ok in confirmation dialog
+     * When  I click cancel in confirmation dialog
+     * Then  I should stay on the edit dialog
+     * When  I switch to the share screen
+     * And   I click ok in confirmation dialog
      * Then  I should leave the edit dialog for the share dialog
+     *
+     * @group LU
+     * @group password
+     * @group edit
      */
     public function testEditPasswordLoseChanges() 
     {
         // Given I am Ada
-        $user = User::get('ada');
-        
-
         // And I am logged in on the password workspace
-        $this->loginAs($user);
+        $this->loginAs(User::get('ada'));
 
         // And I am editing a password I own
         $resource = Resource::get(array('user' => 'ada', 'permission' => 'owner'));
@@ -577,14 +622,14 @@ class PasswordEditTest extends PassboltTestCase
         // And I switch to the share screen
         $this->findByCss('#js_tab_nav_js_rs_permission a')->click();
 
-        // Then  I should see a confirmation dialog notifying me regarding the changes I'm going to lose
+        // Then I should see a confirmation dialog notifying me regarding the changes I'm going to lose
         $this->assertConfirmationDialog('Do you really want to leave ?');
 
         // When I click cancel in confirmation dialog
         $this->cancelActionInConfirmationDialog();
 
         // Then	I should stay on the edit dialog
-        $this->assertVisible('#js_rs_edit');
+        $this->assertVisible('js_rs_edit');
 
         // When	I switch to the share dialog
         $this->findByCss('#js_tab_nav_js_rs_permission a')->click();
@@ -593,32 +638,33 @@ class PasswordEditTest extends PassboltTestCase
         // And I click ok in confirmation dialog
         $this->confirmActionInConfirmationDialog();
 
-        // Then  I should leave the edit dialog for the share dialog
-        $this->assertVisible('#js_rs_permission');
+        // Then I should leave the edit dialog for the share dialog
+        $this->assertVisible('js_rs_permission');
     }
 
     /**
      * Scenario: As a user I should be notified I will lose my changes on the edit password dialog after editing the secret
      *
      * Given I am Ada
-     * And I am logged in on the password workspace
-     * And I am editing a password I own
-     * When I edit the secret
-     * And I switch to the share screen
+     * And   I am logged in on the password workspace
+     * And   I am editing a password I own
+     * When  I edit the secret
+     * And   I switch to the share screen
      * Then  I should see a confirmation dialog notifying me regarding the changes I'm going to lose
-     *
-     * When I click cancel in confirmation dialog
-     * Then        I should stay on the edit dialog
-     *
-     * When I switch to the share screen
-     * And I click ok in confirmation dialog
+     * When  I click cancel in confirmation dialog
+     * Then  I should stay on the edit dialog
+     * When  I switch to the share screen
+     * And   I click ok in confirmation dialog
      * Then  I should leave the edit dialog for the share dialog
+     *
+     * @group LU
+     * @group password
+     * @group edit
      */
     public function testEditPasswordSecretLoseChanges() 
     {
         // Given I am Ada
         $user = User::get('ada');
-        
 
         // And I am logged in on the password workspace
         $this->loginAs($user);
@@ -640,20 +686,20 @@ class PasswordEditTest extends PassboltTestCase
         $this->waitUntilSecretIsDecryptedInField();
         $this->goOutOfIframe();
 
-        $this->assertVisible('.edit-password-dialog');
+        $this->assertVisibleByCss('.edit-password-dialog');
         $this->inputSecret('My new password');
 
         // And I switch to the share screen
         $this->findByCss('#js_tab_nav_js_rs_permission a')->click();
 
-        // Then  I should see a confirmation dialog notifying me regarding the changes I'm going to lose
+        // Then I should see a confirmation dialog notifying me regarding the changes I'm going to lose
         $this->assertConfirmationDialog('Do you really want to leave ?');
 
         // When I click cancel in confirmation dialog
         $this->cancelActionInConfirmationDialog();
 
         // Then	I should stay on the edit dialog
-        $this->assertVisible('#js_rs_edit');
+        $this->assertVisible('js_rs_edit');
 
         // When	I switch to the share dialog
         $this->findByCss('#js_tab_nav_js_rs_permission a')->click();
@@ -662,8 +708,8 @@ class PasswordEditTest extends PassboltTestCase
         // And I click ok in confirmation dialog
         $this->confirmActionInConfirmationDialog();
 
-        // Then  I should leave the edit dialog for the share dialog
-        $this->assertVisible('#js_rs_permission');
+        // Then I should leave the edit dialog for the share dialog
+        $this->assertVisible('js_rs_permission');
     }
 
     /**
@@ -671,17 +717,21 @@ class PasswordEditTest extends PassboltTestCase
      * Regression: PASSBOLT-1038
      *
      * Given I am Ada
-     * And I am logged in on the password workspace
-     * And I am editing a password I own
-     * When I click on name input text field
-     * And I empty the name input text field value
-     * And I enter a new value
-     * And I click save
+     * And   I am logged in on the password workspace
+     * And   I am editing a password I own
+     * When  I click on name input text field
+     * And   I empty the name input text field value
+     * And   I enter a new value
+     * And   I click save
      * Then  I can see a success notification
-     * And I can see that the password name have changed in the overview
-     * And I can see the new name value in the sidebar
-     * When I click edit button
+     * And   I can see that the password name have changed in the overview
+     * And   I can see the new name value in the sidebar
+     * When  I click edit button
      * Then  I can see the new name in the edit password dialog
+     *
+     * @group LU
+     * @group password
+     * @group edit
      */
     public function testEditPasswordName() 
     {
@@ -690,7 +740,6 @@ class PasswordEditTest extends PassboltTestCase
 
         // Given I am Ada
         $user = User::get('ada');
-        
 
         // And I am logged in on the password workspace
         $this->loginAs($user);
@@ -710,20 +759,20 @@ class PasswordEditTest extends PassboltTestCase
         // And I click save
         $this->click('.edit-password-dialog input[type=submit]');
 
-        // Then  I can see a success notification
+        // Then I can see a success notification
         $this->assertNotification('app_resources_edit_success');
 
         // And I can see that the password name have changed in the overview
         $this->assertElementContainsText('#js_wsp_pwd_browser .tableview-content', $newname);
 
         // And I can see the new name value in the sidebar
-        $this->assertVisible('#js_pwd_details.panel.aside');
+        $this->assertVisibleByCss('#js_pwd_details.panel.aside');
         $this->assertElementContainsText('js_pwd_details', $newname);
 
         // When I click edit button
         $this->click('js_wk_menu_edition_button');
 
-        // Then  I can see the new name in the edit password dialog
+        // Then I can see the new name in the edit password dialog
         $this->assertInputValue('js_field_name', $newname);
     }
 
@@ -731,12 +780,16 @@ class PasswordEditTest extends PassboltTestCase
      * Scenario: As a user I can edit the description of a password I have own
      *
      * Given I am Ada
-     * And I am logged in on the password workspace
-     * And I am editing the description of a password I own
+     * And   I am logged in on the password workspace
+     * And   I am editing the description of a password I own
      * Then  I can see the success notification
-     * And I can see the new description in the sidebar
-     * When I click edit button
+     * And   I can see the new description in the sidebar
+     * When  I click edit button
      * Then  I can see the new description in the edit password dialog
+     *
+     * @group LU
+     * @group password
+     * @group edit
      */
     public function testEditPasswordDescription() 
     {
@@ -751,7 +804,7 @@ class PasswordEditTest extends PassboltTestCase
         $this->loginAs($user);
 
         // And I am editing the description of a password I own
-        // Then  I can see a success notification
+        // Then I can see a success notification
         $resource = Resource::get(
             array(
             'user' => 'ada',
@@ -768,7 +821,7 @@ class PasswordEditTest extends PassboltTestCase
         // When I click edit button
         $this->click('js_wk_menu_edition_button');
 
-        // Then  I can see the new description in the edit password dialog
+        // Then I can see the new description in the edit password dialog
         $this->assertInputValue('js_field_description', $r['description']);
     }
 
@@ -776,12 +829,16 @@ class PasswordEditTest extends PassboltTestCase
      * Scenario: As a user I can edit the uri of a password I have own
      *
      * Given I am Ada
-     * And I am logged in on the password workspace
-     * And I am editing the uri of a password I own
+     * And   I am logged in on the password workspace
+     * And   I am editing the uri of a password I own
      * Then  I can see the success notification
-     * And I can see the new uri in the sidebar
-     * When I click edit button
+     * And   I can see the new uri in the sidebar
+     * When  I click edit button
      * Then  I can see the new uri in the edit password dialog
+     *
+     * @group LU
+     * @group password
+     * @group edit
      */
     public function testEditPasswordUri() 
     {
@@ -796,7 +853,7 @@ class PasswordEditTest extends PassboltTestCase
         $this->loginAs($user);
 
         // And I am editing the uri of a password I own
-        // Then  I can see a success notification
+        // Then I can see a success notification
         $resource = Resource::get(
             array(
             'user' => 'ada',
@@ -816,27 +873,31 @@ class PasswordEditTest extends PassboltTestCase
         // When I click edit button
         $this->click('js_wk_menu_edition_button');
 
-        // Then  I can see the new uri in the edit password dialog
+        // Then I can see the new uri in the edit password dialog
         $this->assertInputValue('js_field_uri', $r['uri']);
     }
 
     /**
-     * @group saucelabs
      * Scenario: As a user I can edit the secret of a password I have own
      *
      * Given I am Ada
-     * And I am logged in on the password workspace
-     * And I am editing a password I own
-     * When I click on the secret password field
+     * And   I am logged in on the password workspace
+     * And   I am editing a password I own
+     * When  I click on the secret password field
      * Then  I see the passphrase dialog
-     * When I enter the passphrase and click submit
+     * When  I enter the passphrase and click submit
      * Then  I can see the password edit dialog
-     * When I enter a new password
-     * And I press the submit button
+     * When  I enter a new password
+     * And   I press the submit button
      * Then  I can see the encryption in progress dialog
      * Then  I can see the success notification
-     * When I copy the password to clipboard
+     * When  I copy the password to clipboard
      * Then  I can see that password have been updated
+     *
+     * @group LU
+     * @group password
+     * @group edit
+     * @group saucelabs
      */
     public function testEditPasswordSecret() 
     {
@@ -868,7 +929,7 @@ class PasswordEditTest extends PassboltTestCase
         $this->click('js_secret');
         $this->goOutOfIframe();
 
-        // Then  I see the passphrase dialog
+        // Then I see the passphrase dialog
         $this->assertMasterPasswordDialog($user);
 
         // When I enter the passphrase and click submit
@@ -880,8 +941,8 @@ class PasswordEditTest extends PassboltTestCase
         $this->waitUntilSecretIsDecryptedInField();
         $this->goOutOfIframe();
 
-        // Then  I can see the password edit dialog
-        $this->assertVisible('.edit-password-dialog');
+        // Then I can see the password edit dialog
+        $this->assertVisibleByCss('.edit-password-dialog');
 
         // When I enter a new password
         $this->inputSecret($r2['password']);
@@ -892,33 +953,37 @@ class PasswordEditTest extends PassboltTestCase
         // Then wait until I don't see  the encryption dialog anymore.
         $this->waitUntilIDontSee('#passbolt-iframe-progress-dialog');
 
-        // Then  I can see the success notification
+        // Then I can see the success notification
         $this->assertNotification('app_resources_edit_success');
 
         // When I copy the password to clipboard
         $this->copyToClipboard($r2, $user);
 
-        // Then  I can see that password have been updated
+        // Then I can see that password have been updated
         $this->assertClipboard($r2['password']);
     }
 
     /**
-     * @group saucelabs
      * Scenario: As a user editing my password I can use the button to view my secret in clear text
      *
      * Given I am Ada
-     * And I am logged in on the password workspace
-     * And I am editing a password I own
-     * When I click the button to view my password in clear text
+     * And   I am logged in on the password workspace
+     * And   I am editing a password I own
+     * When  I click the button to view my password in clear text
      * Then  I see the passphrase dialog
-     * When I enter the passphrase in the input field
-     * And I press the submit button
+     * When  I enter the passphrase in the input field
+     * And   I press the submit button
      * Then  I can see the password in clear text
-     * When I press the same button to hide my password again
+     * When  I press the same button to hide my password again
      * Then  I do not see the password in clear text
-     * When I press the button to view my password in cleartext
+     * When  I press the button to view my password in cleartext
      * Then  I do not the passphrase dialog
      * Then  I can see the password in clear text
+     *
+     * @group LU
+     * @group password
+     * @group edit
+     * @group saucelabs
      */
     public function testEditPasswordViewClearText() 
     {
@@ -943,7 +1008,7 @@ class PasswordEditTest extends PassboltTestCase
         $this->click('js_secret_view');
         $this->goOutOfIframe();
 
-        // Then  I see the passphrase dialog
+        // Then I see the passphrase dialog
         $this->assertMasterPasswordDialog($user);
 
         // When I enter the passphrase and I press the submit button
@@ -952,48 +1017,52 @@ class PasswordEditTest extends PassboltTestCase
         // Wait until I don't see the passphrase window anymore.
         $this->waitUntilIDontSee('#passbolt-iframe-master-password');
 
-        // Then  I should see the input field with the password in clear text
+        // Then I should see the input field with the password in clear text
         $this->goIntoSecretIframe();
         $this->waitUntilSecretIsDecryptedInField();
         $this->assertNotVisible('js_secret');
-        $this->assertVisible('js_secret_clear');
+        $this->assertVisibleByCss('js_secret_clear');
         $this->assertTrue($this->findById('js_secret_clear')->getAttribute('value') == $r1['password']);
 
         // When I press the same button to hide my password again
         $this->click('js_secret_view');
 
-        // Then  I should not see the input field with the password in clear text
+        // Then I should not see the input field with the password in clear text
         $this->assertNotVisible('js_secret_clear');
 
         // When I press the button to view my password in cleartext
         $this->click('js_secret_view');
 
-        // Then  I do not the passphrase dialog
+        // Then I do not the passphrase dialog
         $this->assertNotVisible('passbolt-iframe-master-password');
 
-        // Then  I can see the password in clear text
-        $this->assertVisible('js_secret_clear');
+        // Then I can see the password in clear text
+        $this->assertVisibleByCss('js_secret_clear');
 
         $this->goOutOfIframe();
     }
 
     /**
-     * @group saucelabs
      * Scenario: As a user editing my password I can generate a new random password automatically
      *
      * Given I am Ada
-     * And I am logged in on the password workspace
-     * And I am editing a password I own
-     * And I can see the generate button is not active
-     * When I click on the secret password field
+     * And   I am logged in on the password workspace
+     * And   I am editing a password I own
+     * And   I can see the generate button is not active
+     * When  I click on the secret password field
      * Then  I see the passphrase dialog
-     * And I enter the passphrase in the input field and press the submit button
-     * And I can see the secret field populated
-     * And I can see the generate button is now active
-     * When I click the button the generate a new random password button
-     * And I click the button to view my password in clear text
+     * And   I enter the passphrase in the input field and press the submit button
+     * And   I can see the secret field populated
+     * And   I can see the generate button is now active
+     * When  I click the button the generate a new random password button
+     * And   I click the button to view my password in clear text
      * Then  I can see the secret is different than the previous one
-     * And I can see that the password complexity is set to fair
+     * And   I can see that the password complexity is set to fair
+     *
+     * @group LU
+     * @group password
+     * @group edit
+     * @group saucelabs
      */
     public function testEditPasswordGenerateRandom() 
     {
@@ -1021,7 +1090,7 @@ class PasswordEditTest extends PassboltTestCase
         // When I click on the secret password field
         $this->click('js_secret');
 
-        // Then  I see the passphrase dialog
+        // Then I see the passphrase dialog
         $this->assertMasterPasswordDialog($user);
 
         // When I enter the passphrase in the input field
@@ -1030,7 +1099,7 @@ class PasswordEditTest extends PassboltTestCase
         // Wait until I don't see the passphrase window anymore.
         $this->waitUntilIDontSee('#passbolt-iframe-master-password');
 
-        // Then  I should see the secret field populated
+        // Then I should see the secret field populated
         $this->goIntoSecretIframe();
 
         $this->waitUntilSecretIsDecryptedInField();
@@ -1045,12 +1114,12 @@ class PasswordEditTest extends PassboltTestCase
         // And I click the button to view my password in clear text
         $this->click('js_secret_view');
 
-        // Then  I can see the secret is different than the previous one
+        // Then I can see the secret is different than the previous one
         $this->assertTrue(($s != $r1['password']));
 
         // And I should see that the password complexity is set to fair
-        $this->assertTrue(strlen($s) == SystemDefaults::$AUTO_PASSWORD_LENGTH);
-        $this->assertComplexity(SystemDefaults::$AUTO_PASSWORD_STRENGTH);
+        $this->assertTrue(strlen($s) == \SystemDefaults::$AUTO_PASSWORD_LENGTH);
+        $this->assertComplexity(\SystemDefaults::$AUTO_PASSWORD_STRENGTH);
 
     }
 
@@ -1058,12 +1127,16 @@ class PasswordEditTest extends PassboltTestCase
      * Scenario: As a user I can not edit a password I have only read access to
      *
      * Given I am Ada
-     * And I am logged in on the password workspace
-     * And I click on a password I cannot edit
+     * And   I am logged in on the password workspace
+     * And   I click on a password I cannot edit
      * Then  I can see the edit button is not active
-     * When I right click on a password I cannot edit
+     * When  I right click on a password I cannot edit
      * Then  I can see the contextual menu
-     * And I can see the edit option is disabled
+     * And   I can see the edit option is disabled
+     *
+     * @group LU
+     * @group password
+     * @group edit
      */
     public function testEditPasswordNoRightNoEdit() 
     {
@@ -1083,13 +1156,13 @@ class PasswordEditTest extends PassboltTestCase
         );
         $this->clickPassword($r['id']);
 
-        // Then  I can see the edit button is not active
+        // Then I can see the edit button is not active
         $this->assertDisabled('js_wk_menu_edition_button');
 
         // When I right click on a password I cannot edit
         $this->rightClickPassword($r['id']);
 
-        // Then  I can see the contextual menu
+        // Then I can see the contextual menu
         $this->findById('js_contextual_menu');
 
         // And I can see the edit option is disabled
@@ -1101,13 +1174,17 @@ class PasswordEditTest extends PassboltTestCase
      * Scenario: As user B I can see the changes are reflected when user A is editing a password we share
      *
      * Given I am Ada
-     * And I am logged in on the password workspace
-     * And I edit a password that I share with betty
-     * And I logout
-     * And I am Betty
-     * And I am logged in on the password workspace
-     * And I copy the password Ada edited to clipboard
+     * And   I am logged in on the password workspace
+     * And   I edit a password that I share with betty
+     * And   I logout
+     * And   I am Betty
+     * And   I am logged in on the password workspace
+     * And   I copy the password Ada edited to clipboard
      * Then  I can see the new password
+     *
+     * @group LU
+     * @group password
+     * @group edit
      */
     public function testEditPasswordUserAEditUserBCanSee() 
     {
@@ -1139,7 +1216,6 @@ class PasswordEditTest extends PassboltTestCase
 
         // And I am Betty
         $user = User::get('betty');
-        
 
         // And I am logged in on the password workspace
         $this->loginAs($user);
@@ -1147,7 +1223,7 @@ class PasswordEditTest extends PassboltTestCase
         // And I copy the password Ada edited to clipboard
         $this->copyToClipboard($r1, $user);
 
-        // Then  I can see the new password
+        // Then I can see the new password
         $this->assertClipboard($r2['password']);
     }
 
@@ -1155,25 +1231,29 @@ class PasswordEditTest extends PassboltTestCase
      * Scenario: As a user I can see error messages when editing a password with wrong inputs
      *
      * Given I am Ada
-     * And I am logged in on the password workspace
-     * And I edit a password I own
-     * When I click on the name input field
-     * And I empty the name input field
-     * And I empty the username input field
-     * And I empty the password input field
-     * And I click save
+     * And   I am logged in on the password workspace
+     * And   I edit a password I own
+     * When  I click on the name input field
+     * And   I empty the name input field
+     * And   I empty the username input field
+     * And   I empty the password input field
+     * And   I click save
      * Then  I see an error message saying that the name is required
-     * And I see an error message saying that the password is required
+     * And   I see an error message saying that the password is required
      * Then  I don't see an error message saying that the username is required
-     * When I enter < as a name
-     * And I enter < as a username
-     * And I enter < as a url
-     * And I enter < as a description
-     * And I click save
+     * When  I enter < as a name
+     * And   I enter < as a username
+     * And   I enter < as a url
+     * And   I enter < as a description
+     * And   I click save
      * Then  I see an error message saying that the name contain invalid characters
      * Then  I see an error message saying that the username contain invalid characters
      * Then  I see an error message saying that the url is not valid
      * Then  I see an error message saying that the description contain invalid characters
+     *
+     * @group LU
+     * @group password
+     * @group edit
      */
     public function testEditPasswordErrorMessages() 
     {
@@ -1215,18 +1295,18 @@ class PasswordEditTest extends PassboltTestCase
         // And I click on the submit button
         $this->click('.edit-password-dialog input[type=submit]');
 
-        // Then  I see an error message saying that the name is required
-        $this->assertVisible('#js_field_name_feedback.error.message');
+        // Then I see an error message saying that the name is required
+        $this->assertVisibleByCss('#js_field_name_feedback.error.message');
         $this->assertElementContainsText(
             $this->find('js_field_name_feedback'), 'is required'
         );
 
-        // Then  I see an error message saying that the username is required
+        // Then I see an error message saying that the username is required
         $this->assertNotVisible('#js_field_username_feedback.error.message');
 
         // And I see an error message saying that the password is required
         $this->goIntoSecretIframe();
-        $this->assertVisible('#js_field_password_feedback.error.message');
+        $this->assertVisibleByCss('#js_field_password_feedback.error.message');
         $this->assertElementContainsText(
             $this->find('js_field_password_feedback'), 'This information is required'
         );
@@ -1247,26 +1327,26 @@ class PasswordEditTest extends PassboltTestCase
         // And I click save
         $this->click('.edit-password-dialog input[type=submit]');
 
-        // Then  I see an error message saying that the name contain invalid characters
-        $this->assertVisible('#js_field_name_feedback.error.message');
+        // Then I see an error message saying that the name contain invalid characters
+        $this->assertVisibleByCss('#js_field_name_feedback.error.message');
         $this->assertElementContainsText(
             $this->find('js_field_name_feedback'), 'should only contain alphabets, numbers'
         );
 
-        // Then  I see an error message saying that the username contain invalid characters
-        $this->assertVisible('#js_field_username_feedback.error.message');
+        // Then I see an error message saying that the username contain invalid characters
+        $this->assertVisibleByCss('#js_field_username_feedback.error.message');
         $this->assertElementContainsText(
             $this->find('js_field_username_feedback'), 'should only contain alphabets, numbers'
         );
 
-        // Then  I see an error message saying that the url is not valid
-        $this->assertVisible('#js_field_uri_feedback.error.message');
+        // Then I see an error message saying that the url is not valid
+        $this->assertVisibleByCss('#js_field_uri_feedback.error.message');
         $this->assertElementContainsText(
             $this->find('js_field_uri_feedback'), 'should only contain alphabets, numbers'
         );
 
-        // Then  I see an error message saying that the description contain invalid characters
-        $this->assertVisible('#js_field_description_feedback.error.message');
+        // Then I see an error message saying that the description contain invalid characters
+        $this->assertVisibleByCss('#js_field_description_feedback.error.message');
         $this->assertElementContainsText(
             $this->find('js_field_description_feedback'), 'should only contain alphabets, numbers'
         );
@@ -1277,23 +1357,27 @@ class PasswordEditTest extends PassboltTestCase
      * Scenario: As a user I receive an email notification on a password update.
      *
      * Given I am Ada
-     * And I am logged in on the password workspace
-     * And I am editing a password I own
-     * When I click on name input text field
-     * And I empty the name input text field value
-     * And I enter a new value
-     * And I click save
+     * And   I am logged in on the password workspace
+     * And   I am editing a password I own
+     * When  I click on name input text field
+     * And   I empty the name input text field value
+     * And   I enter a new value
+     * And   I click save
      * Then  I can see a success notification
-     * And I can see that the password name have changed in the overview
-     * When I access my last email notification
+     * And   I can see that the password name have changed in the overview
+     * When  I access my last email notification
      * Then  I should see that I received an email informing me that the password has been updated
-     * And I should see that the email title should be the old name (not the changed one)
-     * And I should see that the email contains You (ada.lovelace@passbolt.com)
+     * And   I should see that the email title should be the old name (not the changed one)
+     * And   I should see that the email contains You (ada.lovelace@passbolt.com)
      *
      * Given I am betty, and the password was shared with me
-     * When I access my last email notification
+     * When  I access my last email notification
      * Then  I should see that I received an email informing me that the password has been updated
-     * And I should see that the email contains Ada Lovelace (ada.lovelace@passbolt.com)
+     * And   I should see that the email contains Ada Lovelace (ada.lovelace@passbolt.com)
+     *
+     * @group LU
+     * @group password
+     * @group edit
      */
     public function testEditPasswordEmailNotification() 
     {
@@ -1322,7 +1406,7 @@ class PasswordEditTest extends PassboltTestCase
         // And I click save
         $this->click('.edit-password-dialog input[type=submit]');
 
-        // Then  I can see a success notification
+        // Then I can see a success notification
         $this->assertNotification('app_resources_edit_success');
 
         // And I can see that the password name have changed in the overview
@@ -1369,33 +1453,33 @@ class PasswordEditTest extends PassboltTestCase
 
     /**
      * Scenario: As LU I can use passbolt on multiple tabs and edit password
+     *
      * Given I am Ada
-     * And I am logged in
-     * When I open a new tab and go to passbolt url
-     * And I switch back to the first tab
-     * And I edit a password
+     * And   I am logged in
+     * When  I open a new tab and go to passbolt url
+     * And   I switch back to the first tab
+     * And   I edit a password
      * Then  I should see the password has been edited
-     * When I switch to the second tab
-     * And I edit a password
+     * When  I switch to the second tab
+     * And   I edit a password
      * Then  I should see the password has been edited
-     * When I refresh the second tab
+     * When  I refresh the second tab
      * Then  I should see the password I edited on the first tab updated on the second tab
-     * When I switch to the first tab and I refresh it
+     * When  I switch to the first tab and I refresh it
      * Then  I should see the password I edited on the second tab updated on the first tab
      *
-     * @throws Exception
+     * @group LU
+     * @group password
+     * @group edit
      */
     public function testMultipleTabEditPassword() 
     {
         // Reset database at the end of test.
         $this->resetDatabaseWhenComplete();
 
-        $user = User::get('ada');
-        
-
         // Given I am Ada
         // And I am logged in
-        $this->loginAs($user);
+        $this->loginAs(User::get('ada'));
 
         // When I open a new tab and go to passbolt url
         $this->openNewTab('');
@@ -1414,7 +1498,7 @@ class PasswordEditTest extends PassboltTestCase
         $resource1UpdateData['name'] = $resource1['name'] . ' updated';
         $this->editPassword($resource1UpdateData);
 
-        // Then  I should see the password has been edited
+        // Then I should see the password has been edited
         $this->assertElementContainsText(
             $this->find('js_wsp_pwd_browser'), $resource1UpdateData['name']
         );
@@ -1433,7 +1517,7 @@ class PasswordEditTest extends PassboltTestCase
         $resource2UpdateData['name'] = $resource2['name'] . ' updated';
         $this->editPassword($resource2UpdateData);
 
-        // Then  I should see the password has been edited
+        // Then I should see the password has been edited
         $this->assertElementContainsText(
             $this->find('js_wsp_pwd_browser'), $resource2UpdateData['name']
         );
@@ -1442,7 +1526,7 @@ class PasswordEditTest extends PassboltTestCase
         $this->driver->navigate()->refresh();
         $this->waitCompletion();
 
-        // Then  I should see the password I edited on the first tab updated on the second tab
+        // Then I should see the password I edited on the first tab updated on the second tab
         $this->assertElementContainsText(
             $this->find('js_wsp_pwd_browser'), $resource1UpdateData['name']
         );
@@ -1452,23 +1536,25 @@ class PasswordEditTest extends PassboltTestCase
         $this->driver->navigate()->refresh();
         $this->waitCompletion();
 
-        // Then  I should see the password I edited on the second tab updated on the first tab
+        // Then I should see the password I edited on the second tab updated on the first tab
         $this->assertElementContainsText(
             $this->find('js_wsp_pwd_browser'), $resource2UpdateData['name']
         );
     }
 
     /**
-     * @group no-saucelabs
-     * @group skip
-     *
      * Scenario: As LU I should be able to edit a password after I restart the browser
+     *
      * Given I am Ada
-     * And I am logged in on the passwords workspace
-     * When I restart the browser
+     * And   I am logged in on the passwords workspace
+     * When  I restart the browser
      * Then  I should be able to edit a password
      *
-     * @throws Exception
+     * @group LU
+     * @group password
+     * @group edit
+     * @group no-saucelabs
+     * @group skip
      */
     public function testRestartBrowserAndEditPassword() 
     {
@@ -1477,7 +1563,6 @@ class PasswordEditTest extends PassboltTestCase
 
         // Given I am Ada
         $user = User::get('ada');
-        
 
         // And I am logged in on the password workspace
         $this->loginAs($user);
@@ -1486,33 +1571,26 @@ class PasswordEditTest extends PassboltTestCase
         $this->restartBrowser();
         $this->waitCompletion();
 
-        // Then  I should be able to edit a password
-        $r1 = Resource::get(
-            array(
-            'user' => 'betty',
-            'permission' => 'update'
-            )
-        );
-        $r2 = array(
-        'id' => $r1['id'],
-        'password' => 'our_brand_new_password'
-        );
+        // Then I should be able to edit a password
+        $r1 = Resource::get(['user' => 'betty', 'permission' => 'update']);
+        $r2 = ['id' => $r1['id'], 'password' => 'our_brand_new_password'];
         $this->editPassword($r2, $user);
     }
 
     /**
-     * @group skip
+     * Scenario: As LU I should be able to edit a password after I close and restore the passbolt tab
      * PASSBOLT-2263 close and restore doesn't work with the latest chrome driver
      * PASSBOLT-2419 close and restore doesn't work with the latest firefox driver
      *
-     * Scenario: As LU I should be able to edit a password after I close and restore the passbolt tab
      * Given I am Ada
-     * And I am on second tab
-     * And I am logged in on the passwords workspace
-     * When I close and restore the tab
+     * And   I am on second tab
+     * And   I am logged in on the passwords workspace
+     * When  I close and restore the tab
      * Then  I should be able to edit a password
      *
-     * @throws Exception
+     * @group LU
+     * @group password
+     * @group edit
      */
     public function testCloseRestoreTabAndEditPassword() 
     {
@@ -1521,7 +1599,6 @@ class PasswordEditTest extends PassboltTestCase
 
         // Given I am Ada
         $user = User::get('ada');
-        
 
         // And I am on second tab
         $this->openNewTab();
@@ -1533,19 +1610,9 @@ class PasswordEditTest extends PassboltTestCase
         $this->closeAndRestoreTab();
         $this->waitCompletion();
 
-        // Then  I should be able to edit a password
-        $r1 = Resource::get(
-            array(
-            'user' => 'betty',
-            'permission' => 'update'
-            )
-        );
-        $r2 = array(
-        'id' => $r1['id'],
-        'password' => 'our_brand_new_password'
-        );
+        // Then I should be able to edit a password
+        $r1 = Resource::get(['user' => 'betty', 'permission' => 'update']);
+        $r2 = ['id' => $r1['id'], 'password' => 'our_brand_new_password'];
         $this->editPassword($r2, $user);
     }
 }
-
-

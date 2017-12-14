@@ -14,17 +14,10 @@
  */
 namespace App\Actions;
 
-use App\Assertions\PasswordAssertionsTrait;
-use App\Assertions\WorkspaceAssertionsTrait;
 use Color;
 
 trait PasswordActionsTrait
 {
-
-    use PasswordAssertionsTrait;
-    use WorkspaceActionsTrait;
-    use WorkspaceAssertionsTrait;
-
     /**
      * Go to the password workspace and click on the create password button
      */
@@ -36,15 +29,13 @@ trait PasswordActionsTrait
             $this->waitUntilISee('#js_wsp_create_button');
         }
         $this->click('#js_wsp_create_button');
-        $this->assertVisible('.create-password-dialog');
+        $this->assertVisibleByCss('.create-password-dialog');
     }
 
     /**
      * Click on a password inside the password workspace.
      *
      * @param string $id id of the password
-     *
-     * @throws Exception
      */
     public function clickPassword($id) 
     {
@@ -58,8 +49,6 @@ trait PasswordActionsTrait
      * Right click on a password with a given id.
      *
      * @param string $id
-     *
-     * @throws Exception
      */
     public function rightClickPassword($id) 
     {
@@ -86,8 +75,7 @@ trait PasswordActionsTrait
     /**
      * Mark or unmark a password as a favorite
      *
-     * @param  $id string
-     * @throws Exception
+     * @param $id string
      */
     public function clickPasswordFavorite($id) 
     {
@@ -99,8 +87,7 @@ trait PasswordActionsTrait
     /**
      * Goto the edit password dialog for a given resource id
      *
-     * @param  $id string
-     * @throws Exception
+     * @param $id string
      */
     public function gotoEditPassword($id) 
     {
@@ -115,7 +102,7 @@ trait PasswordActionsTrait
         }
         $this->click('js_wk_menu_edition_button');
         $this->waitCompletion();
-        $this->assertVisible('.edit-password-dialog');
+        $this->assertVisibleByCss('.edit-password-dialog');
         $this->waitUntilISee('#passbolt-iframe-secret-edition.ready');
     }
 
@@ -170,7 +157,7 @@ trait PasswordActionsTrait
     /**
      * Find a password id by name in the interface.
      *
-     * @param  $name
+     * @param $name
      * @return uuid id
      */
     public function findPasswordIdByName($name) 
@@ -183,8 +170,7 @@ trait PasswordActionsTrait
     /**
      * Edit a password helper
      *
-     * @param  $password
-     * @throws Exception
+     * @param $password
      */
     public function editPassword($password, $user = []) 
     {
@@ -235,9 +221,8 @@ trait PasswordActionsTrait
     /**
      * Assert if a security token match user parameters
      *
-     * @param  $user array see fixtures
-     * @param  $context where is the security token (master or else)
-     * @throws Exception
+     * @param $user array see fixtures
+     * @param $context where is the security token (master or else)
      */
     public function assertSecurityToken($user, $context = null) 
     {
@@ -265,12 +250,12 @@ trait PasswordActionsTrait
                 $this->click('js_perm_create_form_aro_auto_cplt');
                 break;
             case 'group':
-                $this->waitUntilISee('js_group_edit_form_auto_cplt');
-                $this->click('js_group_edit_form_auto_cplt');
+                $this->waitUntilISee('#js_group_edit_form_auto_cplt');
+                $this->click('#js_group_edit_form_auto_cplt');
                 break;
             default:
-                $this->waitUntilISee('js_secret');
-                $this->click('js_secret');
+                $this->waitUntilISee('#js_secret');
+                $this->click('#js_secret');
                 break;
             }
 

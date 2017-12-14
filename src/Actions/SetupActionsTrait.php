@@ -41,8 +41,6 @@ trait SetupActionsTrait
      * @param $data
      *  - username
      *  - masterpassword
-     *
-     * @throws Exception
      */
     public function completeSetupWithKeyGeneration($data) 
     {
@@ -87,8 +85,6 @@ trait SetupActionsTrait
      *
      * @param $data
      *  - private_key
-     *
-     * @throws Exception
      */
     public function completeSetupWithKeyImport($data) 
     {
@@ -128,9 +124,8 @@ trait SetupActionsTrait
     /**
      * go To Setup page.
      *
-     * @throws Exception
-     * @param  string $username
-     * @param  bool   $checkPluginSuccess
+     * @param string $username
+     * @param bool   $checkPluginSuccess
      */
     public function goToSetup($username, $checkPluginSuccess = true) 
     {

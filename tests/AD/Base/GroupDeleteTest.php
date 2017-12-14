@@ -21,15 +21,15 @@ class ADGroupDeleteTest extends PassboltTestCase
      * Scenario: As an administrator I can delete a group that doesn't have any passwords shared with it.
      * Given    that I am logged in as an administrator
      *   And    that I am on the users workspace
-     * When I click on the contextual menu of a group that I want to remove that doesn't have any password shared with it
+     * When  I click on the contextual menu of a group that I want to remove that doesn't have any password shared with it
      * Then  I should see a contextual menu with an option "delete group"
-     * When I click on the "delete group" menu item.
+     * When  I click on the "delete group" menu item.
      * Then  I should see a confirmation dialog opening
-     *   And    I should see a message saying that there is no password associated with the group
-     *   And    I should see a call to action button with the "delete group" text
-     * When I click on "delete group" button
+     *   And   I should see a message saying that there is no password associated with the group
+     *   And   I should see a call to action button with the "delete group" text
+     * When  I click on "delete group" button
      * Then  I should see that the confirmation dialog disappears
-     * And I should see that the group is not present in the list anymore
+     * And   I should see that the group is not present in the list anymore
      */
     public function testDeleteGroupWithoutPasswords() 
     {
@@ -67,15 +67,15 @@ class ADGroupDeleteTest extends PassboltTestCase
      * Scenario: As an administrator I can delete a group that has passwords shared with it
      * Given    that I am logged in as an administrator
      *   And    that I am on the users workspace
-     * When I click on the contextual menu of a group that I want to remove that has passwords shared with it
+     * When  I click on the contextual menu of a group that I want to remove that has passwords shared with it
      * Then  I should see a contextual menu with an option "delete group"
-     * When I click on the "delete group" menu item.
+     * When  I click on the "delete group" menu item.
      * Then  I should see a confirmation dialog opening
-     *   And    I should see a message saying that there are x passwords associated with this group
-     *   And    I should see a call to action button with the "delete group" text
-     * When I click on "delete group" button
+     *   And   I should see a message saying that there are x passwords associated with this group
+     *   And   I should see a call to action button with the "delete group" text
+     * When  I click on "delete group" button
      * Then  I should see that the confirmation dialog disappears
-     * And I should see that the group is not present in the list anymore
+     * And   I should see that the group is not present in the list anymore
      */
     public function testDeleteGroupWithPasswords() 
     {
@@ -113,23 +113,23 @@ class ADGroupDeleteTest extends PassboltTestCase
      * Scenario: As an administrator I can't delete a group that is the sole owner of passwords
      * Given    that I am logged in as an administrator
      *   And    that I am on the passwords workspace
-     * When I create a password
-     *   And    I share this password with the group "Accounting"
-     *   And    I set the group as "owner" of the password
-     *   And    I set myself as "can read" only so that the group is the only owner left
-     *   And    I save the permissions
+     * When  I create a password
+     *   And   I share this password with the group "Accounting"
+     *   And   I set the group as "owner" of the password
+     *   And   I set myself as "can read" only so that the group is the only owner left
+     *   And   I save the permissions
      * Then  I should see a notification saying that the permissions have been saved
-     * When I go to the users workspace
-     *   And      I click on the contextual menu icon of the group "accounting" which is now the sole owner of a password
+     * When  I go to the users workspace
+     *   And   I click on the contextual menu icon of the group "accounting" which is now the sole owner of a password
      * Then  I should see a contextual menu with an option "delete group"
-     * When I click on the "delete group" menu item.
+     * When  I click on the "delete group" menu item.
      * Then  I should see a confirmation dialog opening
-     *   And    I should see a message saying that the group is the sole owner of the password created
-     *   And    I should see the name of the password listed in the message
-     *   And    I should see a button "Got it"
-     * When I click on "Got it" button
+     *   And   I should see a message saying that the group is the sole owner of the password created
+     *   And   I should see the name of the password listed in the message
+     *   And   I should see a button "Got it"
+     * When  I click on "Got it" button
      * Then  I should see that the confirmation dialog disappears
-     * And I should see that the group is still present in the list
+     * And   I should see that the group is still present in the list
      */
     public function testDeleteGroupSoleOwnerOfPasswords() 
     {
@@ -155,7 +155,7 @@ class ADGroupDeleteTest extends PassboltTestCase
         $resource['id'] = $this->findPasswordIdByName($resource['name']);
         $this->gotoSharePassword($resource['id']);
 
-        // Then  I can see the group has no right on the password
+        // Then I can see the group has no right on the password
         $this->assertElementNotContainText(
             $this->findByCss('#js_permissions_list'),
             'Accounting'
@@ -196,21 +196,21 @@ class ADGroupDeleteTest extends PassboltTestCase
      * Scenario: As an administrator I can delete a group that is already selected in the list
      * Given    that I am logged in as an administrator
      *   And    that I am on the users workspace
-     * When I click on the group that I want to delete
+     * When  I click on the group that I want to delete
      * Then  I should see that the group is selected
-     *   And    I should see that the breadcrum shows "All users > group name"
-     * When I click on the contextual menu of a group that I want to remove that doesn't have any password shared with it
+     *   And   I should see that the breadcrum shows "All users > group name"
+     * When  I click on the contextual menu of a group that I want to remove that doesn't have any password shared with it
      * Then  I should see a contextual menu with an option "delete group"
-     * When I click on the "delete group" menu item
+     * When  I click on the "delete group" menu item
      * Then  I should see a confirmation dialog opening
-     *   And    I should see a message saying that there is no password associated with the group
-     *   And    I should see a call to action button with the "delete group" text
-     * When I click on "delete group" button
+     *   And   I should see a message saying that there is no password associated with the group
+     *   And   I should see a call to action button with the "delete group" text
+     * When  I click on "delete group" button
      * Then  I should see that the confirmation dialog disappears
-     *   And    I should see that the group is not present in the list anymore
-     *   And    I should see that the group is not selected anymore
-     *   And    I should see that instead, the All users filter is selected
-     *   And    I should see that the breadcrumb is now "All users" only and doesn't contain the name of the group
+     *   And   I should see that the group is not present in the list anymore
+     *   And   I should see that the group is not selected anymore
+     *   And   I should see that instead, the All users filter is selected
+     *   And   I should see that the breadcrumb is now "All users" only and doesn't contain the name of the group
      */
     public function testDeleteSelectedGroup() 
     {

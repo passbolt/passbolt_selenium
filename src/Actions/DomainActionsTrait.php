@@ -22,8 +22,6 @@ trait DomainActionsTrait
 
     /**
      * Switch config to use secondary domain (for multi domain testing).
-     *
-     * @throw Exception
      */
     public function switchToSecondaryDomain() 
     {

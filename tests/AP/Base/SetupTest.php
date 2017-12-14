@@ -640,7 +640,7 @@ class SetupTest extends PassboltSetupTestCase
      * Scenario: As AP doing the setup, I should not be able to import a key already used by another user.
      *
      * Given I have registered and I am following the setup
-     * When I am at the import step, and I try to import a key that is already in use by another user (example: Ada).
+     * When  I am at the import step, and I try to import a key that is already in use by another user (example: Ada).
      * Then  I should see an error message informing me that this key is already in use.
      *
      * @group AP
@@ -725,7 +725,7 @@ class SetupTest extends PassboltSetupTestCase
         $userU = User::get('ursula');
         $this->rightClickUser($userU['id']);
 
-        // Then  I select the delete option in the contextual menu
+        // Then I select the delete option in the contextual menu
         $this->click('#js_user_browser_menu_delete a');
 
         // Assert that the confirmation dialog is displayed.
@@ -734,7 +734,7 @@ class SetupTest extends PassboltSetupTestCase
         // Click ok in confirmation dialog.
         $this->confirmActionInConfirmationDialog();
 
-        // Then  I should see a success notification message saying the user is deleted
+        // Then I should see a success notification message saying the user is deleted
         $this->waitCompletion();
 
         $this->logout();

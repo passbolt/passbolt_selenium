@@ -32,7 +32,7 @@ class PASSBOLT1807 extends PassboltSetupTestCase
      *
      * @group AP
      * @group setup
-     * @group regressions
+     * @group regression
      * @group v2
      * @group import-key
      */
@@ -48,7 +48,7 @@ class PASSBOLT1807 extends PassboltSetupTestCase
         // When I import a key with multiple ids
         $this->goToSetup($user['Username']);
 
-        // Then  I am able to complete the setup
+        // Then I am able to complete the setup
         $this->completeSetupWithKeyImport([
             'private_key' => file_get_contents(Gpgkey::get(['name' => 'margaret'])['filepath'])
         ]);

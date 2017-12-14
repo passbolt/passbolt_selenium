@@ -15,9 +15,9 @@ class GMWorkspaceGroupTest extends PassboltTestCase
      * Scenario: As a group manager I can see the list users that are part of the group in the users grid by using the group filter
      *
      * Given        I am logged in as GM, and I go to the user workspace
-     * When         I click on a group name
-     * Then         I should see that the given group is selected
-     * And          I should see that the list of users display only the users that are part of this group.
+     * When  I click on a group name
+     * Then  I should see that the given group is selected
+     * And   I should see that the list of users display only the users that are part of this group.
      */
     public function testFilterUsersByGroup() 
     {
@@ -33,7 +33,7 @@ class GMWorkspaceGroupTest extends PassboltTestCase
         $group = Group::get(['id' => UuidFactory::uuid('group.id.ergonom')]);
         $this->clickGroup($group['id']);
 
-        // Then  I should see that the given group is selected
+        // Then I should see that the given group is selected
         $this->assertGroupSelected($group['id']);
 
         // And I should see that the list of users display only the users that are part of this group.

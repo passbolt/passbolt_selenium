@@ -25,8 +25,8 @@ trait WorkspaceAssertionsTrait
     /**
      * Check that the breadcumb contains the given crumbs
      *
-     * @param $wspName The workspace name
-     * @param $crumbs The crumbs to check
+     * @param string $wspName the workspace name
+     * @param array $crumbs the crumbs to check
      */
     public function assertBreadcrumb($wspName, $crumbs) 
     {

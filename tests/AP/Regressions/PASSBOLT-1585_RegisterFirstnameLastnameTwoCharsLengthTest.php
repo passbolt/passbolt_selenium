@@ -46,7 +46,7 @@ class PASSBOLT1585 extends PassboltSetupTestCase
         $this->assertNotVisible('.plugin-check.warning');
         $this->completeRegistration($chienShiung);
 
-        // Then  I should be able to login
+        // Then I should be able to login
         $this->loginAs($chienShiung, false);
     }
 }

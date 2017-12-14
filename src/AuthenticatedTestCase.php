@@ -17,6 +17,8 @@ namespace App;
 use App\Common\Actions\ScriptedActionsTrait;
 use App\Common\Config;
 use App\Common\RecordableTestCase;
+use Facebook\WebDriver\Exception\NoSuchElementException;
+use Facebook\WebDriver\WebDriverBy;
 
 abstract class AuthenticatedTestCase extends RecordableTestCase
 {
@@ -53,9 +55,9 @@ abstract class AuthenticatedTestCase extends RecordableTestCase
 
         // If not on the login page, we redirect to it.
         try {
-            $this->find('.users.login.form');
+            $this->getDriver()->findElement(WebDriverBy::cssSelector('.users.login.form'));
         }
-        catch(\Exception $e) {
+        catch(NoSuchElementException $e) {
             $this->getUrl('login');
         }
 

@@ -25,7 +25,7 @@ trait FindHelperTrait
     /**
      * A generic find, try by id, then css
      *
-     * @param  mixed $selector Element or selector string
+     * @param mixed $selector Element or selector string
      * @return mixed
      */
     public function find($selector) : RemoteWebElement
@@ -68,7 +68,7 @@ trait FindHelperTrait
     /**
      * Find an element by a CSS selector
      *
-     * @param  $css
+     * @param $css
      * @return mixed
      */
     public function findByCss($css) : RemoteWebElement
@@ -79,7 +79,7 @@ trait FindHelperTrait
     /**
      * Find all elements by a CSS selector
      *
-     * @param  $css
+     * @param $css
      * @return mixed
      */
     public function findAllByCss($css) : RemoteWebElement
@@ -90,7 +90,7 @@ trait FindHelperTrait
     /**
      * Find an element by a XPath selector
      *
-     * @param  $xpath
+     * @param $xpath
      * @return RemoteWebElement
      */
     public function findByXpath($xpath) : RemoteWebElement
@@ -101,7 +101,7 @@ trait FindHelperTrait
     /**
      * Find all elements by a XPath selector
      *
-     * @param  $xpath
+     * @param $xpath
      * @return array RemoteWebElement[]
      */
     public function findAllByXpath($xpath) : array
@@ -112,7 +112,7 @@ trait FindHelperTrait
     /**
      * Find an element by ID
      *
-     * @param  $id
+     * @param $id
      * @return RemoteWebElement
      */
     public function findById($id) : RemoteWebElement
@@ -123,7 +123,7 @@ trait FindHelperTrait
     /**
      * Find a link by its text
      *
-     * @param  $text
+     * @param $text
      * @return RemoteWebElement
      */
     public function findLinkByText($text) : RemoteWebElement

@@ -28,7 +28,7 @@ trait UserAssertionsTrait
     /**
      * Check if the user has already been selected
      *
-     * @param  $id string
+     * @param $id string
      * @return bool
      */
     public function isUserSelected($id) 
@@ -43,7 +43,7 @@ trait UserAssertionsTrait
     /**
      * Check if the user has not been selected
      *
-     * @param  $id string
+     * @param $id string
      * @return bool
      */
     public function isUserNotSelected($id) 
@@ -58,7 +58,7 @@ trait UserAssertionsTrait
     /**
      * Check if the user is inactive.
      *
-     * @param  $id
+     * @param $id
      * @return bool
      */
     public function isUserInactive($id) 

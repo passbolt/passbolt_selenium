@@ -39,19 +39,18 @@ class GroupCreateTest extends PassboltTestCase
      * @group LU
      * @group group
      * @group create
+     * @group v2
      */
     public function testCantCreateGroup() 
     {
         // Given I am LU.
-        $user = User::get('ada');
-
         // I am logged in as admin
-        $this->loginAs($user);
+        $this->loginAs(User::get('ada'));
 
         // Go to user workspace
         $this->gotoWorkspace('user');
 
-        // Then  I shouldn't see the create button
+        // Then I shouldn't see the create button
         $this->assertElementNotContainText(
             $this->findByCss('.main-action-wrapper'),
             'create'

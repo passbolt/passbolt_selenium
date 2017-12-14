@@ -82,7 +82,7 @@ trait SauceLabTestTrait
     /**
      * Update capabilities with some saucelab sauce
      *
-     * @param  DesiredCapabilities $capabilities
+     * @param DesiredCapabilities $capabilities
      * @return DesiredCapabilities
      */
     protected function _setSauceLabCapabilities(DesiredCapabilities $capabilities) 

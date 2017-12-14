@@ -18,21 +18,16 @@ use Facebook\WebDriver\Exception\NoSuchElementException;
 
 trait MasterPasswordActionsTrait
 {
-
-    use PasswordActionsTrait;
-
     /**
      * Copy a password to clipboard
      *
-     * @param  $resource
-     * @param  $user
-     * @throws Exception
-     * @throws NoSuchElementException
+     * @param $resource
+     * @param $user
      */
     public function copyToClipboard($resource, $user) 
     {
         $this->rightClickPassword($resource['id']);
-        $this->waitUntilISee('js_contextual_menu');
+        $this->waitUntilISee('#js_contextual_menu');
         $this->clickLink('Copy password');
         $this->assertMasterPasswordDialog($user);
         $this->enterMasterPassword($user['MasterPassword']);
@@ -56,7 +51,7 @@ trait MasterPasswordActionsTrait
         }
 
         // Get master password submit button element.
-        $submit = $this->find('master-password-submit');
+        $submit = $this->findById('master-password-submit');
 
         // Click on button.
         $submit->click();

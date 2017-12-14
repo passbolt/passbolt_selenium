@@ -1,10 +1,25 @@
 <?php
 /**
- * Bug PASSBOLT-1680 - Regression test
+ * Passbolt ~ Open source password manager for teams
+ * Copyright (c) Passbolt SARL (https://www.passbolt.com)
  *
- * @copyright (c) 2017 Passbolt SARL
- * @licence   GNU Affero General Public License http://www.gnu.org/licenses/agpl-3.0.en.html
+ * Licensed under GNU Affero General Public License version 3 of the or any later version.
+ * For full copyright and license information, please see the LICENSE.txt
+ * Redistributions of files must retain the above copyright notice.
+ *
+ * @copyright Copyright (c) Passbolt SARL (https://www.passbolt.com)
+ * @license   https://opensource.org/licenses/AGPL-3.0 AGPL License
+ * @link      https://www.passbolt.com Passbolt(tm)
+ * @since     2.0.0
  */
+/**
+ * Bug PASSBOLT-1680 - Regression test
+ */
+namespace Tests\LU\Regressions;
+
+use App\PassboltTestCase;
+use Data\Fixtures\User;
+
 class PASSBOLT1680 extends PassboltTestCase
 {
 
@@ -12,10 +27,13 @@ class PASSBOLT1680 extends PassboltTestCase
      * Scenario: As a user I can view a password I just created on my list of passwords
      *
      * Given I am Ada
-     * And I am logged in
-     * When I create a new password with a secret of 4096 characters
+     * And   I am logged in
+     * When  I create a new password with a secret of 4096 characters
      * Then  I see the password I created in my password list
-     * And I see the secret match the entry I made
+     * And   I see the secret match the entry I made
+     *
+     * @group LU
+     * @group regression
      */
     public function testCreatePasswordAndView() 
     {
@@ -48,7 +66,7 @@ class PASSBOLT1680 extends PassboltTestCase
         $this->click('.create-password-dialog input[type=submit]');
         $this->assertNotification('app_resources_add_success');
 
-        // Then  I see the password I created in my password list
+        // Then I see the password I created in my password list
         $this->assertElementContainsText(
             $this->find('js_wsp_pwd_browser'), $password['name']
         );

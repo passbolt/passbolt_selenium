@@ -30,8 +30,6 @@ trait SidebarActionsTrait
      * This expects the comment form to be shown already.
      *
      * @param $comment
-     *
-     * @throws Exception
      */
     public function postCommentInSidebar($comment) 
     {

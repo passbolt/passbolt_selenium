@@ -30,19 +30,28 @@ class LoginTest extends PassboltTestCase
 {
 
     /**
-     * Scenario: As AN I can login to passbolt
-     * @todo document the steps
+     * Scenario: As a LU I can login to passbolt
+     *
+     * Given I am Ada
+     * And   I am on the login page
+     * Then  I can see that my plugin is configured
+     * And   I can see the login form
+     * And   I can see my username in the login form
+     * When  I click on the submit button
+     * Then  I can see an error message saying a password is required
+     * When  I input my master password
+     * And   I press enter
+     * Then  I can see a progress feedback in the place of the form
+     * Then  I can see that I am on the password workspace
+     * And   my username is mentioned at the top
      *
      * @group LU
      * @group login
      * @group saucelabs
+     * @group v2
      */
     public function testLogin() 
     {
-        $this->getUrl('login');
-        sleep(1);
-        $this->assertVisible('.plugin-check.' . $this->_browser['type'] . '.warning');
-
         $user = User::get('ada');
         $this->setClientConfig($user);
 
@@ -54,8 +63,8 @@ class LoginTest extends PassboltTestCase
         $this->assertVisible('passbolt-iframe-login-form');
         $this->goIntoLoginIframe();
 
-        $this->assertVisible('.login-form.master-password');
-        $this->assertInputValue('username', $user['Username']);
+        $this->assertVisibleByCss('.login-form.master-password');
+        $this->assertInputValue('UserUsername', $user['Username']);
 
         $this->inputText('js_master_password', 'somethingwrong');
         $this->click('loginSubmit');
@@ -63,54 +72,6 @@ class LoginTest extends PassboltTestCase
         $this->waitUntilISee('#loginMessage.error');
         $this->inputText('js_master_password', $user['MasterPassword']);
 
-        $this->click('loginSubmit');
-        $this->assertElementContainsText('loginMessage', 'Please wait');
-        $this->goOutOfIframe();
-
-        $this->waitUntilISee('.login.form .feedback');
-        $this->assertElementContainsText('.login.form .feedback', 'Logging in');
-        $this->waitCompletion();
-
-        // wait for redirection trigger
-        sleep(1);
-        $this->waitCompletion();
-
-        $this->assertElementContainsText(
-            $this->findByCss('.header .user.profile .details .name'),
-            'Ada Lovelace'
-        );
-    }
-
-    /**
-     * Scenario: As AN I can login to passbolt by submitting the login form with the enter key
-     *
-     * @todo   document the steps
-     * @group LU
-     * @group login
-     */
-    public function testLoginWithEnterKey() 
-    {
-        $this->getUrl('login');
-        sleep(1);
-        $this->assertVisible('.plugin-check.' . $this->_browser['type'] . '.warning');
-
-        $user = User::get('ada');
-        $this->setClientConfig($user);
-
-        $this->getUrl('login');
-
-        $this->waitUntilISee('.plugin-check.' . $this->_browser['type'] . '.success');
-        $this->waitUntilISee('.plugin-check.gpg.success');
-
-        $this->assertVisible('passbolt-iframe-login-form');
-        $this->goIntoLoginIframe();
-
-        $this->assertVisible('.login-form.master-password');
-        $this->assertInputValue('username', $user['Username']);
-
-        $this->click('js_master_password');
-        $this->waitUntilElementHasFocus('js_master_password');
-        $this->typeTextLikeAUser($user['MasterPassword']);
         $this->pressEnter();
 
         $this->assertElementContainsText('loginMessage', 'Please wait');
@@ -121,8 +82,7 @@ class LoginTest extends PassboltTestCase
         $this->waitCompletion();
 
         // wait for redirection trigger
-        sleep(1);
-        $this->waitCompletion();
+        $this->waitUntilISee('html.passboltplugin-ready');
 
         $this->assertElementContainsText(
             $this->findByCss('.header .user.profile .details .name'),
@@ -143,6 +103,7 @@ class LoginTest extends PassboltTestCase
      *
      * @group LU
      * @group login
+     * @group v2
      */
     public function testMultipleTabsLogin() 
     {
@@ -183,9 +144,7 @@ class LoginTest extends PassboltTestCase
      *
      * @group LU
      * @group login
-     * @group skip
-     * @group chrome-only
-     * @group no-saucelabs
+     * @group v2
      */
     public function testRestartBrowserAndStillLoggedIn() 
     {
@@ -204,8 +163,6 @@ class LoginTest extends PassboltTestCase
 
     /**
      * Scenario: As LU I should still be logged in after I close and restore the passbolt tab
-     * PASSBOLT-2263 close and restore doesn't work with the latest chrome driver
-     * PASSBOLT-2419 close and restore doesn't work with the latest firefox driver
      *
      * Given I am Ada
      * And   I am on second tab
@@ -216,6 +173,8 @@ class LoginTest extends PassboltTestCase
      * @group LU
      * @group login
      * @group skip
+     * PASSBOLT-2263 close and restore doesn't work with the latest chrome driver
+     * PASSBOLT-2419 close and restore doesn't work with the latest firefox driver
      */
     public function testCloseRestoreTabAndStillLoggedIn() 
     {

@@ -1,16 +1,38 @@
 <?php
 /**
- * Bug PASSBOLT-1040 - Regression test
+ * Passbolt ~ Open source password manager for teams
+ * Copyright (c) Passbolt SARL (https://www.passbolt.com)
  *
- * @copyright (c) 2017 Passbolt SARL
- * @licence   GNU Affero General Public License http://www.gnu.org/licenses/agpl-3.0.en.html
+ * Licensed under GNU Affero General Public License version 3 of the or any later version.
+ * For full copyright and license information, please see the LICENSE.txt
+ * Redistributions of files must retain the above copyright notice.
+ *
+ * @copyright Copyright (c) Passbolt SARL (https://www.passbolt.com)
+ * @license   https://opensource.org/licenses/AGPL-3.0 AGPL License
+ * @link      https://www.passbolt.com Passbolt(tm)
+ * @since     2.0.0
  */
+/**
+ * Bug PASSBOLT-1040 - Regression test
+ */
+namespace Tests\LU\Regressions;
+
+use App\Actions\PasswordActionsTrait;
+use App\Assertions\WorkspaceAssertionsTrait;
+use App\PassboltTestCase;
+use Data\Fixtures\User;
+use Data\Fixtures\Resource;
+
 class PASSBOLT1040 extends PassboltTestCase
 {
+    use PasswordActionsTrait;
+    use WorkspaceAssertionsTrait;
+
     /**
      * Scenario: As a user editing my password encryption should not happen if do not edit the secret
      *
-     * @throws Exception
+     * @group LU
+     * @group regression
      */
     public function testNoEncryptionOnResourceNameEdit() 
     {
@@ -18,11 +40,8 @@ class PASSBOLT1040 extends PassboltTestCase
         $this->resetDatabaseWhenComplete();
 
         // Given I am Ada
-        $user = User::get('ada');
-        
-
         // And I am logged in on the password workspace
-        $this->loginAs($user);
+        $this->loginAs(User::get('ada'));
 
         // And I am editing the name, description, uri, username of a password I own
         $resource = Resource::get(
@@ -47,14 +66,9 @@ class PASSBOLT1040 extends PassboltTestCase
         $this->click('.edit-password-dialog input[type=submit]');
 
         // And I wait until I'm sure the progress dialog didn't appear
-        try {
-            $this->waitUntilISee('#passbolt-iframe-progress-dialog', null, 2);
-            $this->assertFalse(true, 'I should not be here, that means the progress dialog appeared');
-        } catch(Exception $e) {
-            //
-        }
+        $this->waitUntilIDontSee('#passbolt-iframe-progress-dialog');
 
-        // Then  I should see a success notification message saying the password is updated.
+        // Then I should see a success notification message saying the password is updated.
         $this->assertNotification('app_resources_edit_success');
     }
 }

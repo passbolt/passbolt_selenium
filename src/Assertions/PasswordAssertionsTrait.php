@@ -14,17 +14,13 @@
  */
 namespace App\Assertions;
 
-use App\BaseTestTrait;
-
 trait PasswordAssertionsTrait
 {
-
-    use BaseTestTrait;
 
     /**
      * Check if the password has already been selected
      *
-     * @param  $id string
+     * @param $id string
      * @return bool
      */
     public function isPasswordFavorite($id) 
@@ -44,16 +40,16 @@ trait PasswordAssertionsTrait
     public function assertComplexity($strength) 
     {
         $class = str_replace(' ', '_', $strength);
-        $this->assertVisible('#js_secret_strength.'.$class);
+        $this->assertVisibleByCss('#js_secret_strength.'.$class);
         $this->assertElementHasClass(
-            $this->find('#js_secret_strength .progress-bar'),
+            $this->findById('js_secret_strength .progress-bar'),
             $class
         );
         // We check visibility only if the strength is available.
         if ($strength != 'not available') {
-            $this->assertVisible('#js_secret_strength .progress-bar.'.$class);
+            $this->assertVisibleByCss('#js_secret_strength .progress-bar.'.$class);
         }
-        $this->assertVisible('#js_secret_strength .complexity-text');
+        $this->assertVisibleByCss('#js_secret_strength .complexity-text');
         $labelStrength = $strength != 'not available' ? $strength : 'n/a';
         $this->assertElementContainsText('#js_secret_strength .complexity-text', 'complexity: '.$labelStrength);
     }
@@ -61,7 +57,7 @@ trait PasswordAssertionsTrait
     /**
      * Assert a password is selected
      *
-     * @param  $id string
+     * @param $id string
      * @return bool
      */
     public function assertPasswordSelected($id) 
@@ -72,7 +68,7 @@ trait PasswordAssertionsTrait
     /**
      * Assert a password is not selected
      *
-     * @param  $id string
+     * @param $id string
      * @return bool
      */
     public function assertPasswordNotSelected($id) 
@@ -83,7 +79,7 @@ trait PasswordAssertionsTrait
     /**
      * Check if the password has already been selected
      *
-     * @param  $id string
+     * @param $id string
      * @return bool
      */
     public function isPasswordSelected($id) 
@@ -98,7 +94,7 @@ trait PasswordAssertionsTrait
     /**
      * Check if the password has not been selected
      *
-     * @param  $id string
+     * @param $id string
      * @return bool
      */
     public function isPasswordNotSelected($id) 

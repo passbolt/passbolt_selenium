@@ -49,7 +49,7 @@ class PASSBOLT1827 extends PassboltSetupTestCase
             'masterpassword' =>  $john['MasterPassword']
         ]);
 
-        // Then  I am able to login
+        // Then I am able to login
         $this->loginAs($john, false);
     }
 }

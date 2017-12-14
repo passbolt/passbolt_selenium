@@ -288,8 +288,7 @@ trait WaitAssertionsTrait
     /**
      * Wait until the title contains.
      *
-     * @param  $title
-     * @throws Exception
+     * @param $title
      */
     public function waitUntilTitleContain($title) 
     {
@@ -300,9 +299,9 @@ trait WaitAssertionsTrait
     /**
      * Wait until the url match a pattern
      *
-     * @param  string $url
-     * @param  bool   $addBase
-     * @param  int    $timeout
+     * @param string $url
+     * @param bool   $addBase
+     * @param int    $timeout
      * @return void
      */
     public function waitUntilUrlMatches($url, $addBase = true, $timeout = 10) 
@@ -327,7 +326,7 @@ trait WaitAssertionsTrait
     /**
      * Wait until an HTML Element has the attribute disabled
      *
-     * @param  $id
+     * @param $id
      */
     public function waitUntilDisabled($id) 
     {
@@ -337,7 +336,7 @@ trait WaitAssertionsTrait
     /**
      * Wait until a notification disappears.
      *
-     * @param  $notificationId
+     * @param $notificationId
      */
     public function waitUntilNotificationDisappears($notificationId) 
     {

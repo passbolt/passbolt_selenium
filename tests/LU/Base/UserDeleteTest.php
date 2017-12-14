@@ -1,28 +1,58 @@
 <?php
 /**
+ * Passbolt ~ Open source password manager for teams
+ * Copyright (c) Passbolt SARL (https://www.passbolt.com)
+ *
+ * Licensed under GNU Affero General Public License version 3 of the or any later version.
+ * For full copyright and license information, please see the LICENSE.txt
+ * Redistributions of files must retain the above copyright notice.
+ *
+ * @copyright Copyright (c) Passbolt SARL (https://www.passbolt.com)
+ * @license   https://opensource.org/licenses/AGPL-3.0 AGPL License
+ * @link      https://www.passbolt.com Passbolt(tm)
+ * @since     2.0.0
+ */
+/**
  * Feature :  As a LU regarding the delete user feature.
  *
  * Scenarios :
  *  - As LU I should be able to get a clear feedback at login if my account has been deleted.
- *
- * @copyright (c) 2017 Passbolt SARL
- * @licence   GNU Affero General Public License http://www.gnu.org/licenses/agpl-3.0.en.html
  */
-class LUUserDeleteTest extends PassboltTestCase
+namespace Tests\LU\Base;
+
+use App\Actions\ConfirmationDialogActionsTrait;
+use App\Actions\UserActionsTrait;
+use App\Actions\WorkspaceActionsTrait;
+use App\Assertions\ConfirmationDialogAssertionsTrait;
+use App\Assertions\WorkspaceAssertionsTrait;
+use App\PassboltTestCase;
+use Data\Fixtures\User;
+
+class UserDeleteTest extends PassboltTestCase
 {
+    use ConfirmationDialogActionsTrait;
+    use ConfirmationDialogAssertionsTrait;
+    use UserActionsTrait;
+    use WorkspaceActionsTrait;
+    use WorkspaceAssertionsTrait;
 
     /**
      * Scenario: As LU I should be able to get a clear feedback at login if my account has been deleted.
-     * Given        I am logged in as admin in the user workspace
-     * And          I click on the user
-     * And          I click on delete button
-     * Then         I should see a confirmation dialog
-     * When         I click ok in the confirmation dialog
-     * Then         I should see a confirmation message
-     * When         I log out
-     * And          I become the user I deleted
-     * And          I go to the login page
-     * Then         I should see a feedback telling me that my account doesn't exist on server
+     *
+     * Given I am logged in as admin in the user workspace
+     * And   I click on the user
+     * And   I click on delete button
+     * Then  I should see a confirmation dialog
+     * When  I click ok in the confirmation dialog
+     * Then  I should see a confirmation message
+     * When  I log out
+     * And   I become the user I deleted
+     * And   I go to the login page
+     * Then  I should see a feedback telling me that my account doesn't exist on server
+     *
+     * @group LU
+     * @group user
+     * @group delete
      */
     public function testDeletedUserGetFeedback() 
     {
@@ -31,7 +61,6 @@ class LUUserDeleteTest extends PassboltTestCase
 
         // Given I am Admin
         $user = User::get('admin');
-        
 
         // And I am logged in on the user workspace
         $this->loginAs($user);
@@ -43,7 +72,7 @@ class LUUserDeleteTest extends PassboltTestCase
         $userU = User::get('ursula');
         $this->clickUser($userU['id']);
 
-        // Then  I select the delete option in the contextual menu
+        // Then I select the delete option in the contextual menu
         $this->click('js_user_wk_menu_deletion_button');
 
         // Assert that the confirmation dialog is displayed.
@@ -52,7 +81,7 @@ class LUUserDeleteTest extends PassboltTestCase
         // Click ok in confirmation dialog.
         $this->confirmActionInConfirmationDialog();
 
-        // Then  I should see a success notification message saying the user is deleted
+        // Then I should see a success notification message saying the user is deleted
         $this->assertNotification('app_users_delete_success');
 
         // Log out.

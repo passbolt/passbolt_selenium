@@ -27,8 +27,8 @@ trait ElementAssertionsTrait
     /**
      * Check if an element has a given class name
      *
-     * @param  mixed     $elt string selector or RemoteWebElement
-     * @param  $className
+     * @param mixed     $elt string selector or RemoteWebElement
+     * @param $className
      * @return bool
      */
     public function elementHasClass($elt, $className)
@@ -86,7 +86,7 @@ trait ElementAssertionsTrait
      * Assert if an element has a given class name
      *
      * @param RemoteWebElement $elt
-     * @param string           $className
+     * @param string $className
      */
     public function assertElementHasClass(RemoteWebElement $elt, $className)
     {

@@ -1,5 +1,18 @@
 <?php
 /**
+ * Passbolt ~ Open source password manager for teams
+ * Copyright (c) Passbolt SARL (https://www.passbolt.com)
+ *
+ * Licensed under GNU Affero General Public License version 3 of the or any later version.
+ * For full copyright and license information, please see the LICENSE.txt
+ * Redistributions of files must retain the above copyright notice.
+ *
+ * @copyright Copyright (c) Passbolt SARL (https://www.passbolt.com)
+ * @license   https://opensource.org/licenses/AGPL-3.0 AGPL License
+ * @link      https://www.passbolt.com Passbolt(tm)
+ * @since     2.0.0
+ */
+/**
  * Feature :  As a user I can edit the password description directly from the sidebar
  *
  * Scenarios
@@ -7,30 +20,40 @@
  *  - As a user I should be able to edit the description of the passwords I own in the sidebar by clicking on the description
  *  - As a user I should be able to see the validation error messages for the description
  *  - As a user I should'nt be able to edit the description of a password with read access only
- *
- * @copyright (c) 2017 Passbolt SARL
- * @licence   GNU Affero General Public License http://www.gnu.org/licenses/agpl-3.0.en.html
  */
+namespace Tests\LU\Base;
+
+use App\Actions\PasswordActionsTrait;
+use App\Assertions\WorkspaceAssertionsTrait;
+use App\PassboltTestCase;
+use Data\Fixtures\User;
+use Data\Fixtures\Resource;
+
 class PasswordEditDescriptionTest extends PassboltTestCase
 {
+    use PasswordActionsTrait;
+    use WorkspaceAssertionsTrait;
 
     /**
-     * @group saucelabs
      * Scenario: As a user I should be able to edit the description of the passwords I own in the sidebar by clicking on the edit button
-     * Given        I am Ada and I am logged in on the password workspace
-     * Then         I should not see the sidebar and the textarea to edit the description
-     * When         I click on a password I own
-     * Then         I should see the description section in the sidebar with a link to edit the description
-     * And          I should see the current password description
-     * When         I click the edit button
-     * Then         I should see a form to edit the description
-     * And          I should see that the form should contain the description pre filled
-     * When         I enter a new description
-     * And          I click on save
-     * Then         I should not see the form anymore
-     * And          I should see the new description
      *
-     * @throws Exception
+     * Given I am Ada and I am logged in on the password workspace
+     * Then  I should not see the sidebar and the textarea to edit the description
+     * When  I click on a password I own
+     * Then  I should see the description section in the sidebar with a link to edit the description
+     * And   I should see the current password description
+     * When  I click the edit button
+     * Then  I should see a form to edit the description
+     * And   I should see that the form should contain the description pre filled
+     * When  I enter a new description
+     * And   I click on save
+     * Then  I should not see the form anymore
+     * And   I should see the new description
+     *
+     * @group LU
+     * @group password
+     * @group edit
+     * @group saucelabs
      */
     public function testDescriptionEditButton() 
     {
@@ -38,11 +61,8 @@ class PasswordEditDescriptionTest extends PassboltTestCase
         $this->resetDatabaseWhenComplete();
 
         // Given I am Ada
-        $user = User::get('ada');
-
-
         // And I am logged in on the password workspace
-        $this->loginAs($user);
+        $this->loginAs(User::get('ada'));
 
         // Make sure the description form is not visible.
         $this->assertNotVisible(".js_rs_details_edit_description textarea");
@@ -55,7 +75,7 @@ class PasswordEditDescriptionTest extends PassboltTestCase
         $this->waitUntilISee('#js_pwd_details.ready');
 
         // I should see the edit button.
-        $this->assertVisible("js_edit_description_button");
+        $this->assertVisibleByCss("js_edit_description_button");
 
         // I should see a description.
         $this->assertElementContainsText('#js_rs_details_description', 'Apache is the world\'s most used web server software.');
@@ -90,20 +110,23 @@ class PasswordEditDescriptionTest extends PassboltTestCase
 
     /**
      * Scenario: As a user I should be able to edit the description of the passwords I own in the sidebar by clicking on the description
-     * Given        I am Ada and I am logged in on the password workspace
-     * Then         I should not see the sidebar and the textarea / form to edit the description
-     * When         I click on a password I own
-     * Then         I should see the description area in the sidebar with a link to edit the description
-     * And          I should see the current password description
-     * When         I click the description
-     * Then         I should a form to edit the description
-     * And          I should see that the form should contain the description pre filled
-     * When         I enter a new description
-     * And          I click on save
-     * Then         I should not see the form anymore
-     * And          I should see the new description
      *
-     * @throws Exception
+     * Given I am Ada and I am logged in on the password workspace
+     * Then  I should not see the sidebar and the textarea / form to edit the description
+     * When  I click on a password I own
+     * Then  I should see the description area in the sidebar with a link to edit the description
+     * And   I should see the current password description
+     * When  I click the description
+     * Then  I should a form to edit the description
+     * And   I should see that the form should contain the description pre filled
+     * When  I enter a new description
+     * And   I click on save
+     * Then  I should not see the form anymore
+     * And   I should see the new description
+     *
+     * @group LU
+     * @group password
+     * @group edit
      */
     public function testDescriptionEditClick() 
     {
@@ -111,11 +134,8 @@ class PasswordEditDescriptionTest extends PassboltTestCase
         $this->resetDatabaseWhenComplete();
 
         // Given I am Ada
-        $user = User::get('ada');
-
-
         // And I am logged in on the password workspace.
-        $this->loginAs($user);
+        $this->loginAs(User::get('ada'));
 
         // Make sure the edit description field is not visible.
         $this->assertNotVisible(".js_rs_details_edit_description textarea");
@@ -125,7 +145,7 @@ class PasswordEditDescriptionTest extends PassboltTestCase
         $this->clickPassword($resource['id']);
 
         // I should see the edit description button.
-        $this->assertVisible("js_edit_description_button");
+        $this->assertVisibleByCss("js_edit_description_button");
 
         // I should see a description.
         $this->assertElementContainsText('#js_rs_details_description', 'Apache is the world\'s most used web server software.');
@@ -161,30 +181,29 @@ class PasswordEditDescriptionTest extends PassboltTestCase
     /**
      * Scenario: As a user I should be able to see the validation error messages for the description
      * Given        I am Ada and I am logged in on the password workspace
-     * Then         I should not see the sidebar and the textarea to edit the description
-     * When         I click on a password I own
-     * Then         I should see the description area in the sidebar with a link to edit the description
-     * And          I should see the current password description
-     * When         I click the edit button
-     * Then         I should see a form to edit the description.
-     * When         I enter ### in the description field
-     * Then         I should see the error message Description should contain only alphabets, numbers, ....
-     * When         I click outside of the textarea
-     * Then         I should see that the form has disappeared
-     * When         I click on the edit button again
-     * Then         I should see the form without error messages
-     * And          I should see that the initial description is entered.
+     * Then  I should not see the sidebar and the textarea to edit the description
+     * When  I click on a password I own
+     * Then  I should see the description area in the sidebar with a link to edit the description
+     * And   I should see the current password description
+     * When  I click the edit button
+     * Then  I should see a form to edit the description.
+     * When  I enter ### in the description field
+     * Then  I should see the error message Description should contain only alphabets, numbers, ....
+     * When  I click outside of the textarea
+     * Then  I should see that the form has disappeared
+     * When  I click on the edit button again
+     * Then  I should see the form without error messages
+     * And   I should see that the initial description is entered.
      *
-     * @throws Exception
+     * @group LU
+     * @group password
+     * @group edit
      */
     public function testDescriptionEditErrorMessages() 
     {
         // Given I am Ada
-        $user = User::get('ada');
-
-
         // And I am logged in on the password workspace.
-        $this->loginAs($user);
+        $this->loginAs(User::get('ada'));
 
         // Make sure the password field is not visible.
         $this->assertNotVisible(".js_rs_details_edit_description textarea");
@@ -230,23 +249,23 @@ class PasswordEditDescriptionTest extends PassboltTestCase
 
     /**
      * Scenario: As a user I should'nt be able to edit the description of a password with read access only
-     * Given        I am Ada and I am logged in on the password workspace
-     * When         I click on a password with read access only
-     * Then         I should see the description in the sidebar
-     * And          I should not see an edit button for the description
-     * When         I click on the description
-     * Then         I should not see a form to edit the description
      *
-     * @throws Exception
+     * Given I am Ada and I am logged in on the password workspace
+     * When  I click on a password with read access only
+     * Then  I should see the description in the sidebar
+     * And   I should not see an edit button for the description
+     * When  I click on the description
+     * Then  I should not see a form to edit the description
+     *
+     * @group LU
+     * @group password
+     * @group edit
      */
     public function testEditDescriptionNotAllowed() 
     {
         // Given I am Ada
-        $user = User::get('ada');
-
-
         // And I am logged in on the password workspace
-        $this->loginAs($user);
+        $this->loginAs(User::get('ada'));
 
         // Make sure the password field is not visible
         $this->assertNotVisible(".js_rs_details_edit_description textarea");
@@ -264,5 +283,4 @@ class PasswordEditDescriptionTest extends PassboltTestCase
         // Make sure password field is not visible.
         $this->assertNotVisible("#js_rs_details_edit_description textarea");
     }
-
 }

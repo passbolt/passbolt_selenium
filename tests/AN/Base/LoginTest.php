@@ -30,7 +30,7 @@ class LoginTest extends PassboltTestCase
     /**
      * Scenario: As AN, I should be redirected to https if ssl.force parameter is set to true.
      * Given I am an anonymous user
-     * When I am trying to access the login page
+     * When  I am trying to access the login page
      * Then  I should see that I am automatically redirected to the https version of it
      *
      * @group chrome-only
@@ -85,11 +85,11 @@ class LoginTest extends PassboltTestCase
      * Given I am an anonymous user with no plugin on the login page
      * When        When the page is loaded
      * Then  I can see a box on the right
-     * And I can see a link download the plugin
-     * And I cannot see an iframe inside the box
-     * And I cannot see a username field (inside the iframe)
-     * And I cannot see a password field (inside the iframe)
-     * And I cannot see a login button
+     * And   I can see a link download the plugin
+     * And   I cannot see an iframe inside the box
+     * And   I cannot see a username field (inside the iframe)
+     * And   I cannot see a password field (inside the iframe)
+     * And   I cannot see a login button
      *
      * @group saucelabs
      */
@@ -139,7 +139,7 @@ class LoginTest extends PassboltTestCase
     /**
      * Scenario: I should not see warnings if I accept cookies and javascript is enabled
      * Given I am an anonymous user with no plugin on the login page
-     * Then         I should not see a cookie warning
+     * Then  I should not see a cookie warning
      * Then      I should not see a javascript warning
      */
     public function testNoCookieBanner() 

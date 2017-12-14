@@ -50,9 +50,7 @@ class PassboltServer
     }
 
     /**
-     * Reset extra server configuration.
-     *
-     * @throws Exception
+     * Reset extra server configuration
      */
     static public function resetExtraConfig() 
     {
