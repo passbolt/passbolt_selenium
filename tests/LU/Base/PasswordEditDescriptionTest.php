@@ -13,7 +13,7 @@
  * @since     2.0.0
  */
 /**
- * Feature :  As a user I can edit the password description directly from the sidebar
+ * Feature: As a user I can edit the password description directly from the sidebar
  *
  * Scenarios
  *  - As a user I should be able to edit the description of the passwords I own in the sidebar by clicking on the edit button

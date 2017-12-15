@@ -13,7 +13,7 @@
  * @since     2.0.0
  */
 /**
- * Feature :  As a user I can get the system to remember my passphrase for a limited time
+ * Feature: As a user I can get the system to remember my passphrase for a limited time
  *
  * Scenarios :
  * As a user I can have my passphrase remembered by the system.

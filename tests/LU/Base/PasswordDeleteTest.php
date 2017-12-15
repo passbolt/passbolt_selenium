@@ -13,7 +13,7 @@
  * @since     2.0.0
  */
 /**
- * Feature :  As a user I can delete passwords
+ * Feature: As a user I can delete passwords
  *
  * Scenarios
  * As a user I can delete a password using a right click

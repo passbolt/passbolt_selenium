@@ -13,7 +13,7 @@
  * @since     2.0.0
  */
 /**
- * Feature :  As a logged in used I shouldn't be able to create groups
+ * Feature: As a logged in used I shouldn't be able to create groups
  *
  * Scenarios :
  *  - As a logged in user I shouldn't be able to create groups from the users workspace

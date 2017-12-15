@@ -13,7 +13,7 @@
  * @since     2.0.0
  */
 /**
- * Feature :  As a user I can create passwords
+ * Feature: As a user I can create passwords
  *
  * Scenarios :
  * As a logged in user I can view the create password dialog

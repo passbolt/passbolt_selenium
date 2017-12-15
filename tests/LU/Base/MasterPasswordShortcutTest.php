@@ -13,7 +13,7 @@
  * @since     2.0.0
  */
 /**
- * Feature :  As a user I can enter my passphrase using the keyboard shortcuts
+ * Feature: As a user I can enter my passphrase using the keyboard shortcuts
  *
  * Scenarios :
  * As a user I can copy a password using the button in the action bar, and enter my passphrase from keyboard only

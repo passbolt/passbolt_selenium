@@ -1,29 +1,59 @@
 <?php
 /**
+ * Passbolt ~ Open source password manager for teams
+ * Copyright (c) Passbolt SARL (https://www.passbolt.com)
+ *
+ * Licensed under GNU Affero General Public License version 3 of the or any later version.
+ * For full copyright and license information, please see the LICENSE.txt
+ * Redistributions of files must retain the above copyright notice.
+ *
+ * @copyright Copyright (c) Passbolt SARL (https://www.passbolt.com)
+ * @license   https://opensource.org/licenses/AGPL-3.0 AGPL License
+ * @link      https://www.passbolt.com Passbolt(tm)
+ * @since     2.0.0
+ */
+/**
  * Feature : As a GM regarding the delete user feature.
  *
  * Scenarios :
  *  - As a GM I should receive a notification when a user who is part of one (or more) groups I manage is deleted.
- *
- * @copyright (c) 2017 Passbolt SARL
- * @licence   GNU Affero General Public License http://www.gnu.org/licenses/agpl-3.0.en.html
  */
+namespace Tests\GM\Base;
+
+use App\Actions\ConfirmationDialogActionsTrait;
+use App\Actions\UserActionsTrait;
+use App\Actions\WorkspaceActionsTrait;
+use App\Assertions\ConfirmationDialogAssertionsTrait;
+use App\Assertions\WorkspaceAssertionsTrait;
+use App\PassboltTestCase;
+use Data\Fixtures\User;
+
 class GMUserDeleteTest extends PassboltTestCase
 {
+    use ConfirmationDialogActionsTrait;
+    use ConfirmationDialogAssertionsTrait;
+    use UserActionsTrait;
+    use WorkspaceActionsTrait;
+    use WorkspaceAssertionsTrait;
 
     /**
      * Scenario: As a GM I should receive a notification when a user who is part of one (or more) groups I manage is deleted.
      *
-     * Given        I am logged in as an admin
+     * Given I am logged in as an admin
      * And   I am on the users workspace
      * When  I delete a user
      * Then  I should see a success notification message
      * When  I access last email sent to one of the group manager
      * Then  I should see the expected email title
-     *     And   I should see the expected email content
+     * And   I should see the expected email content
      * When  I access last email sent to another group manager
      * Then  I should see the expected email title
-     *     And   I should see the expected email content
+     * And   I should see the expected email content
+     *
+     * @group GM
+     * @group group
+     * @group user
+     * @group delete
      */
     public function testDeleteUserEmailNotification() 
     {
@@ -31,7 +61,6 @@ class GMUserDeleteTest extends PassboltTestCase
 
         // Given I am an administrator.
         $user = User::get('admin');
-
 
         // I am logged in as admin
         $this->loginAs($user);

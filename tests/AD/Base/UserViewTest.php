@@ -1,6 +1,6 @@
 <?php
 /**
- * Feature :  As Admin I can view user information
+ * Feature: As Admin I can view user information
  *
  * Scenarios :
  * - As an admin I should see the sidebar groups section updated when I create a group
@@ -16,7 +16,7 @@ class ADUserViewTest extends PassboltTestCase
      * Scenario: As an admin I should be able to distinguish visually inactive users
      *
      * Given I am logged in as Admin, and I go to the user workspace
-     * When        I look at Orna who is a deactivated user
+     * When  I look at Orna who is a deactivated user
      * Then  I should see that the user is shown in a different color
      * When  I click on the user Orna
      * Then  I should see that the sidebar opens
@@ -61,7 +61,7 @@ class ADUserViewTest extends PassboltTestCase
      * Scenario: As an admin I should see the sidebar groups section updated when I create a group
      *
      * Given I am logged in as Admin, and I go to the user workspace
-     * When        I click on a user
+     * When  I click on a user
      * And   I create a group where the user I selected is member of
      * Then  I should see the groups membership list updated with the new group
      */

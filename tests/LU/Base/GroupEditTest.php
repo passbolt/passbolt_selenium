@@ -13,13 +13,10 @@
  * @since     2.0.0
  */
 /**
- * Feature :  As a LU I shouldn't be able to edit a group
+ * Feature: As a LU I shouldn't be able to edit a group
  *
  * Scenarios :
  *  - As a LU I shouldn't be able to edit a group
- *
- * @copyright (c) 2017-present Passbolt SARL
- * @licence   GNU Affero General Public License http://www.gnu.org/licenses/agpl-3.0.en.html
  */
 namespace Tests\LU\Base;
 

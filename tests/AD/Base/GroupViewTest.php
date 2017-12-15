@@ -1,6 +1,6 @@
 <?php
 /**
- * Feature :  As an administrator I can view group information
+ * Feature: As an administrator I can view group information
  *
  * Scenarios :
  *  - As administrator I can see the list users that are part of the group in the edit group dialog

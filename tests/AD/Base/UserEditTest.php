@@ -13,7 +13,7 @@
  * @since     2.0.0
  */
 /**
- * Feature :  As a user I can edit users
+ * Feature: As a user I can edit users
  *
  * Scenarios :
  *  - As an admin I can edit a user using the edit button in the action bar

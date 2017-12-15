@@ -3,7 +3,7 @@ use Facebook\WebDriver\WebDriverBy;
 use Facebook\WebDriver\WebDriverSelect;
 
 /**
- * Feature :  As an administrator I can edit groups
+ * Feature: As an administrator I can edit groups
  *
  * Scenarios :
  *  - As an administrator I can edit a group using the right click contextual menu
@@ -29,8 +29,8 @@ class ADGroupEditTest extends PassboltTestCase
      * When  I click on the contextual menu button of a group on the right
      * Then  I should see the group contextual menu
      * And   I should see the “Edit group” option
-     * When        I click on “Edit group”
-     * Then        I should see the Edit group dialog
+     * When  I click on “Edit group”
+     * Then  I should see the Edit group dialog
      */
     public function testEditGroupRightClick() 
     {
@@ -60,11 +60,11 @@ class ADGroupEditTest extends PassboltTestCase
      *
      * Given I am logged in as administrator
      * And   I am editing a group
-     * When        I observe the content of the edit group dialog
-     * Then        I should see a “group name” field containing the current group name.
-     * When        I modify the group name
+     * When  I observe the content of the edit group dialog
+     * Then  I should see a “group name” field containing the current group name.
+     * When  I modify the group name
      * And   I click on “save”
-     * Then        I should see that the dialog disappears
+     * Then  I should see that the dialog disappears
      * And   I should see a confirmation message saying that the group has been edited
      * And   I should see that the group name has been changed in the groups list
      */
@@ -106,7 +106,7 @@ class ADGroupEditTest extends PassboltTestCase
      * Given I am logged in as administrator
      * And   I am on the user workspace
      * And   I should see a “edit” button next to the Information section
-     * When        I press the “Edit” button
+     * When  I press the “Edit” button
      * Then  I should see the Edit group dialog
      */
     public function testEditGroupFromSidebar() 
@@ -137,7 +137,7 @@ class ADGroupEditTest extends PassboltTestCase
      *
      * Given I am logged in as administrator
      * And   I am editing a group that I am not the group manager of
-     * When        I observe the content of the edit group dialog
+     * When  I observe the content of the edit group dialog
      * Then  I should not see a Add people section
      *  And     I should see a warning message saying that "Only the group manager can add new people to a group."
      */
@@ -391,9 +391,9 @@ class ADGroupEditTest extends PassboltTestCase
      * Then  I should see the list of users that are part of this group in the edit group dialog
      * And   I should see next to each user the role that he has in the group in a select box
      * When  I change the role of one simple group member to group manager
-     * Then        I should see the member marked as going to be updated next to it
+     * Then  I should see the member marked as going to be updated next to it
      * And   I should see a warning message saying that the changes will be applied after clicking on save
-     * When        I click on save
+     * When  I click on save
      * Then  I should see a confirmation message saying that the group was edited
      * And         A notification should be sent to the user that was promoted group manager
      * When  I log in as the user who was promoted group manager
@@ -470,8 +470,8 @@ class ADGroupEditTest extends PassboltTestCase
      * Given I am logged in as administrator
      * And   I am on the users workspace
      * And   I edit a group
-     * When        I change all the members roles to member (except one admin)
-     * Then        I should not be able to change the role of this user
+     * When  I change all the members roles to member (except one admin)
+     * Then  I should not be able to change the role of this user
      */
     public function testAtLeastOneGroupManager() 
     {

@@ -13,7 +13,7 @@
  * @since     2.0.0
  */
 /**
- * Feature :  As a user I can share passwords
+ * Feature: As a user I can share passwords
  *
  * Scenarios :
  * As a user I can see the share dialog using the share button in the action bar

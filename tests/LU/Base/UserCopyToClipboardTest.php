@@ -13,7 +13,7 @@
  * @since     2.0.0
  */
 /**
- * Feature :  As a admin I can copy users email and public key into the clipboard
+ * Feature: As a admin I can copy users email and public key into the clipboard
  *
  * Scenarios :
  * As a admin I can see the list of copy options when clicking right on a user

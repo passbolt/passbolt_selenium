@@ -3,7 +3,7 @@ use Facebook\WebDriver\WebDriverBy;
 use Facebook\WebDriver\WebDriverSelect;
 
 /**
- * Feature :  As an administrator I can create groups
+ * Feature: As an administrator I can create groups
  *
  * Scenarios :
  *  - As an administrator I can click on create group and see that the create group dialog exists.

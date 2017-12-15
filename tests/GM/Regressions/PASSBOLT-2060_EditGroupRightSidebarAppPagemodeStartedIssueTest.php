@@ -1,12 +1,39 @@
 <?php
 /**
+ * Passbolt ~ Open source password manager for teams
+ * Copyright (c) Passbolt SARL (https://www.passbolt.com)
+ *
+ * Licensed under GNU Affero General Public License version 3 of the or any later version.
+ * For full copyright and license information, please see the LICENSE.txt
+ * Redistributions of files must retain the above copyright notice.
+ *
+ * @copyright Copyright (c) Passbolt SARL (https://www.passbolt.com)
+ * @license   https://opensource.org/licenses/AGPL-3.0 AGPL License
+ * @link      https://www.passbolt.com Passbolt(tm)
+ * @since     2.0.0
+ */
+/**
  * Bug PASSBOLT-2060 - Regression test
  *
  * @copyright (c) 2015-present Bolt Softwares Pvt Ltd
  * @licence   GNU Affero General Public License http://www.gnu.org/licenses/agpl-3.0.en.html
  */
+namespace Tests\GM\Regressions;
+
+use App\Actions\GroupActionsTrait;
+use App\Actions\WorkspaceActionsTrait;
+use App\Assertions\GroupAssertionsTrait;
+use App\Assertions\WorkspaceAssertionsTrait;
+use App\Lib\UuidFactory;
+use App\PassboltSetupTestCase;
+use Data\Fixtures\User;
+
 class PASSBOLT2060 extends PassboltSetupTestCase
 {
+    use GroupActionsTrait;
+    use GroupAssertionsTrait;
+    use WorkspaceActionsTrait;
+    use WorkspaceAssertionsTrait;
 
     /**
      * Scenario: As a user I should be able to edit a group from the right sidebar
@@ -14,8 +41,12 @@ class PASSBOLT2060 extends PassboltSetupTestCase
      * Given I register an account as John Doe
      * When  I complete the setup with a passphrase longer than 50 char
      * Then  I am able to login
+     *
+     * @group GM
+     * @group group
+     * @group edit
      */
-    public function testSetupAndLoginWithLongPassphrase() 
+    public function testEditGroupFromSidebar()
     {
         $this->resetDatabaseWhenComplete();
 

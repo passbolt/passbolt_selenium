@@ -13,7 +13,7 @@
  * @since     2.0.0
  */
 /**
- * Feature :  As LU I can view user information
+ * Feature: As LU I can view user information
  *
  * Scenarios :
  * - As a user I should be able to view the user details

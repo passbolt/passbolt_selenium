@@ -13,7 +13,7 @@
  * @since     2.0.0
  */
 /**
- * Feature :  As LU I can view group information
+ * Feature: As LU I can view group information
  *
  * Scenarios :
  *  - As a user I can see a group information from the sidebar

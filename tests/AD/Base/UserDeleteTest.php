@@ -1,6 +1,6 @@
 <?php
 /**
- * Feature :  As a admin I can delete users
+ * Feature: As a admin I can delete users
  *
  * Scenarios :
  *  - As admin I should be able to delete a user on a right click

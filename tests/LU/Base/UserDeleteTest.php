@@ -13,7 +13,7 @@
  * @since     2.0.0
  */
 /**
- * Feature :  As a LU regarding the delete user feature.
+ * Feature: As a LU regarding the delete user feature.
  *
  * Scenarios :
  *  - As LU I should be able to get a clear feedback at login if my account has been deleted.

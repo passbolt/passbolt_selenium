@@ -3,7 +3,7 @@
 //use Facebook\WebDriver\WebDriverSelect;
 
 /**
- * Feature :  As an administrator I can delete a group
+ * Feature: As an administrator I can delete a group
  *
  * Scenarios :
  *  - As an administrator I can delete a group that doesn't have any passwords shared with it

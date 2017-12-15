@@ -13,7 +13,7 @@
  * @since     2.0.0
  */
 /**
- * Feature :  As a user I can copy my password info to clipboard
+ * Feature: As a user I can copy my password info to clipboard
  *
  * Scenarios :
  * As a user I can see the list of copy options when clicking right on a password

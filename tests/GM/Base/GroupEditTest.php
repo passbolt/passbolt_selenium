@@ -1,9 +1,19 @@
 <?php
-use Facebook\WebDriver\WebDriverBy;
-use Facebook\WebDriver\WebDriverSelect;
-
 /**
- * Feature :  As a group manager I can edit groups
+ * Passbolt ~ Open source password manager for teams
+ * Copyright (c) Passbolt SARL (https://www.passbolt.com)
+ *
+ * Licensed under GNU Affero General Public License version 3 of the or any later version.
+ * For full copyright and license information, please see the LICENSE.txt
+ * Redistributions of files must retain the above copyright notice.
+ *
+ * @copyright Copyright (c) Passbolt SARL (https://www.passbolt.com)
+ * @license   https://opensource.org/licenses/AGPL-3.0 AGPL License
+ * @link      https://www.passbolt.com Passbolt(tm)
+ * @since     2.0.0
+ */
+/**
+ * Feature: As a group manager I can edit groups
  *
  * Scenarios :
  *  - As a group manager I can edit a group using the right click contextual menu
@@ -19,12 +29,33 @@ use Facebook\WebDriver\WebDriverSelect;
  *  - As a user I should receive a notification when I am deleted from a group
  *  - As a group member I should receive a notification when my role in the group has changed
  *  - As a group manager I should receive a notification when another group manager updated the members of a group I manage
- *
- * @copyright (c) 2017-present Passbolt SARL
- * @licence   GNU Affero General Public License http://www.gnu.org/licenses/agpl-3.0.en.html
  */
+namespace Tests\GM\Base;
+
+use App\Actions\GroupActionsTrait;
+use App\Actions\MasterPasswordActionsTrait;
+use App\Actions\PasswordActionsTrait;
+use App\Actions\WorkspaceActionsTrait;
+use App\Assertions\ClipboardAssertions;
+use App\Assertions\GroupAssertionsTrait;
+use App\Assertions\MasterPasswordAssertionsTrait;
+use App\Assertions\WorkspaceAssertionsTrait;
+use App\Lib\UuidFactory;
+use App\PassboltTestCase;
+use Data\Fixtures\User;
+use Data\Fixtures\Group;
+use Data\Fixtures\Resource;
+
 class GMGroupEditTest extends PassboltTestCase
 {
+    use ClipboardAssertions;
+    use GroupActionsTrait;
+    use GroupAssertionsTrait;
+    use MasterPasswordAssertionsTrait;
+    use MasterPasswordActionsTrait;
+    use PasswordActionsTrait;
+    use WorkspaceActionsTrait;
+    use WorkspaceAssertionsTrait;
 
     /**
      * Scenario: As a group manager I can edit a group using the right click contextual menu
@@ -33,8 +64,12 @@ class GMGroupEditTest extends PassboltTestCase
      * When  I click on the contextual menu button of a group on the right
      * Then  I should see the group contextual menu
      * And   I should see the “Edit group” option
-     * When        I click on “Edit group”
-     * Then        I should see the Edit group dialog
+     * When  I click on “Edit group”
+     * Then  I should see the Edit group dialog
+     *
+     * @group GM
+     * @group group
+     * @group edit
      */
     public function testEditGroupRightClick() 
     {
@@ -62,10 +97,14 @@ class GMGroupEditTest extends PassboltTestCase
     /**
      * Scenario: As a group manager I shouldn't be able to edit groups from the users workspace
      *
-     * Given        I am a group manager
+     * Given I am a group manager
      * And   I am on the user workspace
      * When  I select a group
      * Then  I should see that there is no dropdown button next to the groups
+     *
+     * @group GM
+     * @group group
+     * @group edit
      */
     public function testCantEditGroup() 
     {
@@ -93,8 +132,12 @@ class GMGroupEditTest extends PassboltTestCase
      * Given I am logged in as administrator
      * And   I am on the user workspace
      * And   I should see a “edit” button next to the Information section
-     * When        I press the “Edit” button
+     * When  I press the “Edit” button
      * Then  I should see the Edit group dialog
+     *
+     * @group GM
+     * @group group
+     * @group edit
      */
     public function testEditGroupFromSidebar() 
     {
@@ -124,8 +167,12 @@ class GMGroupEditTest extends PassboltTestCase
      *
      * Given I am logged in as administrator
      * And   I am on the user workspace
-     * When        I click a group name
+     * When  I click a group name
      * And   I should not see a “edit” button next to the Information section
+     *
+     * @group GM
+     * @group group
+     * @group edit
      */
     public function testCantEditGroupDontManageFromSidebar() 
     {
@@ -149,9 +196,13 @@ class GMGroupEditTest extends PassboltTestCase
      *
      * Given I am logged in as a group manager
      * And   I am editing a group that I manage
-     * When        I observe the content of the edit group dialog
-     * Then        I should see a “group name” field containing the current group name.
+     * When  I observe the content of the edit group dialog
+     * Then  I should see a “group name” field containing the current group name.
      * And   I should see that the group name field is disabled.
+     *
+     * @group GM
+     * @group group
+     * @group edit
      */
     public function testCannotEditGroupName() 
     {
@@ -176,18 +227,22 @@ class GMGroupEditTest extends PassboltTestCase
      *
      * Given I am logged in as a group manager
      * And   I am on the users workspace
-     * When I’m editing a group
+     * When  I’m editing a group
      * Then  I should see the list of users that are part of this group in the edit group dialog
      * And   I should see next to each user the role that he has in the group in a select box
      * When  I change the role of one simple group member to group manager
-     * Then        I should see the member marked as going to be updated next to it
+     * Then  I should see the member marked as going to be updated next to it
      * And   I should see a warning message saying that the changes will be applied after clicking on save
-     * When        I click on save
+     * When  I click on save
      * Then  I should see a confirmation message saying that the group was edited
-     * And         A notification should be sent to the user that was promoted group manager
+     * And   A notification should be sent to the user that was promoted group manager
      * When  I log in as the user who was promoted group manager
      * And   I go to the users workspace
      * Then  I should be able to add users to the new group that I manage
+     *
+     * @group GM
+     * @group group
+     * @group edit
      */
     public function testEditGroupPromoteMember() 
     {
@@ -259,8 +314,12 @@ class GMGroupEditTest extends PassboltTestCase
      * Given I am logged in as group manager
      * And   I am on the users workspace
      * And   I edit a group
-     * When        I change all the members roles to member (except one admin)
-     * Then        I should not be able to change the role of this user
+     * When  I change all the members roles to member (except one admin)
+     * Then  I should not be able to change the role of this user
+     *
+     * @group GM
+     * @group group
+     * @group edit
      */
     public function testAtLeastOneGroupManager() 
     {
@@ -288,16 +347,20 @@ class GMGroupEditTest extends PassboltTestCase
      * And   I am on the users workspace
      * And   I edit a group
      * When  I add a member to the group
-     * Then        I should see that the user is added in the list of group members
+     * Then  I should see that the user is added in the list of group members
      * And   I should see that the list of users automatically scrolled down so I can see the last user that was added
      * And   I should see that his group role is “group member”
      * And   I should see a warning message saying that the changes will be applied after clicking on save
-     * When        I press the save button
-     * Then        I should see that the dialog disappears
+     * When  I press the save button
+     * Then  I should see that the dialog disappears
      * And   I should see a confirmation message saying that the group members have been edited
-     * When        I log in as the user that was newly added to the group
+     * When  I log in as the user that was newly added to the group
      * And   I go to the users workspace
-     * Then        I filter the list of users with the group
+     * Then  I filter the list of users with the group
+     *
+     * @group GM
+     * @group group
+     * @group edit
      */
     public function testAddGroupMemberWithoutPasswordsEncryption() 
     {
@@ -358,7 +421,6 @@ class GMGroupEditTest extends PassboltTestCase
         );
     }
 
-
     /**
      * Scenario: As a group manager I can add a user to a group that accesses passwords using the edit group dialog
      *
@@ -366,23 +428,27 @@ class GMGroupEditTest extends PassboltTestCase
      * And   I am on the users workspace
      * And   I edit a group
      * When  I add a member to the group
-     * Then        I should see that the user is added in the list of group members
+     * Then  I should see that the user is added in the list of group members
      * And   I should see that the list of users automatically scrolled down so I can see the last user that was added
      * And   I should see that his group role is “group member”
      * And   I should see a warning message saying that the changes will be applied after clicking on save
-     * When        I press the save button
-     * Then        I should see that the dialog disappears
+     * When  I press the save button
+     * Then  I should see that the dialog disappears
      * And   I should see a confirmation message saying that the group members have been edited
-     * When        I log in as the user that was newly added to the group
+     * When  I log in as the user that was newly added to the group
      * And   I go to the passwords workspace
      * Then  I should see that the group passwords are now accessible
      * When  I click on the "chai" password
      * And   I click on the button "copy password to clipboard"
      * And   I enter the appropriate master key
      * Then  I should see that the password copied in the clipboard is the one corresponding to chai
-     * When        I go to the users workspace
+     * When  I go to the users workspace
      * And   I filter the list of users with the group
      * Then  I should see that Ping appears in the list of group members.
+     *
+     * @group GM
+     * @group group
+     * @group edit
      */
     public function testAddGroupMemberWithPasswordsEncryption() 
     {
@@ -487,6 +553,10 @@ class GMGroupEditTest extends PassboltTestCase
      * And   I go to the users workspace
      * And   I filter by the group the user has been removed
      * Then  I filter by the group the user has been removed
+     *
+     * @group GM
+     * @group group
+     * @group edit
      */
     public function testRemoveGroupMember() 
     {
@@ -546,19 +616,23 @@ class GMGroupEditTest extends PassboltTestCase
     /**
      * Scenario: As a user I should receive a notification when I am added to a group
      *
-     * Given        I am logged in as a group manager
+     * Given I am logged in as a group manager
      * And   I am on the users workspace
      * And   I am editing a group that I manage
      * When  I add Ada as group manager
-     *  And         I add Betty as member
-     *  And         I click on save
+     * And   I add Betty as member
+     * And   I click on save
      * Then  I should see a success notification message
      * When  I access last email sent to the group manager
      * Then  I should see the expected email title
-     *     And   I should see the expected email content
+     * And   I should see the expected email content
      * When  I access last email sent to the group member
      * Then  I should see the expected email title
-     *     And   I should see the expected email content
+     * And   I should see the expected email content
+     *
+     * @group GM
+     * @group group
+     * @group edit
      */
     public function testEditGroupAddUserEmailNotification() 
     {
@@ -621,15 +695,19 @@ class GMGroupEditTest extends PassboltTestCase
     /**
      * Scenario: As a user I should receive a notification when I am deleted from a group
      *
-     * Given        I am logged in as a group manager
+     * Given I am logged in as a group manager
      * And   I am on the users workspace
      * And   I am editing a group that I manage
      * When  I remove a user from the group
-     *  And         I click on save
+     * And   I click on save
      * Then  I should see a success notification message
      * When  I access last email sent to the user
      * Then  I should see the expected email title
-     *     And   I should see the expected email content
+     * And   I should see the expected email content
+     *
+     * @group GM
+     * @group group
+     * @group edit
      */
     public function testEditGroupDeleteUserEmailNotification() 
     {
@@ -637,7 +715,6 @@ class GMGroupEditTest extends PassboltTestCase
 
         // Given I am a group manager.
         $user = User::get('frances');
-
 
         // I am logged in as admin
         $this->loginAs($user);
@@ -672,17 +749,21 @@ class GMGroupEditTest extends PassboltTestCase
     /**
      * Scenario: As a group member I should receive a notification when my role in the group has changed
      *
-     * Given        I am logged in as a group manager
+     * Given I am logged in as a group manager
      * And   I am on the users workspace
      * And   I am editing a group that I manage
      * When  I change a user role to group manager
-     *  And         I change a user role to member
-     *  And         I click on save
+     * And   I change a user role to member
+     * And   I click on save
      * Then  I should see a success notification message
-     * When         When I access last email sent to the group manager
+     * When  When I access last email sent to the group manager
      * Then  I should see the expected email
-     * When         When I access last email sent to the member
+     * When  When I access last email sent to the member
      * Then  I should see the expected email
+     *
+     * @group GM
+     * @group group
+     * @group edit
      */
     public function testEditGroupUpdateUserEmailNotification() 
     {
@@ -736,19 +817,23 @@ class GMGroupEditTest extends PassboltTestCase
     /**
      * Scenario: As a group manager I should receive a notification when another group manager updated the members of a group I manage
      *
-     * Given        I am logged in as a group manager
+     * Given I am logged in as a group manager
      * And   I am on the users workspace
      * And   I am editing a group that I manage
      * When  I add some users to a group
-     *  And   I remove some users from the group
-     *  And   I update the role of some users
-     *  And         I click on save
+     * And   I remove some users from the group
+     * And   I update the role of some users
+     * And   I click on save
      * Then  I should see a success notification message
-     * When            I access last email sent to me
-     * Then            I shouldn't see any email
+     * When  I access last email sent to me
+     * Then  I shouldn't see any email
      * When  I access last email sent to the other group manager
      * Then  I should see the expected email title
-     *     And   I should see the expected email content
+     * And   I should see the expected email content
+     *
+     * @group GM
+     * @group group
+     * @group edit
      */
     public function testEditGroupGroupUpdatedSummaryEmailNotification() 
     {
