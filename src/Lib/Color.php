@@ -1,4 +1,6 @@
 <?php
+namespace App\Lib;
+
 /**
  * Class Color
  * Helper class for color conversion

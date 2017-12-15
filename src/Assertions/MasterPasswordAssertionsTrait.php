@@ -35,7 +35,7 @@ trait MasterPasswordAssertionsTrait
         // Then I can see the close dialog button
         $this->assertVisibleByCss('a.dialog-close');
         // Then I can see the OK button
-        $this->assertVisibleByCss('master-password-submit');
+        $this->assertVisible('master-password-submit');
         // Then I can see the cancel button
         $this->assertVisibleByCss('a.js-dialog-close.cancel');
         // Then I go out of the iframe

@@ -172,9 +172,9 @@ class LoginTest extends PassboltTestCase
      *
      * @group LU
      * @group login
-     * @group skip
+     * @group v2
+     * @group firefox-only
      * PASSBOLT-2263 close and restore doesn't work with the latest chrome driver
-     * PASSBOLT-2419 close and restore doesn't work with the latest firefox driver
      */
     public function testCloseRestoreTabAndStillLoggedIn() 
     {

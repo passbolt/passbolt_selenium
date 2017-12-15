@@ -54,6 +54,7 @@ class GroupViewTest extends PassboltTestCase
      * @group group
      * @group view
      * @group broken
+     * @group PASSBOLT-2524
      */
     function testViewGroupInfoFromSidebar() 
     {
@@ -117,6 +118,7 @@ class GroupViewTest extends PassboltTestCase
      * @group group
      * @group view
      * @group broken
+     * @group PASSBOLT-2524
      */
     function testViewGroupMemberFromSidebar() 
     {

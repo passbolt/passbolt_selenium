@@ -14,7 +14,7 @@
  */
 namespace App\Actions;
 
-use Color;
+use App\Lib\Color;
 
 trait PasswordActionsTrait
 {
@@ -39,8 +39,8 @@ trait PasswordActionsTrait
      */
     public function clickPassword($id) 
     {
-        if(!$this->isVisible('.page.password')) {
-            $this->fail("click password requires to be on the password workspace");
+        if (!$this->isVisible('.page.password')) {
+            $this->fail('Click password requires to be on the password workspace');
         }
         $this->click('#resource_' . $id . ' .cell_name');
     }
@@ -238,16 +238,16 @@ trait PasswordActionsTrait
             switch ($context) {
             case 'master':
                 $this->waitUntilElementHasFocus('js_master_password_focus_first');
-                $this->waitUntilISee('js_master_password');
-                $this->click('js_master_password');
+                $this->waitUntilISee('#js_master_password');
+                $this->click('#js_master_password');
                 break;
             case 'login':
-                $this->waitUntilISee('js_master_password');
-                $this->click('js_master_password');
+                $this->waitUntilISee('#js_master_password');
+                $this->click('#js_master_password');
                 break;
             case 'share':
-                $this->waitUntilISee('js_perm_create_form_aro_auto_cplt');
-                $this->click('js_perm_create_form_aro_auto_cplt');
+                $this->waitUntilISee('#js_perm_create_form_aro_auto_cplt');
+                $this->click('#js_perm_create_form_aro_auto_cplt');
                 break;
             case 'group':
                 $this->waitUntilISee('#js_group_edit_form_auto_cplt');

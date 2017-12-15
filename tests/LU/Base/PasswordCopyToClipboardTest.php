@@ -67,6 +67,8 @@ class PasswordCopyToClipboardTest extends PassboltTestCase
      * @group LU
      * @group password
      * @group saucelabs
+     * @group broken
+     * @group PASSBOLT-2522
      */
     function testCopyPasswordButton() 
     {
@@ -109,6 +111,7 @@ class PasswordCopyToClipboardTest extends PassboltTestCase
      *
      * @group LU
      * @group password
+     * @group v2
      */
     function testCopyContextualMenuView() 
     {
@@ -151,6 +154,8 @@ class PasswordCopyToClipboardTest extends PassboltTestCase
      *
      * @group LU
      * @group password
+     * @group broken
+     * @group PASSBOLT-2522
      */
     public function testCopyPasswordToClipboardViaContextualMenu() 
     {
@@ -168,7 +173,7 @@ class PasswordCopyToClipboardTest extends PassboltTestCase
         $this->rightClickPassword($resource['id']);
 
         // Then I can see the contextual menu
-        $this->assertVisibleByCss('js_contextual_menu');
+        $this->assertVisible('js_contextual_menu');
 
         // When I click on the link 'copy password'
         $this->click('#js_password_browser_menu_copy_password a');
@@ -202,6 +207,8 @@ class PasswordCopyToClipboardTest extends PassboltTestCase
      *
      * @group LU
      * @group password
+     * @group broken
+     * @group PASSBOLT-2522
      */
     public function testCopyPasswordToClipboardViaContextualMenuAndEnterKey() 
     {
@@ -219,7 +226,7 @@ class PasswordCopyToClipboardTest extends PassboltTestCase
         $this->rightClickPassword($resource['id']);
 
         // Then I can see the contextual menu
-        $this->assertVisibleByCss('js_contextual_menu');
+        $this->assertVisible('js_contextual_menu');
 
         // When I click on the link 'copy password'
         $this->click('#js_password_browser_menu_copy_password a');
@@ -253,6 +260,8 @@ class PasswordCopyToClipboardTest extends PassboltTestCase
      *
      * @group LU
      * @group password
+     * @group broken
+     * @group PASSBOLT-2522
      */
     function testCopyURIToClipboardViaContextualMenu() 
     {
@@ -288,6 +297,8 @@ class PasswordCopyToClipboardTest extends PassboltTestCase
      *
      * @group LU
      * @group password
+     * @group broken
+     * @group PASSBOLT-2522
      */
     function testCopyUsernameToClipboardViaContextualMenu() 
     {
@@ -322,6 +333,8 @@ class PasswordCopyToClipboardTest extends PassboltTestCase
      *
      * @group LU
      * @group password
+     * @group broken
+     * @group PASSBOLT-2522
      */
     public function testCopyPasswordToClipboardViaGridSecretCopy() 
     {
@@ -343,7 +356,6 @@ class PasswordCopyToClipboardTest extends PassboltTestCase
 
         // Then the password is copied to clipboard
         $this->assertClipboard($resource['password']);
-
     }
 
     /**
@@ -358,6 +370,8 @@ class PasswordCopyToClipboardTest extends PassboltTestCase
      *
      * @group LU
      * @group password
+     * @group broken
+     * @group PASSBOLT-2522
      */
     public function testCopyPasswordToClipboardViaSidebarSecretCopy() 
     {

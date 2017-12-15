@@ -27,6 +27,7 @@ use App\Actions\MasterPasswordActionsTrait;
 use App\Actions\PasswordActionsTrait;
 use App\Assertions\ClipboardAssertions;
 use App\Assertions\MasterPasswordAssertionsTrait;
+use App\Assertions\PasswordAssertionsTrait;
 use App\Assertions\WorkspaceAssertionsTrait;
 use App\PassboltTestCase;
 use Data\Fixtures\User;
@@ -37,11 +38,11 @@ class MasterPasswordShortcutTest extends PassboltTestCase
     use MasterPasswordAssertionsTrait;
     use MasterPasswordActionsTrait;
     use ClipboardAssertions;
+    use PasswordAssertionsTrait;
     use PasswordActionsTrait;
     use WorkspaceAssertionsTrait;
 
     /**
-     * @group saucelabs
      * Scenario: As a user I can copy a password using the button in the action bar,
      * and enter my passphrase from keyboard only.
      *
@@ -56,13 +57,15 @@ class MasterPasswordShortcutTest extends PassboltTestCase
      *
      * @group LU
      * @group master-password
+     * @group saucelabs
+     * @group broken
+     * @group PASSBOLT-2522
      */
     function testMasterPasswordShortcutCopyPasswordButton() 
     {
         // Given I am Ada
         $user = User::get('ada');
         $resource = Resource::get(array('user' => 'ada'));
-
 
         // And I am logged in on the password workspace
         $this->loginAs($user);
@@ -101,6 +104,8 @@ class MasterPasswordShortcutTest extends PassboltTestCase
      *
      * @group LU
      * @group master-password
+     * @group broken
+     * @group PASSBOLT-2522
      */
     function testMasterPasswordShortcutTabFirstCopyPasswordButton() 
     {
@@ -142,6 +147,7 @@ class MasterPasswordShortcutTest extends PassboltTestCase
      *
      * @group LU
      * @group master-password
+     * @group v2
      */
     function testMasterPasswordShortcutEditPasswordSecret() 
     {
@@ -193,12 +199,12 @@ class MasterPasswordShortcutTest extends PassboltTestCase
      *
      * @group LU
      * @group master-password
+     * @group v2
      */
     function testMasterPasswordShortcutTabFirstEditPasswordSecret() 
     {
         // Given I am Ada
         $user = User::get('ada');
-
 
         // And I am logged in
         $this->loginAs($user);

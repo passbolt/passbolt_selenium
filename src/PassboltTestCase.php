@@ -190,7 +190,7 @@ abstract class PassboltTestCase extends AuthenticatedTestCase
             }
 
             // Reset the database if requested or on failure
-            if ($this->resetDatabaseWhenComplete || $this->getStatus() == PHPUnit_Runner_BaseTestRunner::STATUS_FAILURE) {
+            if ($this->resetDatabaseWhenComplete) {
                 PassboltServer::resetDatabase(Config::read('passbolt.url'));
             }
 

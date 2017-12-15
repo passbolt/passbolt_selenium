@@ -63,6 +63,8 @@ class PasswordCommentTest extends PassboltTestCase
      * @group LU
      * @group comment
      * @group saucelabs
+     * @group broken
+     * @group PASSBOLT-2528
      */
     public function testCommentAdd() 
     {
@@ -70,8 +72,8 @@ class PasswordCommentTest extends PassboltTestCase
         $this->resetDatabaseWhenComplete();
 
         $comments = [
-        'this is a comment',
-        'reply to the first comment',
+            'this is a comment',
+            'reply to the first comment',
         ];
 
         // Given I am Ada
@@ -126,13 +128,10 @@ class PasswordCommentTest extends PassboltTestCase
      * Then  I should see the comment form section
      * When  I click on submit without entering a comment
      * Then  I should see an error message saying that the information is required
-     * When  I enter text 'aa' in the comment field
-     * Then  I should see an error message 'The content should be between 3 to 255 characters'
-     * When  I enter text 'test<' in the comment field
-     * Then  I should see an error message 'The content should contain only alphabets, numbers and the special characters...'
      *
      * @group LU
      * @group comment
+     * @group v2
      */
     public function testCommentValidate() 
     {
@@ -157,12 +156,7 @@ class PasswordCommentTest extends PassboltTestCase
         // Then I see an error message saying that the field should not be empty
         $this->assertVisibleByCss('#js_rs_details_comments .js_comment_content_feedback');
         $this->assertElementContainsText(
-            $this->find('#js_rs_details_comments .js_comment_content_feedback'), 'This information is required'
-        );
-
-        $this->inputText('js_field_comment_content', 'test<');
-        $this->assertElementContainsText(
-            $this->find('#js_rs_details_comments .js_comment_content_feedback'), 'alphabets, numbers and the special characters'
+            $this->find('#js_rs_details_comments .js_comment_content_feedback'), 'A comment is required'
         );
     }
 
@@ -181,6 +175,8 @@ class PasswordCommentTest extends PassboltTestCase
      *
      * @group LU
      * @group comment
+     * @group broken
+     * @group PASSBOLT-2528
      */
     public function testCommentDelete() 
     {
@@ -189,7 +185,6 @@ class PasswordCommentTest extends PassboltTestCase
 
         // Given I am Ada
         $user = User::get('ada');
-        
 
         // And I am logged in on the password workspace
         $this->loginAs($user);
@@ -198,10 +193,7 @@ class PasswordCommentTest extends PassboltTestCase
         $resource = Resource::get(array('user' => 'ada', 'id' => UuidFactory::uuid('resource.id.bower')));
         $this->clickPassword($resource['id']);
 
-        // Enter comment and submit.
-        $this->postCommentInSidebar('this is a test comment');
-
-        // Check whether the comments list contain the new comment.
+        // Check whether the comments list contain an existing comment from fixtures.
         $this->waitUntilISee('#js_rs_details_comments_list', '/this is a test comment/');
         $this->assertNotVisible($this->commentFormSelector);
 
@@ -225,67 +217,38 @@ class PasswordCommentTest extends PassboltTestCase
             'this is a test comment'
         );
 
-        // Check whether the comments list contain the new comment.
-        $this->assertElementNotContainText(
-            $this->find('#js_rs_details_comments_list'),
-            'this is a test comment'
-        );
         $this->assertVisibleByCss($this->commentFormSelector);
     }
 
     /**
-     * Scenario: As a user I should be able to delete a comment
+     * Scenario: As a user who didn't post a comment I should not be able to delete it
      *
-     * Given I am Ada
+     * Given I am Betty
      * And   I am logged in
-     * And   I click password
-     * And   I enter and save a comment
-     * Then  I should see the comment in the list
-     * And   I should see a delete button
-     * When  I log out and I log in again as betty
-     * And   I select the same password
+     * And   I select the bower password
      * Then  I should see the comment posted by ada
      * And   I should not see the delete button
      *
      * @group LU
      * @group comment
+     * @group broken
+     * @group PASSBOLT-2531
      */
-    public function testCommentDeleteOnlyOwner() 
+    public function testCommentDeleteOnlyPossibleForOwner()
     {
-        // Reset database at the end of test.
-        $this->resetDatabaseWhenComplete();
-
-        // Given I am Ada
-        $user = User::get('ada');
-
-        // And I am logged in on the password workspace
-        $this->loginAs($user);
-
-        // When I click the password centos
-        $this->clickPassword(UuidFactory::uuid('resource.id.centos'));
-
-        // Enter and post comment.
-        $this->postCommentInSidebar('this is a test comment');
-
-        // I should see the delete button.
-        $buttonDeleteSelector = '#js_rs_details_comments_list a.js_delete_comment';
-        $this->assertVisibleByCss($buttonDeleteSelector);
-
-        // When I logout.
-        $this->logout();
-
         // And I log in again as betty.
-        $user = User::get('betty');
+        $user = User::get('edith');
 
         $this->loginAs($user);
 
         // And I select the same centos password.
-        $this->clickPassword(UuidFactory::uuid('resource.id.centos'));
+        $this->clickPassword(UuidFactory::uuid('resource.id.bower'));
 
         // Check whether the comments list contain the new comment.
         $this->waitUntilISee('#js_rs_details_comments_list', '/this is a test comment/');
 
         // I should not see the delete button.
+        $buttonDeleteSelector = '#js_rs_details_comments_list a.js_delete_comment';
         $this->assertNotVisible($buttonDeleteSelector);
 
     }
@@ -308,6 +271,8 @@ class PasswordCommentTest extends PassboltTestCase
      *
      * @group LU
      * @group comment
+     * @group broken
+     * @group PASSBOLT-2528
      */
     public function testCommentAddEmailNotification() 
     {

@@ -55,6 +55,7 @@ class LogoutTest extends PassboltTestCase
      * @group LU
      * @group logout
      * @group saucelabs
+     * @group v2
      */
     public function testLogout() 
     {
@@ -90,6 +91,8 @@ class LogoutTest extends PassboltTestCase
      *
      * @group LU
      * @group logout
+     * @group broken
+     * @group PASSBOLT-2523
      */
     public function testOnClickSessionExpiredAutoRedirect() 
     {
@@ -97,13 +100,7 @@ class LogoutTest extends PassboltTestCase
         $user = User::get('ada');
 
         // Reduce the session timeout to accelerate the test
-        PassboltServer::setExtraConfig(
-            [
-            'Session' => [
-            'timeout' => 0.25
-            ]
-            ]
-        );
+        PassboltServer::setExtraConfig(['Session' => ['timeout' => 0.25]]);
 
         // And I am logged in on the password workspace
         $this->loginAs($user);
@@ -135,6 +132,8 @@ class LogoutTest extends PassboltTestCase
      *
      * @group LU
      * @group logout
+     * @group broken
+     * @group PASSBOLT-2523
      */
     public function testOnClickSessionExpiredManualRedirect() 
     {
@@ -142,11 +141,7 @@ class LogoutTest extends PassboltTestCase
         $user = User::get('ada');
 
         // Reduce the session timeout to accelerate the test
-        PassboltServer::setExtraConfig([
-            'Session' => [
-            'timeout' => 0.25
-            ]]
-        );
+        PassboltServer::setExtraConfig(['Session' => ['timeout' => 0.25]]);
 
         // And I am logged in on the password workspace
         $this->loginAs($user);
@@ -181,6 +176,8 @@ class LogoutTest extends PassboltTestCase
      * @group LU
      * @group logout
      * @group saucelabs
+     * @group broken
+     * @group PASSBOLT-2523
      */
     public function testSessionExpired() 
     {
@@ -214,6 +211,8 @@ class LogoutTest extends PassboltTestCase
      * @group LU
      * @group logout
      * @group no-saucelabs
+     * @group broken
+     * @group PASSBOLT-2523
      * @group skip
      */
     public function testRestartBrowserAndLoggedOutAfterSessionExpired() 
@@ -236,8 +235,6 @@ class LogoutTest extends PassboltTestCase
 
     /**
      * Scenario: As LU I should be logged out when I close the passbolt tab and restore it after my session expired
-     * PASSBOLT-2263 close and restore doesn't work with the latest chrome driver
-     * PASSBOLT-2419 close and restore doesn't work with the latest firefox driver
      *
      * Given I am Ada
      * And   I am logged in on the passwords workspace
@@ -246,7 +243,11 @@ class LogoutTest extends PassboltTestCase
      *
      * @group LU
      * @group logout
+     * @group broken
+     * @group PASSBOLT-2523
      * @group skip
+     * PASSBOLT-2263 close and restore doesn't work with the latest chrome driver
+     * PASSBOLT-2419 close and restore doesn't work with the latest firefox driver
      */
     public function testCloseRestoreTabAndLoggedOutAfterSessionExpired() 
     {

@@ -62,18 +62,19 @@ class MasterPasswordRememberTest extends PassboltTestCase
      * @group LU
      * @group master-password
      * @group saucelabs
+     * @group broken
+     * @group PASSBOLT-2522
      */
     function testMasterPasswordRemember() 
     {
         // Given I am Ada
         $user = User::get('ada');
-        
 
         // And I am logged in on the password workspace
         $this->loginAs($user);
 
         // When I click on a password in the list
-        $rsA = Resource::get(array('user' => 'ada', 'id' => UuidFactory::uuid('resource.id.apache')));
+        $rsA = Resource::get(['user' => 'ada', 'id' => UuidFactory::uuid('resource.id.apache')]);
         $this->clickPassword($rsA['id']);
 
         // And I click on the link 'copy password'
@@ -84,7 +85,7 @@ class MasterPasswordRememberTest extends PassboltTestCase
 
         // And I should see a checkbox remember my passphrase
         $this->goIntoMasterPasswordIframe();
-        $this->assertVisibleByCss('js_remember_master_password');
+        $this->assertVisible('js_remember_master_password');
         $this->goOutOfIframe();
 
         // When I enter my passphrase from keyboard only
@@ -97,7 +98,7 @@ class MasterPasswordRememberTest extends PassboltTestCase
         $this->assertClipboard($rsA['password']);
 
         // When I click on another password in the list
-        $rsB = Resource::get(array('user' => 'ada', 'id' => UuidFactory::uuid('resource.id.bower')));
+        $rsB = Resource::get(['user' => 'ada', 'id' => UuidFactory::uuid('resource.id.bower')]);
         $this->clickPassword($rsB['id']);
 
         // And I click on the link 'copy password'

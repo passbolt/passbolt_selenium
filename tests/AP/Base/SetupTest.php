@@ -465,7 +465,6 @@ class SetupTest extends PassboltSetupTestCase
      * @group AP
      * @group setup
      * @group v2
-     * @group broken-series
      */
     public function testSetupNotAccessibleAfterAccountValidation() 
     {

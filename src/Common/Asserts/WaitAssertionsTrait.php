@@ -16,9 +16,10 @@ namespace App\Common\Asserts;
 
 use App\Lib\UuidFactory;
 use App\Common\Config;
-use Color;
+use App\Lib\Color;
 use Exception;
 use Facebook\WebDriver\Remote\RemoteWebDriver;
+use Facebook\WebDriver\Remote\RemoteWebElement;
 use Facebook\WebDriver\WebDriverBy;
 use PHPUnit_Framework_Assert;
 
@@ -82,6 +83,7 @@ trait WaitAssertionsTrait
 
         $message = 'html.loaded could not be found in time';
         PHPUnit_Framework_Assert::fail($message);
+        return false;
     }
 
     /**
@@ -90,6 +92,7 @@ trait WaitAssertionsTrait
      * @param Callback $callback The function that will do the assertion
      * @param array $args An array of arguments to pass the callback function
      * @param int $timeout
+     * @throws Exception
      * @return bool
      */
     public function waitUntil($callback, $args = array(), $timeout = 15) 
@@ -113,35 +116,39 @@ trait WaitAssertionsTrait
             $second = 1000000;
             usleep(($second * $timeout) / $loops);
         }
-
-        PHPUnit_Framework_Assert::fail($caughtException->getMessage());
+        if ($caughtException !== null) {
+            throw $caughtException;
+        }
         return false;
     }
 
     /**
      * Wait until the css value is equal
      *
-     * @param string $selector
+     * @param RemoteWebElement $element
      * @param string $name
      * @param string $expectedValue
      * @param int $timeout
      * @return void
      */
-    public function waitUntilCssValueEqual($selector, $name, $expectedValue, $timeout = 10) 
+    public function waitUntilCssValueEqual(RemoteWebElement $element, $name, $expectedValue, $timeout = 10)
     {
-        $this->waitUntil(
-            function () use (&$selector, &$name, &$expectedValue) {
-                $e = $this->getDriver()->findElement(WebDriverBy::cssSelector($selector));
-                $value = $e->getCssValue($name);
-                $rgba = Color::rgbToRgba($value);
-                if ($rgba !== $expectedValue) {
-                    $message = 'The colors do not match. ';
-                    $message .= 'Expected: ' . $expectedValue;
-                    $message .= ' and and got ' . $rgba;
-                    PHPUnit_Framework_Assert::fail($message);
-                }
-            }, null, $timeout
-        );
+        try {
+            $this->waitUntil(
+                function () use (&$element, &$name, &$expectedValue) {
+                    $value = $element->getCssValue($name);
+                    $rgba = Color::rgbToRgba($value);
+                    if ($rgba !== $expectedValue) {
+                        $message = 'The colors do not match. ';
+                        $message .= 'Expected: ' . $expectedValue;
+                        $message .= ' and and got ' . $rgba;
+                        throw new Exception($message);
+                    }
+                }, null, $timeout
+            );
+        } catch (Exception $exception) {
+            PHPUnit_Framework_Assert::fail($exception->getMessage());
+        }
     }
 
     /**
@@ -186,6 +193,7 @@ trait WaitAssertionsTrait
         $message = "waitUntilIDontSee $cssSelector, $regexp : Timeout thrown by " . $backtrace[1]['class'];
         $message .= "::" . $backtrace[1]['function'] . "()\n . element: $cssSelector ($regexp)";
         PHPUnit_Framework_Assert::fail($message);
+        return false;
     }
 
     /**
@@ -217,6 +225,7 @@ trait WaitAssertionsTrait
         $backtrace = debug_backtrace();
         $message = "waitUntilElementHasFocus $id Timeout thrown by " . $backtrace[1]['class'] . "::" . $backtrace[1]['function'] . "() \n";
         PHPUnit_Framework_Assert::fail($message);
+        return false;
     }
 
     /**
@@ -283,6 +292,7 @@ trait WaitAssertionsTrait
         $message = "waitUntilISee $id, $regexp\nTimeout thrown by " . $backtrace[1]['class'];
         $message .= "::" . $backtrace[1]['function'] . "()\n . element(s): $id ($regexp)";
         PHPUnit_Framework_Assert::fail($message);
+        return false;
     }
 
     /**
@@ -293,7 +303,11 @@ trait WaitAssertionsTrait
     public function waitUntilTitleContain($title) 
     {
         $callback = array($this, 'assertTitleContain');
-        $this->waitUntil($callback, array($title));
+        try {
+            $this->waitUntil($callback, array($title));
+        } catch (Exception $exception) {
+            PHPUnit_Framework_Assert::fail($exception->getMessage());
+        }
     }
 
     /**
@@ -306,21 +320,25 @@ trait WaitAssertionsTrait
      */
     public function waitUntilUrlMatches($url, $addBase = true, $timeout = 10) 
     {
-        $this->waitUntil(
-            function () use ($url, $addBase) {
-                if ($addBase) {
-                    $uri = Config::read('passbolt.url') . DS . $url;
-                } else {
-                    $uri = $url;
-                }
-                if($uri !== $this->getDriver()->getCurrentURL()) {
-                    $message = 'The url do not match. ';
-                    $message .= 'expected: ' . $uri;
-                    $message .= ' and got ' . $this->getDriver()->getCurrentURL();
-                    PHPUnit_Framework_Assert::fail($message);
-                }
-            }, null, $timeout
-        );
+        try {
+            $this->waitUntil(
+                function () use ($url, $addBase) {
+                    if ($addBase) {
+                        $uri = Config::read('passbolt.url') . DS . $url;
+                    } else {
+                        $uri = $url;
+                    }
+                    if($uri !== $this->getDriver()->getCurrentURL()) {
+                        $message = 'The url do not match. ';
+                        $message .= 'expected: ' . $uri;
+                        $message .= ' and got ' . $this->getDriver()->getCurrentURL();
+                        PHPUnit_Framework_Assert::fail($message);
+                    }
+                }, null, $timeout
+            );
+        } catch (Exception $exception) {
+            PHPUnit_Framework_Assert::fail($exception->getMessage());
+        }
     }
 
     /**
@@ -330,7 +348,11 @@ trait WaitAssertionsTrait
      */
     public function waitUntilDisabled($id) 
     {
-        $this->waitUntil(array($this, 'assertDisabled'), array($id));
+        try {
+            $this->waitUntil(array($this, 'assertDisabled'), array($id));
+        } catch (Exception $exception) {
+            PHPUnit_Framework_Assert::fail($exception->getMessage());
+        }
     }
 
     /**
