@@ -35,7 +35,7 @@ use App\Assertions\PasswordAssertionsTrait;
 use App\Assertions\WorkspaceAssertionsTrait;
 use App\PassboltTestCase;
 use Data\Fixtures\User;
-use SystemDefaults;
+use Data\Fixtures\SystemDefaults;
 
 class PasswordCreateTest extends PassboltTestCase
 {
@@ -73,7 +73,8 @@ class PasswordCreateTest extends PassboltTestCase
      *
      * @group LU
      * @group password
-     * @group create
+     * @group password-create
+     * @group v2
      */
     public function testCreatePasswordDialogExist()
     {
@@ -174,7 +175,8 @@ class PasswordCreateTest extends PassboltTestCase
      *
      * @group LU
      * @group password
-     * @group create
+     * @group password-create
+     * @group v2
      */
     public function testCreatePasswordDialogOpenClose() 
     {
@@ -231,21 +233,13 @@ class PasswordCreateTest extends PassboltTestCase
      * And   I am on the create password dialog
      * When  I press the enter key on the keyboard
      * Then  I see an error message saying that the name is required
-     * When  I enter '<' as a name
-     * And   I enter '<' as a username
-     * And   I enter '<' as a url
-     * And   I enter '<' as a description
-     * And   I click on the save button
-     * Then  I see an error message saying that the name contain invalid characters
-     * Then  I see an error message saying that the username contain invalid characters
-     * Then  I see an error message saying that the url is not valid
-     * Then  I see an error message saying that the description contain invalid characters
      * When  I enter 'aa' as a url
      * Then  I see an error message saying that the length should be between x and x characters
      *
      * @group LU
      * @group password
-     * @group create
+     * @group password-create
+     * @group v2
      */
     public function testCreatePasswordErrorMessages() 
     {
@@ -268,42 +262,6 @@ class PasswordCreateTest extends PassboltTestCase
             $this->find('js_field_name_feedback'), 'is required'
         );
 
-        // I should not see an error message for username.
-        $this->assertNotVisible('#js_field_username_feedback.error.message');
-
-        // When I enter < as a name
-        $this->inputText('js_field_name', '<');
-
-        // And I enter < as a username
-        $this->inputText('js_field_username', '<');
-
-        // And I enter < as a url
-        $this->inputText('js_field_uri', '<');
-
-        // And I enter < as a description
-        $this->inputText('js_field_description', '<');
-
-        // And I click save
-        $this->click('.create-password-dialog input[type=submit]');
-
-        // Then I see an error message saying that the name contain invalid characters
-        $this->assertVisibleByCss('#js_field_name_feedback.error.message');
-        $this->assertElementContainsText(
-            $this->find('js_field_name_feedback'), 'should only contain alphabets, numbers'
-        );
-
-        // And I see an error message saying that the username contain invalid characters
-        $this->assertVisibleByCss('#js_field_username_feedback.error.message');
-        $this->assertElementContainsText(
-            $this->find('js_field_username_feedback'), 'should only contain alphabets, numbers'
-        );
-
-        // And I see an error message saying that the url is not valid
-        $this->assertVisibleByCss('#js_field_uri_feedback.error.message');
-        $this->assertElementContainsText(
-            $this->find('js_field_uri_feedback'), 'should only contain alphabets, numbers'
-        );
-
         // And I see an error message saying that the password should not be empty
         $this->goIntoSecretIframe();
         $this->assertVisibleByCss('#js_field_password_feedback.error.message');
@@ -312,11 +270,8 @@ class PasswordCreateTest extends PassboltTestCase
         );
         $this->goOutOfIframe();
 
-        // And I see an error message saying that the description contain invalid characters
-        $this->assertVisibleByCss('#js_field_description_feedback.error.message');
-        $this->assertElementContainsText(
-            $this->find('js_field_description_feedback'), 'should only contain alphabets, numbers'
-        );
+        // I should not see an error message for username.
+        $this->assertNotVisible('#js_field_username_feedback.error.message');
 
         // When I enter aa as a url
         $this->inputText('js_field_uri', 'aa');
@@ -324,7 +279,7 @@ class PasswordCreateTest extends PassboltTestCase
         // Then I see an error message saying that the length should be between x and x characters
         $this->assertVisibleByCss('#js_field_uri_feedback.error.message');
         $this->assertElementContainsText(
-            $this->find('js_field_uri_feedback'), 'URI should be between'
+            $this->find('js_field_uri_feedback'), 'should be between'
         );
     }
 
@@ -346,7 +301,8 @@ class PasswordCreateTest extends PassboltTestCase
      *
      * @group LU
      * @group password
-     * @group create
+     * @group password-create
+     * @group v2
      * @group saucelabs
      */
     public function testCreatePasswordAndView() 
@@ -418,7 +374,8 @@ class PasswordCreateTest extends PassboltTestCase
      *
      * @group LU
      * @group password
-     * @group create
+     * @group password-create
+     * @group v2
      */
     public function testCreatePasswordWithKeyboardShortcutsAndView() 
     {
@@ -520,7 +477,8 @@ class PasswordCreateTest extends PassboltTestCase
      *
      * @group LU
      * @group password
-     * @group create
+     * @group password-create
+     * @group v2
      */
     public function testCreatePasswordKeyboardShortcuts() 
     {
@@ -599,7 +557,8 @@ class PasswordCreateTest extends PassboltTestCase
      *
      * @group LU
      * @group password
-     * @group create
+     * @group password-create
+     * @group v2
      * @group saucelabs
      */
     public function testCreatePasswordGenerateButton() 
@@ -640,7 +599,8 @@ class PasswordCreateTest extends PassboltTestCase
      *
      * @group LU
      * @group password
-     * @group create
+     * @group password-create
+     * @group v2
      * @group saucelabs
      */
     public function testCreatePasswordViewButton() 
@@ -664,7 +624,7 @@ class PasswordCreateTest extends PassboltTestCase
 
         // Then I see the input field with the password in clear text
         $this->assertNotVisible('js_secret');
-        $this->assertVisibleByCss('js_secret_clear');
+        $this->assertVisible('js_secret_clear');
         $this->assertTrue($this->findById('js_secret_clear')->getAttribute('value') == 'ftp-password-test');
 
         // When I click on the view password
@@ -694,7 +654,8 @@ class PasswordCreateTest extends PassboltTestCase
      *
      * @group LU
      * @group password
-     * @group create
+     * @group password-create
+     * @group v2
      */
     public function testCreatePasswordEmailNotification() 
     {
@@ -735,7 +696,7 @@ class PasswordCreateTest extends PassboltTestCase
         $this->getUrl('seleniumtests/showlastemail/' . $user['Username']);
 
         // The email title should be:
-        $this->assertMetaTitleContains(sprintf('Password %s has been added', 'localhost ftp'));
+        $this->assertMetaTitleContains('You added the resource localhost ftp');
 
         // I should see the resource name in the email.
         $this->assertElementContainsText(
@@ -746,6 +707,7 @@ class PasswordCreateTest extends PassboltTestCase
 
     /**
      * Scenario: As LU I can use passbolt on multiple tabs and create password
+     *
      * Given I am Ada
      * And   I am logged in
      * When  I open a new tab and go to passbolt url
@@ -762,8 +724,9 @@ class PasswordCreateTest extends PassboltTestCase
      *
      * @group LU
      * @group password
-     * @group create
+     * @group password-create
      * @group no-saucelabs
+     * @group v2
      */
     public function testMultipleTabsCreatePassword() 
     {
@@ -839,12 +802,14 @@ class PasswordCreateTest extends PassboltTestCase
      *
      * @group LU
      * @group password
-     * @group create
+     * @group password-create
      * @group no-saucelabs
      * @group skip
      */
     public function testRestartBrowserAndCreatePassword() 
     {
+        $this->markTestIncomplete();
+
         // Reset database at the end of test.
         $this->resetDatabaseWhenComplete();
 
@@ -867,8 +832,6 @@ class PasswordCreateTest extends PassboltTestCase
 
     /**
      * Scenario: As LU I should be able to create a password after I close and restore the passbolt tab
-     * PASSBOLT-2263 close and restore doesn't work with the latest chrome driver
-     * PASSBOLT-2419 close and restore doesn't work with the latest firefox driver
      *
      * Given I am Ada
      * And   I am on second tab
@@ -878,8 +841,10 @@ class PasswordCreateTest extends PassboltTestCase
      *
      * @group LU
      * @group password
-     * @group create
+     * @group password-create
+     * @group v2
      * @group skip
+     * PASSBOLT-2263 close and restore doesn't work with the latest chrome driver
      */
     public function testCloseRestoreTabAndCreatePassword() 
     {

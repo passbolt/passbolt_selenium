@@ -50,6 +50,7 @@ use App\Assertions\WorkspaceAssertionsTrait;
 use App\PassboltTestCase;
 use Data\Fixtures\User;
 use Data\Fixtures\Resource;
+use Data\Fixtures\SystemDefaults;
 
 class PasswordEditTest extends PassboltTestCase
 {
@@ -1118,8 +1119,8 @@ class PasswordEditTest extends PassboltTestCase
         $this->assertTrue(($s != $r1['password']));
 
         // And I should see that the password complexity is set to fair
-        $this->assertTrue(strlen($s) == \SystemDefaults::$AUTO_PASSWORD_LENGTH);
-        $this->assertComplexity(\SystemDefaults::$AUTO_PASSWORD_STRENGTH);
+        $this->assertTrue(strlen($s) == SystemDefaults::$AUTO_PASSWORD_LENGTH);
+        $this->assertComplexity(SystemDefaults::$AUTO_PASSWORD_STRENGTH);
 
     }
 

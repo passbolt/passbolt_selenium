@@ -80,21 +80,16 @@ trait VisibilityAssertionsTrait
      */
     public function assertVisible($id, $message = '')
     {
-        if (empty($message)) {
-            $message = 'Failed to assert that the element ' . $id . ' is visible';
-        }
         try {
             $element = $this->getDriver()->findElement(WebDriverBy::id($id));
         } catch (NoSuchElementException $exception) {
+            $message = 'Failed to find the element ' . $id;
             PHPUnit_Framework_Assert::fail($message);
         }
         if (!$element->isDisplayed()) {
+            $message = 'Failed to assert that the element ' . $id . ' is visible';
             PHPUnit_Framework_Assert::fail($message);
         }
-        PHPUnit_Framework_Assert::assertTrue(
-            $element->isDisplayed(),
-            $message
-        );
     }
 
     /**
