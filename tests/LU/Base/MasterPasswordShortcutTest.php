@@ -58,8 +58,7 @@ class MasterPasswordShortcutTest extends PassboltTestCase
      * @group LU
      * @group master-password
      * @group saucelabs
-     * @group broken
-     * @group PASSBOLT-2522
+     * @group v2
      */
     function testMasterPasswordShortcutCopyPasswordButton() 
     {
@@ -104,8 +103,7 @@ class MasterPasswordShortcutTest extends PassboltTestCase
      *
      * @group LU
      * @group master-password
-     * @group broken
-     * @group PASSBOLT-2522
+     * @group v2
      */
     function testMasterPasswordShortcutTabFirstCopyPasswordButton() 
     {

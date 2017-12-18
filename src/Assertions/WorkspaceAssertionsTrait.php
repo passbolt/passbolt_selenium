@@ -50,22 +50,10 @@ trait WorkspaceAssertionsTrait
      * @param $notificationId
      * @param string         $msg
      */
-    public function assertNotification($notificationId, $msg = null) 
+    public function assertNotification($notificationId)
     {
-        $notificationId = '#notification_' . UuidFactory::uuid($notificationId);
-        $this->waitUntilISee($notificationId);
-        if (isset($msg)) {
-            $contain = false;
-            $elt = $this->find($notificationId);
-            $text = $elt->getText();
-            if(preg_match('/^\/.+\/[a-z]*$/i', $msg)) {
-                $contain = preg_match($msg, $text) != false;
-            } else {
-                $contain = strpos($text, $msg) !== false;
-            }
-            $this->assertTrue(($contain !== false), 'fail to find the notification message ' . $msg);
-        }
+//        $notificationId = '#notification_' . UuidFactory::uuid($notificationId);
+        $this->waitUntilISee('#js_app_notificator .' . $notificationId);
     }
-
 
 }

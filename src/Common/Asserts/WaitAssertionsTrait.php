@@ -362,7 +362,8 @@ trait WaitAssertionsTrait
      */
     public function waitUntilNotificationDisappears($notificationId) 
     {
-        $notificationId = 'notification_' . UuidFactory::uuid($notificationId);
+        //$notificationId = 'notification_' . UuidFactory::uuid($notificationId);
+        $notificationId = '#js_app_notificator .' . $notificationId;
         $this->waitUntilIDontSee($notificationId);
     }
 

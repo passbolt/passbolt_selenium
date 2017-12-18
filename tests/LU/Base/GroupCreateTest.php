@@ -38,7 +38,7 @@ class GroupCreateTest extends PassboltTestCase
      *
      * @group LU
      * @group group
-     * @group create
+     * @group group-create
      * @group v2
      */
     public function testCantCreateGroup() 

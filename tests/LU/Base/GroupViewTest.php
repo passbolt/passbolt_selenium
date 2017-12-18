@@ -52,16 +52,14 @@ class GroupViewTest extends PassboltTestCase
      *
      * @group LU
      * @group group
-     * @group view
+     * @group group-view
      * @group broken
      * @group PASSBOLT-2524
      */
     function testViewGroupInfoFromSidebar() 
     {
         // Given that I am a logged-in user
-        $user = User::get('ada');
-        
-        $this->loginAs($user);
+        $this->loginAs(User::get('ada'));
 
         // And I am on the users workspace
         $this->gotoWorkspace('user');
@@ -116,16 +114,14 @@ class GroupViewTest extends PassboltTestCase
      *
      * @group LU
      * @group group
-     * @group view
+     * @group group-view
      * @group broken
      * @group PASSBOLT-2524
      */
     function testViewGroupMemberFromSidebar() 
     {
         // Given I am logged in as a user
-        $user = User::get('ada');
-        
-        $this->loginAs($user);
+        $this->loginAs(User::get('ada'));
 
         // And I am on the users workspace
         $this->gotoWorkspace('user');

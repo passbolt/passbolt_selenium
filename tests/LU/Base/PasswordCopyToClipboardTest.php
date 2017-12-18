@@ -67,8 +67,7 @@ class PasswordCopyToClipboardTest extends PassboltTestCase
      * @group LU
      * @group password
      * @group saucelabs
-     * @group broken
-     * @group PASSBOLT-2522
+     * @group v2
      */
     function testCopyPasswordButton() 
     {
@@ -154,8 +153,7 @@ class PasswordCopyToClipboardTest extends PassboltTestCase
      *
      * @group LU
      * @group password
-     * @group broken
-     * @group PASSBOLT-2522
+     * @group v2
      */
     public function testCopyPasswordToClipboardViaContextualMenu() 
     {
@@ -207,8 +205,7 @@ class PasswordCopyToClipboardTest extends PassboltTestCase
      *
      * @group LU
      * @group password
-     * @group broken
-     * @group PASSBOLT-2522
+     * @group v2
      */
     public function testCopyPasswordToClipboardViaContextualMenuAndEnterKey() 
     {
@@ -260,8 +257,7 @@ class PasswordCopyToClipboardTest extends PassboltTestCase
      *
      * @group LU
      * @group password
-     * @group broken
-     * @group PASSBOLT-2522
+     * @group v2
      */
     function testCopyURIToClipboardViaContextualMenu() 
     {
@@ -297,8 +293,7 @@ class PasswordCopyToClipboardTest extends PassboltTestCase
      *
      * @group LU
      * @group password
-     * @group broken
-     * @group PASSBOLT-2522
+     * @group v2
      */
     function testCopyUsernameToClipboardViaContextualMenu() 
     {
@@ -333,8 +328,7 @@ class PasswordCopyToClipboardTest extends PassboltTestCase
      *
      * @group LU
      * @group password
-     * @group broken
-     * @group PASSBOLT-2522
+     * @group v2
      */
     public function testCopyPasswordToClipboardViaGridSecretCopy() 
     {
@@ -370,8 +364,7 @@ class PasswordCopyToClipboardTest extends PassboltTestCase
      *
      * @group LU
      * @group password
-     * @group broken
-     * @group PASSBOLT-2522
+     * @group v2
      */
     public function testCopyPasswordToClipboardViaSidebarSecretCopy() 
     {

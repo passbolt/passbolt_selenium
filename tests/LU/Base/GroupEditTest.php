@@ -42,7 +42,7 @@ class LUGroupEditTest extends PassboltTestCase
      *
      * @group LU
      * @group group
-     * @group edit
+     * @group group-edit
      * @group v2
      */
     public function testCantEditGroup() 
