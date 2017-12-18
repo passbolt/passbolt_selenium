@@ -54,7 +54,8 @@ class PasswordDeleteTest extends PassboltTestCase
      *
      * @group LU
      * @group password
-     * @group delete
+     * @group password-delete
+     * @group v2
      */
     public function testDeletePasswordRightClick() 
     {
@@ -100,7 +101,8 @@ class PasswordDeleteTest extends PassboltTestCase
      *
      * @group LU
      * @group password
-     * @group delete
+     * @group password-delete
+     * @group v2
      * @group saucelabs
      */
     public function testDeletePasswordButton() 
@@ -156,7 +158,8 @@ class PasswordDeleteTest extends PassboltTestCase
      *
      * @group LU
      * @group password
-     * @group delete
+     * @group password-delete
+     * @group v2
      */
     public function testDeletePasswordShared() 
     {
@@ -168,7 +171,7 @@ class PasswordDeleteTest extends PassboltTestCase
 
         // Then I can see a password shared with ada in the list
         $resource = Resource::get(array('user' => 'ada', 'id' => UuidFactory::uuid('resource.id.apache')));
-        $this->assertVisibleByCss('resource_' . $resource['id']);
+        $this->assertVisible('resource_' . $resource['id']);
 
         // When I logout
         $this->logout();
@@ -178,7 +181,7 @@ class PasswordDeleteTest extends PassboltTestCase
         $this->loginAs($userB);
 
         // When I click on the password shared with Ada
-        $this->assertVisibleByCss('resource_' . $resource['id']);
+        $this->assertVisible('resource_' . $resource['id']);
         $this->clickPassword($resource['id']);
 
         // And I click on the more button
@@ -227,7 +230,8 @@ class PasswordDeleteTest extends PassboltTestCase
      *
      * @group LU
      * @group password
-     * @group delete
+     * @group password-delete
+     * @group v2
      */
     public function testDeletePasswordIDontOwn() 
     {
@@ -249,7 +253,7 @@ class PasswordDeleteTest extends PassboltTestCase
         $this->clickLink('delete');
 
         // Then I can still see the password in the list
-        $this->assertVisibleByCss('resource_' . $resource['id']);
+        $this->assertVisible('resource_' . $resource['id']);
 
         // When I right click on the password I have view right
         $this->rightClickPassword($resource['id']);
@@ -261,7 +265,7 @@ class PasswordDeleteTest extends PassboltTestCase
         $this->click('#js_password_browser_menu_delete a');
 
         // Then I can still see the password in the list
-        $this->assertVisibleByCss('resource_' . $resource['id']);
+        $this->assertVisible('resource_' . $resource['id']);
     }
 
     /**
@@ -280,7 +284,8 @@ class PasswordDeleteTest extends PassboltTestCase
      *
      * @group LU
      * @group password
-     * @group delete
+     * @group password-delete
+     * @group broken
      */
     public function testDeletePasswordEmailNotification() 
     {
