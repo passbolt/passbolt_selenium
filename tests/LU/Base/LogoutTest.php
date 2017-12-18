@@ -91,8 +91,8 @@ class LogoutTest extends PassboltTestCase
      *
      * @group LU
      * @group logout
-     * @group broken
-     * @group PASSBOLT-2523
+     * @group saucelabs
+     * @group v2
      */
     public function testOnClickSessionExpiredAutoRedirect() 
     {
@@ -132,8 +132,8 @@ class LogoutTest extends PassboltTestCase
      *
      * @group LU
      * @group logout
-     * @group broken
-     * @group PASSBOLT-2523
+     * @group no-saucelabs
+     * @group v2
      */
     public function testOnClickSessionExpiredManualRedirect() 
     {
@@ -176,8 +176,7 @@ class LogoutTest extends PassboltTestCase
      * @group LU
      * @group logout
      * @group saucelabs
-     * @group broken
-     * @group PASSBOLT-2523
+     * @group v2
      */
     public function testSessionExpired() 
     {
@@ -197,7 +196,7 @@ class LogoutTest extends PassboltTestCase
         $this->click('confirm-button');
 
         // Then I should see the login page
-        $this->waitUntilISee('.plugin-check.' . $this->_browser['type'] . '.success');
+        $this->waitUntilISee('.plugin-check.' . $this->_browser['type'] . '.success', null, 70);
     }
 
     /**
@@ -211,9 +210,7 @@ class LogoutTest extends PassboltTestCase
      * @group LU
      * @group logout
      * @group no-saucelabs
-     * @group broken
-     * @group PASSBOLT-2523
-     * @group skip
+     * @group v2
      */
     public function testRestartBrowserAndLoggedOutAfterSessionExpired() 
     {
@@ -244,7 +241,6 @@ class LogoutTest extends PassboltTestCase
      * @group LU
      * @group logout
      * @group broken
-     * @group PASSBOLT-2523
      * @group skip
      * PASSBOLT-2263 close and restore doesn't work with the latest chrome driver
      * PASSBOLT-2419 close and restore doesn't work with the latest firefox driver
