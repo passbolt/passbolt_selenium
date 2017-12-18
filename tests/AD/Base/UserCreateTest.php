@@ -50,7 +50,8 @@ class UserCreateTest extends PassboltTestCase
     use WorkspaceActionsTrait;
 
     /**
-     * Scenario: As a user I can view the create user dialog
+     * Scenario: As an admin I can view the create user dialog
+     *
      * Given I am admin
      * And   I am logged in
      * When  I go to user workspace
@@ -125,7 +126,7 @@ class UserCreateTest extends PassboltTestCase
     }
 
     /**
-     * Scenario: As a user I can open close the create user dialog
+     * Scenario: As an admin I can open close the create user dialog
      *
      * Given I am Admin
      * And   I am logged in

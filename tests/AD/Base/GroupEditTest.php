@@ -1,7 +1,17 @@
 <?php
-use Facebook\WebDriver\WebDriverBy;
-use Facebook\WebDriver\WebDriverSelect;
-
+/**
+ * Passbolt ~ Open source password manager for teams
+ * Copyright (c) Passbolt SARL (https://www.passbolt.com)
+ *
+ * Licensed under GNU Affero General Public License version 3 of the or any later version.
+ * For full copyright and license information, please see the LICENSE.txt
+ * Redistributions of files must retain the above copyright notice.
+ *
+ * @copyright Copyright (c) Passbolt SARL (https://www.passbolt.com)
+ * @license   https://opensource.org/licenses/AGPL-3.0 AGPL License
+ * @link      https://www.passbolt.com Passbolt(tm)
+ * @since     2.0.0
+ */
 /**
  * Feature: As an administrator I can edit groups
  *
@@ -15,12 +25,25 @@ use Facebook\WebDriver\WebDriverSelect;
  *  - As a group member I should receive a notification when my role in the group has changed
  *  - As a group manager I should receive a notification when admin updated the members of a group I manage
  *  - As an administrator I can edit the existing group members and promote a group member to group manager
- *
- * @copyright (c) 2017-present Passbolt SARL
- * @licence   GNU Affero General Public License http://www.gnu.org/licenses/agpl-3.0.en.html
  */
+namespace Tests\AD\Base;
+
+use App\Actions\GroupActionsTrait;
+use App\Actions\WorkspaceActionsTrait;
+use App\Assertions\GroupAssertionsTrait;
+use App\Assertions\WorkspaceAssertionsTrait;
+use App\PassboltTestCase;
+use App\Lib\UuidFactory;
+use Data\Fixtures\User;
+use Data\Fixtures\Group;
+
 class ADGroupEditTest extends PassboltTestCase
 {
+
+    use WorkspaceActionsTrait;
+    use WorkspaceAssertionsTrait;
+    use GroupAssertionsTrait;
+    use GroupActionsTrait;
 
     /**
      * Scenario: As an administrator I can edit a group using the right click contextual menu
@@ -139,7 +162,7 @@ class ADGroupEditTest extends PassboltTestCase
      * And   I am editing a group that I am not the group manager of
      * When  I observe the content of the edit group dialog
      * Then  I should not see a Add people section
-     *  And     I should see a warning message saying that "Only the group manager can add new people to a group."
+     * And     I should see a warning message saying that "Only the group manager can add new people to a group."
      */
     public function testEditGroupAsNotGroupManager() 
     {
@@ -162,11 +185,11 @@ class ADGroupEditTest extends PassboltTestCase
      * Given that   I am logged in as an administrator
      * And   I am on the users workspace
      * When  I edit the "accounting" group
-     *  And         I fill 'Board' for name
-     *  And         I click on submit
+     * And   I fill 'Board' for name
+     * And   I click on submit
      * Then  I should see a notification saying that the group couldn't be updated
-     *  And         I should see an error message under the name field
-     *  And         I should see that this error message says that the group name is already in use
+     * And   I should see an error message under the name field
+     * And   I should see that this error message says that the group name is already in use
      */
     public function testEditGroupNameValidation() 
     {
@@ -203,7 +226,7 @@ class ADGroupEditTest extends PassboltTestCase
      * And   I am on the users workspace
      * And   I am editing a group
      * When  I remove a user from the group
-     *  And         I click on save
+     * And   I click on save
      * Then  I should see a success notification message
      * When  I access last email sent to the user
      * Then  I should see the expected email title
@@ -252,8 +275,8 @@ class ADGroupEditTest extends PassboltTestCase
      * And   I am on the users workspace
      * And   I am editing a group that I manage
      * When  I change a user role to group manager
-     *  And         I change a user role to member
-     *  And         I click on save
+     * And   I change a user role to member
+     * And   I click on save
      * Then  I should see a success notification message
      * When         When I access last email sent to the group manager
      * Then  I should see the expected email
@@ -316,9 +339,9 @@ class ADGroupEditTest extends PassboltTestCase
      * And   I am on the users workspace
      * And   I am editing a group that I manage
      * When  I add some users to a group
-     *  And   I remove some users from the group
-     *  And   I update the role of some users
-     *  And         I click on save
+     * And   I remove some users from the group
+     * And   I update the role of some users
+     * And   I click on save
      * Then  I should see a success notification message
      * When            I access last email sent to me
      * Then            I shouldn't see any email

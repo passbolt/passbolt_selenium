@@ -1,5 +1,18 @@
 <?php
 /**
+ * Passbolt ~ Open source password manager for teams
+ * Copyright (c) Passbolt SARL (https://www.passbolt.com)
+ *
+ * Licensed under GNU Affero General Public License version 3 of the or any later version.
+ * For full copyright and license information, please see the LICENSE.txt
+ * Redistributions of files must retain the above copyright notice.
+ *
+ * @copyright Copyright (c) Passbolt SARL (https://www.passbolt.com)
+ * @license   https://opensource.org/licenses/AGPL-3.0 AGPL License
+ * @link      https://www.passbolt.com Passbolt(tm)
+ * @since     2.0.0
+ */
+/**
  * Feature: As a admin I can delete users
  *
  * Scenarios :
@@ -8,16 +21,30 @@
  *  - As Admin I should not be able to delete my own user account
  *  - As Admin I should not be able to delete a user who is the sole owner of some shared passwords
  *  - As Admin I should not be able to delete a user who is the sole group manager of groups
- *
- * @copyright (c) 2017 Passbolt SARL
- * @licence   GNU Affero General Public License http://www.gnu.org/licenses/agpl-3.0.en.html
  */
+namespace Tests\AD\Base;
+
+use App\Actions\ConfirmationDialogActionsTrait;
+use App\Actions\UserActionsTrait;
+use App\Actions\WorkspaceActionsTrait;
+use App\Assertions\ConfirmationDialogAssertionsTrait;
+use App\Assertions\WorkspaceAssertionsTrait;
+use App\PassboltTestCase;
+use Data\Fixtures\User;
+
 class ADUserDeleteTest extends PassboltTestCase
 {
 
+    use ConfirmationDialogActionsTrait;
+    use ConfirmationDialogAssertionsTrait;
+    use UserActionsTrait;
+    use WorkspaceAssertionsTrait;
+    use WorkspaceActionsTrait;
+
     /**
      * Scenario: As admin I should be able to delete a user on a right click
-     * Given        I am logged in as admin in the user workspace
+     *
+     * Given I am logged in as admin in the user workspace
      * And   I right click on a user
      * Then  I should see a contextual menu with a delete option
      * When  I click on the delete option
@@ -27,6 +54,10 @@ class ADUserDeleteTest extends PassboltTestCase
      * And   I should not see the user in the user list anymore
      * When  I refresh the page
      * Then  I still should not see the user in the user list anymore
+     *
+     * @group AD
+     * @group user
+     * @group delete
      */
     public function testDeleteUserRightClick() 
     {
@@ -35,7 +66,6 @@ class ADUserDeleteTest extends PassboltTestCase
 
         // And I am Admin
         $user = User::get('admin');
-
 
         // And I am logged in on the user workspace
         $this->loginAs($user);
@@ -73,9 +103,9 @@ class ADUserDeleteTest extends PassboltTestCase
     }
 
     /**
-     * @group saucelabs
      * Scenario: As admin I should be able to delete a user using the delete button
-     * Given        I am logged in as admin in the user workspace
+     *
+     * Given I am logged in as admin in the user workspace
      * And   I click on the user
      * And   I click on delete button
      * Then  I should see a confirmation dialog
@@ -84,6 +114,11 @@ class ADUserDeleteTest extends PassboltTestCase
      * And   I should not see the user in the user list anymore
      * When  I refresh the page
      * Then  I still should not see the user in the user list anymore
+     *
+     * @group AD
+     * @group user
+     * @group delete
+     * @group saucelabs
      */
     public function testDeleteUserButton() 
     {
@@ -131,12 +166,17 @@ class ADUserDeleteTest extends PassboltTestCase
 
     /**
      * Scenario: As Admin I should not be able to delete my own user account
-     * Given        I am logged in as admin in the user workspace
+     *
+     * Given I am logged in as admin in the user workspace
      * And   I click on my own name in the user list
      * Then  I should see that the delete button is disabled
      * When  I right click on my name in the users list
      * Then  I should see a contextual menu
      * And   I should see that the delete option is not available.
+     *
+     * @group AD
+     * @group user
+     * @group delete
      */
     public function testDeleteUserMyself() 
     {
@@ -169,14 +209,19 @@ class ADUserDeleteTest extends PassboltTestCase
 
     /**
      * Scenario: As Admin I should not be able to delete a user who is the sole owner of some shared passwords
-     * Given        I am logged in as admin in the user workspace
+     *
+     * Given I am logged in as admin in the user workspace
      * And   I click on the user
      * And   I click on delete button
      * Then  I should see a confirmation dialog
      * When  I click ok in the confirmation dialog
      * Then  I should see a message explaining me why the user can't be deleted
      * When  I click on the dialog main action
-     * Then            I should see that the dialog disappears
+     * Then  I should see that the dialog disappears
+     *
+     * @group AD
+     * @group user
+     * @group delete
      */
     public function testDeletedUserSoleOwner() 
     {
@@ -212,14 +257,19 @@ class ADUserDeleteTest extends PassboltTestCase
 
     /**
      * Scenario: As Admin I should not be able to delete a user who is the sole group manager of groups
-     * Given        I am logged in as admin in the user workspace
+     *
+     * Given I am logged in as admin in the user workspace
      * And   I click on the user
      * And   I click on delete button
      * Then  I should see a confirmation dialog
      * When  I click ok in the confirmation dialog
      * Then  I should see a message explaining me why the user can't be deleted
      * When  I click on the dialog main action
-     * Then            I should see that the dialog disappears
+     * Then  I should see that the dialog disappears
+     *
+     * @group AD
+     * @group user
+     * @group delete
      */
     public function testDeletedUserSoleGroupManager() 
     {

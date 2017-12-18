@@ -1,7 +1,17 @@
 <?php
-//use Facebook\WebDriver\WebDriverBy;
-//use Facebook\WebDriver\WebDriverSelect;
-
+/**
+ * Passbolt ~ Open source password manager for teams
+ * Copyright (c) Passbolt SARL (https://www.passbolt.com)
+ *
+ * Licensed under GNU Affero General Public License version 3 of the or any later version.
+ * For full copyright and license information, please see the LICENSE.txt
+ * Redistributions of files must retain the above copyright notice.
+ *
+ * @copyright Copyright (c) Passbolt SARL (https://www.passbolt.com)
+ * @license   https://opensource.org/licenses/AGPL-3.0 AGPL License
+ * @link      https://www.passbolt.com Passbolt(tm)
+ * @since     2.0.0
+ */
 /**
  * Feature: As an administrator I can delete a group
  *
@@ -10,26 +20,52 @@
  *  - As an administrator I can delete a group that has passwords shared with it
  *  - As an administrator I can't delete a group that is the sole owner of passwords
  *  - As an administrator I can delete a group that is already selected in the list
- *
- * @copyright (c) 2017-present Passbolt SARL
- * @licence   GNU Affero General Public License http://www.gnu.org/licenses/agpl-3.0.en.html
  */
+namespace Tests\AD\Base;
+
+use App\Actions\ConfirmationDialogActionsTrait;
+use App\Actions\GroupActionsTrait;
+use App\Actions\PasswordActionsTrait;
+use App\Actions\PermissionActionsTrait;
+use App\Actions\ShareActionsTrait;
+use App\Actions\WorkspaceActionsTrait;
+use App\Assertions\GroupAssertionsTrait;
+use App\Assertions\WorkspaceAssertionsTrait;
+use App\Lib\UuidFactory;
+use App\PassboltTestCase;
+use Data\Fixtures\User;
+
 class ADGroupDeleteTest extends PassboltTestCase
 {
 
+    use ConfirmationDialogActionsTrait;
+    use GroupActionsTrait;
+    use GroupAssertionsTrait;
+    use PermissionActionsTrait;
+    use PasswordActionsTrait;
+    use ShareActionsTrait;
+    use WorkspaceActionsTrait;
+    use WorkspaceAssertionsTrait;
+
     /**
      * Scenario: As an administrator I can delete a group that doesn't have any passwords shared with it.
-     * Given    that I am logged in as an administrator
-     *   And    that I am on the users workspace
+     *
+     * Given I am logged in as an administrator
+     * And   I am on the users workspace
      * When  I click on the contextual menu of a group that I want to remove that doesn't have any password shared with it
      * Then  I should see a contextual menu with an option "delete group"
      * When  I click on the "delete group" menu item.
      * Then  I should see a confirmation dialog opening
-     *   And   I should see a message saying that there is no password associated with the group
-     *   And   I should see a call to action button with the "delete group" text
+     * And   I should see a message saying that there is no password associated with the group
+     * And   I should see a call to action button with the "delete group" text
      * When  I click on "delete group" button
      * Then  I should see that the confirmation dialog disappears
      * And   I should see that the group is not present in the list anymore
+     *
+     * @group AD
+     * @group user
+     * @group group
+     * @group delete
      */
     public function testDeleteGroupWithoutPasswords() 
     {
@@ -37,7 +73,6 @@ class ADGroupDeleteTest extends PassboltTestCase
 
         // Given I am an administrator.
         $user = User::get('admin');
-        
 
         // I am logged in as admin
         $this->loginAs($user);
@@ -65,17 +100,23 @@ class ADGroupDeleteTest extends PassboltTestCase
 
     /**
      * Scenario: As an administrator I can delete a group that has passwords shared with it
-     * Given    that I am logged in as an administrator
-     *   And    that I am on the users workspace
+     *
+     * Given I am logged in as an administrator
+     * And   I am on the users workspace
      * When  I click on the contextual menu of a group that I want to remove that has passwords shared with it
      * Then  I should see a contextual menu with an option "delete group"
      * When  I click on the "delete group" menu item.
      * Then  I should see a confirmation dialog opening
-     *   And   I should see a message saying that there are x passwords associated with this group
-     *   And   I should see a call to action button with the "delete group" text
+     * And   I should see a message saying that there are x passwords associated with this group
+     * And   I should see a call to action button with the "delete group" text
      * When  I click on "delete group" button
      * Then  I should see that the confirmation dialog disappears
      * And   I should see that the group is not present in the list anymore
+     *
+     * @group AD
+     * @group user
+     * @group group
+     * @group delete
      */
     public function testDeleteGroupWithPasswords() 
     {
@@ -83,7 +124,6 @@ class ADGroupDeleteTest extends PassboltTestCase
 
         // Given I am an administrator.
         $user = User::get('admin');
-        
 
         // I am logged in as admin
         $this->loginAs($user);
@@ -111,25 +151,30 @@ class ADGroupDeleteTest extends PassboltTestCase
 
     /**
      * Scenario: As an administrator I can't delete a group that is the sole owner of passwords
-     * Given    that I am logged in as an administrator
-     *   And    that I am on the passwords workspace
+     * Given I am logged in as an administrator
+     * And   I am on the passwords workspace
      * When  I create a password
-     *   And   I share this password with the group "Accounting"
-     *   And   I set the group as "owner" of the password
-     *   And   I set myself as "can read" only so that the group is the only owner left
-     *   And   I save the permissions
+     * And   I share this password with the group "Accounting"
+     * And   I set the group as "owner" of the password
+     * And   I set myself as "can read" only so that the group is the only owner left
+     * And   I save the permissions
      * Then  I should see a notification saying that the permissions have been saved
      * When  I go to the users workspace
-     *   And   I click on the contextual menu icon of the group "accounting" which is now the sole owner of a password
+     * And   I click on the contextual menu icon of the group "accounting" which is now the sole owner of a password
      * Then  I should see a contextual menu with an option "delete group"
      * When  I click on the "delete group" menu item.
      * Then  I should see a confirmation dialog opening
-     *   And   I should see a message saying that the group is the sole owner of the password created
-     *   And   I should see the name of the password listed in the message
-     *   And   I should see a button "Got it"
+     * And   I should see a message saying that the group is the sole owner of the password created
+     * And   I should see the name of the password listed in the message
+     * And   I should see a button "Got it"
      * When  I click on "Got it" button
      * Then  I should see that the confirmation dialog disappears
      * And   I should see that the group is still present in the list
+     *
+     * @group AD
+     * @group user
+     * @group group
+     * @group delete
      */
     public function testDeleteGroupSoleOwnerOfPasswords() 
     {
@@ -137,7 +182,6 @@ class ADGroupDeleteTest extends PassboltTestCase
 
         // Given I am an administrator.
         $user = User::get('admin');
-        
 
         // I am logged in as admin
         $this->loginAs($user);
@@ -194,23 +238,29 @@ class ADGroupDeleteTest extends PassboltTestCase
 
     /**
      * Scenario: As an administrator I can delete a group that is already selected in the list
-     * Given    that I am logged in as an administrator
-     *   And    that I am on the users workspace
+     *
+     * Given I am logged in as an administrator
+     * And   I am on the users workspace
      * When  I click on the group that I want to delete
      * Then  I should see that the group is selected
-     *   And   I should see that the breadcrum shows "All users > group name"
+     * And   I should see that the breadcrum shows "All users > group name"
      * When  I click on the contextual menu of a group that I want to remove that doesn't have any password shared with it
      * Then  I should see a contextual menu with an option "delete group"
      * When  I click on the "delete group" menu item
      * Then  I should see a confirmation dialog opening
-     *   And   I should see a message saying that there is no password associated with the group
-     *   And   I should see a call to action button with the "delete group" text
+     * And   I should see a message saying that there is no password associated with the group
+     * And   I should see a call to action button with the "delete group" text
      * When  I click on "delete group" button
      * Then  I should see that the confirmation dialog disappears
-     *   And   I should see that the group is not present in the list anymore
-     *   And   I should see that the group is not selected anymore
-     *   And   I should see that instead, the All users filter is selected
-     *   And   I should see that the breadcrumb is now "All users" only and doesn't contain the name of the group
+     * And   I should see that the group is not present in the list anymore
+     * And   I should see that the group is not selected anymore
+     * And   I should see that instead, the All users filter is selected
+     * And   I should see that the breadcrumb is now "All users" only and doesn't contain the name of the group
+     *
+     * @group AD
+     * @group user
+     * @group group
+     * @group delete
      */
     public function testDeleteSelectedGroup() 
     {
@@ -218,8 +268,6 @@ class ADGroupDeleteTest extends PassboltTestCase
 
         // Given I am an administrator.
         $user = User::get('admin');
-        
-
         $groupId = UuidFactory::uuid('group.id.accounting');
 
         // I am logged in as admin
@@ -254,5 +302,4 @@ class ADGroupDeleteTest extends PassboltTestCase
         $this->assertBreadcrumb('users', ['All users']);
         $this->assertElementNotContainText($this->findById('js_wsp_users_breadcrumb'),  'Accounting (group)');
     }
-
 }

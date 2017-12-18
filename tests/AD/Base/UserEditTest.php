@@ -502,10 +502,10 @@ class UserEditTest extends PassboltTestCase
 
         // Create user
         $newUser = [
-        'first_name' => 'John',
-        'last_name'  => 'Doe',
-        'username'   => 'johndoe@passbolt.com',
-        'admin'      => true
+            'first_name' => 'John',
+            'last_name'  => 'Doe',
+            'username'   => 'johndoe@passbolt.com',
+            'admin'      => true
         ];
         $this->createUser($newUser);
 
@@ -551,7 +551,7 @@ class UserEditTest extends PassboltTestCase
         $this->logout();
 
         // Through the dummies, we can predict the user that was created (predictible uuid).
-        $user = User::get('john');
+        // $user = User::get('john');
 
         // And I login again as the newly created user
         $this->loginAs($newUser['username']);

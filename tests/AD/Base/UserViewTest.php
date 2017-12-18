@@ -1,18 +1,44 @@
 <?php
 /**
+ * Passbolt ~ Open source password manager for teams
+ * Copyright (c) Passbolt SARL (https://www.passbolt.com)
+ *
+ * Licensed under GNU Affero General Public License version 3 of the or any later version.
+ * For full copyright and license information, please see the LICENSE.txt
+ * Redistributions of files must retain the above copyright notice.
+ *
+ * @copyright Copyright (c) Passbolt SARL (https://www.passbolt.com)
+ * @license   https://opensource.org/licenses/AGPL-3.0 AGPL License
+ * @link      https://www.passbolt.com Passbolt(tm)
+ * @since     2.0.0
+ */
+/**
  * Feature: As Admin I can view user information
  *
  * Scenarios :
  * - As an admin I should see the sidebar groups section updated when I create a group
- *
- * @copyright (c) 2017-present Passbolt SARL
- * @licence   GNU Affero General Public License http://www.gnu.org/licenses/agpl-3.0.en.html
  */
+namespace Tests\AD\Base;
+
+use App\Actions\GroupActionsTrait;
+use App\Actions\UserActionsTrait;
+use App\Actions\WorkspaceActionsTrait;
+use App\Assertions\GroupAssertionsTrait;
+use App\Assertions\UserAssertionsTrait;
+use App\Assertions\WorkspaceAssertionsTrait;
+use App\PassboltTestCase;
+use Data\Fixtures\User;
+
 class ADUserViewTest extends PassboltTestCase
 {
+    use UserActionsTrait;
+    use UserAssertionsTrait;
+    use GroupActionsTrait;
+    use GroupAssertionsTrait;
+    use WorkspaceActionsTrait;
+    use WorkspaceAssertionsTrait;
 
     /**
-     * @group saucelabs
      * Scenario: As an admin I should be able to distinguish visually inactive users
      *
      * Given I am logged in as Admin, and I go to the user workspace
@@ -22,15 +48,17 @@ class ADUserViewTest extends PassboltTestCase
      * Then  I should see that the sidebar opens
      * And   I shouldn't see the group details in the sidebar
      * And   I shouldn't see the gpg key in the sidebar
+     *
+     * @group AD
+     * @group user
+     * @group view
+     * @group saucelabs
      */
     public function testViewInactiveUser() 
     {
         // Given I am Ada
-        $user = User::get('admin');
-        
-
         // And I am logged in on the user workspace
-        $this->loginAs($user);
+        $this->loginAs(User::get('admin'));
         $this->gotoWorkspace('user');
 
         // When I click on a user
@@ -57,13 +85,17 @@ class ADUserViewTest extends PassboltTestCase
     }
 
     /**
-     * @group saucelabs
      * Scenario: As an admin I should see the sidebar groups section updated when I create a group
      *
      * Given I am logged in as Admin, and I go to the user workspace
      * When  I click on a user
      * And   I create a group where the user I selected is member of
      * Then  I should see the groups membership list updated with the new group
+     *
+     * @group AD
+     * @group user
+     * @group view
+     * @group saucelabs
      */
     public function testUpdateSidebarGroupsListWhenCreateGroup() 
     {
@@ -72,7 +104,6 @@ class ADUserViewTest extends PassboltTestCase
 
         // Given I am Ada
         $user = User::get('admin');
-        
 
         // And I am logged in on the user workspace
         $this->loginAs($user);
@@ -93,5 +124,4 @@ class ADUserViewTest extends PassboltTestCase
         // I should see the groups membership list updated with the new group
         $this->assertGroupUserInSidebar('New group', true);
     }
-
 }

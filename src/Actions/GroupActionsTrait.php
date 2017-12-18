@@ -15,6 +15,7 @@
 namespace App\Actions;
 
 use Exception;
+use Facebook\WebDriver\Remote\RemoteWebElement;
 use Facebook\WebDriver\WebDriverSelect;
 use Data\Fixtures\User;
 
@@ -144,9 +145,9 @@ trait GroupActionsTrait
      * Get a temporary user element from the list
      *
      * @param $user
-     * @return Object $rowElement
+     * @return RemoteWebElement $rowElement
      */
-    public function getTemporaryGroupUserElement($user) 
+    public function getTemporaryGroupUserElement($user) : RemoteWebElement
     {
         $userFullName = $user['FirstName'] . ' ' . $user['LastName'];
 

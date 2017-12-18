@@ -1,5 +1,18 @@
 <?php
 /**
+ * Passbolt ~ Open source password manager for teams
+ * Copyright (c) Passbolt SARL (https://www.passbolt.com)
+ *
+ * Licensed under GNU Affero General Public License version 3 of the or any later version.
+ * For full copyright and license information, please see the LICENSE.txt
+ * Redistributions of files must retain the above copyright notice.
+ *
+ * @copyright Copyright (c) Passbolt SARL (https://www.passbolt.com)
+ * @license   https://opensource.org/licenses/AGPL-3.0 AGPL License
+ * @link      https://www.passbolt.com Passbolt(tm)
+ * @since     2.0.0
+ */
+/**
  * Feature: As an administrator I can view group information
  *
  * Scenarios :
@@ -9,16 +22,34 @@
  * @copyright (c) 2017-present Passbolt SARL
  * @licence   GNU Affero General Public License http://www.gnu.org/licenses/agpl-3.0.en.html
  */
+namespace Tests\AD\Base;
+
+use App\Actions\GroupActionsTrait;
+use App\Actions\WorkspaceActionsTrait;
+use App\Assertions\GroupAssertionsTrait;
+use App\PassboltTestCase;
+use App\Lib\UuidFactory;
+use Data\Fixtures\User;
+use Data\Fixtures\Group;
+
 class ADGroupViewTest extends PassboltTestCase
 {
+
+    use GroupActionsTrait;
+    use GroupAssertionsTrait;
+    use WorkspaceActionsTrait;
 
     /**
      * Scenario: As administrator I can see the list users that are part of the group in the edit group dialog
      *
-     * Given that        I am logged in as an administrator
+     * Given I am logged in as an administrator
      * And   I am on the users workspace
-     * When                I edit a group
-     * Then                I should see the list of users that are members of a given group
+     * When  I edit a group
+     * Then  I should see the list of users that are members of a given group
+     *
+     * @group AD
+     * @group group
+     * @group view
      */
     function testViewGroupMemberFromEditDialog() 
     {
@@ -46,6 +77,10 @@ class ADGroupViewTest extends PassboltTestCase
      * Then  I should see that the sidebar contains a member section
      * And   I should see that the members sections contains the list of users that are members of this group
      * And   I should see that below each user I can see his membership type
+     *
+     * @group AD
+     * @group group
+     * @group view
      */
     function testViewGroupMemberFromSidebar() 
     {

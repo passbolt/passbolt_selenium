@@ -99,7 +99,7 @@ trait UserActionsTrait
     /**
      * Goto the edit user dialog for a given user id
      *
-     * @param $id string
+     * @param mixed $id user array or uuid
      */
     public function gotoEditUser($id) 
     {
