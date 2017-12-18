@@ -47,6 +47,7 @@ class GMWorkspaceGroupTest extends PassboltTestCase
      * @group user-workspace
      * @group filter
      * @group saucelabs
+     * @group broken
      */
     public function testFilterUsersByGroup() 
     {

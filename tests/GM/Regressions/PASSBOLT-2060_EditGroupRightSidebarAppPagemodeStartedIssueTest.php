@@ -21,17 +21,20 @@
 namespace Tests\GM\Regressions;
 
 use App\Actions\GroupActionsTrait;
+use App\Actions\PasswordActionsTrait;
 use App\Actions\WorkspaceActionsTrait;
 use App\Assertions\GroupAssertionsTrait;
 use App\Assertions\WorkspaceAssertionsTrait;
 use App\Lib\UuidFactory;
 use App\PassboltSetupTestCase;
+use Data\Fixtures\Group;
 use Data\Fixtures\User;
 
 class PASSBOLT2060 extends PassboltSetupTestCase
 {
     use GroupActionsTrait;
     use GroupAssertionsTrait;
+    use PasswordActionsTrait;
     use WorkspaceActionsTrait;
     use WorkspaceAssertionsTrait;
 
@@ -45,6 +48,7 @@ class PASSBOLT2060 extends PassboltSetupTestCase
      * @group GM
      * @group group
      * @group edit
+     * @group broken
      */
     public function testEditGroupFromSidebar()
     {

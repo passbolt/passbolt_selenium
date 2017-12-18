@@ -70,6 +70,7 @@ class GMGroupEditTest extends PassboltTestCase
      * @group GM
      * @group group
      * @group edit
+     * @group broken
      */
     public function testEditGroupRightClick() 
     {
@@ -105,6 +106,7 @@ class GMGroupEditTest extends PassboltTestCase
      * @group GM
      * @group group
      * @group edit
+     * @group v2
      */
     public function testCantEditGroup() 
     {
@@ -138,6 +140,7 @@ class GMGroupEditTest extends PassboltTestCase
      * @group GM
      * @group group
      * @group edit
+     * @group v2
      */
     public function testEditGroupFromSidebar() 
     {
@@ -173,6 +176,7 @@ class GMGroupEditTest extends PassboltTestCase
      * @group GM
      * @group group
      * @group edit
+     * @group v2
      */
     public function testCantEditGroupDontManageFromSidebar() 
     {
@@ -203,6 +207,7 @@ class GMGroupEditTest extends PassboltTestCase
      * @group GM
      * @group group
      * @group edit
+     * @group v2
      */
     public function testCannotEditGroupName() 
     {
@@ -243,6 +248,8 @@ class GMGroupEditTest extends PassboltTestCase
      * @group GM
      * @group group
      * @group edit
+     * @group broken
+     * @group PASSBOLT-2536
      */
     public function testEditGroupPromoteMember() 
     {
@@ -320,6 +327,8 @@ class GMGroupEditTest extends PassboltTestCase
      * @group GM
      * @group group
      * @group edit
+     * @group broken
+     * @group PASSBOLT-2536
      */
     public function testAtLeastOneGroupManager() 
     {
@@ -361,6 +370,7 @@ class GMGroupEditTest extends PassboltTestCase
      * @group GM
      * @group group
      * @group edit
+     * @group broken
      */
     public function testAddGroupMemberWithoutPasswordsEncryption() 
     {
@@ -449,6 +459,7 @@ class GMGroupEditTest extends PassboltTestCase
      * @group GM
      * @group group
      * @group edit
+     * @group broken
      */
     public function testAddGroupMemberWithPasswordsEncryption() 
     {
@@ -557,6 +568,7 @@ class GMGroupEditTest extends PassboltTestCase
      * @group GM
      * @group group
      * @group edit
+     * @group broken
      */
     public function testRemoveGroupMember() 
     {
@@ -633,6 +645,7 @@ class GMGroupEditTest extends PassboltTestCase
      * @group GM
      * @group group
      * @group edit
+     * @group broken
      */
     public function testEditGroupAddUserEmailNotification() 
     {
@@ -708,6 +721,7 @@ class GMGroupEditTest extends PassboltTestCase
      * @group GM
      * @group group
      * @group edit
+     * @group broken
      */
     public function testEditGroupDeleteUserEmailNotification() 
     {
@@ -764,6 +778,7 @@ class GMGroupEditTest extends PassboltTestCase
      * @group GM
      * @group group
      * @group edit
+     * @group broken
      */
     public function testEditGroupUpdateUserEmailNotification() 
     {
@@ -834,6 +849,7 @@ class GMGroupEditTest extends PassboltTestCase
      * @group GM
      * @group group
      * @group edit
+     * @group broken
      */
     public function testEditGroupGroupUpdatedSummaryEmailNotification() 
     {

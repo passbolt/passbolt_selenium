@@ -39,6 +39,7 @@ class GMGroupDeleteTest extends PassboltTestCase
      * @group GM
      * @group group
      * @group delete
+     * @group v2
      */
     public function testDeleteGroupRightClick() 
     {

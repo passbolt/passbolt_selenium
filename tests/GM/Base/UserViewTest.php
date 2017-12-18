@@ -19,6 +19,7 @@
 namespace Tests\GM\Base;
 
 use App\Actions\GroupActionsTrait;
+use App\Actions\PasswordActionsTrait;
 use App\Actions\UserActionsTrait;
 use App\Actions\WorkspaceActionsTrait;
 use App\Assertions\GroupAssertionsTrait;
@@ -32,6 +33,7 @@ class GMUserViewTest extends PassboltTestCase
 {
     use GroupActionsTrait;
     use GroupAssertionsTrait;
+    use PasswordActionsTrait;
     use UserActionsTrait;
     use WorkspaceActionsTrait;
     use WorkspaceAssertionsTrait;
@@ -50,6 +52,7 @@ class GMUserViewTest extends PassboltTestCase
      * @group group
      * @group view
      * @group saucelabs
+     * @group broken
      */
     public function testUpdateSidebarGroupsListWhenUpdateGroup() 
     {

@@ -46,6 +46,7 @@ class GMGroupViewTest extends PassboltTestCase
      * @group GM
      * @group group
      * @group view
+     * @group v2
      */
     function testViewGroupMemberFromEditDialog() 
     {
@@ -76,6 +77,7 @@ class GMGroupViewTest extends PassboltTestCase
      * @group GM
      * @group group
      * @group view
+     * @group v2
      */
     function testViewGroupMemberFromSidebar() 
     {

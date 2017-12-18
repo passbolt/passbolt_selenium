@@ -16,6 +16,7 @@ namespace App\Actions;
 
 use Exception;
 use Facebook\WebDriver\Remote\RemoteWebElement;
+use Facebook\WebDriver\WebDriverBy;
 use Facebook\WebDriver\WebDriverSelect;
 use Data\Fixtures\User;
 
@@ -263,7 +264,7 @@ trait GroupActionsTrait
             $this->click("#js_contextual_menu #js_group_browser_menu_edit a");
             $this->waitUntilISee('.edit-group-dialog');
             $this->waitUntilISee('#js_edit_group.ready');
-            $this->findById('#passbolt-iframe-group-edit');
+            $this->findById('passbolt-iframe-group-edit');
             $this->waitUntilISee('#passbolt-iframe-group-edit.ready');
         }
     }

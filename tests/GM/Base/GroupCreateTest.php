@@ -40,6 +40,7 @@ class GMGroupCreateTest extends PassboltTestCase
      * @group GM
      * @group group
      * @group create
+     * @group v2
      */
     public function testCantCreateGroup() 
     {
