@@ -14,6 +14,10 @@
  */
 namespace App\Assertions;
 
+use App\Lib\UuidFactory;
+use Facebook\WebDriver\WebDriverBy;
+use Facebook\WebDriver\WebDriverSelect;
+
 trait GroupAssertionsTrait
 {
     /**
