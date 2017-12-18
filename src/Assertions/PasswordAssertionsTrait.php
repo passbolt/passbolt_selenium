@@ -42,7 +42,7 @@ trait PasswordAssertionsTrait
         $class = str_replace(' ', '_', $strength);
         $this->assertVisibleByCss('#js_secret_strength.'.$class);
         $this->assertElementHasClass(
-            $this->findById('js_secret_strength .progress-bar'),
+            $this->findByCss('#js_secret_strength .progress-bar'),
             $class
         );
         // We check visibility only if the strength is available.
