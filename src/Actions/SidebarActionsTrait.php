@@ -46,7 +46,7 @@ trait SidebarActionsTrait
         $this->click('#js_rs_details_comments a.comment-submit');
 
         // Assert that notification is shown.
-        $this->assertNotification('app_comments_addforeigncomment_success');
+        $this->assertNotification('app_comments_addPost_success');
     }
 
 }

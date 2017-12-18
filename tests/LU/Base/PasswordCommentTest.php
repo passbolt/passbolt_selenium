@@ -62,9 +62,9 @@ class PasswordCommentTest extends PassboltTestCase
      *
      * @group LU
      * @group comment
+     * @group comment-add
+     * @group v2
      * @group saucelabs
-     * @group broken
-     * @group PASSBOLT-2528
      */
     public function testCommentAdd() 
     {
@@ -131,6 +131,7 @@ class PasswordCommentTest extends PassboltTestCase
      *
      * @group LU
      * @group comment
+     * @group comment-validation
      * @group v2
      */
     public function testCommentValidate() 
@@ -161,12 +162,13 @@ class PasswordCommentTest extends PassboltTestCase
     }
 
     /**
-     * Scenario: As a user I should be able to delete a comment
+     * Scenario: As a user I should be able to delete a comment I just added
      *
      * Given I am Ada
      * And   I am logged in
      * And   I click password
-     * And   I enter and save a comment
+     * And   I enter a comment
+     * And   I click on save button
      * Then  I should see the comment in the list
      * And   I should see a delete button
      * When  I click on the delete button
@@ -175,8 +177,9 @@ class PasswordCommentTest extends PassboltTestCase
      *
      * @group LU
      * @group comment
+     * @group comment-delete
      * @group broken
-     * @group PASSBOLT-2528
+     * @group PASSBOLT-2538
      */
     public function testCommentDelete() 
     {
@@ -193,13 +196,13 @@ class PasswordCommentTest extends PassboltTestCase
         $resource = Resource::get(array('user' => 'ada', 'id' => UuidFactory::uuid('resource.id.bower')));
         $this->clickPassword($resource['id']);
 
-        // Check whether the comments list contain an existing comment from fixtures.
-        $this->waitUntilISee('#js_rs_details_comments_list', '/this is a test comment/');
-        $this->assertNotVisible($this->commentFormSelector);
+        // Add a comment
+        $this->postCommentInSidebar('this is a comment for delete test');
+        $this->waitUntilNotificationDisappears('app_comments_addPost_success');
 
         // Delete comment.
         $buttonDeleteSelector = '#js_rs_details_comments_list a.js_delete_comment';
-        $this->assertVisibleByCss($buttonDeleteSelector);
+        $this->waitUntilISee($buttonDeleteSelector);
         $this->click($buttonDeleteSelector);
 
         // Assert that the confirmation dialog is displayed.
@@ -214,7 +217,7 @@ class PasswordCommentTest extends PassboltTestCase
         // Assert that the comment has disappeared
         $this->assertElementNotContainText(
             $this->find('#js_rs_details_comments_list'),
-            'this is a test comment'
+            'this is a comment for delete test'
         );
 
         $this->assertVisibleByCss($this->commentFormSelector);
@@ -226,23 +229,24 @@ class PasswordCommentTest extends PassboltTestCase
      * Given I am Betty
      * And   I am logged in
      * And   I select the bower password
-     * Then  I should see the comment posted by ada
+     * Then  I should see the comment posted by irene
      * And   I should not see the delete button
      *
      * @group LU
      * @group comment
+     * @group comment-delete
      * @group broken
      * @group PASSBOLT-2531
      */
     public function testCommentDeleteOnlyPossibleForOwner()
     {
         // And I log in again as betty.
-        $user = User::get('edith');
+        $user = User::get('betty');
 
         $this->loginAs($user);
 
         // And I select the same centos password.
-        $this->clickPassword(UuidFactory::uuid('resource.id.bower'));
+        $this->clickPassword(UuidFactory::uuid('resource.id.apache'));
 
         // Check whether the comments list contain the new comment.
         $this->waitUntilISee('#js_rs_details_comments_list', '/this is a test comment/');
@@ -250,7 +254,6 @@ class PasswordCommentTest extends PassboltTestCase
         // I should not see the delete button.
         $buttonDeleteSelector = '#js_rs_details_comments_list a.js_delete_comment';
         $this->assertNotVisible($buttonDeleteSelector);
-
     }
 
     /**
@@ -271,8 +274,8 @@ class PasswordCommentTest extends PassboltTestCase
      *
      * @group LU
      * @group comment
-     * @group broken
-     * @group PASSBOLT-2528
+     * @group comment-notification
+     * @group v2
      */
     public function testCommentAddEmailNotification() 
     {
@@ -304,16 +307,10 @@ class PasswordCommentTest extends PassboltTestCase
         // The email title should be:
         $this->assertMetaTitleContains(sprintf('%s commented on %s', $user['FirstName'], $resource['name']));
 
-        // I should see the resource name in the email.
+        // I should see the user firstname name in the email.
         $this->assertElementContainsText(
             'bodyTable',
-            $user['FirstName'] . ' ' . $user['LastName']
-        );
-
-        // I should see the resource name in the email.
-        $this->assertElementContainsText(
-            'bodyTable',
-            $comment
+            $user['FirstName']
         );
 
         // I should see the comment in the email
