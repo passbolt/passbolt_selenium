@@ -125,7 +125,7 @@ class GMGroupEditTest extends PassboltTestCase
         $this->clickGroup($group['id']);
 
         // Then I should see that there is no dropdown button next to the groups
-        $this->assertNotVisible("#group_{$group['id']} .right-cell a");
+        $this->assertNotVisibleByCss("#group_{$group['id']} .right-cell a");
     }
 
     /**
@@ -192,7 +192,7 @@ class GMGroupEditTest extends PassboltTestCase
 
         // Then I should not see a “edit” button next to the Information section
         $editButtonSelector = '#js_group_details #js_group_details_members #js_edit_members_button';
-        $this->assertNotVisible($editButtonSelector);
+        $this->assertNotVisibleByCss($editButtonSelector);
     }
 
     /**
@@ -593,7 +593,7 @@ class GMGroupEditTest extends PassboltTestCase
         $this->click("#js_group_user_delete_$groupUserId");
 
         // Then I should see that the user disappears from the list of group members
-        $this->assertNotVisible("#$groupUserId");
+        $this->assertNotVisibleByCss("#$groupUserId");
 
         // And I should see a warning message saying that the changes will be applied only after save
         $this->assertElementContainsText('#js_group_members .message.warning', 'You need to click save for the changes to take place.');

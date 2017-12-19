@@ -72,7 +72,7 @@ class UserEditTest extends PassboltTestCase
         $this->gotoWorkspace('user');
 
         // Then I can see the edit user button is disabled
-        $this->assertVisibleByCss('js_user_wk_menu_edition_button');
+        $this->assertVisible('js_user_wk_menu_edition_button');
         $this->assertVisibleByCss('#js_user_wk_menu_edition_button.disabled');
 
         // Select Frances Allen
@@ -80,8 +80,8 @@ class UserEditTest extends PassboltTestCase
         $this->clickUser($user['id']);
 
         // Then I can see the edit user button is disabled
-        $this->assertVisibleByCss('js_user_wk_menu_edition_button');
-        $this->assertNotVisible('#js_user_wk_menu_edition_button.disabled');
+        $this->assertVisible('js_user_wk_menu_edition_button');
+        $this->assertNotVisibleByCss('#js_user_wk_menu_edition_button.disabled');
 
         // When I click on the edit button
         $this->click('js_user_wk_menu_edition_button');
@@ -120,7 +120,7 @@ class UserEditTest extends PassboltTestCase
         $this->rightClickUser($user['id']);
 
         // Then I can see the contextual menu
-        $this->assertVisibleByCss('js_contextual_menu');
+        $this->assertVisible('js_contextual_menu');
 
         // When I click on the edit link in the contextual menu
         $this->click('#js_user_browser_menu_edit a');
@@ -166,7 +166,7 @@ class UserEditTest extends PassboltTestCase
         $this->click('.edit-user-dialog .js-dialog-cancel');
 
         // Then I do not see the edit user dialog
-        $this->assertNotVisible('.edit-user-dialog');
+        $this->assertNotVisibleByCss('.edit-user-dialog');
 
         // When I reopen the edit user dialog
         $this->click('js_user_wk_menu_edition_button');
@@ -177,7 +177,7 @@ class UserEditTest extends PassboltTestCase
         $this->click('.edit-user-dialog .dialog-close');
 
         // Then I do not see the edit user dialog
-        $this->assertNotVisible('.edit-user-dialog');
+        $this->assertNotVisibleByCss('.edit-user-dialog');
 
         // When I reopen the edit user dialog
         $this->click('js_user_wk_menu_edition_button');
@@ -451,13 +451,13 @@ class UserEditTest extends PassboltTestCase
 
         // Assert that the user has admin capabilities.
         // Observe that create button is visible
-        $this->assertVisibleByCss('js_wsp_create_button');
+        $this->assertVisible('js_wsp_create_button');
 
         // Observe that edit button is visible
-        $this->assertVisibleByCss('js_user_wk_menu_edition_button');
+        $this->assertVisible('js_user_wk_menu_edition_button');
 
         // Observe that delete button is visible
-        $this->assertVisibleByCss('js_user_wk_menu_deletion_button');
+        $this->assertVisible('js_user_wk_menu_deletion_button');
     }
 
     /**
@@ -561,13 +561,13 @@ class UserEditTest extends PassboltTestCase
 
         // Assert that the user doesn't have admin capabilities
         // Observe that create button is not visible
-        $this->assertNotVisible('js_wsp_create_button');
+        $this->assertNotVisibleByCss('#js_wsp_create_button');
 
         // Observe that edit button is not visible
-        $this->assertNotVisible('js_user_wk_menu_edition_button');
+        $this->assertNotVisibleByCss('#js_user_wk_menu_edition_button');
 
         // Observe that delete button is not visible
-        $this->assertNotVisible('js_user_wk_menu_deletion_button');
+        $this->assertNotVisibleByCss('#js_user_wk_menu_deletion_button');
     }
 
     /**

@@ -62,7 +62,7 @@ class PASSBOLT1041 extends PassboltTestCase
         $this->click('#js_password_browser_menu_edit a');
 
         // Then I cannot see the contextual menu
-        $this->assertNotVisible('js_contextual_menu');
+        $this->assertNotVisibleByCss('#js_contextual_menu');
     }
 
     /**

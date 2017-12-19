@@ -178,7 +178,7 @@ class PASSBOLT1377 extends PassboltTestCase
             $r['id'] = $resource['id'];
             $r['password'] = 'password_' . $i;
             $this->sharePassword($resource, $shareWith[$i], $user);
-            $this->waitUntilNotificationDisappears('app_share_update_success');
+            $this->waitUntilNotificationDisappears('app_share_share_success');
         }
     }
 }

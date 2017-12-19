@@ -199,7 +199,7 @@ class ADGroupCreateTest extends PassboltTestCase
         $this->findByCss('.edit-group-dialog a.cancel')->click();
 
         // Then I should not see the create group dialog
-        $this->assertNotVisible('.edit-group-dialog');
+        $this->assertNotVisibleByCss('.edit-group-dialog');
 
         // Create a new group
         $this->gotoCreateGroup();
@@ -211,7 +211,7 @@ class ADGroupCreateTest extends PassboltTestCase
         $this->findByCss('.edit-group-dialog a.dialog-close')->click();
 
         // Then I should not see the create group dialog
-        $this->assertNotVisible('.edit-group-dialog');
+        $this->assertNotVisibleByCss('.edit-group-dialog');
 
         // -- WITH ESCAPE --
         // Create a new group

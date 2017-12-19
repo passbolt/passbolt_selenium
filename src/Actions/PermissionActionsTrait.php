@@ -35,7 +35,7 @@ trait PermissionActionsTrait
 
         // I can see the user has a direct permission
         $this->assertElementContainsText(
-            $this->findByCss('#js_permissions_list'),
+            $this->findById('js_permissions_list'),
             $username
         );
 
@@ -74,10 +74,10 @@ trait PermissionActionsTrait
         $this->waitCompletion();
 
         // And I see a notice message that the operation was a success
-        $this->assertNotification('app_share_update_success');
+        $this->assertNotification('app_share_share_success');
 
         // And I should not see the share dialog anymore
-        $this->assertNotVisible('.share-password-dialog');
+        $this->assertNotVisibleByCss('.share-password-dialog');
     }
 
     /**
@@ -92,18 +92,15 @@ trait PermissionActionsTrait
 
         // I can see the user has a direct permission
         $this->assertElementContainsText(
-            $this->findByCss('#js_permissions_list'),
+            $this->findById('js_permissions_list'),
             $username
         );
 
         // Find the permission row element
         // I delete the permission
-        try {
-            $rowElement = $this->findByXpath('//*[@id="js_permissions_list"]//*[.="' . $username . '"]//ancestor::li[1]');
-            $deleteButton = $rowElement->findElement(WebDriverBy::cssSelector('.js_perm_delete'));
-        } catch(NoSuchElementException $exception) {
-            \PHPUnit_Framework_Assert::fail('Could not find delete button');
-        }
+        $rowElement = $this->findByXpath('//*[@id="js_permissions_list"]//*[.="' . $username . '"]//ancestor::li[1]');
+        $deleteButton = $rowElement->findElement(WebDriverBy::cssSelector('.js_perm_delete'));
+        $this->assertTrue($deleteButton->isDisplayed());
         $deleteButton->click();
     }
 
@@ -118,6 +115,14 @@ trait PermissionActionsTrait
         // Delete temporary the permission
         $this->deleteTemporaryPermission($password, $username);
 
+        try {
+            // if it didn't work try to scroll and try again
+            $this->findByCss('#js_permissions_changes.hidden');
+            $this->scrollElementToBottom('js_permissions_list');
+            $this->deleteTemporaryPermission($password, $username);
+        } catch(NoSuchElementException $exception) {
+        }
+
         // I can see that temporary changes are waiting to be saved
         $this->assertElementContainsText(
             $this->findByCss('.share-password-dialog #js_permissions_changes'),
@@ -129,10 +134,10 @@ trait PermissionActionsTrait
         $this->waitCompletion();
 
         // And I see a notice message that the operation was a success
-        $this->assertNotification('app_share_update_success');
+        $this->assertNotification('app_share_share_success');
 
         // And I should not see the share dialog anymore
-        $this->assertNotVisible('.share-password-dialog');
+        $this->assertNotVisibleByCss('.share-password-dialog');
     }
 
 }

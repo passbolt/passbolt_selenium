@@ -196,7 +196,7 @@ class PasswordCreateTest extends PassboltTestCase
         $this->findByCss('.create-password-dialog a.cancel')->click();
 
         // Then I should not see the create password dialog
-        $this->assertNotVisible('.create-password-dialog');
+        $this->assertNotVisibleByCss('.create-password-dialog');
 
         // -- WITH X BUTTON --
         // When I click on the create password button
@@ -209,7 +209,7 @@ class PasswordCreateTest extends PassboltTestCase
         $this->findByCss('.create-password-dialog a.dialog-close')->click();
 
         // Then I should not see the create password dialog
-        $this->assertNotVisible('.create-password-dialog');
+        $this->assertNotVisibleByCss('.create-password-dialog');
 
         // -- WITH ESCAPE --
         // When I click on the create password button
@@ -271,7 +271,7 @@ class PasswordCreateTest extends PassboltTestCase
         $this->goOutOfIframe();
 
         // I should not see an error message for username.
-        $this->assertNotVisible('#js_field_username_feedback.error.message');
+        $this->assertNotVisibleByCss('#js_field_username_feedback.error.message');
 
         // When I enter aa as a url
         $this->inputText('js_field_uri', 'aa');
@@ -623,7 +623,7 @@ class PasswordCreateTest extends PassboltTestCase
         $this->click('js_secret_view');
 
         // Then I see the input field with the password in clear text
-        $this->assertNotVisible('js_secret');
+        $this->assertNotVisibleByCss('#js_secret');
         $this->assertVisible('js_secret_clear');
         $this->assertTrue($this->findById('js_secret_clear')->getAttribute('value') == 'ftp-password-test');
 
@@ -631,7 +631,7 @@ class PasswordCreateTest extends PassboltTestCase
         $this->click('js_secret_view');
 
         // Then I should not see the input field with the password in clear text
-        $this->assertNotVisible('js_secret_clear');
+        $this->assertNotVisibleByCss('#js_secret_clear');
     }
 
     /**

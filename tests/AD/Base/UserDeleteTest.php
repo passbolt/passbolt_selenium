@@ -204,7 +204,7 @@ class ADUserDeleteTest extends PassboltTestCase
         $this->rightClickUser($user['id']);
 
         // I should see that the delete option is not available.
-        $this->assertNotVisible('js_user_browser_menu_delete');
+        $this->assertNotVisibleByCss('#js_user_browser_menu_delete');
     }
 
     /**

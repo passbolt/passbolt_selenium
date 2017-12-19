@@ -77,7 +77,7 @@ class PasswordWorkspaceTest extends PassboltTestCase
      *
      * @group LU
      * @group password
-     * @group workspace
+     * @group password-workspace
      * @group saucelabs
      */
     public function testWorkspace() 
@@ -101,7 +101,7 @@ class PasswordWorkspaceTest extends PassboltTestCase
         $filters = ['All items', 'Favorite', 'Recently modified', 'Shared with me', 'Items I own'];
         for ($i = 0; $i < count($filters); $i++) {
             $this->assertElementContainsText(
-                $this->findByCss('#js_wsp_pwd_filter_shortcuts'),
+                $this->findById('js_wsp_pwd_filter_shortcuts'),
                 $filters[$i]
             );
         }
@@ -142,7 +142,7 @@ class PasswordWorkspaceTest extends PassboltTestCase
      *
      * @group LU
      * @group password
-     * @group workspace
+     * @group password-workspace
      * @group saucelabs
      */
     public function testBrowsePasswords() 
@@ -197,7 +197,7 @@ class PasswordWorkspaceTest extends PassboltTestCase
      *
      * @group LU
      * @group password
-     * @group workspace
+     * @group password-workspace
      * @group saucelabs
      */
     public function testFilterPasswords() 
@@ -301,7 +301,7 @@ class PasswordWorkspaceTest extends PassboltTestCase
      *
      * @group LU
      * @group password
-     * @group workspace
+     * @group password-workspace
      * @group saucelabs
      */
     public function testPasswordDetails() 
@@ -376,7 +376,7 @@ class PasswordWorkspaceTest extends PassboltTestCase
      *
      * @group LU
      * @group password
-     * @group workspace
+     * @group password-workspace
      * @group saucelabs
      */
     public function testFavorite() 
@@ -448,7 +448,7 @@ class PasswordWorkspaceTest extends PassboltTestCase
      *
      * @group LU
      * @group password
-     * @group workspace
+     * @group password-workspace
      * @group saucelabs
      */
     public function testSearchByKeywords()
@@ -477,7 +477,7 @@ class PasswordWorkspaceTest extends PassboltTestCase
         // I fill the "app search" field with "shared resource"
         $this->inputText('js_app_filter_keywords', $searchPwd);
         $this->click("#js_app_filter_form button[value='search']");
-        $this->waitUntilISee('js_wsp_password_breadcrumb', "/Search : $searchPwd/");
+        $this->waitUntilISee('#js_wsp_password_breadcrumb', "/Search : $searchPwd/");
 
         // I should see the view filtered with my search
         $this->assertElementContainsText(
@@ -507,7 +507,7 @@ class PasswordWorkspaceTest extends PassboltTestCase
      *
      * @group LU
      * @group password
-     * @group workspace
+     * @group password-workspace
      */
     public function testSearchByKeywordsUnselectPasswords() 
     {
@@ -524,7 +524,7 @@ class PasswordWorkspaceTest extends PassboltTestCase
         // And I filter the workspace by keywords
         $this->inputText('js_app_filter_keywords', $searchPwd);
         $this->click("#js_app_filter_form button[value='search']");
-        $this->waitUntilISee('js_wsp_password_breadcrumb', "/Search : $searchPwd/");
+        $this->waitUntilISee('#js_wsp_password_breadcrumb', "/Search : $searchPwd/");
 
         // Then I should see the password unselected
         $this->assertPasswordNotSelected($resourceId);
@@ -541,7 +541,7 @@ class PasswordWorkspaceTest extends PassboltTestCase
      *
      * @group LU
      * @group password
-     * @group workspace
+     * @group password-workspace
      */
     public function testSearchByKeywordsChangesGlobalFilterToAllItems() 
     {
@@ -561,7 +561,7 @@ class PasswordWorkspaceTest extends PassboltTestCase
         // When I fill the "app search" field with "shared resource"
         $this->inputText('js_app_filter_keywords', $searchPwd);
         $this->click("#js_app_filter_form button[value='search']");
-        $this->waitUntilISee('js_wsp_password_breadcrumb', "/Search : $searchPwd/");
+        $this->waitUntilISee('#js_wsp_password_breadcrumb', "/Search : $searchPwd/");
 
         // Then I should see the filter "All items" is selected.
         $this->assertFilterIsSelected('js_pwd_wsp_filter_all');
@@ -596,7 +596,7 @@ class PasswordWorkspaceTest extends PassboltTestCase
      *
      * @group LU
      * @group password
-     * @group workspace
+     * @group password-workspace
      */
     public function testSidebarVisibility() 
     {
@@ -607,7 +607,7 @@ class PasswordWorkspaceTest extends PassboltTestCase
         $this->assertToggleButtonStatus('js_wk_secondary_menu_view_sidebar_button', TOGGLE_BUTTON_PRESSED);
 
         // I should not see the sidebar
-        $this->assertNotVisible('#js_pwd_details');
+        $this->assertNotVisibleByCss('#js_pwd_details');
 
         // And I am editing a password I own
         $resource = Resource::get(array('user' => 'ada', 'permission' => 'owner'));
@@ -622,7 +622,7 @@ class PasswordWorkspaceTest extends PassboltTestCase
         $this->clickPassword($resource['id']);
 
         // I should not see the secondary sidebar
-        $this->assertNotVisible('#js_pwd_details');
+        $this->assertNotVisibleByCss('#js_pwd_details');
 
         // Click on a password
         $this->clickPassword($resource['id']);
@@ -637,7 +637,7 @@ class PasswordWorkspaceTest extends PassboltTestCase
         $this->assertToggleButtonStatus('js_wk_secondary_menu_view_sidebar_button', TOGGLE_BUTTON_UNPRESSED);
 
         // I should not see the sidebar anymore.
-        $this->assertNotVisible('#js_pwd_details');
+        $this->assertNotVisibleByCss('#js_pwd_details');
 
         // Click on the password again to deselect it.
         $this->clickPassword($resource['id']);
@@ -646,7 +646,7 @@ class PasswordWorkspaceTest extends PassboltTestCase
         $this->assertToggleButtonStatus('js_wk_secondary_menu_view_sidebar_button', TOGGLE_BUTTON_UNPRESSED);
 
         // I should not see the sidebar.
-        $this->assertNotVisible('#js_pwd_details');
+        $this->assertNotVisibleByCss('#js_pwd_details');
 
         // Click on the sidebar button to toggle it in.
         $this->click('js_wk_secondary_menu_view_sidebar_button');
@@ -655,7 +655,7 @@ class PasswordWorkspaceTest extends PassboltTestCase
         $this->assertToggleButtonStatus('js_wk_secondary_menu_view_sidebar_button', TOGGLE_BUTTON_PRESSED);
 
         // I should not see the sidebar.
-        $this->assertNotVisible('#js_pwd_details');
+        $this->assertNotVisibleByCss('#js_pwd_details');
 
         // Click on the password again to select it.
         $this->clickPassword($resource['id']);
@@ -670,7 +670,7 @@ class PasswordWorkspaceTest extends PassboltTestCase
         $this->assertToggleButtonStatus('js_wk_secondary_menu_view_sidebar_button', TOGGLE_BUTTON_UNPRESSED);
 
         // Then I should not see the sidebar anymore.
-        $this->assertNotVisible('#js_pwd_details');
+        $this->assertNotVisibleByCss('#js_pwd_details');
     }
 
     /**
@@ -693,7 +693,7 @@ class PasswordWorkspaceTest extends PassboltTestCase
      *
      * @group LU
      * @group password
-     * @group workspace
+     * @group password-workspace
      */
     public function testPasswordWorkspaceEmptyState() 
     {
@@ -732,7 +732,7 @@ class PasswordWorkspaceTest extends PassboltTestCase
         $this->waitCompletion();
 
         // The layer empty content with text should not be visible.
-        $this->assertNotVisible('.empty-content');
+        $this->assertNotVisibleByCss('.empty-content');
         $this->assertElementNotContainText($this->findById('js_wsp_pwd_browser'), 'Welcome to passbolt!');
 
         // When I go Back to All items.
@@ -755,7 +755,7 @@ class PasswordWorkspaceTest extends PassboltTestCase
         );
 
         // The layer empty content with text should not be visible.
-        $this->assertNotVisible('.empty-content');
+        $this->assertNotVisibleByCss('.empty-content');
         $this->assertElementNotContainText($this->findById('js_wsp_pwd_browser'), 'Welcome to passbolt!');
     }
 
@@ -774,7 +774,7 @@ class PasswordWorkspaceTest extends PassboltTestCase
      *
      * @group LU
      * @group password
-     * @group workspace
+     * @group password-workspace
      * @group saucelabs
      */
     public function testSortByColumn()
@@ -850,7 +850,7 @@ class PasswordWorkspaceTest extends PassboltTestCase
      *
      * @group LU
      * @group password
-     * @group workspace
+     * @group password-workspace
      */
     public function testFilterByGroups() 
     {
@@ -934,7 +934,7 @@ class PasswordWorkspaceTest extends PassboltTestCase
      *
      * @group LU
      * @group password
-     * @group workspace
+     * @group password-workspace
      */
     public function testFilterByGroupsNoGroups() 
     {

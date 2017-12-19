@@ -164,7 +164,7 @@ class UserCreateTest extends PassboltTestCase
         $this->findByCss('.create-user-dialog a.cancel')->click();
 
         // Then I should not see the create password dialog
-        $this->assertNotVisible('.create-user-dialog');
+        $this->assertNotVisibleByCss('.create-user-dialog');
 
         // -- WITH X BUTTON --
         // When I click on the create password button
@@ -179,7 +179,7 @@ class UserCreateTest extends PassboltTestCase
         $this->findByCss('.create-user-dialog a.dialog-close')->click();
 
         // Then I should not see the create password dialog
-        $this->assertNotVisible('.create-user-dialog');
+        $this->assertNotVisibleByCss('.create-user-dialog');
 
         // -- WITH ESCAPE --
         // When I click on the create password button
@@ -568,13 +568,13 @@ class UserCreateTest extends PassboltTestCase
         $this->gotoWorkspace('user');
 
         // Observe that create button is not visible
-        $this->assertNotVisible('js_wsp_create_button');
+        $this->assertNotVisibleByCss('#js_wsp_create_button');
 
         // Observe that edit button is not visible
-        $this->assertNotVisible('js_user_wk_menu_edition_button');
+        $this->assertNotVisibleByCss('#js_user_wk_menu_edition_button');
 
         // Observe that delete button is not visible
-        $this->assertNotVisible('js_user_wk_menu_deletion_button');
+        $this->assertNotVisibleByCss('#js_user_wk_menu_deletion_button');
     }
 
     /**
@@ -651,13 +651,13 @@ class UserCreateTest extends PassboltTestCase
         $this->gotoWorkspace('user');
 
         // Observe that create button is visible
-        $this->assertVisibleByCss('js_wsp_create_button');
+        $this->assertVisible('js_wsp_create_button');
 
         // Observe that edit button is visible
-        $this->assertVisibleByCss('js_user_wk_menu_edition_button');
+        $this->assertVisible('js_user_wk_menu_edition_button');
 
         // Observe that delete button is visible
-        $this->assertVisibleByCss('js_user_wk_menu_deletion_button');
+        $this->assertVisible('js_user_wk_menu_deletion_button');
     }
 
     /**

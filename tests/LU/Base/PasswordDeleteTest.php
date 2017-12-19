@@ -200,7 +200,7 @@ class PasswordDeleteTest extends PassboltTestCase
         $this->assertNotification('app_resources_delete_success');
 
         // And I should not see the password in the list anymore
-        $this->assertNotVisible('resource_' . $resource['id']);
+        $this->assertNotVisibleByCss('#resource_' . $resource['id']);
 
         // When I logout
         $this->logout();
@@ -210,7 +210,7 @@ class PasswordDeleteTest extends PassboltTestCase
         $this->loginAs($userB);
 
         // And I should not see the password deleted by ada in the list anymore
-        $this->assertNotVisible('resource_' . $resource['id']);
+        $this->assertNotVisibleByCss('#resource_' . $resource['id']);
     }
 
     /**

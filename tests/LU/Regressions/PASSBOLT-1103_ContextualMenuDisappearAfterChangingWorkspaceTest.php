@@ -67,7 +67,7 @@ class PASSBOLT1103 extends PassboltTestCase
         $this->gotoWorkspace('user');
 
         // Then I shouldn't see the contextual menu anymore
-        $this->assertNotVisible('js_contextual_menu');
+        $this->assertNotVisibleByCss('#js_contextual_menu');
 
         // And I right click on user betty
         $betty = User::get(array( 'user' => 'betty' ));
@@ -80,7 +80,7 @@ class PASSBOLT1103 extends PassboltTestCase
         $this->gotoWorkspace('password');
 
         // Then I shouldn't see the contextual menu anymore
-        $this->assertNotVisible('js_contextual_menu');
+        $this->assertNotVisibleByCss('#js_contextual_menu');
 
         // And I right click on the password I clicked before.
         $this->rightClickPassword($resource['id']);

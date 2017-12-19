@@ -95,13 +95,13 @@ trait VisibilityAssertionsTrait
     /**
      * Assert if an element identified by its id is not visible or not present
      *
-     * @param $id
+     * @param string $cssSelector css selector
      */
-    public function assertNotVisible($id)
+    public function assertNotVisibleByCss($cssSelector)
     {
         PHPUnit_Framework_Assert::assertTrue(
-            $this->isNotVisible($id),
-            'Failed to assert that the element ' . $id . ' is not visible'
+            $this->isNotVisible($cssSelector),
+            'Failed to assert that the element ' . $cssSelector . ' is not visible'
         );
     }
 

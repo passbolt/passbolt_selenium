@@ -89,7 +89,7 @@ class UserWorkspaceTest extends PassboltTestCase
         $filters = ['All users', 'Recently modified'];
         for ($i = 0; $i < count($filters); $i++) {
             $this->assertElementContainsText(
-                $this->findByCss('#js_wsp_users_filter_shortcuts'),
+                $this->findById('js_wsp_users_filter_shortcuts'),
                 $filters[$i]
             );
         }
@@ -256,7 +256,7 @@ class UserWorkspaceTest extends PassboltTestCase
         // I fill the "app search" field with "tetris license"
         $this->inputText('js_app_filter_keywords', $searchUser);
         $this->click("#js_app_filter_form button[value='search']");
-        $this->waitUntilISee('js_wsp_users_breadcrumb', "/Search : $searchUser/");
+        $this->waitUntilISee('#js_wsp_users_breadcrumb', "/Search : $searchUser/");
 
         // I should see the view filtered with my search
         $this->waitCompletion();
@@ -304,7 +304,7 @@ class UserWorkspaceTest extends PassboltTestCase
         // And I filter the workspace by keywords
         $this->inputText('js_app_filter_keywords', $searchUser);
         $this->click("#js_app_filter_form button[value='search']");
-        $this->waitUntilISee('js_wsp_users_breadcrumb', "/Search : $searchUser/");
+        $this->waitUntilISee('#js_wsp_users_breadcrumb', "/Search : $searchUser/");
 
         // Then I should see the password unselected
         $this->assertUserNotSelected($userId);
@@ -341,7 +341,7 @@ class UserWorkspaceTest extends PassboltTestCase
         // When I fill the "app search" field with "shared resource"
         $this->inputText('js_app_filter_keywords', $searchUser);
         $this->click("#js_app_filter_form button[value='search']");
-        $this->waitUntilISee('js_wsp_users_breadcrumb', "/Search : $searchUser/");
+        $this->waitUntilISee('#js_wsp_users_breadcrumb', "/Search : $searchUser/");
 
         // Then I should see the filter "All items" is selected.
         $this->assertFilterIsSelected('js_users_wsp_filter_all');
@@ -372,20 +372,20 @@ class UserWorkspaceTest extends PassboltTestCase
         $this->gotoWorkspace('user');
 
         // Then I should not see the create button
-        $this->assertVisibleByCss('js_wsp_create_button');
+        $this->assertVisible('js_wsp_create_button');
 
         // And I should not see the edit button
-        $this->assertVisibleByCss('js_user_wk_menu_edition_button');
+        $this->assertVisible('js_user_wk_menu_edition_button');
 
         // And I should not see the delete button
-        $this->assertVisibleByCss('js_user_wk_menu_deletion_button');
+        $this->assertVisible('js_user_wk_menu_deletion_button');
 
         // Right click on a user
         $betty = User::get('betty');
         $this->rightClickUser($betty['id']);
 
         // Then I can see the contextual menu
-        $this->assertVisibleByCss('js_contextual_menu');
+        $this->assertVisible('js_contextual_menu');
 
         // And I should see the option Copy public key
         $contextualMenu = $this->find('#js_contextual_menu');
@@ -427,20 +427,20 @@ class UserWorkspaceTest extends PassboltTestCase
         $this->gotoWorkspace('user');
 
         // Then I should not see the create button
-        $this->assertNotVisible('js_wsp_create_button');
+        $this->assertNotVisibleByCss('#js_wsp_create_button');
 
         // And I should not see the edit button
-        $this->assertNotVisible('js_user_wk_menu_edition_button');
+        $this->assertNotVisibleByCss('#js_user_wk_menu_edition_button');
 
         // And I should not see the delete button
-        $this->assertNotVisible('js_user_wk_menu_deletion_button');
+        $this->assertNotVisibleByCss('#js_user_wk_menu_deletion_button');
 
         // Right click on a user
         $betty = User::get('betty');
         $this->rightClickUser($betty['id']);
 
         // Then I can see the contextual menu
-        $this->assertVisibleByCss('js_contextual_menu');
+        $this->assertVisible('js_contextual_menu');
 
         // And I should see the option Copy public key
         $contextualMenu = $this->find('#js_contextual_menu');
@@ -496,7 +496,7 @@ class UserWorkspaceTest extends PassboltTestCase
         $this->assertToggleButtonStatus('js_wk_secondary_menu_view_sidebar_button', TOGGLE_BUTTON_PRESSED);
 
         // I should not see the sidebar
-        $this->assertNotVisible('#js_user_details');
+        $this->assertNotVisibleByCss('#js_user_details');
 
         // And I am editing a password I own
         $betty = User::get('betty');
@@ -511,7 +511,7 @@ class UserWorkspaceTest extends PassboltTestCase
         $this->clickUser($betty);
 
         // I should not see the secondary sidebar
-        $this->assertNotVisible('#js_user_details');
+        $this->assertNotVisibleByCss('#js_user_details');
 
         // Click on a password
         $this->clickUser($betty);
@@ -526,7 +526,7 @@ class UserWorkspaceTest extends PassboltTestCase
         $this->assertToggleButtonStatus('js_wk_secondary_menu_view_sidebar_button', TOGGLE_BUTTON_UNPRESSED);
 
         // I should not see the sidebar anymore.
-        $this->assertNotVisible('#js_user_details');
+        $this->assertNotVisibleByCss('#js_user_details');
 
         // Click on the password again to deselect it.
         $this->clickUser($betty);
@@ -535,7 +535,7 @@ class UserWorkspaceTest extends PassboltTestCase
         $this->assertToggleButtonStatus('js_wk_secondary_menu_view_sidebar_button', TOGGLE_BUTTON_UNPRESSED);
 
         // I should not see the sidebar.
-        $this->assertNotVisible('#js_user_details');
+        $this->assertNotVisibleByCss('#js_user_details');
 
         // Click on the sidebar button to toggle it in.
         $this->click('js_wk_secondary_menu_view_sidebar_button');
@@ -544,7 +544,7 @@ class UserWorkspaceTest extends PassboltTestCase
         $this->assertToggleButtonStatus('js_wk_secondary_menu_view_sidebar_button', TOGGLE_BUTTON_PRESSED);
 
         // I should not see the sidebar.
-        $this->assertNotVisible('#js_user_details');
+        $this->assertNotVisibleByCss('#js_user_details');
 
         // Click on the password again to select it.
         $this->clickUser($betty);
@@ -556,7 +556,7 @@ class UserWorkspaceTest extends PassboltTestCase
         $this->click('#js_user_details .dialog-close');
 
         // Then I should not see the sidebar anymore.
-        $this->assertNotVisible('#js_user_details');
+        $this->assertNotVisibleByCss('#js_user_details');
     }
 
     /**

@@ -78,10 +78,10 @@ class ADUserViewTest extends PassboltTestCase
         $this->waitUntilISee('.sidebar.user .detailed-information');
 
         // I should see the groups information in the sidebar.
-        $this->assertNotVisible('.sidebar.user .groups');
+        $this->assertNotVisibleByCss('.sidebar.user .groups');
 
         // I should see the key information in the sidebar.
-        $this->assertNotVisible('.sidebar.user .key-information');
+        $this->assertNotVisibleByCss('.sidebar.user .key-information');
     }
 
     /**

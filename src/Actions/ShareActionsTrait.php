@@ -124,7 +124,7 @@ trait ShareActionsTrait
         $this->waitUntilIDontSee('#passbolt-iframe-progress-dialog');
 
         // And I see a notice message that the operation was a success
-        $this->assertNotification('app_share_update_success');
+        $this->assertNotification('app_share_share_success');
 
         // And I should not see the share dialog anymore
         $this->waitUntilIDontSee('.share-password-dialog');

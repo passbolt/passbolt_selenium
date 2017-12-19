@@ -97,7 +97,7 @@ class PasswordEditTest extends PassboltTestCase
         $this->clickPassword($resource['id']);
 
         // Then I can see the edit button is enabled
-        $this->assertNotVisible('#js_wk_menu_edition_button.disabled');
+        $this->assertNotVisibleByCss('#js_wk_menu_edition_button.disabled');
         $this->assertVisible('js_wk_menu_edition_button');
 
         // When I click on the edit button
@@ -181,7 +181,7 @@ class PasswordEditTest extends PassboltTestCase
         $this->click('.edit-password-dialog .js-dialog-cancel');
 
         // Then I do not see the edit password dialog
-        $this->assertNotVisible('.edit-password-dialog');
+        $this->assertNotVisibleByCss('.edit-password-dialog');
 
         // When I reopen the edit password dialog
         $this->click('js_wk_menu_edition_button');
@@ -192,7 +192,7 @@ class PasswordEditTest extends PassboltTestCase
         $this->click('.edit-password-dialog .dialog-close');
 
         // Then I do not see the edit password dialog
-        $this->assertNotVisible('.edit-password-dialog');
+        $this->assertNotVisibleByCss('.edit-password-dialog');
 
         // When I reopen the edit password dialog
         $this->click('js_wk_menu_edition_button');
@@ -285,7 +285,7 @@ class PasswordEditTest extends PassboltTestCase
             $this->findByCss('.edit-password-dialog #js_tab_nav_js_rs_permission a'),
             'Share'
         );
-        $this->assertNotVisible('.edit-password-dialog #js_tab_nav_js_rs_permission a.selected');
+        $this->assertNotVisibleByCss('.edit-password-dialog #js_tab_nav_js_rs_permission a.selected');
 
         // And I can see the name text input and label is marked as mandatory
         $this->assertVisibleByCss('.edit-password-dialog input[type=text]#js_field_name.required');
@@ -321,7 +321,7 @@ class PasswordEditTest extends PassboltTestCase
         $this->assertVisibleByCss('input[type=password]#js_secret');
 
         // And I can not see the password in cleartext
-        $this->assertNotVisible('input[type=password]#js_secret_clear');
+        $this->assertNotVisibleByCss('input[type=password]#js_secret_clear');
         $this->assertInputValue('js_secret_clear', '');
         $this->assertInputValue('js_secret', '');
 
@@ -1028,7 +1028,7 @@ class PasswordEditTest extends PassboltTestCase
         // Then I should see the input field with the password in clear text
         $this->goIntoSecretIframe();
         $this->waitUntilSecretIsDecryptedInField();
-        $this->assertNotVisible('js_secret');
+        $this->assertNotVisibleByCss('#js_secret');
         $this->assertVisible('js_secret_clear');
         $this->assertTrue($this->findById('js_secret_clear')->getAttribute('value') == $r1['password']);
 
@@ -1036,13 +1036,13 @@ class PasswordEditTest extends PassboltTestCase
         $this->click('js_secret_view');
 
         // Then I should not see the input field with the password in clear text
-        $this->assertNotVisible('js_secret_clear');
+        $this->assertNotVisibleByCss('#js_secret_clear');
 
         // When I press the button to view my password in cleartext
         $this->click('js_secret_view');
 
         // Then I do not the passphrase dialog
-        $this->assertNotVisible('passbolt-iframe-master-password');
+        $this->assertNotVisibleByCss('#passbolt-iframe-master-password');
 
         // Then I can see the password in clear text
         $this->assertVisible('js_secret_clear');
@@ -1172,7 +1172,7 @@ class PasswordEditTest extends PassboltTestCase
 
         // And I can see the edit option is disabled
         $this->click('#js_password_browser_menu_edit a');
-        $this->assertNotVisible('.edit-password-dialog');
+        $this->assertNotVisibleByCss('.edit-password-dialog');
     }
 
     /**
@@ -1297,7 +1297,7 @@ class PasswordEditTest extends PassboltTestCase
         );
 
         // Then I see an error message saying that the username is required
-        $this->assertNotVisible('#js_field_username_feedback.error.message');
+        $this->assertNotVisibleByCss('#js_field_username_feedback.error.message');
 
         // And I see an error message saying that the password is required
         $this->goIntoSecretIframe();

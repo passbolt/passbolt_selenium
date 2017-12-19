@@ -66,7 +66,7 @@ class PasswordEditDescriptionTest extends PassboltTestCase
         $this->loginAs(User::get('ada'));
 
         // Make sure the description form is not visible.
-        $this->assertNotVisible('.js_rs_details_edit_description textarea');
+        $this->assertNotVisibleByCss('.js_rs_details_edit_description textarea');
 
         // When I click on a password I own.
         $resource = Resource::get(array('user' => 'ada', 'permission' => 'owner'));
@@ -103,7 +103,7 @@ class PasswordEditDescriptionTest extends PassboltTestCase
         $this->assertNotification('app_resources_update_success');
 
         // Make sure the description form is not visible anymore.
-        $this->assertNotVisible('#js_rs_details_edit_description textarea.js_resource_description');
+        $this->assertNotVisibleByCss('#js_rs_details_edit_description textarea.js_resource_description');
 
         // And check that the new description is shown.
         $this->assertElementContainsText('#js_rs_details_description', 'this is a test description');
@@ -140,7 +140,7 @@ class PasswordEditDescriptionTest extends PassboltTestCase
         $this->loginAs(User::get('ada'));
 
         // Make sure the edit description field is not visible.
-        $this->assertNotVisible('.js_rs_details_edit_description textarea');
+        $this->assertNotVisibleByCss('.js_rs_details_edit_description textarea');
 
         // When I click on a password I own.
         $resource = Resource::get(array('user' => 'ada', 'permission' => 'owner'));
@@ -174,7 +174,7 @@ class PasswordEditDescriptionTest extends PassboltTestCase
         $this->assertNotification('app_resources_update_success');
 
         // Make sure the password edition form is not visible anymore.
-        $this->assertNotVisible('#js_rs_details_edit_description textarea.js_resource_description');
+        $this->assertNotVisibleByCss('#js_rs_details_edit_description textarea.js_resource_description');
 
         // And check that the new description reflects in the sidebar.
         $this->assertElementContainsText('#js_rs_details_description', 'this is a test description');
@@ -211,7 +211,7 @@ class PasswordEditDescriptionTest extends PassboltTestCase
         $this->loginAs(User::get('ada'));
 
         // Make sure the password field is not visible.
-        $this->assertNotVisible('.js_rs_details_edit_description textarea');
+        $this->assertNotVisibleByCss('.js_rs_details_edit_description textarea');
 
         // When I click on a password I own.
         $resource = Resource::get(array('user' => 'ada', 'permission' => 'owner'));
@@ -237,7 +237,7 @@ class PasswordEditDescriptionTest extends PassboltTestCase
         $this->releaseFocus();
 
         // Make sure the description field is not visible.
-        $this->assertNotVisible('.js_rs_details_edit_description textarea');
+        $this->assertNotVisibleByCss('.js_rs_details_edit_description textarea');
 
         // Click on the edit button.
         $this->click('#js_edit_description_button i');
@@ -274,19 +274,19 @@ class PasswordEditDescriptionTest extends PassboltTestCase
         $this->loginAs(User::get('ada'));
 
         // Make sure the password field is not visible
-        $this->assertNotVisible('.js_rs_details_edit_description textarea');
+        $this->assertNotVisibleByCss('.js_rs_details_edit_description textarea');
 
         // When I click on a password I own
         $resource = Resource::get(array('user' => 'ada', 'permission' => 'read'));
         $this->clickPassword($resource['id']);
 
         // I should not see the edit button.
-        $this->assertNotVisible('js_edit_description_button');
+        $this->assertNotVisibleByCss('#js_edit_description_button');
 
         // Click on the description
         $this->click('#js_rs_details_description p.description_content');
 
         // Make sure password field is not visible.
-        $this->assertNotVisible('#js_rs_details_edit_description textarea');
+        $this->assertNotVisibleByCss('#js_rs_details_edit_description textarea');
     }
 }

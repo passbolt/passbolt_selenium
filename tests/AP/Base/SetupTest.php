@@ -613,7 +613,7 @@ class SetupTest extends PassboltSetupTestCase
         $this->waitForSection('domain_check');
 
         // I should not se any warning.
-        $this->assertNotVisible('.plugin-check.warning');
+        $this->assertNotVisibleByCss('.plugin-check.warning');
 
         // Complete registration.
         $this->completeRegistration($john);

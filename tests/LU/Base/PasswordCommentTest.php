@@ -83,7 +83,7 @@ class PasswordCommentTest extends PassboltTestCase
         $this->loginAs($user);
 
         // Make sure the password field is not visible.
-        $this->assertNotVisible($this->commentFormSelector);
+        $this->assertNotVisibleByCss($this->commentFormSelector);
 
         // When I click on a password I own.
         $resource = Resource::get(array('user' => 'ada', 'id' => UuidFactory::uuid('resource.id.centos')));
@@ -93,7 +93,7 @@ class PasswordCommentTest extends PassboltTestCase
         $this->postCommentInSidebar($comments[0]);
 
         // Make sure the password field is not visible.
-        $this->assertNotVisible($this->commentFormSelector);
+        $this->assertNotVisibleByCss($this->commentFormSelector);
 
         // And check that the form is not visible anymore.
         $this->assertVisible('js_rs_details_comments_list');
@@ -253,7 +253,7 @@ class PasswordCommentTest extends PassboltTestCase
 
         // I should not see the delete button.
         $buttonDeleteSelector = '#js_rs_details_comments_list a.js_delete_comment';
-        $this->assertNotVisible($buttonDeleteSelector);
+        $this->assertNotVisibleByCss($buttonDeleteSelector);
     }
 
     /**
@@ -292,7 +292,7 @@ class PasswordCommentTest extends PassboltTestCase
         $this->loginAs($user);
 
         // Make sure the password field is not visible
-        $this->assertNotVisible($this->commentFormSelector);
+        $this->assertNotVisibleByCss($this->commentFormSelector);
 
         // When I click on a password I own
         $resource = Resource::get(array('user' => 'ada', 'id' => UuidFactory::uuid('resource.id.centos')));

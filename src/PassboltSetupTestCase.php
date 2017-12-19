@@ -263,7 +263,7 @@ abstract class PassboltSetupTestCase extends PassboltTestCase
             ->click();
 
         // Then I should not see the dialog anymore.
-        $this->assertNotVisible('dialog-server-key-info');
+        $this->assertNotVisibleByCss('dialog-server-key-info');
 
         // If I open the dialog again.
         $this->clickLink('More');
@@ -273,7 +273,7 @@ abstract class PassboltSetupTestCase extends PassboltTestCase
             ->click();
 
         // Then I should not see the dialog anymore.
-        $this->assertNotVisible('dialog-server-key-info');
+        $this->assertNotVisibleByCss('dialog-server-key-info');
 
         // Check box domain check.
         $this->checkCheckbox('js_setup_domain_check');

@@ -145,8 +145,8 @@ class LoginTest extends PassboltTestCase
     public function testNoCookieBanner() 
     {
         $this->getUrl('login');
-        $this->assertNotVisible('.message.error.no-js');
-        $this->assertNotVisible('.message.error.no-cookies');
+        $this->assertNotVisibleByCss('.message.error.no-js');
+        $this->assertNotVisibleByCss('.message.error.no-cookies');
     }
 
     /**

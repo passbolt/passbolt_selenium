@@ -56,7 +56,7 @@ class SettingsProfileTest extends PassboltTestCase
      *
      * @group LU
      * @group settings
-     * @group profile
+     * @group settings-profile
      */
     public function testSettingsProfile() 
     {
@@ -128,7 +128,7 @@ class SettingsProfileTest extends PassboltTestCase
      *
      * @group LU
      * @group settings
-     * @group profile
+     * @group settings-profile
      */
     public function testSettingsProfileBreadcrumb() 
     {
@@ -187,7 +187,7 @@ class SettingsProfileTest extends PassboltTestCase
      *
      * @group LU
      * @group settings
-     * @group profile
+     * @group settings-profile
      * @group saucelabs
      */
     public function testSettingsProfileAvatarEditOk() 
@@ -212,7 +212,7 @@ class SettingsProfileTest extends PassboltTestCase
         $this->click('.dialog a.dialog-close');
 
         // I cannot see the dialog anymore.
-        $this->assertNotVisible('.dialog');
+        $this->assertNotVisibleByCss('.dialog');
 
         // I click on the link Click here to upload a new picture.
         $this->click('.section.profile-detailed-information a.edit-avatar-action');
@@ -224,7 +224,7 @@ class SettingsProfileTest extends PassboltTestCase
         $this->click('.dialog a.cancel');
 
         // I cannot see the dialog anymore.
-        $this->assertNotVisible('.dialog');
+        $this->assertNotVisibleByCss('.dialog');
 
         // I click again on the link Click here to upload a new picture.
         $this->click('.section.profile-detailed-information a.edit-avatar-action');
@@ -274,7 +274,7 @@ class SettingsProfileTest extends PassboltTestCase
      *
      * @group LU
      * @group settings
-     * @group profile
+     * @group settings-profile
      */
     public function testSettingsProfileAvatarEditErrorFileType() 
     {
@@ -340,7 +340,7 @@ class SettingsProfileTest extends PassboltTestCase
      *
      * @group LU
      * @group settings
-     * @group profile
+     * @group settings-profile
      * @group saucelabs
      */
     public function testSettingsProfileUpdateView() 
@@ -380,8 +380,8 @@ class SettingsProfileTest extends PassboltTestCase
         $this->assertVisibleByCss('.edit-profile-dialog label[for=js_field_username]');
 
         // Assert I can't see the field role
-        $this->assertNotVisible('.edit-profile-dialog #js_field_role_id');
-        $this->assertNotVisible('.edit-profile-dialog #js_field_role_id input[type=checkbox]');
+        $this->assertNotVisibleByCss('.edit-profile-dialog #js_field_role_id');
+        $this->assertNotVisibleByCss('.edit-profile-dialog #js_field_role_id input[type=checkbox]');
 
         // And I can see the user last name in the text input
         $this->assertInputValue('js_field_username', $user['Username']);
@@ -416,7 +416,7 @@ class SettingsProfileTest extends PassboltTestCase
      *
      * @group LU
      * @group settings
-     * @group profile
+     * @group settings-profile
      */
     public function testSettingsProfileUpdateCanSeeErrors() 
     {
@@ -508,7 +508,7 @@ class SettingsProfileTest extends PassboltTestCase
      *
      * @group LU
      * @group settings
-     * @group profile
+     * @group settings-profile
      * @group saucelabs
      */
     public function testSettingsProfileUpdateEditFirstName() 
@@ -580,7 +580,7 @@ class SettingsProfileTest extends PassboltTestCase
      *
      * @group LU
      * @group settings
-     * @group profile
+     * @group settings-profile
      * @group saucelabs
      */
     public function testSettingsProfileUpdateEditLastName() 

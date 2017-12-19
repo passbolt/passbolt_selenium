@@ -43,7 +43,7 @@ class PASSBOLT1585 extends PassboltSetupTestCase
         $this->registerUser($chienShiung['FirstName'], $chienShiung['LastName'], $chienShiung['Username']);
         $this->goToSetup($chienShiung['Username']);
         $this->waitForSection('domain_check');
-        $this->assertNotVisible('.plugin-check.warning');
+        $this->assertNotVisibleByCss('.plugin-check.warning');
         $this->completeRegistration($chienShiung);
 
         // Then I should be able to login

@@ -14,6 +14,10 @@
  */
 namespace App\Assertions;
 
+use Facebook\WebDriver\WebDriverBy;
+use Facebook\WebDriver\WebDriverSelect;
+use Facebook\WebDriver\Exception\NoSuchElementException;
+
 trait PermissionAssertionsTrait
 {
 
@@ -31,7 +35,7 @@ trait PermissionAssertionsTrait
 
         // I can see the user has a direct permission
         $this->assertElementContainsText(
-            $this->findByCss('#js_permissions_list'),
+            $this->findById('js_permissions_list'),
             $username
         );
 
@@ -39,8 +43,14 @@ trait PermissionAssertionsTrait
         $rowElement = $this->findByXpath('//*[@id="js_permissions_list"]//*[.="' . $username . '"]//ancestor::li[1]');
 
         // I can see the permission is as expected
-        $select = new WebDriverSelect($rowElement->findElement(WebDriverBy::cssSelector('.js_share_rs_perm_type')));
-        $this->assertEquals($permissionType, $select->getFirstSelectedOption()->getText());
+        try {
+            $elt = $rowElement->findElement(WebDriverBy::cssSelector('.js_share_rs_perm_type'));
+            $select = new WebDriverSelect($elt);
+            $text = $select->getFirstSelectedOption()->getText();
+            $this->assertEquals($permissionType, $text);
+        } catch (NoSuchElementException $exception) {
+            \PHPUnit_Framework_Assert::fail('Could not find the permission type select input.');
+        }
 
         // Close the dialog
         if (!isset($options['closeDialog']) || $options['closeDialog'] == true) {
@@ -61,7 +71,7 @@ trait PermissionAssertionsTrait
 
         // I can see the user has a direct permission
         $this->assertElementContainsText(
-            $this->findByCss('#js_rs_details_permissions_list'),
+            $this->findById('js_rs_details_permissions_list'),
             $aro_name
         );
 
@@ -85,7 +95,7 @@ trait PermissionAssertionsTrait
 
         // I can see the user has a direct permission
         $this->assertElementNotContainText(
-            $this->findByCss('#js_permissions_list'),
+            $this->findById('js_permissions_list'),
             $username
         );
     }

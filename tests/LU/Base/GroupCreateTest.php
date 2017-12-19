@@ -56,6 +56,6 @@ class GroupCreateTest extends PassboltTestCase
             'create'
         );
 
-        $this->assertNotVisible('#js_wsp_create_button');
+        $this->assertNotVisibleByCss('#js_wsp_create_button');
     }
 }

@@ -201,7 +201,7 @@ class ADGroupDeleteTest extends PassboltTestCase
 
         // Then I can see the group has no right on the password
         $this->assertElementNotContainText(
-            $this->findByCss('#js_permissions_list'),
+            $this->findById('js_permissions_list'),
             'Accounting'
         );
 

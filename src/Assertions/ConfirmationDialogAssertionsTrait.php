@@ -45,9 +45,9 @@ trait ConfirmationDialogAssertionsTrait
         // Assert I can see the confirm dialog.
         $this->waitUntilISee('.session-expired-dialog', null, 120);
         // Then I can see the close dialog button
-        $this->assertNotVisible('.session-expired-dialog a.dialog-close');
+        $this->assertNotVisibleByCss('.session-expired-dialog a.dialog-close');
         // Then I can see the cancel link.
-        $this->assertNotVisible('.session-expired-dialog a.cancel');
+        $this->assertNotVisibleByCss('.session-expired-dialog a.cancel');
         // Then I can see the Ok button.
         $this->assertVisibleByCss('.session-expired-dialog input#confirm-button');
         // Then I can see the title

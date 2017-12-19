@@ -154,7 +154,7 @@ trait GroupActionsTrait
 
         // I can see the user has a direct entry
         $this->assertElementContainsText(
-            $this->findByCss('#js_permissions_list'),
+            $this->findById('js_permissions_list'),
             $userFullName
         );
 

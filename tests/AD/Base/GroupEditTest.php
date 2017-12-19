@@ -120,7 +120,7 @@ class ADGroupEditTest extends PassboltTestCase
         $this->assertNotification('app_groups_edit_success');
 
         // And I should see that the group name has been changed in the groups list
-        $this->waitUntilISee('js_wsp_users_groups_list', '/' . $groupNameUpdate . '/');
+        $this->waitUntilISee('#js_wsp_users_groups_list', '/' . $groupNameUpdate . '/');
     }
 
     /**
@@ -174,7 +174,7 @@ class ADGroupEditTest extends PassboltTestCase
         $this->gotoEditGroup($group['id']);
 
         // And I shouldn't see the Add people iframe.
-        $this->assertNotVisible('#js_group_members_add #passbolt-iframe-group-edit');
+        $this->assertNotVisibleByCss('#js_group_members_add #passbolt-iframe-group-edit');
 
         // And I see a warning message saying that only the group manager can add new people to a group.
         $this->assertElementContainsText('#js_group_members .message.warning', 'Only the group manager can add new people to a group.');
@@ -556,7 +556,7 @@ class ADGroupEditTest extends PassboltTestCase
         $this->click("#js_group_user_delete_$groupUserId");
 
         // Then I should see that the user disappears from the list of group members
-        $this->assertNotVisible("#$groupUserId");
+        $this->assertNotVisibleByCss("#$groupUserId");
 
         // And I should see a warning message saying that the changes will be applied only after save
         $this->assertElementContainsText('#js_group_members .message.warning', 'You need to click save for the changes to take place.');
