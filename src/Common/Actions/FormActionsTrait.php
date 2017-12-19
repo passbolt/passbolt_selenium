@@ -40,6 +40,23 @@ trait FormActionsTrait
     }
 
     /**
+     * Input some text in an element
+     *
+     * @param string $selector CSS selector
+     * @param string $txt the text to be typed on keyboard
+     * @param bool $append boolean (optional) true if you want to keep the current value intact
+     */
+    public function inputTextByCss(string $selector, string $txt, bool $append = false)
+    {
+        $input = $this->getDriver()->findElement(WebDriverBy::cssSelector($selector));
+        $input->click();
+        if (!$append) {
+            $input->clear();
+        }
+        $input->sendKeys($txt);
+    }
+
+    /**
      * Check the checkbox with given id
      *
      * @param string $id for WebDriverBy::id
