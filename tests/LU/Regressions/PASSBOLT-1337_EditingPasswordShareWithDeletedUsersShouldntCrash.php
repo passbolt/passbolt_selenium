@@ -119,7 +119,7 @@ class PASSBOLT1337 extends PassboltTestCase
         $this->click('.edit-password-dialog input[type=submit]');
 
         // Then I can see a success notification
-        $this->assertNotification('app_resources_edit_success');
+        $this->assertNotification('app_resources_update_success');
 
         // And I can see that the password name have changed in the overview
         $this->assertElementContainsText('#js_wsp_pwd_browser .tableview-content', $newname);

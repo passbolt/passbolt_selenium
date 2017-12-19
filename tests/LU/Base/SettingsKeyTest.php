@@ -77,10 +77,10 @@ class SettingsKeyTest extends PassboltTestCase
         );
 
         // I should see a download public key button.
-        $this->assertVisibleByCss('js_settings_wk_menu_download_public_key');
+        $this->assertVisible('js_settings_wk_menu_download_public_key');
 
         // I should see a download private key button.
-        $this->assertVisibleByCss('js_settings_wk_menu_download_private_key');
+        $this->assertVisible('js_settings_wk_menu_download_private_key');
 
         // I should see the uid of the key.
         $this->assertElementContainsText(

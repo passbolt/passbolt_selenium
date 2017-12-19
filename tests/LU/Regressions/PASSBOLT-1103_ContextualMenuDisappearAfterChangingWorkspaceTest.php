@@ -61,7 +61,7 @@ class PASSBOLT1103 extends PassboltTestCase
         $this->rightClickPassword($resource['id']);
 
         // Then I can see the contextual menu
-        $this->assertVisibleByCss('js_contextual_menu');
+        $this->assertVisible('js_contextual_menu');
 
         // When I change workspace
         $this->gotoWorkspace('user');
@@ -74,7 +74,7 @@ class PASSBOLT1103 extends PassboltTestCase
         $this->rightClickUser($betty['id']);
 
         // Then I can see the contextual menu
-        $this->assertVisibleByCss('js_contextual_menu');
+        $this->assertVisible('js_contextual_menu');
 
         // When I change workspace
         $this->gotoWorkspace('password');
@@ -86,6 +86,6 @@ class PASSBOLT1103 extends PassboltTestCase
         $this->rightClickPassword($resource['id']);
 
         // Then I can see the contextual menu
-        $this->assertVisibleByCss('js_contextual_menu');
+        $this->assertVisible('js_contextual_menu');
     }
 }

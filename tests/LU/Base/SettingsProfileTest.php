@@ -140,7 +140,7 @@ class SettingsProfileTest extends PassboltTestCase
         $this->gotoWorkspace('settings');
 
         // I should see the breadcrumb.
-        $this->assertVisibleByCss('js_wsp_settings_breadcrumb');
+        $this->assertVisible('js_wsp_settings_breadcrumb');
 
         // I should see an element containing All users in the breadcrumb.
         $this->assertElementContainsText(

@@ -96,7 +96,7 @@ class PasswordCommentTest extends PassboltTestCase
         $this->assertNotVisible($this->commentFormSelector);
 
         // And check that the form is not visible anymore.
-        $this->assertVisibleByCss('#js_rs_details_comments_list');
+        $this->assertVisible('js_rs_details_comments_list');
 
         // Check whether the comments list contain the new comment.
         $this->waitUntilISee('#js_rs_details_comments_list', '/' . $comments[0] . '/');

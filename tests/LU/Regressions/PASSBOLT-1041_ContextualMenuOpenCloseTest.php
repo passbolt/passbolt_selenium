@@ -56,7 +56,7 @@ class PASSBOLT1041 extends PassboltTestCase
         $this->rightClickPassword($resource['id']);
 
         // Then I can see the contextual menu
-        $this->assertVisibleByCss('js_contextual_menu');
+        $this->assertVisible('js_contextual_menu');
 
         // When I click on the edit link
         $this->click('#js_password_browser_menu_edit a');
@@ -70,7 +70,7 @@ class PASSBOLT1041 extends PassboltTestCase
      */
     public function testContextMenuOpenOnRightClick() 
     {
-        $this->markTestIncomplete();
+        $this->markTestSkipped();
         // @TODO: in selenium (level: hard :)
         // Repeat in a fast fashion:
         // Mouse right click down on an item

@@ -808,7 +808,7 @@ class PasswordCreateTest extends PassboltTestCase
      */
     public function testRestartBrowserAndCreatePassword() 
     {
-        $this->markTestIncomplete();
+        $this->markTestSkipped();
 
         // Reset database at the end of test.
         $this->resetDatabaseWhenComplete();

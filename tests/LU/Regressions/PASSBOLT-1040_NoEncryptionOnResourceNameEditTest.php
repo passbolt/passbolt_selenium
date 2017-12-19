@@ -69,6 +69,6 @@ class PASSBOLT1040 extends PassboltTestCase
         $this->waitUntilIDontSee('#passbolt-iframe-progress-dialog');
 
         // Then I should see a success notification message saying the password is updated.
-        $this->assertNotification('app_resources_edit_success');
+        $this->assertNotification('app_resources_update_success');
     }
 }

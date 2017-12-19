@@ -134,7 +134,7 @@ class PASSBOLT1377 extends PassboltTestCase
             $this->editPassword($r, $user);
 
             // Wait until notification disappears.
-            $this->waitUntilNotificationDisappears('app_resources_edit_success');
+            $this->waitUntilNotificationDisappears('app_resources_update_success');
         }
     }
 

@@ -215,7 +215,7 @@ trait PasswordActionsTrait
         $this->waitUntilIDontSee('.edit-password-dialog');
 
         // And I should see the notification.
-        $this->assertNotification('app_resources_edit_success');
+        $this->assertNotification('app_resources_update_success');
     }
 
     /**

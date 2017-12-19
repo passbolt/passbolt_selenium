@@ -119,10 +119,10 @@ class ADGroupCreateTest extends PassboltTestCase
         $this->assertElementContainsText('#js_group_members .message.warning', 'The group is empty, please add a group manager.');
 
         // And I see a section add members
-        $this->assertVisibleByCss('js_group_members_add');
+        $this->assertVisible('js_group_members_add');
 
         // And I see the Add people iframe
-        $this->assertVisibleByCss('#js_group_members_add #passbolt-iframe-group-edit');
+        $this->assertVisible('passbolt-iframe-group-edit');
 
         // When I switch to the add people iframe
         $this->goIntoAddUserIframe();
