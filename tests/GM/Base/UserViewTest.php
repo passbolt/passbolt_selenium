@@ -52,7 +52,7 @@ class GMUserViewTest extends PassboltTestCase
      * @group group
      * @group view
      * @group saucelabs
-     * @group broken
+     * @group v2
      */
     public function testUpdateSidebarGroupsListWhenUpdateGroup() 
     {
@@ -61,7 +61,6 @@ class GMUserViewTest extends PassboltTestCase
 
         // Given I am Ada
         $user = User::get('admin');
-
 
         // And I am logged in on the user workspace
         $this->loginAs($user);

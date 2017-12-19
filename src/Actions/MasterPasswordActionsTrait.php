@@ -15,6 +15,8 @@
 namespace App\Actions;
 
 use Facebook\WebDriver\Exception\NoSuchElementException;
+use Facebook\WebDriver\Exception\StaleElementReferenceException;
+use Facebook\WebDriver\Exception\UnknownServerException;
 
 trait MasterPasswordActionsTrait
 {

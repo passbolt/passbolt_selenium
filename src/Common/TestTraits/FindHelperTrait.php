@@ -82,7 +82,7 @@ trait FindHelperTrait
      * @param $css
      * @return mixed
      */
-    public function findAllByCss($css) : RemoteWebElement
+    public function findAllByCss($css) : array
     {
         return $this->getDriver()->findElements(WebDriverBy::cssSelector($css));
     }

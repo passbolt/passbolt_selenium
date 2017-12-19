@@ -88,7 +88,7 @@ trait GroupAssertionsTrait
         $this->waitUntilISee('#js_user_groups_list.ready');
 
         // Retrieve the group details information
-        $rowElement = $rowElement = $this->findByXpath('//*[@id="js_user_groups_list"]//*[contains(text(), "' . $groupName . '")]//ancestor::li');
+        $rowElement = $this->findByXpath('//*[@id="js_user_groups_list"]//*[contains(text(), "' . $groupName . '")]//ancestor::li');
 
         // I can see the group is in the list
         $this->assertElementContainsText(
