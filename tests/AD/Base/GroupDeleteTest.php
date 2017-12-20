@@ -270,8 +270,7 @@ class ADGroupDeleteTest extends PassboltTestCase
      * @group user
      * @group group
      * @group delete
-     * @group broken
-     * @group PASSBOLT-2546
+     * @group v2
      */
     public function testDeleteSelectedGroup()
     {
