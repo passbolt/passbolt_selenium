@@ -53,6 +53,7 @@ class ADUserViewTest extends PassboltTestCase
      * @group user
      * @group view
      * @group saucelabs
+     * @group broken
      */
     public function testViewInactiveUser() 
     {
@@ -96,6 +97,7 @@ class ADUserViewTest extends PassboltTestCase
      * @group user
      * @group view
      * @group saucelabs
+     * @group broken
      */
     public function testUpdateSidebarGroupsListWhenCreateGroup() 
     {

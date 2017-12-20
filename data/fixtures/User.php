@@ -25,7 +25,7 @@ class User {
         switch ($name) {
             default:
             case 'ada':
-                return array_merge($conf,array(
+                return array_merge($conf, array(
                     'id' => UuidFactory::uuid('user.id.ada'),
 	                'name' => 'ada',
                     'FirstName' => 'Ada',
@@ -38,7 +38,7 @@ class User {
                 ));
                 break;
             case 'betty':
-                return array_merge($conf,array(
+                return array_merge($conf, array(
                     'id' => UuidFactory::uuid('user.id.betty'),
 	                'name' => 'betty',
                     'FirstName' => 'Betty',
@@ -50,7 +50,7 @@ class User {
                 ));
                 break;
 			case 'carol':
-				return array_merge($conf,array(
+				return array_merge($conf, array(
 					'id' => UuidFactory::uuid('user.id.carol'),
 					'name' => 'carol',
 					'FirstName' => 'Carol',
@@ -62,7 +62,7 @@ class User {
 				));
 				break;
 			case 'frances':
-				return array_merge($conf,array(
+				return array_merge($conf, array(
 					'id' => UuidFactory::uuid('user.id.frances'),
 					'name' => 'frances',
 					'FirstName' => 'Frances',
@@ -74,7 +74,7 @@ class User {
 				));
 				break;
 			case 'edith':
-				return array_merge($conf,array(
+				return array_merge($conf, array(
 					'id' => UuidFactory::uuid('user.id.edith'),
 					'name' => 'edith',
 					'FirstName' => 'Edith',
@@ -86,7 +86,7 @@ class User {
 				));
 				break;
 			case 'grace':
-				return array_merge($conf,array(
+				return array_merge($conf, array(
 					'id' => UuidFactory::uuid('user.id.grace'),
 					'name' => 'grace',
 					'FirstName' => 'Grace',
@@ -98,7 +98,7 @@ class User {
 				));
 				break;
 			case 'irene':
-				return array_merge($conf,array(
+				return array_merge($conf, array(
 					'id' => UuidFactory::uuid('user.id.irene'),
 					'name' => 'irene',
 					'FirstName' => 'Irene',
@@ -110,7 +110,7 @@ class User {
 				));
 				break;
 			case 'jean':
-				return array_merge($conf,array(
+				return array_merge($conf, array(
 					'id' => UuidFactory::uuid('user.id.jean'),
 					'name' => 'jean',
 					'FirstName' => 'Jean',
@@ -122,7 +122,7 @@ class User {
 				));
 				break;
 			case 'orna':
-				return array_merge($conf,array(
+				return array_merge($conf, array(
 					'id' => UuidFactory::uuid('user.id.orna'),
 					'name' => 'orna',
 					'FirstName' => 'Orna',
@@ -134,7 +134,7 @@ class User {
 				));
 				break;
 			case 'ping':
-				return array_merge($conf,array(
+				return array_merge($conf, array(
 					'id' => UuidFactory::uuid('user.id.ping'),
 					'name' => 'ping',
 					'FirstName' => 'Ping',
@@ -146,7 +146,7 @@ class User {
 				));
 				break;
 			case 'thelma':
-				return array_merge($conf,array(
+				return array_merge($conf, array(
 					'id' => UuidFactory::uuid('user.id.thelma'),
 					'name' => 'thelma',
 					'FirstName' => 'Thelma',
@@ -158,7 +158,7 @@ class User {
 				));
 				break;
 			case 'ursula':
-				return array_merge($conf,array(
+				return array_merge($conf, array(
 					'id' => UuidFactory::uuid('user.id.ursula'),
 					'name' => 'ursula',
 					'FirstName' => 'Ursula',
@@ -170,7 +170,7 @@ class User {
 				));
 				break;
 			case 'wang':
-				return array_merge($conf,array(
+				return array_merge($conf, array(
 					'id' => UuidFactory::uuid('user.id.wang'),
 					'name' => 'wang',
 					'FirstName' => 'Wang',
@@ -182,7 +182,7 @@ class User {
 				));
 				break;
 	        case 'kathleen':
-		        return array_merge($conf,array(
+		        return array_merge($conf, array(
 			        'id' => UuidFactory::uuid('user.id.kathleen'),
 			        'name' => 'kathleen',
 			        'FirstName' => 'Kathleen',
@@ -195,7 +195,7 @@ class User {
 		        ));
 		        break;
 	        case 'admin':
-		        return array_merge($conf,array(
+		        return array_merge($conf, array(
 			        'id' => UuidFactory::uuid('user.id.admin'),
 			        'name' => 'admin',
 			        'FirstName' => 'Admin',
@@ -213,7 +213,7 @@ class User {
 	         ***************************************************/
 
 	        case 'john':
-		        return array_merge($conf,array(
+		        return array_merge($conf, array(
 			        'id' => UuidFactory::uuid('johndoe@passbolt.com'),
 			        'name' => 'john',
 			        'FirstName' => 'John',
@@ -227,7 +227,7 @@ class User {
 		        break;
 
 			case 'curtis':
-				return array_merge($conf,array(
+				return array_merge($conf, array(
 					'id' => UuidFactory::uuid('curtismayfield@passbolt.com'),
 					'name' => 'curtis',
 					'FirstName' => 'Curtis',
@@ -241,7 +241,7 @@ class User {
 				break;
 
 			case 'chien-shiung':
-				return array_merge($conf,array(
+				return array_merge($conf, array(
 					'id' => UuidFactory::uuid('chien-shiung@passbolt.com'),
 					'name' => 'curtis',
 					'FirstName' => 'Chien-Shiung',
@@ -255,7 +255,7 @@ class User {
 				break;
 
 			case 'margaret':
-				return array_merge($conf,array(
+				return array_merge($conf, array(
 					'id' => UuidFactory::uuid('margaret@passbolt.com'),
 					'name' => 'margaret',
 					'FirstName' => 'Margaret',

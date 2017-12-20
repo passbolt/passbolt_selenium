@@ -70,6 +70,7 @@ class UserCreateTest extends PassboltTestCase
      * @group AD
      * @group user
      * @group create
+     * @group v2
      */
     public function testCreateUserDialogExist() 
     {
@@ -147,6 +148,7 @@ class UserCreateTest extends PassboltTestCase
      * @group AD
      * @group user
      * @group create
+     * @group v2
      */
     public function testCreateUserDialogOpenClose() 
     {
@@ -222,6 +224,7 @@ class UserCreateTest extends PassboltTestCase
      * @group AD
      * @group user
      * @group create
+     * @group broken
      */
     public function testCreateUserErrorMessages() 
     {
@@ -320,6 +323,7 @@ class UserCreateTest extends PassboltTestCase
      * @group AD
      * @group user
      * @group create
+     * @group broken
      */
     public function testCreateUserUsernameExist() 
     {
@@ -372,6 +376,7 @@ class UserCreateTest extends PassboltTestCase
      * @group user
      * @group create
      * @group saucelabs
+     * @group broken
      */
     public function testCreateUserAndView() 
     {
@@ -456,6 +461,7 @@ class UserCreateTest extends PassboltTestCase
      * @group user
      * @group create
      * @group saucelabs
+     * @group broken
      */
     public function testCreateUserCanLogInAfter() 
     {
@@ -524,6 +530,7 @@ class UserCreateTest extends PassboltTestCase
      * @group AD
      * @group user
      * @group create
+     * @group broken
      */
     public function testCreateNonAdminUserHasNotAdminRights() 
     {
@@ -600,6 +607,7 @@ class UserCreateTest extends PassboltTestCase
      * @group AD
      * @group user
      * @group create
+     * @group broken
      */
     public function testCreateAdminUserHasAdminRights() 
     {
@@ -686,6 +694,7 @@ class UserCreateTest extends PassboltTestCase
      * @group AD
      * @group user
      * @group create
+     * @group broken
      */
     public function testCreateUserAdminCanViewNotUserUntilFirstLogin() 
     {
@@ -799,6 +808,7 @@ class UserCreateTest extends PassboltTestCase
      * @group AD
      * @group user
      * @group create
+     * @group broken
      */
     public function testCreateUserEmail() 
     {
@@ -844,6 +854,7 @@ class UserCreateTest extends PassboltTestCase
      * @group create
      * @group no-saucelabs
      * @group skip
+     * @group broken
      */
     public function testRestartBrowserAndCreateUser() 
     {
@@ -887,6 +898,7 @@ class UserCreateTest extends PassboltTestCase
      * @group skip
      * PASSBOLT-2263 close and restore doesn't work with the latest chrome driver
      * PASSBOLT-2419 close and restore doesn't work with the latest firefox driver
+     * @group broken
      */
     public function testCloseRestoreTabAndCreateUser() 
     {

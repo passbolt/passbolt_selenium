@@ -59,6 +59,7 @@ class UserEditTest extends PassboltTestCase
      * @group AD
      * @group user
      * @group edit
+     * @group v2
      */
     public function testEditUserButton() 
     {
@@ -104,6 +105,7 @@ class UserEditTest extends PassboltTestCase
      * @group AD
      * @group user
      * @group edit
+     * @group v2
      */
     public function testEditUserRightClick() 
     {
@@ -148,6 +150,7 @@ class UserEditTest extends PassboltTestCase
      * @group AD
      * @group user
      * @group edit
+     * @group v2
      */
     public function testEditUserDialogOpenClose() 
     {
@@ -213,15 +216,14 @@ class UserEditTest extends PassboltTestCase
      * @group AD
      * @group user
      * @group edit
+     * @group v2
      */
     public function testEditUserDialogView() 
     {
-        // Given I am Ada
-        $user = User::get('admin');
-
+        // Given I am Admin
+        $this->loginAs(User::get('admin'));
 
         // And I am logged in on the user workspace
-        $this->loginAs($user['Username']);
         $this->gotoWorkspace('user');
 
         // And I am editing a user
@@ -265,8 +267,8 @@ class UserEditTest extends PassboltTestCase
     /**
      * Scenario: As an admin I can edit the first name of a user
      *
-     * Given I am admin
-     * And   I am logged in on the user workspace
+     * Given Given that I am logged in as admin
+     * And   I am on the user workspace
      * And   I am editing a user
      * When  I click on first name input text field
      * And   I empty the first name input text field value
@@ -282,17 +284,17 @@ class UserEditTest extends PassboltTestCase
      * @group user
      * @group edit
      * @group saucelabs
+     * @group broken
      */
     public function testEditUserFirstName() 
     {
         // Reset database at the end of test.
         $this->resetDatabaseWhenComplete();
 
-        // Given I am Ada
-        $user = User::get('admin');
+        // Given that I am logged in as admin
+        $this->loginAs(User::get('admin'));
 
-        // And I am logged in on the user workspace
-        $this->loginAs($user['Username']);
+        // I am on the user workspace
         $this->gotoWorkspace('user');
 
         // And I am editing a user
@@ -329,8 +331,8 @@ class UserEditTest extends PassboltTestCase
     /**
      * Scenario: As an admin I can edit the last name of a user
      *
-     * Given I am admin
-     * And   I am logged in on the user workspace
+     * Given that I am logged in as admin
+     * And   I am on the user workspace
      * And   I am editing a user
      * When  I click on last name input text field
      * And   I empty the last name input text field value
@@ -346,17 +348,17 @@ class UserEditTest extends PassboltTestCase
      * @group user
      * @group edit
      * @group saucelabs
+     * @group broken
      */
     public function testEditUserLastName() 
     {
         // Reset database at the end of test.
         $this->resetDatabaseWhenComplete();
 
-        // Given I am Admin
-        $user = User::get('admin');
+        // Given that I am logged in as admin
+        $this->loginAs(User::get('admin'));
 
-        // And I am logged in on the user workspace
-        $this->loginAs($user['Username']);
+        // And I am on the user workspace
         $this->gotoWorkspace('user');
 
         // And I am editing a user
@@ -393,8 +395,8 @@ class UserEditTest extends PassboltTestCase
     /**
      * Scenario: As an admin I can modify the role of a non admin user to admin
      *
-     * Given I am admin
-     * And   I am logged in on the user workspace
+     * Given that I am logged in as admin
+     * And   I am on the user workspace
      * And   I am editing a user who is not an admin
      * When  I check the admin role
      * And   I click save
@@ -406,17 +408,17 @@ class UserEditTest extends PassboltTestCase
      * @group AD
      * @group user
      * @group edit
+     * @group broken
      */
     public function testEditUserRoleChangeToAdmin() 
     {
         // Reset database at the end of test.
         $this->resetDatabaseWhenComplete();
 
-        // Given I am Admin
-        $user = User::get('admin');
+        // Given that I am logged in as admin
+        $this->loginAs(User::get('admin'));
 
-        // And I am logged in on the user workspace
-        $this->loginAs($user['Username']);
+        // And I am on the user workspace
         $this->gotoWorkspace('user');
 
         // And I am editing a user
@@ -463,8 +465,8 @@ class UserEditTest extends PassboltTestCase
     /**
      * Scenario: As an admin I can modify the role of an admin user to non admin
      *
-     * Given I am admin
-     * And   I am logged in on the user workspace
+     * Given I am logged in as admin
+     * And   I am on the user workspace
      * And   I created a new admin user
      * And   I logout
      * And   I follow the setup procedure as the new user
@@ -487,17 +489,17 @@ class UserEditTest extends PassboltTestCase
      * @group AD
      * @group user
      * @group edit
+     * @group broken
      */
     public function testEditUserRoleChangeToNonAdmin() 
     {
         // Reset database at the end of test.
         $this->resetDatabaseWhenComplete();
 
-        // Given I am Admin
-        $user = User::get('admin');
+        // Given I am logged in as admin
+        $this->loginAs(User::get('admin'));
 
-        // And I am logged in on the user workspace
-        $this->loginAs($user['Username']);
+        // And I am on the user workspace
         $this->gotoWorkspace('user');
 
         // Create user
@@ -583,6 +585,7 @@ class UserEditTest extends PassboltTestCase
      * @group AD
      * @group user
      * @group edit
+     * @group v2
      */
     public function testEditUserOwnAdminRole() 
     {
@@ -620,6 +623,7 @@ class UserEditTest extends PassboltTestCase
      * @group AD
      * @group user
      * @group edit
+     * @group broken
      */
     public function testEditUserUserAEditUserBCanSee() 
     {
@@ -683,6 +687,7 @@ class UserEditTest extends PassboltTestCase
      * @group AD
      * @group user
      * @group edit
+     * @group broken
      */
     public function testEditUserErrorMessages() 
     {

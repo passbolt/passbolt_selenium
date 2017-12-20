@@ -25,11 +25,14 @@ namespace Tests\AD\Base;
 
 use App\Actions\ConfirmationDialogActionsTrait;
 use App\Actions\GroupActionsTrait;
+use App\Actions\MasterPasswordActionsTrait;
 use App\Actions\PasswordActionsTrait;
 use App\Actions\PermissionActionsTrait;
 use App\Actions\ShareActionsTrait;
 use App\Actions\WorkspaceActionsTrait;
 use App\Assertions\GroupAssertionsTrait;
+use App\Assertions\MasterPasswordAssertionsTrait;
+use App\Assertions\PasswordAssertionsTrait;
 use App\Assertions\WorkspaceAssertionsTrait;
 use App\Lib\UuidFactory;
 use App\PassboltTestCase;
@@ -41,8 +44,11 @@ class ADGroupDeleteTest extends PassboltTestCase
     use ConfirmationDialogActionsTrait;
     use GroupActionsTrait;
     use GroupAssertionsTrait;
-    use PermissionActionsTrait;
+    use MasterPasswordActionsTrait;
+    use MasterPasswordAssertionsTrait;
     use PasswordActionsTrait;
+    use PasswordAssertionsTrait;
+    use PermissionActionsTrait;
     use ShareActionsTrait;
     use WorkspaceActionsTrait;
     use WorkspaceAssertionsTrait;
@@ -66,6 +72,7 @@ class ADGroupDeleteTest extends PassboltTestCase
      * @group user
      * @group group
      * @group delete
+     * @group v2
      */
     public function testDeleteGroupWithoutPasswords() 
     {
@@ -117,6 +124,7 @@ class ADGroupDeleteTest extends PassboltTestCase
      * @group user
      * @group group
      * @group delete
+     * @group broken
      */
     public function testDeleteGroupWithPasswords() 
     {
@@ -175,6 +183,7 @@ class ADGroupDeleteTest extends PassboltTestCase
      * @group user
      * @group group
      * @group delete
+     * @group broken
      */
     public function testDeleteGroupSoleOwnerOfPasswords() 
     {
@@ -261,6 +270,7 @@ class ADGroupDeleteTest extends PassboltTestCase
      * @group user
      * @group group
      * @group delete
+     * @group broken
      */
     public function testDeleteSelectedGroup() 
     {

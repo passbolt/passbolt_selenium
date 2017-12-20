@@ -54,6 +54,11 @@ class ADGroupEditTest extends PassboltTestCase
      * And   I should see the “Edit group” option
      * When  I click on “Edit group”
      * Then  I should see the Edit group dialog
+     *
+     * @group AD
+     * @group group
+     * @group edit
+     * @group v2
      */
     public function testEditGroupRightClick() 
     {
@@ -90,6 +95,11 @@ class ADGroupEditTest extends PassboltTestCase
      * Then  I should see that the dialog disappears
      * And   I should see a confirmation message saying that the group has been edited
      * And   I should see that the group name has been changed in the groups list
+     *
+     * @group AD
+     * @group group
+     * @group edit
+     * @group broken
      */
     public function testEditGroupName() 
     {
@@ -131,6 +141,11 @@ class ADGroupEditTest extends PassboltTestCase
      * And   I should see a “edit” button next to the Information section
      * When  I press the “Edit” button
      * Then  I should see the Edit group dialog
+     *
+     * @group AD
+     * @group group
+     * @group edit
+     * @group v2
      */
     public function testEditGroupFromSidebar() 
     {
@@ -163,6 +178,11 @@ class ADGroupEditTest extends PassboltTestCase
      * When  I observe the content of the edit group dialog
      * Then  I should not see a Add people section
      * And     I should see a warning message saying that "Only the group manager can add new people to a group."
+     *
+     * @group AD
+     * @group group
+     * @group edit
+     * @group broken
      */
     public function testEditGroupAsNotGroupManager() 
     {
@@ -190,6 +210,11 @@ class ADGroupEditTest extends PassboltTestCase
      * Then  I should see a notification saying that the group couldn't be updated
      * And   I should see an error message under the name field
      * And   I should see that this error message says that the group name is already in use
+     *
+     * @group AD
+     * @group group
+     * @group edit
+     * @group broken
      */
     public function testEditGroupNameValidation() 
     {
@@ -230,7 +255,12 @@ class ADGroupEditTest extends PassboltTestCase
      * Then  I should see a success notification message
      * When  I access last email sent to the user
      * Then  I should see the expected email title
-     *     And   I should see the expected email content
+     * And   I should see the expected email content
+     *
+     * @group AD
+     * @group group
+     * @group edit
+     * @group broken
      */
     public function testEditGroupDeleteUserEmailNotification() 
     {
@@ -282,6 +312,11 @@ class ADGroupEditTest extends PassboltTestCase
      * Then  I should see the expected email
      * When         When I access last email sent to the member
      * Then  I should see the expected email
+     *
+     * @group AD
+     * @group group
+     * @group edit
+     * @group broken
      */
     public function testEditGroupUpdateUserEmailNotification() 
     {
@@ -347,7 +382,12 @@ class ADGroupEditTest extends PassboltTestCase
      * Then            I shouldn't see any email
      * When  I access last email sent to the other group manager
      * Then  I should see the expected email title
-     *     And   I should see the expected email content
+     * And   I should see the expected email content
+     *
+     * @group AD
+     * @group group
+     * @group edit
+     * @group broken
      */
     public function testEditGroupGroupUpdatedSummaryEmailNotification() 
     {
@@ -355,7 +395,6 @@ class ADGroupEditTest extends PassboltTestCase
 
         // Given I am an administrator.
         $user = User::get('admin');
-        
 
         // I am logged in as admin
         $this->loginAs($user);
@@ -422,6 +461,11 @@ class ADGroupEditTest extends PassboltTestCase
      * When  I log in as the user who was promoted group manager
      * And   I go to the users workspace
      * Then  I should be able to add users to the new group that I manage
+     *
+     * @group AD
+     * @group group
+     * @group edit
+     * @group broken
      */
     public function testEditGroupPromoteMember() 
     {
@@ -495,6 +539,11 @@ class ADGroupEditTest extends PassboltTestCase
      * And   I edit a group
      * When  I change all the members roles to member (except one admin)
      * Then  I should not be able to change the role of this user
+     *
+     * @group AD
+     * @group group
+     * @group edit
+     * @group broken
      */
     public function testAtLeastOneGroupManager() 
     {
@@ -532,6 +581,11 @@ class ADGroupEditTest extends PassboltTestCase
      * And   I go to the users workspace
      * And   I filter by the group the user has been removed
      * Then  I filter by the group the user has been removed
+     *
+     * @group AD
+     * @group group
+     * @group edit
+     * @group broken
      */
     public function testRemoveGroupMember() 
     {
