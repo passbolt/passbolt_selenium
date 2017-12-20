@@ -21,9 +21,11 @@
 namespace Tests\AD\Base;
 
 use App\Actions\GroupActionsTrait;
+use App\Actions\PasswordActionsTrait;
 use App\Actions\UserActionsTrait;
 use App\Actions\WorkspaceActionsTrait;
 use App\Assertions\GroupAssertionsTrait;
+use App\Assertions\PasswordAssertionsTrait;
 use App\Assertions\UserAssertionsTrait;
 use App\Assertions\WorkspaceAssertionsTrait;
 use App\PassboltTestCase;
@@ -35,6 +37,8 @@ class ADUserViewTest extends PassboltTestCase
     use UserAssertionsTrait;
     use GroupActionsTrait;
     use GroupAssertionsTrait;
+    use PasswordActionsTrait;
+    use PasswordAssertionsTrait;
     use WorkspaceActionsTrait;
     use WorkspaceAssertionsTrait;
 
@@ -42,9 +46,9 @@ class ADUserViewTest extends PassboltTestCase
      * Scenario: As an admin I should be able to distinguish visually inactive users
      *
      * Given I am logged in as Admin, and I go to the user workspace
-     * When  I look at Orna who is a deactivated user
+     * When  I look at Ruth who is a deactivated user
      * Then  I should see that the user is shown in a different color
-     * When  I click on the user Orna
+     * When  I click on the user Ruth
      * Then  I should see that the sidebar opens
      * And   I shouldn't see the group details in the sidebar
      * And   I shouldn't see the gpg key in the sidebar
@@ -53,24 +57,24 @@ class ADUserViewTest extends PassboltTestCase
      * @group user
      * @group view
      * @group saucelabs
-     * @group broken
+     * @group v2
      */
     public function testViewInactiveUser() 
     {
-        // Given I am Ada
+        // Given I am Admin
         // And I am logged in on the user workspace
         $this->loginAs(User::get('admin'));
         $this->gotoWorkspace('user');
 
         // When I click on a user
-        $userO = User::get('orna');
-        $id = $userO['id'];
+        $userR = User::get('ruth');
+        $id = $userR['id'];
 
         // I should see that the user is shown in a different color.
         $this->assertUserInactive($id);
 
-        // When I click on the user "Orna"
-        $this->clickUser($userO);
+        // When I click on the user "Ruth"
+        $this->clickUser($userR);
 
         // I should see that the sidebar opens.
         $this->waitUntilISee('.sidebar.user');
@@ -97,7 +101,7 @@ class ADUserViewTest extends PassboltTestCase
      * @group user
      * @group view
      * @group saucelabs
-     * @group broken
+     * @group v2
      */
     public function testUpdateSidebarGroupsListWhenCreateGroup() 
     {

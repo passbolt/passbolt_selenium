@@ -82,7 +82,8 @@ class ADGroupCreateTest extends PassboltTestCase
     public function testCreateGroupDialogExist() 
     {
         // Given I am logged in as admin
-        $this->loginAs(User::get('admin'));
+        $user = User::get('admin');
+        $this->loginAs($user);
 
         // Go to user workspace
         $this->gotoWorkspace('user');
@@ -621,7 +622,7 @@ class ADGroupCreateTest extends PassboltTestCase
      * @group AD
      * @group group
      * @group create
-     * @group broken
+     * @group v2
      */
     public function testCreateGroupInactiveUsers() 
     {
@@ -636,10 +637,10 @@ class ADGroupCreateTest extends PassboltTestCase
         $this->gotoCreateGroup();
 
         // And I enter the name of an inactive user
-        $userO = User::get('orna');
+        $userR = User::get('ruth');
         $this->goIntoAddUserIframe();
         $this->assertSecurityToken($user, 'group');
-        $this->inputText('js_group_edit_form_auto_cplt', strtolower($userO['FirstName']), true);
+        $this->inputText('js_group_edit_form_auto_cplt', strtolower($userR['FirstName']), true);
         $this->click('.security-token');
         $this->goOutOfIframe();
 

@@ -125,6 +125,7 @@ class ADGroupDeleteTest extends PassboltTestCase
      * @group group
      * @group delete
      * @group broken
+     * @group PASSBOLT-2544
      */
     public function testDeleteGroupWithPasswords() 
     {
@@ -183,7 +184,7 @@ class ADGroupDeleteTest extends PassboltTestCase
      * @group user
      * @group group
      * @group delete
-     * @group broken
+     * @group v2
      */
     public function testDeleteGroupSoleOwnerOfPasswords() 
     {
@@ -239,7 +240,6 @@ class ADGroupDeleteTest extends PassboltTestCase
         $this->confirmActionInConfirmationDialog();
 
         $this->waitUntilIDontSee('.confirm.dialog');
-        sleep(2);
 
         // Assert that the group name is still there.
         $this->waitUntilISee("#js_wsp_users_groups_list #group_${groupId}");
@@ -271,8 +271,9 @@ class ADGroupDeleteTest extends PassboltTestCase
      * @group group
      * @group delete
      * @group broken
+     * @group PASSBOLT-2546
      */
-    public function testDeleteSelectedGroup() 
+    public function testDeleteSelectedGroup()
     {
         $this->resetDatabaseWhenComplete = true;
 

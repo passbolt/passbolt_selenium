@@ -284,7 +284,7 @@ class UserEditTest extends PassboltTestCase
      * @group user
      * @group edit
      * @group saucelabs
-     * @group broken
+     * @group v2
      */
     public function testEditUserFirstName() 
     {
@@ -306,14 +306,14 @@ class UserEditTest extends PassboltTestCase
 
         // And I empty the name input text field value
         // And I enter a new value
-        $newname = 'modifiedname';
+        $newname = 'Modifiedname';
         $this->inputText('js_field_first_name', $newname);
 
         // And I click save
         $this->click('.edit-user-dialog input[type=submit]');
 
         // Then I can see a success notification
-        $this->assertNotification('app_users_edit_success');
+        $this->assertNotification('app_users_editPost_success');
 
         // And I can see that the user first name have changed in the overview
         $this->assertElementContainsText('#js_wsp_users_browser .tableview-content', $newname);
@@ -348,7 +348,7 @@ class UserEditTest extends PassboltTestCase
      * @group user
      * @group edit
      * @group saucelabs
-     * @group broken
+     * @group v2
      */
     public function testEditUserLastName() 
     {
@@ -370,14 +370,14 @@ class UserEditTest extends PassboltTestCase
 
         // And I empty the name input text field value
         // And I enter a new value
-        $newname = 'modifiedlastname';
+        $newname = 'Modifiedlastname';
         $this->inputText('js_field_last_name', $newname);
 
         // And I click save
         $this->click('.edit-user-dialog input[type=submit]');
 
         // Then I can see a success notification
-        $this->assertNotification('app_users_edit_success');
+        $this->assertNotification('app_users_editPost_success');
 
         // And I can see that the user last name have changed in the overview
         $this->assertElementContainsText('#js_wsp_users_browser .tableview-content', $newname);
@@ -408,7 +408,7 @@ class UserEditTest extends PassboltTestCase
      * @group AD
      * @group user
      * @group edit
-     * @group broken
+     * @group v2
      */
     public function testEditUserRoleChangeToAdmin() 
     {
@@ -444,9 +444,7 @@ class UserEditTest extends PassboltTestCase
         $this->logout();
 
         // And I log in as the user who has been edited
-        $user = User::get('betty');
-
-        $this->loginAs($user['Username']);
+        $this->loginAs(User::get('betty'));
 
         // And go to the user workspace
         $this->gotoWorkspace('user');
@@ -490,6 +488,7 @@ class UserEditTest extends PassboltTestCase
      * @group user
      * @group edit
      * @group broken
+     * @group PASSBOLT-2544
      */
     public function testEditUserRoleChangeToNonAdmin() 
     {
@@ -531,20 +530,20 @@ class UserEditTest extends PassboltTestCase
         $user = User::get('admin');
 
         // And I am logged in on the user workspace
-        $this->loginAs($user['Username']);
+        $this->loginAs($user);
         $this->gotoWorkspace('user');
 
         // When I edit the new user
         $this->goToEditUser($newUser);
 
         // And I unselect the admin role
-        $this->checkCheckbox('#js_field_role_id .role-admin input[type=checkbox]');
+        $this->checkCheckbox('js_field_role_id');
 
         // And I submit the changes
         $this->click('.edit-user-dialog input[type=submit]');
 
         // Then I should see a success message
-        $this->assertNotification('app_users_edit_success');
+        $this->assertNotification('app_users_editPost_success');
 
         // And I should see that the user is marked as admin in the sidebar
         $this->assertElementContainsText('#js_user_details .role', 'User');
@@ -556,7 +555,7 @@ class UserEditTest extends PassboltTestCase
         // $user = User::get('john');
 
         // And I login again as the newly created user
-        $this->loginAs($newUser['username']);
+        $this->loginAs(User::get('john'));
 
         // And go to the user workspace
         $this->gotoWorkspace('user');
@@ -623,7 +622,7 @@ class UserEditTest extends PassboltTestCase
      * @group AD
      * @group user
      * @group edit
-     * @group broken
+     * @group v2
      */
     public function testEditUserUserAEditUserBCanSee() 
     {
@@ -643,7 +642,7 @@ class UserEditTest extends PassboltTestCase
         // And I edit the user betty
         $u1 = array(
         'id' => $betty['id'],
-        'first_name' => 'thisisnotbetty'
+        'first_name' => 'Thisisnotbetty'
         );
         $this->editUser($u1);
 
@@ -674,20 +673,16 @@ class UserEditTest extends PassboltTestCase
      * When  I press the enter key on the keyboard
      * Then  I see an error message saying that the first name is required
      * And   I see an error message saying that the last name is required
-     * When  I enter '&' as a first name
-     * And   I enter '&' as a last name
+     * When  I enter 'emoticon' as a first name
+     * And   I enter 'emoticon' as a last name
      * And   I click on the save button
      * Then  I see an error message saying that the first name contain invalid characters
      * And   I see an error message saying that the last name contain invalid characters
-     * When  I enter 'aa' as a first name
-     * And   I enter 'aa' as a last name
-     * Then  I see an error message saying that the length of first name should be between x and x characters
-     * And   I see an error message saying that the length of last name should be between x and x characters
      *
      * @group AD
      * @group user
      * @group edit
-     * @group broken
+     * @group v2
      */
     public function testEditUserErrorMessages() 
     {
@@ -726,10 +721,10 @@ class UserEditTest extends PassboltTestCase
         );
 
         // When I enter & as a first name
-        $this->inputText('js_field_first_name', '&');
+        $this->inputText('js_field_first_name', "🙂");
 
         // When I enter & as a last name
-        $this->inputText('js_field_last_name', '&');
+        $this->inputText('js_field_last_name', '🙂');
 
         // And I click save
         $this->click('.edit-user-dialog input[type=submit]');
@@ -737,27 +732,13 @@ class UserEditTest extends PassboltTestCase
         // Then I see an error message saying that the first name contain invalid characters
         $this->assertVisibleByCss('#js_field_first_name_feedback.error.message');
         $this->assertElementContainsText(
-            $this->find('js_field_first_name_feedback'), 'should only contain alphabets'
+            $this->find('js_field_first_name_feedback'), 'First name should be a valid utf8 string.'
         );
 
         // Then I see an error message saying that the first name contain invalid characters
         $this->assertVisibleByCss('#js_field_last_name_feedback.error.message');
         $this->assertElementContainsText(
-            $this->find('js_field_last_name_feedback'), 'should only contain alphabets'
-        );
-
-        // And I enter aa as a first name
-        $this->inputText('js_field_first_name', 'a');
-        $this->assertVisibleByCss('#js_field_first_name_feedback.error.message');
-        $this->assertElementContainsText(
-            $this->find('js_field_first_name_feedback'), 'First name should be between'
-        );
-
-        // And I enter aa as a last name
-        $this->inputText('js_field_last_name', 'a');
-        $this->assertVisibleByCss('#js_field_last_name_feedback.error.message');
-        $this->assertElementContainsText(
-            $this->find('js_field_last_name_feedback'), 'Last name should be between'
+            $this->find('js_field_last_name_feedback'), 'Last name should be a valid utf8 string.'
         );
     }
 }

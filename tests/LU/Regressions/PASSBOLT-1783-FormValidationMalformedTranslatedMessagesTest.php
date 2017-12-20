@@ -60,7 +60,7 @@ class PASSBOLT1783 extends PassboltTestCase
         $this->inputText('js_field_username', 'a');
         if (isset($user['admin']) && $user['admin'] === true) {
             // Check box admin
-            $this->checkCheckbox('#js_field_role_id .role-admin input[type=checkbox]');
+            $this->checkCheckbox('js_field_role_id');
         }
         $this->click('.create-user-dialog input[type=submit]');
 

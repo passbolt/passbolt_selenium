@@ -15,6 +15,7 @@
 namespace App\Actions;
 
 use Exception;
+use Facebook\WebDriver\Exception\NoSuchElementException;
 use Facebook\WebDriver\Remote\RemoteWebElement;
 use Facebook\WebDriver\WebDriverBy;
 use Facebook\WebDriver\WebDriverSelect;
@@ -264,8 +265,14 @@ trait GroupActionsTrait
             $this->click("#js_contextual_menu #js_group_browser_menu_edit a");
             $this->waitUntilISee('.edit-group-dialog');
             $this->waitUntilISee('#js_edit_group.ready');
-            $this->findById('passbolt-iframe-group-edit');
-            $this->waitUntilISee('#passbolt-iframe-group-edit.ready');
+            // If the user is group manager, the extension should inject an iframe to
+            // select a new user to add to the group
+            try{
+                $this->findById('passbolt-iframe-group-edit');
+                $this->waitUntilISee('#passbolt-iframe-group-edit.ready');
+            } catch(NoSuchElementException $e) {
+                // Nothing to do.
+            }
         }
     }
 

@@ -145,6 +145,18 @@ class User {
 					'PrivateKey' => 'ping_private.key'
 				));
 				break;
+			case 'ruth':
+				return array_merge($conf, array(
+					'id' => UuidFactory::uuid('user.id.ruth'),
+					'name' => 'ruth',
+					'FirstName' => 'Ruth',
+					'LastName' => 'Teitelbaum',
+					'Username' => 'ruth@passbolt.com',
+					'MasterPassword' => 'ruth@passbolt.com',
+					'TokenCode' => 'RUT',
+					'PrivateKey' => 'ruth_private.key'
+				));
+				break;
 			case 'thelma':
 				return array_merge($conf, array(
 					'id' => UuidFactory::uuid('user.id.thelma'),

@@ -75,7 +75,7 @@ class SettingsWorkspaceTest extends PassboltTestCase
         // I fill the "app search" field with "Betty"
         $this->inputText('js_app_filter_keywords', $searchUser);
         $this->click("#js_app_filter_form button[value='search']");
-        $this->waitUntilISee('#js_passbolt_people_workspace_controller');
+        $this->waitUntilISee('#js_passbolt_user_workspace_controller');
         $this->waitCompletion();
 
         // I should see the view filtered with my search

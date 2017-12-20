@@ -50,7 +50,7 @@ class ADGroupViewTest extends PassboltTestCase
      * @group AD
      * @group group
      * @group view
-     * @group broken
+     * @group v2
      */
     function testViewGroupMemberFromEditDialog() 
     {

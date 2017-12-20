@@ -209,22 +209,18 @@ class UserCreateTest extends PassboltTestCase
      * Then  I see an error message saying that the first name is required
      * And   I see an error message saying that the last name is required
      * And   I see an error message saying that the username is required
-     * When  I enter '&' as a first name
-     * And   I enter '&' as a last name
-     * And   I enter '&' as a username
+     * When  I enter 'emoticon' as a first name
+     * And   I enter 'emoticon' as a last name
+     * And   I enter 'not-valid-email' as a username
      * And   I click on the save button
      * Then  I see an error message saying that the first name contain invalid characters
      * And   I see an error message saying that the last name contain invalid characters
      * And   I see an error message saying that the username should be an email
-     * When  I enter 'aa' as a first name
-     * And   I enter 'aa' as a last name
-     * Then  I see an error message saying that the length of first name should be between x and x characters
-     * And   I see an error message saying that the length of last name should be between x and x characters
      *
      * @group AD
      * @group user
      * @group create
-     * @group broken
+     * @group v2
      */
     public function testCreateUserErrorMessages() 
     {
@@ -263,13 +259,13 @@ class UserCreateTest extends PassboltTestCase
         );
 
         // When I enter & as a first name
-        $this->inputText('js_field_first_name', '&');
+        $this->inputText('js_field_first_name', "🙂");
 
         // When I enter & as a last name
-        $this->inputText('js_field_last_name', '&');
+        $this->inputText('js_field_last_name', '🙂');
 
         // And I enter & as a username
-        $this->inputText('js_field_username', '&');
+        $this->inputText('js_field_username', 'not-valid-email');
 
         // And I click save
         $this->click('.create-user-dialog input[type=submit]');
@@ -277,34 +273,19 @@ class UserCreateTest extends PassboltTestCase
         // Then I see an error message saying that the first name contain invalid characters
         $this->assertVisibleByCss('#js_field_first_name_feedback.error.message');
         $this->assertElementContainsText(
-            $this->find('js_field_first_name_feedback'), 'should only contain alphabets'
+            $this->find('js_field_first_name_feedback'), 'First name should be a valid utf8 string.'
         );
 
-        // Then I see an error message saying that the first name contain invalid characters
+        // And I see an error message saying that the first name contain invalid characters
         $this->assertVisibleByCss('#js_field_last_name_feedback.error.message');
         $this->assertElementContainsText(
-            $this->find('js_field_last_name_feedback'), 'should only contain alphabets'
+            $this->find('js_field_last_name_feedback'), 'Last name should be a valid utf8 string.'
         );
 
-        // Then I see an error message saying that the username should be an email
+        // And I see an error message saying that the username should be an email
         $this->assertVisibleByCss('#js_field_username_feedback.error.message');
         $this->assertElementContainsText(
-            $this->find('js_field_username_feedback'), 'Only email format is allowed'
-        );
-
-
-        // And I enter aa as a first name
-        $this->inputText('js_field_first_name', 'a');
-        $this->assertVisibleByCss('#js_field_first_name_feedback.error.message');
-        $this->assertElementContainsText(
-            $this->find('js_field_first_name_feedback'), 'First name should be between'
-        );
-
-        // And I enter aa as a last name
-        $this->inputText('js_field_last_name', 'a');
-        $this->assertVisibleByCss('#js_field_last_name_feedback.error.message');
-        $this->assertElementContainsText(
-            $this->find('js_field_last_name_feedback'), 'Last name should be between'
+            $this->find('js_field_username_feedback'), 'The username should be a valid email address.'
         );
     }
 
@@ -323,7 +304,7 @@ class UserCreateTest extends PassboltTestCase
      * @group AD
      * @group user
      * @group create
-     * @group broken
+     * @group v2
      */
     public function testCreateUserUsernameExist() 
     {
@@ -352,7 +333,7 @@ class UserCreateTest extends PassboltTestCase
         // Then I see a notice message that the username is already taken
         $this->waitUntilISee('#js_field_username_feedback.error.message');
         $this->assertElementContainsText(
-            $this->find('js_field_username_feedback'), 'The username has already been taken'
+            $this->find('js_field_username_feedback'), 'This username is already in use.'
         );
     }
 
@@ -376,7 +357,7 @@ class UserCreateTest extends PassboltTestCase
      * @group user
      * @group create
      * @group saucelabs
-     * @group broken
+     * @group v2
      */
     public function testCreateUserAndView() 
     {
@@ -394,10 +375,10 @@ class UserCreateTest extends PassboltTestCase
         $this->gotoCreateUser();
 
         // Enter firstnametest in the first name field
-        $this->inputText('js_field_first_name', 'firstnametest');
+        $this->inputText('js_field_first_name', 'Firstnametest');
 
         // Enter lastnametest in the last name field
-        $this->inputText('js_field_last_name', 'lastnametest');
+        $this->inputText('js_field_last_name', 'Lastnametest');
 
         // Enter usernametest in the username field
         $this->inputText('js_field_username', 'usernametest@passbolt.com');
@@ -406,17 +387,17 @@ class UserCreateTest extends PassboltTestCase
         $this->click('.create-user-dialog input[type=submit]');
 
         // I see a notice message that the operation was a success
-        $this->assertNotification('app_users_add_success');
+        $this->assertNotification('app_users_addPost_success');
 
         // I see the password I created in my password list
         $this->assertElementContainsText(
-            $this->find('js_passbolt_people_workspace_controller'), 'firstnametest'
+            $this->find('js_passbolt_user_workspace_controller'), 'Firstnametest'
         );
         $this->assertElementContainsText(
-            $this->find('js_passbolt_people_workspace_controller'), 'lastnametest'
+            $this->find('js_passbolt_user_workspace_controller'), 'Lastnametest'
         );
         $this->assertElementContainsText(
-            $this->find('js_passbolt_people_workspace_controller'), 'usernametest'
+            $this->find('js_passbolt_user_workspace_controller'), 'usernametest'
         );
 
         // refresh pages
@@ -427,13 +408,13 @@ class UserCreateTest extends PassboltTestCase
 
         // I see the password I created in my password list
         $this->assertElementContainsText(
-            $this->find('js_passbolt_people_workspace_controller'), 'firstnametest'
+            $this->find('js_passbolt_user_workspace_controller'), 'Firstnametest'
         );
         $this->assertElementContainsText(
-            $this->find('js_passbolt_people_workspace_controller'), 'lastnametest'
+            $this->find('js_passbolt_user_workspace_controller'), 'Lastnametest'
         );
         $this->assertElementContainsText(
-            $this->find('js_passbolt_people_workspace_controller'), 'usernametest'
+            $this->find('js_passbolt_user_workspace_controller'), 'usernametest'
         );
     }
 
@@ -461,7 +442,7 @@ class UserCreateTest extends PassboltTestCase
      * @group user
      * @group create
      * @group saucelabs
-     * @group broken
+     * @group v2
      */
     public function testCreateUserCanLogInAfter() 
     {
@@ -501,7 +482,7 @@ class UserCreateTest extends PassboltTestCase
             'private_key'=>file_get_contents(Gpgkey::get(['name' => 'johndoe'])['filepath'])
             ]
         );
-        $this->loginAs('johndoe@passbolt.com');
+        $this->loginAs(User::get('john'));
         $this->assertElementContainsText(
             $this->find('js_app_profile_dropdown'), 'johndoe@passbolt.com'
         );
@@ -530,7 +511,7 @@ class UserCreateTest extends PassboltTestCase
      * @group AD
      * @group user
      * @group create
-     * @group broken
+     * @group v2
      */
     public function testCreateNonAdminUserHasNotAdminRights() 
     {
@@ -566,7 +547,7 @@ class UserCreateTest extends PassboltTestCase
             ]
         );
 
-        $this->loginAs('johndoe@passbolt.com');
+        $this->loginAs(User::get('john'));
         $this->assertElementContainsText(
             $this->find('js_app_profile_dropdown'), 'johndoe@passbolt.com'
         );
@@ -607,7 +588,7 @@ class UserCreateTest extends PassboltTestCase
      * @group AD
      * @group user
      * @group create
-     * @group broken
+     * @group v2
      */
     public function testCreateAdminUserHasAdminRights() 
     {
@@ -648,7 +629,7 @@ class UserCreateTest extends PassboltTestCase
         );
 
         // Log in.
-        $this->loginAs('johndoe@passbolt.com');
+        $this->loginAs(User::get('john'));
 
         // Assert user is logged in.
         $this->assertElementContainsText(
@@ -694,7 +675,7 @@ class UserCreateTest extends PassboltTestCase
      * @group AD
      * @group user
      * @group create
-     * @group broken
+     * @group v2
      */
     public function testCreateUserAdminCanViewNotUserUntilFirstLogin() 
     {
@@ -710,8 +691,8 @@ class UserCreateTest extends PassboltTestCase
 
         // Create user
         $newUser = [
-        'first_name' => 'firstnametest',
-        'last_name'  => 'lastnametest',
+        'first_name' => 'Firstnametest',
+        'last_name'  => 'Lastnametest',
         'username'   => 'usernametest@passbolt.com',
         'admin'      => false
         ];
@@ -719,13 +700,13 @@ class UserCreateTest extends PassboltTestCase
 
         // I see the user I created in my users list
         $this->assertElementContainsText(
-            $this->find('js_passbolt_people_workspace_controller'), $newUser['first_name']
+            $this->find('js_passbolt_user_workspace_controller'), $newUser['first_name']
         );
         $this->assertElementContainsText(
-            $this->find('js_passbolt_people_workspace_controller'), $newUser['last_name']
+            $this->find('js_passbolt_user_workspace_controller'), $newUser['last_name']
         );
         $this->assertElementContainsText(
-            $this->find('js_passbolt_people_workspace_controller'), $newUser['username']
+            $this->find('js_passbolt_user_workspace_controller'), $newUser['username']
         );
 
         $this->logout();
@@ -741,13 +722,13 @@ class UserCreateTest extends PassboltTestCase
 
         // I don't see the user that has been created by admin
         $this->assertElementNotContainText(
-            $this->find('js_passbolt_people_workspace_controller'), $newUser['first_name']
+            $this->find('js_passbolt_user_workspace_controller'), $newUser['first_name']
         );
         $this->assertElementNotContainText(
-            $this->find('js_passbolt_people_workspace_controller'), $newUser['last_name']
+            $this->find('js_passbolt_user_workspace_controller'), $newUser['last_name']
         );
         $this->assertElementNotContainText(
-            $this->find('js_passbolt_people_workspace_controller'), $newUser['username']
+            $this->find('js_passbolt_user_workspace_controller'), $newUser['username']
         );
 
         // Logout
@@ -780,13 +761,13 @@ class UserCreateTest extends PassboltTestCase
 
         // I can now see the user that was created
         $this->assertElementContainsText(
-            $this->find('js_passbolt_people_workspace_controller'), $newUser['first_name']
+            $this->find('js_passbolt_user_workspace_controller'), $newUser['first_name']
         );
         $this->assertElementContainsText(
-            $this->find('js_passbolt_people_workspace_controller'), $newUser['last_name']
+            $this->find('js_passbolt_user_workspace_controller'), $newUser['last_name']
         );
         $this->assertElementContainsText(
-            $this->find('js_passbolt_people_workspace_controller'), $newUser['username']
+            $this->find('js_passbolt_user_workspace_controller'), $newUser['username']
         );
     }
 
@@ -808,7 +789,7 @@ class UserCreateTest extends PassboltTestCase
      * @group AD
      * @group user
      * @group create
-     * @group broken
+     * @group v2
      */
     public function testCreateUserEmail() 
     {
@@ -835,7 +816,7 @@ class UserCreateTest extends PassboltTestCase
         $this->getUrl('seleniumtests/showlastemail/' . urlencode('johndoe@passbolt.com'));
 
         // Assert the title of the email is "Admin created an account for you!'"
-        $this->assertMetaTitleContains('Admin created an account for you!');
+        $this->assertMetaTitleContains('Welcome to passbolt, John!');
         // Assert I can see the text "Admin just invited you yo join"
         $this->assertPageContainsText('Admin just invited you to join');
     }
@@ -853,8 +834,7 @@ class UserCreateTest extends PassboltTestCase
      * @group user
      * @group create
      * @group no-saucelabs
-     * @group skip
-     * @group broken
+     * @group v2
      */
     public function testRestartBrowserAndCreateUser() 
     {

@@ -14,6 +14,8 @@
  */
 namespace App\Actions;
 
+use Facebook\WebDriver\Exception\NoSuchElementException;
+
 trait UserActionsTrait
 {
     /**
@@ -43,10 +45,10 @@ trait UserActionsTrait
         $this->inputText('js_field_username', $user['username']);
         if (isset($user['admin']) && $user['admin'] === true) {
             // Check box admin
-            $this->checkCheckbox('#js_field_role_id .role-admin input[type=checkbox]');
+            $this->checkCheckbox('js_field_role_id');
         }
         $this->click('.create-user-dialog input[type=submit]');
-        $this->assertNotification('app_users_add_success');
+        $this->assertNotification('app_users_addPost_success');
     }
 
     /**
@@ -134,21 +136,21 @@ trait UserActionsTrait
         }
         if (isset($user['admin'])) {
             // Get current state of admin
-            $el = null;
+            $isAdmin = true;
             try {
-                $el = $this->findByCss('#js_field_role_id .role-admin input[type=checkbox][checked=checked]');
+                $this->findByCss('#js_field_role_id .role-admin input[type=checkbox][checked=checked]');
             }
-            catch(Exception $e) {
+            catch(NoSuchElementException $e) {
+                $isAdmin = false;
             }
             // if el was found, admin checkbox is already checked.
-            $isAdmin = ($el == null ? false : true);
             if ($isAdmin != $user['admin']) {
-                $this->checkCheckbox('#js_field_role_id .role-admin input[type=checkbox]');
+                $this->checkCheckbox('js_field_role_id');
             }
         }
 
         $this->click('.edit-user-dialog input[type=submit]');
-        $this->assertNotification('app_users_edit_success');
+        $this->assertNotification('app_users_editPost_success');
     }
 
 }
