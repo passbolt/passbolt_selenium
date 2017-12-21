@@ -92,4 +92,11 @@ class LoggableTestCase extends SeleniumTestCase
         }
     }
 
+    /**
+     * Display message in the console
+     * @param $myDebugVar
+     */
+    public function consoleLog($myDebugVar) {
+        fwrite(STDERR, print_r($myDebugVar, TRUE));
+    }
 }

@@ -173,6 +173,11 @@ abstract class PassboltTestCase extends AuthenticatedTestCase
     protected function tearDown() 
     {
         try {
+            // Reset the database if requested
+            if ($this->resetDatabaseWhenComplete) {
+                PassboltServer::resetDatabase(Config::read('passbolt.url'));
+            }
+
             if ($this->getStatus() == PHPUnit_Runner_BaseTestRunner::STATUS_FAILURE) {
                 // Take a screenshot.
                 if(Config::read('testserver.selenium.screenshotOnFail')) {
@@ -189,35 +194,30 @@ abstract class PassboltTestCase extends AuthenticatedTestCase
                 $this->stopVideo($this->getStatus());
             }
 
-            // Reset the database if requested or on failure
-            if ($this->resetDatabaseWhenComplete) {
-                PassboltServer::resetDatabase(Config::read('passbolt.url'));
-            }
 
-            if(isset($this->driver)) {
-                if($this->_quit === '0') {
-                    return;
-                } else if(empty($this->_quit) 
-                    || ($this->_quit === '1') 
-                    || ($this->_quit === '2' && isset($this->_failing) && !$this->_failing)
-                ) {
-                    /**
-                     * It can happen that the quit function throw a curl exception.
-                     * In that case the selenium node crashed, and to avoid the parallel execution
-                     * to be a total failure. We :
-                     * - catch the exception to avoid the parallel process to crash without finishing the tearDown
-                     * - complete the tearDown to release the selenium server instance and make it available for
-                     *   another execution.
-                     * - Don't forget to add the environment following variables to your docker run :
-                     *   > -e MAX_INSTANCES=5 -e MAX_SESSIONS=5
-                     *   It will allow the selenium server to accept more than one call, so even if one crash it does
-                     *   not lock the server.
-                     */
-                    try {
-                        $this->getDriver()->quit();
-                    } catch(\Exception $e) {
-                        // Do nothing
-                    }
+
+            if($this->_quit === '0') {
+                return;
+            } else if(empty($this->_quit)
+                || ($this->_quit === '1')
+                || ($this->_quit === '2' && isset($this->_failing) && !$this->_failing)
+            ) {
+                /**
+                 * It can happen that the quit function throw a curl exception.
+                 * In that case the selenium node crashed, and to avoid the parallel execution
+                 * to be a total failure. We :
+                 * - catch the exception to avoid the parallel process to crash without finishing the tearDown
+                 * - complete the tearDown to release the selenium server instance and make it available for
+                 *   another execution.
+                 * - Don't forget to add the environment following variables to your docker run :
+                 *   > -e MAX_INSTANCES=5 -e MAX_SESSIONS=5
+                 *   It will allow the selenium server to accept more than one call, so even if one crash it does
+                 *   not lock the server.
+                 */
+                try {
+                    $this->getDriver()->quit();
+                } catch(\Exception $e) {
+                    // Do nothing
                 }
             }
 
@@ -242,6 +242,7 @@ abstract class PassboltTestCase extends AuthenticatedTestCase
             }
 
         } catch (\Exception $e) {
+            $this->consoleLog($e->getMessage());
             $logPath = Config::read('testserver.selenium.logs.path');
             $log = $e->getMessage() . "\n" . $e->getTraceAsString();
             $filePath = "$logPath/{$this->testName}_tear_down_exception.log";

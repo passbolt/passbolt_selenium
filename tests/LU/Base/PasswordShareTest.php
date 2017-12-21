@@ -1389,6 +1389,7 @@ class PasswordShareTest extends PassboltTestCase
      * @group LU
      * @group password
      * @group password-share
+     * @group v2
      */
     public function testDeletedUsersShouldntBeVisibleInTheListOfPermissions() 
     {
@@ -1425,6 +1426,7 @@ class PasswordShareTest extends PassboltTestCase
         $this->gotoWorkspace('user');
 
         // When I click on a user
+        $this->click('#js_wsp_users_browser .js_grid_column_name');
         $this->clickUser($userU['id']);
 
         // Then I click on the delete button
@@ -1481,6 +1483,7 @@ class PasswordShareTest extends PassboltTestCase
      * @group LU
      * @group password
      * @group password-share
+     * @group v2
      */
     public function testMultipleTabsEditPasswordPermission() 
     {
@@ -1562,6 +1565,8 @@ class PasswordShareTest extends PassboltTestCase
      */
     public function testRestartBrowserAndSharePassword() 
     {
+        $this->markTestSkipped();
+
         // Reset database at the end of test.
         $this->resetDatabaseWhenComplete();
 
@@ -1605,9 +1610,9 @@ class PasswordShareTest extends PassboltTestCase
      * @group LU
      * @group password
      * @group password-share
-     * @group skip
-     * PASSBOLT-2263 close and restore doesn't work with the latest chrome driver
-     * PASSBOLT-2419 close and restore doesn't work with the latest firefox driver
+     * @group v2
+     * @group firefox-only
+     * PASSBOLT-2419 close and restore doesn't work with the latest chrome driver
      */
     public function testCloseRestoreTabAndSharePassword() 
     {
@@ -1616,12 +1621,13 @@ class PasswordShareTest extends PassboltTestCase
 
         // Given I am Carol
         $user = User::get('carol');
+        $this->setClientConfig($user);
 
         // And I am on second tab
         $this->openNewTab();
 
         // And I am logged in on the password workspace
-        $this->loginAs($user);
+        $this->loginAs($user, false);
 
         // When I close and restore the tab
         $this->closeAndRestoreTab();

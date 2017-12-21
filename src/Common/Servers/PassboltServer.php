@@ -27,7 +27,7 @@ class PassboltServer
             $response = Request::get($url . '/seleniumtests/resetInstance/' . $dummy)
                 ->send();
         } catch(ConnectionErrorException $exception) {
-            \PHPUnit_Framework_Assert::fail('Fail to reset the database. Connection error.');
+            return false;
         }
         $seeCreated = preg_match('/created/', $response->body);
         sleep(2); // Wait for database to be imported (no visible output).
@@ -45,8 +45,9 @@ class PassboltServer
         try {
             $request->sendsType(Mime::JSON)->send();
         } catch(Exception $exception) {
-            \PHPUnit_Framework_Assert::fail('Fail to set extra config.');
+            return false;
         }
+        return true;
     }
 
     /**
@@ -59,7 +60,8 @@ class PassboltServer
         try {
             $request->sendsType(Mime::JSON)->send();
         } catch(Exception $exception) {
-            \PHPUnit_Framework_Assert::fail('Fail to reset extra config.');
+            return false;
         }
+        return true;
     }
 }

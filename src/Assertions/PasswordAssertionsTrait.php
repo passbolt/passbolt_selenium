@@ -14,6 +14,8 @@
  */
 namespace App\Assertions;
 
+use App\Lib\UuidFactory;
+
 trait PasswordAssertionsTrait
 {
 
@@ -58,7 +60,6 @@ trait PasswordAssertionsTrait
      * Assert a password is selected
      *
      * @param $id string
-     * @return bool
      */
     public function assertPasswordSelected($id) 
     {
@@ -69,7 +70,6 @@ trait PasswordAssertionsTrait
      * Assert a password is not selected
      *
      * @param $id string
-     * @return bool
      */
     public function assertPasswordNotSelected($id) 
     {
@@ -114,12 +114,7 @@ trait PasswordAssertionsTrait
      */
     public function assertICanSeePassword($name) 
     {
-        try {
-            $this->waitUntilISee('resource_' . UuidFactory::uuid('resource.id.' . $name), '/' . $name . '/i');
-        }
-        catch(Exception $e) {
-            $this->fail("Failed to assert that the password " . $name . " is visible");
-        }
+       $this->waitUntilISee('#resource_' . UuidFactory::uuid('resource.id.' . strtolower($name)), '/' . $name . '/i');
     }
 
     /**
@@ -130,11 +125,6 @@ trait PasswordAssertionsTrait
      */
     public function assertICannotSeePassword($name) 
     {
-        try {
-            $this->waitUntilIDontSee('#resource_' . UuidFactory::uuid('resource.id.' . $name), '/' . $name . '/i');
-        }
-        catch(Exception $e) {
-            $this->fail("Failed to assert that the password " . $name . " is visible");
-        }
+        $this->waitUntilIDontSee('#resource_' . UuidFactory::uuid('resource.id.' . strtolower($name)), '/' . $name . '/i');
     }
 }

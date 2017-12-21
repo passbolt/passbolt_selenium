@@ -79,6 +79,7 @@ class PasswordWorkspaceTest extends PassboltTestCase
      * @group password
      * @group password-workspace
      * @group saucelabs
+     * @group v2
      */
     public function testWorkspace() 
     {
@@ -144,6 +145,7 @@ class PasswordWorkspaceTest extends PassboltTestCase
      * @group password
      * @group password-workspace
      * @group saucelabs
+     * @group v2
      */
     public function testBrowsePasswords() 
     {
@@ -199,6 +201,7 @@ class PasswordWorkspaceTest extends PassboltTestCase
      * @group password
      * @group password-workspace
      * @group saucelabs
+     * @group v2
      */
     public function testFilterPasswords() 
     {
@@ -303,6 +306,7 @@ class PasswordWorkspaceTest extends PassboltTestCase
      * @group password
      * @group password-workspace
      * @group saucelabs
+     * @group v2
      */
     public function testPasswordDetails() 
     {
@@ -321,7 +325,7 @@ class PasswordWorkspaceTest extends PassboltTestCase
         $pwdDetails = [
             'username'        => 'vector',
             'url'             => 'https://inkscape.org/',
-            'modified'        => '/(a|an|[0-9]{1,2}) (minute|minutes|hour|hours) ago/',
+            'modified'        => '/(a|an|[0-9]{1,2}) (minute|minutes|hour|hours|days) ago/',
             'created-by'      => 'edith@passbolt.com',
             'modified-by'     => 'edith@passbolt.com',
         ];
@@ -378,6 +382,7 @@ class PasswordWorkspaceTest extends PassboltTestCase
      * @group password
      * @group password-workspace
      * @group saucelabs
+     * @group v2
      */
     public function testFavorite() 
     {
@@ -450,6 +455,7 @@ class PasswordWorkspaceTest extends PassboltTestCase
      * @group password
      * @group password-workspace
      * @group saucelabs
+     * @group v2
      */
     public function testSearchByKeywords()
     {
@@ -508,6 +514,7 @@ class PasswordWorkspaceTest extends PassboltTestCase
      * @group LU
      * @group password
      * @group password-workspace
+     * @group v2
      */
     public function testSearchByKeywordsUnselectPasswords() 
     {
@@ -542,6 +549,7 @@ class PasswordWorkspaceTest extends PassboltTestCase
      * @group LU
      * @group password
      * @group password-workspace
+     * @group v2
      */
     public function testSearchByKeywordsChangesGlobalFilterToAllItems() 
     {
@@ -597,6 +605,7 @@ class PasswordWorkspaceTest extends PassboltTestCase
      * @group LU
      * @group password
      * @group password-workspace
+     * @group v2
      */
     public function testSidebarVisibility() 
     {
@@ -694,6 +703,7 @@ class PasswordWorkspaceTest extends PassboltTestCase
      * @group LU
      * @group password
      * @group password-workspace
+     * @group v2
      */
     public function testPasswordWorkspaceEmptyState() 
     {
@@ -776,6 +786,7 @@ class PasswordWorkspaceTest extends PassboltTestCase
      * @group password
      * @group password-workspace
      * @group saucelabs
+     * @group v2
      */
     public function testSortByColumn()
     {
@@ -913,14 +924,14 @@ class PasswordWorkspaceTest extends PassboltTestCase
         // I should see the password "framasoft".
         $this->assertICanSeePassword('framasoft');
         // And I shouldn't see the password "debian".
-        $this->assertICannotSeePassword('debian');
+        $this->assertICannotSeePassword('Debian');
 
         // When I click on the group "ergonom".
         $this->clickGroup(UuidFactory::uuid('group.id.ergonom'), 'password');
         $this->waitCompletion();
 
         // I should see the password "debian".
-        $this->assertICanSeePassword('debian');
+        $this->assertICanSeePassword('Debian');
 
         // And I shouldn't see the password "framasoft".
         $this->assertICannotSeePassword('framasoft');
@@ -935,6 +946,7 @@ class PasswordWorkspaceTest extends PassboltTestCase
      * @group LU
      * @group password
      * @group password-workspace
+     * @group v2
      */
     public function testFilterByGroupsNoGroups() 
     {
