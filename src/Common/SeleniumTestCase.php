@@ -29,6 +29,7 @@ use App\Common\TestTraits\FindHelperTrait;
 
 use Facebook\WebDriver\Remote\RemoteWebDriver;
 use PHPUnit_Framework_TestCase;
+use PHPUnit_Runner_BaseTestRunner;
 
 abstract class SeleniumTestCase extends PHPUnit_Framework_TestCase
 {
@@ -88,4 +89,23 @@ abstract class SeleniumTestCase extends PHPUnit_Framework_TestCase
         return $this->toString();
     }
 
+    /**
+     * Tell a test if they must leave browser window open
+     *
+     * @return bool|mixed
+     */
+    protected function mustCloseBrowser() {
+        // Always quit if config is missing
+        $quit = Config::read('testserver.selenium.quitOnFailure');
+        if (!isset($quit)) {
+            return true;
+        }
+
+        // Quit if config says to quit on failure (or error)
+        if ($this->getStatus() >= PHPUnit_Runner_BaseTestRunner::STATUS_FAILURE) {
+            return $quit;
+        }
+
+        return true;
+    }
 }

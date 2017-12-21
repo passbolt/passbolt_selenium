@@ -24,9 +24,7 @@ abstract class PassboltTestCase extends AuthenticatedTestCase
 {
     use SauceLabTestTrait;
 
-    protected $_quit;
     protected $_browser;
-    protected $_failing;
     protected $_build;
 
     // indicate if the database should be reset at the end of the test
@@ -46,8 +44,6 @@ abstract class PassboltTestCase extends AuthenticatedTestCase
      */
     protected function setUp() 
     {
-        $this->_failing = null;
-
         // Bootstrap config
         try {
             Config::get();
@@ -173,55 +169,21 @@ abstract class PassboltTestCase extends AuthenticatedTestCase
     protected function tearDown() 
     {
         try {
-            // Reset the database if requested
-            if ($this->resetDatabaseWhenComplete) {
-                PassboltServer::resetDatabase(Config::read('passbolt.url'));
+            if($this->mustScreenshot()) {
+                $this->takeScreenshot();
             }
-
-            if ($this->getStatus() == PHPUnit_Runner_BaseTestRunner::STATUS_FAILURE) {
-                // Take a screenshot.
-                if(Config::read('testserver.selenium.screenshotOnFail')) {
-                    $this->takeScreenshot();
-                }
-                // Retrieve the plugin logs.
-                if(!empty($this->_browser['extensions']) && Config::read('testserver.selenium.logs.plugin')) {
-                    $this->getLogs();
-                }
+            if($this->mustLog()) {
+                $this->getLogs();
             }
-
-            // Retrieve the recorded video.
-            if (Config::read('testserver.selenium.videoRecord')) {
+            if ($this->isVideoRecording()) {
                 $this->stopVideo($this->getStatus());
             }
-
-
-
-            if($this->_quit === '0') {
-                return;
-            } else if(empty($this->_quit)
-                || ($this->_quit === '1')
-                || ($this->_quit === '2' && isset($this->_failing) && !$this->_failing)
-            ) {
-                /**
-                 * It can happen that the quit function throw a curl exception.
-                 * In that case the selenium node crashed, and to avoid the parallel execution
-                 * to be a total failure. We :
-                 * - catch the exception to avoid the parallel process to crash without finishing the tearDown
-                 * - complete the tearDown to release the selenium server instance and make it available for
-                 *   another execution.
-                 * - Don't forget to add the environment following variables to your docker run :
-                 *   > -e MAX_INSTANCES=5 -e MAX_SESSIONS=5
-                 *   It will allow the selenium server to accept more than one call, so even if one crash it does
-                 *   not lock the server.
-                 */
-                try {
-                    $this->getDriver()->quit();
-                } catch(\Exception $e) {
-                    // Do nothing
-                }
+            if ($this->mustResetDatabase()) {
+                PassboltServer::resetDatabase(Config::read('passbolt.url'));
             }
-
-            // If test was running on saucelabs, we update the status.
+            if($this->mustCloseBrowser()) {
+                $this->closeBrowser();
+            }
             if ($this->isSauceLabTest()) {
                 $this->updateTestStatus();
             }
@@ -279,15 +241,6 @@ abstract class PassboltTestCase extends AuthenticatedTestCase
     {
         $passboltInstances = Config::read('passbolt.instances');
         return (!empty($passboltInstances));
-    }
-
-    /**
-     * Assert post conditions.
-     */
-    protected function assertPostConditions() 
-    {
-        $this->_failing = false;
-        parent::assertPostConditions();
     }
 
     /************************************************
@@ -384,4 +337,56 @@ abstract class PassboltTestCase extends AuthenticatedTestCase
         return $capabilities;
     }
 
+    /**
+     * Should we get the browser plugin logs?
+     * @return bool
+     */
+    protected function mustLog() {
+        $logs = Config::read('testserver.selenium.logs.plugin');
+        if (!isset($logs) || $logs === false) {
+            return false;
+        }
+        if(!empty($this->_browser['extensions'])) {
+            if ($this->getStatus() >= \PHPUnit_Runner_BaseTestRunner::STATUS_FAILURE) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Close the browser by quiting using the driver
+     *
+     * @return bool status
+     */
+    protected function closeBrowser() {
+        /**
+         * It can happen that the quit function throw a curl exception.
+         * In that case the selenium node crashed, and to avoid the parallel execution
+         * to be a total failure. We :
+         * - catch the exception to avoid the parallel process to crash without finishing the tearDown
+         * - complete the tearDown to release the selenium server instance and make it available for
+         *   another execution.
+         * - Don't forget to add the environment following variables to your docker run :
+         *   > -e MAX_INSTANCES=5 -e MAX_SESSIONS=5
+         *   It will allow the selenium server to accept more than one call, so even if one crash it does
+         *   not lock the server.
+         */
+        try {
+            $this->getDriver()->quit();
+        } catch(\Exception $e) {
+            // Do nothing
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * Should the test reset the database or not
+     *
+     * @return bool
+     */
+    protected function mustResetDatabase() {
+        return $this->resetDatabaseWhenComplete;
+    }
 }

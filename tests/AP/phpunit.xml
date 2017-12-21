@@ -15,7 +15,6 @@
 
     <php>
         <env name="REQUIRE_EXTENSION" value="1"/>
-        <env name="QUIT" value="1" />
     </php>
 
     <testsuites>

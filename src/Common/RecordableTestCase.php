@@ -96,4 +96,31 @@ class RecordableTestCase extends LoggableTestCase
         exec("$vncSnapshotBin $ip $screenshotPath/{$this->testName}.jpg > /dev/null 2>&1");
         exec("$vncSnapshotBin $ip $screenshotPath/{$this->testName}.jpg > /dev/null 2>&1");
     }
+
+    /**
+     * Should the test take a screenshot?
+     * @return bool
+     */
+    protected function mustScreenshot() {
+        $screenshot = Config::read('testserver.selenium.screenshotOnFail');
+        if (!isset($screenshot) || $screenshot === false) {
+            return false;
+        }
+        if ($this->getStatus() >= \PHPUnit_Runner_BaseTestRunner::STATUS_FAILURE) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Is a video recording going on?
+     * @return bool|mixed
+     */
+    protected function isVideoRecording() {
+        $video = Config::read('testserver.selenium.videoRecord');
+        if (!isset($video)) {
+            return false;
+        }
+        return $video;
+    }
 }

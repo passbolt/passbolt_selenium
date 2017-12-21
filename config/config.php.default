@@ -62,6 +62,7 @@ $config = array (
 			'url' => 'http://{APP_URL}:4444/wd/hub',
 			'instances' => [/* selenium instances */],
 			'screenshotOnFail' => false,
+            'quitOnFailure' => true,
             'screenshots' => [
                 'path' => '/* screenshot path */',
                 'binary' => '/* screenshot tool path */'
