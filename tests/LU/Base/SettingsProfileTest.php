@@ -541,7 +541,7 @@ class SettingsProfileTest extends PassboltTestCase
         $this->click('.edit-profile-dialog input[type=submit]');
 
         // Then I can see a success notification
-        $this->assertNotification('app_users_edit_success');
+        $this->assertNotification('app_users_editPost_success');
 
         // I should see the new first name of the user in the table info
         $this->assertElementContainsText(
@@ -613,7 +613,7 @@ class SettingsProfileTest extends PassboltTestCase
         $this->click('.edit-profile-dialog input[type=submit]');
 
         // Then I can see a success notification
-        $this->assertNotification('app_users_edit_success');
+        $this->assertNotification('app_users_editPost_success');
 
         // I should see the new first name of the user in the table info
         $this->assertElementContainsText(

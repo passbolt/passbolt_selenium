@@ -54,7 +54,7 @@ class GMUserDeleteTest extends PassboltTestCase
      * @group group
      * @group user
      * @group delete
-     * @group broken
+     * @group v2
      */
     public function testDeleteUserEmailNotification() 
     {
@@ -84,25 +84,23 @@ class GMUserDeleteTest extends PassboltTestCase
         $this->getUrl('seleniumtests/showlastemail/' . $userP['Username']);
 
         // Then I should see the expected email title
-        $this->assertMetaTitleContains(sprintf('%s deleted a user', $user['FirstName']));
+        $this->assertMetaTitleContains(sprintf('%s deleted user %s', $user['FirstName'], $userU['FirstName']));
 
         // And I should see the expected email content
-        $this->assertElementContainsText('bodyTable', 'User: ' . $userU['FirstName'] . ' ' . $userU['LastName']);
-        $this->assertElementContainsText('bodyTable', 'The user is now deleted on passbolt');
-        $this->assertElementContainsText('bodyTable', 'IT support (Group manager)');
-        $this->assertElementContainsText('bodyTable', 'Human resource (Member)');
+        $this->assertElementContainsText('bodyTable', sprintf('The user %s %s (%s) is now deleted', $userU['FirstName'], $userU['LastName'], $userU['Username']));
+        $this->assertElementContainsText('bodyTable', 'IT support');
+        $this->assertElementContainsText('bodyTable', 'Human resource');
 
         // When I access last email sent to another group manager
         $userT = User::get('thelma');
         $this->getUrl('seleniumtests/showlastemail/' . $userT['Username']);
 
         // Then I should see the expected email title
-        $this->assertMetaTitleContains(sprintf('%s deleted a user', $user['FirstName']));
+        $this->assertMetaTitleContains(sprintf('%s deleted user %s', $user['FirstName'], $userU['FirstName']));
 
         // And I should see the expected email content
-        $this->assertElementContainsText('bodyTable', 'User: ' . $userU['FirstName'] . ' ' . $userU['LastName']);
-        $this->assertElementContainsText('bodyTable', 'The user is now deleted on passbolt');
-        $this->assertElementContainsText('bodyTable', 'Human resource (Member)');
+        $this->assertElementContainsText('bodyTable', sprintf('The user %s %s (%s) is now deleted', $userU['FirstName'], $userU['LastName'], $userU['Username']));
+        $this->assertElementContainsText('bodyTable', 'Human resource');
     }
 
 }

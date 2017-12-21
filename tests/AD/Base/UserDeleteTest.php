@@ -58,6 +58,7 @@ class ADUserDeleteTest extends PassboltTestCase
      * @group AD
      * @group user
      * @group delete
+     * @group v2
      */
     public function testDeleteUserRightClick() 
     {
@@ -119,6 +120,7 @@ class ADUserDeleteTest extends PassboltTestCase
      * @group user
      * @group delete
      * @group saucelabs
+     * @group v2
      */
     public function testDeleteUserButton() 
     {
@@ -177,6 +179,7 @@ class ADUserDeleteTest extends PassboltTestCase
      * @group AD
      * @group user
      * @group delete
+     * @group v2
      */
     public function testDeleteUserMyself() 
     {
@@ -222,6 +225,7 @@ class ADUserDeleteTest extends PassboltTestCase
      * @group AD
      * @group user
      * @group delete
+     * @group v2
      */
     public function testDeletedUserSoleOwner() 
     {
@@ -270,6 +274,7 @@ class ADUserDeleteTest extends PassboltTestCase
      * @group AD
      * @group user
      * @group delete
+     * @group v2
      */
     public function testDeletedUserSoleGroupManager() 
     {

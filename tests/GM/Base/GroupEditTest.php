@@ -70,7 +70,7 @@ class GMGroupEditTest extends PassboltTestCase
      * @group GM
      * @group group
      * @group edit
-     * @group broken
+     * @group v2
      */
     public function testEditGroupRightClick() 
     {
@@ -248,8 +248,7 @@ class GMGroupEditTest extends PassboltTestCase
      * @group GM
      * @group group
      * @group edit
-     * @group broken
-     * @group PASSBOLT-2536
+     * @group v2
      */
     public function testEditGroupPromoteMember() 
     {
@@ -327,8 +326,7 @@ class GMGroupEditTest extends PassboltTestCase
      * @group GM
      * @group group
      * @group edit
-     * @group broken
-     * @group PASSBOLT-2536
+     * @group v2
      */
     public function testAtLeastOneGroupManager() 
     {
@@ -346,7 +344,7 @@ class GMGroupEditTest extends PassboltTestCase
 
         // Then I should not be able to change the role of this user
         $groupUserId = UuidFactory::uuid('group_user.id.human_resource-ping');
-        $this->waitUntilDisabled("#js_group_user_is_admin_$groupUserId");
+        $this->waitUntilDisabled("js_group_user_is_admin_$groupUserId");
     }
 
     /**
@@ -370,7 +368,7 @@ class GMGroupEditTest extends PassboltTestCase
      * @group GM
      * @group group
      * @group edit
-     * @group broken
+     * @group v2
      */
     public function testAddGroupMemberWithoutPasswordsEncryption() 
     {
@@ -449,9 +447,8 @@ class GMGroupEditTest extends PassboltTestCase
      * And   I go to the passwords workspace
      * Then  I should see that the group passwords are now accessible
      * When  I click on the "chai" password
-     * And   I click on the button "copy password to clipboard"
-     * And   I enter the appropriate master key
-     * Then  I should see that the password copied in the clipboard is the one corresponding to chai
+     * And   I copy the password to clipboard
+     * Then  I can see that password is valid
      * When  I go to the users workspace
      * And   I filter the list of users with the group
      * Then  I should see that Ping appears in the list of group members.
@@ -519,22 +516,13 @@ class GMGroupEditTest extends PassboltTestCase
         );
         $this->clickPassword($resource['id']);
 
-        // When I click on the link 'copy password'
-        $this->click('js_wk_menu_secretcopy_button');
+        // When I copy the password to clipboard
+        $this->copyToClipboard($resource, $ping);
 
-        // Then I can see the master key dialog
-        $this->assertMasterPasswordDialog($ping);
-
-        // When I enter my passphrase and click submit
-        $this->enterMasterPassword($ping['MasterPassword']);
-
-        // Then I can see a success message telling me the password was copied to clipboard
-        $this->assertNotification('plugin_clipboard_copy_success');
-
-        // And the content of the clipboard is valid
+        // Then I can see that password is valid
         $this->assertClipboard($resource['password']);
 
-        // And I go to the users workspace
+        // When I go to the users workspace
         $this->gotoWorkspace('user');
 
         // And I filter the list of users with the group
@@ -568,7 +556,7 @@ class GMGroupEditTest extends PassboltTestCase
      * @group GM
      * @group group
      * @group edit
-     * @group broken
+     * @group v2
      */
     public function testRemoveGroupMember() 
     {
@@ -645,7 +633,7 @@ class GMGroupEditTest extends PassboltTestCase
      * @group GM
      * @group group
      * @group edit
-     * @group broken
+     * @group v2
      */
     public function testEditGroupAddUserEmailNotification() 
     {
@@ -687,8 +675,8 @@ class GMGroupEditTest extends PassboltTestCase
         $this->assertMetaTitleContains(sprintf('%s added you to the group %s', $user['FirstName'], $group['name']));
 
         // And I should see the expected email content
-        $this->assertElementContainsText('bodyTable', 'Name: ' . $group['name']);
-        $this->assertElementContainsText('bodyTable', 'Your role: Group manager');
+        $this->assertElementContainsText('bodyTable', "{$user['FirstName']} ({$user['Username']})");
+        $this->assertElementContainsText('bodyTable', "added you to the group {$group['name']}");
         $this->assertElementContainsText('bodyTable', 'As member of the group');
         $this->assertElementContainsText('bodyTable', 'And as group manager');
 
@@ -699,8 +687,8 @@ class GMGroupEditTest extends PassboltTestCase
         $this->assertMetaTitleContains(sprintf('%s added you to the group %s', $user['FirstName'], $group['name']));
 
         // And I should see the expected email content
-        $this->assertElementContainsText('bodyTable', 'Name: ' . $group['name']);
-        $this->assertElementContainsText('bodyTable', 'Your role: Member');
+        $this->assertElementContainsText('bodyTable', "{$user['FirstName']} ({$user['Username']})");
+        $this->assertElementContainsText('bodyTable', "added you to the group {$group['name']}");
         $this->assertElementContainsText('bodyTable', 'As member of the group');
         $this->assertElementNotContainText('bodyTable', 'And as group manager');
     }
@@ -721,7 +709,7 @@ class GMGroupEditTest extends PassboltTestCase
      * @group GM
      * @group group
      * @group edit
-     * @group broken
+     * @group v2
      */
     public function testEditGroupDeleteUserEmailNotification() 
     {
@@ -756,7 +744,8 @@ class GMGroupEditTest extends PassboltTestCase
         $this->assertMetaTitleContains(sprintf('%s removed you from the group %s', $user['FirstName'], $group['name']));
 
         // And I should see the expected email content
-        $this->assertElementContainsText('bodyTable', 'Name: ' . $group['name']);
+        $this->assertElementContainsText('bodyTable', "{$user['FirstName']} ({$user['Username']})");
+        $this->assertElementContainsText('bodyTable', "removed you from the group {$group['name']}");
         $this->assertElementContainsText('bodyTable', 'You are no longer a member of this group');
     }
 
@@ -778,7 +767,7 @@ class GMGroupEditTest extends PassboltTestCase
      * @group GM
      * @group group
      * @group edit
-     * @group broken
+     * @group v2
      */
     public function testEditGroupUpdateUserEmailNotification() 
     {
@@ -786,7 +775,6 @@ class GMGroupEditTest extends PassboltTestCase
 
         // Given I am a group manager.
         $user = User::get('ping');
-
 
         // I am logged in as admin
         $this->loginAs($user);
@@ -814,18 +802,18 @@ class GMGroupEditTest extends PassboltTestCase
         $this->getUrl('seleniumtests/showlastemail/' . $userW['Username']);
 
         // Then I should see the expected email
-        $this->assertMetaTitleContains(sprintf('%s updated your group membership', $user['FirstName'], $group['name']));
-        $this->assertElementContainsText('bodyTable', 'Group name: ' . $group['name']);
-        $this->assertElementContainsText('bodyTable', 'New role: Group manager');
+        $this->assertMetaTitleContains(sprintf('%s updated your membership in the group %s', $user['FirstName'], $group['name'], $group['name']));
+        $this->assertElementContainsText('bodyTable', "{$user['FirstName']} ({$user['Username']})");
+        $this->assertElementContainsText('bodyTable', "updated your membership in the group {$group['name']}");
         $this->assertElementContainsText('bodyTable', 'You are now a group manager of this group');
 
         // When I access last email sent to the member
         $this->getUrl('seleniumtests/showlastemail/' . $userT['Username']);
 
         // Then I should see the expected email
-        $this->assertMetaTitleContains(sprintf('%s updated your group membership', $user['FirstName'], $group['name']));
-        $this->assertElementContainsText('bodyTable', 'Group name: ' . $group['name']);
-        $this->assertElementContainsText('bodyTable', 'New role: Member');
+        $this->assertMetaTitleContains(sprintf('%s updated your membership in the group %s', $user['FirstName'], $group['name'], $group['name']));
+        $this->assertElementContainsText('bodyTable', "{$user['FirstName']} ({$user['Username']})");
+        $this->assertElementContainsText('bodyTable', "updated your membership in the group {$group['name']}");
         $this->assertElementContainsText('bodyTable', 'You are no longer a group manager of this group');
     }
 
@@ -849,7 +837,7 @@ class GMGroupEditTest extends PassboltTestCase
      * @group GM
      * @group group
      * @group edit
-     * @group broken
+     * @group v2
      */
     public function testEditGroupGroupUpdatedSummaryEmailNotification() 
     {
@@ -903,10 +891,11 @@ class GMGroupEditTest extends PassboltTestCase
         $this->getUrl('seleniumtests/showlastemail/' . $thelma['Username']);
 
         // Then I should see the expected email title
-        $this->assertMetaTitleContains(sprintf('%s updated members of the group %s', $user['FirstName'], $group['name']));
+        $this->assertMetaTitleContains(sprintf('%s updated the group %s', $user['FirstName'], $group['name']));
 
         // And I should see the expected email content
-        $this->assertElementContainsText('bodyTable', 'Name: ' . $group['name']);
+        $this->assertElementContainsText('bodyTable', "{$user['FirstName']} ({$user['Username']})");
+        $this->assertElementContainsText('bodyTable', "updated the group {$group['name']}");
         $this->assertElementContainsText('bodyTable', 'Added members');
         $this->assertElementContainsText('#added_users', "{$ada['FirstName']} {$ada['LastName']} (Group manager)");
         $this->assertElementContainsText('#added_users', "{$betty['FirstName']} {$betty['LastName']} (Member)");

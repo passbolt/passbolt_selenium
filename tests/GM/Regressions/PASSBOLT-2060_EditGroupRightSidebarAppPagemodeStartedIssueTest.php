@@ -48,7 +48,7 @@ class PASSBOLT2060 extends PassboltSetupTestCase
      * @group GM
      * @group group
      * @group edit
-     * @group broken
+     * @group v2
      */
     public function testEditGroupFromSidebar()
     {

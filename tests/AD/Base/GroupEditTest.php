@@ -29,8 +29,10 @@
 namespace Tests\AD\Base;
 
 use App\Actions\GroupActionsTrait;
+use App\Actions\PasswordActionsTrait;
 use App\Actions\WorkspaceActionsTrait;
 use App\Assertions\GroupAssertionsTrait;
+use App\Assertions\PasswordAssertionsTrait;
 use App\Assertions\WorkspaceAssertionsTrait;
 use App\PassboltTestCase;
 use App\Lib\UuidFactory;
@@ -42,6 +44,8 @@ class ADGroupEditTest extends PassboltTestCase
 
     use WorkspaceActionsTrait;
     use WorkspaceAssertionsTrait;
+    use PasswordActionsTrait;
+    use PasswordAssertionsTrait;
     use GroupAssertionsTrait;
     use GroupActionsTrait;
 
@@ -54,6 +58,11 @@ class ADGroupEditTest extends PassboltTestCase
      * And   I should see the “Edit group” option
      * When  I click on “Edit group”
      * Then  I should see the Edit group dialog
+     *
+     * @group AD
+     * @group group
+     * @group edit
+     * @group v2
      */
     public function testEditGroupRightClick() 
     {
@@ -90,6 +99,11 @@ class ADGroupEditTest extends PassboltTestCase
      * Then  I should see that the dialog disappears
      * And   I should see a confirmation message saying that the group has been edited
      * And   I should see that the group name has been changed in the groups list
+     *
+     * @group AD
+     * @group group
+     * @group edit
+     * @group v2
      */
     public function testEditGroupName() 
     {
@@ -131,6 +145,11 @@ class ADGroupEditTest extends PassboltTestCase
      * And   I should see a “edit” button next to the Information section
      * When  I press the “Edit” button
      * Then  I should see the Edit group dialog
+     *
+     * @group AD
+     * @group group
+     * @group edit
+     * @group v2
      */
     public function testEditGroupFromSidebar() 
     {
@@ -163,6 +182,11 @@ class ADGroupEditTest extends PassboltTestCase
      * When  I observe the content of the edit group dialog
      * Then  I should not see a Add people section
      * And     I should see a warning message saying that "Only the group manager can add new people to a group."
+     *
+     * @group AD
+     * @group group
+     * @group edit
+     * @group v2
      */
     public function testEditGroupAsNotGroupManager() 
     {
@@ -190,6 +214,11 @@ class ADGroupEditTest extends PassboltTestCase
      * Then  I should see a notification saying that the group couldn't be updated
      * And   I should see an error message under the name field
      * And   I should see that this error message says that the group name is already in use
+     *
+     * @group AD
+     * @group group
+     * @group edit
+     * @group v2
      */
     public function testEditGroupNameValidation() 
     {
@@ -215,7 +244,7 @@ class ADGroupEditTest extends PassboltTestCase
         $this->waitUntilISee('#js_field_name_feedback.error.message');
 
         $this->assertElementContainsText(
-            $this->find('js_field_name_feedback'), 'The group name provided is already used by another group'
+            $this->find('js_field_name_feedback'), 'The name provided is already used by another group.'
         );
     }
 
@@ -230,7 +259,12 @@ class ADGroupEditTest extends PassboltTestCase
      * Then  I should see a success notification message
      * When  I access last email sent to the user
      * Then  I should see the expected email title
-     *     And   I should see the expected email content
+     * And   I should see the expected email content
+     *
+     * @group AD
+     * @group group
+     * @group edit
+     * @group v2
      */
     public function testEditGroupDeleteUserEmailNotification() 
     {
@@ -264,7 +298,6 @@ class ADGroupEditTest extends PassboltTestCase
         $this->assertMetaTitleContains(sprintf('%s removed you from the group %s', $user['FirstName'], $group['name']));
 
         // And I should see the expected email content
-        $this->assertElementContainsText('bodyTable', 'Name: ' . $group['name']);
         $this->assertElementContainsText('bodyTable', 'You are no longer a member of this group');
     }
 
@@ -282,6 +315,11 @@ class ADGroupEditTest extends PassboltTestCase
      * Then  I should see the expected email
      * When         When I access last email sent to the member
      * Then  I should see the expected email
+     *
+     * @group AD
+     * @group group
+     * @group edit
+     * @group v2
      */
     public function testEditGroupUpdateUserEmailNotification() 
     {
@@ -317,25 +355,25 @@ class ADGroupEditTest extends PassboltTestCase
         $this->getUrl('seleniumtests/showlastemail/' . $userW['Username']);
 
         // Then I should see the expected email
-        $this->assertMetaTitleContains(sprintf('%s updated your group membership', $user['FirstName'], $group['name']));
-        $this->assertElementContainsText('bodyTable', 'Group name: ' . $group['name']);
-        $this->assertElementContainsText('bodyTable', 'New role: Group manager');
+        $this->assertMetaTitleContains(sprintf('%s updated your membership in the group %s', $user['FirstName'], $group['name']));
+        $this->assertElementContainsText('bodyTable', "{$user['FirstName']} ({$user['Username']})");
+        $this->assertElementContainsText('bodyTable', sprintf('updated your membership in the group %s', $group['name']));
         $this->assertElementContainsText('bodyTable', 'You are now a group manager of this group');
 
         // When I access last email sent to the member
         $this->getUrl('seleniumtests/showlastemail/' . $userT['Username']);
 
         // Then I should see the expected email
-        $this->assertMetaTitleContains(sprintf('%s updated your group membership', $user['FirstName'], $group['name']));
-        $this->assertElementContainsText('bodyTable', 'Group name: ' . $group['name']);
-        $this->assertElementContainsText('bodyTable', 'New role: Member');
+        $this->assertMetaTitleContains(sprintf('%s updated your membership in the group %s', $user['FirstName'], $group['name']));
+        $this->assertElementContainsText('bodyTable', "{$user['FirstName']} ({$user['Username']})");
+        $this->assertElementContainsText('bodyTable', sprintf('updated your membership in the group %s', $group['name']));
         $this->assertElementContainsText('bodyTable', 'You are no longer a group manager of this group');
     }
 
     /**
      * Scenario: As a group manager I should receive a notification when admin updated the members of a group I manage
      *
-     * Given        I am logged in as a group manager
+     * Given I am logged in as a group manager
      * And   I am on the users workspace
      * And   I am editing a group that I manage
      * When  I add some users to a group
@@ -343,19 +381,23 @@ class ADGroupEditTest extends PassboltTestCase
      * And   I update the role of some users
      * And   I click on save
      * Then  I should see a success notification message
-     * When            I access last email sent to me
-     * Then            I shouldn't see any email
+     * When  I access last email sent to me
+     * Then  I should not see any email
      * When  I access last email sent to the other group manager
      * Then  I should see the expected email title
-     *     And   I should see the expected email content
+     * And   I should see the expected email content
+     *
+     * @group AD
+     * @group group
+     * @group edit
+     * @group v2
      */
-    public function testEditGroupGroupUpdatedSummaryEmailNotification() 
+    public function testEditGroupGroupUpdatedSummaryEmailNotification()
     {
         $this->resetDatabaseWhenComplete();
 
         // Given I am an administrator.
         $user = User::get('admin');
-        
 
         // I am logged in as admin
         $this->loginAs($user);
@@ -393,10 +435,11 @@ class ADGroupEditTest extends PassboltTestCase
             $this->getUrl('seleniumtests/showlastemail/' . $groupManager['Username']);
 
             // Then I should see the expected email title
-            $this->assertMetaTitleContains(sprintf('%s updated members of the group %s', $user['FirstName'], $group['name']));
+            $this->assertMetaTitleContains(sprintf('%s updated the group %s', $user['FirstName'], $group['name']));
 
             // And I should see the expected email content
-            $this->assertElementContainsText('bodyTable', 'Name: ' . $group['name']);
+            $this->assertElementContainsText('bodyTable', "{$user['FirstName']} ({$user['Username']})");
+            $this->assertElementContainsText('bodyTable', sprintf('updated the group %s', $group['name']));
             $this->assertElementNotContainText('bodyTable', 'Added members');
             $this->assertElementContainsText('bodyTable', 'Removed members');
             $this->assertElementContainsText('#deleted_users', "{$ursula['FirstName']} {$ursula['LastName']} (Member)");
@@ -422,6 +465,11 @@ class ADGroupEditTest extends PassboltTestCase
      * When  I log in as the user who was promoted group manager
      * And   I go to the users workspace
      * Then  I should be able to add users to the new group that I manage
+     *
+     * @group AD
+     * @group group
+     * @group edit
+     * @group v2
      */
     public function testEditGroupPromoteMember() 
     {
@@ -495,6 +543,11 @@ class ADGroupEditTest extends PassboltTestCase
      * And   I edit a group
      * When  I change all the members roles to member (except one admin)
      * Then  I should not be able to change the role of this user
+     *
+     * @group AD
+     * @group group
+     * @group edit
+     * @group v2
      */
     public function testAtLeastOneGroupManager() 
     {
@@ -512,7 +565,7 @@ class ADGroupEditTest extends PassboltTestCase
 
         // Then I should not be able to change the role of this user
         $groupUserId = UuidFactory::uuid('group_user.id.human_resource-ping');
-        $this->waitUntilDisabled("#js_group_user_is_admin_$groupUserId");
+        $this->waitUntilDisabled("js_group_user_is_admin_$groupUserId");
     }
 
     /**
@@ -532,6 +585,11 @@ class ADGroupEditTest extends PassboltTestCase
      * And   I go to the users workspace
      * And   I filter by the group the user has been removed
      * Then  I filter by the group the user has been removed
+     *
+     * @group AD
+     * @group group
+     * @group edit
+     * @group v2
      */
     public function testRemoveGroupMember() 
     {

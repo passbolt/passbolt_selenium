@@ -45,6 +45,7 @@ class ADWorkspaceGroupTest extends PassboltTestCase
      * @group user
      * @group workspace
      * @group saucelabs
+     * @group v2
      */
     public function testFilterUsersByGroup() 
     {

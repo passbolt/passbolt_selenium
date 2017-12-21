@@ -55,8 +55,7 @@ class ADGroupCreateTest extends PassboltTestCase
     /**
      * Scenario: As an administrator I can click on create group and see that the create group dialog exists.
      *
-     * Given I am admin
-     * And   I am logged in
+     * Given I am logged in as admin
      * When  I go to user workspace
      * Then  I should see a button create in the actions panel
      * When  I click on the create button
@@ -78,13 +77,12 @@ class ADGroupCreateTest extends PassboltTestCase
      * @group AD
      * @group group
      * @group create
+     * @group v2
      */
     public function testCreateGroupDialogExist() 
     {
-        // Given I am an administrator.
+        // Given I am logged in as admin
         $user = User::get('admin');
-
-        // I am logged in as admin
         $this->loginAs($user);
 
         // Go to user workspace
@@ -157,8 +155,7 @@ class ADGroupCreateTest extends PassboltTestCase
     /**
      * Scenario: As an admin I can open close the create group dialog
      *
-     * Given I am an Admin
-     * And   I am logged in
+     * Given I am logged in as admin
      * And   I am on the people workspace
      * When  I click on the create group button
      * Then  I see the create group dialog
@@ -176,17 +173,14 @@ class ADGroupCreateTest extends PassboltTestCase
      * @group AD
      * @group group
      * @group create
+     * @group v2
      */
     public function testCreateGroupDialogOpenClose() 
     {
-        // Given that I am Ada
-        $user = User::get('admin');
-        
+        // Given I am logged in as admin
+        $this->loginAs(User::get('admin'));
 
-        // And I am logged in and on the people workspace
-        $this->loginAs($user);
-
-        // Go to user workspace
+        // And I am on the people workspace
         $this->gotoWorkspace('user');
 
         // Create a new group
@@ -236,22 +230,17 @@ class ADGroupCreateTest extends PassboltTestCase
      * When  I click on the group name field
      * And   I press enter
      * Then  I should see an error message saying that the field name is required
-     * When  I enter & as a field name
-     * And   I press enter
-     * Then  I should see an error message saying that it should be alphanumeric only
      * And   I should see that the submit button is disabled
      *
      * @group AD
      * @group group
      * @group create
+     * @group v2
      */
     public function testCreateGroupNameValidation() 
     {
-        // Given I am an administrator.
-        $user = User::get('admin');
-
-        // I am logged in as admin
-        $this->loginAs($user);
+        // Given I am logged in as admin
+        $this->loginAs(User::get('admin'));
 
         // Go to user workspace
         $this->gotoWorkspace('user');
@@ -269,16 +258,6 @@ class ADGroupCreateTest extends PassboltTestCase
         $this->assertVisibleByCss('#js_field_name_feedback.error.message');
         $this->assertElementContainsText(
             $this->find('js_field_name_feedback'), 'is required'
-        );
-
-        // When I enter & as a name
-        $this->inputText('js_field_name', '&');
-        // And I press enter
-        $this->pressEnter();
-        // Then I see an error message saying that the name contain invalid characters
-        $this->assertVisibleByCss('#js_field_name_feedback.error.message');
-        $this->assertElementContainsText(
-            $this->find('js_field_name_feedback'), 'Alphanumeric only'
         );
 
         // And I should see that the save button is still disabled
@@ -305,6 +284,7 @@ class ADGroupCreateTest extends PassboltTestCase
      * @group AD
      * @group group
      * @group create
+     * @group v2
      */
     public function testCreateGroupNameAlreadyExists() 
     {
@@ -338,7 +318,7 @@ class ADGroupCreateTest extends PassboltTestCase
         $this->waitUntilISee('#js_field_name_feedback.error.message');
 
         $this->assertElementContainsText(
-            $this->find('js_field_name_feedback'), 'The group name provided is already used by another group'
+            $this->find('js_field_name_feedback'), 'The name provided is already used by another group.'
         );
     }
 
@@ -373,6 +353,7 @@ class ADGroupCreateTest extends PassboltTestCase
      * @group AD
      * @group group
      * @group create
+     * @group v2
      */
     public function testCreateGroupGroupMembersValidation() 
     {
@@ -511,6 +492,7 @@ class ADGroupCreateTest extends PassboltTestCase
      * @group AD
      * @group group
      * @group create
+     * @group v2
      */
     public function testCreateGroupGroupMembersDelete() 
     {
@@ -586,6 +568,7 @@ class ADGroupCreateTest extends PassboltTestCase
      * @group AD
      * @group group
      * @group create
+     * @group v2
      */
     public function testCreateGroupSuccess() 
     {
@@ -624,7 +607,7 @@ class ADGroupCreateTest extends PassboltTestCase
         $this->waitUntilIDontSee('.edit-group-dialog');
 
         // Wait until I see a group called jean kevin in the list.
-        $this->waitUntilISee("js_wsp_users_groups_list", '/jeankevin/');
+        $this->waitUntilISee("#js_wsp_users_groups_list", '/jeankevin/');
     }
 
     /**
@@ -639,6 +622,7 @@ class ADGroupCreateTest extends PassboltTestCase
      * @group AD
      * @group group
      * @group create
+     * @group v2
      */
     public function testCreateGroupInactiveUsers() 
     {
@@ -653,10 +637,10 @@ class ADGroupCreateTest extends PassboltTestCase
         $this->gotoCreateGroup();
 
         // And I enter the name of an inactive user
-        $userO = User::get('orna');
+        $userR = User::get('ruth');
         $this->goIntoAddUserIframe();
         $this->assertSecurityToken($user, 'group');
-        $this->inputText('js_group_edit_form_auto_cplt', strtolower($userO['FirstName']), true);
+        $this->inputText('js_group_edit_form_auto_cplt', strtolower($userR['FirstName']), true);
         $this->click('.security-token');
         $this->goOutOfIframe();
 
@@ -688,6 +672,7 @@ class ADGroupCreateTest extends PassboltTestCase
      * @group AD
      * @group group
      * @group create
+     * @group v2
      */
     public function testCreateGroupAddUserEmailNotification() 
     {
@@ -735,8 +720,8 @@ class ADGroupCreateTest extends PassboltTestCase
         $this->assertMetaTitleContains(sprintf('%s added you to the group %s', $user['FirstName'], $groupName));
 
         // And I should see the expected email content
-        $this->assertElementContainsText('bodyTable', 'Name: World citizen');
-        $this->assertElementContainsText('bodyTable', 'Your role: Group manager');
+        $this->assertElementContainsText('bodyTable', "{$user['FirstName']} ({$user['Username']})");
+        $this->assertElementContainsText('bodyTable', sprintf('added you to the group %s', $groupName));
         $this->assertElementContainsText('bodyTable', 'As member of the group');
         $this->assertElementContainsText('bodyTable', 'And as group manager');
 
@@ -747,8 +732,8 @@ class ADGroupCreateTest extends PassboltTestCase
         $this->assertMetaTitleContains(sprintf('%s added you to the group %s', $user['FirstName'], $groupName));
 
         // And I should see the expected email content
-        $this->assertElementContainsText('bodyTable', 'Name: World citizen');
-        $this->assertElementContainsText('bodyTable', 'Your role: Member');
+        $this->assertElementContainsText('bodyTable', "{$user['FirstName']} ({$user['Username']})");
+        $this->assertElementContainsText('bodyTable', sprintf('added you to the group %s', $groupName));
         $this->assertElementContainsText('bodyTable', 'As member of the group');
         $this->assertElementNotContainText('bodyTable', 'And as group manager');
     }
