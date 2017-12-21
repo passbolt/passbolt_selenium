@@ -46,6 +46,9 @@ class SettingsKeyTest extends PassboltTestCase
      * @group LU
      * @group settings
      * @group settings-key
+     * @group broken
+     * @group PASSBOLT-2550
+     * @group PASSBOLT-2549
      */
     public function testSettingsKeyInfo() 
     {
@@ -141,6 +144,9 @@ class SettingsKeyTest extends PassboltTestCase
      * @group settings
      * @group settings-key
      * @group saucelabs
+     * @group broken
+     * @group PASSBOLT-2550
+     * @group PASSBOLT-2549
      */
     public function testSettingsKeyDownload() 
     {

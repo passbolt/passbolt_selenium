@@ -97,13 +97,13 @@ class SettingsProfileTest extends PassboltTestCase
         // And I should the created date in the ago format
         $this->assertElementContainsText(
             $this->findByCss('.table-info.profile .created'),
-            '/(a|an|[0-9]{1,2}) (minute|minutes|hour|hours) ago/'
+            '/(a|an|[0-9]{1,2}) (minute|minutes|hour|hours|days) ago/'
         );
 
         // And I should see the correct modified date in the ago format
         $this->assertElementContainsText(
             $this->findByCss('.table-info.profile .modified'),
-            '/(a|an|[0-9]{1,2}) (minute|minutes|hour|hours) ago/'
+            '/(a|an|[0-9]{1,2}) (minute|minutes|hour|hours|days) ago/'
         );
 
         // I should see the picture of Ada.
@@ -118,7 +118,8 @@ class SettingsProfileTest extends PassboltTestCase
 
     /**
      * Scenario: As a LU I should be able to see and use the breadcrumb of the profile section.
-     * Given        I am logged in as LU in the settings workspace, profile section.
+     *
+     * Given I am logged in as LU in the settings workspace, profile section.
      * Then  I should see a breadcrumb
      * And   I should see a breadcrumb section containing All users
      * And   I should see a breadcrumb section containing my name
@@ -129,6 +130,7 @@ class SettingsProfileTest extends PassboltTestCase
      * @group LU
      * @group settings
      * @group settings-profile
+     * @group v2
      */
     public function testSettingsProfileBreadcrumb() 
     {
@@ -262,6 +264,7 @@ class SettingsProfileTest extends PassboltTestCase
 
     /**
      * Scenario: As LU, I shouldn't be able to upload a wrong file format as my avatar picture
+     *
      * Given I am logged in as LU in the settings workspace, profile section.
      * When  I click on upload a new picture
      * Then  I should see a dialog window where I can select a file to upload
@@ -342,6 +345,7 @@ class SettingsProfileTest extends PassboltTestCase
      * @group settings
      * @group settings-profile
      * @group saucelabs
+     * @group v2
      */
     public function testSettingsProfileUpdateView() 
     {

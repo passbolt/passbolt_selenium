@@ -863,6 +863,7 @@ class PasswordWorkspaceTest extends PassboltTestCase
      * @group password
      * @group password-workspace
      * @group broken
+     * @group PASSBOLT-2548
      */
     public function testFilterByGroups() 
     {
