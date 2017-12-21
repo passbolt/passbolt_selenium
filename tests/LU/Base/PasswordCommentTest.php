@@ -249,7 +249,7 @@ class PasswordCommentTest extends PassboltTestCase
         $this->clickPassword(UuidFactory::uuid('resource.id.apache'));
 
         // Check whether the comments list contain the new comment.
-        $this->waitUntilISee('#js_rs_details_comments_list', '/this is a test comment/');
+        $this->waitUntilISee('#js_rs_details_comments_list', '/this is a short comment/');
 
         // I should not see the delete button.
         $buttonDeleteSelector = '#js_rs_details_comments_list a.js_delete_comment';
