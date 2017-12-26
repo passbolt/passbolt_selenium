@@ -60,8 +60,9 @@ class UserWorkspaceTest extends PassboltTestCase
      *
      * @group LU
      * @group user
-     * @group workspace
+     * @group user-workspace
      * @group saucelabs
+     * @group v2
      */
     public function testWorkspace() 
     {
@@ -130,8 +131,9 @@ class UserWorkspaceTest extends PassboltTestCase
      *
      * @group LU
      * @group user
-     * @group workspace
+     * @group user-workspace
      * @group saucelabs
+     * @group v2
      */
     public function testBrowseUsers()
     {
@@ -182,8 +184,9 @@ class UserWorkspaceTest extends PassboltTestCase
      *
      * @group LU
      * @group user
-     * @group workspace
+     * @group user-workspace
      * @group saucelabs
+     * @group v2
      */
     public function testFilterUsers() 
     {
@@ -226,8 +229,9 @@ class UserWorkspaceTest extends PassboltTestCase
      *
      * @group LU
      * @group user
-     * @group workspace
+     * @group user-workspace
      * @group saucelabs
+     * @group v2
      */
     public function testSearchByKeywords() 
     {
@@ -285,8 +289,9 @@ class UserWorkspaceTest extends PassboltTestCase
      *
      * @group LU
      * @group user
-     * @group workspace
+     * @group user-workspace
      * @group saucelabs
+     * @group v2
      */
     public function testSearchByKeywordsUnselectUsers() 
     {
@@ -312,6 +317,7 @@ class UserWorkspaceTest extends PassboltTestCase
 
     /**
      * Scenario: As a user when I filter by keywords the user workspace the global filter "All users" should be selected
+     *
      * Given I am logged in as Ada, and I go to the user workspace
      * When  I click on the recently modified filter
      * Then  I should see that menu All users is not selected anymore
@@ -320,7 +326,8 @@ class UserWorkspaceTest extends PassboltTestCase
      *
      * @group LU
      * @group user
-     * @group workspace
+     * @group user-workspace
+     * @group v2
      */
     public function testSearchByKeywordsChangesGlobalFilterToAllUsers() 
     {
@@ -349,6 +356,7 @@ class UserWorkspaceTest extends PassboltTestCase
 
     /**
      * Scenario: As an admin user, I should have admin rights inside the user workspace
+     *
      * Given I am logged in as admin on the user workspace
      * Then  I should see the create button
      * And   I should see the edit button
@@ -362,7 +370,8 @@ class UserWorkspaceTest extends PassboltTestCase
      *
      * @group LU
      * @group user
-     * @group workspace
+     * @group user-workspace
+     * @group v2
      */
     public function testAdminUserHasAdminRights() 
     {
@@ -417,7 +426,8 @@ class UserWorkspaceTest extends PassboltTestCase
      *
      * @group LU
      * @group user
-     * @group workspace
+     * @group user-workspace
+     * @group v2
      */
     public function testNonAdminUserHasNotAdminRights() 
     {
@@ -457,7 +467,6 @@ class UserWorkspaceTest extends PassboltTestCase
     }
 
     /**
-     * @group saucelabs
      * Scenario: As a logged in user, I should be able to control the sidebar visibility through the sidebar button
      * Given        I am logged in as ada
      * And   I am on the user workspace
@@ -484,7 +493,9 @@ class UserWorkspaceTest extends PassboltTestCase
      *
      * @group LU
      * @group user
-     * @group workspace
+     * @group user-workspace
+     * @group v2
+     * @group saucelabs
      */
     public function testSidebarVisibility() 
     {
@@ -574,8 +585,9 @@ class UserWorkspaceTest extends PassboltTestCase
      *
      * @group LU
      * @group user
-     * @group workspace
+     * @group user-workspace
      * @group saucelabs
+     * @group v2
      */
     public function testSortByColumn() 
     {
