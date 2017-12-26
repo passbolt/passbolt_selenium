@@ -17,6 +17,9 @@
  */
 namespace Tests\LU\Regressions;
 
+use App\Actions\PasswordActionsTrait;
+use App\Actions\ShareActionsTrait;
+use App\Assertions\PasswordAssertionsTrait;
 use App\Lib\UuidFactory;
 use App\PassboltTestCase;
 use Data\Fixtures\User;
@@ -25,6 +28,9 @@ use Facebook\WebDriver\WebDriverBy;
 
 class PASSBOLT1758 extends PassboltTestCase
 {
+    use PasswordActionsTrait;
+    use PasswordAssertionsTrait;
+    use ShareActionsTrait;
 
     /**
      * Scenario: As a user I can share a password with other users
@@ -38,6 +44,7 @@ class PASSBOLT1758 extends PassboltTestCase
      *
      * @group LU
      * @group regression
+     * @group v2
      */
     public function testShareSearchUsersFiltersOnName() 
     {
@@ -51,12 +58,10 @@ class PASSBOLT1758 extends PassboltTestCase
         $this->loginAs($user);
 
         // When I go to the sharing dialog of a password I own
-        Resource::get(
-            array(
+        Resource::get([
             'user' => 'ada',
             'id' => UuidFactory::uuid('resource.id.apache')
-            )
-        );
+        ]);
         $this->gotoSharePassword(UuidFactory::uuid('resource.id.apache'));
 
         // And I search a user by his lastname

@@ -39,6 +39,7 @@ class PASSBOLT1041 extends PassboltTestCase
      *
      * @group LU
      * @group regression
+     * @group v2
      */
     public function testContextualMenuMustCloseAfterClick() 
     {

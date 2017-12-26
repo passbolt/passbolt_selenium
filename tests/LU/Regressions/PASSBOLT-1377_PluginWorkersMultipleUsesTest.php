@@ -17,16 +17,25 @@
  */
 namespace Tests\LU\Regressions;
 
+use App\Actions\MasterPasswordActionsTrait;
 use App\Actions\PasswordActionsTrait;
 use App\Actions\ShareActionsTrait;
+use App\Assertions\MasterPasswordAssertionsTrait;
+use App\Assertions\PasswordAssertionsTrait;
+use App\Assertions\WorkspaceAssertionsTrait;
 use App\PassboltTestCase;
 use Data\Fixtures\User;
 use Data\Fixtures\Resource;
 use App\Lib\UuidFactory;
+
 class PASSBOLT1377 extends PassboltTestCase
 {
+    use PasswordAssertionsTrait;
     use PasswordActionsTrait;
     use ShareActionsTrait;
+    use WorkspaceAssertionsTrait;
+    use MasterPasswordAssertionsTrait;
+    use MasterPasswordActionsTrait;
 
     /**
      * Scenario: As a user I can login & logout multiple times
@@ -40,6 +49,7 @@ class PASSBOLT1377 extends PassboltTestCase
      *
      * @group LU
      * @group regression
+     * @group v2
      */
     public function testLoginLogoutMultipleTimes() 
     {
@@ -47,7 +57,7 @@ class PASSBOLT1377 extends PassboltTestCase
         $user = User::get('ada');
         $this->setClientConfig($user);
 
-        for ($i=0; $i<5; $i++) {
+        for ($i=0; $i<3; $i++) {
             // When I am logged in on the user workspace
             $this->loginAs($user, false);
 
@@ -70,6 +80,7 @@ class PASSBOLT1377 extends PassboltTestCase
      *
      * @group LU
      * @group regression
+     * @group v2
      */
     public function testCreatePasswordMultipleTimes() 
     {
@@ -81,7 +92,7 @@ class PASSBOLT1377 extends PassboltTestCase
 
         $this->loginAs($user);
 
-        for ($i=0; $i<5; $i++) {
+        for ($i=0; $i<3; $i++) {
             // And I am creating the password
             // Then I can see a success notification
             $password = array(
@@ -108,6 +119,7 @@ class PASSBOLT1377 extends PassboltTestCase
      * @group no-saucelabs
      * @group LU
      * @group regression
+     * @group v2
      */
     public function testEditPasswordMultipleTimes() 
     {
@@ -119,14 +131,12 @@ class PASSBOLT1377 extends PassboltTestCase
 
         $this->loginAs($user);
 
-        $resource = Resource::get(
-            array(
+        $resource = Resource::get([
             'user' => 'ada',
             'permission' => 'owner'
-            )
-        );
+        ]);
 
-        for ($i=0; $i<5; $i++) {
+        for ($i=0; $i<3; $i++) {
             // And I am editing the secret of a password I own
             // Then I can see a success notification
             $r['id'] = $resource['id'];
@@ -149,6 +159,7 @@ class PASSBOLT1377 extends PassboltTestCase
      *
      * @group LU
      * @group regression
+     * @group v2
      */
     public function testSharePasswordMultipleTimes() 
     {
@@ -160,16 +171,14 @@ class PASSBOLT1377 extends PassboltTestCase
 
         $this->loginAs($user);
 
-        $resource = Resource::get(
-            array(
+        $resource = Resource::get([
             'id' => UuidFactory::uuid('resource.id.apache'),
-            'user' => 'ada',
-            )
-        );
+            'user' => 'ada'
+        ]);
         $shareWith = [
-        'frances',
-        'edith',
-        'admin'
+            'frances',
+            'edith',
+            'admin'
         ];
 
         for ($i=0; $i<count($shareWith); $i++) {

@@ -47,6 +47,7 @@ class PASSBOLT1103 extends PassboltTestCase
      *
      * @group LU
      * @group regression
+     * @group v2
      */
     public function testContextualMenuDisappearAfterChangingWorkspace() 
     {
@@ -57,7 +58,7 @@ class PASSBOLT1103 extends PassboltTestCase
         $this->loginAs($user);
 
         // When I right click on a password I own
-        $resource = Resource::get(array('user' => 'ada', 'permission' => 'owner'));
+        $resource = Resource::get(['user' => 'ada', 'permission' => 'owner']);
         $this->rightClickPassword($resource['id']);
 
         // Then I can see the contextual menu
