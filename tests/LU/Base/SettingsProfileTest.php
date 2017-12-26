@@ -573,6 +573,7 @@ class SettingsProfileTest extends PassboltTestCase
      * @group settings
      * @group settings-profile
      * @group saucelabs
+     * @group v2
      */
     public function testSettingsProfileUpdateEditLastName() 
     {

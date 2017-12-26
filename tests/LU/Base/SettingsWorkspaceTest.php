@@ -42,7 +42,9 @@ class SettingsWorkspaceTest extends PassboltTestCase
      *
      * @group LU
      * @group settings
+     * @group settings-workspace
      * @group saucelabs
+     * @group v2
      */
     public function testSearchByKeywords()
     {
@@ -79,8 +81,9 @@ class SettingsWorkspaceTest extends PassboltTestCase
         $this->waitCompletion();
 
         // I should see the view filtered with my search
-        $userBrowser = $this->findByCss('#js_wsp_users_browser .tableview-content');
-        $this->waitUntilISee($userBrowser, "/$searchUser/");
+        $userBrowserSelector = '#js_wsp_users_browser .tableview-content';
+        $userBrowser = $this->findByCss($userBrowserSelector);
+        $this->waitUntilISee($userBrowserSelector, "/$searchUser/");
         for ($i=0; $i< count($hiddenUsers); $i++) {
             $this->assertElementNotContainText(
                 $userBrowser,
