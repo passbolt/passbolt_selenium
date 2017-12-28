@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "1b7902b6eb8a1387af336b2324ddb64d",
+    "content-hash": "72c1302ea798e18f543e72dfb2d7b12f",
     "packages": [
         {
             "name": "appium/php-client",
@@ -355,13 +355,13 @@
             "version": "dev-master",
             "source": {
                 "type": "git",
-                "url": "https://github.com/passbolt/ImageCompare.git",
-                "reference": "c3d38e7585693ab61210829ab718c4e9d3fd6d2b"
+                "url": "https://github.com/inceddy/ImageCompare.git",
+                "reference": "48c08bf3d5999bdf96a81360123ae4c5c8c68460"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/passbolt/ImageCompare/zipball/c3d38e7585693ab61210829ab718c4e9d3fd6d2b",
-                "reference": "c3d38e7585693ab61210829ab718c4e9d3fd6d2b",
+                "url": "https://api.github.com/repos/inceddy/ImageCompare/zipball/48c08bf3d5999bdf96a81360123ae4c5c8c68460",
+                "reference": "48c08bf3d5999bdf96a81360123ae4c5c8c68460",
                 "shasum": ""
             },
             "type": "library",
@@ -375,9 +375,10 @@
             ],
             "description": "micro Lib for image comparison",
             "support": {
-                "source": "https://github.com/passbolt/ImageCompare/tree/master"
+                "source": "https://github.com/inceddy/ImageCompare/tree/master",
+                "issues": "https://github.com/inceddy/ImageCompare/issues"
             },
-            "time": "2017-12-26T07:15:06+00:00"
+            "time": "2017-12-26T21:22:15+00:00"
         },
         {
             "name": "myclabs/deep-copy",

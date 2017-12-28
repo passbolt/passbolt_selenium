@@ -42,7 +42,7 @@
         },
         {
           "type": "vcs",
-          "url": "https://github.com/passbolt/ImageCompare"
+          "url": "https://github.com/inceddy/ImageCompare.git"
         }
     ],
     "require": {
