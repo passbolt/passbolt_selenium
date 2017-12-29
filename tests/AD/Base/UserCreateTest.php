@@ -835,6 +835,7 @@ class UserCreateTest extends PassboltTestCase
      * @group create
      * @group no-saucelabs
      * @group v2
+     * @group skip
      */
     public function testRestartBrowserAndCreateUser() 
     {

@@ -42,7 +42,6 @@ class RegisterTest extends PassboltTestCase
      * @group saucelabs
      * @group AN
      * @group register
-     * @group broken
      */
     public function testANCanRegister()
     {
@@ -59,7 +58,7 @@ class RegisterTest extends PassboltTestCase
         $this->click('#disclaimer');
 
         // And press enter
-        $this->pressEnter();
+        $this->click('.button.primary');
 
         // Then I should see an error message
         $this->waitUntilISee('#username.form-error');

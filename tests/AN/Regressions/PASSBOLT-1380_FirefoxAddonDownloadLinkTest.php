@@ -64,7 +64,6 @@ class PASSBOLT1380_Login extends PassboltTestCase
      * @group AN
      * @group regression
      * @group firefox-only
-     * @group broken
      */
     public function testFirefoxDownloadLinkOnSetup() 
     {

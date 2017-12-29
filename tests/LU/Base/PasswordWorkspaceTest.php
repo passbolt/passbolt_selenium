@@ -389,7 +389,7 @@ class PasswordWorkspaceTest extends PassboltTestCase
         // Reset database at the end of test.
         $this->resetDatabaseWhenComplete();
 
-        $resourceId = UuidFactory::uuid('resource.id.apache');
+        $resourceId = UuidFactory::uuid('resource.id.cakephp');
         $resource = Resource::get(['user' => 'betty', 'id' => $resourceId]);
 
         // Given I am Ada

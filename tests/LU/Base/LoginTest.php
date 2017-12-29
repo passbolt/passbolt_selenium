@@ -145,6 +145,7 @@ class LoginTest extends PassboltTestCase
      * @group LU
      * @group login
      * @group v2
+     * @group skip
      */
     public function testRestartBrowserAndStillLoggedIn() 
     {

@@ -100,17 +100,16 @@ class LoginTest extends PassboltTestCase
      * @group AN
      * @group login
      * @group saucelabs
-     * @group broken
      * @depends testCanSeeErrorMsg
      */
-    public function testCanSeeLoginForm() 
+    public function testCanSeeLoginForm()
     {
         $this->getUrl('login');
 
-        $loginForm = null;
+        $loginFormSelector = '.login.form';
 
         try {
-            $loginForm = $this->findByCss('.login.form');
+            $loginForm = $this->findByCss($loginFormSelector);
         } catch (NoSuchElementException $e) {
             $this->fail('User login form was not found');
         }
@@ -132,13 +131,13 @@ class LoginTest extends PassboltTestCase
 
         // And I should not see a username field.
         $this->assertElementNotContainText(
-            $loginForm,
+            $loginFormSelector,
             'Username'
         );
 
         // And I should not see a password field.
         $this->assertElementNotContainText(
-            $loginForm,
+            $loginFormSelector,
             'Master password'
         );
     }

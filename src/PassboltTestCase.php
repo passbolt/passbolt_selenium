@@ -93,6 +93,7 @@ abstract class PassboltTestCase extends AuthenticatedTestCase
     protected function _setBrowserConfig() 
     {
         $browser = getenv('BROWSER');
+        $browserConfigName = '';
 
         // Sanity checks
         if(empty($browser)) {
@@ -101,11 +102,20 @@ abstract class PassboltTestCase extends AuthenticatedTestCase
         if(!isset($browser)) {
             $this->stop('ERROR No browser defined either in testsuite or config.');
         }
-        $browsers = Config::read('browsers');
-        if(!isset($browsers) || !isset($browsers[$browser])) {
-            $this->stop('ERROR No browser config found for: ' . $browser);
+
+        // Extension required ?
+        $requireExtension = getenv('REQUIRE_EXTENSION');
+        if ($requireExtension) {
+            $browserConfigName = "${browser}_with_passbolt_extension";
+        } else {
+            $browserConfigName = "${browser}_vanilla";
         }
-        $this->_browser = $browsers[$browser];
+
+        $browsers = Config::read('browsers');
+        if(!isset($browsers) || !isset($browsers[$browserConfigName])) {
+            $this->stop('ERROR No browser config found for: ' . $browserConfigName);
+        }
+        $this->_browser = $browsers[$browserConfigName];
     }
 
     /**
