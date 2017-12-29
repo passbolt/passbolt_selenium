@@ -86,7 +86,12 @@ abstract class SeleniumTestCase extends PHPUnit_Framework_TestCase
      */
     public function getTestName() : string 
     {
-        return $this->toString();
+        $name = $this->toString();
+	    // Replace unwanted parts of name to have something more readable.
+	    // Example: Tests\LU\Base\PasswordCommentTest::testExample => LU::PasswordCommentTest::testExample
+	    $name = str_replace(['Tests\\', 'Base\\', '\\'], ['', '', '::'], $name);
+	    $name = trim($name, ':');
+	    return $name;
     }
 
     /**

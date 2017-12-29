@@ -29,8 +29,7 @@ class RecordableTestCase extends LoggableTestCase
     private function __getSeleniumServerIp() 
     {
         $seleniumServerUrl = Config::read('testserver.selenium.url');
-        preg_match('/\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}/', $seleniumServerUrl, $ip);
-        return $ip[0];
+        return parse_url($seleniumServerUrl, PHP_URL_HOST);
     }
 
     /**
@@ -45,7 +44,8 @@ class RecordableTestCase extends LoggableTestCase
         $outputFile = "/tmp/flvrec_{$this->getTestName()}_output.log";
         $pidFile = "/tmp/flvrec_{$this->getTestName()}_pid.txt";
 
-        exec(sprintf("%s > %s 2>&1 & echo $! > %s", $cmd, $outputFile, $pidFile));
+		$cmd = sprintf("%s > %s 2>&1 & echo $! > %s", $cmd, $outputFile, $pidFile);
+        exec($cmd);
         $pid = file_get_contents("/tmp/flvrec_{$this->getTestName()}_pid.txt");
 
         $this->videoPid = $pid;
