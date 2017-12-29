@@ -17,7 +17,9 @@
  */
 namespace Tests\LU\Regressions;
 
+use App\Actions\PasswordActionsTrait;
 use App\Actions\ShareActionsTrait;
+use App\Assertions\PasswordAssertionsTrait;
 use App\PassboltTestCase;
 use Data\Fixtures\User;
 use Data\Fixtures\Resource;
@@ -27,6 +29,8 @@ use Facebook\WebDriver\WebDriverBy;
 
 class PASSBOLT1759 extends PassboltTestCase
 {
+    use PasswordActionsTrait;
+    use PasswordAssertionsTrait;
     use ShareActionsTrait;
 
     /**
@@ -42,6 +46,7 @@ class PASSBOLT1759 extends PassboltTestCase
      *
      * @group LU
      * @group regression
+     * @group v2
      */
     public function testShareSearchUsersFiltersOnName() 
     {

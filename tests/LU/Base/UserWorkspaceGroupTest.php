@@ -42,9 +42,9 @@ class UserWorkspaceGroupTest extends PassboltTestCase
      *
      * @group LU
      * @group user
-     * @group workspace
-     * @group group
+     * @group user-group
      * @group saucelabs
+     * @group v2
      */
     public function testGroupIndex() 
     {
@@ -75,9 +75,9 @@ class UserWorkspaceGroupTest extends PassboltTestCase
      *
      * @group LU
      * @group user
-     * @group workspace
-     * @group group
+     * @group user-group
      * @group saucelabs
+     * @group v2
      */
     public function testFilterUsersByGroup() 
     {

@@ -18,8 +18,10 @@
 namespace Tests\LU\Regressions;
 
 use App\Actions\MasterPasswordActionsTrait;
+use App\Actions\PasswordActionsTrait;
 use App\Actions\ShareActionsTrait;
 use App\Assertions\MasterPasswordAssertionsTrait;
+use App\Assertions\PasswordAssertionsTrait;
 use App\Assertions\PermissionAssertionsTrait;
 use App\PassboltTestCase;
 use Data\Fixtures\User;
@@ -28,6 +30,8 @@ use App\Lib\UuidFactory;
 
 class PASSBOLT2031 extends PassboltTestCase
 {
+    use PasswordActionsTrait;
+    use PasswordAssertionsTrait;
     use MasterPasswordAssertionsTrait;
     use MasterPasswordActionsTrait;
     use PermissionAssertionsTrait;
@@ -48,6 +52,8 @@ class PASSBOLT2031 extends PassboltTestCase
      *
      * @group LU
      * @group regression
+     * @group broken
+     * @group PASSBOLT-2555
      */
     public function testShareWithMultipleUsers() 
     {
@@ -61,12 +67,10 @@ class PASSBOLT2031 extends PassboltTestCase
         $this->loginAs($user);
 
         // When I go to the sharing dialog of a password I own
-        $resource = Resource::get(
-            array(
+        $resource = Resource::get([
             'user' => 'ada',
             'id' => UuidFactory::uuid('resource.id.apache')
-            )
-        );
+        ]);
         $this->gotoSharePassword(UuidFactory::uuid('resource.id.apache'));
 
         // And I give read access to multiple users/groups

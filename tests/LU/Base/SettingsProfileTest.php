@@ -57,6 +57,7 @@ class SettingsProfileTest extends PassboltTestCase
      * @group LU
      * @group settings
      * @group settings-profile
+     * @group v2
      */
     public function testSettingsProfile() 
     {
@@ -191,6 +192,7 @@ class SettingsProfileTest extends PassboltTestCase
      * @group settings
      * @group settings-profile
      * @group saucelabs
+     * @group v2
      */
     public function testSettingsProfileAvatarEditOk() 
     {
@@ -245,7 +247,7 @@ class SettingsProfileTest extends PassboltTestCase
         $this->click('.dialog input[type=submit]');
 
         // Then I should see a success message.
-        $this->assertNotification('app_users_editavatar_success');
+        $this->assertNotification('app_users_editPost_success');
 
         // And I should see that the profile picture has been replaced in the profile details.
         $actualImage =  $this->find('.avatar img')->getAttribute('src');
@@ -278,6 +280,8 @@ class SettingsProfileTest extends PassboltTestCase
      * @group LU
      * @group settings
      * @group settings-profile
+     * @group broken
+     * @group PASSBOLT-2551
      */
     public function testSettingsProfileAvatarEditErrorFileType() 
     {
@@ -304,7 +308,7 @@ class SettingsProfileTest extends PassboltTestCase
         $this->click('.dialog input[type=submit]');
 
         // Then I should see a success message.
-        $this->assertNotification('app_users_editavatar_error');
+        $this->assertNotification('app_users_editPost_error');
 
         // And I should see that the profile picture has been replaced in the profile details.
         $adaImage = 'ada.png';
@@ -408,19 +412,16 @@ class SettingsProfileTest extends PassboltTestCase
      * When  I press the enter key on the keyboard
      * Then  I see an error message saying that the first name is required
      * And   I see an error message saying that the last name is required
-     * When  I enter '&' as a first name
-     * And   I enter '&' as a last name
+     * When  I enter emoji as a first name
+     * And   I enter emoji as a last name
      * And   I click on the save button
      * Then  I see an error message saying that the first name contain invalid characters
      * And   I see an error message saying that the last name contain invalid characters
-     * When  I enter 'aa' as a first name
-     * And   I enter 'aa' as a last name
-     * Then  I see an error message saying that the length of first name should be between x and x characters
-     * And   I see an error message saying that the length of last name should be between x and x characters
      *
      * @group LU
      * @group settings
      * @group settings-profile
+     * @group v2
      */
     public function testSettingsProfileUpdateCanSeeErrors() 
     {
@@ -459,10 +460,10 @@ class SettingsProfileTest extends PassboltTestCase
         );
 
         // When I enter & as a first name
-        $this->inputText('js_field_first_name', '&');
+        $this->inputText('js_field_first_name', '🔥');
 
         // When I enter & as a last name
-        $this->inputText('js_field_last_name', '&');
+        $this->inputText('js_field_last_name', '🔥');
 
         // And I click save
         $this->click('.edit-profile-dialog input[type=submit]');
@@ -470,27 +471,13 @@ class SettingsProfileTest extends PassboltTestCase
         // Then I see an error message saying that the first name contain invalid characters
         $this->assertVisibleByCss('#js_field_first_name_feedback.error.message');
         $this->assertElementContainsText(
-            $this->find('js_field_first_name_feedback'), 'should only contain alphabets'
+            $this->find('js_field_first_name_feedback'), 'should be a valid utf8 string'
         );
 
         // Then I see an error message saying that the first name contain invalid characters
         $this->assertVisibleByCss('#js_field_last_name_feedback.error.message');
         $this->assertElementContainsText(
-            $this->find('js_field_last_name_feedback'), 'should only contain alphabets'
-        );
-
-        // And I enter aa as a first name
-        $this->inputText('js_field_first_name', 'a');
-        $this->assertVisibleByCss('#js_field_first_name_feedback.error.message');
-        $this->assertElementContainsText(
-            $this->find('js_field_first_name_feedback'), 'First name should be between'
-        );
-
-        // And I enter aa as a last name
-        $this->inputText('js_field_last_name', 'a');
-        $this->assertVisibleByCss('#js_field_last_name_feedback.error.message');
-        $this->assertElementContainsText(
-            $this->find('js_field_last_name_feedback'), 'Last name should be between'
+            $this->find('js_field_last_name_feedback'), 'should be a valid utf8 string'
         );
     }
 
@@ -514,6 +501,7 @@ class SettingsProfileTest extends PassboltTestCase
      * @group settings
      * @group settings-profile
      * @group saucelabs
+     * @group v2
      */
     public function testSettingsProfileUpdateEditFirstName() 
     {
@@ -538,8 +526,7 @@ class SettingsProfileTest extends PassboltTestCase
 
         // And I empty the name input text field value
         // And I enter a new value
-        $newname = 'modifiedfirstname';
-        $this->inputText('js_field_first_name', $newname);
+        $this->inputText('js_field_first_name', 'modifiedfirstname');
 
         // And I click save
         $this->click('.edit-profile-dialog input[type=submit]');
@@ -549,8 +536,8 @@ class SettingsProfileTest extends PassboltTestCase
 
         // I should see the new first name of the user in the table info
         $this->assertElementContainsText(
-            $this->find('.table-info.profile .name'),
-            $newname . ' Lovelace'
+            $this->find('.table-info.profile .name .value'),
+            'Modifiedfirstname Lovelace'
         );
 
         // Refresh the page.
@@ -561,8 +548,8 @@ class SettingsProfileTest extends PassboltTestCase
 
         // I should see the new first name of the user in the table info
         $this->assertElementContainsText(
-            $this->find('.table-info.profile .name'),
-            $newname . ' Lovelace'
+            $this->find('.table-info.profile .name .value'),
+            'Modifiedfirstname Lovelace'
         );
     }
 
@@ -586,6 +573,7 @@ class SettingsProfileTest extends PassboltTestCase
      * @group settings
      * @group settings-profile
      * @group saucelabs
+     * @group v2
      */
     public function testSettingsProfileUpdateEditLastName() 
     {
@@ -610,7 +598,7 @@ class SettingsProfileTest extends PassboltTestCase
 
         // And I empty the name input text field value
         // And I enter a new value
-        $newname = 'modifiedlastname';
+        $newname = 'Modified';
         $this->inputText('js_field_last_name', $newname);
 
         // And I click save
@@ -621,7 +609,7 @@ class SettingsProfileTest extends PassboltTestCase
 
         // I should see the new first name of the user in the table info
         $this->assertElementContainsText(
-            $this->find('.table-info.profile .name'),
+            $this->find('.table-info.profile .name .value'),
             'Ada ' . $newname
         );
 
@@ -633,7 +621,7 @@ class SettingsProfileTest extends PassboltTestCase
 
         // I should see the new first name of the user in the table info
         $this->assertElementContainsText(
-            $this->find('.table-info.profile .name'),
+            $this->find('.table-info.profile .name .value'),
             'Ada ' . $newname
         );
     }

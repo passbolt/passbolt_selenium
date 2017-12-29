@@ -596,6 +596,7 @@ class SetupTest extends PassboltSetupTestCase
      * @group AP
      * @group setup
      * @group v2
+     * @group unstable
      */
     public function testSetupDisplayWarningIfAlreadyConfigured() 
     {

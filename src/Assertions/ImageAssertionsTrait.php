@@ -14,7 +14,7 @@
  */
 namespace App\Assertions;
 
-use App\Lib\Image;
+use Image;
 use PHPUnit_Framework_Assert;
 
 trait ImageAssertionsTrait
@@ -33,8 +33,15 @@ trait ImageAssertionsTrait
      */
     public function assertImagesAreSame($image1Path, $image2Path, $tolerance = 0.05) 
     {
-        $image1 = Image::fromFile($image1Path);
-        $image2 = Image::fromFile($image2Path);
+        $options = array(
+            'ssl' => [
+                'verify_peer' => true,
+                'allow_self_signed' => true,
+            ],
+        );
+        $context = stream_context_create($options);
+        $image1 = Image::fromFile($image1Path, $context);
+        $image2 = Image::fromFile($image2Path, $context);
         $diff = $image1->difference($image2);
         $scoreMin = 1 - $tolerance;
         PHPUnit_Framework_Assert::assertTrue($diff >= $scoreMin);

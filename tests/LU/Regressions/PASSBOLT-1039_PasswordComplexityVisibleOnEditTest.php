@@ -21,6 +21,7 @@ use App\Actions\MasterPasswordActionsTrait;
 use App\Actions\PasswordActionsTrait;
 use App\Assertions\MasterPasswordAssertionsTrait;
 use App\Assertions\PasswordAssertionsTrait;
+use App\Assertions\WorkspaceAssertionsTrait;
 use App\PassboltTestCase;
 use Data\Fixtures\User;
 
@@ -30,6 +31,7 @@ class PASSBOLT1039 extends PassboltTestCase
     use PasswordAssertionsTrait;
     use MasterPasswordActionsTrait;
     use MasterPasswordAssertionsTrait;
+    use WorkspaceAssertionsTrait;
 
     /**
      * Scenario: As a user I can see the current password complexity when editing a password
@@ -43,6 +45,7 @@ class PASSBOLT1039 extends PassboltTestCase
      *
      * @group LU
      * @group regression
+     * @group v2
      */
     public function testEditPasswordComplexityCheck() 
     {

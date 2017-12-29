@@ -45,6 +45,7 @@ class PASSBOLT1395 extends PassboltTestCase
      *
      * @group LU
      * @group regression
+     * @group v2
      */
     public function testCantSelectMultiplePasswords() 
     {
@@ -79,6 +80,7 @@ class PASSBOLT1395 extends PassboltTestCase
      *
      * @group LU
      * @group regression
+     * @group v2
      */
     public function testCantSelectMultipleUsers() 
     {

@@ -18,6 +18,7 @@
 namespace Tests\LU\Regressions;
 
 use App\Actions\PasswordActionsTrait;
+use App\Assertions\PasswordAssertionsTrait;
 use App\Assertions\WorkspaceAssertionsTrait;
 use App\PassboltTestCase;
 use Data\Fixtures\User;
@@ -26,6 +27,7 @@ use Data\Fixtures\Resource;
 class PASSBOLT1040 extends PassboltTestCase
 {
     use PasswordActionsTrait;
+    use PasswordAssertionsTrait;
     use WorkspaceAssertionsTrait;
 
     /**
@@ -33,6 +35,7 @@ class PASSBOLT1040 extends PassboltTestCase
      *
      * @group LU
      * @group regression
+     * @group v2
      */
     public function testNoEncryptionOnResourceNameEdit() 
     {
@@ -44,12 +47,10 @@ class PASSBOLT1040 extends PassboltTestCase
         $this->loginAs(User::get('ada'));
 
         // And I am editing the name, description, uri, username of a password I own
-        $resource = Resource::get(
-            array(
+        $resource = Resource::get([
             'user' => 'ada',
             'permission' => 'owner'
-            )
-        );
+        ]);
         $r['id'] = $resource['id'];
         $r['description'] = 'this is a new description';
         $r['name'] = 'newname';

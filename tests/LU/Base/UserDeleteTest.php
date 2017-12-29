@@ -52,7 +52,8 @@ class UserDeleteTest extends PassboltTestCase
      *
      * @group LU
      * @group user
-     * @group delete
+     * @group user-delete
+     * @group v2
      */
     public function testDeletedUserGetFeedback() 
     {

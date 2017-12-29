@@ -17,11 +17,23 @@
  */
 namespace Tests\LU\Regressions;
 
+use App\Actions\MasterPasswordActionsTrait;
+use App\Actions\PasswordActionsTrait;
+use App\Assertions\ClipboardAssertions;
+use App\Assertions\MasterPasswordAssertionsTrait;
+use App\Assertions\PasswordAssertionsTrait;
+use App\Assertions\WorkspaceAssertionsTrait;
 use App\PassboltTestCase;
 use Data\Fixtures\User;
 
 class PASSBOLT1680 extends PassboltTestCase
 {
+    use MasterPasswordActionsTrait;
+    use MasterPasswordAssertionsTrait;
+    use PasswordActionsTrait;
+    use PasswordAssertionsTrait;
+    use WorkspaceAssertionsTrait;
+    use ClipboardAssertions;
 
     /**
      * Scenario: As a user I can view a password I just created on my list of passwords
@@ -34,6 +46,7 @@ class PASSBOLT1680 extends PassboltTestCase
      *
      * @group LU
      * @group regression
+     * @group v2
      */
     public function testCreatePasswordAndView() 
     {

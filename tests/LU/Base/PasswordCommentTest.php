@@ -214,6 +214,9 @@ class PasswordCommentTest extends PassboltTestCase
         // Assert delete notification is shown
         $this->assertNotification('app_comments_delete_success');
 
+        // Assert that the comments loaded.
+        $this->waitUntilISee('#js_rs_details_comments.ready');
+
         // Assert that the comment has disappeared
         $this->assertElementNotContainText(
             $this->find('#js_rs_details_comments_list'),

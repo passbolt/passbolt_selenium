@@ -62,6 +62,7 @@ class PASSBOLT1337 extends PassboltTestCase
      *
      * @group LU
      * @group regression
+     * @group v2
      */
     public function testEditingPasswordSharedWithDeletedUsersShouldntCrash() 
     {
@@ -93,13 +94,11 @@ class PASSBOLT1337 extends PassboltTestCase
         // Then I should see a success notification message saying the user is deleted
         $this->assertNotification('app_users_delete_success');
 
-
         // When I logout
         $this->logout();
 
         // And I am Ada
         $user = User::get('ada');
-        
 
         // And I am logged in on the password workspace
         $this->loginAs($user);

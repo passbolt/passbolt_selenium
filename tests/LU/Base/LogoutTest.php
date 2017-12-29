@@ -211,6 +211,7 @@ class LogoutTest extends PassboltTestCase
      * @group logout
      * @group no-saucelabs
      * @group v2
+     * @group skip
      */
     public function testRestartBrowserAndLoggedOutAfterSessionExpired() 
     {

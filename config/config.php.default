@@ -84,7 +84,7 @@ $config = array (
 		),
 	),
 	'browsers' => array (
-		'default' => 'firefox_with_passbolt_extension',
+		'default' => 'firefox',
 		'common' => array(
 			'downloads_path' => 'file:///home/seluser/Downloads'
 		),
