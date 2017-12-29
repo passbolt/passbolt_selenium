@@ -134,8 +134,7 @@ class UserCopyToClipboardTest extends PassboltTestCase
      * @group user
      * @group user-clipboard
      * @group saucelabs
-     * @group broken
-     * @group PASSBOLT-2552
+     * @group v2
      */
     public function testCopyPublicKeyToClipboardViaContextualMenu()
     {
@@ -162,7 +161,6 @@ class UserCopyToClipboardTest extends PassboltTestCase
         $this->assertClipboard(file_get_contents(GPG_FIXTURES . DS . 'betty_public.key'));
     }
 
-
     /**
      * Scenario: As a admin I can copy the public key to clipboard with the copy button in the sidebar
      *
@@ -176,8 +174,7 @@ class UserCopyToClipboardTest extends PassboltTestCase
      * @group user
      * @group user-clipboard
      * @group saucelabs
-     * @group broken
-     * @group PASSBOLT-2552
+     * @group v2
      */
     public function testCopyPublicKeyToClipboardViaSidebarCopy() 
     {

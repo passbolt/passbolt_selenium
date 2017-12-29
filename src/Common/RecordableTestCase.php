@@ -72,7 +72,7 @@ class RecordableTestCase extends LoggableTestCase
         }
 
         // Delete video if test is not a failure
-        if (Config::read('testserver.selenium.videos.when') == 'onFail' && $status != PHPUnit_Runner_BaseTestRunner::STATUS_FAILURE) {
+        if (Config::read('testserver.selenium.videos.when') == 'onFail' && $status != \PHPUnit_Runner_BaseTestRunner::STATUS_FAILURE) {
             // If test is not a failure, we delete the video. We don't need to keep it.
             $videoPath = Config::read('testserver.selenium.videos.path');
             $filePath = "$videoPath/{$this->testName}.flv";

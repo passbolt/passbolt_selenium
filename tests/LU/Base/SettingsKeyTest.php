@@ -22,6 +22,7 @@ namespace Tests\LU\Base;
 
 use App\Actions\WorkspaceActionsTrait;
 use App\Assertions\WorkspaceAssertionsTrait;
+use App\Common\Config;
 use App\PassboltTestCase;
 use Data\Fixtures\User;
 
@@ -46,9 +47,7 @@ class SettingsKeyTest extends PassboltTestCase
      * @group LU
      * @group settings
      * @group settings-key
-     * @group broken
-     * @group PASSBOLT-2550
-     * @group PASSBOLT-2549
+     * @group v2
      */
     public function testSettingsKeyInfo() 
     {
@@ -144,15 +143,14 @@ class SettingsKeyTest extends PassboltTestCase
      * @group settings
      * @group settings-key
      * @group saucelabs
-     * @group broken
-     * @group PASSBOLT-2550
-     * @group PASSBOLT-2549
+     * @group v2
      */
     public function testSettingsKeyDownload() 
     {
         // Given I am Ada
         // And I am logged in on the user workspace
-        $this->loginAs(User::get('ada'));
+        $user = User::get('ada');
+        $this->loginAs($user);
 
         // Go to user workspace
         $this->gotoWorkspace('settings');
@@ -167,8 +165,9 @@ class SettingsKeyTest extends PassboltTestCase
         $this->click('js_settings_wk_menu_download_public_key');
 
         // Compare the downloaded file with the key of the user.
-        // $md5Downloaded = md5(file_get_contents(SELENIUM_TMP . DS . 'passbolt_public.asc'));
-        // $md5ActualKey = md5(file_get_contents(GPG_FIXTURES . DS . $user['PublicKey']));
+//         $md5Downloaded = md5(file_get_contents(Config::read('browsers.common.downloads_path') . DS . 'passbolt_public.asc'));
+//         $md5ActualKey = md5(file_get_contents(GPG_FIXTURES . DS . $user['PublicKey']));
         // TODO : #PASSBOLT-1253 modify docker container so mounted directories are writeable.
+        $this->markTestIncomplete();
     }
 }
