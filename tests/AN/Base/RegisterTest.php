@@ -42,6 +42,7 @@ class RegisterTest extends PassboltTestCase
      * @group saucelabs
      * @group AN
      * @group register
+     * @group broken
      */
     public function testANCanRegister()
     {
@@ -112,6 +113,7 @@ class RegisterTest extends PassboltTestCase
      *
      * @group AN
      * @group register
+     * @group v2
      */
     public function testCannotSeeSetupPageWithInvalidInformation() 
     {
