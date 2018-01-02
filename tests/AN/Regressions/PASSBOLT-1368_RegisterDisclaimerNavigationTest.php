@@ -37,6 +37,7 @@ class PASSBOLT1368 extends PassboltTestCase
      *
      * @group AN
      * @group regression
+     * @group v2
      */
     public function testLegalDisclaimerNavigation() 
     {

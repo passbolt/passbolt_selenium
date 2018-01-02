@@ -38,6 +38,7 @@ class RecoverTest extends PassboltRecoverTestCase
      * @group saucelabs
      * @group AN
      * @group recover
+     * @group broken
      */
     public function testANRecoverNoPlugin()
     {

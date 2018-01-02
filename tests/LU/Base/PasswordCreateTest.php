@@ -696,13 +696,11 @@ class PasswordCreateTest extends PassboltTestCase
         $this->getUrl('seleniumtests/showlastemail/' . $user['Username']);
 
         // The email title should be:
-        $this->assertMetaTitleContains('You added the resource localhost ftp');
+        $this->assertMetaTitleContains('You added the password localhost ftp');
 
         // I should see the resource name in the email.
-        $this->assertElementContainsText(
-            'bodyTable',
-            'localhost ftp'
-        );
+        $this->assertElementContainsText('bodyTable', 'You have saved a new password');
+        $this->assertElementContainsText('bodyTable', 'localhost ftp');
     }
 
     /**

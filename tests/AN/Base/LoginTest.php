@@ -34,6 +34,9 @@ class LoginTest extends PassboltTestCase
      * Then  I should see that I am automatically redirected to the https version of it
      *
      * @group chrome-only
+     * @group AN
+     * @group login
+     * @group v2
      * @todo PASSBOLT-2253 Disabled for FF, certificate issue.
      */
     public function testSslRedirect() 
@@ -63,7 +66,10 @@ class LoginTest extends PassboltTestCase
      * Then  I can see the title of the page contain 'Login'
      * Then  I can see the error message telling me an add-on is required
      *
+     * @group AN
+     * @group login
      * @group saucelabs
+     * @group v2
      */
     public function testCanSeeErrorMsg() 
     {
@@ -91,19 +97,19 @@ class LoginTest extends PassboltTestCase
      * And   I cannot see a password field (inside the iframe)
      * And   I cannot see a login button
      *
+     * @group AN
+     * @group login
      * @group saucelabs
-     */
-    /**
      * @depends testCanSeeErrorMsg
      */
-    public function testCanSeeLoginForm() 
+    public function testCanSeeLoginForm()
     {
         $this->getUrl('login');
 
-        $loginForm = null;
+        $loginFormSelector = '.login.form';
 
         try {
-            $loginForm = $this->findByCss('.login.form');
+            $loginForm = $this->findByCss($loginFormSelector);
         } catch (NoSuchElementException $e) {
             $this->fail('User login form was not found');
         }
@@ -125,13 +131,13 @@ class LoginTest extends PassboltTestCase
 
         // And I should not see a username field.
         $this->assertElementNotContainText(
-            $loginForm,
+            $loginFormSelector,
             'Username'
         );
 
         // And I should not see a password field.
         $this->assertElementNotContainText(
-            $loginForm,
+            $loginFormSelector,
             'Master password'
         );
     }
@@ -141,6 +147,10 @@ class LoginTest extends PassboltTestCase
      * Given I am an anonymous user with no plugin on the login page
      * Then  I should not see a cookie warning
      * Then      I should not see a javascript warning
+     *
+     * @group AN
+     * @group login
+     * @group v2
      */
     public function testNoCookieBanner() 
     {
@@ -156,6 +166,10 @@ class LoginTest extends PassboltTestCase
      * When  I am on the login page
      * Then  I can see the app version number in the footer
      * And   I can't see the plugin version number
+     *
+     * @group AN
+     * @group login
+     * @group v2
      */
     public function testCanSeeVersionNumber() 
     {

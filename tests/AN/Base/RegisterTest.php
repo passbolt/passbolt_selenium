@@ -58,7 +58,7 @@ class RegisterTest extends PassboltTestCase
         $this->click('#disclaimer');
 
         // And press enter
-        $this->pressEnter();
+        $this->click('.button.primary');
 
         // Then I should see an error message
         $this->waitUntilISee('#username.form-error');
@@ -112,6 +112,7 @@ class RegisterTest extends PassboltTestCase
      *
      * @group AN
      * @group register
+     * @group v2
      */
     public function testCannotSeeSetupPageWithInvalidInformation() 
     {

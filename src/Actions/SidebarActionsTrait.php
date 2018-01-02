@@ -47,6 +47,9 @@ trait SidebarActionsTrait
 
         // Assert that notification is shown.
         $this->assertNotification('app_comments_addPost_success');
+
+        // Assert that the comments loaded.
+        $this->waitUntilISee('#js_rs_details_comments.ready');
     }
 
 }

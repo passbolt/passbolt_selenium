@@ -178,8 +178,7 @@ class PasswordCommentTest extends PassboltTestCase
      * @group LU
      * @group comment
      * @group comment-delete
-     * @group broken
-     * @group PASSBOLT-2538
+     * @group unstable
      */
     public function testCommentDelete() 
     {
@@ -200,6 +199,9 @@ class PasswordCommentTest extends PassboltTestCase
         $this->postCommentInSidebar('this is a comment for delete test');
         $this->waitUntilNotificationDisappears('app_comments_addPost_success');
 
+	    // Scroll sidebar to bottom.
+	    $this->scrollSidebarToBottom();
+
         // Delete comment.
         $buttonDeleteSelector = '#js_rs_details_comments_list a.js_delete_comment';
         $this->waitUntilISee($buttonDeleteSelector);
@@ -213,6 +215,9 @@ class PasswordCommentTest extends PassboltTestCase
 
         // Assert delete notification is shown
         $this->assertNotification('app_comments_delete_success');
+
+        // Assert that the comments loaded.
+        $this->waitUntilISee('#js_rs_details_comments.ready');
 
         // Assert that the comment has disappeared
         $this->assertElementNotContainText(

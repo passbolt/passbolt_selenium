@@ -34,6 +34,10 @@ class PASSBOLT1346 extends PassboltTestCase
      * Then  I go to the login page
      * When  I click on the register link
      * Then  I go to the login page
+     *
+     * @group AN
+     * @group regression
+     * @group v2
      */
     public function testTopNavigationLink() 
     {

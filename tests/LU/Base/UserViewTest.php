@@ -53,8 +53,7 @@ class UserViewTest extends PassboltTestCase
      * @group user
      * @group user-view
      * @group saucelabs
-     * @group broken
-     * @group PASSBOLT-2552
+     * @group v2
      */
     public function testUsersDetails() 
     {
