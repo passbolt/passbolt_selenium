@@ -862,8 +862,7 @@ class PasswordWorkspaceTest extends PassboltTestCase
      * @group LU
      * @group password
      * @group password-workspace
-     * @group broken
-     * @group PASSBOLT-2548
+     * @group v2
      */
     public function testFilterByGroups() 
     {
@@ -874,7 +873,7 @@ class PasswordWorkspaceTest extends PassboltTestCase
         $user = User::get('irene');
 
         // I am logged in as irene.
-        $this->loginAs($user, false);
+        $this->loginAs($user);
 
         // I edit the group "ergonom".
         $group = Group::get(['id' => UuidFactory::uuid('group.id.ergonom')]);
