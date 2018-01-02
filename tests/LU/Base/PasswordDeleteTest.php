@@ -277,7 +277,7 @@ class PasswordDeleteTest extends PassboltTestCase
      * And   I click on the more button
      * And   I click on the delete link
      * Then  I should see a success notification message saying the password is deleted
-     * When  I access the last notification email for this user
+     * When  I access the last notification email for Betty user
      * Then  I should see a notification email stating that the password has been deleted
      * When  I access the last notification email of a user the password was shared with
      * Then  I should see a notification email stating that the password has been deleted
@@ -285,7 +285,7 @@ class PasswordDeleteTest extends PassboltTestCase
      * @group LU
      * @group password
      * @group password-delete
-     * @group broken
+     * @group v2
      */
     public function testDeletePasswordEmailNotification() 
     {
@@ -317,24 +317,6 @@ class PasswordDeleteTest extends PassboltTestCase
         // Then I should see a success notification message saying the password is deleted
         $this->assertNotification('app_resources_delete_success');
 
-        // Access last email sent to Betty.
-        $this->getUrl('seleniumtests/showlastemail/' . $user['Username']);
-
-        // The email title should be:
-        $this->assertMetaTitleContains(sprintf('Password %s has been deleted', $resource['name']));
-
-        // I should see the user name in the email.
-        $this->assertElementContainsText(
-            'bodyTable',
-            'You (' . $user['Username'] . ')'
-        );
-
-        // I should see the resource name in the email.
-        $this->assertElementContainsText(
-            'bodyTable',
-            $resource['name']
-        );
-
         // Get the details of betty, with whom the password is shared.
         $betty = User::get('betty');
 
@@ -342,12 +324,12 @@ class PasswordDeleteTest extends PassboltTestCase
         $this->getUrl('seleniumtests/showlastemail/' . $betty['Username']);
 
         // The email title should be:
-        $this->assertMetaTitleContains(sprintf('Password %s has been deleted', $resource['name']));
+        $this->assertMetaTitleContains($user['FirstName'] . ' deleted the password ' . $resource['name']);
 
         // I should see the user name in the email.
         $this->assertElementContainsText(
             'bodyTable',
-            $user['FirstName'] . ' ' . $user['LastName'] . ' (' . $user['Username'] . ')'
+            $user['FirstName']
         );
 
         // I should see the resource name in the email.
