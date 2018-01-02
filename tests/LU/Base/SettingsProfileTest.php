@@ -280,8 +280,6 @@ class SettingsProfileTest extends PassboltTestCase
      * @group LU
      * @group settings
      * @group settings-profile
-     * @group broken
-     * @group PASSBOLT-2551
      */
     public function testSettingsProfileAvatarEditErrorFileType() 
     {
