@@ -76,7 +76,7 @@ class PasswordDeleteTest extends PassboltTestCase
         $this->click('#js_password_browser_menu_delete a');
 
         // Assert that the confirmation dialog is displayed.
-        $this->assertConfirmationDialog('Do you really want to delete password ?');
+        $this->assertConfirmationDialog('Do you really want to delete?');
 
         // Click ok in confirmation dialog.
         $this->confirmActionInConfirmationDialog();
@@ -125,7 +125,7 @@ class PasswordDeleteTest extends PassboltTestCase
         $this->clickLink('delete');
 
         // Assert that the confirmation dialog is displayed.
-        $this->assertConfirmationDialog('Do you really want to delete password ?');
+        $this->assertConfirmationDialog('Do you really want to delete?');
 
         // Click ok in confirmation dialog.
         $this->confirmActionInConfirmationDialog();
@@ -191,7 +191,7 @@ class PasswordDeleteTest extends PassboltTestCase
         $this->clickLink('delete');
 
         // Assert that the confirmation dialog is displayed.
-        $this->assertConfirmationDialog('Do you really want to delete password ?');
+        $this->assertConfirmationDialog('Do you really want to delete?');
 
         // Click ok in confirmation dialog.
         $this->confirmActionInConfirmationDialog();
@@ -309,7 +309,7 @@ class PasswordDeleteTest extends PassboltTestCase
         $this->clickLink('delete');
 
         // Assert that the confirmation dialog is displayed.
-        $this->assertConfirmationDialog('Do you really want to delete password ?');
+        $this->assertConfirmationDialog('Do you really want to delete?');
 
         // Click ok in confirmation dialog.
         $this->confirmActionInConfirmationDialog();

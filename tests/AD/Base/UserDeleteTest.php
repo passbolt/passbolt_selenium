@@ -82,7 +82,7 @@ class ADUserDeleteTest extends PassboltTestCase
         $this->click('#js_user_browser_menu_delete a');
 
         // Assert that the confirmation dialog is displayed.
-        $this->assertConfirmationDialog('Do you really want to delete user ?');
+        $this->assertConfirmationDialog('Do you really want to delete?');
 
         // Click ok in confirmation dialog.
         $this->confirmActionInConfirmationDialog();
@@ -145,7 +145,7 @@ class ADUserDeleteTest extends PassboltTestCase
         $this->click('js_user_wk_menu_deletion_button');
 
         // Assert that the confirmation dialog is displayed.
-        $this->assertConfirmationDialog('Do you really want to delete user ?');
+        $this->assertConfirmationDialog('Do you really want to delete?');
 
         // Click ok in confirmation dialog.
         $this->confirmActionInConfirmationDialog();
