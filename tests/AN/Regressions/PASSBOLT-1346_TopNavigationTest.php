@@ -42,8 +42,6 @@ class PASSBOLT1346 extends PassboltTestCase
     public function testTopNavigationLink() 
     {
         $this->getUrl('/');
-        $this->assertTitleContain('Login');
-        $this->click('.top.navigation.primary .home a');
         $this->waitUntilTitleContain('Login');
         $this->clickLink('home');
         $this->waitUntilTitleContain('Login');
