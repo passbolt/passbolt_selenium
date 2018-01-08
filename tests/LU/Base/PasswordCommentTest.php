@@ -208,7 +208,7 @@ class PasswordCommentTest extends PassboltTestCase
         $this->click($buttonDeleteSelector);
 
         // Assert that the confirmation dialog is displayed.
-        $this->assertConfirmationDialog('Do you really want to delete comment ?');
+        $this->assertConfirmationDialog('Do you really want to delete?');
 
         // Click ok in confirmation dialog.
         $this->confirmActionInConfirmationDialog();

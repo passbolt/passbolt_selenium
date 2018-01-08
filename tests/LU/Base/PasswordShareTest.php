@@ -1433,7 +1433,7 @@ class PasswordShareTest extends PassboltTestCase
         $this->click('js_user_wk_menu_deletion_button');
 
         // Then I should see confirmation dialog
-        $this->assertConfirmationDialog('Do you really want to delete user ?');
+        $this->assertConfirmationDialog('Do you really want to delete?');
 
         // When	I click ok in confirmation dialog.
         $this->confirmActionInConfirmationDialog();

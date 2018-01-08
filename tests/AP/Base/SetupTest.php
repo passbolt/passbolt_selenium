@@ -729,7 +729,7 @@ class SetupTest extends PassboltSetupTestCase
         $this->click('#js_user_browser_menu_delete a');
 
         // Assert that the confirmation dialog is displayed.
-        $this->assertConfirmationDialog('Do you really want to delete user ?');
+        $this->assertConfirmationDialog('Do you really want to delete?');
 
         // Click ok in confirmation dialog.
         $this->confirmActionInConfirmationDialog();
