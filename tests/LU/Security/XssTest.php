@@ -13,60 +13,37 @@
  * @since     2.0.0
  */
 /**
- * Feature : Password Workspace
- *
- * - As a user I should be able to see the passwords workspace
- * - As a user I should be able to browse my passwords
- * - As a user I should be able to use the navigation filters
- * - As a user I should be able to view my password details
- * - As a user I should be able to fav/unfav
- * - As a user I should be able to search a password by keywords
- * - As a user when I filter the password workspace all passwords should be unselected
- * - As a user when I filter by keywords the password workspace the global filter "All items" should be selected
- * - As a user, I should be able to control the sidebar visibility through the sidebar button
- * - As a user, I should see a welcome message when I am on an empty password workspace
- * - As a user I should be able to sort the passwords browser by column
- * - As a user I should be able to filter my passwords by group
- * - As a user who doesn't belong to any group, I should'nt see the "Filter by group" section on the passwords workspace
+ * Scenarios :
+ * - As a user I should not be affected by any xss on the passwords workspace
+ * - As a user I should not be affected by any xss on the users workspace
+ * - As a user I should not be affected by any xss on the settings workspace
  */
 namespace Tests\LU\Security;
 
 use App\Actions\GroupActionsTrait;
-use App\Actions\MasterPasswordActionsTrait;
 use App\Actions\PasswordActionsTrait;
-use App\Actions\SetupActionsTrait;
 use App\Actions\ShareActionsTrait;
 use App\Actions\UserActionsTrait;
 use App\Actions\WorkspaceActionsTrait;
-use App\Assertions\FilterAssertionsTrait;
-use App\Assertions\GroupAssertionsTrait;
 use App\Assertions\MasterPasswordAssertionsTrait;
 use App\Assertions\PasswordAssertionsTrait;
 use App\Assertions\SecurityAssertionsTrait;
-use App\Assertions\SidebarAssertionsTrait;
 use App\Assertions\UserAssertionsTrait;
-use App\Assertions\WorkspaceAssertionsTrait;
 use App\Lib\UuidFactory;
 use App\PassboltTestCase;
 use Data\Fixtures\User;
 
 class XssTest extends PassboltTestCase
 {
-    use FilterAssertionsTrait;
     use GroupActionsTrait;
-    use GroupAssertionsTrait;
-    use PasswordActionsTrait;
-    use MasterPasswordActionsTrait;
     use MasterPasswordAssertionsTrait;
+    use PasswordActionsTrait;
+    use PasswordAssertionsTrait;
     use SecurityAssertionsTrait;
-    use SetupActionsTrait;
     use ShareActionsTrait;
-    use SidebarAssertionsTrait;
     use UserActionsTrait;
     use UserAssertionsTrait;
     use WorkspaceActionsTrait;
-    use WorkspaceAssertionsTrait;
-    use PasswordAssertionsTrait;
 
     /**
      * Scenario: As a user I should not be affected by any xss on the passwords workspace
