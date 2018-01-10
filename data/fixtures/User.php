@@ -206,18 +206,30 @@ class User {
 			        'PublicKey'  => 'kathleen_public.key',
 		        ));
 		        break;
-	        case 'admin':
-		        return array_merge($conf, array(
-			        'id' => UuidFactory::uuid('user.id.admin'),
-			        'name' => 'admin',
-			        'FirstName' => 'Admin',
-			        'LastName' => 'User',
-			        'Username' => 'admin@passbolt.com',
-			        'MasterPassword' => 'admin@passbolt.com',
-			        'TokenCode' => 'ADM',
-			        'PrivateKey' => 'admin_private.key'
-		        ));
-		        break;
+			case 'admin':
+				return array_merge($conf, array(
+					'id' => UuidFactory::uuid('user.id.admin'),
+					'name' => 'admin',
+					'FirstName' => 'Admin',
+					'LastName' => 'User',
+					'Username' => 'admin@passbolt.com',
+					'MasterPassword' => 'admin@passbolt.com',
+					'TokenCode' => 'ADM',
+					'PrivateKey' => 'admin_private.key'
+				));
+				break;
+			case 'xss0':
+				return array_merge($conf, array(
+					'id' => UuidFactory::uuid('user.id.xss0'),
+					'name' => 'xss0',
+					'FirstName' => 'Xss',
+					'LastName' => 'User 0',
+					'Username' => 'xss0@passbolt.com',
+					'MasterPassword' => 'xss0@passbolt.com',
+					'TokenCode' => 'XSS',
+					'PrivateKey' => 'xss0_private.key'
+				));
+				break;
 
 	        /***************************************************
 	         *  Definition of non existing users we can

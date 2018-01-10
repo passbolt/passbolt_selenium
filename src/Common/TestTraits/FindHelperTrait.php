@@ -13,10 +13,10 @@
  * @since     2.0.0
  */
 namespace App\Common\TestTraits;
+use Facebook\WebDriver\Exception\NoSuchElementException;
 use Facebook\WebDriver\WebDriverBy;
 use Facebook\WebDriver\Remote\RemoteWebElement;
 use Facebook\WebDriver\Remote\RemoteWebDriver;
-use PHPUnit_Framework_Assert;
 
 trait FindHelperTrait
 {
@@ -59,10 +59,26 @@ trait FindHelperTrait
         }
 
         if (is_null($element)) {
-            PHPUnit_Framework_Assert::fail('Cannot find element: ' . $selector);
+            throw new NoSuchElementException('Cannot find element: ' . $selector);
         }
 
         return $element;
+    }
+
+    /**
+     * Check that an element exists
+     *
+     * @param mixed $selector Element or selector string
+     * @return bool
+     */
+    public function elementExists($selector) : bool
+    {
+        try {
+            $this->find($selector);
+            return true;
+        } catch(NoSuchElementException $e) {
+            return false;
+        }
     }
 
     /**

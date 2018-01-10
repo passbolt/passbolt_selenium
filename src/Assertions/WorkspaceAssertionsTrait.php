@@ -48,7 +48,6 @@ trait WorkspaceAssertionsTrait
      * @see   in passbolt/app/webroot/js/app/config/notification.json for notification uuid seed
      *         example: UuidFactory::uuid('app_resources_index_success') is how to create the id from the seed
      * @param $notificationId
-     * @param string         $msg
      */
     public function assertNotification($notificationId)
     {
