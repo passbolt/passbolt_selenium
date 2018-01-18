@@ -41,6 +41,7 @@ namespace Tests\LU\Base;
 use App\Actions\ConfirmationDialogActionsTrait;
 use App\Actions\MasterPasswordActionsTrait;
 use App\Actions\PasswordActionsTrait;
+use App\Actions\SidebarActionsTrait;
 use App\Actions\WorkspaceActionsTrait;
 use App\Assertions\ClipboardAssertions;
 use App\Assertions\ConfirmationDialogAssertionsTrait;
@@ -54,16 +55,16 @@ use Data\Fixtures\SystemDefaults;
 
 class PasswordEditTest extends PassboltTestCase
 {
-
-    use WorkspaceActionsTrait;
-    use PasswordActionsTrait;
-    use MasterPasswordActionsTrait;
-    use MasterPasswordAssertionsTrait;
+    use ClipboardAssertions;
     use ConfirmationDialogActionsTrait;
     use ConfirmationDialogAssertionsTrait;
-    use ClipboardAssertions;
-    use WorkspaceAssertionsTrait;
+    use MasterPasswordActionsTrait;
+    use MasterPasswordAssertionsTrait;
+    use PasswordActionsTrait;
     use PasswordAssertionsTrait;
+    use SidebarActionsTrait;
+    use WorkspaceActionsTrait;
+    use WorkspaceAssertionsTrait;
 
     /**
      * Scenario: As a user I can edit a password using the edit button in the action bar
@@ -792,7 +793,8 @@ class PasswordEditTest extends PassboltTestCase
      * And   I am logged in on the password workspace
      * And   I am editing the description of a password I own
      * Then  I can see the success notification
-     * And   I can see the new description in the sidebar
+     * When  I open the description section
+     * Then   I can see the new description in the sidebar
      * When  I click edit button
      * Then  I can see the new description in the edit password dialog
      *
@@ -825,7 +827,10 @@ class PasswordEditTest extends PassboltTestCase
         $r['description'] = 'this is a new description';
         $this->editPassword($r);
 
-        // And I can see the new description in the sidebar
+        // When I open the description section
+        $this->clickSecondarySidebarSectionHeader('description');
+
+        // Then I can see the new description in the sidebar
         $this->assertElementContainsText('#js_pwd_details .description_content', $r['description']);
 
         // When I click edit button

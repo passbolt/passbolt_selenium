@@ -34,10 +34,10 @@ use Data\Fixtures\Resource;
 
 class PasswordCommentTest extends PassboltTestCase
 {
-    use PasswordActionsTrait;
-    use SidebarActionsTrait;
     use ConfirmationDialogActionsTrait;
     use ConfirmationDialogAssertionsTrait;
+    use PasswordActionsTrait;
+    use SidebarActionsTrait;
     use WorkspaceAssertionsTrait;
 
     private $commentFormSelector = '#js_rs_details_comments form#js_comment_add_form';
@@ -88,6 +88,7 @@ class PasswordCommentTest extends PassboltTestCase
         // When I click on a password I own.
         $resource = Resource::get(array('user' => 'ada', 'id' => UuidFactory::uuid('resource.id.centos')));
         $this->clickPassword($resource['id']);
+        $this->clickSecondarySidebarSectionHeader('comments');
 
         // Enter comment and post.
         $this->postCommentInSidebar($comments[0]);
@@ -145,6 +146,7 @@ class PasswordCommentTest extends PassboltTestCase
         // When I click on a password I own
         $resource = Resource::get(array('user' => 'ada', 'id' => UuidFactory::uuid('resource.id.bower')));
         $this->clickPassword($resource['id']);
+        $this->clickSecondarySidebarSectionHeader('comments');
 
         // Make sure password field is visible
         $this->waitUntilISee($this->commentFormSelector);
@@ -194,6 +196,7 @@ class PasswordCommentTest extends PassboltTestCase
         // When I click on a password I own
         $resource = Resource::get(array('user' => 'ada', 'id' => UuidFactory::uuid('resource.id.bower')));
         $this->clickPassword($resource['id']);
+        $this->clickSecondarySidebarSectionHeader('comments');
 
         // Add a comment
         $this->postCommentInSidebar('this is a comment for delete test');
@@ -252,6 +255,7 @@ class PasswordCommentTest extends PassboltTestCase
 
         // And I select the same centos password.
         $this->clickPassword(UuidFactory::uuid('resource.id.apache'));
+        $this->clickSecondarySidebarSectionHeader('comments');
 
         // Check whether the comments list contain the new comment.
         $this->waitUntilISee('#js_rs_details_comments_list', '/this is a short comment/');
@@ -302,6 +306,7 @@ class PasswordCommentTest extends PassboltTestCase
         // When I click on a password I own
         $resource = Resource::get(array('user' => 'ada', 'id' => UuidFactory::uuid('resource.id.centos')));
         $this->clickPassword($resource['id']);
+        $this->clickSecondarySidebarSectionHeader('comments');
 
         // Enter comment and submit.
         $this->postCommentInSidebar($comment);

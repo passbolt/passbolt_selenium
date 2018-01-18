@@ -37,4 +37,15 @@ trait SidebarAssertionsTrait
 
     }
 
+    /**
+     * Check if a sidebar section is closed
+     *
+     * @param string $name Name of the section
+     * @return bool
+     */
+    public function isSecondarySidebarSectionClosed($name) {
+        $sectionElement = $this->find(".panel.aside .sidebar-section.$name");
+        return $this->elementHasClass($sectionElement, 'closed');
+    }
+
 }

@@ -22,8 +22,11 @@
 namespace Tests\GM\Base;
 
 use App\Actions\GroupActionsTrait;
+use App\Actions\SidebarActionsTrait;
 use App\Actions\WorkspaceActionsTrait;
 use App\Assertions\GroupAssertionsTrait;
+use App\Assertions\SidebarAssertionsTrait;
+use App\Common\Asserts\ElementAssertionsTrait;
 use App\Lib\UuidFactory;
 use App\PassboltTestCase;
 use Data\Fixtures\User;
@@ -31,8 +34,11 @@ use Data\Fixtures\Group;
 
 class GMGroupViewTest extends PassboltTestCase
 {
+    use ElementAssertionsTrait;
     use GroupActionsTrait;
     use GroupAssertionsTrait;
+    use SidebarActionsTrait;
+    use SidebarAssertionsTrait;
     use WorkspaceActionsTrait;
 
     /**

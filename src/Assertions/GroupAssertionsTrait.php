@@ -117,6 +117,11 @@ trait GroupAssertionsTrait
             $this->clickGroup($groupId);
         }
 
+        // If the members section is closed, open it.
+        if ($this->isSecondarySidebarSectionClosed('members')) {
+            $this->clickSecondarySidebarSectionHeader('members');
+        }
+
         // Then I should see that the sidebar contains a member section
         $this->waitUntilISee('#js_group_details.ready #js_group_details_members');
 

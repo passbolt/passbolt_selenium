@@ -23,6 +23,7 @@ namespace Tests\LU\Security;
 use App\Actions\GroupActionsTrait;
 use App\Actions\PasswordActionsTrait;
 use App\Actions\ShareActionsTrait;
+use App\Actions\SidebarActionsTrait;
 use App\Actions\UserActionsTrait;
 use App\Actions\WorkspaceActionsTrait;
 use App\Assertions\MasterPasswordAssertionsTrait;
@@ -41,6 +42,7 @@ class XssTest extends PassboltTestCase
     use PasswordAssertionsTrait;
     use SecurityAssertionsTrait;
     use ShareActionsTrait;
+    use SidebarActionsTrait;
     use UserActionsTrait;
     use UserAssertionsTrait;
     use WorkspaceActionsTrait;
@@ -86,7 +88,9 @@ class XssTest extends PassboltTestCase
 
             // Assert password select
             $this->clickPassword($id);
+            $this->clickSecondarySidebarSectionHeader('permissions');
             $this->waitUntilISee('#js_rs_details_permissions_list.ready');
+            $this->clickSecondarySidebarSectionHeader('comments');
             $this->waitUntilISee('#js_rs_details_comments_list.ready');
             $this->assertXss();
 

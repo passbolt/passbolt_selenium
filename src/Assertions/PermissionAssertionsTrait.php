@@ -54,7 +54,7 @@ trait PermissionAssertionsTrait
 
         // Close the dialog
         if (!isset($options['closeDialog']) || $options['closeDialog'] == true) {
-            $this->find('.dialog .dialog-close')->click();
+            $this->pressEscape();
         }
     }
 
@@ -66,6 +66,10 @@ trait PermissionAssertionsTrait
      */
     public function assertPermissionInSidebar($aro_name, $permissionType) 
     {
+        if ($this->isSecondarySidebarSectionClosed('permissions')) {
+            $this->clickSecondarySidebarSectionHeader('permissions');
+        }
+
         // Wait until the permissions are loaded. (ready state).
         $this->waitUntilISee('#js_rs_details_permissions_list.ready');
 

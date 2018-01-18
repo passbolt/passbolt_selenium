@@ -22,8 +22,10 @@
 namespace Tests\LU\Base;
 
 use App\Actions\GroupActionsTrait;
+use App\Actions\SidebarActionsTrait;
 use App\Actions\WorkspaceActionsTrait;
 use App\Assertions\GroupAssertionsTrait;
+use App\Assertions\SidebarAssertionsTrait;
 use App\PassboltTestCase;
 use Data\Fixtures\User;
 use Data\Fixtures\Group;
@@ -32,9 +34,11 @@ use Facebook\WebDriver\WebDriverBy;
 
 class GroupViewTest extends PassboltTestCase
 {
-    use WorkspaceActionsTrait;
     use GroupActionsTrait;
     use GroupAssertionsTrait;
+    use SidebarActionsTrait;
+    use SidebarAssertionsTrait;
+    use WorkspaceActionsTrait;
 
     /**
      * Scenario: As a user I can see a group information from the sidebar
@@ -72,7 +76,7 @@ class GroupViewTest extends PassboltTestCase
 
         // And I should see a group information section
         $this->assertElementContainsText(
-            '#js_group_details .header',
+            '#js_group_details .sidebar-header',
             $group['name']
         );
         $this->assertVisibleByCss('#js_group_details .detailed-information');

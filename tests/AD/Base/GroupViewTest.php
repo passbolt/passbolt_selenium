@@ -25,8 +25,10 @@
 namespace Tests\AD\Base;
 
 use App\Actions\GroupActionsTrait;
+use App\Actions\SidebarActionsTrait;
 use App\Actions\WorkspaceActionsTrait;
 use App\Assertions\GroupAssertionsTrait;
+use App\Assertions\SidebarAssertionsTrait;
 use App\PassboltTestCase;
 use App\Lib\UuidFactory;
 use Data\Fixtures\User;
@@ -34,9 +36,10 @@ use Data\Fixtures\Group;
 
 class ADGroupViewTest extends PassboltTestCase
 {
-
     use GroupActionsTrait;
     use GroupAssertionsTrait;
+    use SidebarActionsTrait;
+    use SidebarAssertionsTrait;
     use WorkspaceActionsTrait;
 
     /**

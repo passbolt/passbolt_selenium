@@ -193,6 +193,7 @@ class SettingsProfileTest extends PassboltTestCase
      * @group settings-profile
      * @group saucelabs
      * @group v2
+     * @group unstable
      */
     public function testSettingsProfileAvatarEditOk() 
     {

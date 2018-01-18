@@ -20,9 +20,11 @@ namespace Tests\LU\Regressions;
 use App\Actions\MasterPasswordActionsTrait;
 use App\Actions\PasswordActionsTrait;
 use App\Actions\ShareActionsTrait;
+use App\Actions\SidebarActionsTrait;
 use App\Assertions\MasterPasswordAssertionsTrait;
 use App\Assertions\PasswordAssertionsTrait;
 use App\Assertions\PermissionAssertionsTrait;
+use App\Assertions\SidebarAssertionsTrait;
 use App\PassboltTestCase;
 use Data\Fixtures\User;
 use Data\Fixtures\Resource;
@@ -30,12 +32,14 @@ use App\Lib\UuidFactory;
 
 class PASSBOLT2031 extends PassboltTestCase
 {
-    use PasswordActionsTrait;
-    use PasswordAssertionsTrait;
     use MasterPasswordAssertionsTrait;
     use MasterPasswordActionsTrait;
+    use PasswordActionsTrait;
+    use PasswordAssertionsTrait;
     use PermissionAssertionsTrait;
     use ShareActionsTrait;
+    use SidebarActionsTrait;
+    use SidebarAssertionsTrait;
 
     /**
      * Scenario: As a user I can share a password with multiple users

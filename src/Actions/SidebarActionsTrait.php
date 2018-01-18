@@ -52,4 +52,14 @@ trait SidebarActionsTrait
         $this->waitUntilISee('#js_rs_details_comments.ready');
     }
 
+    /**
+     * Click on a secondary sidebar section header.
+     *
+     * @param string $name The section name
+     */
+    public function clickSecondarySidebarSectionHeader($name)
+    {
+        $this->click(".panel.aside .$name .accordion-header");
+    }
+
 }

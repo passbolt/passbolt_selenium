@@ -46,6 +46,7 @@ use App\Actions\MasterPasswordActionsTrait;
 use App\Actions\PasswordActionsTrait;
 use App\Actions\PermissionActionsTrait;
 use App\Actions\ShareActionsTrait;
+use App\Actions\SidebarActionsTrait;
 use App\Actions\UserActionsTrait;
 use App\Actions\WorkspaceActionsTrait;
 use App\Assertions\ClipboardAssertions;
@@ -53,6 +54,7 @@ use App\Assertions\ConfirmationDialogAssertionsTrait;
 use App\Assertions\MasterPasswordAssertionsTrait;
 use App\Assertions\PasswordAssertionsTrait;
 use App\Assertions\PermissionAssertionsTrait;
+use App\Assertions\SidebarAssertionsTrait;
 use App\Assertions\WorkspaceAssertionsTrait;
 use App\Lib\UuidFactory;
 use App\PassboltTestCase;
@@ -73,6 +75,8 @@ class PasswordShareTest extends PassboltTestCase
     use PermissionActionsTrait;
     use PermissionAssertionsTrait;
     use ShareActionsTrait;
+    use SidebarActionsTrait;
+    use SidebarAssertionsTrait;
     use UserActionsTrait;
     use WorkspaceAssertionsTrait;
     use WorkspaceActionsTrait;
@@ -163,6 +167,7 @@ class PasswordShareTest extends PassboltTestCase
      * Given I am Ada
      * And   I am logged in on the password workspace
      * When  I click on a password I own
+     * And   I open the shared with section
      * Then  I can see the sidebar with a permissions section
      * And   I can see a edit permissions button
      * When  I click on the edit permissions button
@@ -185,6 +190,9 @@ class PasswordShareTest extends PassboltTestCase
 
         // Then I can see the sidebar.
         $this->waitUntilISee('#js_pwd_details');
+
+        // And I open the shared with section
+        $this->clickSecondarySidebarSectionHeader('permissions');
 
         // And I can see the permission details in the sidebar.
         $this->assertVisible('js_rs_details_permissions');
@@ -681,7 +689,7 @@ class PasswordShareTest extends PassboltTestCase
      * @group saucelabs
      * @group v2
      */
-    public function testSharePasswordWithUserAndView() 
+    public function testSharePasswordWithUserAndView()
     {
         // Reset database at the end of test.
         $this->resetDatabaseWhenComplete();
@@ -801,6 +809,7 @@ class PasswordShareTest extends PassboltTestCase
      * @group password
      * @group password-share
      * @group v2
+     * @group unstable
      */
     public function testSharePasswordWithUserAndViewNewPermissionInSidebar() 
     {

@@ -23,6 +23,7 @@
  */
 namespace Tests\LU\Base;
 
+use App\Actions\SidebarActionsTrait;
 use App\Actions\UserActionsTrait;
 use App\Actions\WorkspaceActionsTrait;
 use App\Assertions\ClipboardAssertions;
@@ -32,10 +33,11 @@ use Data\Fixtures\User;
 
 class UserCopyToClipboardTest extends PassboltTestCase
 {
+    use ClipboardAssertions;
+    use UserActionsTrait;
+    use SidebarActionsTrait;
     use WorkspaceActionsTrait;
     use WorkspaceAssertionsTrait;
-    use UserActionsTrait;
-    use ClipboardAssertions;
 
     /**
      * Scenario: As a admin I can copy the public key to clipboard with a right click
@@ -167,6 +169,7 @@ class UserCopyToClipboardTest extends PassboltTestCase
      * Given I am Admin
      * And   I am logged in on the user workspace
      * When  I click on the user betty
+     * And   I open the gpgkey section
      * And   I click on a the copy public key link in the sidebar
      * Then  the public key is copied to clipboard
      *
@@ -183,10 +186,13 @@ class UserCopyToClipboardTest extends PassboltTestCase
         $this->loginAs(User::get('ada'));
         $this->gotoWorkspace('user');
 
-        // Get user betty
-        $betty = User::get('betty');
+
         // When I click on the user betty
+        $betty = User::get('betty');
         $this->clickUser($betty['id']);
+
+        // And I open the gpgkey section
+        $this->clickSecondarySidebarSectionHeader('key-information');
 
         // And I click on a the copy secret password link in the sidebar
         $this->click('#js_user_details a.copy-public-key');

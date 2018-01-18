@@ -20,6 +20,7 @@
  */
 namespace Tests\LU\Base;
 
+use App\Actions\SidebarActionsTrait;
 use App\Actions\UserActionsTrait;
 use App\Actions\WorkspaceActionsTrait;
 use App\Assertions\GroupAssertionsTrait;
@@ -28,9 +29,10 @@ use Data\Fixtures\User;
 
 class UserViewTest extends PassboltTestCase
 {
-    use WorkspaceActionsTrait;
-    use UserActionsTrait;
     use GroupAssertionsTrait;
+    use SidebarActionsTrait;
+    use UserActionsTrait;
+    use WorkspaceActionsTrait;
 
     /**
      * Scenario: As a user I should be able to view the user details
@@ -103,6 +105,7 @@ class UserViewTest extends PassboltTestCase
         // And I should see the user's groups name and user roles
         $this->assertGroupUserInSidebar('Accounting', true);
         // And I should see the user's key id
+        $this->clickSecondarySidebarSectionHeader('key-information');
         $cssSelector = '#js_user_details .key-information li.keyid';
         $this->assertElementContainsText(
             $this->findByCss($cssSelector),

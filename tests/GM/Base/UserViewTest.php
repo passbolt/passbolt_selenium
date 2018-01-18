@@ -19,6 +19,7 @@
 namespace Tests\GM\Base;
 
 use App\Actions\GroupActionsTrait;
+use App\Actions\MasterPasswordActionsTrait;
 use App\Actions\PasswordActionsTrait;
 use App\Actions\UserActionsTrait;
 use App\Actions\WorkspaceActionsTrait;
@@ -33,6 +34,7 @@ class GMUserViewTest extends PassboltTestCase
 {
     use GroupActionsTrait;
     use GroupAssertionsTrait;
+    use MasterPasswordActionsTrait;
     use PasswordActionsTrait;
     use UserActionsTrait;
     use WorkspaceActionsTrait;
@@ -60,7 +62,7 @@ class GMUserViewTest extends PassboltTestCase
         $this->resetDatabaseWhenComplete();
 
         // Given I am Ada
-        $user = User::get('admin');
+        $user = User::get('irene');
 
         // And I am logged in on the user workspace
         $this->loginAs($user);
@@ -71,7 +73,7 @@ class GMUserViewTest extends PassboltTestCase
         $this->clickUser($userF);
 
         // And I edit a group I am group manager
-        $group = Group::get(['id' => UuidFactory::uuid('group.id.operations')]);
+        $group = Group::get(['id' => UuidFactory::uuid('group.id.ergonom')]);
         $this->gotoEditGroup($group['id']);
 
         // And I add the selected user to the group
@@ -80,8 +82,12 @@ class GMUserViewTest extends PassboltTestCase
 
         // And I click save
         $this->click('.edit-group-dialog a.button.primary');
+        $this->enterMasterPassword($user['MasterPassword']);
 
-        // Then I should a success notification
+        // Then I should see that the dialog disappears
+        $this->waitUntilIDontSee('.edit-group-dialog');
+
+        // And I should a success notification
         $this->assertNotification('app_groups_edit_success');
 
         // And I should see the groups membership list updated with the new group

@@ -35,6 +35,7 @@ namespace Tests\GM\Base;
 use App\Actions\GroupActionsTrait;
 use App\Actions\MasterPasswordActionsTrait;
 use App\Actions\PasswordActionsTrait;
+use App\Actions\SidebarActionsTrait;
 use App\Actions\WorkspaceActionsTrait;
 use App\Assertions\ClipboardAssertions;
 use App\Assertions\GroupAssertionsTrait;
@@ -54,6 +55,7 @@ class GMGroupEditTest extends PassboltTestCase
     use MasterPasswordAssertionsTrait;
     use MasterPasswordActionsTrait;
     use PasswordActionsTrait;
+    use SidebarActionsTrait;
     use WorkspaceActionsTrait;
     use WorkspaceAssertionsTrait;
 
@@ -82,6 +84,8 @@ class GMGroupEditTest extends PassboltTestCase
 
         // When I click on the contextual menu button of a group on the right
         $groupId = UuidFactory::uuid('group.id.ergonom');
+        $groupElement = $this->find("#group_$groupId");
+        $this->driver->getMouse()->mouseMove($groupElement->getCoordinates());
         $this->click("#group_$groupId .right-cell a");
 
         // Then I should see the group contextual menu
@@ -155,6 +159,7 @@ class GMGroupEditTest extends PassboltTestCase
         $this->clickGroup($group['id']);
 
         // Then I should see a “edit” button next to the Information section
+        $this->clickSecondarySidebarSectionHeader('members');
         $editButtonSelector = '#js_group_details #js_group_details_members #js_edit_members_button';
         $this->waitUntilISee($editButtonSelector);
 

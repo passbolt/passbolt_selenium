@@ -261,6 +261,8 @@ trait GroupActionsTrait
             $this->waitUntilISee('.page.user');
         }
         if(!$this->isVisible('.edit-group-dialog')) {
+            $groupElement = $this->find("#group_$id");
+            $this->driver->getMouse()->mouseMove($groupElement->getCoordinates());
             $this->click("#group_${id} .right-cell a");
             $this->click("#js_contextual_menu #js_group_browser_menu_edit a");
             $this->waitUntilISee('.edit-group-dialog');
@@ -289,6 +291,8 @@ trait GroupActionsTrait
             $this->gotoWorkspace('user');
             $this->waitUntilISee('.page.user');
         }
+        $groupElement = $this->find("#group_$id");
+        $this->driver->getMouse()->mouseMove($groupElement->getCoordinates());
         $this->click("#group_${id} .right-cell a");
         $this->click("#js_contextual_menu #js_group_browser_menu_remove a");
         $this->waitUntilISee('.dialog.confirm');

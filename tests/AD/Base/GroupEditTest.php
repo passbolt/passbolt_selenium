@@ -30,6 +30,7 @@ namespace Tests\AD\Base;
 
 use App\Actions\GroupActionsTrait;
 use App\Actions\PasswordActionsTrait;
+use App\Actions\SidebarActionsTrait;
 use App\Actions\WorkspaceActionsTrait;
 use App\Assertions\GroupAssertionsTrait;
 use App\Assertions\PasswordAssertionsTrait;
@@ -41,13 +42,13 @@ use Data\Fixtures\Group;
 
 class ADGroupEditTest extends PassboltTestCase
 {
-
-    use WorkspaceActionsTrait;
-    use WorkspaceAssertionsTrait;
+    use GroupActionsTrait;
+    use GroupAssertionsTrait;
     use PasswordActionsTrait;
     use PasswordAssertionsTrait;
-    use GroupAssertionsTrait;
-    use GroupActionsTrait;
+    use SidebarActionsTrait;
+    use WorkspaceActionsTrait;
+    use WorkspaceAssertionsTrait;
 
     /**
      * Scenario: As an administrator I can edit a group using the right click contextual menu
@@ -74,6 +75,8 @@ class ADGroupEditTest extends PassboltTestCase
 
         // When I click on the contextual menu button of a group on the right
         $groupId = UuidFactory::uuid('group.id.ergonom');
+        $groupElement = $this->find("#group_$groupId");
+        $this->driver->getMouse()->mouseMove($groupElement->getCoordinates());
         $this->click("#group_$groupId .right-cell a");
 
         // Then I should see the group contextual menu
@@ -164,6 +167,7 @@ class ADGroupEditTest extends PassboltTestCase
         $this->clickGroup($group['id']);
 
         // Then I should see a “edit” button next to the Information section
+        $this->clickSecondarySidebarSectionHeader('members');
         $editButtonSelector = '#js_group_details #js_group_details_members #js_edit_members_button';
         $this->waitUntilISee($editButtonSelector);
 

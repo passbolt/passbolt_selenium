@@ -22,6 +22,7 @@ namespace Tests\GM\Regressions;
 
 use App\Actions\GroupActionsTrait;
 use App\Actions\PasswordActionsTrait;
+use App\Actions\SidebarActionsTrait;
 use App\Actions\WorkspaceActionsTrait;
 use App\Assertions\GroupAssertionsTrait;
 use App\Assertions\WorkspaceAssertionsTrait;
@@ -35,6 +36,7 @@ class PASSBOLT2060 extends PassboltSetupTestCase
     use GroupActionsTrait;
     use GroupAssertionsTrait;
     use PasswordActionsTrait;
+    use SidebarActionsTrait;
     use WorkspaceActionsTrait;
     use WorkspaceAssertionsTrait;
 
@@ -67,6 +69,7 @@ class PASSBOLT2060 extends PassboltSetupTestCase
         $this->clickGroup($group['id']);
 
         // Then I should see a “edit” button next to the Information section
+        $this->clickSecondarySidebarSectionHeader('members');
         $editButtonSelector = '#js_group_details #js_group_details_members #js_edit_members_button';
         $this->waitUntilISee($editButtonSelector);
 
