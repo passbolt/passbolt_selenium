@@ -1311,19 +1311,6 @@ class PasswordEditTest extends PassboltTestCase
             $this->find('js_field_password_feedback'), 'This information is required'
         );
         $this->goOutOfIframe();
-
-        // When I enter < in all fields
-        $this->inputText('js_field_name', '<');
-        $this->inputText('js_field_uri', '<');
-        $this->inputText('js_field_description', '<');
-
-        // And I click save
-        $this->click('.edit-password-dialog input[type=submit]');
-
-        // I Should see an error message
-        $this->assertVisibleByCss('#js_field_name_feedback.error.message');
-        $this->assertVisibleByCss('#js_field_uri_feedback.error.message');
-        $this->assertVisibleByCss('#js_field_description_feedback.error.message');
     }
 
     /**

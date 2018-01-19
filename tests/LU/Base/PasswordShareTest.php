@@ -1051,6 +1051,7 @@ class PasswordShareTest extends PassboltTestCase
      * @group password
      * @group password-share
      * @group v2
+     * @group unstable
      */
     public function testSharePasswordWithGroupAndViewNewPermissionInSidebar() 
     {

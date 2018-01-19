@@ -233,8 +233,6 @@ class PasswordCreateTest extends PassboltTestCase
      * And   I am on the create password dialog
      * When  I press the enter key on the keyboard
      * Then  I see an error message saying that the name is required
-     * When  I enter 'aa' as a url
-     * Then  I see an error message saying that the length should be between x and x characters
      *
      * @group LU
      * @group password
@@ -272,15 +270,6 @@ class PasswordCreateTest extends PassboltTestCase
 
         // I should not see an error message for username.
         $this->assertNotVisibleByCss('#js_field_username_feedback.error.message');
-
-        // When I enter aa as a url
-        $this->inputText('js_field_uri', 'aa');
-
-        // Then I see an error message saying that the length should be between x and x characters
-        $this->assertVisibleByCss('#js_field_uri_feedback.error.message');
-        $this->assertElementContainsText(
-            $this->find('js_field_uri_feedback'), 'should be between'
-        );
     }
 
     /**
