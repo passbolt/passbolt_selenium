@@ -58,7 +58,7 @@ class ToolbarTest extends PassboltSetupTestCase
     {
         $this->waitUntilISee('body');
         $this->clickToolbarIcon();
-        $this->waitUntilUrlMatches('https://www.passbolt.com/start', false);
+        $this->waitUntilUrlMatches('https://www.passbolt.com/start');
         $this->assertElementContainsText(
             $this->findByCss('h1'),
             'How would you like to use passbolt?'

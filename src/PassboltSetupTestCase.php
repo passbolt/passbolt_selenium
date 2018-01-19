@@ -544,8 +544,7 @@ abstract class PassboltSetupTestCase extends PassboltTestCase
         );
 
         // I should be on the login page.
-        sleep(5);
-        $this->getDriver()->switchTo()->activeElement();
+        $this->waitUntilUrlMatches('auth/login');
         $this->waitUntilISee('.information h2', '/Welcome back!/');
 
         try{

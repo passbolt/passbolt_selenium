@@ -75,7 +75,7 @@ trait SetupActionsTrait
         $this->clickLink("Next");
         // Fill up password.
         $this->waitUntilISee('#js_step_content h3', '/Setup is complete/i');
-        $this->getUrl('login');
+        $this->getUrl('auth/login');
         // Wait until I see the login page.
         $this->waitUntilISee('.information h2', '/Welcome back!/i');
     }
@@ -125,9 +125,9 @@ trait SetupActionsTrait
      * go To Setup page.
      *
      * @param string $username
-     * @param bool   $checkPluginSuccess
+     * @param string $pluginCheck The plugin state. Can be success, error or warning. Default success.
      */
-    public function goToSetup($username, $checkPluginSuccess = true) 
+    public function goToSetup($username, $pluginCheck = 'success')
     {
         // Get last email.
         $this->getUrl('seleniumtests/showlastemail/' . urlencode($username));
@@ -139,9 +139,21 @@ trait SetupActionsTrait
         // Go to url remembered above.
         $this->getUrl($setupUrl);
 
-        // Test that the plugin confirmation message is displayed.
-        if ($checkPluginSuccess) {
-            $this->waitUntilISee('.plugin-check-wrapper .plugin-check.success', '/Nice one! The plugin is installed and up to date/i');
+        // Assert the plugin check section
+        switch($pluginCheck) {
+            case 'success':
+                // Wait for the redirection from setup/install (API) to data/setup.html (plugin)
+                $this->waitUntilUrlMatches('data/setup.html');
+                $this->waitUntilISee('.plugin-check-wrapper .plugin-check.success', '/Nice one! The plugin is installed and up to date/i');
+                break;
+            case 'warning':
+                // Wait for the redirection from setup/install (API) to data/setup.html (plugin)
+                $this->waitUntilUrlMatches('data/setup.html');
+                $this->waitUntilISee('.plugin-check-wrapper .plugin-check.warning', '/Warning: The plugin is already configured/i');
+                break;
+            case 'error':
+                $this->waitUntilISee('.plugin-check-wrapper .plugin-check.warning', '/A web extension is required to use passbolt./i');
+                break;
         }
     }
 

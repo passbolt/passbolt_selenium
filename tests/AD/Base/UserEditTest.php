@@ -513,12 +513,10 @@ class UserEditTest extends PassboltTestCase
         // Log out.
         $this->logout();
 
-        // As new user, access the email sent after accoun creation
-        $this->getUrl('seleniumtests/showlastemail/' . urlencode($newUser['username']));
-        // Follow the link in the email.
-        $this->followLink('get started');
-        // Wait until I am sure that the page is loaded.
-        $this->waitUntilISee('.plugin-check-wrapper', '/Plugin check/');
+
+        // As a new user, I start the passbolt plugin setup
+        $this->goToSetup($newUser['username'], 'warning');
+
         // Go to login page. we don't need to complete the setup since we just want to check the login.
         $this->completeSetupWithKeyImport(
             [

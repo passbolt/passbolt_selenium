@@ -46,7 +46,7 @@ class PASSBOLT1380_Login extends PassboltTestCase
         $this->assertTitleContain('Login');
         $this->assertVisibleByCss('.plugin-check.firefox.error');
         $this->followLink('Download it here');
-        $this->waitUntilUrlMatches('https://addons.mozilla.org/en-US/firefox/addon/passbolt/', false);
+        $this->waitUntilUrlMatches('https://addons.mozilla.org/en-US/firefox/addon/passbolt/');
         $this->assertTitleContain('Add-ons for Firefox');
     }
 
@@ -84,7 +84,7 @@ class PASSBOLT1380_Login extends PassboltTestCase
         $this->followLink('Download it here');
 
         // Then I am redirected to https://addons.mozilla.org
-        $this->waitUntilUrlMatches('https://addons.mozilla.org/en-US/firefox/addon/passbolt/', false);
+        $this->waitUntilUrlMatches('https://addons.mozilla.org/en-US/firefox/addon/passbolt/');
         $this->assertTitleContain('Add-ons for Firefox');
     }
 }

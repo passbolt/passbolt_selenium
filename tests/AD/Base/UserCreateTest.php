@@ -470,12 +470,9 @@ class UserCreateTest extends PassboltTestCase
 
         $this->logout();
 
-        // As AN, access the email sent after accoun creation
-        $this->getUrl('seleniumtests/showlastemail/' . urlencode('johndoe@passbolt.com'));
-        // Follow the link in the email.
-        $this->followLink('get started');
-        // Wait until I am sure that the page is loaded.
-        $this->waitUntilISee('.plugin-check-wrapper', '/Plugin check/');
+        // As a new user, I start the passbolt plugin setup
+        $this->goToSetup('johndoe@passbolt.com', 'warning');
+
         // Go to login page. we don't need to complete the setup since we just want to check the login.
         $this->completeSetupWithKeyImport(
             [
@@ -534,12 +531,10 @@ class UserCreateTest extends PassboltTestCase
         );
 
         $this->logout();
-        // As AN, access the email sent after accoun creation
-        $this->getUrl('seleniumtests/showlastemail/' . urlencode('johndoe@passbolt.com'));
-        // Follow the link in the email.
-        $this->followLink('get started');
-        // Wait until I am sure that the page is loaded.
-        $this->waitUntilISee('.plugin-check-wrapper', '/Plugin check/');
+
+        // As a new user, I start the passbolt plugin setup
+        $this->goToSetup('johndoe@passbolt.com', 'warning');
+
         // Go to login page. we don't need to complete the setup since we just want to check the login.
         $this->completeSetupWithKeyImport(
             [
@@ -615,12 +610,10 @@ class UserCreateTest extends PassboltTestCase
         );
 
         $this->logout();
-        // As AN, access the email sent after accoun creation
-        $this->getUrl('seleniumtests/showlastemail/' . urlencode('johndoe@passbolt.com'));
-        // Follow the link in the email.
-        $this->followLink('get started');
-        // Wait until I am sure that the page is loaded.
-        $this->waitUntilISee('.plugin-check-wrapper', '/Plugin check/');
+
+        // As a new user, I start the passbolt plugin setup
+        $this->goToSetup('johndoe@passbolt.com', 'warning');
+
         // Go to login page. we don't need to complete the setup since we just want to check the login.
         $this->completeSetupWithKeyImport(
             [
@@ -691,10 +684,10 @@ class UserCreateTest extends PassboltTestCase
 
         // Create user
         $newUser = [
-        'first_name' => 'Firstnametest',
-        'last_name'  => 'Lastnametest',
-        'username'   => 'usernametest@passbolt.com',
-        'admin'      => false
+            'first_name' => 'Firstnametest',
+            'last_name'  => 'Lastnametest',
+            'username'   => 'usernametest@passbolt.com',
+            'admin'      => false
         ];
         $this->createUser($newUser);
 
@@ -734,20 +727,15 @@ class UserCreateTest extends PassboltTestCase
         // Logout
         $this->logout();
 
-        // As new user, access the email sent after accoun creation
-        $this->getUrl('seleniumtests/showlastemail/' . urlencode($newUser['username']));
-        // Follow the link in the email.
-        $this->followLink('get started');
-        // Wait until I am sure that the page is loaded.
-        $this->waitUntilISee('.plugin-check-wrapper', '/Plugin check/');
+        // As a new user, I start the passbolt plugin setup
+        $this->goToSetup($newUser['username'], 'warning');
+
         // Go to login page. we don't need to complete the setup since we just want to check the login.
-        $this->completeSetupWithKeyGeneration(
-            [
+        $this->completeSetupWithKeyGeneration([
             'username' => $newUser['username'],
             'password' => 'password',
             'masterpassword' => 'masterpassword'
-            ]
-        );
+        ]);
 
         // Given I am Ada
         $user = User::get('betty');

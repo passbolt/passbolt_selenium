@@ -261,6 +261,7 @@ trait GroupActionsTrait
             $this->waitUntilISee('.page.user');
         }
         if(!$this->isVisible('.edit-group-dialog')) {
+            $this->waitUntilISee('#js_wsp_users_groups_list.ready');
             $groupElement = $this->find("#group_$id");
             $this->driver->getMouse()->mouseMove($groupElement->getCoordinates());
             $this->click("#group_${id} .right-cell a");

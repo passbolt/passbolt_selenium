@@ -129,6 +129,9 @@ trait ShareActionsTrait
         // And I should not see the share dialog anymore
         $this->waitUntilIDontSee('.share-password-dialog');
 
+        // And the application is ready
+        $this->waitCompletion();
+
         // And I wait unit I see the password permissions section is ready.
         $this->waitUntilISee('#js_rs_details_permissions.ready');
     }

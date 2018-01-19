@@ -19,10 +19,13 @@
  */
 namespace Tests\AN\Base;
 
+use App\Actions\SetupActionsTrait;
 use App\PassboltTestCase;
 
 class RegisterTest extends PassboltTestCase
 {
+    use SetupActionsTrait;
+
     /**
      * Scenario: As an anonymous user without plugin I can register and see the first setup step
      *
@@ -75,7 +78,7 @@ class RegisterTest extends PassboltTestCase
         // When I register with John Doe information
         $this->inputText('profile-first-name', 'john');
         $this->inputText('profile-last-name', 'doe');
-        $this->inputText('username', 'john@passbolt.com');
+        $this->inputText('username', 'johndoe@passbolt.com');
         $this->click('#disclaimer');
 
         // And I click on the submit button
@@ -84,14 +87,10 @@ class RegisterTest extends PassboltTestCase
         // Then I should see the thank you page
         $this->waitUntilISee('.register.thank-you.form.feedback');
 
-        // When I got to my mailbox
-        $this->getUrl('seleniumtests/showlastemail/' . urlencode('john@passbolt.com'));
-
-        // And follow the link in the registration email.
-        $this->followLink('get started');
+        // As a new user, I start the passbolt plugin setup
+        $this->goToSetup('johndoe@passbolt.com', false);
 
         // Then I can see the first setup step page
-        $this->waitUntilISee('.plugin-check-wrapper', '/Plugin check/');
         $this->assertUrlMatch('/\/setup\/install\/[a-z0-9\-]{36}\/[a-z0-9\-]{36}/');
         $this->assertElementContainsText(
             $this->findById('js_step_title'),

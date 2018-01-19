@@ -68,7 +68,7 @@ class PASSBOLT1494 extends PassboltSetupTestCase
         $this->registerUser($curtis['FirstName'], $curtis['LastName'], $curtis['Username']);
 
         // Go to setup page.
-        $this->goToSetup($curtis['Username'], false);
+        $this->goToSetup($curtis['Username'], 'warning');
 
         // Wait until I see the setup section domain check.
         $this->waitForSection('domain_check');

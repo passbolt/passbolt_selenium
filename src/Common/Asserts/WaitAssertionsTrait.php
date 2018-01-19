@@ -313,26 +313,20 @@ trait WaitAssertionsTrait
     /**
      * Wait until the url match a pattern
      *
-     * @param string $url
-     * @param bool   $addBase
-     * @param int    $timeout
+     * @param string $regexp
+     * @param int $timeout
      * @return void
      */
-    public function waitUntilUrlMatches($url, $addBase = true, $timeout = 10) 
+    public function waitUntilUrlMatches(string $regexp = '', $timeout = 10)
     {
+        $regexp = '/' . preg_quote($regexp, '/') . '/';
+
         try {
             $this->waitUntil(
-                function () use ($url, $addBase) {
-                    if ($addBase) {
-                        $uri = Config::read('passbolt.url') . DS . $url;
-                    } else {
-                        $uri = $url;
-                    }
-                    if($uri !== $this->getDriver()->getCurrentURL()) {
-                        $message = 'The url do not match. ';
-                        $message .= 'expected: ' . $uri;
-                        $message .= ' and got ' . $this->getDriver()->getCurrentURL();
-                        PHPUnit_Framework_Assert::fail($message);
+                function () use ($regexp) {
+                    $url = $this->getDriver()->getCurrentURL();
+                    if (!preg_match($regexp, $url)) {
+                        PHPUnit_Framework_Assert::fail("The url ($url) does not match ($regexp)");
                     }
                 }, null, $timeout
             );
