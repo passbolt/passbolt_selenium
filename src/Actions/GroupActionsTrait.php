@@ -254,9 +254,14 @@ trait GroupActionsTrait
     public function gotoEditGroup($id) 
     {
         if(!$this->isVisible('.page.user')) {
-            $this->getUrl('');
-            $this->waitUntilISee('html.passboltplugin-ready');
-            $this->waitUntilISee('.page.password');
+            if(!$this->isVisible('html.passboltplugin-ready')) {
+                $this->getUrl('');
+                $this->waitUntilISee('html.passboltplugin-ready');
+                $this->waitUntilISee('.page.password');
+            }
+            if($this->isVisible('.dialog')) {
+                $this->click('.dialog .dialog-close');
+            }
             $this->gotoWorkspace('user');
             $this->waitUntilISee('.page.user');
         }
