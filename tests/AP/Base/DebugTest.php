@@ -140,23 +140,11 @@ class DebugTest extends PassboltTestCase
         $this->inputText('UserUsername', $user['Username']);
         $this->click('js_save_conf');
         $this->waitUntilISee($feedback, '/The first name cannot be empty/');
-        $this->click('js_save_conf');
-        $this->waitUntilISee($feedback, '/The first name cannot be empty/');
-
-        // Check first name is not alphanumeric
-        $this->inputText('ProfileFirstName', '?');
-        $this->click('js_save_conf');
-        $this->waitUntilISee($feedback, '/The first name should only contain alphabetical and numeric characters/');
 
         // Check empty last name
         $this->inputText('ProfileFirstName', $user['FirstName']);
         $this->click('js_save_conf');
         $this->waitUntilISee($feedback, '/The last name cannot be empty/');
-
-        // Check last name is not alphanumeric
-        $this->inputText('ProfileLastName', '?');
-        $this->click('js_save_conf');
-        $this->waitUntilISee($feedback, '/The last name should only contain alphabetical and numeric characters/');
 
         // Check empty security token
         $this->inputText('ProfileLastName', $user['LastName']);
@@ -164,9 +152,9 @@ class DebugTest extends PassboltTestCase
         $this->waitUntilISee($feedback, '/A token code cannot be empty/');
 
         // Check security token code is not alpha numeric
-        $this->inputText('securityTokenCode', '?');
+        $this->inputText('securityTokenCode', 'な');
         $this->click('js_save_conf');
-        $this->waitUntilISee($feedback, '/The token code should only contain alphabetical and numeric characters/');
+        $this->waitUntilISee($feedback, '/The token code should only contain ASCII characters/');
 
         // Check security token code length is exactly 3 characters in length
         $this->inputText('securityTokenCode', '12');
