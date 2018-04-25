@@ -35,8 +35,9 @@ class PASSBOLT1494 extends PassboltSetupTestCase
      * @group regression
      * @group no-saucelabs
      * @group v2
+     * @group unstable
      */
-    public function testPluginShouldStartAfterTwoSetup() 
+    public function testPluginShouldStartAfterTwoSetup()
     {
         // Reset database at the end of test.
         $this->resetDatabaseWhenComplete();
