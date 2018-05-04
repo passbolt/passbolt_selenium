@@ -748,7 +748,7 @@ class PasswordShareTest extends PassboltTestCase
     }
 
     /**
-     * Scenario: As a user I should receive a notification when another user share a password with me
+     * Scenario: As a user I should receive an email notification when another user share a password with me
      *
      * Given I am Carol
      * And   I am logged in on the password workspace
@@ -763,6 +763,8 @@ class PasswordShareTest extends PassboltTestCase
      * @group password-share
      * @group saucelabs
      * @group v2
+     * @group skip
+     * @group email
      */
     public function testSharePasswordWithUserNotification() 
     {
@@ -927,7 +929,7 @@ class PasswordShareTest extends PassboltTestCase
     }
 
     /**
-     * Scenario: As a user I should receive a notification when another user share a password with me
+     * Scenario: As a user I should receive an email notification when another user share a password with me
      *
      * Given I am Carol
      * And   I am logged in on the password workspace
@@ -942,6 +944,8 @@ class PasswordShareTest extends PassboltTestCase
      * @group password-share
      * @group saucelabs
      * @group v2
+     * @group skip
+     * @group email
      */
     public function testSharePasswordWithGroupNotification() 
     {

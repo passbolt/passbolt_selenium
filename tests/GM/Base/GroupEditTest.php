@@ -639,6 +639,8 @@ class GMGroupEditTest extends PassboltTestCase
      * @group group
      * @group edit
      * @group v2
+     * @group skip
+     * @group email
      */
     public function testEditGroupAddUserEmailNotification() 
     {
@@ -715,6 +717,8 @@ class GMGroupEditTest extends PassboltTestCase
      * @group group
      * @group edit
      * @group v2
+     * @group skip
+     * @group email
      */
     public function testEditGroupDeleteUserEmailNotification() 
     {
@@ -773,6 +777,8 @@ class GMGroupEditTest extends PassboltTestCase
      * @group group
      * @group edit
      * @group v2
+     * @group skip
+     * @group email
      */
     public function testEditGroupUpdateUserEmailNotification() 
     {
@@ -843,6 +849,8 @@ class GMGroupEditTest extends PassboltTestCase
      * @group group
      * @group edit
      * @group v2
+     * @group skip
+     * @group email
      */
     public function testEditGroupGroupUpdatedSummaryEmailNotification() 
     {

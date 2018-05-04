@@ -286,6 +286,8 @@ class PasswordDeleteTest extends PassboltTestCase
      * @group password
      * @group password-delete
      * @group v2
+     * @group skip
+     * @group email
      */
     public function testDeletePasswordEmailNotification() 
     {

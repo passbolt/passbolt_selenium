@@ -645,6 +645,8 @@ class PasswordCreateTest extends PassboltTestCase
      * @group password
      * @group password-create
      * @group v2
+     * @group skip
+     * @group email
      */
     public function testCreatePasswordEmailNotification() 
     {

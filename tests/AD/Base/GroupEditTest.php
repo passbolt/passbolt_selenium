@@ -255,7 +255,7 @@ class ADGroupEditTest extends PassboltTestCase
     /**
      * Scenario: As a user I should receive a notification when I am deleted from a group
      *
-     * Given        I am logged in as an admin
+     * Given I am logged in as an admin
      * And   I am on the users workspace
      * And   I am editing a group
      * When  I remove a user from the group
@@ -269,6 +269,8 @@ class ADGroupEditTest extends PassboltTestCase
      * @group group
      * @group edit
      * @group v2
+     * @group skip
+     * @group email
      */
     public function testEditGroupDeleteUserEmailNotification() 
     {
@@ -308,22 +310,24 @@ class ADGroupEditTest extends PassboltTestCase
     /**
      * Scenario: As a group member I should receive a notification when my role in the group has changed
      *
-     * Given        I am logged in as a group manager
+     * Given I am logged in as a group manager
      * And   I am on the users workspace
      * And   I am editing a group that I manage
      * When  I change a user role to group manager
      * And   I change a user role to member
      * And   I click on save
      * Then  I should see a success notification message
-     * When         When I access last email sent to the group manager
+     * When  When I access last email sent to the group manager
      * Then  I should see the expected email
-     * When         When I access last email sent to the member
+     * When  When I access last email sent to the member
      * Then  I should see the expected email
      *
      * @group AD
      * @group group
      * @group edit
      * @group v2
+     * @group skip
+     * @group email
      */
     public function testEditGroupUpdateUserEmailNotification() 
     {
@@ -395,6 +399,8 @@ class ADGroupEditTest extends PassboltTestCase
      * @group group
      * @group edit
      * @group v2
+     * @group skip
+     * @group email
      */
     public function testEditGroupGroupUpdatedSummaryEmailNotification()
     {

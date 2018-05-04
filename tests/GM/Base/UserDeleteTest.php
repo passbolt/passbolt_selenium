@@ -55,6 +55,8 @@ class GMUserDeleteTest extends PassboltTestCase
      * @group user
      * @group delete
      * @group v2
+     * @group skip
+     * @group email
      */
     public function testDeleteUserEmailNotification() 
     {

@@ -1339,6 +1339,8 @@ class PasswordEditTest extends PassboltTestCase
      * @group password
      * @group password-edit
      * @group v2
+     * @group skip
+     * @group email
      */
     public function testEditPasswordEmailNotification() 
     {

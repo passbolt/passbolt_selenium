@@ -673,6 +673,8 @@ class ADGroupCreateTest extends PassboltTestCase
      * @group group
      * @group create
      * @group v2
+     * @group skip
+     * @group email
      */
     public function testCreateGroupAddUserEmailNotification() 
     {

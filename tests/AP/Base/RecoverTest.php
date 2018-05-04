@@ -209,6 +209,8 @@ class RecoverTest extends PassboltRecoverTestCase
      * @group AP
      * @group recover
      * @group v2
+     * @group skip
+     * @group email
      */
     public function testRecoverEmailNotification() 
     {

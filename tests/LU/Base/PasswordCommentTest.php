@@ -266,7 +266,7 @@ class PasswordCommentTest extends PassboltTestCase
     }
 
     /**
-     * Scenario: As a user I should receive an email notification when I write a comment.
+     * Scenario: As a user I receive an email notification when somebody else write a comment.
      * 
      * Given I am Ada
      * And   I am logged in
@@ -285,8 +285,10 @@ class PasswordCommentTest extends PassboltTestCase
      * @group comment
      * @group comment-notification
      * @group v2
+     * @group skip
+     * @group email
      */
-    public function testCommentAddEmailNotification() 
+    public function testCommentAddEmailNotification()
     {
         // Reset database at the end of test.
         $this->resetDatabaseWhenComplete();
