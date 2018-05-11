@@ -499,8 +499,9 @@ class SetupTest extends PassboltSetupTestCase
      * @group AP
      * @group setup
      * @group v2
+     * @group unstable
      */
-    public function testSetupMultipleTimes() 
+    public function testSetupMultipleTimes()
     {
         // Reset database at the end of test.
         $this->resetDatabaseWhenComplete();
