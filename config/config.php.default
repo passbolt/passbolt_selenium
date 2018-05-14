@@ -89,7 +89,7 @@ $config = array (
 			'downloads_path' => 'file:///home/seluser/Downloads'
 		),
 		'firefox_common' => array(
-			//'binary_path' => '/tmp/firefox/firefox-bin'
+			'binary_path' => '/tmp/firefox/firefox-bin'
 		),
 		'firefox_with_passbolt_extension' => array(
 			'name' => 'Firefox with Passbolt extension',
