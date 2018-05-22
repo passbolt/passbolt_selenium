@@ -123,7 +123,7 @@ trait GroupAssertionsTrait
         }
 
         // Then I should see that the sidebar contains a member section
-        $this->waitUntilISee('#js_group_details.ready #js_group_details_members');
+        $this->waitUntilISee('#js_group_details.ready #js_group_details_members #js_group_details_group_members_list.ready');
 
         // And I should see that the members sections contains the list of users that are members of this group
         $userFullName = $user['FirstName'] . ' ' . $user['LastName'];

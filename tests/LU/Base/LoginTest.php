@@ -84,6 +84,7 @@ class LoginTest extends PassboltTestCase
         // wait for redirection trigger
         $this->waitUntilISee('html.passboltplugin-ready');
 
+        $this->waitUntilISee('.header .user.profile .details .name');
         $this->assertElementContainsText(
             $this->findByCss('.header .user.profile .details .name'),
             'Ada Lovelace'

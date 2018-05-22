@@ -438,7 +438,7 @@ class UserEditTest extends PassboltTestCase
         $this->click('js_user_wk_menu_edition_button');
 
         // Then I can see the admin role checked in the role checkboxes
-        $this->find('#js_field_role_id .role-admin input[type=checkbox][checked=checked]');
+        $this->find('#js_field_is_admin_checkbox')->isSelected();
 
         // When I log out
         $this->logout();
@@ -535,7 +535,7 @@ class UserEditTest extends PassboltTestCase
         $this->goToEditUser($newUser);
 
         // And I unselect the admin role
-        $this->checkCheckbox('js_field_role_id');
+        $this->checkCheckbox('js_field_is_admin_checkbox');
 
         // And I submit the changes
         $this->click('.edit-user-dialog input[type=submit]');
@@ -600,7 +600,7 @@ class UserEditTest extends PassboltTestCase
 
         // Check that admin role checkbox is disabled.
         $this->assertElementAttributeEquals(
-            $this->find('#js_field_role_id .role-admin input[type=checkbox]'),
+            $this->find('#js_field_is_admin_checkbox'),
             'disabled',
             'true'
         );

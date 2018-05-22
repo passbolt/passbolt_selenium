@@ -45,7 +45,7 @@ trait UserActionsTrait
         $this->inputText('js_field_username', $user['username']);
         if (isset($user['admin']) && $user['admin'] === true) {
             // Check box admin
-            $this->checkCheckbox('js_field_role_id');
+            $this->checkCheckbox('js_field_is_admin_checkbox');
         }
         $this->click('.create-user-dialog input[type=submit]');
         $this->assertNotification('app_users_addPost_success');
@@ -135,17 +135,9 @@ trait UserActionsTrait
             $this->inputText('js_field_last_name', $user['last_name']);
         }
         if (isset($user['admin'])) {
-            // Get current state of admin
-            $isAdmin = true;
-            try {
-                $this->findByCss('#js_field_role_id .role-admin input[type=checkbox][checked=checked]');
-            }
-            catch(NoSuchElementException $e) {
-                $isAdmin = false;
-            }
-            // if el was found, admin checkbox is already checked.
+            $isAdmin = $this->find('#js_field_is_admin_checkbox')->isSelected();
             if ($isAdmin != $user['admin']) {
-                $this->checkCheckbox('js_field_role_id');
+                $this->checkCheckbox('js_field_is_admin_checkbox');
             }
         }
 

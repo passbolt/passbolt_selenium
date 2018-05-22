@@ -99,13 +99,13 @@ class SettingsKeyTest extends PassboltTestCase
         // I should see the creation date.
         $this->assertElementContainsText(
             $this->find('#privkeyinfo td.created'),
-            '2015-08-09 12:48:31'
+            '2015-08-09T12:48:31+00:00'
         );
 
         // I should see the expiration date.
         $this->assertElementContainsText(
             $this->find('#privkeyinfo td.expires'),
-            '2019-08-09 12:48:31'
+            '2019-08-09T12:48:31+00:00'
         );
 
         // I should see the length.

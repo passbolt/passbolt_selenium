@@ -81,7 +81,7 @@ trait GroupActionsTrait
     }
 
     /**
-     * Add a temporary user to a gtoup.
+     * Add a temporary user to a group.
      *
      * @param $user
      * @return HTML element added in the list
@@ -134,7 +134,7 @@ trait GroupActionsTrait
         // I should see that the user role for the group can't be changed.
         $roleSelect = $userElt->findElement(WebDriverBy::cssSelector('.js_group_user_is_admin'));
         $properties['role_disabled'] = $roleSelect->getAttribute('disabled') == 'true' ? true:false;
-        $properties['role'] = $roleSelect->getAttribute('value') == '1' ? 'Group manager' : 'Member';
+        $properties['role'] = $roleSelect->getAttribute('value') == 'true' ? 'Group manager' : 'Member';
 
         // I should see that the user can't be deleted (because he is the only group manager
         $deleteBtn = $userElt->findElement(WebDriverBy::cssSelector('.js_group_user_delete'));

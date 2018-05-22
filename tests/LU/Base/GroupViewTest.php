@@ -94,6 +94,7 @@ class GroupViewTest extends PassboltTestCase
         // And I should see the latest user who modified the group
         $selector = '#js_group_details .detailed-information li.modified_by .value';
         $elt = $this->find($selector);
+        sleep(10);
         $this->assertNotEmpty($elt->getText());
 
         // And I should see the number of members

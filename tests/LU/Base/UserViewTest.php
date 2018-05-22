@@ -79,8 +79,8 @@ class UserViewTest extends PassboltTestCase
         'modified'         => '/ago$/',
         'keyid'         => '477FB14C',
         'type'             => 'RSA',
-        'created'        => '/[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}/',
-        'expires'        => '/[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}/',
+        'created'        => '/[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}\+\d\d:\d\d/',
+        'expires'        => '/[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}\+\d\d:\d\d/',
         ];
         $userDetails['key'] = trim(file_get_contents(GPG_FIXTURES . DS . 'frances_public.key'));
 

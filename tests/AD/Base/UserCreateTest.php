@@ -113,8 +113,8 @@ class UserCreateTest extends PassboltTestCase
         $this->assertVisibleByCss('.create-user-dialog label[for=js_field_username]');
 
         // And I see the role input marked as mandatory
-        $this->assertVisibleByCss('.create-user-dialog .input.required #js_field_role_id');
-        $this->assertVisibleByCss('.create-user-dialog .input.required label[for=js_field_role_id]');
+        $this->assertVisibleByCss('.create-user-dialog .input.required #js_field_is_admin');
+        $this->assertVisibleByCss('.create-user-dialog .input.required label[for=js_field_is_admin]');
 
         // And I see the save button
         $this->assertVisibleByCss('.create-user-dialog input[type=submit].button.primary');

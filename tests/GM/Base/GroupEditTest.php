@@ -117,7 +117,6 @@ class GMGroupEditTest extends PassboltTestCase
         // Given I am a group manager
         $user = User::get('ping');
 
-
         // I am logged in as admin
         $this->loginAs($user);
 

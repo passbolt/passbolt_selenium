@@ -387,8 +387,8 @@ class SettingsProfileTest extends PassboltTestCase
         $this->assertVisibleByCss('.edit-profile-dialog label[for=js_field_username]');
 
         // Assert I can't see the field role
-        $this->assertNotVisibleByCss('.edit-profile-dialog #js_field_role_id');
-        $this->assertNotVisibleByCss('.edit-profile-dialog #js_field_role_id input[type=checkbox]');
+        $this->assertNotVisibleByCss('.edit-profile-dialog #js_field_is_admin');
+        $this->assertNotVisibleByCss('.edit-profile-dialog #js_field_is_admin input[type=checkbox]');
 
         // And I can see the user last name in the text input
         $this->assertInputValue('js_field_username', $user['Username']);

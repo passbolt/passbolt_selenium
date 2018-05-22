@@ -106,7 +106,6 @@ class PasswordEditDescriptionTest extends PassboltTestCase
         $this->assertNotification('app_resources_update_success');
 
         // Make sure the description form is not visible anymore.
-        $this->clickSecondarySidebarSectionHeader('description');
         $this->assertNotVisibleByCss('#js_rs_details_edit_description textarea.js_resource_description');
 
         // And check that the new description is shown.
@@ -182,7 +181,6 @@ class PasswordEditDescriptionTest extends PassboltTestCase
         $this->assertNotification('app_resources_update_success');
 
         // Make sure the password edition form is not visible anymore.
-        $this->clickSecondarySidebarSectionHeader('description');
         $this->assertNotVisibleByCss('#js_rs_details_edit_description textarea.js_resource_description');
 
         // And check that the new description reflects in the sidebar.
