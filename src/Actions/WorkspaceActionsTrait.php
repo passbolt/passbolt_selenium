@@ -27,7 +27,7 @@ trait WorkspaceActionsTrait
         switch ($name) {
         case 'settings':
             $this->click('#js_app_profile_dropdown');
-            $this->clickLink('my profile');
+            $this->clickLink('Profile');
             $this->waitUntilISee('.page.settings.profile');
             break;
         case 'user':

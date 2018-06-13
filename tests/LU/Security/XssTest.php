@@ -252,7 +252,7 @@ class XssTest extends PassboltTestCase
         $this->assertXss();
 
         // When Click on Manage your keys.
-        $this->clickLink('Manage your keys');
+        $this->clickLink('Keys inspector');
         $this->waitUntilISee('.page.settings.keys');
         $this->assertXss();
     }

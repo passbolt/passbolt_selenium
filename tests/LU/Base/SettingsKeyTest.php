@@ -37,7 +37,7 @@ class SettingsKeyTest extends PassboltTestCase
      * And   I click on Manage your keys menu
      * Then  I should see the keys section
      * And   The menu "Manage your keys should be selected"
-     * And   The breadcrumb should be in this order : 'All users', 'Ada Lovelace', 'Keys management'
+     * And   The breadcrumb should be in this order : 'All users', 'Ada Lovelace', 'Keys inspector'
      * And   I should see a button Download public key
      * And   I should see a button Download private key
      * And   I should see all the key information (uid, fingerprint, etc)
@@ -61,7 +61,7 @@ class SettingsKeyTest extends PassboltTestCase
         $this->gotoWorkspace('settings');
 
         // Click on Manage your keys.
-        $this->clickLink('Manage your keys');
+        $this->clickLink('Keys inspector');
 
         // I should see a section with a title Profile
         $this->waitUntilISee('.page.settings.keys');
@@ -69,13 +69,13 @@ class SettingsKeyTest extends PassboltTestCase
         // Check that menu "Manage your keys" is selected
         $this->assertElementContainsText(
             $this->find('#js_wk_settings_menu .row.selected'),
-            'Manage your keys'
+            'Keys inspector'
         );
 
         // Check breadcrumb.
         $this->assertBreadcrumb(
             'settings',
-            ['All users', 'Ada Lovelace', 'Keys management']
+            ['All users', 'Ada Lovelace', 'Keys inspector']
         );
 
         // I should see a download public key button.
@@ -156,7 +156,7 @@ class SettingsKeyTest extends PassboltTestCase
         $this->gotoWorkspace('settings');
 
         // Click on Manage your keys.
-        $this->clickLink('Manage your keys');
+        $this->clickLink('Keys inspector');
 
         // I should see a section with a title Profile
         $this->waitUntilISee('.page.settings.keys');
