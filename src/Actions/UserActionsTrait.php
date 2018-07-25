@@ -87,11 +87,11 @@ trait UserActionsTrait
         $eltSelector = '#user_' . $id . ' .cell_name';
         $this->getDriver()->executeScript(
         "
-            console.log('execute...');
-			jQuery('$eltSelector').trigger({
-				type:'mousedown',
-				which:3
-			});
+            var element = jQuery('$eltSelector')[0];
+            var rect = element.getBoundingClientRect();
+            jQuery('.tableview-content')[0].scrollTo(rect.left, rect.top);
+            var mouseDownEvent = new MouseEvent('mousedown', {view: window, bubbles: true, cancelable: true, button:2});
+			element.dispatchEvent(mouseDownEvent);
 		"
         );
         // Without this little interval, the menu doesn't have time to open.

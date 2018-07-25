@@ -138,12 +138,8 @@ class ADGroupCreateTest extends PassboltTestCase
         // I should see the save button
         // And I should see that it is disabled by default
         // And I should see that the save button is still disabled
-        $saveButton = $this->find('.edit-group-dialog a.button.primary');
-        $this->assertElementAttributeEquals(
-            $saveButton,
-            'disabled',
-            'true'
-        );
+        $primaryButtonElement = $this->find('.edit-group-dialog a.button.primary');
+        $this->assertElementHasClass($primaryButtonElement, 'disabled');
 
         // And I see the cancel button
         $this->assertVisibleByCss('.edit-group-dialog a.cancel');
@@ -261,11 +257,8 @@ class ADGroupCreateTest extends PassboltTestCase
         );
 
         // And I should see that the save button is still disabled
-        $this->assertElementAttributeEquals(
-            $this->find('.edit-group-dialog a.button.primary'),
-            'disabled',
-            'true'
-        );
+        $primaryButtonElement = $this->find('.edit-group-dialog a.button.primary');
+        $this->assertElementHasClass($primaryButtonElement, 'disabled');
     }
 
     /**
@@ -371,11 +364,8 @@ class ADGroupCreateTest extends PassboltTestCase
         $this->gotoCreateGroup();
 
         // And I should see that the save button is still disabled
-        $this->assertElementAttributeEquals(
-            $this->find('.edit-group-dialog a.button.primary'),
-            'disabled',
-            'true'
-        );
+        $primaryButtonElement = $this->find('.edit-group-dialog a.button.primary');
+        $this->assertElementHasClass($primaryButtonElement, 'disabled');
 
         $ada = User::get('ada');
         $this->searchGroupUserToAdd($ada, $user);
@@ -408,11 +398,8 @@ class ADGroupCreateTest extends PassboltTestCase
 
 
         // And I should see that the save button is now enabled
-        $this->assertElementAttributeEquals(
-            $this->find('.edit-group-dialog a.button.primary'),
-            'disabled',
-            null
-        );
+        $primaryButtonElement = $this->find('.edit-group-dialog a.button.primary');
+        $this->assertElementHasNotClass($primaryButtonElement, 'disabled');
 
         // Add another user to group.
         $carol = User::get('carol');
@@ -470,11 +457,8 @@ class ADGroupCreateTest extends PassboltTestCase
         $this->assertTrue($props['delete_disabled']);
 
         // And I should see that the save button is still enabled
-        $this->assertElementAttributeEquals(
-            $this->find('.edit-group-dialog a.button.primary'),
-            'disabled',
-            null
-        );
+        $primaryButtonElement = $this->find('.edit-group-dialog a.button.primary');
+        $this->assertElementHasNotClass($primaryButtonElement, 'disabled');
     }
 
     /**
@@ -509,11 +493,8 @@ class ADGroupCreateTest extends PassboltTestCase
         $this->gotoCreateGroup();
 
         // And I should see that the save button is still disabled
-        $this->assertElementAttributeEquals(
-            $this->find('.edit-group-dialog a.button.primary'),
-            'disabled',
-            'true'
-        );
+        $primaryButtonElement = $this->find('.edit-group-dialog a.button.primary');
+        $this->assertElementHasClass($primaryButtonElement, 'disabled');
 
         $ada = User::get('ada');
         $this->searchGroupUserToAdd($ada, $user);

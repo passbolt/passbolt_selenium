@@ -62,10 +62,11 @@ trait PasswordActionsTrait
         // and not on the contextMenu event. (and the primitive mouseDown doesn't exist in the webDriver).
         $this->getDriver()->executeScript(
             "
-			jQuery('$eltSelector').trigger({
-				type:'mousedown',
-				which:3
-			});
+			var element = jQuery('$eltSelector')[0];
+            var rect = element.getBoundingClientRect();
+            jQuery('.tableview-content')[0].scrollTo(rect.left, rect.top);
+            var mouseDownEvent = new MouseEvent('mousedown', {view: window, bubbles: true, cancelable: true, button:2});
+			element.dispatchEvent(mouseDownEvent);
 		"
         );
         // Without this little interval, the menu doesn't have time to open.

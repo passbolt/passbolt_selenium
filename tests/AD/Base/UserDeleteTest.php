@@ -197,11 +197,8 @@ class ADUserDeleteTest extends PassboltTestCase
         $this->clickUser($user['id']);
 
         // Then I should see that the delete button is disabled.
-        $this->assertElementAttributeEquals(
-            $this->find('js_user_wk_menu_deletion_button'),
-            'disabled',
-            'true'
-        );
+        $primaryButtonElement = $this->find('#js_user_wk_menu_deletion_button');
+        $this->assertElementHasClass($primaryButtonElement, 'disabled');
 
         // Right click on the same user.
         $this->rightClickUser($user['id']);

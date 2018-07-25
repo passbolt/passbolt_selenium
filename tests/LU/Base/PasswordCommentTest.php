@@ -155,7 +155,7 @@ class PasswordCommentTest extends PassboltTestCase
         $this->scrollSidebarToBottom();
 
         // Click on submit.
-        $this->click('#js_rs_details_comments a.comment-submit');
+        $this->click('#js_rs_details_comments button.comment-submit');
         // Then I see an error message saying that the field should not be empty
         $this->assertVisibleByCss('#js_rs_details_comments .js_comment_content_feedback');
         $this->assertElementContainsText(
