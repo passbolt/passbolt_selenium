@@ -44,8 +44,6 @@ trait FormAssertionsTrait
     public function assertDisabled($id)
     {
         $elt = $this->getDriver()->findElement(WebDriverBy::id($id));
-        $attr = $elt->getAttribute('disabled');
-        $msg = 'Failed to assert the element '.$id . 'is disabled';
-        PHPUnit_Framework_Assert::assertTrue(($attr === 'true'), $msg);
+        $this->assertElementHasClass($elt, 'disabled');
     }
 }

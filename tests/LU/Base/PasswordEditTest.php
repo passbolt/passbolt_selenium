@@ -1096,7 +1096,8 @@ class PasswordEditTest extends PassboltTestCase
         $this->goIntoSecretIframe();
 
         // And I can see the generate button is not active
-        $this->assertDisabled('js_secret_generate');
+        $editButton = $this->find('#js_secret_generate');
+        $this->assertElementHasClass($editButton, 'disabled');
 
         // When I click on the secret password field
         $this->click('js_secret');
@@ -1167,7 +1168,8 @@ class PasswordEditTest extends PassboltTestCase
         $this->clickPassword($r['id']);
 
         // Then I can see the edit button is not active
-        $this->assertDisabled('js_wk_menu_edition_button');
+        $editButton = $this->find('#js_wk_menu_edition_button');
+        $this->assertElementHasClass($editButton, 'disabled');
 
         // When I right click on a password I cannot edit
         $this->rightClickPassword($r['id']);

@@ -43,7 +43,7 @@ trait SidebarActionsTrait
         $this->inputText('js_field_comment_content', $comment);
 
         // Click on submit.
-        $this->click('#js_rs_details_comments a.comment-submit');
+        $this->click('#js_rs_details_comments button.comment-submit');
 
         // Assert that notification is shown.
         $this->assertNotification('app_comments_addPost_success');

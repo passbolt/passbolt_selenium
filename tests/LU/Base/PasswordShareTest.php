@@ -152,7 +152,8 @@ class PasswordShareTest extends PassboltTestCase
         $this->assertVisible('js_contextual_menu');
 
         // I can see the the share option is enabled
-        $this->assertVisibleByCss('#js_password_browser_menu_share.ready');
+        $menuItem = $this->find('#js_password_browser_menu_share');
+        $this->assertElementHasNotClass($menuItem, 'disabled');
 
         // When I click on the share link in the contextual menu
         $this->click('#js_password_browser_menu_share a');
@@ -225,7 +226,7 @@ class PasswordShareTest extends PassboltTestCase
      * @group password-share
      * @group v2
      */
-    public function testEditPasswordNoRightNoShare() 
+    public function testEditPasswordNoRightNoShare()
     {
         // Given I am Ada
         // And I am logged in on the password workspace
@@ -236,7 +237,8 @@ class PasswordShareTest extends PassboltTestCase
         $this->clickPassword($r['id']);
 
         // Then I can see the share button is not active
-        $this->assertDisabled('js_wk_menu_sharing_button');
+        $editButton = $this->find('#js_wk_menu_sharing_button');
+        $this->assertElementHasClass($editButton, 'disabled');
 
         // When I right click on a password I have only update access to
         $this->rightClickPassword($r['id']);
@@ -253,7 +255,8 @@ class PasswordShareTest extends PassboltTestCase
         $this->clickPassword($r['id']);
 
         // Then I can see the share button is not active
-        $this->assertDisabled('js_wk_menu_sharing_button');
+        $editButton = $this->find('#js_wk_menu_sharing_button');
+        $this->assertElementHasClass($editButton, 'disabled');
 
         // When I right click on a password I have only update access to
         $this->rightClickPassword($r['id']);
@@ -439,6 +442,7 @@ class PasswordShareTest extends PassboltTestCase
 
         // And I go to the share tab
         $this->findByCss('#js_tab_nav_js_rs_permission a')->click();
+        $this->waitUntilISee('#js_rs_permission.ready');
         $this->waitCompletion();
 
         // Then I can see that Ada is owner
