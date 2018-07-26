@@ -76,7 +76,7 @@ class LogoutTest extends PassboltTestCase
         $this->click('#js_app_navigation_right .logout a');
 
         // Then I should see the login page
-        $this->waitUntilISee('.plugin-check.' . $this->_browser['type'] . '.success');
+        $this->waitUntilUrlMatches('/auth/login');
     }
 
     /**
@@ -97,16 +97,17 @@ class LogoutTest extends PassboltTestCase
     public function testOnClickSessionExpiredAutoRedirect() 
     {
         // Given I am Ada
+        $timeout = 0.25;
         $user = User::get('ada');
 
         // Reduce the session timeout to accelerate the test
-        PassboltServer::setExtraConfig(['Session' => ['timeout' => 0.25]]);
+        PassboltServer::setExtraConfig(['Session' => ['timeout' => $timeout]]);
 
         // And I am logged in on the password workspace
         $this->loginAs($user);
 
         // And I wait until the session expires
-        sleep(15);
+        sleep(($timeout*60)+1);
 
         // And I click on a password I own
         $resource = Resource::get(array('user' => 'ada', 'permission' => 'owner'));
@@ -116,7 +117,7 @@ class LogoutTest extends PassboltTestCase
         $this->assertSessionExpiredDialog();
 
         // And I should be redirected to the login page in 60 seconds
-        $this->waitUntilISee('.plugin-check.' . $this->_browser['type'] . '.success', null, 7);
+        $this->waitUntilUrlMatches('/auth/login');
     }
 
     /**
@@ -138,16 +139,17 @@ class LogoutTest extends PassboltTestCase
     public function testOnClickSessionExpiredManualRedirect() 
     {
         // Given I am Ada
+        $timeout = 0.25;
         $user = User::get('ada');
 
         // Reduce the session timeout to accelerate the test
-        PassboltServer::setExtraConfig(['Session' => ['timeout' => 0.25]]);
+        PassboltServer::setExtraConfig(['Session' => ['timeout' => $timeout]]);
 
         // And I am logged in on the password workspace
         $this->loginAs($user);
 
         // When I wait until the session timeout
-        sleep(15);
+        sleep(($timeout*60)+1);
 
         // And I click on a password I own
         $resource = Resource::get(array('user' => 'ada', 'permission' => 'owner'));
@@ -160,7 +162,7 @@ class LogoutTest extends PassboltTestCase
         $this->click('confirm-button');
 
         // Then I should see the login page
-        $this->waitUntilISee('.plugin-check.' . $this->_browser['type'] . '.success');
+        $this->waitUntilUrlMatches('/auth/login');
     }
 
     /**
@@ -181,10 +183,11 @@ class LogoutTest extends PassboltTestCase
     public function testSessionExpired() 
     {
         // Given I am Ada
+        $timeout = 0.25;
         $user = User::get('ada');
 
         // Reduce the session timeout to accelerate the test
-        PassboltServer::setExtraConfig(['Session' => ['timeout' => 0.25]]);
+        PassboltServer::setExtraConfig(['Session' => ['timeout' => $timeout]]);
 
         // And I am logged in on the password workspace
         $this->loginAs($user);
@@ -196,7 +199,7 @@ class LogoutTest extends PassboltTestCase
         $this->click('confirm-button');
 
         // Then I should see the login page
-        $this->waitUntilISee('.plugin-check.' . $this->_browser['type'] . '.success', null, 70);
+        $this->waitUntilUrlMatches('/auth/login');
     }
 
     /**
@@ -216,19 +219,20 @@ class LogoutTest extends PassboltTestCase
     public function testRestartBrowserAndLoggedOutAfterSessionExpired() 
     {
         // Given I am Ada
+        $timeout = 0.25;
         $user = User::get('ada');
 
         // Reduce the session timeout to accelerate the test
-        PassboltServer::setExtraConfig(['Session' => ['timeout' => 0.25]]);
+        PassboltServer::setExtraConfig(['Session' => ['timeout' => $timeout]]);
 
         // And I am logged in on the password workspace
         $this->loginAs($user);
 
         // When I restart the browser
-        $this->restartBrowser(['waitBeforeRestart' => 15]);
+        $this->restartBrowser(['waitBeforeRestart' => ($timeout*60)+1]);
 
         // Then I should be logged out
-        $this->assertUrlMatch('/\/auth\/login/');
+        $this->waitUntilUrlMatches('/auth/login');
     }
 
     /**
@@ -249,6 +253,7 @@ class LogoutTest extends PassboltTestCase
     public function testCloseRestoreTabAndLoggedOutAfterSessionExpired() 
     {
         // Given I am Ada
+        $timeout = 0.25;
         $user = User::get('ada');
         $this->setClientConfig($user);
 
@@ -256,16 +261,16 @@ class LogoutTest extends PassboltTestCase
         $this->openNewTab();
 
         // Reduce the session timeout to accelerate the test
-        PassboltServer::setExtraConfig(['Session' => ['timeout' => 0.25]]);
+        PassboltServer::setExtraConfig(['Session' => ['timeout' => $timeout]]);
 
         // And I am logged in on the password workspace
         $this->loginAs($user, false);
 
         // When I close and restore the tab
-        $this->closeAndRestoreTab(['waitBeforeRestore' => 15]);
+        $this->closeAndRestoreTab(['waitBeforeRestore' => ($timeout*60)+1]);
 
         // Then I should be logged out
-        $this->waitUntilUrlMatches('auth/login', 120);
+        $this->waitUntilUrlMatches('/auth/login');
     }
 
 }

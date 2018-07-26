@@ -43,6 +43,7 @@ class PASSBOLT1606 extends PassboltTestCase
     public function testAutoLogoutFromAnotherTab() 
     {
         // Given I am Ada
+        $timeout = 0.25;
         $user = User::get('ada');
         $this->setClientConfig($user);
 
@@ -50,7 +51,7 @@ class PASSBOLT1606 extends PassboltTestCase
         $this->openNewTab();
 
         // Reduce the session timeout to accelerate the test
-        PassboltServer::setExtraConfig(['Session' => ['timeout' => 0.10]]);
+        PassboltServer::setExtraConfig(['Session' => ['timeout' => $timeout]]);
 
         // When I am logged in on the password workspace
         $this->loginAs($user, false);
@@ -62,13 +63,13 @@ class PASSBOLT1606 extends PassboltTestCase
         $this->switchToPreviousTab();
 
         // And I wait until the expired dialog redirect the user to the login page
-        sleep(10);
+        sleep(($timeout*60)+1);
 
         // And I switch to the passbolt tab
         $this->switchToNextTab();
 
         // Then I should see the login page
-        $this->waitUntilISee('.plugin-check.' . $this->_browser['type'] . '.success');
+        $this->waitUntilUrlMatches('/auth/login');
     }
 
 }
