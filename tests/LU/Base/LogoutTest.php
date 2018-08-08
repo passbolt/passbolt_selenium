@@ -264,7 +264,7 @@ class LogoutTest extends PassboltTestCase
         PassboltServer::setExtraConfig(['Session' => ['timeout' => $timeout]]);
 
         // And I am logged in on the password workspace
-        $this->loginAs($user, false);
+        $this->loginAs($user, ['setConfig' => false]);
 
         // When I close and restore the tab
         $this->closeAndRestoreTab(['waitBeforeRestore' => ($timeout*60)+1]);

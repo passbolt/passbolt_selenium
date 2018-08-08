@@ -314,7 +314,7 @@ class RecoverTest extends PassboltRecoverTestCase
         $this->waitUntilUrlMatches('auth/login');
 
         // Attempt to log in as ada.
-        $this->loginAs(User::get('ada'), false);
+        $this->loginAs(User::get('ada'), ['setConfig' => false]);
 
         // Assert I am logged in as Ada.
         $this->assertElementContainsText(

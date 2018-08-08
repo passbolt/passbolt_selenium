@@ -59,7 +59,7 @@ class PASSBOLT1494 extends PassboltSetupTestCase
         $this->completeRegistration($john);
 
         // I should be able to login
-        $this->loginAs($john, false);
+        $this->loginAs($john, ['setConfig' => false]);
 
         // I logout.
         $this->logout();
@@ -79,7 +79,7 @@ class PASSBOLT1494 extends PassboltSetupTestCase
         $this->completeRegistration($curtis);
 
         // And I am logged in on the password workspace
-        $this->loginAs($curtis, false);
+        $this->loginAs($curtis, ['setConfig' => false]);
 
         // wait for redirection trigger
         sleep(1);

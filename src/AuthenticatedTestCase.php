@@ -17,6 +17,7 @@ namespace App;
 use App\Common\Actions\ScriptedActionsTrait;
 use App\Common\Config;
 use App\Common\RecordableTestCase;
+use App\Lib\Cakephp\Hash;
 use Facebook\WebDriver\Exception\NoSuchElementException;
 use Facebook\WebDriver\WebDriverBy;
 
@@ -36,10 +37,12 @@ abstract class AuthenticatedTestCase extends RecordableTestCase
     /**
      * Login on the application with the given user.
      *
-     * @param array user
+     * @param array $user
+     * @param array $options
      */
-    public function loginAs($user, $setConfig = true)
+    public function loginAs($user, $options = [])
     {
+        $setConfig = Hash::get($options, 'setConfig', true);
         if($setConfig) {
             $this->setClientConfig($user);
         }

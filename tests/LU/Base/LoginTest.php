@@ -123,7 +123,7 @@ class LoginTest extends PassboltTestCase
         $this->switchToPreviousTab();
 
         // Then I should be able to login to passbolt from the first tab.
-        $this->loginAs($user, false);
+        $this->loginAs($user, ['setConfig' => false]);
 
         // When I logout
         $this->logout();
@@ -132,7 +132,7 @@ class LoginTest extends PassboltTestCase
         $this->switchToNextTab();
 
         // Then I should be able to login to passbolt from the second tab
-        $this->loginAs($user, false);
+        $this->loginAs($user, ['setConfig' => false]);
     }
 
     /**
@@ -188,7 +188,7 @@ class LoginTest extends PassboltTestCase
         $this->openNewTab();
 
         // And I am logged in
-        $this->loginAs($user, false);
+        $this->loginAs($user, ['setConfig' => false]);
 
         // When I close and restore the tab
         $this->closeAndRestoreTab();

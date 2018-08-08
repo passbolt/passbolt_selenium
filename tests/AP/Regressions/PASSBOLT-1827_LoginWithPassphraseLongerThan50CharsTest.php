@@ -50,6 +50,6 @@ class PASSBOLT1827 extends PassboltSetupTestCase
         ]);
 
         // Then I am able to login
-        $this->loginAs($john, false);
+        $this->loginAs($john, ['setConfig' => false]);
     }
 }

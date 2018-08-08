@@ -56,7 +56,7 @@ class PassboltServer
     static public function resetExtraConfig() 
     {
         $url = Config::read('passbolt.url') . DS . '/seleniumtests/resetExtraConfig';
-        $request = Request::post($url);
+        $request = Request::get($url);
         try {
             $request->sendsType(Mime::JSON)->send();
         } catch(Exception $exception) {

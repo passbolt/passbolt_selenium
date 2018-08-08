@@ -54,7 +54,7 @@ class PASSBOLT1606 extends PassboltTestCase
         PassboltServer::setExtraConfig(['Session' => ['timeout' => $timeout]]);
 
         // When I am logged in on the password workspace
-        $this->loginAs($user, false);
+        $this->loginAs($user, ['setConfig' => false]);
 
         // Then I should see the session expired dialog
         $this->assertSessionExpiredDialog();

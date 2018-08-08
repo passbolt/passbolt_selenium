@@ -47,6 +47,6 @@ class PASSBOLT1585 extends PassboltSetupTestCase
         $this->completeRegistration($chienShiung);
 
         // Then I should be able to login
-        $this->loginAs($chienShiung, false);
+        $this->loginAs($chienShiung, ['setConfig' => false]);
     }
 }

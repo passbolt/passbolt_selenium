@@ -1569,7 +1569,7 @@ class PasswordEditTest extends PassboltTestCase
         $this->openNewTab();
 
         // And I am logged in on the password workspace
-        $this->loginAs($user, false);
+        $this->loginAs($user, ['setConfig' => false]);
 
         // When I close and restore the tab
         $this->closeAndRestoreTab();

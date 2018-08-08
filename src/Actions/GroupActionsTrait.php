@@ -242,6 +242,7 @@ trait GroupActionsTrait
             $this->waitUntilISee('.page.password');
         }
         $eltSelector = '#group_' . $id . ' .main-cell';
+        $this->waitUntilISee($eltSelector);
         $this->click($eltSelector);
         $this->waitCompletion();
     }
