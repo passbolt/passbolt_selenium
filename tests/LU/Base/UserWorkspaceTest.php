@@ -599,6 +599,7 @@ class UserWorkspaceTest extends PassboltTestCase
         // When I sort the users browser by name
         $columnId = 'name';
         $this->click('.js_grid_column_' . $columnId);
+        $this->waitCompletion();
 
         // Then I should see it sorted by name
         $columnHeaderResourceElement = $this->find('#js_wsp_users_browser .tableview-header .js_grid_column_' . $columnId);
@@ -608,6 +609,7 @@ class UserWorkspaceTest extends PassboltTestCase
         // When I sort the users browser by username descendingly as it is by default sorted ascendingly
         $columnId = 'username';
         $this->click('.js_grid_column_' . $columnId);
+        $this->waitCompletion();
 
         // Then I should see it sorted by username
         $columnHeaderUsernameElement = $this->find('#js_wsp_users_browser .tableview-header .js_grid_column_' . $columnId);
@@ -619,6 +621,7 @@ class UserWorkspaceTest extends PassboltTestCase
         // When I sort the users browser by modified
         $columnId = 'modified';
         $this->click('.js_grid_column_' . $columnId);
+        $this->waitCompletion();
 
         // Then I should see it sorted by modified
         $columnHeaderModifiedElement = $this->find('#js_wsp_users_browser .tableview-header .js_grid_column_' . $columnId);
@@ -630,6 +633,7 @@ class UserWorkspaceTest extends PassboltTestCase
         // When I sort the users browser by uri
         $columnId = 'last_logged_in';
         $this->click('.js_grid_column_' . $columnId);
+        $this->waitCompletion();
 
         // Then I should see it sorted by lasted logged in
         $columnHeaderUriElement = $this->find('#js_wsp_users_browser .tableview-header .js_grid_column_' . $columnId);

@@ -725,7 +725,7 @@ class PasswordWorkspaceTest extends PassboltTestCase
         );
 
         $this->loginAs(
-            ['Username' => $john['Username'], 'MasterPassword' => $john['MasterPassword']], false
+            ['Username' => $john['Username'], 'MasterPassword' => $john['MasterPassword']], ['setConfig' => false]
         );
         // Check we are logged in.
         $this->waitCompletion();
@@ -798,6 +798,7 @@ class PasswordWorkspaceTest extends PassboltTestCase
         // When I sort the passwords browser by resource name
         $columnId = 'name';
         $this->click('.js_grid_column_' . $columnId);
+        $this->waitCompletion();
 
         // Then I should see it sorted by resource name
         $columnHeaderResourceElement = $this->find('#js_wsp_pwd_browser .tableview-header .js_grid_column_' . $columnId);
@@ -807,6 +808,7 @@ class PasswordWorkspaceTest extends PassboltTestCase
         // When I sort the passwords browser by username
         $columnId = 'username';
         $this->click('.js_grid_column_' . $columnId);
+        $this->waitCompletion();
 
         // Then I should see it sorted by username
         $columnHeaderUsernameElement = $this->find('#js_wsp_pwd_browser .tableview-header .js_grid_column_' . $columnId);
@@ -818,6 +820,7 @@ class PasswordWorkspaceTest extends PassboltTestCase
         // When I sort the passwords browser by uri
         $columnId = 'uri';
         $this->click('.js_grid_column_' . $columnId);
+        $this->waitCompletion();
 
         // Then I should see it sorted by uri
         $columnHeaderUriElement = $this->find('#js_wsp_pwd_browser .tableview-header .js_grid_column_' . $columnId);
@@ -829,6 +832,7 @@ class PasswordWorkspaceTest extends PassboltTestCase
         // When I sort the passwords browser by modified
         $columnId = 'modified';
         $this->click('.js_grid_column_' . $columnId);
+        $this->waitCompletion();
 
         // Then I should see it sorted by modified
         $columnHeaderModifiedElement = $this->find('#js_wsp_pwd_browser .tableview-header .js_grid_column_' . $columnId);
