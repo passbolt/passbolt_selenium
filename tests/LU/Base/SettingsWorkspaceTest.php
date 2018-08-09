@@ -15,6 +15,7 @@
 /**
  * Feature : Settings Workspace
  *
+ * - As a user I should be able to access the settings workspace using route
  * - As a user I should be able to search a user by keywords
  */
 namespace Tests\LU\Base;
@@ -28,6 +29,26 @@ class SettingsWorkspaceTest extends PassboltTestCase
 {
     use WorkspaceActionsTrait;
     use WorkspaceAssertionsTrait;
+
+    /**
+     * Scenario: As a user I should be able to access the settings workspace using route
+     *
+     * When  I am logged in as Ada
+     * And   I enter the user workspace route in the url
+     * Then  I should see the settings profile screen
+     *
+     * @group LU
+     * @group settings
+     * @group settings-workspace
+     * @group saucelabs
+     * @group v2
+     */
+    public function testRoute()
+    {
+        $this->loginAs(User::get('ada'), ['url' => '/app/settings']);
+        $this->waitCompletion();
+        $this->waitUntilISee('.page.settings.profile');
+    }
 
     /**
      * Scenario: As a user I should be able to search a password by keywords from the settings workspace

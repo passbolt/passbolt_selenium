@@ -16,6 +16,7 @@
  * Feature: As an administrator I can edit groups
  *
  * Scenarios :
+ *  - As an admin I should be able to access the group edit dialog using route
  *  - As an administrator I can edit a group using the right click contextual menu
  *  - As an administrator I can edit the group name
  *  - As an administrator I can edit a group from the sidebar
@@ -49,6 +50,26 @@ class ADGroupEditTest extends PassboltTestCase
     use SidebarActionsTrait;
     use WorkspaceActionsTrait;
     use WorkspaceAssertionsTrait;
+
+    /**
+     * Scenario: As an admin I should be able to access the group edit dialog using route
+     *
+     * When  I am logged in as Admin
+     * And   I enter the route in the url
+     * Then  I should see the group edit dialog
+     *
+     * @group AD
+     * @group group
+     * @group group-edit
+     * @group saucelabs
+     * @group v2
+     */
+    public function testRoute_EditGroup()
+    {
+        $this->loginAs(User::get('admin'), ['url' => '/app/groups/edit/36563004-3f25-50c0-b22e-6554c3ccc4e7']);
+        $this->waitCompletion();
+        $this->waitUntilISee('.edit-group-dialog');
+    }
 
     /**
      * Scenario: As an administrator I can edit a group using the right click contextual menu

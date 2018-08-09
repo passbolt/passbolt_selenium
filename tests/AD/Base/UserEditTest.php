@@ -16,6 +16,7 @@
  * Feature: As a user I can edit users
  *
  * Scenarios :
+ *  - As an admin I should be able to access the user edit dialog using route
  *  - As an admin I can edit a user using the edit button in the action bar
  *  - As an admin I can edit a user using the right click contextual menu
  *  - As an admin I can open close the edit user dialog
@@ -44,6 +45,27 @@ class UserEditTest extends PassboltTestCase
     use SetupActionsTrait;
     use WorkspaceAssertionsTrait;
     use WorkspaceActionsTrait;
+
+    /**
+     * Scenario: As a user I should be able to access the user edit dialog using route
+     *
+     * When  I am logged in as Admin
+     * And   I enter the route in the url
+     * Then  I should see the user edit dialog
+     *
+     * @group AD
+     * @group user
+     * @group user-edit
+     * @group saucelabs
+     * @group v2
+     */
+    public function testRoute_EditUser()
+    {
+        $this->loginAs(User::get('admin'), ['url' => '/app/users/edit/8d038399-ecac-55b4-8ad3-b7f0650de2a2?first_name=Ornaa&last_name=Blueberry']);
+        $this->waitCompletion();
+        $this->assertInputValue('js_field_first_name', 'Ornaa');
+        $this->assertInputValue('js_field_last_name', 'Blueberry');
+    }
 
     /**
      * Scenario: As a admin I can edit a user using the edit button in the action bar

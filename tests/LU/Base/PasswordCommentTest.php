@@ -15,6 +15,7 @@
 /**
  * Feature : As a user I can comment on a password
  *
+ * - As a user I should be able to access the password comments using route
  * - As a user I should be able to ad comments
  * - As a user I should see error messages if the content entered is not alright
  * - As a user I should be able to delete a comment
@@ -41,6 +42,27 @@ class PasswordCommentTest extends PassboltTestCase
     use WorkspaceAssertionsTrait;
 
     private $commentFormSelector = '#js_rs_details_comments form#js_comment_add_form';
+
+    /**
+     * Scenario: As a user I should be able to access the password comments using route
+     *
+     * When  I am logged in as Ada
+     * And   I enter the route in the url
+     * Then  I should see the comments
+     *
+     * @group LU
+     * @group comment
+     * @group comment-see
+     * @group saucelabs
+     * @group v2
+     */
+    public function testRoute_SeePasswordComments()
+    {
+        $resourceId = UuidFactory::uuid('resource.id.cakephp');
+        $this->loginAs(User::get('ada'), ['url' => "/app/passwords/view/$resourceId/comments"]);
+        $this->waitCompletion();
+        $this->waitUntilISee('#js_rs_details_comments form#js_comment_add_form');
+    }
 
     /**
      * Scenario: As a user I should be able to add comments

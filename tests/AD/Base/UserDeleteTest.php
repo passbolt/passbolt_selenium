@@ -16,6 +16,7 @@
  * Feature: As a admin I can delete users
  *
  * Scenarios :
+ *  - As an admin I should be able to access the user delete dialog using route
  *  - As admin I should be able to delete a user on a right click
  *  - As admin I should be able to delete a user using the delete button
  *  - As Admin I should not be able to delete my own user account
@@ -40,6 +41,26 @@ class ADUserDeleteTest extends PassboltTestCase
     use UserActionsTrait;
     use WorkspaceAssertionsTrait;
     use WorkspaceActionsTrait;
+
+    /**
+     * Scenario: As an admin I should be able to access the user delete dialog using route
+     *
+     * When  I am logged in as Ada
+     * And   I enter the route in the url
+     * Then  I should see the user delete dialog
+     *
+     * @group AD
+     * @group user
+     * @group user-delete
+     * @group saucelabs
+     * @group v2
+     */
+    public function testRoute_DeleteUser()
+    {
+        $this->loginAs(User::get('admin'), ['url' => '/app/users/delete/8d038399-ecac-55b4-8ad3-b7f0650de2a2']);
+        $this->waitCompletion();
+        $this->assertConfirmationDialog('Do you really want to delete?');
+    }
 
     /**
      * Scenario: As admin I should be able to delete a user on a right click

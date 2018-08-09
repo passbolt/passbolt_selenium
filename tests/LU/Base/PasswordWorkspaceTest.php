@@ -15,6 +15,8 @@
 /**
  * Feature : Password Workspace
  *
+ * - As a user I should be able to access the password workspace using route
+ * - As a user I should be able to access the password workspace using route
  * - As a user I should be able to see the passwords workspace
  * - As a user I should be able to browse my passwords
  * - As a user I should be able to use the navigation filters
@@ -61,6 +63,47 @@ class PasswordWorkspaceTest extends PassboltTestCase
     use WorkspaceActionsTrait;
     use WorkspaceAssertionsTrait;
     use PasswordAssertionsTrait;
+
+    /**
+     * Scenario: As a user I should be able to access the password workspace using route
+     *
+     * When  I am logged in as Ada
+     * And   I enter the user workspace route in the url
+     * Then  I should see the workspace
+     *
+     * @group LU
+     * @group password
+     * @group password-workspace
+     * @group saucelabs
+     * @group v2
+     */
+    public function testRoute()
+    {
+        $this->loginAs(User::get('ada'), ['url' => '/app/passwords']);
+        $this->waitCompletion();
+        $this->waitUntilISee('.page.password');
+    }
+
+    /**
+     * Scenario: As a user I should be able to access the password workspace using route
+     *
+     * When  I am logged in as Ada
+     * And   I enter the route in the url
+     * Then  I should see the password selected
+     *
+     * @group LU
+     * @group password
+     * @group password-workspace
+     * @group saucelabs
+     * @group v2
+     */
+    public function testRoute_SelectPassword()
+    {
+        $resourceId = UuidFactory::uuid('resource.id.cakephp');
+        $this->loginAs(User::get('ada'), ['url' => "/app/passwords/view/$resourceId"]);
+        $this->waitCompletion();
+        $this->assertPasswordSelected($resourceId);
+    }
 
     /**
      * Scenario: As a user I should be able to see the passwords workspace

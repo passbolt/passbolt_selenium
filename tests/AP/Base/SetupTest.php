@@ -291,11 +291,11 @@ class SetupTest extends PassboltSetupTestCase
         $this->goToSetup($john['Username']);
         $this->completeRegistration();
 
-        $this->loginAs([
+        $loginAs = [
             'Username' => $john['Username'],
             'MasterPassword' => $john['MasterPassword']
-            ], false
-        );
+        ];
+        $this->loginAs($loginAs, ['setConfig' => false]);
 
         // Check we are logged in.
         $this->waitCompletion();
@@ -371,12 +371,11 @@ class SetupTest extends PassboltSetupTestCase
         $this->waitUntilISee('.information h2', '/Welcome back!/');
 
         // Login as john doe
-        $this->loginAs(
-            [
+        $loginAs = [
             'Username' => $key['owner_email'],
             'MasterPassword' => $key['masterpassword']
-            ], false
-        );
+        ];
+        $this->loginAs($loginAs, ['setConfig' => false]);
 
         $this->waitCompletion();
         // Check we are logged in.

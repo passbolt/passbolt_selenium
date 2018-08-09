@@ -16,10 +16,11 @@
  * Feature: As an administrator I can delete a group
  *
  * Scenarios :
- *  - As an administrator I can delete a group that doesn't have any passwords shared with it
- *  - As an administrator I can delete a group that has passwords shared with it
- *  - As an administrator I can't delete a group that is the sole owner of passwords
- *  - As an administrator I can delete a group that is already selected in the list
+ *  - As an admin I should be able to access the group delete dialog using route
+ *  - As an admin I can delete a group that doesn't have any passwords shared with it
+ *  - As an admin I can delete a group that has passwords shared with it
+ *  - As an admin I can't delete a group that is the sole owner of passwords
+ *  - As an admin I can delete a group that is already selected in the list
  */
 namespace Tests\AD\Base;
 
@@ -30,6 +31,7 @@ use App\Actions\PasswordActionsTrait;
 use App\Actions\PermissionActionsTrait;
 use App\Actions\ShareActionsTrait;
 use App\Actions\WorkspaceActionsTrait;
+use App\Assertions\ConfirmationDialogAssertionsTrait;
 use App\Assertions\GroupAssertionsTrait;
 use App\Assertions\MasterPasswordAssertionsTrait;
 use App\Assertions\PasswordAssertionsTrait;
@@ -42,6 +44,7 @@ class ADGroupDeleteTest extends PassboltTestCase
 {
 
     use ConfirmationDialogActionsTrait;
+    use ConfirmationDialogAssertionsTrait;
     use GroupActionsTrait;
     use GroupAssertionsTrait;
     use MasterPasswordActionsTrait;
@@ -52,6 +55,26 @@ class ADGroupDeleteTest extends PassboltTestCase
     use ShareActionsTrait;
     use WorkspaceActionsTrait;
     use WorkspaceAssertionsTrait;
+
+    /**
+     * Scenario: As an admin I should be able to access the group delete dialog using route
+     *
+     * When  I am logged in as Admin
+     * And   I enter the route in the url
+     * Then  I should see the group delete dialog
+     *
+     * @group AD
+     * @group group
+     * @group group-delete
+     * @group saucelabs
+     * @group v2
+     */
+    public function testRoute_DeleteGroup()
+    {
+        $this->loginAs(User::get('admin'), ['url' => '/app/groups/delete/36563004-3f25-50c0-b22e-6554c3ccc4e7']);
+        $this->waitCompletion();
+        $this->assertConfirmationDialog('You are about to delete the group "Board"!');
+    }
 
     /**
      * Scenario: As an administrator I can delete a group that doesn't have any passwords shared with it.

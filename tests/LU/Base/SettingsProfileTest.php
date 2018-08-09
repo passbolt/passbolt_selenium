@@ -15,6 +15,7 @@
 /**
  * Feature : Settings Workspace, keys section
  *
+ * - As a user I should be able to access the settings profile info screen using route
  * - As a LU I should be able to see my profile information in the profile section
  * - As a LU I should be able to see and use the breadcrumb of the profile section.
  * - As LU, I should be able to edit my avatar picture.
@@ -39,6 +40,26 @@ class SettingsProfileTest extends PassboltTestCase
     use WorkspaceAssertionsTrait;
     use WorkspaceActionsTrait;
     use ImageAssertionsTrait;
+
+    /**
+     * Scenario: As a user I should be able to access the settings profile info screen using route
+     *
+     * When  I am logged in as Ada
+     * And   I enter the user workspace route in the url
+     * Then  I should see the settings profile screen
+     *
+     * @group LU
+     * @group settings
+     * @group settings-workspace
+     * @group saucelabs
+     * @group v2
+     */
+    public function testRoute_SeeProfile()
+    {
+        $this->loginAs(User::get('ada'), ['url' => '/app/settings/profile']);
+        $this->waitCompletion();
+        $this->waitUntilISee('.page.settings.profile');
+    }
 
     /**
      * Scenario: As a LU I should be able to see my profile information in the profile section

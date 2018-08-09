@@ -61,7 +61,8 @@ abstract class AuthenticatedTestCase extends RecordableTestCase
             $this->getDriver()->findElement(WebDriverBy::cssSelector('.users.login.form'));
         }
         catch(NoSuchElementException $e) {
-            $this->getUrl('login');
+            $url = Hash::get($options, 'url', 'login');
+            $this->getUrl($url);
         }
 
         $this->waitUntilISee('#passbolt-iframe-login-form.ready');

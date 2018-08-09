@@ -16,7 +16,8 @@
  * Feature: As LU I can view user information
  *
  * Scenarios :
- * - As a user I should be able to view the user details
+ *  - As a user I should be able to see the user details using route
+ *  - As a user I should be able to view the user details
  */
 namespace Tests\LU\Base;
 
@@ -33,6 +34,26 @@ class UserViewTest extends PassboltTestCase
     use SidebarActionsTrait;
     use UserActionsTrait;
     use WorkspaceActionsTrait;
+
+    /**
+     * Scenario: As a user I should be able to see the user details using route
+     *
+     * When  I am logged in as Ada
+     * And   I enter the route in the url
+     * Then  I should see the user details
+     *
+     * @group LU
+     * @group user
+     * @group user-view
+     * @group saucelabs
+     * @group v2
+     */
+    public function testRoute_ViewUser()
+    {
+        $this->loginAs(User::get('ada'), ['url' => '/app/users/view/8d038399-ecac-55b4-8ad3-b7f0650de2a2']);
+        $this->waitCompletion();
+        $this->assertPageContainsElement('#js_user_details');
+    }
 
     /**
      * Scenario: As a user I should be able to view the user details

@@ -16,6 +16,7 @@
  * Feature: As a user I can create passwords
  *
  * Scenarios :
+ *  - As an admin I should be able to access the user add dialog using route
  *  - As a user I can view the create user dialog
  *  - As a user I can open close the create user dialog
  *  - As a admin I can see error messages when creating a user with wrong inputs
@@ -48,6 +49,28 @@ class UserCreateTest extends PassboltTestCase
     use SetupActionsTrait;
     use WorkspaceAssertionsTrait;
     use WorkspaceActionsTrait;
+
+    /**
+     * Scenario: As an admin I should be able to access the user add dialog using route
+     *
+     * When  I am logged in as Ada
+     * And   I enter the route in the url
+     * Then  I should see the user add dialog
+     *
+     * @group AD
+     * @group user
+     * @group user-create
+     * @group saucelabs
+     * @group v2
+     */
+    public function testRoute_AddUser()
+    {
+        $this->loginAs(User::get('admin'), ['url' => '/app/users/add?first_name=John&last_name=Doe&username=john.doe@assbolt.com']);
+        $this->waitCompletion();
+        $this->assertInputValue('js_field_first_name', 'John');
+        $this->assertInputValue('js_field_last_name', 'Doe');
+        $this->assertInputValue('js_field_username', 'john.doe@assbolt.com');
+    }
 
     /**
      * Scenario: As an admin I can view the create user dialog

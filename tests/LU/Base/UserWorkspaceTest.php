@@ -15,6 +15,8 @@
 /**
  * Feature : User Workspace
  *
+ * - As a user I should be able to access the user workspace using route
+ * - As a user I should be able to access the user workspace using route
  * - As a user I should be able to see the users workspace
  * - As a user I should be able to browse the users
  * - As a user I should be able to use the navigation filters
@@ -45,6 +47,26 @@ class UserWorkspaceTest extends PassboltTestCase
     use UserActionsTrait;
     use FilterAssertionsTrait;
     use SidebarAssertionsTrait;
+
+    /**
+     * Scenario: As a user I should be able to access the user workspace using route
+     *
+     * When  I am logged in as Ada
+     * And   I enter the route in the url
+     * Then  I should see the workspace
+     *
+     * @group LU
+     * @group user
+     * @group user-workspace
+     * @group saucelabs
+     * @group v2
+     */
+    public function testRoute()
+    {
+        $this->loginAs(User::get('ada'), ['url' => '/app/users']);
+        $this->waitCompletion();
+        $this->waitUntilISee('.page.user');
+    }
 
     /**
      * Scenario: As a user I should be able to see the user workspace

@@ -15,8 +15,9 @@
 /**
  * Feature : Settings Workspace, keys section
  *
- * - As a LU I should be able to see my keys info in the settings workspace, keys section
- * - As a LU I should be able to download my public and private key
+ * - As a user I should be able to access the settings keys info screen using route
+ * - As a user I should be able to see my keys info in the settings workspace, keys section
+ * - As a user I should be able to download my public and private key
  */
 namespace Tests\LU\Base;
 
@@ -30,6 +31,26 @@ class SettingsKeyTest extends PassboltTestCase
 {
     use WorkspaceActionsTrait;
     use WorkspaceAssertionsTrait;
+
+    /**
+     * Scenario: As a user I should be able to access the settings keys info screen using route
+     *
+     * When  I am logged in as Ada
+     * And   I enter the user workspace route in the url
+     * Then  I should see the settings keys screen
+     *
+     * @group LU
+     * @group settings
+     * @group settings-workspace
+     * @group saucelabs
+     * @group v2
+     */
+    public function testRoute_SeeKeys()
+    {
+        $this->loginAs(User::get('ada'), ['url' => '/app/settings/keys']);
+        $this->waitCompletion();
+        $this->waitUntilISee('.page.settings.keys');
+    }
 
     /**
      * Scenario: As a LU I should be able to see my keys info in the settings workspace, keys section

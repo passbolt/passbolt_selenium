@@ -16,6 +16,7 @@
  * Feature: As a user I can edit a password
  *
  * Scenarios:
+ * As a user I should be able to access the password edit dialog using route
  * As a user I can edit a password using the edit button in the action bar
  * As a user I can edit a password using the right click contextual menu
  * As a user I can open close the edit password dialog
@@ -48,6 +49,7 @@ use App\Assertions\ConfirmationDialogAssertionsTrait;
 use App\Assertions\MasterPasswordAssertionsTrait;
 use App\Assertions\PasswordAssertionsTrait;
 use App\Assertions\WorkspaceAssertionsTrait;
+use App\Lib\UuidFactory;
 use App\PassboltTestCase;
 use Data\Fixtures\User;
 use Data\Fixtures\Resource;
@@ -65,6 +67,27 @@ class PasswordEditTest extends PassboltTestCase
     use SidebarActionsTrait;
     use WorkspaceActionsTrait;
     use WorkspaceAssertionsTrait;
+
+    /**
+     * Scenario: As a user I should be able to access the password edit dialog using route
+     *
+     * When  I am logged in as Ada
+     * And   I enter the route in the url
+     * Then  I should see the edit dialog
+     *
+     * @group LU
+     * @group password
+     * @group password-edit
+     * @group saucelabs
+     * @group v2
+     */
+    public function testRoute_EditPassword()
+    {
+        $resourceId = UuidFactory::uuid('resource.id.cakephp');
+        $this->loginAs(User::get('ada'), ['url' => "/app/passwords/edit/$resourceId"]);
+        $this->waitCompletion();
+        $this->assertVisibleByCss('.edit-password-dialog');
+    }
 
     /**
      * Scenario: As a user I can edit a password using the edit button in the action bar

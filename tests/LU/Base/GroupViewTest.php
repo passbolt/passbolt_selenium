@@ -41,6 +41,46 @@ class GroupViewTest extends PassboltTestCase
     use WorkspaceActionsTrait;
 
     /**
+     * Scenario: As a user I should be able to see the group detail using route
+     *
+     * When  I am logged in as Ada
+     * And   I enter the route in the url
+     * Then  I should see the group detail
+     *
+     * @group LU
+     * @group group
+     * @group group-view
+     * @group saucelabs
+     * @group v2
+     */
+    public function testRoute_ViewGroup()
+    {
+        $this->loginAs(User::get('admin'), ['url' => '/app/groups/view/36563004-3f25-50c0-b22e-6554c3ccc4e7']);
+        $this->waitCompletion();
+        $this->waitUntilISee('#js_group_details.ready');
+    }
+
+    /**
+     * Scenario: As a user I should be able to see the group memberships using route
+     *
+     * When  I am logged in as Ada
+     * And   I enter the route in the url
+     * Then  I should see the group memberships
+     *
+     * @group LU
+     * @group group
+     * @group group-view
+     * @group saucelabs
+     * @group v2
+     */
+    public function testRoute_ViewGroupMemberships()
+    {
+        $this->loginAs(User::get('admin'), ['url' => '/app/groups/view/36563004-3f25-50c0-b22e-6554c3ccc4e7/membership']);
+        $this->waitCompletion();
+        $this->waitUntilISee('#js_group_details.ready #js_group_details_members #js_group_details_group_members_list.ready');
+    }
+
+    /**
      * Scenario: As a user I can see a group information from the sidebar
      *
      * Given I am a logged-in user
