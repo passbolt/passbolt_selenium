@@ -57,20 +57,6 @@ trait MasterPasswordActionsTrait
         // Click on button.
         $submit->click();
 
-        // Check that button has processing class.
-        try {
-            $this->assertElementHasClass(
-                $submit,
-                'processing'
-            );
-        } catch(StaleElementReferenceException $e) {
-            // Everything alright.
-            // It's just that the element has already been removed from the dom.
-        } catch(UnknownServerException $e) {
-            // Everything alright.
-            // It's just that the element has already been removed and the selenium doesn't find it.
-        }
-
         $this->goOutOfIframe();
         $this->waitUntilIDontSee('#passbolt-iframe-master-password');
     }
@@ -102,13 +88,6 @@ trait MasterPasswordActionsTrait
         } else {
             $this->inputText('js_master_password', $pwd);
             $this->pressEnter();
-        }
-
-        try {
-            $this->waitUntilISee('#master-password-submit.processing');
-        } catch (StaleElementReferenceException $e) {
-            // Do nothing.
-            // This happens sometimes when the master password decryption is too fast
         }
 
         $this->goOutOfIframe();

@@ -51,7 +51,6 @@ trait WorkspaceAssertionsTrait
      */
     public function assertNotification($notificationId)
     {
-//        $notificationId = '#notification_' . UuidFactory::uuid($notificationId);
         $this->waitUntilISee('#js_app_notificator .' . $notificationId);
     }
 
