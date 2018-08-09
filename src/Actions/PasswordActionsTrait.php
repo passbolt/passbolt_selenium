@@ -98,7 +98,7 @@ trait PasswordActionsTrait
             $this->waitUntilISee('#js_wk_menu_edition_button');
         }
         $this->releaseFocus(); // we click somewhere in case the password is already active
-        if (!$this->a($id)) {
+        if (!$this->isPasswordSelected($id)) {
             $this->clickPassword($id);
         }
         $this->click('js_wk_menu_edition_button');
