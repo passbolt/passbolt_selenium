@@ -1,4 +1,3 @@
-
 <?php
 /**
  * Passbolt ~ Open source password manager for teams
