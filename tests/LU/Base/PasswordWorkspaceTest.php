@@ -494,6 +494,8 @@ class PasswordWorkspaceTest extends PassboltTestCase
      * And   I should see the breadcrumb with the following:
      *                    | All items
      *                    | Search : shared resource
+     * When  I make a search to get an empty result
+     * Then  I should see an empty workspace with the text relative to the empty search filter
      *
      * @group LU
      * @group password
@@ -545,6 +547,13 @@ class PasswordWorkspaceTest extends PassboltTestCase
         //    | All items
         //    | Search : shared resource
         $this->assertBreadcrumb('password', $breadcrumb);
+
+        // When I make a search to get an empty result
+        $this->inputText('js_app_filter_keywords', '011011100110111101110100001000000110011001101111011101010110111001100100');
+
+        // I should see an empty workspace with the text relative to the empty search filter
+        $this->waitUntilISee('#js_wsp_pwd_browser .empty-content');
+        $this->assertElementContainsText('#js_wsp_pwd_browser .empty-content', 'None of your passwords matched this search.');
     }
 
     /**
@@ -784,15 +793,39 @@ class PasswordWorkspaceTest extends PassboltTestCase
         // When I click on the favorite filter.
         $this->clickLink("Favorite");
         $this->waitCompletion();
+        sleep(2);
+        // The layer empty content with the text relative to the empty favorite filter
+        $this->waitUntilISee('.empty-content');
+        $this->assertElementContainsText('.empty-content', 'None of your passwords are yet marked as favorite.');
 
-        // The layer empty content with text should not be visible.
-        $this->assertNotVisibleByCss('.empty-content');
-        $this->assertElementNotContainText($this->findById('js_wsp_pwd_browser'), 'Welcome to passbolt!');
+        // When I click on the recently modified filter
+        $this->clickLink("Recently modified");
+        $this->waitCompletion();
+        sleep(2);
+        // I should see an empty workspace with the text relative to the empty recently modified filter
+        $this->waitUntilISee('.empty-content');
+        $this->assertElementContainsText('.empty-content', 'Welcome to passbolt!');
+
+        // When I click on the shared with me filter.
+        $this->clickLink("Shared with me");
+        $this->waitCompletion();
+        sleep(2);
+        // I should see an empty workspace with the text relative to the empty shared with me filter
+        $this->waitUntilISee('.empty-content');
+        $this->assertElementContainsText('.empty-content', 'No passwords are shared with you yet.');
+
+        // When I click on the owner filter.
+        $this->clickLink("Items I own");
+        $this->waitCompletion();
+        sleep(2);
+        // I should see an empty workspace with the text relative to the empty owner filter
+        $this->waitUntilISee('.empty-content');
+        $this->assertElementContainsText('.empty-content', 'You do not own any passwords yet.');
 
         // When I go Back to All items.
         $this->clickLink("All items");
         $this->waitCompletion();
-
+        sleep(2);
         // I should see an empty workspace with the text Welcome to passbolt!
         $this->waitUntilISee('.empty-content');
         $this->assertElementContainsText('.empty-content', 'Welcome to passbolt!');
