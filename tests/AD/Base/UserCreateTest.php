@@ -372,9 +372,6 @@ class UserCreateTest extends PassboltTestCase
      * And   I click on the save button
      * And   I see a notice message that the operation was a success
      * And   I see the user I created in my user list
-     * When  I refresh the page
-     * And   I go to user workspace
-     * Then  I should still see the user I created in my user list
      *
      * @group AD
      * @group user
@@ -411,23 +408,6 @@ class UserCreateTest extends PassboltTestCase
 
         // I see a notice message that the operation was a success
         $this->assertNotification('app_users_addPost_success');
-
-        // I see the password I created in my password list
-        $this->assertElementContainsText(
-            $this->find('js_passbolt_user_workspace_controller'), 'Firstnametest'
-        );
-        $this->assertElementContainsText(
-            $this->find('js_passbolt_user_workspace_controller'), 'Lastnametest'
-        );
-        $this->assertElementContainsText(
-            $this->find('js_passbolt_user_workspace_controller'), 'usernametest'
-        );
-
-        // refresh pages
-        $this->refresh();
-
-        // Go to user workspace
-        $this->gotoWorkspace('user');
 
         // I see the password I created in my password list
         $this->assertElementContainsText(
