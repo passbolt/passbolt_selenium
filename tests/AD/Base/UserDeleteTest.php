@@ -20,8 +20,8 @@
  *  - As admin I should be able to delete a user on a right click
  *  - As admin I should be able to delete a user using the delete button
  *  - As Admin I should not be able to delete my own user account
- *  - As Admin I should not be able to delete a user who is the sole owner of some shared passwords
- *  - As Admin I should not be able to delete a user who is the sole group manager of groups
+ *  - As Admin I can delete a user who is the sole owner of some shared passwords if tranfer the ownership of these passwords
+ *  - As Admin I can delete a user who is the sole group manager of groups if I transfer the managers of this groups
  */
 namespace Tests\AD\Base;
 
@@ -229,7 +229,7 @@ class ADUserDeleteTest extends PassboltTestCase
     }
 
     /**
-     * Scenario: As Admin I should not be able to delete a user who is the sole owner of some shared passwords
+     * Scenario: As Admin I can delete a user who is the sole owner of some shared passwords if tranfer the ownership of these passwords
      *
      * Given I am logged in as admin in the user workspace
      * And   I click on the user
@@ -245,7 +245,7 @@ class ADUserDeleteTest extends PassboltTestCase
      * @group delete
      * @group v2
      */
-    public function testDeletedUserSoleOwner() 
+    public function testDeletedUserSoleOwner()
     {
         // Reset database at the end of test.
         $this->resetDatabaseWhenComplete();
@@ -261,24 +261,37 @@ class ADUserDeleteTest extends PassboltTestCase
         $this->gotoWorkspace('user');
 
         // When I click on a user
-        $userA = User::get('ada');
-        $this->clickUser($userA['id']);
+        $userK = User::get('ada');
+        $this->clickUser($userK['id']);
 
         // And I click on delete button
         $this->click('js_user_wk_menu_deletion_button');
 
-        // Then I should see a message explaining me why the user can't be deleted
-        $this->assertConfirmationDialog('You cannot delete this user!');
+        // Then I should see a dialog showing me why the user cannot be simply deleted
+        $this->waitUntilISee('.dialog');
+        $this->assertElementContainsText('.dialog', 'You cannot delete this user!');
 
-        // When I click on the dialog main action
-        $this->confirmActionInConfirmationDialog();
+        // And I should see a the passwords transfer section
+        $this->waitUntilISee('.ownership-transfer-items');
 
-        // Then I should see that the dialog disappears
-        $this->waitUntilIDontSee('.mad_component_confirm');
+        // And I should see a password requiring a transfer
+        $this->assertElementContainsText('.ownership-transfer-items', 'apache (Password) new owner:');
+
+        // And I should see a list of possible owners
+        $this->assertElementContainsText('.ownership-transfer-items', 'Carol Shaw (carol@passbolt.com)');
+
+        // When I click on delete button
+        $this->click('.dialog .submit-wrapper input.button.primary');
+
+        // Then I should see a success notification message saying the user is deleted
+        $this->assertNotification('app_users_delete_success');
+
+        // And I should not see the user in the grid
+        $this->assertElementNotContainText('#js_wsp_users_browser', 'Ada Lovelace');
     }
 
     /**
-     * Scenario: As Admin I should not be able to delete a user who is the sole group manager of groups
+     * Scenario: As Admin I can delete a user who is the sole group manager of groups if I transfer the managers of this groups
      *
      * Given I am logged in as admin in the user workspace
      * And   I click on the user
@@ -317,13 +330,25 @@ class ADUserDeleteTest extends PassboltTestCase
         $this->click('js_user_wk_menu_deletion_button');
 
         // Then I should see a message explaining me why the user can't be deleted
-        $this->assertConfirmationDialog('You cannot delete this user!');
+        $this->waitUntilISee('.dialog');
+        $this->assertElementContainsText('.dialog', 'You cannot delete this user!');
 
-        // When I click on the dialog main action
-        $this->confirmActionInConfirmationDialog();
+        // And I should see a the passwords transfer section
+        $this->waitUntilISee('.ownership-transfer-items');
 
-        // Then I should see that the dialog disappears
-        $this->waitUntilIDontSee('.mad_component_confirm');
+        // And I should see a password requiring a transfer
+        $this->assertElementContainsText('.ownership-transfer-items', 'Accounting (Group) new manager:');
+
+        // And I should see a list of possible owners
+        $this->assertElementContainsText('.ownership-transfer-items', 'Grace Hopper (grace@passbolt.com)');
+
+        // When I click on delete button
+        $this->click('.dialog .submit-wrapper input.button.primary');
+
+        // Then I should see a success notification message saying the user is deleted
+        $this->assertNotification('app_users_delete_success');
+
+        // And I should not see the user in the grid
+        $this->assertElementNotContainText('#js_wsp_users_browser', 'Frances Allen');
     }
-
 }
