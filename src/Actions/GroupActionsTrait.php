@@ -244,6 +244,7 @@ trait GroupActionsTrait
         $eltSelector = '#group_' . $id . ' .main-cell';
         $this->waitUntilISee($eltSelector);
         $this->click($eltSelector);
+        sleep(1);
         $this->waitCompletion();
     }
 

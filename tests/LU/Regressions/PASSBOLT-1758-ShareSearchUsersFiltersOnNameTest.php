@@ -77,7 +77,7 @@ class PASSBOLT1758 extends PassboltTestCase
         // Then I should see only one result
         $this->goIntoShareAutocompleteIframe();
         $listOfUsers = $this->driver->findElements(WebDriverBy::cssSelector('ul li'));
-        $this->assertEquals(1, count($listOfUsers));
+        $this->assertEquals(2, count($listOfUsers));
 
         // And I should see only the user Edit Clarke in the autocomplete list
         $shareWithUserFullName = $userC['FirstName'] . ' ' . $userC['LastName'];

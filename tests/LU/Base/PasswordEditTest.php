@@ -1491,6 +1491,7 @@ class PasswordEditTest extends PassboltTestCase
 
         // When I switch to the second tab
         $this->switchToNextTab();
+        $this->waitCompletion();
 
         // And I edit a password
         $resource2 = Resource::get([
