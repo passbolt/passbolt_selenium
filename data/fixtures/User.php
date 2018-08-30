@@ -280,7 +280,7 @@ class User {
 
 			case 'margaret':
 				return array_merge($conf, array(
-					'id' => UuidFactory::uuid('margaret@passbolt.com'),
+					'id' => UuidFactory::uuid('user.id.margaret'),
 					'name' => 'margaret',
 					'FirstName' => 'Margaret',
 					'LastName' => 'Hamilton',
