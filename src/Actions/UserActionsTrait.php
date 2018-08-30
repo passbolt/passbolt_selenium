@@ -49,6 +49,7 @@ trait UserActionsTrait
         }
         $this->click('.create-user-dialog input[type=submit]');
         $this->assertNotification('app_users_addPost_success');
+        $this->waitCompletion();
     }
 
     /**
