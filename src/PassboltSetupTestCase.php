@@ -344,7 +344,7 @@ abstract class PassboltSetupTestCase extends PassboltTestCase
 
         // Test that complexity has been updated.
         $expectedComplexity = isset($user['PasswordStrength']) ? $user['PasswordStrength'] : 'fair';
-        $this->waitUntilISee('#js_user_pwd_strength .complexity-text', "/$expectedComplexity/", 5);
+        $this->waitUntilISee('#js_user_pwd_strength .complexity-text strong', "/$expectedComplexity/", 5);
 
         // Test that progress bar contains class fair.
         $this->assertElementHasClass(
