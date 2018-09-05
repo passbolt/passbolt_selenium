@@ -214,6 +214,60 @@ class PasswordDeleteTest extends PassboltTestCase
     }
 
     /**
+     * Scenario: As a user I can delete multiple passwords
+     *
+     * Given I am Ada
+     * And   I am logged in on the password worskpace
+     * Then  I can see a password shared with ada in the list
+     * When  I logout
+     * And   I am Ada
+     * And   I am logged in on the password workspace
+     * When  I click on the password shared with betty
+     * And   I click on the more button
+     * And   I click on the delete link
+     * Then  I should see a success notification message saying the password is deleted
+     * And   I should not see the password deleted by ada in the list anymore
+     * When  I logout
+     * And   I am Betty
+     * And   I am logged in on the password worskpace
+     * Then  I cannot see the password in the list anymore
+     *
+     * @group LU
+     * @group password
+     * @group password-delete
+     * @group v2
+     */
+    public function testDeleteMultiplePasswords()
+    {
+        $resourceE = UuidFactory::uuid('resource.id.enlightenment');
+        $resourceG = UuidFactory::uuid('resource.id.grogle');
+
+        // Reset database at the end of test.
+        $this->resetDatabaseWhenComplete();
+
+        // Given I am Ada
+        $userA = User::get('ada');
+        $this->loginAs($userA);
+        sleep(2);
+
+        // When I select passwords owned by Ada
+        $this->click("#multiple_select_checkbox_$resourceE input");
+        $this->click("#multiple_select_checkbox_$resourceG input");
+
+        // And I delete them
+        $this->click('js_wk_menu_more_button');
+        $this->clickLink('delete');
+        $this->confirmActionInConfirmationDialog();
+
+        // Then I should see the delete all notification
+        $this->assertNotification('app_resources_delete_all_success');
+
+        // And I should not see the passwords anymore in the grid
+        $this->assertNotVisibleByCss("#resource_$resourceE");
+        $this->assertNotVisibleByCss("#resource_$resourceG");
+    }
+
+    /**
      * Scenario: As a user I should not be able to delete a password when I have read access
      *
      * Given I am Betty
