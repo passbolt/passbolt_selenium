@@ -16,6 +16,7 @@
  * Feature: As a user I can get the system to remember my passphrase for a limited time
  *
  * Scenarios :
+ * As a user I can have my passphrase remembered by the system from the login page
  * As a user I can have my passphrase remembered by the system.
  */
 namespace Tests\LU\Base;
@@ -37,6 +38,57 @@ class MasterPasswordRememberTest extends PassboltTestCase
     use MasterPasswordAssertionsTrait;
     use PasswordActionsTrait;
     use WorkspaceAssertionsTrait;
+
+    /**
+     * Scenario: As a user I can have my passphrase remembered by the system from the login page
+     *
+     * Given I am Ada
+     * When  I got to the login page
+     * Then  I should the see a remember me option
+     * When  I click the remember me box
+     * And   I login on the password workspace
+     * And   I copy the secret of a password
+     * Then  The password should have been copied to clipboard without asking me for my master password
+     *
+     * @group LU
+     * @group master-password
+     * @group saucelabs
+     * @group v2
+     */
+    function testMasterPasswordRemember_RememberFromLogin()
+    {
+        // Given I am Ada
+        $user = User::get('ada');
+        $this->setClientConfig($user);
+
+        // When I got to the login page
+        $this->getUrl('/');
+
+        // Then I should the see a remember me option
+        $this->waitUntilISee('#passbolt-iframe-login-form.ready');
+        $this->goIntoLoginIframe();
+        $this->waitUntilISee('#rememberMe');
+        $this->goOutOfIframe();
+
+        // When I click the remember me box
+        $this->goIntoLoginIframe();
+        $this->click('#rememberMe');
+        $this->goOutOfIframe();
+
+        // And I login on the password workspace
+        $this->loginAs($user, ['setConfig' => false]);
+
+        // And I copy the secret of a password
+        $rsA = Resource::get(['user' => 'ada', 'id' => UuidFactory::uuid('resource.id.apache')]);
+        $this->clickPassword($rsA['id']);
+        $this->click('js_wk_menu_secretcopy_button');
+        $this->waitCompletion();
+
+        // Then The password should have been copied to clipboard without asking me for my master password
+        $this->assertNotification('plugin_clipboard_copy_success');
+        $this->waitUntilNotificationDisappears('plugin_clipboard_copy_success');
+        $this->assertClipboard($rsA['password']);
+    }
 
     /**
      * Scenario: As a user I can have my passphrase remembered by the system.
@@ -85,6 +137,7 @@ class MasterPasswordRememberTest extends PassboltTestCase
         // And I should see a checkbox remember my passphrase
         $this->goIntoMasterPasswordIframe();
         $this->assertVisible('js_remember_master_password');
+        $this->assertVisible('js_remember_master_password_duration');
         $this->goOutOfIframe();
 
         // When I enter my passphrase from keyboard only
