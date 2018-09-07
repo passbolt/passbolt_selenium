@@ -209,7 +209,7 @@ class ADGroupDeleteTest extends PassboltTestCase
      * @group delete
      * @group v2
      */
-    public function testDeleteGroupSoleOwnerOfPasswords() 
+    public function testDeleteGroupSoleOwner()
     {
         $this->resetDatabaseWhenComplete = true;
 
@@ -221,10 +221,10 @@ class ADGroupDeleteTest extends PassboltTestCase
 
         // I create a password.
         $resource = [
-        'name' => 'bankaccount',
-        'username' => 'admin',
-        'uri' => 'https://www.bankaccount.com',
-        'password' => 'testpassword'
+            'name' => 'bankaccount',
+            'username' => 'admin',
+            'uri' => 'https://www.bankaccount.com',
+            'password' => 'testpassword'
         ];
         $this->createPassword($resource);
 
@@ -255,17 +255,28 @@ class ADGroupDeleteTest extends PassboltTestCase
         $this->goToRemoveGroup($groupId);
 
         // Assert that I can see text.
-        $this->waitUntilISee('.dialog.confirm', '/You are trying to delete the group \"Accounting\"/');
-        $this->waitUntilISee('.dialog.confirm', '/This group is the sole owner of 1 password: ' . $resource['name'] . '\. You need to transfer the ownership to other users before you can proceed./');
+        $this->waitUntilISee('.dialog');
+        $this->assertElementContainsText('.dialog', 'You cannot delete this group!');
+        $this->waitUntilISee('.dialog', '/You are about to delete Accounting/');
+        $this->waitUntilISee('.dialog', '/This group is the owner of passwords. You need to transfer the ownership to other users or groups to continue./');
 
-        // Confirm action.
-        $this->assertActionNameInConfirmationDialog('Got it!');
-        $this->confirmActionInConfirmationDialog();
+        // And I should see a the passwords transfer section
+        $this->waitUntilISee('.ownership-transfer-items');
 
-        $this->waitUntilIDontSee('.confirm.dialog');
+        // And I should see a password requiring a transfer
+        $this->assertElementContainsText('.ownership-transfer-items', 'bankaccount (Password) new owner:');
 
-        // Assert that the group name is still there.
-        $this->waitUntilISee("#js_wsp_users_groups_list #group_${groupId}");
+        // And I should see a list of possible owners
+        $this->assertElementContainsText('.ownership-transfer-items', 'Admin User (admin@passbolt.com)');
+
+        // When I click on delete button
+        $this->click('.dialog .submit-wrapper input.button.primary');
+
+        // Then I should see a success notification message saying the group is deleted
+        $this->assertNotification('app_groups_delete_success');
+
+        // And I should not see the group in the group list
+        $this->waitUntilIDontSee("#js_wsp_users_groups_list", '/Accounting/');
     }
 
     /**

@@ -303,6 +303,6 @@ trait GroupActionsTrait
         $this->driver->getMouse()->mouseMove($groupElement->getCoordinates());
         $this->click("#group_${id} .right-cell a");
         $this->click("#js_contextual_menu #js_group_browser_menu_remove a");
-        $this->waitUntilISee('.dialog.confirm');
+        $this->waitUntilISee('.dialog');
     }
 }
