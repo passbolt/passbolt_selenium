@@ -24,7 +24,9 @@ use App\Actions\SidebarActionsTrait;
 use App\Assertions\MasterPasswordAssertionsTrait;
 use App\Assertions\PasswordAssertionsTrait;
 use App\Assertions\PermissionAssertionsTrait;
+use App\Assertions\ShareAssertionsTrait;
 use App\Assertions\SidebarAssertionsTrait;
+use App\Assertions\WorkspaceAssertionsTrait;
 use App\PassboltTestCase;
 use Data\Fixtures\User;
 use Data\Fixtures\Resource;
@@ -38,8 +40,10 @@ class PASSBOLT2031 extends PassboltTestCase
     use PasswordAssertionsTrait;
     use PermissionAssertionsTrait;
     use ShareActionsTrait;
+    use ShareAssertionsTrait;
     use SidebarActionsTrait;
     use SidebarAssertionsTrait;
+    use WorkspaceAssertionsTrait;
 
     /**
      * Scenario: As a user I can share a password with multiple users
@@ -84,16 +88,7 @@ class PASSBOLT2031 extends PassboltTestCase
         $this->addTemporaryPermission($resource, 'ping', $user);
 
         // And I click on the save button
-        $this->click('js_rs_share_save');
-
-        // And I see the passphrase dialog
-        $this->assertMasterPasswordDialog($user);
-
-        // And I enter the passphrase and click submit
-        $this->enterMasterPassword($user['MasterPassword']);
-
-        // Then I wait until I don't see  the encryption dialog anymore.
-        $this->waitUntilIDontSee('#passbolt-iframe-progress-dialog');
+        $this->saveShareChanges($user);
         $this->waitCompletion();
 
         // And I can see the new permissions in sidebar

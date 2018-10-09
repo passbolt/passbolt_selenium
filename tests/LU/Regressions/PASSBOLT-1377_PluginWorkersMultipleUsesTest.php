@@ -22,6 +22,7 @@ use App\Actions\PasswordActionsTrait;
 use App\Actions\ShareActionsTrait;
 use App\Assertions\MasterPasswordAssertionsTrait;
 use App\Assertions\PasswordAssertionsTrait;
+use App\Assertions\ShareAssertionsTrait;
 use App\Assertions\WorkspaceAssertionsTrait;
 use App\PassboltTestCase;
 use Data\Fixtures\User;
@@ -33,6 +34,7 @@ class PASSBOLT1377 extends PassboltTestCase
     use PasswordAssertionsTrait;
     use PasswordActionsTrait;
     use ShareActionsTrait;
+    use ShareAssertionsTrait;
     use WorkspaceAssertionsTrait;
     use MasterPasswordAssertionsTrait;
     use MasterPasswordActionsTrait;

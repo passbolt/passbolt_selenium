@@ -27,33 +27,26 @@ trait PermissionActionsTrait
      * @param $password
      * @param $username
      * @param $permissionType
-     * @param $user
      */
-    public function editTemporaryPermission($password, $username, $permissionType, $user) 
+    public function editTemporaryPermission($password, $username, $permissionType)
     {
         $this->gotoSharePassword($password['id']);
 
         // I can see the user has a direct permission
         $this->assertElementContainsText(
-            $this->findById('js_permissions_list'),
+            $this->findById('js-share-edit-list'),
             $username
         );
 
         // Find the permission row element
         // and change the permission
         try {
-            $rowElement = $this->findByXpath('//*[@id="js_permissions_list"]//*[.="' . $username . '"]//ancestor::li[1]');
-            $select = new WebDriverSelect($rowElement->findElement(WebDriverBy::cssSelector('.js_share_rs_perm_type')));
+            $rowElement = $this->findByXpath('//*[@id="js-share-edit-list"]//*[.="' . $username . '"]//ancestor::li[1]');
+            $select = new WebDriverSelect($rowElement->findElement(WebDriverBy::cssSelector('.select.rights .permission')));
             $select->selectByVisibleText($permissionType);
         } catch (NoSuchElementException $exception) {
             \PHPUnit_Framework_Assert::fail('Could not find the permission to edit');
         }
-
-        // I can see that temporary changes are waiting to be saved
-        $this->assertElementContainsText(
-            $this->findByCss('.share-password-dialog #js_permissions_changes'),
-            'You need to save to apply the changes'
-        );
     }
 
     /**
@@ -70,14 +63,7 @@ trait PermissionActionsTrait
         $this->editTemporaryPermission($password, $username, $permissionType, $user);
 
         // When I click on the save button
-        $this->click('js_rs_share_save');
-        $this->waitCompletion();
-
-        // And I see a notice message that the operation was a success
-        $this->assertNotification('app_share_share_success');
-
-        // And I should not see the share dialog anymore
-        $this->assertNotVisibleByCss('.share-password-dialog');
+        $this->saveShareChanges($user);
     }
 
     /**
@@ -88,18 +74,16 @@ trait PermissionActionsTrait
      */
     public function deleteTemporaryPermission($password, $username) 
     {
-        $this->gotoSharePassword($password['id']);
-
         // I can see the user has a direct permission
         $this->assertElementContainsText(
-            $this->findById('js_permissions_list'),
+            $this->findById('js-share-edit-list'),
             $username
         );
 
         // Find the permission row element
         // I delete the permission
-        $rowElement = $this->findByXpath('//*[@id="js_permissions_list"]//*[.="' . $username . '"]//ancestor::li[1]');
-        $deleteButton = $rowElement->findElement(WebDriverBy::cssSelector('.js_perm_delete'));
+        $rowElement = $this->findByXpath('//*[@id="js-share-edit-list"]//*[.="' . $username . '"]//ancestor::li[1]');
+        $deleteButton = $rowElement->findElement(WebDriverBy::cssSelector('.js-share-delete-button'));
         $this->assertTrue($deleteButton->isDisplayed());
         $deleteButton->click();
     }
@@ -108,36 +92,29 @@ trait PermissionActionsTrait
      * Delete a password permission helper
      *
      * @param $password
-     * @param $username
+     * @param $aroName
      */
-    public function deletePermission($password, $username) 
+    public function deletePermission($password, $aroName, $user)
     {
         // Delete temporary the permission
-        $this->deleteTemporaryPermission($password, $username);
+        $this->deleteTemporaryPermission($password, $aroName);
 
         try {
             // if it didn't work try to scroll and try again
             $this->findByCss('#js_permissions_changes.hidden');
-            $this->scrollElementToBottom('js_permissions_list');
-            $this->deleteTemporaryPermission($password, $username);
+            $this->scrollElementToBottom('js-share-edit-list');
+            $this->deleteTemporaryPermission($password, $aroName);
         } catch(NoSuchElementException $exception) {
         }
 
         // I can see that temporary changes are waiting to be saved
         $this->assertElementContainsText(
-            $this->findByCss('.share-password-dialog #js_permissions_changes'),
+            $this->findByCss('.share-password-dialog'),
             'You need to save to apply the changes'
         );
 
         // When I click on the save button
-        $this->click('js_rs_share_save');
-        $this->waitCompletion();
-
-        // And I see a notice message that the operation was a success
-        $this->assertNotification('app_share_share_success');
-
-        // And I should not see the share dialog anymore
-        $this->assertNotVisibleByCss('.share-password-dialog');
+        $this->saveShareChanges($user);
     }
 
 }

@@ -29,6 +29,7 @@ use App\Actions\WorkspaceActionsTrait;
 use App\Assertions\MasterPasswordAssertionsTrait;
 use App\Assertions\PasswordAssertionsTrait;
 use App\Assertions\SecurityAssertionsTrait;
+use App\Assertions\ShareAssertionsTrait;
 use App\Assertions\UserAssertionsTrait;
 use App\Lib\UuidFactory;
 use App\PassboltTestCase;
@@ -42,6 +43,7 @@ class XssTest extends PassboltTestCase
     use PasswordAssertionsTrait;
     use SecurityAssertionsTrait;
     use ShareActionsTrait;
+    use ShareAssertionsTrait;
     use SidebarActionsTrait;
     use UserActionsTrait;
     use UserAssertionsTrait;
@@ -104,6 +106,7 @@ class XssTest extends PassboltTestCase
             $this->gotoSharePassword($id);
             $this->assertXss();
             $this->click('.dialog-close');
+            $this->goOutOfIframe();
             $this->waitUntilIDontSee('.dialog');
 
             // Assert password uri clic

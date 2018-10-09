@@ -93,6 +93,7 @@ class LogoutTest extends PassboltTestCase
      * @group logout
      * @group saucelabs
      * @group v2
+     * @group unstable
      */
     public function testOnClickSessionExpiredAutoRedirect() 
     {
@@ -135,6 +136,7 @@ class LogoutTest extends PassboltTestCase
      * @group logout
      * @group no-saucelabs
      * @group v2
+     * @group unstable
      */
     public function testOnClickSessionExpiredManualRedirect() 
     {

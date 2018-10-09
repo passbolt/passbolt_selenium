@@ -20,6 +20,7 @@ namespace Tests\LU\Regressions;
 use App\Actions\PasswordActionsTrait;
 use App\Actions\ShareActionsTrait;
 use App\Assertions\PasswordAssertionsTrait;
+use App\Assertions\ShareAssertionsTrait;
 use App\Lib\UuidFactory;
 use App\PassboltTestCase;
 use Data\Fixtures\User;
@@ -31,6 +32,7 @@ class PASSBOLT1758 extends PassboltTestCase
     use PasswordActionsTrait;
     use PasswordAssertionsTrait;
     use ShareActionsTrait;
+    use ShareAssertionsTrait;
 
     /**
      * Scenario: As a user I can share a password with other users
@@ -46,7 +48,7 @@ class PASSBOLT1758 extends PassboltTestCase
      * @group regression
      * @group v2
      */
-    public function testShareSearchUsersFiltersOnName() 
+    public function testShareSearchUsersFiltersOnName_D()
     {
         // Reset database at the end of test.
         $this->resetDatabaseWhenComplete();
@@ -66,17 +68,12 @@ class PASSBOLT1758 extends PassboltTestCase
 
         // And I search a user by his lastname
         $userC = User::get('edith');
-        $this->goIntoShareIframe();
-        $this->inputText('js_perm_create_form_aro_auto_cplt', $userC['LastName'], true);
+        $this->inputText('js-search-aros-input', $userC['LastName'], true);
         $this->click('.security-token');
-        $this->goOutOfIframe();
-
-        // I wait the autocomplete box is loaded.
-        $this->waitCompletion(10, '#passbolt-iframe-password-share-autocomplete.loaded');
+        $this->waitUntilISee('#js-search-aro-autocomplete.ready');
 
         // Then I should see only one result
-        $this->goIntoShareAutocompleteIframe();
-        $listOfUsers = $this->driver->findElements(WebDriverBy::cssSelector('ul li'));
+        $listOfUsers = $this->driver->findElements(WebDriverBy::cssSelector('#js-search-aro-autocomplete ul li'));
         $this->assertEquals(2, count($listOfUsers));
 
         // And I should see only the user Edit Clarke in the autocomplete list

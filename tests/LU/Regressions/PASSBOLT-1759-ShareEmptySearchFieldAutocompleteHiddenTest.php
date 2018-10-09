@@ -20,6 +20,7 @@ namespace Tests\LU\Regressions;
 use App\Actions\PasswordActionsTrait;
 use App\Actions\ShareActionsTrait;
 use App\Assertions\PasswordAssertionsTrait;
+use App\Assertions\ShareAssertionsTrait;
 use App\PassboltTestCase;
 use Data\Fixtures\User;
 use Data\Fixtures\Resource;
@@ -32,6 +33,7 @@ class PASSBOLT1759 extends PassboltTestCase
     use PasswordActionsTrait;
     use PasswordAssertionsTrait;
     use ShareActionsTrait;
+    use ShareAssertionsTrait;
 
     /**
      * Scenario: As a user I can share a password with other users
@@ -48,7 +50,7 @@ class PASSBOLT1759 extends PassboltTestCase
      * @group regression
      * @group v2
      */
-    public function testShareSearchUsersFiltersOnName() 
+    public function testShareSearchUsersFiltersOnName()
     {
         // Reset database at the end of test.
         $this->resetDatabaseWhenComplete();
@@ -69,28 +71,20 @@ class PASSBOLT1759 extends PassboltTestCase
         $this->gotoSharePassword(UuidFactory::uuid('resource.id.apache'));
 
         // And I search a user
-        $this->goIntoShareIframe();
-        $this->inputText('js_perm_create_form_aro_auto_cplt', '@passbolt.com', true);
+        $this->inputText('js-search-aros-input', '@passbolt.com', true);
         $this->click('.security-token');
-        $this->goOutOfIframe();
-
-        // I wait the autocomplete box is loaded.
-        $this->waitCompletion(10, '#passbolt-iframe-password-share-autocomplete.loaded');
+        $this->waitUntilISee('#js-search-aro-autocomplete.ready');
 
         // Then I should see results
-        $this->goIntoShareAutocompleteIframe();
-        $listOfUsers = $this->driver->findElements(WebDriverBy::cssSelector('ul li'));
+        $listOfUsers = $this->driver->findElements(WebDriverBy::cssSelector('#js-search-aro-autocomplete ul li'));
         $this->assertNotEquals(0, count($listOfUsers));
-        $this->goOutOfIframe();
 
         // When I empty the search field
-        $this->goIntoShareIframe();
-        $this->emptyFieldLikeAUser('js_perm_create_form_aro_auto_cplt');
+        $this->emptyFieldLikeAUser('js-search-aros-input');
         $this->click('.security-token');
-        $this->goOutOfIframe();
 
-        // Then the autocomplete field should be hidden
-        $this->waitUntilIDontSee('#passbolt-iframe-password-share-autocomplete');
+        // Then the autocomplete  should be hidden
+        $this->waitUntilIDontSee('#js-search-aro-autocomplete');
     }
 
 }

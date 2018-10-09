@@ -247,8 +247,8 @@ trait PasswordActionsTrait
                 $this->click('#js_master_password');
                 break;
             case 'share':
-                $this->waitUntilISee('#js_perm_create_form_aro_auto_cplt');
-                $this->click('#js_perm_create_form_aro_auto_cplt');
+                $this->waitUntilISee('#js-search-aros-input');
+                $this->click('#js-search-aros-input');
                 break;
             case 'group':
                 $this->waitUntilISee('#js_group_edit_form_auto_cplt');

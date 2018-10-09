@@ -35,6 +35,7 @@ use App\Assertions\ConfirmationDialogAssertionsTrait;
 use App\Assertions\GroupAssertionsTrait;
 use App\Assertions\MasterPasswordAssertionsTrait;
 use App\Assertions\PasswordAssertionsTrait;
+use App\Assertions\ShareAssertionsTrait;
 use App\Assertions\WorkspaceAssertionsTrait;
 use App\Lib\UuidFactory;
 use App\PassboltTestCase;
@@ -53,6 +54,7 @@ class ADGroupDeleteTest extends PassboltTestCase
     use PasswordAssertionsTrait;
     use PermissionActionsTrait;
     use ShareActionsTrait;
+    use ShareAssertionsTrait;
     use WorkspaceActionsTrait;
     use WorkspaceAssertionsTrait;
 
@@ -234,7 +236,7 @@ class ADGroupDeleteTest extends PassboltTestCase
 
         // Then I can see the group has no right on the password
         $this->assertElementNotContainText(
-            $this->findById('js_permissions_list'),
+            $this->findById('js-share-edit-list'),
             'Accounting'
         );
 

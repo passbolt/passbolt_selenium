@@ -39,11 +39,11 @@ trait FormAssertionsTrait
     /**
      * Assert if an input is disabled
      *
-     * @param $id
+     * @param $selector
      */
-    public function assertDisabled($id)
+    public function assertDisabled($selector)
     {
-        $elt = $this->getDriver()->findElement(WebDriverBy::id($id));
+        $elt = $this->find($selector);
         $this->assertElementHasClass($elt, 'disabled');
     }
 }

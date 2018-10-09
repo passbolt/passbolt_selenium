@@ -728,6 +728,7 @@ class PasswordCreateTest extends PassboltTestCase
 
         // When I open a new tab, switch to it and go to passbolt url.
         $this->openNewTab('');
+        $this->waitCompletion();
 
         // And I switch back to the first tab
         $this->switchToPreviousTab();

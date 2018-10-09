@@ -35,16 +35,16 @@ trait PermissionAssertionsTrait
 
         // I can see the user has a direct permission
         $this->assertElementContainsText(
-            $this->findById('js_permissions_list'),
+            $this->findById('js-share-edit-list'),
             $username
         );
 
         // Find the permission row element
-        $rowElement = $this->findByXpath('//*[@id="js_permissions_list"]//*[.="' . $username . '"]//ancestor::li[1]');
+        $rowElement = $this->findByXpath('//*[@id="js-share-edit-list"]//*[.="' . $username . '"]//ancestor::li[1]');
 
         // I can see the permission is as expected
         try {
-            $elt = $rowElement->findElement(WebDriverBy::cssSelector('.js_share_rs_perm_type'));
+            $elt = $rowElement->findElement(WebDriverBy::cssSelector('.select.rights .permission'));
             $select = new WebDriverSelect($elt);
             $text = $select->getFirstSelectedOption()->getText();
             $this->assertEquals($permissionType, $text);
@@ -95,11 +95,9 @@ trait PermissionAssertionsTrait
      */
     public function assertNoPermission($password, $username) 
     {
-        $this->gotoSharePassword($password['id']);
-
         // I can see the user has a direct permission
         $this->assertElementNotContainText(
-            $this->findById('js_permissions_list'),
+            $this->findById('js-share-edit-list'),
             $username
         );
     }

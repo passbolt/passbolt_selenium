@@ -24,19 +24,22 @@ trait ShareActionsTrait
      */
     public function gotoSharePassword($id) 
     {
+        if ($this->isVisible('#passbolt-iframe-password-share.ready') || $this->isVisible('.share-password-dialog')) {
+            return;
+        }
         if(!$this->isVisible('.page.password')) {
             $this->getUrl('');
             $this->waitUntilISee('.page.password');
             $this->waitUntilISee('#js_wk_menu_sharing_button');
         }
-        if(!$this->isVisible('#js_rs_permission')) {
+        if(!$this->isVisible('.share-password-dialog')) {
             $this->releaseFocus(); // we click somewhere in case the password is already active
             if (!$this->isPasswordSelected($id)) {
                 $this->clickPassword($id);
             }
             $this->click('js_wk_menu_sharing_button');
-            $this->waitUntilISee('.share-password-dialog #js_rs_permission.ready');
-            $this->waitUntilISee('#passbolt-iframe-password-share.ready');
+            $this->assertShareDialogVisible();
+            $this->goIntoShareIframe();
         }
     }
 
@@ -49,17 +52,10 @@ trait ShareActionsTrait
      */
     public function searchAroToGrant($password, $aroName, $user) 
     {
-        $this->gotoSharePassword($password['id']);
-
-        // I enter the username I want to share the password with in the autocomplete field
-        $this->goIntoShareIframe();
         $this->assertSecurityToken($user, 'share');
-        $this->inputText('js_perm_create_form_aro_auto_cplt', $aroName, true);
+        $this->inputText('js-search-aros-input', $aroName, true);
         $this->click('.security-token');
-        $this->goOutOfIframe();
-
-        // I wait the autocomplete box is loaded.
-        $this->waitCompletion(10, '#passbolt-iframe-password-share-autocomplete.loaded');
+        $this->waitUntilISee('#js-search-aro-autocomplete.ready');
     }
 
     /**
@@ -75,18 +71,16 @@ trait ShareActionsTrait
         $this->searchAroToGrant($password, $aroName, $user);
 
         // I wait until I see the automplete field resolved
-        $this->goIntoShareAutocompleteIframe();
         $this->waitUntilISee('.autocomplete-content', '/' . $aroName . '/i');
 
         // I click on the username link the autocomplete field retrieved.
-        $element = $this->findByXpath('//*[contains(., "' . $aroName . '")]//ancestor::li[1]');
+        $element = $this->findByXpath('//*[@id="js-search-aro-autocomplete"]//*[contains(., "' . $aroName . '")]//ancestor::li[1]');
         $element->click();
-        $this->goOutOfIframe();
 
         // I can see that temporary changes are waiting to be saved
         $this->assertElementContainsText(
-            $this->findByCss('.share-password-dialog #js_permissions_changes'),
-            'You need to save to apply the changes'
+            $this->findByCss('.share-password-dialog'),
+            'You need to save to apply the changes.'
         );
     }
 
@@ -99,6 +93,7 @@ trait ShareActionsTrait
      */
     public function sharePassword($password, $aroName, $user) 
     {
+        $this->gotoSharePassword($password['id']);
         $this->addTemporaryPermission($password, $aroName, $user);
         $this->saveShareChanges($user);
     }
@@ -111,29 +106,27 @@ trait ShareActionsTrait
     public function saveShareChanges($user) 
     {
         // When I click on the save button
-        $this->click('js_rs_share_save');
+        $this->click('js-share-save');
 
         // Then I see the passphrase dialog
         $this->assertMasterPasswordDialog($user);
 
         // When I enter the passphrase and click submit
         $this->enterMasterPassword($user['MasterPassword']);
+        $this->goOutOfIframe();
 
         // Then I see a dialog telling me encryption is in progress
         // Assert that the progress dialog is not displayed anymore (if it was displayed).
+
+        // And I don't see the sahre password iframe
         $this->waitUntilIDontSee('#passbolt-iframe-progress-dialog');
+        $this->waitUntilIDontSee('#passbolt-iframe-share-password');
 
         // And I see a notice message that the operation was a success
         $this->assertNotification('app_share_share_success');
 
-        // And I should not see the share dialog anymore
-        $this->waitUntilIDontSee('.share-password-dialog');
-
         // And the application is ready
         $this->waitCompletion();
-
-        // And I wait unit I see the password permissions section is ready.
-        $this->waitUntilISee('#js_rs_details_permissions.ready');
     }
 
     /**
@@ -142,14 +135,6 @@ trait ShareActionsTrait
     public function goIntoShareIframe() 
     {
         $this->getDriver()->switchTo()->frame('passbolt-iframe-password-share');
-    }
-
-    /**
-     * Put the focus inside the password share autocomplete iframe
-     */
-    public function goIntoShareAutocompleteIframe() 
-    {
-        $this->getDriver()->switchTo()->frame('passbolt-iframe-password-share-autocomplete');
     }
 
 }

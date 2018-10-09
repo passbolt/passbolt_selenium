@@ -408,6 +408,7 @@ class UserCreateTest extends PassboltTestCase
 
         // I see a notice message that the operation was a success
         $this->assertNotification('app_users_addPost_success');
+        $this->waitCompletion();
 
         // I see the password I created in my password list
         $this->assertElementContainsText(

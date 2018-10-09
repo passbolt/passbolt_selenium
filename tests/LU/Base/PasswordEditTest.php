@@ -48,6 +48,7 @@ use App\Assertions\ClipboardAssertions;
 use App\Assertions\ConfirmationDialogAssertionsTrait;
 use App\Assertions\MasterPasswordAssertionsTrait;
 use App\Assertions\PasswordAssertionsTrait;
+use App\Assertions\ShareAssertionsTrait;
 use App\Assertions\WorkspaceAssertionsTrait;
 use App\Lib\UuidFactory;
 use App\PassboltTestCase;
@@ -64,6 +65,7 @@ class PasswordEditTest extends PassboltTestCase
     use MasterPasswordAssertionsTrait;
     use PasswordActionsTrait;
     use PasswordAssertionsTrait;
+    use ShareAssertionsTrait;
     use SidebarActionsTrait;
     use WorkspaceActionsTrait;
     use WorkspaceAssertionsTrait;
@@ -300,16 +302,16 @@ class PasswordEditTest extends PassboltTestCase
 
         // And I can see the edit tab is selected
         $this->assertElementContainsText(
-            $this->findByCss('.edit-password-dialog #js_tab_nav_js_rs_edit a.selected'),
+            $this->findByCss('.edit-password-dialog #js-share-go-to-edit a.selected'),
             'Edit'
         );
 
         // And I can see the share tab is not selected
         $this->assertElementContainsText(
-            $this->findByCss('.edit-password-dialog #js_tab_nav_js_rs_permission a'),
+            $this->findByCss('.edit-password-dialog #js-share-go-to-share a'),
             'Share'
         );
-        $this->assertNotVisibleByCss('.edit-password-dialog #js_tab_nav_js_rs_permission a.selected');
+        $this->assertNotVisibleByCss('.edit-password-dialog #js-share-go-to-share a.selected');
 
         // And I can see the name text input and label is marked as mandatory
         $this->assertVisibleByCss('.edit-password-dialog input[type=text]#js_field_name.required');
@@ -652,7 +654,7 @@ class PasswordEditTest extends PassboltTestCase
         $this->inputText('js_field_name', $newname);
 
         // And I switch to the share screen
-        $this->findByCss('#js_tab_nav_js_rs_permission a')->click();
+        $this->findByCss('#js-share-go-to-share a')->click();
 
         // Then I should see a confirmation dialog notifying me regarding the changes I'm going to lose
         $this->assertConfirmationDialog('Do you really want to leave ?');
@@ -664,14 +666,14 @@ class PasswordEditTest extends PassboltTestCase
         $this->assertVisible('js_rs_edit');
 
         // When	I switch to the share dialog
-        $this->findByCss('#js_tab_nav_js_rs_permission a')->click();
+        $this->findByCss('#js-share-go-to-share a')->click();
         $this->assertConfirmationDialog('Do you really want to leave ?');
 
         // And I click ok in confirmation dialog
         $this->confirmActionInConfirmationDialog();
 
         // Then I should leave the edit dialog for the share dialog
-        $this->assertVisible('js_rs_permission');
+        $this->assertShareDialogVisible();
     }
 
     /**
@@ -723,7 +725,7 @@ class PasswordEditTest extends PassboltTestCase
         $this->inputSecret('My new password');
 
         // And I switch to the share screen
-        $this->findByCss('#js_tab_nav_js_rs_permission a')->click();
+        $this->findByCss('#js-share-go-to-share a')->click();
 
         // Then I should see a confirmation dialog notifying me regarding the changes I'm going to lose
         $this->assertConfirmationDialog('Do you really want to leave ?');
@@ -735,14 +737,14 @@ class PasswordEditTest extends PassboltTestCase
         $this->assertVisible('js_rs_edit');
 
         // When	I switch to the share dialog
-        $this->findByCss('#js_tab_nav_js_rs_permission a')->click();
+        $this->findByCss('#js-share-go-to-share a')->click();
         $this->assertConfirmationDialog('Do you really want to leave ?');
 
         // And I click ok in confirmation dialog
         $this->confirmActionInConfirmationDialog();
 
         // Then I should leave the edit dialog for the share dialog
-        $this->assertVisible('js_rs_permission');
+        $this->assertShareDialogVisible();
     }
 
     /**
