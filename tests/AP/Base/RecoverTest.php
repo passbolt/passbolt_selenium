@@ -459,6 +459,6 @@ class RecoverTest extends PassboltRecoverTestCase
         $this->clickLink('Next');
 
         // Then I should see an error message informing me that the format of the key is not known.
-        $this->waitUntilISee('#KeyErrorMessage', '/Unknown ASCII armor type/');
+        $this->waitUntilISee('#KeyErrorMessage', '/Misformed armored text/');
     }
 }

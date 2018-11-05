@@ -417,7 +417,7 @@ abstract class PassboltSetupTestCase extends PassboltTestCase
         // Assert that error message contains the right text.
         $this->assertElementContainsText(
             $this->findById('KeyErrorMessage'),
-            'Unknown ASCII armor type'
+            'Misformed armored text'
         );
         // Emtpy value.
         $this->findById('js_setup_import_key_text')->clear();
