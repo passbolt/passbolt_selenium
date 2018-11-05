@@ -18,6 +18,7 @@ use App\Common\BrowserControllers\BrowserController;
 
 use Facebook\WebDriver\Remote\DriverCommand;
 use Facebook\WebDriver\Remote\RemoteWebDriver;
+use Facebook\WebDriver\WebDriverDimension;
 use Facebook\WebDriver\WebDriverKeys;
 
 trait BrowserActionsTrait
@@ -51,12 +52,10 @@ trait BrowserActionsTrait
      */
     public function maximizeWindow()
     {
-        $this->getDriver()->manage()->window()->maximize();
-
-        // @deprecated, but keep it as example if it happens again.
-        // We set the dimension manually because the maximize function doesn't work anymore with the current unbranded
-        // version of FF we use (54.0.1) and geckodriver 0.19..
-        // $this->getDriver()->manage()->window()->setSize(new WebDriverDimension(1920, 1080));
+        // Work with firefox 58
+        // $this->getDriver()->manage()->window()->maximize();
+        // Work with chrome 70
+        $this->getDriver()->manage()->window()->setSize(new WebDriverDimension(1920, 1080));
     }
 
     /**
