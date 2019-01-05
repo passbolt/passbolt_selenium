@@ -53,14 +53,16 @@ class ADGroupCreateTest extends PassboltTestCase
     use PasswordActionsTrait;
 
     /**
+     * Scenario: As an administrator I can view the create group dialog and close it
+     *
+     * Merged from:
      * Scenario: As an administrator I can click on create group and see that the create group dialog exists.
+     * Scenario: As an admin I can open close the create group dialog
      *
      * Given I am logged in as admin
-     * When  I go to user workspace
-     * Then  I should see a button create in the actions panel
-     * When  I click on the create button
-     * Then  I should see a submenu
-     * And   I should see an item create group in the submeny
+     * And   I am on the people workspace
+     * When  I click on the create group button
+     * Then  I see the create group dialog
      * When  I click on create group
      * Then  I should see a dialog with title "Create group"
      * And   I should see a name field and label
@@ -73,26 +75,30 @@ class ADGroupCreateTest extends PassboltTestCase
      * And   I should see a Save button
      * And   I should see a cancel button
      * And   I should see a button close to close the dialog
+     * When  I click on the cancel button
+     * Then  I should not see the create group dialog
+     * When  I click on the create group button
+     * Then  I see the create group dialog
+     * When  I click on the close dialog button
+     * Then  I should not see the create group dialog
+     * When  I click on the create group button
+     * Then  I see the create group dialog
+     * When  I press the keyboard escape key
+     * Then  I should not see the create group dialog
      *
      * @group AD
      * @group group
-     * @group create
+     * @group group-create
      * @group v2
      */
-    public function testCreateGroupDialogExist() 
+    public function testCreateGroupDialogVisibleAndOpenClose()
     {
         // Given I am logged in as admin
         $user = User::get('admin');
         $this->loginAs($user);
 
-        // Go to user workspace
+        // And I am on the people workspace
         $this->gotoWorkspace('user');
-
-        // Then I see the create button
-        $this->assertElementContainsText(
-            $this->findByCss('.main-action-wrapper'),
-            'create'
-        );
 
         // Create a new group
         $this->gotoCreateGroup();
@@ -146,44 +152,6 @@ class ADGroupCreateTest extends PassboltTestCase
 
         // And I see the close dialog button
         $this->assertVisibleByCss('.edit-group-dialog a.dialog-close');
-    }
-
-    /**
-     * Scenario: As an admin I can open close the create group dialog
-     *
-     * Given I am logged in as admin
-     * And   I am on the people workspace
-     * When  I click on the create group button
-     * Then  I see the create group dialog
-     * When  I click on the cancel button
-     * Then  I should not see the create group dialog
-     * When  I click on the create group button
-     * Then  I see the create group dialog
-     * When  I click on the close dialog button
-     * Then  I should not see the create group dialog
-     * When  I click on the create group button
-     * Then  I see the create group dialog
-     * When  I press the keyboard escape key
-     * Then  I should not see the create group dialog
-     *
-     * @group AD
-     * @group group
-     * @group create
-     * @group v2
-     */
-    public function testCreateGroupDialogOpenClose() 
-    {
-        // Given I am logged in as admin
-        $this->loginAs(User::get('admin'));
-
-        // And I am on the people workspace
-        $this->gotoWorkspace('user');
-
-        // Create a new group
-        $this->gotoCreateGroup();
-
-        // Then I see the create group dialog
-        $this->assertVisibleByCss('.edit-group-dialog');
 
         // When I click on the cancel button
         $this->findByCss('.edit-group-dialog a.cancel')->click();
@@ -230,7 +198,7 @@ class ADGroupCreateTest extends PassboltTestCase
      *
      * @group AD
      * @group group
-     * @group create
+     * @group group-create
      * @group v2
      */
     public function testCreateGroupNameValidation() 
@@ -276,7 +244,7 @@ class ADGroupCreateTest extends PassboltTestCase
      *
      * @group AD
      * @group group
-     * @group create
+     * @group group-create
      * @group v2
      */
     public function testCreateGroupNameAlreadyExists() 
@@ -345,7 +313,7 @@ class ADGroupCreateTest extends PassboltTestCase
      *
      * @group AD
      * @group group
-     * @group create
+     * @group group-create
      * @group v2
      */
     public function testCreateGroupGroupMembersValidation() 
@@ -475,7 +443,7 @@ class ADGroupCreateTest extends PassboltTestCase
      *
      * @group AD
      * @group group
-     * @group create
+     * @group group-create
      * @group v2
      */
     public function testCreateGroupGroupMembersDelete() 
@@ -548,7 +516,7 @@ class ADGroupCreateTest extends PassboltTestCase
      *
      * @group AD
      * @group group
-     * @group create
+     * @group group-create
      * @group v2
      */
     public function testCreateGroupSuccess() 
@@ -602,7 +570,7 @@ class ADGroupCreateTest extends PassboltTestCase
      *
      * @group AD
      * @group group
-     * @group create
+     * @group group-create
      * @group v2
      */
     public function testCreateGroupInactiveUsers() 
@@ -652,7 +620,7 @@ class ADGroupCreateTest extends PassboltTestCase
      *
      * @group AD
      * @group group
-     * @group create
+     * @group group-create
      * @group v2
      * @group skip
      * @group email
