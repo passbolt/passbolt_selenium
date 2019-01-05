@@ -757,6 +757,7 @@ class PasswordWorkspaceTest extends PassboltTestCase
      * @group password
      * @group password-workspace
      * @group v2
+     * @group broken
      */
     public function testPasswordWorkspaceEmptyState() 
     {
