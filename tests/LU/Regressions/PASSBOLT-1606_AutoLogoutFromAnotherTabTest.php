@@ -39,6 +39,7 @@ class PASSBOLT1606 extends PassboltTestCase
      * @group LU
      * @group regression
      * @group v2
+     * @group broken
      */
     public function testAutoLogoutFromAnotherTab() 
     {

@@ -179,6 +179,7 @@ class LogoutTest extends PassboltTestCase
      * @group logout
      * @group saucelabs
      * @group v2
+     * @group broken
      */
     public function testSessionExpired() 
     {
