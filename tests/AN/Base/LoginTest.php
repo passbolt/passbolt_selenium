@@ -73,7 +73,6 @@ class LoginTest extends PassboltTestCase
      */
     public function testCanSeeErrorMsg() 
     {
-        $this->assertTrue(false);
         $this->getUrl('login');
         $this->assertTitleContain('Login');
 
