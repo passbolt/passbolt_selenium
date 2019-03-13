@@ -146,6 +146,7 @@ trait PasswordActionsTrait
 
     /**
      * Helper to create a password
+     * @return {string} The created resource id
      */
     public function createPassword($password) 
     {
@@ -153,6 +154,15 @@ trait PasswordActionsTrait
         $this->click('.create-password-dialog input[type=submit]');
         $this->waitUntilIDontSee('#passbolt-iframe-progress-dialog');
         $this->assertNotification('app_resources_add_success');
+        $this->waitCompletion();
+        $resourceId = null;
+        $this->waitUntil(
+            function () use (&$resourceId, $password) {
+                $resourceId = $this->findPasswordIdByName($password['name']);
+            }, null, 4
+        );
+        
+        return $resourceId;
     }
 
     /**

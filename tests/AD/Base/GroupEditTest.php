@@ -30,10 +30,12 @@
 namespace Tests\AD\Base;
 
 use App\Actions\GroupActionsTrait;
+use App\Actions\MasterPasswordActionsTrait;
 use App\Actions\PasswordActionsTrait;
 use App\Actions\SidebarActionsTrait;
 use App\Actions\WorkspaceActionsTrait;
 use App\Assertions\GroupAssertionsTrait;
+use App\Assertions\MasterPasswordAssertionsTrait;
 use App\Assertions\PasswordAssertionsTrait;
 use App\Assertions\WorkspaceAssertionsTrait;
 use App\PassboltTestCase;
@@ -45,6 +47,8 @@ class ADGroupEditTest extends PassboltTestCase
 {
     use GroupActionsTrait;
     use GroupAssertionsTrait;
+    use MasterPasswordAssertionsTrait;
+    use MasterPasswordActionsTrait;
     use PasswordActionsTrait;
     use PasswordAssertionsTrait;
     use SidebarActionsTrait;
@@ -563,6 +567,8 @@ class ADGroupEditTest extends PassboltTestCase
         $this->searchGroupUserToAdd($ada, $promotedUser);
         $this->addTemporaryGroupUser($ada);
         $this->click('.edit-group-dialog a.button.primary');
+        $this->assertMasterPasswordDialog($promotedUser);
+        $this->enterMasterPassword($promotedUser['MasterPassword']);
         $this->assertNotification('app_groups_edit_success');
     }
 

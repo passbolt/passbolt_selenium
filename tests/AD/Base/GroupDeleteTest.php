@@ -228,10 +228,9 @@ class ADGroupDeleteTest extends PassboltTestCase
             'uri' => 'https://www.bankaccount.com',
             'password' => 'testpassword'
         ];
-        $this->createPassword($resource);
+        $resource['id'] = $this->createPassword($resource);
 
         // Share password.
-        $resource['id'] = $this->findPasswordIdByName($resource['name']);
         $this->gotoSharePassword($resource['id']);
 
         // Then I can see the group has no right on the password

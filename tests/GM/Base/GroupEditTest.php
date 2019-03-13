@@ -315,6 +315,8 @@ class GMGroupEditTest extends PassboltTestCase
         $this->searchGroupUserToAdd($ada, $promotedUser);
         $this->addTemporaryGroupUser($ada);
         $this->click('.edit-group-dialog a.button.primary');
+        $this->assertMasterPasswordDialog($promotedUser);
+        $this->enterMasterPassword($promotedUser['MasterPassword']);
         $this->assertNotification('app_groups_edit_success');
     }
 
@@ -408,6 +410,8 @@ class GMGroupEditTest extends PassboltTestCase
 
         // When I press the save button
         $this->click('.edit-group-dialog a.button.primary');
+        $this->assertMasterPasswordDialog($user);
+        $this->enterMasterPassword($user['MasterPassword']);
 
         // Then I should see that the dialog disappears
         $this->waitUntilIDontSee('.edit-group-dialog');

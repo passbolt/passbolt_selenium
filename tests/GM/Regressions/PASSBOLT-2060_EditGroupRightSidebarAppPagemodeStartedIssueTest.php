@@ -21,10 +21,12 @@
 namespace Tests\GM\Regressions;
 
 use App\Actions\GroupActionsTrait;
+use App\Actions\MasterPasswordActionsTrait;
 use App\Actions\PasswordActionsTrait;
 use App\Actions\SidebarActionsTrait;
 use App\Actions\WorkspaceActionsTrait;
 use App\Assertions\GroupAssertionsTrait;
+use App\Assertions\MasterPasswordAssertionsTrait;
 use App\Assertions\WorkspaceAssertionsTrait;
 use App\Lib\UuidFactory;
 use App\PassboltSetupTestCase;
@@ -35,6 +37,8 @@ class PASSBOLT2060 extends PassboltSetupTestCase
 {
     use GroupActionsTrait;
     use GroupAssertionsTrait;
+    use MasterPasswordActionsTrait;
+    use MasterPasswordAssertionsTrait;
     use PasswordActionsTrait;
     use SidebarActionsTrait;
     use WorkspaceActionsTrait;
@@ -96,6 +100,8 @@ class PASSBOLT2060 extends PassboltSetupTestCase
 
         // When I press the save button
         $this->click('.edit-group-dialog a.button.primary');
+        $this->assertMasterPasswordDialog($user);
+        $this->enterMasterPassword($user['MasterPassword']);
 
         // Then I should see that the dialog disappears
         $this->waitUntilIDontSee('.edit-group-dialog');

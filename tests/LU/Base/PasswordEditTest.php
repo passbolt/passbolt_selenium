@@ -71,27 +71,6 @@ class PasswordEditTest extends PassboltTestCase
     use WorkspaceAssertionsTrait;
 
     /**
-     * Scenario: As a user I should be able to access the password edit dialog using route
-     *
-     * When  I am logged in as Ada
-     * And   I enter the route in the url
-     * Then  I should see the edit dialog
-     *
-     * @group LU
-     * @group password
-     * @group password-edit
-     * @group saucelabs
-     * @group v2
-     */
-    public function testRoute_EditPassword()
-    {
-        $resourceId = UuidFactory::uuid('resource.id.cakephp');
-        $this->loginAs(User::get('ada'), ['url' => "/app/passwords/edit/$resourceId"]);
-        $this->waitCompletion();
-        $this->assertVisibleByCss('.edit-password-dialog');
-    }
-
-    /**
      * Scenario: As a user I can edit a password using the edit button in the action bar
      *
      * Given I am Ada
