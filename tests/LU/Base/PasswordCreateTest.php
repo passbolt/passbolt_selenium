@@ -359,7 +359,6 @@ class PasswordCreateTest extends PassboltTestCase
      * And   I press enter
      * Then  I see a dialog telling me encryption is in progress
      * And   I see a notice message that the operation was a success
-     * And   I see the password I created in my password list
      *
      * @group LU
      * @group password
@@ -430,14 +429,6 @@ class PasswordCreateTest extends PassboltTestCase
 
         // I see a notice message that the operation was a success
         $this->assertNotification('app_resources_add_success');
-
-        // I see the password I created in my password list
-        $this->assertElementContainsText(
-            $this->find('js_wsp_pwd_browser'), 'ftp://passbolt.com'
-        );
-        $this->assertElementContainsText(
-            $this->find('js_wsp_pwd_browser'), 'localhost ftp'
-        );
     }
 
     /**
