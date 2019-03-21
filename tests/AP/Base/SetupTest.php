@@ -77,8 +77,10 @@ class SetupTest extends PassboltSetupTestCase
         // We check below that we can read the invitation email and click on the link get started.
         // Get last email.
         $this->getUrl('seleniumtests/showlastemail/' . urlencode('johndoe@passbolt.com'));
+
         // Follow the link in the email.
         $this->followLink('get started');
+
         // Wait until I see the first page of setup.
         $this->waitForSection('domain_check');
 
@@ -692,97 +694,5 @@ class SetupTest extends PassboltSetupTestCase
 
         // I should see an error message.
         $this->waitUntilISee('#KeyErrorMessage', '/This key is already used by another user/');
-    }
-
-    /**
-     * Scenario: As AP doing the setup, I should be able to import a key already used by another user who is soft deleted.
-     *
-     * Given I first login as admin and I delete Ada
-     * When  I have registered as a new user and I am following the setup
-     * When  I am at the import step, and I try to import a key that was already used by a deleted user.
-     * Then  I should see that the key is imported normally.
-     *
-     * @group AP
-     * @group setup
-     * @group v2
-     * @group import-key
-     */
-    public function testFollowSetupWithImportNonUniqueKeyBelongingToDeletedUser() 
-    {
-        // Reset database at the end of test.
-        $this->resetDatabaseWhenComplete();
-
-        // And I am Admin
-        $user = User::get('admin');
-
-        // And I am logged in on the user workspace
-        $this->loginAs($user);
-
-        // Go to user workspace
-        $this->gotoWorkspace('user');
-
-        // When I right click on a user
-        $userU = User::get('ursula');
-        $this->rightClickUser($userU['id']);
-
-        // Then I select the delete option in the contextual menu
-        $this->click('#js_user_browser_menu_delete a');
-
-        // Assert that the confirmation dialog is displayed.
-        $this->assertConfirmationDialog('Do you really want to delete?');
-
-        // Click ok in confirmation dialog.
-        $this->confirmActionInConfirmationDialog();
-
-        // Then I should see a success notification message saying the user is deleted
-        $this->waitCompletion();
-
-        $this->logout();
-
-        $john = User::get('john');
-        $john['PrivateKey'] = 'ursula_private.key';
-
-        // Register John Doe as a user.
-        $this->registerUser($john['FirstName'], $john['LastName'], $john['Username']);
-
-        // Go to setup page and register
-        $this->goToSetup($john['Username'], false);
-
-        // Wait
-        $this->waitForSection('domain_check');
-
-        // Wait for the server key to be retrieved.
-        $this->waitUntilISee('.why-plugin-wrapper', '/I\'ve checked/i');
-
-        // Check box domain check.
-        $this->checkCheckbox('js_setup_domain_check');
-
-        // Click Next.
-        $this->clickLink("Next");
-
-        // Wait
-        $this->waitForSection('generate_key_form');
-
-        // Click on import.
-        $this->clickLink('import');
-
-        // Wait
-        $this->waitForSection('import_key_form');
-
-        // Insert Ada's key instead of John's key (Ada's key already exist in database).
-        $keyData = file_get_contents(GPG_FIXTURES . DS .  $john['PrivateKey']);
-        $this->inputText('js_setup_import_key_text', $keyData);
-
-        // Click Next
-        $this->clickLink('Next');
-
-        // Wait until section appears.
-        $this->waitForSection('import_key_done');
-
-        // I should see a success message.
-        $this->assertElementContainsText(
-            $this->findByCss('.message.warning'),
-            'Warning'
-        );
     }
 }
