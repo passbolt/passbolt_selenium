@@ -35,6 +35,12 @@ trait WorkspaceActionsTrait
             $this->waitUntilISee('.page.user');
             $this->waitCompletion();
             break;
+        case 'administration':
+            $linkCssSelector = '#js_app_nav_left_administration_link a';
+            $this->waitUntilISee($linkCssSelector);
+            $this->click($linkCssSelector);
+            $this->waitCompletion();
+            break;
         default:
             $linkCssSelector = '#js_app_nav_left_' . $name . '_wsp_link a';
             $this->waitUntilISee($linkCssSelector);
