@@ -67,6 +67,7 @@ class EmailNotificationSettingsTest extends PassboltTestCase
      * And  I go to the email queue for this user
      * Then I can see username is not included in the email
      *
+     * @group pro
      * @group AD
      * @group notification
      * @group email-notification
@@ -167,6 +168,7 @@ class EmailNotificationSettingsTest extends PassboltTestCase
      * And    I click delete
      * Then    I can see there is no related email notification in the email queue
      *
+     * @group pro
      * @group AD
      * @group notification
      * @group email-notification
@@ -216,16 +218,16 @@ class EmailNotificationSettingsTest extends PassboltTestCase
         $this->waitUntilISee('#js-send-password-create-toggle-button');
 
         // When	I click on the “when you create a password” label
-        $this->click("#js-send-password-create-toggle-button .toggle-switch-button");
+        $this->click("#js-send-password-create-toggle-button label");
 
         // Then I can see the toggle is disabled
-        $this->waitUntilISee('#js-send-password-create-toggle-button[disabled]');
+        $this->waitUntilIDontSee('#js-send-password-create-toggle-button .toggle-switch-checkbox:checked');
 
         // When I click on the toggle next to the “when a password is deleted” label
-        $this->click("#js-send-password-delete-toggle-button .toggle-switch-button");
+        $this->click("#js-send-password-delete-toggle-button label");
 
         // Then I can see the toggle is disabled
-        $this->waitUntilISee('#js-send-password-delete-toggle-button[disabled]');
+        $this->waitUntilIDontSee('#js-send-password-delete-toggle-button .toggle-switch-checkbox:checked');
 
         // When I click save
         $this->click('#js-email-notification-settings-save-button');
@@ -266,6 +268,7 @@ class EmailNotificationSettingsTest extends PassboltTestCase
      * And  I go to the email notification settings administration screen
      * Then I can see a warning banner at the top
      *
+     * @group pro
      * @group AD
      * @group notification
      * @group email-notification
@@ -316,6 +319,7 @@ class EmailNotificationSettingsTest extends PassboltTestCase
      * And  I go to the email notification settings administration screen
      * Then I can see a warning banner at the top
      *
+     * @group pro
      * @group AD
      * @group notification
      * @group email-notification
