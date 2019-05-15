@@ -67,7 +67,7 @@ class EmailNotificationSettingsTest extends PassboltTestCase
      * And  I go to the email queue for this user
      * Then I can see username is not included in the email
      *
-     * @group pro
+     * @group pro-only
      * @group AD
      * @group notification
      * @group email-notification
@@ -168,7 +168,7 @@ class EmailNotificationSettingsTest extends PassboltTestCase
      * And    I click delete
      * Then    I can see there is no related email notification in the email queue
      *
-     * @group pro
+     * @group pro-only
      * @group AD
      * @group notification
      * @group email-notification
@@ -268,7 +268,7 @@ class EmailNotificationSettingsTest extends PassboltTestCase
      * And  I go to the email notification settings administration screen
      * Then I can see a warning banner at the top
      *
-     * @group pro
+     * @group pro-only
      * @group AD
      * @group notification
      * @group email-notification
@@ -319,7 +319,7 @@ class EmailNotificationSettingsTest extends PassboltTestCase
      * And  I go to the email notification settings administration screen
      * Then I can see a warning banner at the top
      *
-     * @group pro
+     * @group pro-only
      * @group AD
      * @group notification
      * @group email-notification
