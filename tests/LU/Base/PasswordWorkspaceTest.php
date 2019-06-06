@@ -160,7 +160,7 @@ class PasswordWorkspaceTest extends PassboltTestCase
         }
 
         // I should see some grid columns are sortable
-        $columnsId = ['name', 'username', 'uri', 'modified', 'owner'];
+        $columnsId = ['name', 'username', 'uri', 'modified'];
         for ($i = 0; $i < count($columnsId); $i++) {
             $this->assertElementHasClass(
                 $this->findByCss('#js_wsp_pwd_browser .tableview-header .js_grid_column_' . $columnsId[$i]),
@@ -874,8 +874,7 @@ class PasswordWorkspaceTest extends PassboltTestCase
 
         // When I sort the passwords browser by resource name
         $columnId = 'name';
-        $this->click('.js_grid_column_' . $columnId);
-        $this->waitCompletion();
+        $this->click('.js_grid_column_' . $columnId . ' a');
 
         // Then I should see it sorted by resource name
         $columnHeaderResourceElement = $this->find('#js_wsp_pwd_browser .tableview-header .js_grid_column_' . $columnId);
@@ -884,7 +883,7 @@ class PasswordWorkspaceTest extends PassboltTestCase
 
         // When I sort the passwords browser by username
         $columnId = 'username';
-        $this->click('.js_grid_column_' . $columnId);
+        $this->click('.js_grid_column_' . $columnId . ' a');
         $this->waitCompletion();
 
         // Then I should see it sorted by username
@@ -896,7 +895,7 @@ class PasswordWorkspaceTest extends PassboltTestCase
 
         // When I sort the passwords browser by uri
         $columnId = 'uri';
-        $this->click('.js_grid_column_' . $columnId);
+        $this->click('.js_grid_column_' . $columnId . ' a');
         $this->waitCompletion();
 
         // Then I should see it sorted by uri
@@ -908,7 +907,7 @@ class PasswordWorkspaceTest extends PassboltTestCase
 
         // When I sort the passwords browser by modified
         $columnId = 'modified';
-        $this->click('.js_grid_column_' . $columnId);
+        $this->click('.js_grid_column_' . $columnId . ' a');
         $this->waitCompletion();
 
         // Then I should see it sorted by modified

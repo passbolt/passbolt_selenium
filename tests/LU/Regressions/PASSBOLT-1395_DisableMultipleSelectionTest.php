@@ -34,7 +34,7 @@ class PASSBOLT1395 extends PassboltTestCase
     use UserAssertionsTrait;
 
     /**
-     * Scenario: As LU I can't select multiple passwprd
+     * Scenario: As LU I can't select multiple password
      *
      * Given I am Ada
      * And   I am logged in on the password workspace
@@ -53,20 +53,20 @@ class PASSBOLT1395 extends PassboltTestCase
         // And I am logged on the password workspace
         $this->loginAs(User::get('ada'));
 
-        // When I click on a user checkbox
+        // When I click on a password checkbox
         $rsA = Resource::get(array('user' => 'ada', 'id' => UuidFactory::uuid('resource.id.apache')));
-        $this->click('multiple_select_checkbox_' . $rsA['id']);
+        $this->click("tr#resource_{$rsA['id']} .cell_multipleSelect input");
 
         // Then I should see it selected
         $this->isPasswordSelected($rsA['id']);
 
-        // When click on another user checkbox
+        // When click on another password checkbox
         $rsG = Resource::get(array('user' => 'ada', 'id' => UuidFactory::uuid('resource.id.gnupg')));
-        $this->click('multiple_select_checkbox_' . $rsG['id']);
+        $this->click("tr#resource_{$rsG['id']} .cell_multipleSelect input");
 
-        // Then I should see only the last user selected
+        // Then I should see all the passwords selected
         $this->assertPasswordSelected($rsG['id']);
-        $this->assertPasswordNotSelected($rsA['id']);
+        $this->assertPasswordSelected($rsA['id']);
     }
 
     /**

@@ -27,7 +27,7 @@ trait PasswordAssertionsTrait
      */
     public function isPasswordFavorite($id) 
     {
-        $eltSelector = '#favorite_' . $id . ' i';
+        $eltSelector = "tr#resource_$id .cell_favorite i";
         if ($this->elementHasClass($eltSelector, 'unfav')) {
             return true;
         }

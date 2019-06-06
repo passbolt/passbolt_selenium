@@ -251,8 +251,8 @@ class PasswordDeleteTest extends PassboltTestCase
         sleep(2);
 
         // When I select passwords owned by Ada
-        $this->click("#multiple_select_checkbox_$resourceE input");
-        $this->click("#multiple_select_checkbox_$resourceG input");
+        $this->click("tr#resource_{$resourceE} .cell_multipleSelect input");
+        $this->click("tr#resource_{$resourceG} .cell_multipleSelect input");
 
         // And I delete them
         $this->click('js_wk_menu_more_button');

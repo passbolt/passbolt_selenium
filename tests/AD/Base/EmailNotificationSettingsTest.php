@@ -245,9 +245,6 @@ class EmailNotificationSettingsTest extends PassboltTestCase
             'password' => '@dm!n',
         ]);
 
-        //And I select a password
-        $this->clickPassword($resourceId);
-
         // And I click delete
         $this->click('js_wk_menu_more_button');
         $this->clickLink('delete');

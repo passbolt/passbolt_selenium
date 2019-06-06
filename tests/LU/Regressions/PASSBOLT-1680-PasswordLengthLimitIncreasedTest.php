@@ -84,9 +84,6 @@ class PASSBOLT1680 extends PassboltTestCase
             $this->find('js_wsp_pwd_browser'), $password['name']
         );
 
-        // And I see the password secret match the secret I entered
-        $elt = $this->find('#js_wsp_pwd_browser div[title="' . $password['name'] . '"]');
-        $elt->click();
         $this->click('js_wk_menu_secretcopy_button');
         $this->enterMasterPassword($user['MasterPassword']);
         $this->assertNotification('plugin_clipboard_copy_success');

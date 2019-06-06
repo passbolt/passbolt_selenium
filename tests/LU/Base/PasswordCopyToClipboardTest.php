@@ -165,7 +165,7 @@ class PasswordCopyToClipboardTest extends PassboltTestCase
         $this->loginAs($user);
 
         // When I select the first password in the list
-        $this->click('multiple_select_checkbox_' . $resource['id']);
+        $this->click("tr#resource_{$resource['id']} .cell_multipleSelect input");
 
         // And I right click
         $this->rightClickPassword($resource['id']);
@@ -217,7 +217,7 @@ class PasswordCopyToClipboardTest extends PassboltTestCase
         $this->loginAs($user);
 
         // When I select the first password in the list
-        $this->click('multiple_select_checkbox_' . $resource['id']);
+        $this->click("tr#resource_{$resource['id']} .cell_multipleSelect input");
 
         // And I right click
         $this->rightClickPassword($resource['id']);
@@ -340,7 +340,7 @@ class PasswordCopyToClipboardTest extends PassboltTestCase
         $this->loginAs($user);
 
         // When I click on a password link of the first row of the table view
-        $this->click('grid_secret_copy_' . $resource['id']);
+        $this->click("tr#resource_{$resource['id']} .secret-copy a");
 
         // And I enter my passphrase
         $this->enterMasterPassword($user['MasterPassword']);

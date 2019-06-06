@@ -65,7 +65,7 @@ trait PasswordActionsTrait
 			var element = jQuery('$eltSelector')[0];
             var rect = element.getBoundingClientRect();
             jQuery('.tableview-content')[0].scrollTo(rect.left, rect.top);
-            var mouseDownEvent = new MouseEvent('mousedown', {view: window, clientX:rect.left, clientY:rect.top, bubbles: true, cancelable: true, button:2});
+            var mouseDownEvent = new MouseEvent('contextmenu', {view: window, clientX:rect.left, clientY:rect.top, bubbles: true, cancelable: true, button:2});
 			element.dispatchEvent(mouseDownEvent);
 		"
         );
@@ -80,7 +80,7 @@ trait PasswordActionsTrait
      */
     public function clickPasswordFavorite($id) 
     {
-        $eltSelector = '#favorite_' . $id . ' i';
+        $eltSelector = "tr#resource_$id .cell_favorite i";
         $this->click($eltSelector);
         $this->waitCompletion();
     }
