@@ -58,7 +58,7 @@ class PASSBOLT1807 extends PassboltSetupTestCase
         $user = User::get('margaret');
         $this->clickUser($user['id']);
         $this->click('js_user_wk_menu_deletion_button');
-        $this->assertConfirmationDialog('Do you really want to delete?');
+        $this->assertConfirmationDialog('Delete user?');
         $this->confirmActionInConfirmationDialog();
         $this->assertNotification('app_users_delete_success');
         $this->logout();
