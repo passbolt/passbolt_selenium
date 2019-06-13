@@ -75,7 +75,7 @@ class GMUserDeleteTest extends PassboltTestCase
         $userU = User::get('ursula');
         $this->rightClickUser($userU['id']);
         $this->click('#js_user_browser_menu_delete a');
-        $this->assertConfirmationDialog('Do you really want to delete?');
+        $this->assertConfirmationDialog('Delete user?');
         $this->confirmActionInConfirmationDialog();
 
         // Then I should see a success notification message
