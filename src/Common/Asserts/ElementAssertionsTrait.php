@@ -66,6 +66,21 @@ trait ElementAssertionsTrait
     }
 
     /**
+     * Assert if a given element is empty
+     *
+     * @param $needle
+     */
+    public function assertElementIsEmpty($elt)
+    {
+        if(!is_object($elt)) {
+            $elt = $this->find($elt);
+        }
+        $eltText = $elt->getText();
+        $msg = sprintf("Failed asserting that element is empty, '%s' found instead", $eltText);
+        PHPUnit_Framework_Assert::assertEmpty($eltText, $msg);
+    }
+
+    /**
      * Assert if a given element does not contain a given text
      *
      * @param $elt

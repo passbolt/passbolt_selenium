@@ -148,7 +148,7 @@ class UserViewTest extends PassboltTestCase
         $cssSelector = '#js_user_details .key-information li.expires';
         $this->assertElementContainsText(
             $this->findByCss($cssSelector),
-            $userDetails['expires']
+            'Expires'
         );
         // And I should see the user's key public key
         $cssSelector = '#js_user_details .key-information li.gpgkey';
@@ -156,6 +156,18 @@ class UserViewTest extends PassboltTestCase
             $this->findByCss($cssSelector),
             $userDetails['key']
         );
+
+        // When I click on a user orna that has a key with an expiry date
+        $userO = User::get('orna');
+        $this->clickUser($userO);
+
+        // Then I can
+        $this->clickSecondarySidebarSectionHeader('key-information');
+        $cssSelector = '#js_user_details .key-information li.expires';
+        $this->assertElementContainsText(
+          $this->findByCss($cssSelector),
+          '/[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}\+\d\d:\d\d/'
+      );
     }
 
 }

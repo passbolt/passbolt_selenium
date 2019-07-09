@@ -124,9 +124,8 @@ class SettingsKeyTest extends PassboltTestCase
         );
 
         // I should see the expiration date.
-        $this->assertElementContainsText(
-            $this->find('#privkeyinfo td.expires'),
-            '2019-08-09T12:48:31+00:00'
+        $this->assertElementIsEmpty(
+            $this->find('#privkeyinfo td.expires')
         );
 
         // I should see the length.
