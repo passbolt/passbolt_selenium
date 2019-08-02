@@ -64,7 +64,7 @@ class LoggableTestCase extends SeleniumTestCase
         $logsElt = $this->getDriver()->findElement(WebDriverBy::id('logsContent'));
         $logs = $logsElt->getText();
         // Store the logs on the server.
-        $filePath = "$logPath/{$this->testName}_plugin.json";
+        $filePath = "$logPath/{$this->getTestName()}_plugin.json";
         file_put_contents($filePath, $logs);
     }
 

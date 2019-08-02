@@ -76,8 +76,8 @@ $config = array (
             ],
             'logs' => [
                 'debug' => false,
-                'plugin' => false,
-				'path' => '/* video path */',
+                'plugin' => true,
+								'path' => '/* video path */',
             ],
 			// Extra capabilities.
 			'capabilities' => array(),

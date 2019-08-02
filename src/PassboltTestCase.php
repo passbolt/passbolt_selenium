@@ -19,6 +19,7 @@ use Facebook\WebDriver\Chrome\ChromeOptions;
 use Facebook\WebDriver\Exception\WebDriverException;
 
 use PHPUnit_Runner_BaseTestRunner;
+use Facebook\WebDriver\WebDriverKeys;
 
 abstract class PassboltTestCase extends AuthenticatedTestCase
 {
