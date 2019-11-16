@@ -140,7 +140,7 @@ class EmailNotificationSettingsTest extends PassboltTestCase
             'username' => 'admin',
             'uri' => 'http://www.google.com',
             'password' => '@dm!n',
-        ]);
+        ], $user);
 
         // And	I go to the email queue for this user
         $this->getUrl('seleniumtests/showlastemail/' . $user['Username']);
@@ -243,7 +243,7 @@ class EmailNotificationSettingsTest extends PassboltTestCase
             'username' => 'admin',
             'uri' => 'http://www.google.com',
             'password' => '@dm!n',
-        ]);
+        ], $user);
 
         // And I click delete
         $this->click('js_wk_menu_more_button');

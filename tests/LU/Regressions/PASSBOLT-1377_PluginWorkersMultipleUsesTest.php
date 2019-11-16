@@ -20,6 +20,7 @@ namespace Tests\LU\Regressions;
 use App\Actions\MasterPasswordActionsTrait;
 use App\Actions\PasswordActionsTrait;
 use App\Actions\ShareActionsTrait;
+use App\Actions\WorkspaceActionsTrait;
 use App\Assertions\MasterPasswordAssertionsTrait;
 use App\Assertions\PasswordAssertionsTrait;
 use App\Assertions\ShareAssertionsTrait;
@@ -38,6 +39,7 @@ class PASSBOLT1377 extends PassboltTestCase
     use WorkspaceAssertionsTrait;
     use MasterPasswordAssertionsTrait;
     use MasterPasswordActionsTrait;
+    use WorkspaceActionsTrait;
 
     /**
      * Scenario: As a user I can login & logout multiple times
@@ -102,10 +104,10 @@ class PASSBOLT1377 extends PassboltTestCase
             'username' => 'username_' . $i,
             'password' => 'password_' . $i
             );
-            $this->createPassword($password);
+            $this->createPassword($password, $user);
 
-            // Wait until notification disappears.
-            $this->waitUntilNotificationDisappears('app_resources_add_success');
+            // Wait until notifications disappeared.
+            $this->waitUntilNotificationDisappear();
         }
     }
 

@@ -54,4 +54,19 @@ trait WorkspaceAssertionsTrait
         $this->waitUntilISee('#js_app_notificator .' . $notificationId);
     }
 
+    /**
+     * Check if a notification message is displayed.
+     *
+     * @param {string} message See that a notification message is displayed.
+     */
+    public function assertNotificationMessage($message)
+    {
+        $element = $this->find('#js_app_notificator');
+        $this->waitUntil(function() use ($element, $message) {
+            $this->assertElementContainsText(
+                $element,
+                $message
+            );
+        });
+    }
 }

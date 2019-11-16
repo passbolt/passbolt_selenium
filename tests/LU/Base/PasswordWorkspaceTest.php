@@ -839,7 +839,8 @@ class PasswordWorkspaceTest extends PassboltTestCase
             'uri' => '',
             'password' => 'testpassword',
             'description' => ''
-            ]
+            ],
+            $john
         );
 
         // The layer empty content with text should not be visible.

@@ -17,6 +17,14 @@ namespace App\Actions;
 trait WorkspaceActionsTrait
 {
     /**
+     * Put the focus inside the react app iframe
+     */
+    public function goIntoReactAppIframe()
+    {
+        $this->getDriver()->switchTo()->frame('react-app');
+    }
+
+    /**
      * Goto workspace
      *
      * @param $name

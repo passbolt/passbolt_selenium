@@ -29,7 +29,6 @@ trait PasswordActionsTrait
             $this->waitUntilISee('#js_wsp_create_button');
         }
         $this->click('#js_wsp_create_button');
-        $this->assertVisibleByCss('.create-password-dialog');
     }
 
     /**
@@ -128,33 +127,30 @@ trait PasswordActionsTrait
     }
 
     /**
-     * Helper to fill the password form
-     */
-    public function fillPasswordForm($password) 
-    {
-        $this->gotoCreatePassword();
-        $this->inputText('js_field_name', $password['name']);
-        $this->inputText('js_field_username', $password['username']);
-        if (isset($password['uri'])) {
-            $this->inputText('js_field_uri', $password['uri']);
-        }
-        $this->inputSecret($password['password']);
-        if (isset($password['description'])) {
-            $this->inputText('js_field_description', $password['description']);
-        }
-    }
-
-    /**
      * Helper to create a password
+     * @param {array} $password The password details
+     * @param {array} $user The user who is creating the password
      * @return {string} The created resource id
      */
-    public function createPassword($password) 
+    public function createPassword($password, $user)
     {
-        $this->fillPasswordForm($password);
+        $this->gotoCreatePassword();
+        $this->goIntoReactAppIframe();
+        $this->assertVisibleByCss('.create-password-dialog');
+        $this->inputText('.create-password-dialog input[name="name"]', isset($password['name']) ? $password['name'] : '');
+        $this->inputText('.create-password-dialog input[name="username"]', isset($password['username']) ? $password['username'] : '');
+        $this->inputText('.create-password-dialog input[name="uri"]', isset($password['uri']) ? $password['uri'] : '');
+        $this->inputText('.create-password-dialog input[name="password"]', isset($password['password']) ? $password['password'] : '');
+        $this->inputText('.create-password-dialog textarea[name="description"]', isset($password['description']) ? $password['description'] : '');
         $this->click('.create-password-dialog input[type=submit]');
-        $this->waitUntilIDontSee('#passbolt-iframe-progress-dialog');
-        $this->assertNotification('app_resources_add_success');
-        $this->waitCompletion();
+        $this->waitUntilISee('.dialog.master-password');
+        $this->inputText('.master-password input[name="passphrase"]', $user['Username']);
+        $this->click('.master-password input[type=submit]');
+        $this->waitUntilIDontSee('.create-password-dialog');
+        $this->goOutOfIframe();
+        $this->assertNotificationMessage('The password has been added successfully');
+        $this->waitUntilNotificationDisappear();
+
         $resourceId = null;
         $this->waitUntil(
             function () use (&$resourceId, $password) {
