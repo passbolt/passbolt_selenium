@@ -115,11 +115,7 @@ trait ShareActionsTrait
         $this->enterMasterPassword($user['MasterPassword']);
         $this->goOutOfIframe();
 
-        // Then I see a dialog telling me encryption is in progress
-        // Assert that the progress dialog is not displayed anymore (if it was displayed).
-
-        // And I don't see the sahre password iframe
-        $this->waitUntilIDontSee('#passbolt-iframe-progress-dialog');
+        // And I don't see the share password iframe
         $this->waitUntilIDontSee('#passbolt-iframe-share-password');
 
         // And I see a notice message that the operation was a success

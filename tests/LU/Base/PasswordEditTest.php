@@ -909,7 +909,6 @@ class PasswordEditTest extends PassboltTestCase
      * Then  I can see the password edit dialog
      * When  I enter a new password
      * And   I press the submit button
-     * Then  I can see the encryption in progress dialog
      * Then  I can see the success notification
      * When  I copy the password to clipboard
      * Then  I can see that password have been updated

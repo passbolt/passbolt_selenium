@@ -43,8 +43,7 @@ class PasswordCreateTest extends PassboltTestCase
      * Then  I should see the passphrase entry dialog.
      * And   I enter 'ada@passbolt.com' as password
      * When  I click on the OK button
-     * Then  I see a dialog telling me encryption is in progress
-     * And   I see a notice message that the operation was a success
+     * Then  I see a notice message that the operation was a success
      * And   I see the password I created in my password list
      * When  I access last email sent to Ada.
      * Then  I should an email that has been sent to me with the title: You added the password selenium name password
