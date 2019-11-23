@@ -98,13 +98,13 @@ class PasswordCreateTest extends PassboltTestCase
         $this->click('.create-password-dialog input[type=submit]');
 
         // Then I should see the passphrase entry dialog.
-        $this->waitUntilISee('.dialog.master-password');
+        $this->waitUntilISee('.dialog.passphrase-entry');
 
         // And I enter 'ada@passbolt.com' as password
-        $this->inputText('.master-password input[name="passphrase"]', 'ada@passbolt.com');
+        $this->inputText('.passphrase-entry input[name="passphrase"]', 'ada@passbolt.com');
 
         // When I click on the OK button
-        $this->click('.master-password input[type=submit]');
+        $this->click('.passphrase-entry input[type=submit]');
         $this->goOutOfIframe();
 
         // I see a notice message that the operation was a success

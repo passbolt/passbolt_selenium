@@ -59,11 +59,11 @@ trait FormActionsTrait
     /**
      * Check the checkbox with given id
      *
-     * @param string $id for WebDriverBy::id
+     * @param string $selector The selector
      */
-    public function checkCheckbox(string $id)
+    public function checkCheckbox(string $selector)
     {
-        $input = $this->getDriver()->findElement(WebDriverBy::id($id));
+        $input = $this->find($selector);
         $input->click();
     }
 }

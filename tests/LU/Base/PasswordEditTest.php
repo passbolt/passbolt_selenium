@@ -431,19 +431,10 @@ class PasswordEditTest extends PassboltTestCase
         $this->pressTab();
 
         // Then I see the passphrase dialog
-        // Given I can see the iframe
-        $this->waitUntilISee('#passbolt-iframe-master-password.ready');
+        $this->assertMasterPasswordDialog($user);
 
         // I type the passphrase using keyboard only
-        $this->goIntoMasterPasswordIframe();
-        $this->typeMasterPasswordLikeAUser($user['MasterPassword']);
-
-        // And I press enter
-        $this->pressEnter();
-        $this->goOutOfIframe();
-
-        // Then the passphrase dialog should disappear
-        $this->waitUntilIDontSee('#passbolt-iframe-master-password');
+        $this->enterMasterPassword($user['MasterPassword']);
 
         // Then I can see the password edit dialog
         $this->assertVisibleByCss('.edit-password-dialog');
@@ -507,7 +498,7 @@ class PasswordEditTest extends PassboltTestCase
      * @group password-edit
      * @group v2
      */
-    public function testEditPasswordKeyboardShortcuts() 
+    public function testEditPasswordKeyboardShortcuts2()
     {
         // Given I am Ada
         $user = User::get('ada');
@@ -538,21 +529,12 @@ class PasswordEditTest extends PassboltTestCase
         $this->pressTab();
 
         // Then I see the passphrase dialog
-        // Given I can see the iframe
-        $this->waitUntilISee('#passbolt-iframe-master-password.ready');
+        $this->assertMasterPasswordDialog($user);
 
-        // I type the passphrase using keyboard only
-        $this->goIntoMasterPasswordIframe();
-        $this->typeMasterPasswordLikeAUser($user['MasterPassword']);
+        // When I enter the user passphrase
+        $this->enterMasterPassword($user['MasterPassword']);
 
-        // And I press enter
-        $this->pressEnter();
-        $this->goOutOfIframe();
-
-        // Then the passphrase dialog should disappear
-        $this->waitUntilIDontSee('#passbolt-iframe-master-password');
-
-        // The field password should have the focus (inside the iframe).
+        // Then The field password should have the focus (inside the iframe).
         $this->goIntoSecretIframe();
         $this->waitUntilSecretIsDecryptedInField();
         $this->assertElementHasFocus('js_secret');
@@ -693,7 +675,6 @@ class PasswordEditTest extends PassboltTestCase
         $this->goOutOfIframe();
         $this->assertMasterPasswordDialog($user);
         $this->enterMasterPassword($user['MasterPassword']);
-        $this->waitUntilIDontSee('#passbolt-iframe-master-password');
 
         // Wait until the password is decrypted and displayed in the field.
         $this->goIntoSecretIframe();
@@ -919,7 +900,7 @@ class PasswordEditTest extends PassboltTestCase
      * @group v2
      * @group saucelabs
      */
-    public function testEditPasswordSecret() 
+    public function testEditPasswordSecret()
     {
         // Reset database at the end of test.
         $this->resetDatabaseWhenComplete();
@@ -947,13 +928,8 @@ class PasswordEditTest extends PassboltTestCase
         $this->click('js_secret');
         $this->goOutOfIframe();
 
-        // Then I see the passphrase dialog
-        $this->assertMasterPasswordDialog($user);
-
-        // When I enter the passphrase and click submit
+        // And I enter the passphrase and click submit
         $this->enterMasterPassword($user['MasterPassword']);
-
-        $this->waitUntilIDontSee('#passbolt-iframe-master-password');
 
         $this->goIntoSecretIframe();
         $this->waitUntilSecretIsDecryptedInField();
@@ -967,9 +943,6 @@ class PasswordEditTest extends PassboltTestCase
 
         // And I press the submit button
         $this->click('.edit-password-dialog input[type=submit]');
-
-        // Then wait until I don't see  the encryption dialog anymore.
-        $this->waitUntilIDontSee('#passbolt-iframe-progress-dialog');
 
         // Then I can see the success notification
         $this->assertNotification('app_resources_update_success');
@@ -1030,9 +1003,6 @@ class PasswordEditTest extends PassboltTestCase
         // When I enter the passphrase and I press the submit button
         $this->enterMasterPassword($user['MasterPassword']);
 
-        // Wait until I don't see the passphrase window anymore.
-        $this->waitUntilIDontSee('#passbolt-iframe-master-password');
-
         // Then I should see the input field with the password in clear text
         $this->goIntoSecretIframe();
         $this->waitUntilSecretIsDecryptedInField();
@@ -1048,9 +1018,6 @@ class PasswordEditTest extends PassboltTestCase
 
         // When I press the button to view my password in cleartext
         $this->click('js_secret_view');
-
-        // Then I do not the passphrase dialog
-        $this->assertNotVisibleByCss('#passbolt-iframe-master-password');
 
         // Then I can see the password in clear text
         $this->assertVisible('js_secret_clear');
@@ -1110,9 +1077,6 @@ class PasswordEditTest extends PassboltTestCase
 
         // When I enter the passphrase in the input field
         $this->enterMasterPassword($user['MasterPassword']);
-
-        // Wait until I don't see the passphrase window anymore.
-        $this->waitUntilIDontSee('#passbolt-iframe-master-password');
 
         // Then I should see the secret field populated
         $this->goIntoSecretIframe();
@@ -1291,7 +1255,6 @@ class PasswordEditTest extends PassboltTestCase
 
         $this->assertMasterPasswordDialog($user);
         $this->enterMasterPassword($user['MasterPassword']);
-        $this->waitUntilIDontSee('#passbolt-iframe-master-password');
         $this->goIntoSecretIframe();
         $this->waitUntilSecretIsDecryptedInField();
         $this->goOutOfIframe();
