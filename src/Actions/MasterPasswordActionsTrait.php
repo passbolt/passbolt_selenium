@@ -14,9 +14,6 @@
  */
 namespace App\Actions;
 
-use Facebook\WebDriver\Exception\StaleElementReferenceException;
-use Facebook\WebDriver\Exception\UnknownServerException;
-
 trait MasterPasswordActionsTrait
 {
     /**
@@ -43,93 +40,22 @@ trait MasterPasswordActionsTrait
      */
     public function enterMasterPassword($pwd, $remember = false) 
     {
-        $this->waitUntilISee('#passbolt-iframe-master-password.ready');
-        $this->goIntoMasterPasswordIframe();
-        $this->inputText('js_master_password', $pwd);
-
+        // Get out of the previous iframe in case we are in one
+        $this->goOutOfIframe();
+        // Go into the react iframe.
+        $this->goIntoReactAppIframe();
+        // I wait until the passphrase entry dialog is displayed.
+        $this->waitUntilISee('.dialog.passphrase-entry');
+        // Fill the passphrase entry.
+        $this->inputText('.passphrase-entry input[name="passphrase"]', $pwd);
+        // Remember the passphrase if requested.
         if ($remember == true) {
-            $this->checkCheckbox('js_remember_master_password');
+            $this->checkCheckbox('.passphrase-entry input[name="rememberMe"]');
         }
-
-        // Get master password submit button element.
-        $submit = $this->findById('master-password-submit');
-
-        // Click on button.
-        $submit->click();
-
+        // Submit.
+        $this->click('.passphrase-entry input[type=submit]');
+        // I go out of the iframe
         $this->goOutOfIframe();
-        $this->waitUntilIDontSee('#passbolt-iframe-master-password');
-    }
-
-    /**
-     * Enter the password in the passphrase iframe using only keyboard, and no clicks.
-     *
-     * @param $pwd
-     *   passphrase string
-     * @param $tabFirst
-     *   if tab should be pressed first to give focus
-     */
-    public function enterMasterPasswordWithKeyboardShortcuts($pwd, $tabFirst = false) 
-    {
-        $this->waitUntilISee('#passbolt-iframe-master-password.ready');
-
-        $this->goIntoMasterPasswordIframe();
-
-        // The scenario using tab can only be tested on chrome.
-        // Firefox cannot use keyboard on element not visible.
-        // The element we use to hold the user focus is hidden.
-        if ($this->getBrowser()['type'] == 'chrome') {
-            if ($tabFirst) {
-                $this->pressTab();
-                $this->assertElementHasFocus('js_master_password');
-            }
-            $this->typeTextLikeAUser($pwd);
-            $this->pressEnter();
-        } else {
-            $this->inputText('js_master_password', $pwd);
-            $this->pressEnter();
-        }
-
-        $this->goOutOfIframe();
-    }
-
-    /**
-     * Type master password like a user would do, pressing key after key.
-     * Take in account that with firefox we cannot sendKeys to invisible element.
-     *
-     * @param $text
-     */
-    public function typeMasterPasswordLikeAUser($text) 
-    {
-        $activeElementIsMasterPasswordFocus = false;
-        $activeElt = $this->getDriver()->switchTo()->activeElement();
-
-        // With the Firefox driver we cannot use the sendKeys function on invisible elements.
-        // If the current active element is the "focus first" element, make it visible first.
-        if ($this->getBrowser()['type'] == 'firefox') {
-            $activeElementIsMasterPasswordFocus = false;
-            $activeEltId = $activeElt->getAttribute('id');
-            if($activeEltId == 'js_master_password_focus_first') {
-                $activeElementIsMasterPasswordFocus = true;
-                $this->getDriver()->executeScript("$('#$activeEltId').css('line-height', '1px');");
-            }
-        }
-
-        // Type each character
-        $this->typeTextLikeAUser($text);
-
-        // Hide the "focus first" element if required.
-        if ($activeElementIsMasterPasswordFocus) {
-            $this->getDriver()->executeScript("$('#$activeEltId').css('line-height', '0');");
-        }
-    }
-
-    /**
-     * Dig into the passphrase iframe
-     */
-    public function goIntoMasterPasswordIframe() 
-    {
-        $this->getDriver()->switchTo()->frame('passbolt-iframe-master-password');
     }
 
 }

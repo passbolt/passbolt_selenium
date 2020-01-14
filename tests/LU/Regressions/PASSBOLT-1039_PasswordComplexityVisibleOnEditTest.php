@@ -94,8 +94,6 @@ class PASSBOLT1039 extends PassboltTestCase
         // When I enter the passphrase and click submit
         $this->enterMasterPassword($user['MasterPassword']);
 
-        $this->waitUntilIDontSee('#passbolt-iframe-master-password');
-
         $this->goIntoSecretIframe();
 
         $this->waitUntilSecretIsDecryptedInField();

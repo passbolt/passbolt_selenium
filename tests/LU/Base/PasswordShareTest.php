@@ -80,8 +80,8 @@ class PasswordShareTest extends PassboltTestCase
     use SidebarActionsTrait;
     use SidebarAssertionsTrait;
     use UserActionsTrait;
-    use WorkspaceAssertionsTrait;
     use WorkspaceActionsTrait;
+    use WorkspaceAssertionsTrait;
 
     /**
      * Scenario: As a user I can see the share dialog using the share button in the action bar

@@ -24,21 +24,11 @@ trait MasterPasswordAssertionsTrait
     {
         // Get out of the previous iframe in case we are in one
         $this->goOutOfIframe();
-        // Given I can see the iframe
-        $this->waitUntilISee('#passbolt-iframe-master-password.ready');
-        // When I can go into the iframe
-        $this->goIntoMasterPasswordIframe();
-        // Then I can see the security token is valid
-        $this->assertSecurityToken($user, 'master');
-        // Then I can see the title
-        $this->assertElementContainsText('.master-password.dialog', 'Please enter your passphrase');
-        // Then I can see the close dialog button
-        $this->assertVisibleByCss('a.dialog-close');
-        // Then I can see the OK button
-        $this->assertVisible('master-password-submit');
-        // Then I can see the cancel button
-        $this->assertVisibleByCss('a.js-dialog-close.cancel');
-        // Then I go out of the iframe
+        // Go into the react iframe.
+        $this->goIntoReactAppIframe();
+        // I wait until the passphrase entry dialog is displayed.
+        $this->waitUntilISee('.dialog.passphrase-entry');
+        // I go out of the iframe
         $this->goOutOfIframe();
     }
 

@@ -143,9 +143,9 @@ trait PasswordActionsTrait
         $this->inputText('.create-password-dialog input[name="password"]', isset($password['password']) ? $password['password'] : '');
         $this->inputText('.create-password-dialog textarea[name="description"]', isset($password['description']) ? $password['description'] : '');
         $this->click('.create-password-dialog input[type=submit]');
-        $this->waitUntilISee('.dialog.master-password');
-        $this->inputText('.master-password input[name="passphrase"]', $user['Username']);
-        $this->click('.master-password input[type=submit]');
+        $this->waitUntilISee('.dialog.passphrase-entry');
+        $this->inputText('.passphrase-entry input[name="passphrase"]', $user['Username']);
+        $this->click('.passphrase-entry input[type=submit]');
         $this->waitUntilIDontSee('.create-password-dialog');
         $this->goOutOfIframe();
         $this->assertNotificationMessage('The password has been added successfully');
@@ -201,7 +201,6 @@ trait PasswordActionsTrait
             $this->goOutOfIframe();
             $this->assertMasterPasswordDialog($user);
             $this->enterMasterPassword($user['MasterPassword']);
-            $this->waitUntilIDontSee('#passbolt-iframe-master-password');
 
             // Wait for password to be decrypted.
             $this->goIntoSecretIframe();

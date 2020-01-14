@@ -36,6 +36,7 @@ namespace Tests\LU\Base;
 
 use App\Actions\MasterPasswordActionsTrait;
 use App\Actions\PasswordActionsTrait;
+use App\Actions\WorkspaceActionsTrait;
 use App\Assertions\ClipboardAssertions;
 use App\Assertions\MasterPasswordAssertionsTrait;
 use App\Assertions\WorkspaceAssertionsTrait;
@@ -50,6 +51,7 @@ class PasswordCopyToClipboardTest extends PassboltTestCase
     use MasterPasswordAssertionsTrait;
     use MasterPasswordActionsTrait;
     use ClipboardAssertions;
+    use WorkspaceActionsTrait;
     use WorkspaceAssertionsTrait;
 
     /**
@@ -232,11 +234,7 @@ class PasswordCopyToClipboardTest extends PassboltTestCase
         $this->assertMasterPasswordDialog($user);
 
         // When I enter the master key.
-        $this->goIntoMasterPasswordIframe();
-        $this->inputText('js_master_password', $user['MasterPassword']);
-        // And I press enter.
-        $this->find('js_master_password')->sendKeys(WebDriverKeys::ENTER);
-        $this->goOutOfIframe();
+        $this->enterMasterPassword($user['MasterPassword']);
 
         // Then I can see a success message telling me the password was copied to clipboard
         $this->assertNotification('plugin_clipboard_copy_success');

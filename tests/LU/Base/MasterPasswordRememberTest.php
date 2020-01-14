@@ -23,6 +23,7 @@ namespace Tests\LU\Base;
 
 use App\Actions\MasterPasswordActionsTrait;
 use App\Actions\PasswordActionsTrait;
+use App\Actions\WorkspaceActionsTrait;
 use App\Assertions\ClipboardAssertions;
 use App\Assertions\MasterPasswordAssertionsTrait;
 use App\Assertions\WorkspaceAssertionsTrait;
@@ -38,6 +39,7 @@ class MasterPasswordRememberTest extends PassboltTestCase
     use MasterPasswordAssertionsTrait;
     use PasswordActionsTrait;
     use WorkspaceAssertionsTrait;
+    use WorkspaceActionsTrait;
 
     /**
      * Scenario: As a user I can have my passphrase remembered by the system from the login page
@@ -51,7 +53,7 @@ class MasterPasswordRememberTest extends PassboltTestCase
      * Then  The password should have been copied to clipboard without asking me for my master password
      *
      * @group LU
-     * @group master-password
+     * @group passphrase-entry
      * @group saucelabs
      * @group v2
      */
@@ -112,11 +114,11 @@ class MasterPasswordRememberTest extends PassboltTestCase
      * Then  The password should have been copied to clipboard
      *
      * @group LU
-     * @group master-password
+     * @group passphrase-entry
      * @group saucelabs
      * @group v2
      */
-    function testMasterPasswordRemember() 
+    function testMasterPasswordRemember()
     {
         // Given I am Ada
         $user = User::get('ada');
@@ -133,12 +135,6 @@ class MasterPasswordRememberTest extends PassboltTestCase
 
         // Then I should see the passphrase dialog.
         $this->assertMasterPasswordDialog($user);
-
-        // And I should see a checkbox remember my passphrase
-        $this->goIntoMasterPasswordIframe();
-        $this->assertVisible('js_remember_master_password');
-        $this->assertVisible('js_remember_master_password_duration');
-        $this->goOutOfIframe();
 
         // When I enter my passphrase from keyboard only
         $this->enterMasterPassword($user['MasterPassword'], false);
@@ -159,10 +155,9 @@ class MasterPasswordRememberTest extends PassboltTestCase
         // Then I should see the passphrase dialog
         $this->assertMasterPasswordDialog($user);
 
-        // When I enter my passphrase from keyboard only
+        // When I enter my passphrase
         // And I check the remember checkbox
         $this->enterMasterPassword($user['MasterPassword'], true);
-        $this->waitUntilIDontSee('#passbolt-iframe-progress-dialog');
         $this->waitCompletion();
 
         // Then The password should have been copied to clipboard
