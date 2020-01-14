@@ -19,6 +19,7 @@ namespace Tests\LU\Regressions;
 
 use App\Actions\MasterPasswordActionsTrait;
 use App\Actions\PasswordActionsTrait;
+use App\Actions\WorkspaceActionsTrait;
 use App\Assertions\MasterPasswordAssertionsTrait;
 use App\Assertions\PasswordAssertionsTrait;
 use App\Assertions\WorkspaceAssertionsTrait;
@@ -32,6 +33,7 @@ class PASSBOLT1039 extends PassboltTestCase
     use MasterPasswordActionsTrait;
     use MasterPasswordAssertionsTrait;
     use WorkspaceAssertionsTrait;
+    use WorkspaceActionsTrait;
 
     /**
      * Scenario: As a user I can see the current password complexity when editing a password
@@ -65,7 +67,7 @@ class PASSBOLT1039 extends PassboltTestCase
             'username' => 'supastrong',
             'password' => 'YVhI[[gbPNt5,o{SwA:S&P]@(gdl'
         );
-        $this->createPassword($password);
+        $this->createPassword($password, $user);
         $this->waitCompletion();
 
         // When I edit the password I just created

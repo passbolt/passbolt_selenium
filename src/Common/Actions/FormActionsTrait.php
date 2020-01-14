@@ -25,13 +25,13 @@ trait FormActionsTrait
     /**
      * Input some text in an element
      *
-     * @param string $id for WebDriverBy::id
+     * @param string $selector the element selector
      * @param string $txt the text to be typed on keyboard
      * @param bool $append boolean (optional) true if you want to keep the current value intact
      */
-    public function inputText(string $id, string $txt, bool $append = false)
+    public function inputText(string $selector, string $txt, bool $append = false)
     {
-        $input = $this->getDriver()->findElement(WebDriverBy::id($id));
+        $input = $this->find($selector);
         $input->click();
         if (!$append) {
             $input->clear();

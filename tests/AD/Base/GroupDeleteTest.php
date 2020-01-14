@@ -228,7 +228,7 @@ class ADGroupDeleteTest extends PassboltTestCase
             'uri' => 'https://www.bankaccount.com',
             'password' => 'testpassword'
         ];
-        $resource['id'] = $this->createPassword($resource);
+        $resource['id'] = $this->createPassword($resource, $user);
 
         // Share password.
         $this->gotoSharePassword($resource['id']);

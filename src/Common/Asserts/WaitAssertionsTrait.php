@@ -71,7 +71,7 @@ trait WaitAssertionsTrait
         for ($i = 0; $i < $timeout * 10; $i++) {
             try {
                 $elt = $this->getDriver()->findElement(WebDriverBy::cssSelector($elementSelector));
-                if(count($elt)) {
+                if($elt) {
                     return true;
                 }
             }
@@ -358,6 +358,15 @@ trait WaitAssertionsTrait
     {
         //$notificationId = 'notification_' . UuidFactory::uuid($notificationId);
         $notificationId = '#js_app_notificator .' . $notificationId;
+        $this->waitUntilIDontSee($notificationId);
+    }
+
+    /**
+     * Wait until a notifications disappeared.
+     */
+    public function waitUntilNotificationDisappear()
+    {
+        $notificationId = '#js_app_notificator';
         $this->waitUntilIDontSee($notificationId);
     }
 
