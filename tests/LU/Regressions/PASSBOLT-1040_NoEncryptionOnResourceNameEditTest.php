@@ -66,9 +66,6 @@ class PASSBOLT1040 extends PassboltTestCase
         // And I click the submit button
         $this->click('.edit-password-dialog input[type=submit]');
 
-        // And I wait until I'm sure the progress dialog didn't appear
-        $this->waitUntilIDontSee('#passbolt-iframe-progress-dialog');
-
         // Then I should see a success notification message saying the password is updated.
         $this->assertNotification('app_resources_update_success');
     }

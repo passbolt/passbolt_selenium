@@ -136,7 +136,7 @@ trait PasswordActionsTrait
     {
         $this->gotoCreatePassword();
         $this->goIntoReactAppIframe();
-        $this->assertVisibleByCss('.create-password-dialog');
+        $this->waitUntilISee('.create-password-dialog');
         $this->inputText('.create-password-dialog input[name="name"]', isset($password['name']) ? $password['name'] : '');
         $this->inputText('.create-password-dialog input[name="username"]', isset($password['username']) ? $password['username'] : '');
         $this->inputText('.create-password-dialog input[name="uri"]', isset($password['uri']) ? $password['uri'] : '');
@@ -215,9 +215,6 @@ trait PasswordActionsTrait
         }
         $this->click('.edit-password-dialog input[type=submit]');
 
-        if (isset($password['password'])) {
-            $this->waitUntilIDontSee('#passbolt-iframe-progress-dialog');
-        }
         // And I should not see the edit dialog anymore
         $this->waitUntilIDontSee('.edit-password-dialog');
 
