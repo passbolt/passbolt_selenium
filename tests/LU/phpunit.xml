@@ -21,7 +21,6 @@
         <testsuite name="Logged in user with firefox">
             <directory>./Base</directory>
             <directory>./Regressions</directory>
-            <directory>./Security</directory>
         </testsuite>
     </testsuites>
 

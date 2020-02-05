@@ -207,9 +207,9 @@ trait WaitAssertionsTrait
     {
         for ($i = 0; $i < $timeout * 10 * 10; $i++) {
             try {
+                $targetElement = $this->find($id);
                 $activeElt = $this->getDriver()->switchTo()->activeElement();
-                $activeId = $activeElt->getAttribute('id');
-                if ($id !== $activeId) {
+                if ($targetElement->getID() !== $activeElt->getID()) {
                     $message = 'Could not get focus for ' . $id;
                     PHPUnit_Framework_Assert::fail($message);
                 }
@@ -356,7 +356,6 @@ trait WaitAssertionsTrait
      */
     public function waitUntilNotificationDisappears($notificationId) 
     {
-        //$notificationId = 'notification_' . UuidFactory::uuid($notificationId);
         $notificationId = '#js_app_notificator .' . $notificationId;
         $this->waitUntilIDontSee($notificationId);
     }

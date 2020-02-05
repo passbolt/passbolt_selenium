@@ -100,16 +100,13 @@ trait PasswordActionsTrait
         if(!$this->isVisible('.page.password')) {
             $this->getUrl('');
             $this->waitUntilISee('.page.password');
-            $this->waitUntilISee('#js_wk_menu_edition_button');
+            $this->waitUntilISee('#js_wsp_create_button');
         }
         $this->releaseFocus(); // we click somewhere in case the password is already active
         if (!$this->isPasswordSelected($id)) {
             $this->clickPassword($id);
         }
         $this->click('js_wk_menu_edition_button');
-        $this->waitCompletion();
-        $this->assertVisibleByCss('.edit-password-dialog');
-        $this->waitUntilISee('#passbolt-iframe-secret-edition.ready');
     }
 
     /**
@@ -184,47 +181,44 @@ trait PasswordActionsTrait
      * Edit a password helper
      *
      * @param $password
+     * $param $user
      */
     public function editPassword($password, $user = []) 
     {
         $this->gotoEditPassword($password['id']);
+        $this->goIntoReactAppIframe();
+        $this->waitUntilISee('.edit-password-dialog');
 
         if (isset($password['name'])) {
-            $this->inputText('js_field_name', $password['name']);
+            $this->inputText('.edit-password-dialog input[name="name"]', isset($password['name']) ? $password['name'] : '');
         }
         if (isset($password['username'])) {
-            $this->inputText('js_field_username', $password['username']);
+            $this->inputText('.edit-password-dialog input[name="username"]', isset($password['username']) ? $password['username'] : '');
         }
         if (isset($password['uri'])) {
-            $this->inputText('js_field_uri', $password['uri']);
+            $this->inputText('.edit-password-dialog input[name="uri"]', isset($password['uri']) ? $password['uri'] : '');
         }
         if (isset($password['password'])) {
-            if (empty($user)) {
-                $this->fail("a user must be provided to the function in order to update the secret");
-            }
-            $this->goIntoSecretIframe();
-            $this->click('js_secret');
-            $this->goOutOfIframe();
-            $this->assertMasterPasswordDialog($user);
-            $this->enterMasterPassword($user['MasterPassword']);
-
-            // Wait for password to be decrypted.
-            $this->goIntoSecretIframe();
-            $this->waitUntilSecretIsDecryptedInField();
-            $this->goOutOfIframe();
-
-            $this->inputSecret($password['password']);
+            $this->click('.edit-password-dialog input[name="password"]');
+            $this->waitUntilISee('.dialog.passphrase-entry');
+            $this->inputText('.passphrase-entry input[name="passphrase"]', $user['Username']);
+            $this->click('.passphrase-entry input[type=submit]');
+            $this->waitUntilElementHasFocus('.edit-password-dialog input[name="password"]');
+            $this->inputText('.edit-password-dialog input[name="password"]', isset($password['password']) ? $password['password'] : '');
         }
         if (isset($password['description'])) {
-            $this->inputText('js_field_description', $password['description']);
+            $this->inputText('.edit-password-dialog textarea[name="description"]', isset($password['description']) ? $password['description'] : '');
         }
         $this->click('.edit-password-dialog input[type=submit]');
-
-        // And I should not see the edit dialog anymore
+        if (isset($password['password'])) {
+            $this->waitUntilISee('.dialog.passphrase-entry');
+            $this->inputText('.passphrase-entry input[name="passphrase"]', $user['Username']);
+            $this->click('.passphrase-entry input[type=submit]');
+        }
         $this->waitUntilIDontSee('.edit-password-dialog');
-
-        // And I should see the notification.
-        $this->assertNotification('app_resources_update_success');
+        $this->goOutOfIframe();
+        $this->assertNotificationMessage('The password has been updated successfully');
+        $this->waitUntilNotificationDisappear();
     }
 
     /**
