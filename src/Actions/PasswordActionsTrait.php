@@ -29,6 +29,12 @@ trait PasswordActionsTrait
             $this->waitUntilISee('#js_wsp_create_button');
         }
         $this->click('#js_wsp_create_button');
+        try {
+            $this->waitUntilISee('.main-action-wrapper ul.dropdown-content', null, 1);
+            $this->click('.main-action-wrapper ul.dropdown-content li.create-resource');
+        } catch (Exception $e) {
+            // nothing to do, CE does not have a drop down
+        }
     }
 
     /**
