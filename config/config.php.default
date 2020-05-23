@@ -84,7 +84,7 @@ $config = array (
 		),
 	),
 	'browsers' => array (
-		'default' => 'firefox',
+		'default' => 'chrome',
 		'common' => array(
 			'downloads_path' => 'file:///home/seluser/Downloads'
 		),
