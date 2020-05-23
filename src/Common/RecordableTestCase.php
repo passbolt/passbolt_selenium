@@ -54,7 +54,7 @@ class RecordableTestCase extends LoggableTestCase
     /**
      * Stop video recording.
      */
-    public function stopVideo(int $status)
+    public function stopVideo(int $status = null)
     {
         if (!isset($this->videoPid)) {
             return;
