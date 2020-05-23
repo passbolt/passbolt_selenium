@@ -23,8 +23,7 @@ trait WorkspaceActionsTrait
      */
     public function goIntoReactAppIframe()
     {
-        $this->waitUntilISee('react-app');
-        $iframe = $this->getDriver()->findElement(WebDriverBy::id('react-app'));
+        $iframe = $this->getDriver()->findElement(WebDriverBy::id('passbolt-iframe-react-app'));
         $this->getDriver()->switchTo()->frame($iframe);
     }
 
