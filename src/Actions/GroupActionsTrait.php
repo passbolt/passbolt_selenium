@@ -212,7 +212,8 @@ trait GroupActionsTrait
      */
     public function goIntoAddUserIframe() 
     {
-        $this->getDriver()->switchTo()->frame('passbolt-iframe-group-edit');
+        $iframe = $this->getDriver()->findElement(WebDriverBy::id('passbolt-iframe-group-edit'));
+        $this->getDriver()->switchTo()->frame($iframe);
     }
 
     /**

@@ -14,6 +14,8 @@
  */
 namespace App\Actions;
 
+use Facebook\WebDriver\WebDriverBy;
+
 trait ShareActionsTrait
 {
 
@@ -130,7 +132,8 @@ trait ShareActionsTrait
      */
     public function goIntoShareIframe() 
     {
-        $this->getDriver()->switchTo()->frame('passbolt-iframe-password-share');
+        $iframe = $this->getDriver()->findElement(WebDriverBy::id('passbolt-iframe-password-share'));
+        $this->getDriver()->switchTo()->frame($iframe);
     }
 
 }

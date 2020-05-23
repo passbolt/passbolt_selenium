@@ -31,7 +31,8 @@ abstract class AuthenticatedTestCase extends RecordableTestCase
      */
     public function goIntoLoginIframe() 
     {
-        $this->getDriver()->switchTo()->frame('passbolt-iframe-login-form');
+        $iframe = $this->getDriver()->findElement(WebDriverBy::id('passbolt-iframe-login-form'));
+        $this->getDriver()->switchTo()->frame($iframe);
     }
 
     /**

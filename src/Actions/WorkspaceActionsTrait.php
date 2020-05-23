@@ -14,6 +14,8 @@
  */
 namespace App\Actions;
 
+use Facebook\WebDriver\WebDriverBy;
+
 trait WorkspaceActionsTrait
 {
     /**
@@ -21,7 +23,8 @@ trait WorkspaceActionsTrait
      */
     public function goIntoReactAppIframe()
     {
-        $this->getDriver()->switchTo()->frame('react-app');
+        $iframe = $this->getDriver()->findElement(WebDriverBy::id('react-app'));
+        $this->getDriver()->switchTo()->frame($iframe);
     }
 
     /**

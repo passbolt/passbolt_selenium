@@ -36,11 +36,6 @@
     },
     "repositories": [
         {
-            "type": "vcs",
-            "url": "https://github.com/passbolt/php-webdriver.git",
-            "no-api": true
-        },
-        {
           "type": "vcs",
           "url": "https://github.com/inceddy/ImageCompare.git"
         }
@@ -50,7 +45,7 @@
         "ramsey/uuid": "^3.7",
         "nategood/httpful": "*",
         "sauce/sausage": ">=0.15.2",
-        "facebook/webdriver": "dev-community",
+        "php-webdriver/webdriver": "^1.8.2",
         "inceddy/image-compare": "dev-master"
     },
     "require-dev": {

@@ -15,6 +15,7 @@
 namespace App\Actions;
 
 use App\Lib\Color;
+use Facebook\WebDriver\WebDriverBy;
 
 trait PasswordActionsTrait
 {
@@ -126,7 +127,8 @@ trait PasswordActionsTrait
      */
     public function goIntoSecretIframe() 
     {
-        $this->getDriver()->switchTo()->frame('passbolt-iframe-secret-edition');
+        $iframe = $this->getDriver()->findElement(WebDriverBy::id('passbolt-iframe-secret-edition'));
+        $this->getDriver()->switchTo()->frame($iframe);
     }
 
     /**
