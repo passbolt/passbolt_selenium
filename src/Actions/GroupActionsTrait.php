@@ -221,7 +221,8 @@ trait GroupActionsTrait
      */
     public function goIntoAddUserAutocompleteIframe() 
     {
-        $this->getDriver()->switchTo()->frame('passbolt-iframe-group-edit-autocomplete');
+        $iframe = $this->getDriver()->findElement(WebDriverBy::id('passbolt-iframe-group-edit-autocomplete'));
+        $this->getDriver()->switchTo()->frame($iframe;
     }
 
     /**

@@ -34,7 +34,6 @@ trait WorkspaceActionsTrait
      */
     public function gotoWorkspace($name) 
     {
-        $linkCssSelector = '';
         switch ($name) {
         case 'settings':
             $this->click('#js_app_profile_dropdown');
