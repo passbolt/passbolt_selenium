@@ -79,7 +79,7 @@ abstract class AuthenticatedTestCase extends RecordableTestCase
         $this->waitUntilIDontSee('.page.login-form.master-password');
 
         // wait for redirection trigger
-        $this->waitUntilISee('.logout');
+        $this->waitUntilISee('.logout', 25);
         $this->waitCompletion();
         $this->waitUntilISee('html.passboltplugin-ready');
 

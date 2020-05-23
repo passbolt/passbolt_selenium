@@ -42,6 +42,31 @@ trait FormActionsTrait
     /**
      * Input some text in an element
      *
+     * @param string $selector the element selector
+     * @param string $txt the text to be typed on keyboard
+     * @param bool $append boolean (optional) true if you want to keep the current value intact
+     */
+    public function inputTextWithEmojis(string $selector, string $txt, bool $append = false)
+    {
+        $input = $this->find($selector);
+        $input->click();
+        if (!$append) {
+            $input->clear();
+        }
+        $setData = "
+			const element = jQuery('$selector')[0];
+            element.value = '$txt';
+            element.dispatchEvent(new Event('keydown', {bubbles: true}));
+            element.dispatchEvent(new Event('keypress', {bubbles: true}));
+            element.dispatchEvent(new Event('input', {bubbles: true}));
+            element.dispatchEvent(new Event('keyup', {bubbles: true}));
+		";
+        $this->getDriver()->executeScript($setData);
+    }
+
+    /**
+     * Input some text in an element
+     *
      * @param string $selector CSS selector
      * @param string $txt the text to be typed on keyboard
      * @param bool $append boolean (optional) true if you want to keep the current value intact
