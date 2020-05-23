@@ -6,12 +6,6 @@
         "selenium",
         "php"
     ],
-    "config": {
-        "optimize-autoloader": true,
-        "platform": {
-            "php": "7.0.33"
-        }
-    },
     "description": "Passbolt selenium tests",
     "license": "AGPL-3.0",
     "homepage": "https://www.passbolt.com",
@@ -38,7 +32,11 @@
         "source": "https://github.com/passbolt/passbolt"
     },
     "config": {
-        "vendor-dir": "vendor"
+        "vendor-dir": "vendor",
+        "optimize-autoloader": true,
+        "platform": {
+            "php": "7.0.33"
+        }
     },
     "repositories": [
         {
