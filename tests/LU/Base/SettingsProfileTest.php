@@ -480,10 +480,10 @@ class SettingsProfileTest extends PassboltTestCase
         );
 
         // When I enter & as a first name
-        $this->inputText('js_field_first_name', '🔥');
+        $this->inputTextWithEmojis('#js_field_first_name', '🔥');
 
         // When I enter & as a last name
-        $this->inputText('js_field_last_name', '🔥');
+        $this->inputTextWithEmojis('#js_field_last_name', '🔥');
 
         // And I click save
         $this->click('.edit-profile-dialog input[type=submit]');

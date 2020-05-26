@@ -37,7 +37,7 @@ trait ClipboardAssertions
         $this->appendHtmlInPage('container', '<textarea id="webdriver-clipboard-content" style="position:absolute; top:0; left:0; z-index:999;"></textarea>');
         $this->waitUntilISee('#webdriver-clipboard-content');
         $this->waitUntil(
-            function () use (&$content) {
+            function () use ($content) {
                 $id = 'webdriver-clipboard-content';
                 $e = $this->getDriver()->findElement(WebDriverBy::id($id));
                 $e->clear();

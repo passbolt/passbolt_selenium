@@ -45,6 +45,11 @@ trait WorkspaceActionsTrait
             $this->waitUntilISee('.page.user');
             $this->waitCompletion();
             break;
+        case 'password':
+            $this->click('#js_app_nav_left_password_wsp_link a');
+            $this->waitUntilISee('.page.password');
+            $this->waitCompletion();
+        break;
         case 'administration':
             $linkCssSelector = '#js_app_nav_left_administration_link a';
             $this->waitUntilISee($linkCssSelector);

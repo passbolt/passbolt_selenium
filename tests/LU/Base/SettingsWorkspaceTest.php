@@ -66,6 +66,7 @@ class SettingsWorkspaceTest extends PassboltTestCase
      * @group settings-workspace
      * @group saucelabs
      * @group v2
+     * @group broken
      */
     public function testSearchByKeywords()
     {

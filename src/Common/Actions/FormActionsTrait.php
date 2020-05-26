@@ -16,6 +16,7 @@ namespace App\Common\Actions;
 
 use Facebook\WebDriver\WebDriverBy;
 use Facebook\WebDriver\Remote\RemoteWebDriver;
+use Facebook\WebDriver\WebDriverKeys;
 
 trait FormActionsTrait
 {
@@ -33,10 +34,32 @@ trait FormActionsTrait
     {
         $input = $this->find($selector);
         $input->click();
-        if (!$append) {
+
+        $isEmpty = empty($input->getAttribute('value'));
+        if (!$append && !$isEmpty) {
             $input->clear();
+            $isEmpty = empty($input->getAttribute('value'));
+            if (!$isEmpty) {
+                $this->clearTextWithKeyboard($selector);
+            }
         }
+
         $input->sendKeys($txt);
+    }
+
+    /**
+     * Clear element value with keyboard.
+     * The Element::clear function does not work with the latest react code, this method should help to clear element
+     * value.
+     *
+     * @param string $selector The element to clear
+     */
+    public function clearTextWithKeyboard(string $selector)
+    {
+        $element = $this->find($selector);
+        $element->click();
+        $element->sendKeys([WebDriverKeys::CONTROL, 'a']);
+        $element->sendKeys(WebDriverKeys::BACKSPACE);
     }
 
     /**

@@ -17,7 +17,8 @@
  * Feature: As an administrator I can select which notifications are sent.
  *
  * Scenarios :
- *  - As an administrator I can select which information is shown in the email notifications
+ *  - As an administrator I can see the CE emails notification settings
+ *  - As an administrator I can see the PRO emails notification settings
  *  - As an administrator I can select which notifications are sent
  *  - As an administrator I get a warning when I already use file based settings
  *  - As an administrator I get a warning when I have settings both in the config file and database
@@ -50,7 +51,7 @@ class EmailNotificationSettingsTest extends PassboltTestCase
     use ConfirmationDialogActionsTrait;
 
     /**
-     * Scenario: As an administrator I can select which information is shown in the email notifications
+     * Scenario: As an administrator I can see the CE emails notification settings
      *
      * Given that I am logged in as an administrator
      * When I click on administration link in the top navigation bar
@@ -58,22 +59,15 @@ class EmailNotificationSettingsTest extends PassboltTestCase
      * And  I can see the “Email content visibility” subtitle
      * And  I can see that all the toggle options are enabled by default
      * And  I can see that the save button is disabled
-     * When I click on the “username” toggle
-     * Then I can see the save button is enabled
-     * When I click save
-     * Then I can see a success notification message
-     * When I go to the password workspace
-     * And  I create a resource
-     * And  I go to the email queue for this user
-     * Then I can see username is not included in the email
      *
      * @group pro-only
      * @group AD
      * @group notification
      * @group email-notification
      * @group v2
+     * @group ce-only
      */
-    public function testEmailNotificationsCanChangeShowSetting()
+    public function testCEEmailNotificationsCanSeeSetting()
     {
         // Reset database at the end of test.
         $this->resetDatabaseWhenComplete();
@@ -117,56 +111,90 @@ class EmailNotificationSettingsTest extends PassboltTestCase
 
         // And	I can see that the save button is disabled
         $this->waitUntilDisabled("js-email-notification-settings-save-button");
+    }
 
-        $this->waitUntilISee('#js-show-username-toggle-button');
 
-        // I click on the “username” toggle
-        $this->click("#js-show-username-toggle-button .toggle-switch-button");
+    /**
+     * Scenario: As an administrator I can see the PRO emails notification settings
+     *
+     * Given that I am logged in as an administrator
+     * When I click on administration link in the top navigation bar
+     * And  I click on email notifications link in the left panel
+     * And  I can see the “Email content visibility” subtitle
+     * And  I can see that all the toggle options are enabled by default
+     * And  I can see that the save button is disabled
+     *
+     * @group pro-only
+     * @group AD
+     * @group notification
+     * @group email-notification
+     * @group v2
+     * @group pro-only
+     */
+    public function testPROEmailNotificationsCanSeeSetting()
+    {
+        // Reset database at the end of test.
+        $this->resetDatabaseWhenComplete();
 
-        // Then	I can see the save button is enabled
-        $this->assertNotVisibleByCss('#js-email-notification-settings-save-button.disabled');
-        $this->assertVisible('js-email-notification-settings-save-button');
+        // Given I am logged in as admin
+        $user = User::get('admin');
+        $this->loginAs($user);
 
-        // When I click save
-        $this->click('#js-email-notification-settings-save-button');
+        // When I click on administration link in the top navigation bar
+        $this->gotoWorkspace('administration');
 
-        // Then I can see a success notification message
-        $this->assertNotification('app_notificationorgsettings_post_success');
+        // And I click on email notifications link in the left panel
+        $linkCssSelector = '#js_app_nav_left_email_notification_link a';
+        $this->waitUntilISee($linkCssSelector);
+        $this->click($linkCssSelector);
+        $this->waitCompletion();
 
-        // When	I go to the password workspace
-        // And	I create a resource
-        $this->createPassword([
-            'name' => 'Test Password',
-            'username' => 'admin',
-            'uri' => 'http://www.google.com',
-            'password' => '@dm!n',
-        ], $user);
+        $formSelector = '#js-email-notification-settings-form';
 
-        // And	I go to the email queue for this user
-        $this->getUrl('seleniumtests/showlastemail/' . $user['Username']);
+        // Wait for the form to load
+        $this->waitUntilISee($formSelector . '.ready');
 
-        // Then	I can see username is not included in the email
-        $this->assertElementNotContainText('#bodyTable', 'Username');
+        $settingsForm = $this->findByCss($formSelector);
+
+        // And I can see the "Email content visibility" subtitle
+        $this->assertElementContainsText(
+            $settingsForm,
+            'Email content visibility'
+        );
+
+        $checkboxes = $this->findAllByCss('.toggle-switch-checkbox');
+
+        $expectedNoOfCheckboxes = count($this->_getDefaultConfigs(true));
+
+        $this->assertEquals($expectedNoOfCheckboxes, count($checkboxes));
+
+        // And	I can see that all the toggle options are enabled by default
+        foreach ($checkboxes as $checkbox) {
+            $this->assertTrue($checkbox->isSelected());
+        }
+
+        // And	I can see that the save button is disabled
+        $this->waitUntilDisabled("js-email-notification-settings-save-button");
     }
 
     /**
      * Scenario: As an administrator I can select which notifications are sent
      *
      * Given that I am logged in as an administrator
-     * And I go to the email notification settings administration screen
-     * Then    I can see the “Email notifications” in breadcrumb
-     * And    I can see all the toggle options are enabled by default
-     * And    I can see at least 12 settings items
-     * When    I click on the “when you create a password” label
-     * Then I can see the toggle is disabled
-     * When I click on the toggle next to the “when a password is deleted” label
-     * Then    I can see the toggle is disabled
-     * When I click save
-     * Then I can see a success notification message
-     * When I go the password workspace
-     * And    I select a password
-     * And    I click delete
-     * Then    I can see there is no related email notification in the email queue
+     * And   I go to the email notification settings administration screen
+     * Then  I can see the “Email notifications” in breadcrumb
+     * And   I can see all the toggle options are enabled by default
+     * And   I can see at least 12 settings items
+     * When  I click on the “when you create a password” label
+     * Then  I can see the toggle is disabled
+     * When  I click on the toggle next to the “when a password is deleted” label
+     * Then  I can see the toggle is disabled
+     * When  I click save
+     * Then  I can see a success notification message
+     * When  I go the password workspace
+     * And   I select a password
+     * And   I click delete
+     * Then  I can see there is no related email notification in the email queue
      *
      * @group pro-only
      * @group AD
@@ -174,7 +202,7 @@ class EmailNotificationSettingsTest extends PassboltTestCase
      * @group email-notification
      * @group v2
      */
-    public function testEmailNotificationsCanChangeSendSetting()
+    public function testEmailNotificationsCanChangeSetting()
     {
         // Reset database at the end of test.
         $this->resetDatabaseWhenComplete();
@@ -372,12 +400,13 @@ class EmailNotificationSettingsTest extends PassboltTestCase
 
     /**
      * Get default config
+     * @param bool $pro Retrieve pro config (default false);
      *
      * @return array
      */
-    private function _getDefaultConfigs()
+    private function _getDefaultConfigs(bool $pro = false)
     {
-        return [
+        $config = [
             'show_comment' => true,
             'show_description' => true,
             'show_secret' => true,
@@ -396,5 +425,18 @@ class EmailNotificationSettingsTest extends PassboltTestCase
             'send_group_user_update' => true,
             'send_group_manager_update' => true,
         ];
+
+        if ($pro) {
+            $proConfig = [
+                'send_folder_deleted' => true,
+                'send_folder_created' => true,
+                'send_folder_updated' => true,
+                'send_folder_share_created' => true,
+                'send_folder_share_dropped' => true,
+            ];
+            $config = array_merge($config, $proConfig);
+        }
+
+        return $config;
     }
 }

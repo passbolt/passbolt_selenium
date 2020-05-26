@@ -368,8 +368,8 @@ class PasswordWorkspaceTest extends PassboltTestCase
         $pwdDetails = [
             'username'        => 'vector',
             'url'             => 'https://inkscape.org/',
-            'created'         => '/(a|an|[0-9]{1,2}) (minute|minutes|hour|hours|days) ago/',
-            'modified'        => '/(a|an|[0-9]{1,2}) (minute|minutes|hour|hours|days) ago/',
+            'created'         => '/(a|an|[0-9]{1,2}) (second|seconds|minute|minutes|hour|hours|days) ago/',
+            'modified'        => '/(a|an|[0-9]{1,2}) (second|seconds|minute|minutes|hour|hours|days) ago/',
             'created-by'      => 'edith@passbolt.com',
             'modified-by'     => 'edith@passbolt.com',
         ];
@@ -393,16 +393,11 @@ class PasswordWorkspaceTest extends PassboltTestCase
         );
         // And I should see the password's creator
         $cssSelector = '#js_pwd_details .detailed-information li.created-by';
-        $this->assertElementContainsText(
-            $this->findByCss($cssSelector),
-            $pwdDetails['created-by']
-        );
+        $this->waitUntilISee($cssSelector, "/{$pwdDetails['created-by']}/");
+
         // And I should see the password's modifier
         $cssSelector = '#js_pwd_details .detailed-information li.modified-by';
-        $this->assertElementContainsText(
-            $this->findByCss($cssSelector),
-            $pwdDetails['modified-by']
-        );
+        $this->waitUntilISee($cssSelector, "/{$pwdDetails['modified-by']}/");
     }
 
     /**
