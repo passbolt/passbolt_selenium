@@ -60,7 +60,6 @@ class EmailNotificationSettingsTest extends PassboltTestCase
      * And  I can see that all the toggle options are enabled by default
      * And  I can see that the save button is disabled
      *
-     * @group pro-only
      * @group AD
      * @group notification
      * @group email-notification
