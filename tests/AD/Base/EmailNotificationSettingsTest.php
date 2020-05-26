@@ -129,7 +129,6 @@ class EmailNotificationSettingsTest extends PassboltTestCase
      * @group notification
      * @group email-notification
      * @group v2
-     * @group pro-only
      */
     public function testPROEmailNotificationsCanSeeSetting()
     {
@@ -196,7 +195,6 @@ class EmailNotificationSettingsTest extends PassboltTestCase
      * And   I click delete
      * Then  I can see there is no related email notification in the email queue
      *
-     * @group pro-only
      * @group AD
      * @group notification
      * @group email-notification
@@ -237,11 +235,6 @@ class EmailNotificationSettingsTest extends PassboltTestCase
         foreach ($checkboxes as $checkbox) {
             $this->assertTrue($checkbox->isSelected());
         }
-
-        $expectedNoOfCheckboxes = count($this->_getDefaultConfigs());
-
-        // And 	I can see at least 12 settings items
-        $this->assertEquals($expectedNoOfCheckboxes, count($checkboxes));
 
         $this->waitUntilISee('#js-send-password-create-toggle-button');
 
@@ -293,7 +286,6 @@ class EmailNotificationSettingsTest extends PassboltTestCase
      * And  I go to the email notification settings administration screen
      * Then I can see a warning banner at the top
      *
-     * @group pro-only
      * @group AD
      * @group notification
      * @group email-notification
@@ -344,7 +336,6 @@ class EmailNotificationSettingsTest extends PassboltTestCase
      * And  I go to the email notification settings administration screen
      * Then I can see a warning banner at the top
      *
-     * @group pro-only
      * @group AD
      * @group notification
      * @group email-notification
