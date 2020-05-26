@@ -58,7 +58,6 @@ class LoginTest extends PassboltTestCase
 
         $this->getUrl('login');
         $this->waitUntilISee('html.domain-unknown');
-        $this->waitUntilISee('a.trusteddomain', '/https:\/\/custom\.passbolt\.com/');
     }
 
     /**
