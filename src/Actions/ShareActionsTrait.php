@@ -14,126 +14,112 @@
  */
 namespace App\Actions;
 
+use Facebook\WebDriver\Exception\NoSuchElementException;
 use Facebook\WebDriver\WebDriverBy;
+use Facebook\WebDriver\WebDriverSelect;
 
 trait ShareActionsTrait
 {
-
     /**
-     * Goto the share password dialog for a given resource id
-     *
-     * @param $id string
+     * Open the share dialog and switch to the react iframe
      */
-    public function gotoSharePassword($id) 
+    public function openShareDialog()
     {
-        if ($this->isVisible('#passbolt-iframe-password-share.ready') || $this->isVisible('.share-password-dialog')) {
-            return;
-        }
-        if(!$this->isVisible('.page.password')) {
-            $this->getUrl('');
-            $this->waitUntilISee('.page.password');
-            $this->waitUntilISee('#js_wk_menu_sharing_button');
-        }
-        if(!$this->isVisible('.share-password-dialog')) {
-            $this->releaseFocus(); // we click somewhere in case the password is already active
-            if (!$this->isPasswordSelected($id)) {
-                $this->clickPassword($id);
-            }
-            $this->click('js_wk_menu_sharing_button');
-            $this->assertShareDialogVisible();
-            $this->goIntoShareIframe();
-        }
+        $this->click('#js_wk_menu_sharing_button');
+        $this->goIntoReactAppIframe();
+        $this->waitUntilISee('.share-dialog');
+        $this->waitUntilIDontSee('.row.skeleton');
     }
 
     /**
-     * Search an aro (User or Group) to share a password with.
-     *
-     * @param $password
-     * @param $aroName
-     * @param $user
+     * Close the share dialog and switch out of the react iframe
      */
-    public function searchAroToGrant($password, $aroName, $user) 
+    public function closeShareDialog()
     {
-        $this->assertSecurityToken($user, 'share');
-        $this->inputText('js-search-aros-input', $aroName, true);
-        $this->click('.security-token');
-        $this->waitUntilISee('#js-search-aro-autocomplete.ready');
-    }
-
-    /**
-     * Add a temporary permission helper
-     *
-     * @param $password
-     * @param $aroName
-     * @param $user
-     */
-    public function addTemporaryPermission($password, $aroName, $user) 
-    {
-        // Search the user to grant.
-        $this->searchAroToGrant($password, $aroName, $user);
-
-        // I wait until I see the automplete field resolved
-        $this->waitUntilISee('.autocomplete-content', '/' . $aroName . '/i');
-
-        // I click on the username link the autocomplete field retrieved.
-        $element = $this->findByXpath('//*[@id="js-search-aro-autocomplete"]//*[contains(., "' . $aroName . '")]//ancestor::li[1]');
-        $element->click();
-
-        // I can see that temporary changes are waiting to be saved
-        $this->assertElementContainsText(
-            $this->findByCss('.share-password-dialog'),
-            'You need to save to apply the changes.'
-        );
-    }
-
-    /**
-     * Share a password helper
-     *
-     * @param $password
-     * @param $aroName
-     * @param $user
-     */
-    public function sharePassword($password, $aroName, $user) 
-    {
-        $this->gotoSharePassword($password['id']);
-        $this->addTemporaryPermission($password, $aroName, $user);
-        $this->saveShareChanges($user);
-    }
-
-    /**
-     * Save share
-     *
-     * @param $user
-     */
-    public function saveShareChanges($user) 
-    {
-        // When I click on the save button
-        $this->click('js-share-save');
-
-        // Then I see the passphrase dialog
-        $this->assertMasterPasswordDialog($user);
-
-        // When I enter the passphrase and click submit
-        $this->enterMasterPassword($user['MasterPassword']);
+        $this->waitUntilISee('.dialog-close');
+        $this->click('.share-dialog a.cancel');
         $this->goOutOfIframe();
-
-        // And I don't see the share password iframe
-        $this->waitUntilIDontSee('#passbolt-iframe-share-password');
-
-        // And I see a notice message that the operation was a success
-        $this->assertNotification('app_share_share_success');
-
-        // And the application is ready
-        $this->waitCompletion();
     }
 
     /**
-     * Put the focus inside the password share iframe
+     * Assert the dialog permissions
+     * @param array $permissions the list of permissions to check
+     * [
+     *    USERNAME => PERMISSION TYPE
+     * ]
+     * i.e.
+     * [
+     *    'ada@passbolt.com' => 15,
+     *    'betty@passbolt.com' => 7
+     * ]
      */
-    public function goIntoShareIframe() 
+    public function assertDialogPermissions(array $permissions)
     {
-        $iframe = $this->getDriver()->findElement(WebDriverBy::id('passbolt-iframe-password-share'));
-        $this->getDriver()->switchTo()->frame($iframe);
+        $liElements = $this->findAllByCss('.share-dialog .permissions li');
+        foreach($liElements as $liElement) {
+            $permissionType = $liElement->findElement(WebDriverBy::cssSelector('select'))->getAttribute('value');
+            $username = trim($liElement->findElement(WebDriverBy::cssSelector('.aro-details span'))->getAttribute('innerHTML'));
+            $this->assertEquals($permissions[$username], $permissionType);
+        }
     }
 
+    /**
+     * Add a temporary permission
+     *
+     * @param string $username the username to add a permission for
+     * @throws NoSuchElementException
+     */
+    public function addTemporaryPermission(string $username)
+    {
+        $this->inputText('.autocomplete input', $username);
+        $this->waitUntilISee('.autocomplete-content', '/' . $username . '/i');
+        $liElements = $this->findAllByCss('.autocomplete-content li');
+        foreach($liElements as $liElement) {
+            if (strpos($liElement->getAttribute('innerHTML'), $username) !== false) {
+                $liElement->click();
+                return;
+            }
+        }
+        throw new NoSuchElementException("Cannot find the user: $username");
+    }
+
+    /**
+     * Delete a permission
+     *
+     * @param string $username The user to delete
+     * @throws NoSuchElementException
+     */
+    public function deleteTemporaryPermission(string $username)
+    {
+        $liElements = $this->findAllByCss('.share-dialog .permissions li');
+        foreach($liElements as $liElement) {
+            if (strpos($liElement->getAttribute('innerHTML'), $username) !== false) {
+                $deleteButton = $liElement->findElement(WebDriverBy::cssSelector('.actions a.remove-item'));
+                $deleteButton->click();
+                return;
+            }
+        }
+        throw new NoSuchElementException("Cannot find a permission associated to the user: $username");
+    }
+
+    /**
+     * Edit a permission
+     *
+     * @param string $username The user to edit the permission
+     * @param string $permissionType The permission type. is owner, can update or can read
+     * @throws \Facebook\WebDriver\Exception\NoSuchElementException
+     * @throws \Facebook\WebDriver\Exception\UnexpectedTagNameException
+     */
+    public function editTemporaryPermission(string $username, string $permissionType)
+    {
+        $liElements = $this->findAllByCss('.share-dialog .permissions li');
+        foreach($liElements as $liElement) {
+            if (strpos($liElement->getAttribute('innerHTML'), $username) !== false) {
+                $permissionSelect = new WebDriverSelect($liElement->findElement(WebDriverBy::cssSelector('select')));
+                $permissionSelect->selectByVisibleText($permissionType);
+                return;
+            }
+        }
+        throw new NoSuchElementException("Cannot find a permission associated to the user: $username");
+    }
 }

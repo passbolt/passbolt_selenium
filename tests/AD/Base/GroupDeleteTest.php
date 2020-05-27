@@ -28,7 +28,6 @@ use App\Actions\ConfirmationDialogActionsTrait;
 use App\Actions\GroupActionsTrait;
 use App\Actions\MasterPasswordActionsTrait;
 use App\Actions\PasswordActionsTrait;
-use App\Actions\PermissionActionsTrait;
 use App\Actions\ShareActionsTrait;
 use App\Actions\WorkspaceActionsTrait;
 use App\Assertions\ConfirmationDialogAssertionsTrait;
@@ -43,7 +42,6 @@ use Data\Fixtures\User;
 
 class ADGroupDeleteTest extends PassboltTestCase
 {
-
     use ConfirmationDialogActionsTrait;
     use ConfirmationDialogAssertionsTrait;
     use GroupActionsTrait;
@@ -52,7 +50,6 @@ class ADGroupDeleteTest extends PassboltTestCase
     use MasterPasswordAssertionsTrait;
     use PasswordActionsTrait;
     use PasswordAssertionsTrait;
-    use PermissionActionsTrait;
     use ShareActionsTrait;
     use ShareAssertionsTrait;
     use WorkspaceActionsTrait;
@@ -230,32 +227,37 @@ class ADGroupDeleteTest extends PassboltTestCase
         ];
         $resource['id'] = $this->createPassword($resource, $user);
 
-        // Share password.
-        $this->gotoSharePassword($resource['id']);
-
-        // Then I can see the group has no right on the password
-        $this->assertElementNotContainText(
-            $this->findById('js-share-edit-list'),
-            'Accounting'
-        );
-
-        // When I give read access to the group for a password I own
-        $this->addTemporaryPermission($resource, 'Accounting', $user);
-        $this->editTemporaryPermission($resource, 'Accounting', 'is owner', $user);
-        $this->editTemporaryPermission($resource, 'admin@passbolt.com', 'can read', $user);
+        // When I make a group sole owner of the password
+        $this->openShareDialog();
+        $this->addTemporaryPermission('Accounting');
+        $this->editTemporaryPermission('Accounting', 'is owner');
+        $this->editTemporaryPermission('admin@passbolt.com', 'can read');
 
         // When I click on the save button
-        $this->saveShareChanges($user);
+        $this->click('.submit-wrapper input[type="submit"]');
 
-        // Go to user workspace
+        // Then I should see the passphrase entry dialog.
+        $this->waitUntilISee('.dialog.passphrase-entry');
+
+        // When I enter 'ada@passbolt.com' as password
+        $this->inputText('.passphrase-entry input[name="passphrase"]', 'admin@passbolt.com');
+
+        // And I click on the OK button
+        $this->click('.passphrase-entry input[type=submit]');
+        $this->goOutOfIframe();
+
+        // Then I see a notice message that the operation was a success
+        $this->assertNotificationMessage('The permissions have been changed successfully.');
+
+        // When I Go to user workspace
         $this->gotoWorkspace('user');
 
-        // When I click on the contextual menu button of a group on the right
+        // And I delete a group
         $groupId = UuidFactory::uuid('group.id.accounting');
         $this->waitUntilISee("#js_wsp_users_groups_list #group_${groupId}");
         $this->goToRemoveGroup($groupId);
 
-        // Assert that I can see text.
+        // Then I can see a confirmation dialog
         $this->waitUntilISee('.dialog');
         $this->assertElementContainsText('.dialog', 'You cannot delete this group!');
         $this->waitUntilISee('.dialog', '/You are about to delete Accounting/');

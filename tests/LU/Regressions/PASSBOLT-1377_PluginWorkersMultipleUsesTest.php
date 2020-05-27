@@ -151,47 +151,4 @@ class PASSBOLT1377 extends PassboltTestCase
             $this->waitUntilNotificationDisappears('app_resources_update_success');
         }
     }
-
-    /**
-     * Scenario: As LU I can share a password mutliple times
-     *
-     * Given I am logged in as ada in the user workspace
-     * [LOOP]
-     * When  I am sharing a password I own
-     * Then  I should expect the password has been shared with success
-     * [END_LOOP]
-     *
-     * @group LU
-     * @group regression
-     * @group v2
-     */
-    public function testSharePasswordMultipleTimes() 
-    {
-        // Reset database at the end of test.
-        $this->resetDatabaseWhenComplete();
-
-        // Given I am logged in as ada in the user workspace
-        $user = User::get('ada');
-
-        $this->loginAs($user);
-
-        $resource = Resource::get([
-            'id' => UuidFactory::uuid('resource.id.apache'),
-            'user' => 'ada'
-        ]);
-        $shareWith = [
-            'frances',
-            'edith',
-            'admin'
-        ];
-
-        for ($i=0; $i<count($shareWith); $i++) {
-            // And I am editing the secret of a password I own
-            // Then I can see a success notification
-            $r['id'] = $resource['id'];
-            $r['password'] = 'password_' . $i;
-            $this->sharePassword($resource, $shareWith[$i], $user);
-            $this->waitUntilNotificationDisappears('app_share_share_success');
-        }
-    }
 }
