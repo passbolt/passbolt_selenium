@@ -82,7 +82,7 @@ class LoginTest extends PassboltTestCase
 
         $this->getUrl('login');
         $this->waitUntilISee('html.server-not-verified');
-        $this->assertElementContainsText('.plugin-check.gpg', 'Could not verify server key. The server key is changed.');
+        $this->assertElementContainsText('.plugin-check.gpg', 'Could not verify server key. The server key has changed.');
     }
 
     /**
