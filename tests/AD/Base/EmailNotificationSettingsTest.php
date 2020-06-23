@@ -418,11 +418,10 @@ class EmailNotificationSettingsTest extends PassboltTestCase
 
         if ($pro) {
             $proConfig = [
-                'send_folder_deleted' => true,
-                'send_folder_created' => true,
-                'send_folder_updated' => true,
-                'send_folder_share_created' => true,
-                'send_folder_share_dropped' => true,
+                'send_folder_delete' => true,
+                'send_folder_create' => true,
+                'send_folder_update' => true,
+                'send_folder_share' => true,
             ];
             $config = array_merge($config, $proConfig);
         }
