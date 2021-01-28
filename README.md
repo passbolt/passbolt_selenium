@@ -1,10 +1,15 @@
+## ARCHIVED
+
+This repository is archived and the code will not be updated.
+Use at your own risk. 
+
+
 passbolt selenium testsuite
 ===========================================
 
 This project is the functional testsuite of Passbolt. It is based on Selenium, PhpUnit and Facebook php-webdriver
 
 Checkout [passbolt.com](http://www.passbolt.com) for more information
-
 
 
 License
