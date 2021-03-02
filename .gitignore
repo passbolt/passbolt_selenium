@@ -1,9 +1,3 @@
-composer.phar
-/vendor
-/data/extensions
-/data/fixtures/gpg
-/data/fixtures/gpg-server
-
 # generic files to ignore
 *.DS_Store
 *~
@@ -14,11 +8,4 @@ composer.phar
 reports/
 
 # plugins
-*.xpi
 node_modules/
-
-# config
-config/config.php
-
-# tempory
-/tmp

@@ -1,147 +1,131 @@
-passbolt selenium testsuite
-===========================================
+	      ____                  __          ____
+	     / __ \____  _____ ____/ /_  ____  / / /_
+	    / /_/ / __ `/ ___/ ___/ __ \/ __ \/ / __/
+	   / ____/ /_/ (__  |__  ) /_/ / /_/ / / /_
+	  /_/    \__,_/____/____/_.___/\____/_/\__/
 
-This project is the functional testsuite of Passbolt. It is based on Selenium, PhpUnit and Facebook php-webdriver
-
-Checkout [passbolt.com](http://www.passbolt.com) for more information
-
+	The open source password manager for teams
+	(c) 2020 Passbolt SA
 
 
 License
 ==============
 
-This project is distributed under [Affero General Public License v3](http://www.gnu.org/licenses/agpl-3.0.html)
+Passbolt is distributed under [Affero General Public License v3](http://www.gnu.org/licenses/agpl-3.0.html)
+
+Images and logos in /src/img/third_party belongs to their respective owner.
 
 
-How to get started
-===========================================
+About
+=========
 
-##  GET THE CODE
+This is the official E2E testing styleguide for Passbolt the open source password manager for teams.
+This styleguide is dedicated to developers who want to improve Passbolt and aim at enriching their
+contribution with E2E tests.
 
-### Github
+Credits
+=========
 
-    git clone git@github.com:passbolt/passbolt_selenium.git
+https://www.passbolt.com/credits
 
-### Bitbucket
+Prerequisite
+============
 
-    git clone git@bitbucket.org:passbolt/passbolt_selenium.git
+You need to have a passbolt environment build locally with selenium activate in config file
+and have done a sql export of the dummy data.
 
-##  CONFIG
+Install
+=========
 
-Clone or rename config.php.default to
+### Running locally
 
-##  SELENIUM
+Before running the E2E tests, be sure you have Chrome and Firefox Nightly as installed.
 
-*   Download the selenium-server-standalone-#.jar file provided here:
+You have to build a local version of Passbolt browser extension for both browsers. To do this, first you need to
+checkout the Passbolt browser extension [repository](https://github.com/passbolt/passbolt_browser_extension) and go
+to the passbolt-browser-extension folder.
 
-    http://selenium-release.storage.googleapis.com/index.html
+For Chrome, run the command:
 
-*   Download and run that file, replacing # with the current server version.
+```
+grunt build-chrome-debug
+```
 
-    java -jar selenium-server-standalone-#.jar
+For firefox, run the command
 
-*   You can also run it on a remote host, you will need to set it up as a grid/node by running two instances
+```
+grunt build-firefox-debug
+```
 
-    java -jar selenium-server-standalone-#.jar -role hub
-    java -jar selenium-server-standalone-#.jar -role node
+That is going to generate a folder file and a crx file respectively in dist/firefox/passbolt-latest and
+dist/chrome/passbolt-latest@passbolt.com.crx.
 
-*   Then when you create a session, be sure to pass the url to where your server is running.
+The Webdriver configuration file uses variable environment PASSBOLT_BROWSER_EXTENSION_CHROME and PASSBOLT_BROWSER_EXTENSION_FIREFOX
+and PASSBOLT_BROWSER_BINARY_FIREFOX to specify the location of these files. So, they should properly defined into your environment such as
+in an Unix-based platform:
 
-    // This would be the url of the host running the server-standalone.jar
-    $host = 'http://localhost:4444/wd/hub'; // this is the default
+```
+export PASSBOLT_BROWSER_EXTENSION_CHROME=<YOUR-CHROME-CRX-FILE-PATH>
+export PASSBOLT_BROWSER_EXTENSION_FIREFOX=<YOUR-FIREFOX-EXTENSION-FOLDER-PATH>
+export PASSBOLT_BROWSER_BINARY_FIREFOX=<YOUR-FIREFOX-NIGHTLY-BINARY-FILE-PATH>
+```
 
-*   Make sure you have firefox installed on your selenium host!
+Finally, run the test as follows for 'pro' or 'ce' edition :
 
+```
+npx wdio wdio.local.pro.conf.js
+npx wdio wdio.local.ce.conf.js
+```
+### Running saucelabs
 
-## PHPUNIT (Using brew or similar)
+You have to build a local version of Passbolt browser extension for both browsers. To do this, first you need to
+checkout the Passbolt browser extension [repository](https://github.com/passbolt/passbolt_browser_extension) and go
+to the passbolt-browser-extension folder.
 
-*  Get phpunit using your package manager for example
+For Chrome, run the command:
 
-    brew phpunit
+```
+grunt build-chrome-debug
+```
 
-*   To run unit tests then simply run:
+For firefox, run the command
 
-    phpunit -c ./tests/USERROLE
+```
+grunt build-firefox-debug
+```
 
-    where User role is
-    - AN : user without plugin
-    - AP : user with plugin
-    - LU : user with configured plugin and user account
+That is going to generate a folder file and a crx file respectively in dist/firefox/passbolt-latest and
+dist/chrome/passbolt-latest@passbolt.com.crx.
 
-* You can also run all tests
+The Webdriver configuration file uses variable environment PASSBOLT_BROWSER_EXTENSION_CHROME and PASSBOLT_BROWSER_EXTENSION_FIREFOX
+to specify the location of these files.
 
-    $ ./run_all_test.sh
+You need also to have SAUCELABS_USERNAME and SAUCELABS_ACCESS_KEY. Pay attention to have a 36 characters long for the access key,
+if it's not the case generate a new one on sauce labs.
 
-* You can also run the tests matching a given pattern (matching class or function name), for example:
+So, they should properly defined into your environment such as
+in an Unix-based platform:
 
-    $ phpunit -c ./tests/LU --filter PasswordDeleteTest
+```
+export PASSBOLT_BROWSER_EXTENSION_CHROME=<YOUR-CHROME-CRX-FILE-PATH>
+export PASSBOLT_BROWSER_EXTENSION_FIREFOX=<YOUR-FIREFOX-EXTENSION-FOLDER-PATH>
+export SAUCELABS_USERNAME=<YOUR-SAUCELABS-USERNAME>
+export SAUCELABS_ACCESS_KEY=<YOUR-SAUCELABS-ACCESS-KEY>
+```
 
+Finally, run the test as follows for 'pro' or 'ce' edition :
 
-## PHPUNIT (Using composer)
+```
+npx wdio wdio.saucelabs.pro.conf.js
+npx wdio wdio.saucelabs.ce.conf.js
+```
 
-*   If you don't want to use your local package manager (brew, apt-get, etc.) you can download the composer.phar
+### Running with shell
 
-    curl -sS https://getcomposer.org/installer | php
+Before execute it, check if the prerequisite is done.
+You could execute the run_selenium_test.sh and choose which version launch.
+If some environment variable are not set, the script will ask you and set it.
 
-*   Install the library.
-
-    php composer.phar install
-
-*   To run unit tests then simply run:
-
-    ./vendor/bin/phpunit -c ./tests
-
-## TEST WITH FIREFOX
-
-*   Below is an example of a selenium test using firefox with the passbolt plugin, running for AP, and for the test testLogin
-    PLEASE NOTE that a shortcut to the .xpi firefox plugin should be placed in data/extensions folder
-
-    BROWSER=firefox_with_passbolt_extension ./passbolt/vendor/phpunit/phpunit/phpunit -c ./tests/AP/phpunit.xml --filter testLogin
-
-## TEST WITH CHROME
-
-*   Below is an example of a selenium test using chrome with the passbolt plugin, running for AP, and for the test testLogin.
-    PLEASE NOTE that a shortcut to the .crx chrome plugin should be placed in data/extensions folder
-
-    BROWSER=chrome_with_passbolt_extension ./passbolt/vendor/phpunit/phpunit/phpunit -c ./tests/AP/phpunit.xml --filter testLogin
-
-
-## PASSBOLT Plugin
-
-*   Get the plugin by downloading the latest build from the repository and put it in data/extensions
-
-    https://github.com/passbolt/passbolt_ff/blob/develop/passbolt-firefox-addon.zip?raw=true
-
-*   Or if you are developing you can create a simlink to your addon project
-
-		cd data/extensions
-		ln -s ../../../passbolt_ff/passbolt-firefox-addon.zip .
-
-## PASSBOLT Fixtures
-
-*   Place the GPG keys in data/fixtures/gpg from
-
-https://github.com/passbolt/passbolt/tree/develop/app/Config/gpg
-
-*   Or if you are developing you can create a simlink to your passbolt project
-
-    cd data/fixtures
-    ln -s ../../../passbolt/app/Config/gpg/ .
-
-
-About Facebook php-webdriver
-===========================================
-
-This WebDriver client is a driver developped by Facebook. It aims to be as close as possible to bindings in other languages.
-The concepts are very similar to the Java, .NET, Python and Ruby bindings for WebDriver.
-
-Looking for documentation about php-webdriver?
-- [API](http://facebook.github.io/php-webdriver/)
-- [Repository](https://github.com/facebook/php-webdriver)
-
-
-##  More information
-
-Check out the Selenium [docs and wiki](http://docs.seleniumhq.org/docs/ and https://code.google.com/p/selenium/wiki)
-
-Learn how to integrate it with PHPUnit [Blogpost](http://codeception.com/11-12-2013/working-with-phpunit-and-selenium-webdriver.html) | [Demo Project](https://github.com/DavertMik/php-webdriver-demo)
+```
+./run_selenium_tests.sh
+```
