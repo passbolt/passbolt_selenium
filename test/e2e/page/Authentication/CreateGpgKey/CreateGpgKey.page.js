@@ -6,7 +6,7 @@ class CreateGpgKeyPage {
    * define selectors using getter methods
    */
   get createGpgKeyPage() {
-    return $('.choose-passphrase');
+    return $('.create-gpg-key');
   }
 
   get inputPassphrase() {
