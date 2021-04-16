@@ -1,33 +1,33 @@
-const PassphraseEntryDialogPage = require('../../Passphrase/PassphraseEntryDialog/PassphraseEntryDialog.page');
+const PassphraseEntryDialogPage = require('../../AuthenticationPassphrase/InputPassphrase/InputPassphrase.page');
 /**
  * sub page containing specific selectors and methods for a specific page
  */
-class PasswordCreateDialogPage {
+class EditResourcePage {
   /**
    * define selectors using getter methods
    */
-  get createPasswordPage() {
-    return $('.create-password-dialog.dialog-wrapper');
+  get editPasswordPage() {
+    return $('.edit-password-dialog.dialog-wrapper');
   }
 
   get inputName() {
-    return $('#create-password-form-name');
+    return $('#edit-password-form-name');
   }
 
   get inputUri() {
-    return $('#create-password-form-uri');
+    return $('#edit-password-form-uri');
   }
 
   get inputUsername() {
-    return $('#create-password-form-username');
+    return $('#edit-password-form-username');
   }
 
   get inputPassword() {
-    return $('#create-password-form-password');
+    return $('#edit-password-form-password');
   }
 
   get inputDescription() {
-    return $('#create-password-form-description');
+    return $('#edit-password-form-description');
   }
 
   get submitButton() {
@@ -36,13 +36,14 @@ class PasswordCreateDialogPage {
 
   /**
    * a method to encapsule automation code to interact with the page
-   * e.g. to create a new password
+   * e.g. to edit a password
    */
-  createPassword(name, uri, username, password, description) {
-    this.createPasswordPage.waitForExist();
+  editPassword(name, uri, username, password, description) {
+    this.editPasswordPage.waitForExist();
     this.inputName.setValue(name);
     this.inputUri.setValue(uri);
     this.inputUsername.setValue(username);
+    this.inputPassword.waitForEnabled();
     this.inputPassword.setValue(password);
     this.inputDescription.setValue(description);
     this.submitButton.waitForClickable();
@@ -51,4 +52,4 @@ class PasswordCreateDialogPage {
   }
 }
 
-module.exports = new PasswordCreateDialogPage();
+module.exports = new EditResourcePage();

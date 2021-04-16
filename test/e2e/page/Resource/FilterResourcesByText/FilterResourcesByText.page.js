@@ -1,7 +1,7 @@
 /**
  * sub page containing specific selectors and methods for a specific page
  */
-class PasswordSearchBarPage {
+class FilterResourcesByTextPage {
   /**
    * define selectors using getter methods
    */
@@ -45,4 +45,4 @@ class PasswordSearchBarPage {
   }
 }
 
-module.exports = new PasswordSearchBarPage();
+module.exports = new FilterResourcesByTextPage();

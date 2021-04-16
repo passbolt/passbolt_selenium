@@ -1,7 +1,7 @@
 /**
  * sub page containing specific selectors and methods for a specific page
  */
-class PasswordSidebarPage {
+class DisplayResourceDetailsPage {
   /**
    * define selectors using getter methods
    */
@@ -46,4 +46,4 @@ class PasswordSidebarPage {
   }
 }
 
-module.exports = new PasswordSidebarPage();
+module.exports = new DisplayResourceDetailsPage();

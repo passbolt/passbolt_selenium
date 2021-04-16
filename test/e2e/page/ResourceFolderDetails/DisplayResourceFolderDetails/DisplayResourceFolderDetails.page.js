@@ -1,7 +1,7 @@
 /**
  * sub page containing specific selectors and methods for a specific page
  */
-class FolderSidebarPage {
+class DisplayResourceFolderDetailsPage {
   /**
    * define selectors using getter methods
    */
@@ -38,4 +38,4 @@ class FolderSidebarPage {
   }
 }
 
-module.exports = new FolderSidebarPage();
+module.exports = new DisplayResourceFolderDetailsPage();

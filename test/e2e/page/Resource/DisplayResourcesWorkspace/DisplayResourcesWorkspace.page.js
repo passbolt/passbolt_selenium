@@ -1,9 +1,9 @@
-const PassphraseEntryDialogPage = require('../../Passphrase/PassphraseEntryDialog/PassphraseEntryDialog.page');
+const PassphraseEntryDialogPage = require('../../AuthenticationPassphrase/InputPassphrase/InputPassphrase.page');
 
 /**
  * sub page containing specific selectors and methods for a specific page
  */
-class PasswordWorkspacePage {
+class DisplayResourcesWorkspacePage {
   /**
    * define selectors using getter methods
    */
@@ -85,4 +85,4 @@ class PasswordWorkspacePage {
   }
 }
 
-module.exports = new PasswordWorkspacePage();
+module.exports = new DisplayResourcesWorkspacePage();

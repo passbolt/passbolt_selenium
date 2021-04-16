@@ -1,33 +1,33 @@
-const PassphraseEntryDialogPage = require('../../Passphrase/PassphraseEntryDialog/PassphraseEntryDialog.page');
+const PassphraseEntryDialogPage = require('../../AuthenticationPassphrase/InputPassphrase/InputPassphrase.page');
 /**
  * sub page containing specific selectors and methods for a specific page
  */
-class PasswordEditDialogPage {
+class CreateResourcePage {
   /**
    * define selectors using getter methods
    */
-  get editPasswordPage() {
-    return $('.edit-password-dialog.dialog-wrapper');
+  get createPasswordPage() {
+    return $('.create-password-dialog.dialog-wrapper');
   }
 
   get inputName() {
-    return $('#edit-password-form-name');
+    return $('#create-password-form-name');
   }
 
   get inputUri() {
-    return $('#edit-password-form-uri');
+    return $('#create-password-form-uri');
   }
 
   get inputUsername() {
-    return $('#edit-password-form-username');
+    return $('#create-password-form-username');
   }
 
   get inputPassword() {
-    return $('#edit-password-form-password');
+    return $('#create-password-form-password');
   }
 
   get inputDescription() {
-    return $('#edit-password-form-description');
+    return $('#create-password-form-description');
   }
 
   get submitButton() {
@@ -36,14 +36,13 @@ class PasswordEditDialogPage {
 
   /**
    * a method to encapsule automation code to interact with the page
-   * e.g. to edit a password
+   * e.g. to create a new password
    */
-  editPassword(name, uri, username, password, description) {
-    this.editPasswordPage.waitForExist();
+  createPassword(name, uri, username, password, description) {
+    this.createPasswordPage.waitForExist();
     this.inputName.setValue(name);
     this.inputUri.setValue(uri);
     this.inputUsername.setValue(username);
-    this.inputPassword.waitForEnabled();
     this.inputPassword.setValue(password);
     this.inputDescription.setValue(description);
     this.submitButton.waitForClickable();
@@ -52,4 +51,4 @@ class PasswordEditDialogPage {
   }
 }
 
-module.exports = new PasswordEditDialogPage();
+module.exports = new CreateResourcePage();
