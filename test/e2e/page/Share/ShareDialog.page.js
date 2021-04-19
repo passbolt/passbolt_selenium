@@ -1,4 +1,4 @@
-const PassphraseEntryDialogPage = require('../Passphrase/PassphraseEntryDialog/PassphraseEntryDialog.page');
+const PassphraseEntryDialogPage = require('../AuthenticationPassphrase/InputPassphrase/InputPassphrase.page');
 /**
  * sub page containing specific selectors and methods for a specific page
  */

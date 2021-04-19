@@ -1,7 +1,7 @@
 /**
  * sub page containing specific selectors and methods for a specific page
  */
-class FoldersTreePage {
+class FilterResourcesByFoldersPage {
   /**
    * define selectors using getter methods
    */
@@ -86,4 +86,4 @@ class FoldersTreePage {
   }
 }
 
-module.exports = new FoldersTreePage();
+module.exports = new FilterResourcesByFoldersPage();

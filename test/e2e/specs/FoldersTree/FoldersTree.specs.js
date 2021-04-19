@@ -1,19 +1,19 @@
-const {adaPrivateKey, adminPrivateKey} = require('../../page/Password/PasswordWorkspace/PasswordWorkspace.data');
+const {adaPrivateKey, adminPrivateKey} = require('../../page/Authentication/ImportGpgKey/ImportGpgKey.data');
 const SeleniumPage = require('../../page/Selenium/Selenium.page');
 const RecoverAuthenticationPage = require('../../page/AuthenticationRecover/RecoverAUthentication/RecoverAuthentication.page');
-const ShareDialogPage = require('../../page/Share/shareDialog.page');
-const DisplayMainMenuPage = require('../../page/navigation/DisplayMainMenu.page');
-const PasswordWorkspacePage = require('../../page/Password/PasswordWorkspace/PasswordWorkspace.page');
-const GridPage = require('../../page/Password/Grid/Grid.page');
-const PasswordSidebarPage = require('../../page/Password/PasswordSidebar/PasswordSidebar.page');
-const FolderSidebarPage = require('../../page/Password/FolderSidebar/FolderSidebar.page');
-const FoldersTreePage = require('../../page/Password/FoldersTree/FoldersTree.page');
-const PasswordSearchBarPage = require('../../page/Password/PasswordSearchBar/PasswordSearchBar.page');
-const PasswordCreateDialogPage = require('../../page/Password/PasswordCreateDialog/PasswordCreateDialog.page');
-const FolderCreateDialogPage = require('../../page/Folder/FolderCreateDialog/FolderCreateDialog.page');
-const FolderRenameDialogPage = require('../../page/Folder/FolderRenameDialog/FolderRenameDialog.page');
-const FolderDeleteDialogPage = require('../../page/Folder/FolderDeleteDialog/FolderDeleteDialog.page');
-const FilterResourcesByShortcutsPage = require('../../page/Password/FilterResourcesByShortcuts/FilterResourcesByShortcuts.page');
+const ShareDialogPage = require('../../page/Share/ShareDialog.page');
+const DisplayMainMenuPage = require('../../page/Common/Menu/DisplayMainMenu.page');
+const DisplayResourcesWorkspacePage = require('../../page/Resource/DisplayResourcesWorkspace/DisplayResourcesWorkspace.page');
+const DisplayResourcesListPage = require('../../page/Resource/DisplayResourcesList/DisplayResourcesList.page');
+const DisplayResourceDetailsPage = require('../../page/ResourceDetails/DisplayResourceDetails/DisplayResourceDetails.page');
+const DisplayResourceFolderDetailsPage = require('../../page/ResourceFolderDetails/DisplayResourceFolderDetails/DisplayResourceFolderDetails.page');
+const FilterResourcesByFoldersPage = require('../../page/Resource/FilterResourcesByFolders/FilterResourcesByFolders.page');
+const FilterResourcesByTextPage = require('../../page/Resource/FilterResourcesByText/FilterResourcesByText.page');
+const CreateResourcePage = require('../../page/Resource/CreateResource/CreateResource.page');
+const CreateResourceFolderPage = require('../../page/ResourceFolder/CreateResourceFolder/CreateResourceFolder.page');
+const RenameResourceFolderPage = require('../../page/ResourceFolder/RenameResourceFolder/RenameResourceFolder.page');
+const DeleteResourceFolderPage = require('../../page/ResourceFolder/DeleteResourceFolder/DeleteResourceFolder.page');
+const FilterResourcesByShortcutsPage = require('../../page/Resource/FilterResourcesByShortcuts/FilterResourcesByShortcuts.page');
 
 describe('password workspace', () => {
   // WARNING : execution order is very important
@@ -29,49 +29,49 @@ describe('password workspace', () => {
   });
 
   it('As LU I should create a new folder', () => {
-    PasswordWorkspacePage.openCreateFolder();
-    FolderCreateDialogPage.createFolder('folderParent');
-    FoldersTreePage.selectedFolderNamed('folderParent');
+    DisplayResourcesWorkspacePage.openCreateFolder();
+    CreateResourceFolderPage.createFolder('folderParent');
+    FilterResourcesByFoldersPage.selectedFolderNamed('folderParent');
   });
 
   it('As LU I should create a new password', () => {
-    PasswordWorkspacePage.openCreatePassword();
-    PasswordCreateDialogPage.createPassword('nameA', 'uri', 'ada@passbolt.com', 'secretA', 'description');
+    DisplayResourcesWorkspacePage.openCreatePassword();
+    CreateResourcePage.createPassword('nameA', 'uri', 'ada@passbolt.com', 'secretA', 'description');
   });
 
   it('As LU I should create a subfolder folder', () => {
-    FoldersTreePage.selectedFolderNamed('folderParent');
-    PasswordWorkspacePage.openCreateFolder();
-    FolderCreateDialogPage.createFolder('folderChild');
+    FilterResourcesByFoldersPage.selectedFolderNamed('folderParent');
+    DisplayResourcesWorkspacePage.openCreateFolder();
+    CreateResourceFolderPage.createFolder('folderChild');
   });
 
   it('As LU I should create a new password', () => {
-    FoldersTreePage.expandFolderSelected();
-    FoldersTreePage.selectedFolderNamed('folderChild');
-    PasswordWorkspacePage.openCreatePassword();
-    PasswordCreateDialogPage.createPassword('nameB', 'uri', 'ada@passbolt.com', 'secretB', 'description');
+    FilterResourcesByFoldersPage.expandFolderSelected();
+    FilterResourcesByFoldersPage.selectedFolderNamed('folderChild');
+    DisplayResourcesWorkspacePage.openCreatePassword();
+    CreateResourcePage.createPassword('nameB', 'uri', 'ada@passbolt.com', 'secretB', 'description');
   });
 
   it('As LU I should share a password', () => {
-    PasswordSidebarPage.openShareResource();
+    DisplayResourceDetailsPage.openShareResource();
     ShareDialogPage.shareResource('admin@passbolt.com', 'ada@passbolt.com');
   });
 
   it('As LU I should share a folder', () => {
-    FoldersTreePage.selectedFolderNamed('folderParent');
-    FolderSidebarPage.openShareResource();
+    FilterResourcesByFoldersPage.selectedFolderNamed('folderParent');
+    DisplayResourceFolderDetailsPage.openShareResource();
     ShareDialogPage.shareResource('Accounting', 'ada@passbolt.com');
   });
 
   it('As LU I should see my passwords share with admin user and accounting group', () => {
-    GridPage.selectedResourceNamed('nameA');
-    PasswordSidebarPage.openShareSection();
-    PasswordSidebarPage.getShareWithExist('Accounting');
-    FoldersTreePage.selectedFolderNamed('folderChild');
-    GridPage.selectedResourceNamed('nameB');
-    PasswordSidebarPage.openShareSection();
-    PasswordSidebarPage.getShareWithExist('Admin User (admin@passbolt.com)');
-    PasswordSidebarPage.getShareWithExist('Accounting');
+    DisplayResourcesListPage.selectedResourceNamed('nameA');
+    DisplayResourceDetailsPage.openShareSection();
+    DisplayResourceDetailsPage.getShareWithExist('Accounting');
+    FilterResourcesByFoldersPage.selectedFolderNamed('folderChild');
+    DisplayResourcesListPage.selectedResourceNamed('nameB');
+    DisplayResourceDetailsPage.openShareSection();
+    DisplayResourceDetailsPage.getShareWithExist('Admin User (admin@passbolt.com)');
+    DisplayResourceDetailsPage.getShareWithExist('Accounting');
   });
 
   it('As LU I should recover admin account', () => {
@@ -81,21 +81,21 @@ describe('password workspace', () => {
 
   it('As LU I should filter my resource by shared with me', () => {
     FilterResourcesByShortcutsPage.filterBySharedWithMe();
-    GridPage.selectedResourceNamed('nameB');
+    DisplayResourcesListPage.selectedResourceNamed('nameB');
   });
 
   it('As LU I should copy the secret of my password', () => {
-    GridPage.copySecretResource('admin@passbolt.com');
-    PasswordSearchBarPage.pasteClipBoardToVerify('secretB');
+    DisplayResourcesListPage.copySecretResource('admin@passbolt.com');
+    FilterResourcesByTextPage.pasteClipBoardToVerify('secretB');
   });
 
   it('As LU I should rename a folder', () => {
-    FoldersTreePage.openFolderRenameDialog();
-    FolderRenameDialogPage.renameFolder('rename');
+    FilterResourcesByFoldersPage.openRenameResourceFolder();
+    RenameResourceFolderPage.renameFolder('rename');
   });
 
   it('As LU I should delete a folder', () => {
-    FoldersTreePage.openFolderDeleteDialog();
-    FolderDeleteDialogPage.deleteFolder();
+    FilterResourcesByFoldersPage.openDeleteResourceFolder();
+    DeleteResourceFolderPage.deleteFolder();
   });
 });

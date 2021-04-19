@@ -1,7 +1,7 @@
 /**
  * sub page containing specific selectors and methods for a specific page
  */
-class FolderDeleteDialogPage {
+class DeleteResourceFolderPage {
   /**
    * define selectors using getter methods
    */
@@ -24,4 +24,4 @@ class FolderDeleteDialogPage {
   }
 }
 
-module.exports = new FolderDeleteDialogPage();
+module.exports = new DeleteResourceFolderPage();

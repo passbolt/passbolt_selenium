@@ -1,18 +1,18 @@
-const {adminPrivateKey} = require('../../page/Password/PasswordWorkspace/PasswordWorkspace.data');
+const {adminPrivateKey} = require('../../page/Authentication/ImportGpgKey/ImportGpgKey.data');
 const SeleniumPage = require('../../page/Selenium/Selenium.page');
 const RecoverAuthenticationPage = require('../../page/AuthenticationRecover/RecoverAUthentication/RecoverAuthentication.page');
 const CreateUserDialogPage = require('../../page/User/CreateUser/CreateUserDialog.page');
-const ShareDialogPage = require('../../page/Share/shareDialog.page');
-const DisplayMainMenuPage = require('../../page/navigation/DisplayMainMenu.page');
-const PasswordWorkspacePage = require('../../page/Password/PasswordWorkspace/PasswordWorkspace.page');
-const GridPage = require('../../page/Password/Grid/Grid.page');
-const PasswordSidebarPage = require('../../page/Password/PasswordSidebar/PasswordSidebar.page');
-const PasswordSearchBarPage = require('../../page/Password/PasswordSearchBar/PasswordSearchBar.page');
+const ShareDialogPage = require('../../page/Share/ShareDialog.page');
+const DisplayMainMenuPage = require('../../page/Common/Menu/DisplayMainMenu.page');
+const DisplayResourcesWorkspacePage = require('../../page/Resource/DisplayResourcesWorkspace/DisplayResourcesWorkspace.page');
+const DisplayResourcesListPage = require('../../page/Resource/DisplayResourcesList/DisplayResourcesList.page');
+const DisplayResourceDetailsPage = require('../../page/ResourceDetails/DisplayResourceDetails/DisplayResourceDetails.page');
+const FilterResourcesByTextPage = require('../../page/Resource/FilterResourcesByText/FilterResourcesByText.page');
 const DisplayUserWorkspacePage = require('../../page/User/DisplayUserWorkspace/DisplayUserWorkspace.page');
 const SetupAuthenticationPage = require('../../page/AuthenticationSetup/SetupAuthentication/SetupAuthentication.page');
-const PasswordCreateDialogPage = require('../../page/Password/PasswordCreateDialog/PasswordCreateDialog.page');
-const PasswordEditDialogPage = require('../../page/Password/PasswordEditDialog/PasswordEditDialog.page');
-const PasswordDeleteDialogPage = require('../../page/Password/PasswordDeleteDialog/PasswordDeleteDialog.page');
+const CreateResourcePage = require('../../page/Resource/CreateResource/CreateResource.page');
+const EditResourcePage = require('../../page/Resource/EditResource/EditResource.page');
+const DeleteResourcePage = require('../../page/Resource/DeleteResource/DeleteResource.page');
 
 describe('password workspace', () => {
   // WARNING : execution order is very important
@@ -40,29 +40,29 @@ describe('password workspace', () => {
   });
 
   it('As LU I should create a new password', () => {
-    PasswordWorkspacePage.openCreatePassword();
-    PasswordCreateDialogPage.createPassword('name', 'uri', 'test@passbolt.com', 'secret', 'description');
+    DisplayResourcesWorkspacePage.openCreatePassword();
+    CreateResourcePage.createPassword('name', 'uri', 'test@passbolt.com', 'secret', 'description');
   });
 
   it('As LU I should copy the secret of my password', () => {
-    GridPage.copySecretResource('test@passbolt.com');
-    PasswordSearchBarPage.pasteClipBoardToVerify('secret');
+    DisplayResourcesListPage.copySecretResource('test@passbolt.com');
+    FilterResourcesByTextPage.pasteClipBoardToVerify('secret');
   });
 
   it('As LU I should share my password created', () => {
-    GridPage.selectedResourceNamed('name');
-    PasswordSidebarPage.openShareResource();
+    DisplayResourcesListPage.selectedResourceNamed('name');
+    DisplayResourceDetailsPage.openShareResource();
     ShareDialogPage.shareResource('admin@passbolt.com', 'test@passbolt.com');
   });
 
   it('As LU I should edit my password', () => {
-    PasswordWorkspacePage.openEditPassword('test@passbolt.com');
-    PasswordEditDialogPage.editPassword('Updated', 'Updated', 'test@passbolt.com', 'Updated', 'Updated');
+    DisplayResourcesWorkspacePage.openEditPassword('test@passbolt.com');
+    EditResourcePage.editPassword('Updated', 'Updated', 'test@passbolt.com', 'Updated', 'Updated');
   });
 
   it('As LU I should delete my password', () => {
-    PasswordWorkspacePage.openDeletePassword();
-    PasswordDeleteDialogPage.deletePassword();
+    DisplayResourcesWorkspacePage.openDeletePassword();
+    DeleteResourcePage.deletePassword();
     DisplayMainMenuPage.signOut();
   });
 });

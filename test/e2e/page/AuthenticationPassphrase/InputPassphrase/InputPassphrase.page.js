@@ -1,7 +1,7 @@
 /**
  * sub page containing specific selectors and methods for a specific page
  */
-class PassphraseEntryDialogPage {
+class InputPassphrasePage {
   /**
    * define selectors using getter methods
    */
@@ -30,4 +30,4 @@ class PassphraseEntryDialogPage {
   }
 }
 
-module.exports = new PassphraseEntryDialogPage();
+module.exports = new InputPassphrasePage();

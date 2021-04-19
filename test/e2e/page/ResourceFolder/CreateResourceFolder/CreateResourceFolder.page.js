@@ -1,12 +1,16 @@
 /**
  * sub page containing specific selectors and methods for a specific page
  */
-class PasswordDeleteDialogPage {
+class CreateResourceFolderPage {
   /**
    * define selectors using getter methods
    */
-  get deletePasswordPage() {
-    return $('.delete-password-dialog.dialog-wrapper');
+  get createFolderPage() {
+    return $('.folder-create-dialog.dialog-wrapper');
+  }
+
+  get inputName() {
+    return $('#folder-name-input');
   }
 
   get submitButton() {
@@ -15,13 +19,14 @@ class PasswordDeleteDialogPage {
 
   /**
    * a method to encapsule automation code to interact with the page
-   * e.g. to delete a password
+   * e.g. to create a new folder
    */
-  deletePassword() {
-    this.deletePasswordPage.waitForExist();
+  createFolder(name) {
+    this.createFolderPage.waitForExist();
+    this.inputName.setValue(name);
     this.submitButton.waitForClickable();
     this.submitButton.click();
   }
 }
 
-module.exports = new PasswordDeleteDialogPage();
+module.exports = new CreateResourceFolderPage();

@@ -1,7 +1,7 @@
 /**
  * sub page containing specific selectors and methods for a specific page
  */
-class FolderRenameDialogPage {
+class RenameResourceFolderPage {
   /**
    * define selectors using getter methods
    */
@@ -29,4 +29,4 @@ class FolderRenameDialogPage {
   }
 }
 
-module.exports = new FolderRenameDialogPage();
+module.exports = new RenameResourceFolderPage();
