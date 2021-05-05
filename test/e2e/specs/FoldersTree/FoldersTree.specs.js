@@ -90,12 +90,12 @@ describe('password workspace', () => {
   });
 
   it('As LU I should rename a folder', () => {
-    FilterResourcesByFoldersPage.openRenameResourceFolder();
+    FilterResourcesByFoldersPage.openFolderRenameDialog();
     RenameResourceFolderPage.renameFolder('rename');
   });
 
   it('As LU I should delete a folder', () => {
-    FilterResourcesByFoldersPage.openDeleteResourceFolder();
+    FilterResourcesByFoldersPage.openFolderDeleteDialog();
     DeleteResourceFolderPage.deleteFolder();
   });
 });
