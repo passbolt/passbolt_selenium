@@ -15,8 +15,8 @@
     "@wdio/sauce-service": "^6.12.1",
     "@wdio/spec-reporter": "^6.11.0",
     "@wdio/sync": "^6.11.0",
-    "chromedriver": "^87.0.7",
-    "geckodriver": "^1.22.1",
+    "chromedriver": "^89.0.0",
+    "geckodriver": "^1.22.2",
     "wdio-chromedriver-service": "^6.0.4",
     "wdio-geckodriver-service": "^1.1.1",
     "webdriverio": "^6.12.1"
