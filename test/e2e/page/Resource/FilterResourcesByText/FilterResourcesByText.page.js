@@ -6,7 +6,7 @@ class FilterResourcesByTextPage {
    * define selectors using getter methods
    */
   get inputSearch() {
-    return $('#app .input.search.required input[type=search]');
+    return $('#app .search .input.search.required input[type=search]');
   }
 
   /**
@@ -37,7 +37,7 @@ class FilterResourcesByTextPage {
   }
 
   _getControlKey() {
-    if (browser.capabilities.platformName === 'mac os x') {
+    if (browser.capabilities.platformName.indexOf('mac') !== -1) {
       return 'Command';
     } else {
       return 'Control';
