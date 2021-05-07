@@ -69,7 +69,7 @@ class FilterResourcesByFoldersPage {
    * a method to encapsule automation code to interact with the page
    * e.g. to open folder rename dialog
    */
-  openFolderRenameDialog() {
+  openRenameResourceFolder() {
     this.openFolderContextualMenu();
     this.renameFolder.waitForClickable();
     this.renameFolder.click();
@@ -79,7 +79,7 @@ class FilterResourcesByFoldersPage {
    * a method to encapsule automation code to interact with the page
    * e.g. to open folder delete dialog
    */
-  openFolderDeleteDialog() {
+  openDeleteResourceFolder() {
     this.openFolderContextualMenu();
     this.deleteFolder.waitForClickable();
     this.deleteFolder.click();
