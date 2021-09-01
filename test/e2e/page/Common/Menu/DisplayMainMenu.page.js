@@ -14,11 +14,11 @@ class DisplayMainMenuPage {
   }
 
   get userMenu() {
-    return $('.primary.navigation.top .left').$('=users');
+    return $('.primary.navigation.top ul').$('=users');
   }
 
   get signOutMenu() {
-    return $('.primary.navigation.top .right').$('=sign out');
+    return $('.primary.navigation.top .right .main-cell a span');
   }
 
   /**

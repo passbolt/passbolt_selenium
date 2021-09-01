@@ -20,7 +20,7 @@ class DisplayResourcesListPage {
   }
 
   getResourceNamed(name) {
-    return $('.tableview-content').$(`div=${name}`);
+    return $('.tableview-content tbody .cell-name').$(`div=${name}`);
   }
 
   /**

@@ -1,4 +1,5 @@
 const PassphraseEntryDialogPage = require('../../AuthenticationPassphrase/InputPassphrase/InputPassphrase.page');
+const GenerateResourcePasswordPage = require("../../ResourcePassword/GenerateResourcePassword/GenerateResourcePassword.page");
 /**
  * sub page containing specific selectors and methods for a specific page
  */
@@ -26,6 +27,10 @@ class EditResourcePage {
     return $('#edit-password-form-password');
   }
 
+  get openPasswordGenerator() {
+    return $('.edit-password-dialog.dialog-wrapper .password-generator');
+  }
+
   get inputDescription() {
     return $('#edit-password-form-description');
   }
@@ -46,6 +51,9 @@ class EditResourcePage {
     this.inputPassword.waitForEnabled();
     this.inputPassword.setValue(password);
     this.inputDescription.setValue(description);
+    this.openPasswordGenerator.waitForClickable();
+    this.openPasswordGenerator.click();
+    GenerateResourcePasswordPage.generatePassword();
     this.submitButton.waitForClickable();
     this.submitButton.click();
     PassphraseEntryDialogPage.entryPassphrase(username);

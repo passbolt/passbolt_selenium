@@ -50,7 +50,6 @@ describe('password workspace', () => {
   });
 
   it('As LU I should share my password created', () => {
-    DisplayResourcesListPage.selectedResourceNamed('name');
     DisplayResourceDetailsPage.openShareResource();
     ShareDialogPage.shareResource('admin@passbolt.com', 'test@passbolt.com');
   });

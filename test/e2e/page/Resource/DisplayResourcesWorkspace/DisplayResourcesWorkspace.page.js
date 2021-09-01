@@ -16,11 +16,11 @@ class DisplayResourcesWorkspacePage {
   }
 
   get newPasswordButton() {
-    return $('.dropdown-content.menu').$('=New password');
+    return $('.dropdown-content.menu #password_action');
   }
 
   get newFolderButton() {
-    return $('.dropdown-content.menu').$('=New folder');
+    return $('.dropdown-content.menu #folder_action');
   }
 
   get editButton() {
