@@ -6,11 +6,11 @@ class FilterResourcesByShortcutsPage {
    * define selectors using getter methods
    */
   get filterResourceByShortcutPage() {
-    return $('.navigation.first.shortcuts');
+    return $('.navigation-secondary.navigation-shortcuts');
   }
 
   get shareWithMe() {
-    return $('.navigation.first.shortcuts ul').$('=Shared with me');
+    return $('.navigation-secondary.navigation-shortcuts ul').$('=Shared with me');
   }
 
   /**

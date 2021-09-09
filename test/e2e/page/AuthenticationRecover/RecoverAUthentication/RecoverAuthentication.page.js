@@ -15,7 +15,7 @@ class RecoverAuthenticationPage {
   }
 
   get inputAgreementTerms() {
-    return $('label[for=checkbox-terms]');
+    return $('label[for=checkbox-terms] span');
   }
 
   get btnSubmit() {
