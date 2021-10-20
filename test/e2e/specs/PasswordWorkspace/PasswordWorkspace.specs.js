@@ -1,3 +1,17 @@
+/**
+ * Passbolt ~ Open source password manager for teams
+ * Copyright (c) Passbolt SA (https://www.passbolt.com)
+ *
+ * Licensed under GNU Affero General Public License version 3 of the or any later version.
+ * For full copyright and license information, please see the LICENSE.txt
+ * Redistributions of files must retain the above copyright notice.
+ *
+ * @copyright     Copyright (c) Passbolt SA (https://www.passbolt.com)
+ * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
+ * @link          https://www.passbolt.com Passbolt(tm)
+ * @since         v3.0.0
+ */
+
 const {adminPrivateKey} = require('../../page/Authentication/ImportGpgKey/ImportGpgKey.data');
 const SeleniumPage = require('../../page/Selenium/Selenium.page');
 const RecoverAuthenticationPage = require('../../page/AuthenticationRecover/RecoverAUthentication/RecoverAuthentication.page');
@@ -19,49 +33,49 @@ describe('password workspace', () => {
 
   after(() => {
     // runs once after the last test in this block
-    SeleniumPage.resetInstanceDefault()
+    return SeleniumPage.resetInstanceDefault()
   });
 
-  it('As LU I should recover admin account', () => {
-    RecoverAuthenticationPage.recover('admin@passbolt.com', adminPrivateKey);
-    DisplayMainMenuPage.switchAppIframe();
+  it('As LU I should recover admin account', async () => {
+    await RecoverAuthenticationPage.recover('admin@passbolt.com', adminPrivateKey);
+    await DisplayMainMenuPage.switchAppIframe();
   });
 
-  it('As AD I should create a new user', () => {
-    DisplayMainMenuPage.goToUserWorkspace();
-    DisplayUserWorkspacePage.openCreateUser();
-    CreateUserDialogPage.createUser('firstname', 'lastname', 'test@passbolt.com');
-    DisplayMainMenuPage.signOut();
+  it('As AD I should create a new user', async () => {
+    await DisplayMainMenuPage.goToUserWorkspace();
+    await DisplayUserWorkspacePage.openCreateUser();
+    await CreateUserDialogPage.createUser('firstname', 'lastname', 'test@passbolt.com');
+    await DisplayMainMenuPage.signOut();
   });
 
-  it('As U I should setup a new account', () => {
-    SetupAuthenticationPage.setup('test@passbolt.com');
-    DisplayMainMenuPage.switchAppIframe();
+  it('As U I should setup a new account', async () => {
+    await SetupAuthenticationPage.setup('test@passbolt.com');
+    await DisplayMainMenuPage.switchAppIframe();
   });
 
-  it('As LU I should create a new password', () => {
-    DisplayResourcesWorkspacePage.openCreatePassword();
-    CreateResourcePage.createPassword('name', 'uri', 'test@passbolt.com', 'secret', 'description');
+  it('As LU I should create a new password', async () => {
+    await DisplayResourcesWorkspacePage.openCreatePassword();
+    await CreateResourcePage.createPassword('name', 'uri', 'test@passbolt.com', 'secret', 'description');
   });
 
-  it('As LU I should copy the secret of my password', () => {
-    DisplayResourcesListPage.copySecretResource('test@passbolt.com');
-    FilterResourcesByTextPage.pasteClipBoardToVerify('secret');
+  it('As LU I should copy the secret of my password', async () => {
+    await DisplayResourcesListPage.copySecretResource('test@passbolt.com');
+    await FilterResourcesByTextPage.pasteClipBoardToVerify('secret');
   });
 
-  it('As LU I should share my password created', () => {
-    DisplayResourceDetailsPage.openShareResource();
-    ShareDialogPage.shareResource('admin@passbolt.com', 'test@passbolt.com');
+  it('As LU I should share my password created', async () => {
+    await DisplayResourceDetailsPage.openShareResource();
+    await ShareDialogPage.shareResource('admin@passbolt.com', 'test@passbolt.com');
   });
 
-  it('As LU I should edit my password', () => {
-    DisplayResourcesWorkspacePage.openEditPassword('test@passbolt.com');
-    EditResourcePage.editPassword('Updated', 'Updated', 'test@passbolt.com', 'Updated', 'Updated');
+  it('As LU I should edit my password', async () => {
+    await DisplayResourcesWorkspacePage.openEditPassword('test@passbolt.com');
+    await EditResourcePage.editPassword('Updated', 'Updated', 'test@passbolt.com', 'Updated', 'Updated');
   });
 
-  it('As LU I should delete my password', () => {
-    DisplayResourcesWorkspacePage.openDeletePassword();
-    DeleteResourcePage.deletePassword();
-    DisplayMainMenuPage.signOut();
+  it('As LU I should delete my password', async () => {
+    await DisplayResourcesWorkspacePage.openDeletePassword();
+    await DeleteResourcePage.deletePassword();
+    await DisplayMainMenuPage.signOut();
   });
 });

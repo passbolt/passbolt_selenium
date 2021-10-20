@@ -1,5 +1,20 @@
+/**
+ * Passbolt ~ Open source password manager for teams
+ * Copyright (c) Passbolt SA (https://www.passbolt.com)
+ *
+ * Licensed under GNU Affero General Public License version 3 of the or any later version.
+ * For full copyright and license information, please see the LICENSE.txt
+ * Redistributions of files must retain the above copyright notice.
+ *
+ * @copyright     Copyright (c) Passbolt SA (https://www.passbolt.com)
+ * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
+ * @link          https://www.passbolt.com Passbolt(tm)
+ * @since         v3.0.0
+ */
+
 const PassphraseEntryDialogPage = require('../../AuthenticationPassphrase/InputPassphrase/InputPassphrase.page');
 const GenerateResourcePasswordPage = require("../../ResourcePassword/GenerateResourcePassword/GenerateResourcePassword.page");
+
 /**
  * sub page containing specific selectors and methods for a specific page
  */
@@ -43,20 +58,20 @@ class EditResourcePage {
    * a method to encapsule automation code to interact with the page
    * e.g. to edit a password
    */
-  editPassword(name, uri, username, password, description) {
-    this.editPasswordPage.waitForExist();
-    this.inputName.setValue(name);
-    this.inputUri.setValue(uri);
-    this.inputUsername.setValue(username);
-    this.inputPassword.waitForEnabled();
-    this.inputPassword.setValue(password);
-    this.inputDescription.setValue(description);
-    this.openPasswordGenerator.waitForClickable();
-    this.openPasswordGenerator.click();
-    GenerateResourcePasswordPage.generatePassword();
-    this.submitButton.waitForClickable();
-    this.submitButton.click();
-    PassphraseEntryDialogPage.entryPassphrase(username);
+  async editPassword(name, uri, username, password, description) {
+    await this.editPasswordPage.waitForExist();
+    await this.inputName.setValue(name);
+    await this.inputUri.setValue(uri);
+    await this.inputUsername.setValue(username);
+    await this.inputPassword.waitForEnabled();
+    await this.inputPassword.setValue(password);
+    await this.inputDescription.setValue(description);
+    await this.openPasswordGenerator.waitForClickable();
+    await this.openPasswordGenerator.click();
+    await GenerateResourcePasswordPage.generatePassword();
+    await this.submitButton.waitForClickable();
+    await this.submitButton.click();
+    await PassphraseEntryDialogPage.entryPassphrase(username);
   }
 }
 

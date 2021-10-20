@@ -1,3 +1,17 @@
+/**
+ * Passbolt ~ Open source password manager for teams
+ * Copyright (c) Passbolt SA (https://www.passbolt.com)
+ *
+ * Licensed under GNU Affero General Public License version 3 of the or any later version.
+ * For full copyright and license information, please see the LICENSE.txt
+ * Redistributions of files must retain the above copyright notice.
+ *
+ * @copyright     Copyright (c) Passbolt SA (https://www.passbolt.com)
+ * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
+ * @link          https://www.passbolt.com Passbolt(tm)
+ * @since         v3.0.0
+ */
+
 const PassphraseEntryDialogPage = require('../../AuthenticationPassphrase/InputPassphrase/InputPassphrase.page');
 
 /**
@@ -39,13 +53,13 @@ class DisplayResourcesWorkspacePage {
    * a method to encapsule automation code to interact with the page
    * e.g. to open create password
    */
-  openCreatePassword() {
-    this.passwordWorkspace.waitForExist();
-    this.createButton.waitForClickable();
-    this.createButton.click();
+  async openCreatePassword() {
+    await this.passwordWorkspace.waitForExist();
+    await this.createButton.waitForClickable();
+    await this.createButton.click();
     if (browser.config.passbolt.edition === 'pro') {
-      this.newPasswordButton.waitForClickable();
-      this.newPasswordButton.click();
+      await this.newPasswordButton.waitForClickable();
+      await this.newPasswordButton.click();
     }
   }
 
@@ -53,35 +67,35 @@ class DisplayResourcesWorkspacePage {
    * a method to encapsule automation code to interact with the page
    * e.g. to open create folder
    */
-  openCreateFolder() {
-    this.passwordWorkspace.waitForExist();
-    this.createButton.waitForClickable();
-    this.createButton.click();
-    this.newFolderButton.waitForClickable();
-    this.newFolderButton.click();
+  async openCreateFolder() {
+    await this.passwordWorkspace.waitForExist();
+    await this.createButton.waitForClickable();
+    await this.createButton.click();
+    await this.newFolderButton.waitForClickable();
+    await this.newFolderButton.click();
   }
 
   /**
    * a method to encapsule automation code to interact with the page
    * e.g. to open edit password
    */
-  openEditPassword(username) {
-    this.passwordWorkspace.waitForExist();
-    this.editButton.waitForClickable();
-    this.editButton.click();
-    PassphraseEntryDialogPage.entryPassphrase(username);
+  async openEditPassword(username) {
+    await this.passwordWorkspace.waitForExist();
+    await this.editButton.waitForClickable();
+    await this.editButton.click();
+    await PassphraseEntryDialogPage.entryPassphrase(username);
   }
 
   /**
    * a method to encapsule automation code to interact with the page
    * e.g. to open delete password
    */
-  openDeletePassword() {
-    this.passwordWorkspace.waitForExist();
-    this.moreButton.waitForClickable();
-    this.moreButton.click();
-    this.deleteButton.waitForClickable();
-    this.deleteButton.click();
+  async openDeletePassword() {
+    await this.passwordWorkspace.waitForExist();
+    await this.moreButton.waitForClickable();
+    await this.moreButton.click();
+    await this.deleteButton.waitForClickable();
+    await this.deleteButton.click();
   }
 }
 

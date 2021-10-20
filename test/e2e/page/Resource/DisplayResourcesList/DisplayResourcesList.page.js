@@ -1,3 +1,17 @@
+/**
+ * Passbolt ~ Open source password manager for teams
+ * Copyright (c) Passbolt SA (https://www.passbolt.com)
+ *
+ * Licensed under GNU Affero General Public License version 3 of the or any later version.
+ * For full copyright and license information, please see the LICENSE.txt
+ * Redistributions of files must retain the above copyright notice.
+ *
+ * @copyright     Copyright (c) Passbolt SA (https://www.passbolt.com)
+ * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
+ * @link          https://www.passbolt.com Passbolt(tm)
+ * @since         v3.0.0
+ */
+
 const PassphraseEntryDialogPage = require('../../AuthenticationPassphrase/InputPassphrase/InputPassphrase.page');
 
 /**
@@ -27,33 +41,33 @@ class DisplayResourcesListPage {
    * a method to encapsule automation code to interact with the page
    * e.g. to copy the secret of a resource
    */
-  copySecretResource(username) {
-    this.gridPage.waitForExist();
-    this.secretResource.waitForClickable();
-    this.secretResource.click();
-    PassphraseEntryDialogPage.entryPassphrase(username);
+  async copySecretResource(username) {
+    await this.gridPage.waitForExist();
+    await this.secretResource.waitForClickable();
+    await this.secretResource.click();
+    await PassphraseEntryDialogPage.entryPassphrase(username);
   }
 
   /**
    * a method to encapsule automation code to interact with the page
    * e.g. to select a resource
    */
-  selectedFirstResource() {
-    this.gridPage.waitForExist();
-    this.firstResource.waitForExist();
-    this.firstResource.waitForClickable();
-    this.firstResource.click();
+  async selectedFirstResource() {
+    await this.gridPage.waitForExist();
+    await this.firstResource.waitForExist();
+    await this.firstResource.waitForClickable();
+    await this.firstResource.click();
   }
 
   /**
    * a method to encapsule automation code to interact with the page
    * e.g. to select a resource named
    */
-  selectedResourceNamed(name) {
-    this.gridPage.waitForExist();
-    this.getResourceNamed(name).waitForExist();
-    this.getResourceNamed(name).waitForClickable();
-    this.getResourceNamed(name).click();
+  async selectedResourceNamed(name) {
+    await this.gridPage.waitForExist();
+    await this.getResourceNamed(name).waitForExist();
+    await this.getResourceNamed(name).waitForClickable();
+    await this.getResourceNamed(name).click();
   }
 }
 

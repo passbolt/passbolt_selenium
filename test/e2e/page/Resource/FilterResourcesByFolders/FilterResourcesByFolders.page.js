@@ -1,4 +1,18 @@
 /**
+ * Passbolt ~ Open source password manager for teams
+ * Copyright (c) Passbolt SA (https://www.passbolt.com)
+ *
+ * Licensed under GNU Affero General Public License version 3 of the or any later version.
+ * For full copyright and license information, please see the LICENSE.txt
+ * Redistributions of files must retain the above copyright notice.
+ *
+ * @copyright     Copyright (c) Passbolt SA (https://www.passbolt.com)
+ * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
+ * @link          https://www.passbolt.com Passbolt(tm)
+ * @since         v3.0.0
+ */
+
+/**
  * sub page containing specific selectors and methods for a specific page
  */
 class FilterResourcesByFoldersPage {
@@ -29,60 +43,60 @@ class FilterResourcesByFoldersPage {
    * a method to encapsule automation code to interact with the page
    * e.g. to select a folder
    */
-  selectedFirstFolder() {
-    this.firstFolder.waitForExist();
-    this.firstFolder.waitForClickable();
-    this.firstFolder.click();
+  async selectedFirstFolder() {
+    await this.firstFolder.waitForExist();
+    await this.firstFolder.waitForClickable();
+    await this.firstFolder.click();
   }
 
   /**
    * a method to encapsule automation code to interact with the page
    * e.g. to select a folder
    */
-  selectedFolderNamed(name) {
-    this.getFolderNamed(name).waitForExist();
-    this.getFolderNamed(name).waitForClickable();
-    this.getFolderNamed(name).click();
+  async selectedFolderNamed(name) {
+    await this.getFolderNamed(name).waitForExist();
+    await this.getFolderNamed(name).waitForClickable();
+    await this.getFolderNamed(name).click();
   }
 
   /**
    * a method to encapsule automation code to interact with the page
    * e.g. to expand the selected folder
    */
-  expandFolderSelected() {
-    this.caretRightFolderSelected.waitForExist();
-    this.caretRightFolderSelected.waitForClickable();
-    this.caretRightFolderSelected.click();
+  async expandFolderSelected() {
+    await this.caretRightFolderSelected.waitForExist();
+    await this.caretRightFolderSelected.waitForClickable();
+    await this.caretRightFolderSelected.click();
   }
 
   /**
    * a method to encapsule automation code to interact with the page
    * e.g. to open folder contextual menu
    */
-  openFolderContextualMenu() {
-    this.firstFolder.waitForExist();
-    this.firstFolder.waitForClickable();
-    this.firstFolder.click({ button: 'right' });
+  async openFolderContextualMenu() {
+    await this.firstFolder.waitForExist();
+    await this.firstFolder.waitForClickable();
+    await this.firstFolder.click({ button: 'right' });
   }
 
   /**
    * a method to encapsule automation code to interact with the page
    * e.g. to open folder rename dialog
    */
-  openRenameResourceFolder() {
-    this.openFolderContextualMenu();
-    this.renameFolder.waitForClickable();
-    this.renameFolder.click();
+  async openRenameResourceFolder() {
+    await this.openFolderContextualMenu();
+    await this.renameFolder.waitForClickable();
+    await this.renameFolder.click();
   }
 
   /**
    * a method to encapsule automation code to interact with the page
    * e.g. to open folder delete dialog
    */
-  openDeleteResourceFolder() {
-    this.openFolderContextualMenu();
-    this.deleteFolder.waitForClickable();
-    this.deleteFolder.click();
+  async openDeleteResourceFolder() {
+    await this.openFolderContextualMenu();
+    await this.deleteFolder.waitForClickable();
+    await this.deleteFolder.click();
   }
 }
 
