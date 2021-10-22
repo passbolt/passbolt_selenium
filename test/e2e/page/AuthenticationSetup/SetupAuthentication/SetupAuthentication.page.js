@@ -1,3 +1,17 @@
+/**
+ * Passbolt ~ Open source password manager for teams
+ * Copyright (c) Passbolt SA (https://www.passbolt.com)
+ *
+ * Licensed under GNU Affero General Public License version 3 of the or any later version.
+ * For full copyright and license information, please see the LICENSE.txt
+ * Redistributions of files must retain the above copyright notice.
+ *
+ * @copyright     Copyright (c) Passbolt SA (https://www.passbolt.com)
+ * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
+ * @link          https://www.passbolt.com Passbolt(tm)
+ * @since         v3.0.0
+ */
+
 const SeleniumPage = require('../../Selenium/Selenium.page');
 const CreateGpgKeyPage = require('../../Authentication/CreateGpgKey/CreateGpgKey.page');
 const DownloadRecoveryKit = require('../../Authentication/DownloadRecoveryKit/DownloadRecoveryKit.page');
@@ -14,31 +28,30 @@ class SetupAuthenticationPage {
     return $('#container');
   }
 
-  get iframe() {
-    return $('#passbolt-iframe-setup');
+  get iframeSelector() {
+    return '#passbolt-iframe-setup';
   }
 
   /**
    * a method to encapsule automation code to interact with the page
    * e.g. to setup using username and password
    */
-  setup(username) {
-    this.container.waitForExist();
+  async setup(username) {
+    await this.container.waitForExist();
     // Show last email and redirect for account setup
-    SeleniumPage.showLastEmailAndRedirect(username);
+    await SeleniumPage.showLastEmailAndRedirect(username);
 
     // Go to iframe setup setup
-    this.iframe.waitForExist();
-    browser.switchToFrame(this.iframe);
+    await SeleniumPage.switchToIframe(this.iframeSelector);
 
     // Choose passphrase
-    CreateGpgKeyPage.choosePassphrase(username);
+    await CreateGpgKeyPage.choosePassphrase(username);
 
     // Generate key
-    DownloadRecoveryKit.generateGpgKey();
+    await DownloadRecoveryKit.generateGpgKey();
 
     // Choose security token
-    ChooseSecurityTokenPage.chooseSecurityToken();
+    await ChooseSecurityTokenPage.chooseSecurityToken();
   }
 }
 
