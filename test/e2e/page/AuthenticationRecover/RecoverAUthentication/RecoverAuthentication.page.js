@@ -33,7 +33,7 @@ class RecoverAuthenticationPage {
   }
 
   get btnSubmit() {
-    return $('input[type=submit]');
+    return $('button[type=submit]');
   }
 
   get iframeSelector() {

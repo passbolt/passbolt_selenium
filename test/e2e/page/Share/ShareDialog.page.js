@@ -34,7 +34,7 @@ class ShareDialogPage {
   }
 
   get submitButton() {
-    return $('.share-form input[type=submit]');
+    return $('.share-form button[type=submit]');
   }
 
   /**

@@ -34,7 +34,7 @@ class DisplayResourcesListPage {
   }
 
   getResourceNamed(name) {
-    return $('.tableview-content tbody .cell-name').$(`div=${name}`);
+    return $('.tableview-content.scroll tbody .cell-name').$(`div=${name}`);
   }
 
   /**

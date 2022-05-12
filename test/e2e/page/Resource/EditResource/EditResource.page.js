@@ -51,7 +51,7 @@ class EditResourcePage {
   }
 
   get submitButton() {
-    return $('input[type=submit]');
+    return $('button[type=submit]');
   }
 
   /**

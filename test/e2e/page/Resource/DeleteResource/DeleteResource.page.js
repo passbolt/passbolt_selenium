@@ -24,7 +24,7 @@ class DeleteResourcePage {
   }
 
   get submitButton() {
-    return $('input[type=submit]');
+    return $('button[type=submit]');
   }
 
   /**

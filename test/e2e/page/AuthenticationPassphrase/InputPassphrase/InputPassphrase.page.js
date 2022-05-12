@@ -20,7 +20,7 @@ class InputPassphrasePage {
    * define selectors using getter methods
    */
   get entryPassphrasePage() {
-    return $('.dialog.passphrase-entry');
+    return $('.dialog-wrapper.passphrase-entry');
   }
 
   get inputPassphrase() {
@@ -28,7 +28,7 @@ class InputPassphrasePage {
   }
 
   get btnSubmit() {
-    return $('.dialog.passphrase-entry input[type="submit"]');
+    return $('.dialog-wrapper.passphrase-entry button[type="submit"]');
   }
 
   /**
