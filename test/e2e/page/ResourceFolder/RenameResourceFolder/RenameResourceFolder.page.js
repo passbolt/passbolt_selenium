@@ -28,7 +28,7 @@ class RenameResourceFolderPage {
   }
 
   get submitButton() {
-    return $('input[type=submit]');
+    return $('button[type=submit]');
   }
 
   /**

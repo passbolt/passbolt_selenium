@@ -24,7 +24,7 @@ class GenerateResourcePasswordPage {
   }
 
   get submitButton() {
-    return $('.generate-resource-password-dialog.dialog-wrapper .dialog-content input[type=submit]');
+    return $('.generate-resource-password-dialog.dialog-wrapper .dialog-content button[type=submit]');
   }
 
   /**
