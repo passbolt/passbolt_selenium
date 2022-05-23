@@ -24,7 +24,7 @@ class DisplayUserWorkspacePage {
   }
 
   get createButton() {
-    return $('.button.create.primary.ready');
+    return $('.button.create.primary');
   }
 
   get newUserButton() {
