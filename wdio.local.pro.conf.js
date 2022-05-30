@@ -75,6 +75,14 @@ exports.config = {
         binary: process.env['PASSBOLT_BROWSER_BINARY_FIREFOX'], // binary of a nightly version with 'nightly' in path
         args: ['-width', '1600', '-height', '1080'],
         prefs: {'browser.helperApps.neverAsk.saveToDisk':   'text/anytext, text/plaintext'}} // not showing download prompt
+    }, {
+      maxInstances: 1,
+      browserName: 'MicrosoftEdge',
+      acceptInsecureCerts: true,
+      'ms:edgeOptions': {
+        extensions: [encode(process.env['PASSBOLT_BROWSER_EXTENSION_CHROME'])],
+        args: ['start-maximized'],
+        prefs: { download: { prompt_for_download: false } } } // not showing download prompt
     }],
     //
     // ===================
@@ -128,7 +136,7 @@ exports.config = {
     // Services take over a specific job you don't want to take care of. They enhance
     // your test setup with almost no effort. Unlike plugins, they don't add new
     // commands. Instead, they hook themselves up into the test process.
-    services: [['chromedriver'], ['geckodriver'], ['firefox-profile',
+    services: [['chromedriver'], ['edgedriver'], ['geckodriver'], ['firefox-profile',
       {'xpinstall.signatures.required': false,
         extensions: [process.env['PASSBOLT_BROWSER_EXTENSION_FIREFOX']], // path to .xpi file or path to unpacked Firefox extension
       }]],
