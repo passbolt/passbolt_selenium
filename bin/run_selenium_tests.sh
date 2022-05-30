@@ -9,9 +9,6 @@ isVariableSet () {
   fi
 }
 
-# Install dependency
-npm install
-
 # Choose the version to launch
 PS3='Please enter your choice: '
 options=("Local PRO Version" "Local CE Version" "SauceLabs PRO Version" "SauceLabs CE Version" "Quit")
