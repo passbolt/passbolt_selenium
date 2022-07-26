@@ -29,7 +29,7 @@ class RecoverAuthenticationPage {
   }
 
   get inputAgreementTerms() {
-    return $('label[for=checkbox-terms] span');
+    return $('#checkbox-terms');
   }
 
   get btnSubmit() {
