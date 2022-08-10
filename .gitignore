@@ -9,3 +9,6 @@ reports/
 
 # plugins
 node_modules/
+
+# local assets
+bin/my/
