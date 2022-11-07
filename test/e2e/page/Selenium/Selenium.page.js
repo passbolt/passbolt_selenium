@@ -28,7 +28,7 @@ class SeleniumPage {
    * e.g. to reset instance default
    */
   async resetInstanceDefault() {
-    await browser.url('/seleniumtests/resetInstance/default');
+    await browser.url('seleniumtests/resetInstance/default');
   }
 
   /**
@@ -38,7 +38,7 @@ class SeleniumPage {
   async showLastEmailAndRedirect(username) {
     // force a wait to be sure the email has been received
     await browser.pause(500);
-    await this.openUrl(`/showLastEmail/${username}`);
+    await this.openUrl(`showLastEmail/${username}`);
     await this.redirectButton.waitForExist();
     const url = await this.redirectButton.getAttribute('href');
     return browser.url(url);
@@ -48,7 +48,7 @@ class SeleniumPage {
    * Open url
    */
   openUrl(path) {
-    return browser.url(`/seleniumtests${path}`);
+    return browser.url(`seleniumtests/${path}`);
   }
 
   /**

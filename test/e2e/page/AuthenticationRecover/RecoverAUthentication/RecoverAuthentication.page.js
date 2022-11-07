@@ -72,7 +72,7 @@ class RecoverAuthenticationPage {
    * Go to the url
    */
   goToRecover() {
-    return browser.url('/recover');
+    return browser.url('recover');
   }
 }
 
