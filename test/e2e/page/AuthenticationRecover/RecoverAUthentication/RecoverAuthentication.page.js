@@ -12,10 +12,11 @@
  * @since         v3.0.0
  */
 
-const SeleniumPage = require('../../Selenium/Selenium.page');
-const ImportGpgKeyPage = require('../../Authentication/ImportGpgKey/ImportGpgKey.page');
-const CheckPassphrasePage = require('../../Authentication/CheckPasphrase/CheckPassphrase.page');
-const ChooseSecurityTokenPage = require('../../Authentication/ChooseSecurityToken/ChooseSecurityToken.page');
+const SeleniumPage = require("../../Selenium/Selenium.page");
+const ImportGpgKeyPage = require("../../Authentication/ImportGpgKey/ImportGpgKey.page");
+const CheckPassphrasePage = require("../../Authentication/CheckPasphrase/CheckPassphrase.page");
+const ChooseSecurityTokenPage = require("../../Authentication/ChooseSecurityToken/ChooseSecurityToken.page");
+const CreateGpgKeyPage = require("../../Authentication/CreateGpgKey/CreateGpgKey.page");
 
 /**
  * sub page containing specific selectors and methods for a specific page
@@ -25,19 +26,28 @@ class RecoverAuthenticationPage {
    * define selectors using getter methods
    */
   get inputUsername() {
-    return $('#username-input');
+    return $("#username-input");
   }
 
   get inputAgreementTerms() {
-    return $('#checkbox-terms');
+    return $("#checkbox-terms");
   }
 
   get btnSubmit() {
-    return $('button[type=submit]');
+    return $("button[type=submit]");
   }
 
   get iframeSelector() {
-    return '#passbolt-iframe-recover';
+    return "#passbolt-iframe-recover";
+  }
+
+  /**
+   * a method to encapsule automation code to interact with the page
+   * e.g. to switch
+   */
+  async switchToRecoverIframe() {
+    // Go to iframe recover setup
+    await SeleniumPage.switchToIframe(this.iframeSelector);
   }
 
   /**
@@ -69,10 +79,28 @@ class RecoverAuthenticationPage {
   }
 
   /**
+   * a method to encapsule automation code to interact with the page
+   * e.g. for after the account recovery request
+   */
+  async recoverByAccountRecoveryRequest(username) {
+    // Show last email and redirect for account recover
+    await SeleniumPage.showLastEmailAndRedirect(username);
+
+    // Go to iframe recover setup
+    await SeleniumPage.switchToIframe(this.iframeSelector);
+    
+    // Choose passphrase
+    await CreateGpgKeyPage.choosePassphrase(username);
+
+    // Choose security token
+    await ChooseSecurityTokenPage.chooseSecurityToken();
+  }
+
+  /**
    * Go to the url
    */
   goToRecover() {
-    return browser.url('/recover');
+    return browser.url("/recover");
   }
 }
 
