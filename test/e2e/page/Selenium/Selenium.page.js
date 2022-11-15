@@ -20,7 +20,7 @@ class SeleniumPage {
    * define selectors using getter methods
    */
   get redirectButton() {
-    return $('.buttonContent a');
+    return $(".buttonContent a");
   }
 
   /**
@@ -28,7 +28,7 @@ class SeleniumPage {
    * e.g. to reset instance default
    */
   async resetInstanceDefault() {
-    await browser.url('/seleniumtests/resetInstance/default');
+    await browser.url("/seleniumtests/resetInstance/default");
   }
 
   /**
@@ -40,7 +40,7 @@ class SeleniumPage {
     await browser.pause(500);
     await this.openUrl(`/showLastEmail/${username}`);
     await this.redirectButton.waitForExist();
-    const url = await this.redirectButton.getAttribute('href');
+    const url = await this.redirectButton.getAttribute("href");
     return browser.url(url);
   }
 
@@ -56,11 +56,14 @@ class SeleniumPage {
    */
   async switchToIframe(cssSelector) {
     const iframe = $(cssSelector);
-    await iframe.waitForExist({timeout: 10000});
-    await iframe.waitForClickable({timeout: 10000});
+    await iframe.waitForExist({ timeout: 15000 });
+    await iframe.waitForClickable({ timeout: 15000 });
     // $(cssSelector) cannot be use for the switch iframe with the current version of wdio for no apparent reason.
     await browser.pause(500);
-    const iframeWithFindElement = await browser.findElement("css selector", cssSelector);
+    const iframeWithFindElement = await browser.findElement(
+      "css selector",
+      cssSelector
+    );
     await browser.switchToFrame(iframeWithFindElement);
   }
 }

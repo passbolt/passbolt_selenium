@@ -37,7 +37,7 @@ class ImportGpgKeyPage {
     // to add value faster than setValue
     // await browser.executeScript("arguments[0].value=arguments[1];", [this.importGpgKeyTextarea, privateKey]);
     // to force a change event for react component (doesn't work with dispatch event method) (add 2 spaces for firefox)
-    await this.importGpgKeyTextarea.setValue(privateKey);
+    await this.importGpgKeyTextarea.setValue(privateKey, {wait:10000});
     await this.btnSubmit.waitForClickable();
     await this.btnSubmit.click();
   }

@@ -33,6 +33,10 @@ class DisplayMainMenuPage {
     return $('.primary.navigation.top ul').$('=users');
   }
 
+  get administrationMenu() {
+    return $('.primary.navigation.top ul').$('=administration');
+  }
+
   get signOutMenu() {
     return $('.primary.navigation.top .right .main-cell a span');
   }
@@ -52,7 +56,7 @@ class DisplayMainMenuPage {
    * e.g. to sign out the current user
    */
   async signOut() {
-    await this.signOutMenu.waitForClickable();
+    await this.signOutMenu.waitForClickable({timeout: 15000});
     await this.signOutMenu.click();
     // Switch to parent to avoid an issue on firefox
     await browser.switchToParentFrame();
@@ -66,6 +70,17 @@ class DisplayMainMenuPage {
     await this.navigationPage.waitForExist();
     await this.userMenu.waitForClickable();
     await this.userMenu.click();
+  }
+
+  /**
+   * a method to encapsule automation code to interact with the page
+   * e.g. to go to the adminstration workspace
+   */
+  async goToAdminstrationWorkspace() {
+    await this.navigationPage.waitForExist();
+    await this.administrationMenu.waitForClickable();
+    await this.administrationMenu.click();
+    await browser.switchToParentFrame();
   }
 }
 

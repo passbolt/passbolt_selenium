@@ -9,39 +9,35 @@
  * @copyright     Copyright (c) Passbolt SA (https://www.passbolt.com)
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
- * @since         v3.0.0
+ * @since         v3.8.0
  */
 
 /**
  * sub page containing specific selectors and methods for a specific page
  */
-class InputPassphrasePage {
+class AdministrationActionsPage {
   /**
-   * define selectors using getter methods
+   * return the save settings button
    */
-  get entryPassphrasePage() {
-    return $('.dialog-wrapper.passphrase-entry');
+  get actionsBar() {
+    return $(".actions-wrapper li");
   }
 
-  get inputPassphrase() {
-    return $('#passphrase-entry-form-passphrase');
-  }
-
-  get btnSubmit() {
-    return $('.dialog-wrapper.passphrase-entry button[type="submit"]');
+  /**
+   * return the save settings button
+   */
+  get saveSettingsButton() {
+    return this.actionsBar.$("=Save settings");
   }
 
   /**
    * a method to encapsule automation code to interact with the page
-   * e.g. to entry passphrase
+   * e.g. save settings button
    */
-  async entryPassphrase(username) {
-    // Entry passphrase
-    await this.entryPassphrasePage.waitForExist(({timeout: 15000}));
-    await this.inputPassphrase.setValue(username);
-    await this.btnSubmit.waitForClickable();
-    await this.btnSubmit.click();
+  async clickOnSaveSettings() {
+    await this.saveSettingsButton.waitForClickable();
+    await this.saveSettingsButton.click();
   }
 }
 
-module.exports = new InputPassphrasePage();
+module.exports = new AdministrationActionsPage();
