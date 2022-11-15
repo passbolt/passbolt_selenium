@@ -88,7 +88,7 @@ class RecoverAuthenticationPage {
 
     // Go to iframe recover setup
     await SeleniumPage.switchToIframe(this.iframeSelector);
-    
+
     // Choose passphrase
     await CreateGpgKeyPage.choosePassphrase(username);
 
@@ -100,7 +100,7 @@ class RecoverAuthenticationPage {
    * Go to the url
    */
   goToRecover() {
-    return browser.url("/recover");
+    return browser.url("recover");
   }
 }
 
