@@ -84,8 +84,9 @@ class RecoverAuthenticationPage {
    */
   async recoverByAccountRecoveryRequest(username) {
     // Show last email and redirect for account recover
-    await SeleniumPage.showLastEmailAndRedirect(username);
-
+    await SeleniumPage.checkSubjectContent(username, "You have initiated an account recovery!")
+    await SeleniumPage.clickOnRedirection();
+    
     // Go to iframe recover setup
     await SeleniumPage.switchToIframe(this.iframeSelector);
 

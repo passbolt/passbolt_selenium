@@ -17,30 +17,34 @@ const DisplayNotificationPage = require("../../Common/Notification/DisplayNotifi
 /**
  * sub page containing specific selectors and methods for a specific page
  */
-class DeleteResourcePage {
-  /**
-   * define selectors using getter methods
-   */
-  get deletePasswordPage() {
-    return $('.delete-password-dialog.dialog-wrapper');
+class DeleteGroupPage {
+
+ /**
+  * return the dialog container for deletion
+  */
+  get dialogDeleteContainer() {
+    return $('.delete-group-dialog');
   }
 
+ /**
+  * return the submit button
+  */
   get submitButton() {
     return $('button[type=submit]');
   }
 
   /**
    * a method to encapsule automation code to interact with the page
-   * e.g. to delete a password
+   * e.g. to validate deletion of group
    */
-  async deletePassword() {
+   async validationDeletion() {
     // this is necessary to avoid any issue with notifications
     await DisplayNotificationPage.closeAllNotifications();
-    await this.deletePasswordPage.waitForExist();
+    await this.dialogDeleteContainer.waitForExist();
     await this.submitButton.waitForClickable();
     await this.submitButton.click();
     await DisplayNotificationPage.successNotification.waitForExist();
   }
 }
 
-module.exports = new DeleteResourcePage();
+module.exports = new DeleteGroupPage();

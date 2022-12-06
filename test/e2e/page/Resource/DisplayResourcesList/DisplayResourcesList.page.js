@@ -66,7 +66,7 @@ class DisplayResourcesListPage {
   async selectedResourceNamed(name) {
     await this.gridPage.waitForExist();
     await this.getResourceNamed(name).waitForExist();
-    await this.getResourceNamed(name).waitForClickable();
+    await this.getResourceNamed(name).waitForClickable({timeout: 15000});
     await this.getResourceNamed(name).click();
   }
 }

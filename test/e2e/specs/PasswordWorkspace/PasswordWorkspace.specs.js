@@ -1,4 +1,4 @@
-/**
+/*
  * Passbolt ~ Open source password manager for teams
  * Copyright (c) Passbolt SA (https://www.passbolt.com)
  *
@@ -30,7 +30,8 @@ const DeleteResourcePage = require('../../page/Resource/DeleteResource/DeleteRes
 
 describe('password workspace', () => {
   // WARNING : execution order is very important
-
+  let ressourceName = null;
+  
   after(() => {
     // runs once after the last test in this block
     return SeleniumPage.resetInstanceDefault()
@@ -48,15 +49,27 @@ describe('password workspace', () => {
     await DisplayMainMenuPage.signOut();
   });
 
+  it("When new users are invited to passbolt, notify them.", async () => { 
+    await SeleniumPage.checkSubjectContent("test@passbolt.com", "Admin just created an account for you on passbolt!")
+    await SeleniumPage.clickOnRedirection();
+  });
+
   it('As U I should setup a new account', async () => {
     await SetupAuthenticationPage.setup('test@passbolt.com');
     await DisplayMainMenuPage.switchAppIframe();
   });
+  
 
   it('As LU I should create a new password', async () => {
     await DisplayResourcesWorkspacePage.openCreatePassword();
     await CreateResourcePage.createPassword('name', 'uri', 'test@passbolt.com', 'secret', 'description');
   });
+
+  it('When a password is created, notify its creator. ', async() => {
+    await SeleniumPage.checkSubjectContent("test@passbolt.com", "You have saved a new password")
+    await SeleniumPage.clickOnRedirection();
+    await DisplayMainMenuPage.switchAppIframe();
+  })
 
   it('As LU I should copy the secret of my password', async () => {
     await DisplayResourcesListPage.copySecretResource('test@passbolt.com');
@@ -68,14 +81,41 @@ describe('password workspace', () => {
     await ShareDialogPage.shareResource('admin@passbolt.com', 'test@passbolt.com');
   });
 
+  it('When a password is shared, notify the users who gain access to it.', async() => {
+    await SeleniumPage.checkSubjectContent("admin@passbolt.com", "Firstname shared a password with you")
+    await SeleniumPage.clickOnRedirection();
+    await DisplayMainMenuPage.switchAppIframe();
+  })
+
   it('As LU I should edit my password', async () => {
     await DisplayResourcesWorkspacePage.openEditPassword('test@passbolt.com');
-    await EditResourcePage.editPassword('Updated', 'Updated', 'test@passbolt.com', 'Updated', 'Updated');
+    ressourceName = await EditResourcePage.editPassword('Updated', 'Updated', 'test@passbolt.com', 'Updated', 'Updated');
+  });
+
+
+  it('When a password is updated, notify the users who have access to it.', async() => {
+    const updatedSubject = `Firstname updated the password ${ressourceName}`;
+    await SeleniumPage.checkSubjectContent("admin@passbolt.com", updatedSubject);
+    await SeleniumPage.checkSubjectContent("test@passbolt.com", updatedSubject);
+    await SeleniumPage.clickOnRedirection();
+    await DisplayMainMenuPage.switchAppIframe();
+  })
+
+  it('When a comment is posted on a password, notify the users who have access to this password.', async () => {
+    //await DisplayResourcesListPage.selectedFirstResource();
+    await DisplayResourceDetailsPage.openCommentsSection()
+    await DisplayResourceDetailsPage.enterComment("Selenium test")
+    await DisplayMainMenuPage.switchAppIframe();
   });
 
   it('As LU I should delete my password', async () => {
     await DisplayResourcesWorkspacePage.openDeletePassword();
     await DeleteResourcePage.deletePassword();
-    await DisplayMainMenuPage.signOut();
   });
+
+  it('When a password is deleted, notify its creator. ', async() => {
+    await SeleniumPage.checkSubjectContent("admin@passbolt.com", `Firstname deleted the password ${ressourceName}`)
+  })
 });
+
+

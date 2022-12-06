@@ -48,6 +48,12 @@ describe('password workspace', () => {
     await FilterResourcesByFoldersPage.selectedFolderNamed('folderParent');
   });
 
+  it('When a folder is created, notify its creator.', async() => {
+    await SeleniumPage.checkSubjectContent("ada@passbolt.com", "You have created a new folder")
+    await SeleniumPage.clickOnRedirection();
+    await DisplayMainMenuPage.switchAppIframe();
+  })
+
   it('As LU I should create a new password', async() => {
     await DisplayResourcesWorkspacePage.openCreatePassword();
     await CreateResourcePage.createPassword('nameA', 'uri', 'ada@passbolt.com', 'secretA', 'description');
@@ -88,6 +94,13 @@ describe('password workspace', () => {
     await DisplayResourceDetailsPage.getShareWithExist('Accounting');
   });
 
+
+  it('When a folder is shared, notify the users who gain access to it', async() => {
+    await SeleniumPage.checkSubjectContent("admin@passbolt.com", "Ada shared a password with you")
+    await SeleniumPage.clickOnRedirection();
+    await DisplayMainMenuPage.switchAppIframe();
+  })
+
   it('As LU I should recover admin account', async() => {
     await RecoverAuthenticationPage.recover('admin@passbolt.com', adminPrivateKey);
     await DisplayMainMenuPage.switchAppIframe();
@@ -108,8 +121,20 @@ describe('password workspace', () => {
     await RenameResourceFolderPage.renameFolder('rename');
   });
 
+  it('When a folder is updated, notify the users who have access to it.', async() => {
+    await SeleniumPage.checkSubjectContent("ada@passbolt.com", "updated the folder rename")
+    await SeleniumPage.clickOnRedirection();
+    await DisplayMainMenuPage.switchAppIframe();
+  })
+
   it('As LU I should delete a folder', async() => {
     await FilterResourcesByFoldersPage.openDeleteResourceFolder();
     await DeleteResourceFolderPage.deleteFolder();
   });
+  
+  it('When a folder is deleted, notify the users who had access to it.', async() => {
+    await SeleniumPage.checkSubjectContent("ada@passbolt.com", "deleted the folder Communication")
+    await SeleniumPage.clickOnRedirection();
+    await DisplayMainMenuPage.switchAppIframe();
+  })
 });

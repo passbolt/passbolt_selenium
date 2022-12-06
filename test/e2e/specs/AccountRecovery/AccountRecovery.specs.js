@@ -34,6 +34,7 @@ const {
 } = require("../../page/Authentication/ImportGpgKey/ImportGpgOrganizationKey.data");
 const AdministrationActionsPage = require("../../page/Administration/AdministrationActions/AdministrationActions.page");
 const PassphraseEntryDialogPage = require("../../page/AuthenticationPassphrase/InputPassphrase/InputPassphrase.page");
+const DisplayNotificationPage = require("../../page/Common/Notification/DisplayNotification.page");
 
 describe("password workspace", () => {
   const admin = "admin@passbolt.com";
@@ -61,7 +62,7 @@ describe("password workspace", () => {
     await PassphraseEntryDialogPage.entryPassphrase(admin);
     // We disable admin email notifications to avoid a confusion into mails
     await DisplayAdministrationMenuPage.goToEmailNotificationSection();
-    await DisplayAdministrationEmailNotificationPage.disableAdministratorNotification();
+    await DisplayAdministrationEmailNotificationPage.toggleAdministratorAccountRecoveryNotification();
     await DisplayMainMenuPage.signOut();
   });
 
@@ -78,16 +79,33 @@ describe("password workspace", () => {
   });
 
   it("As AD, I can approve a user account recovery request", async () => {
+    // this is necessary to avoid any issue with notifications
+    await DisplayNotificationPage.closeAllNotifications();
     await LoginPage.goToLogin();
     await LoginPage.login(admin);
     await DisplayMainMenuPage.switchAppIframe();
     await DisplayMainMenuPage.goToUserWorkspace();
+    await DisplayMainMenuPage.switchAppIframe();
     await DisplayUserWorkspacePage.searchUser(adminName);
     await DisplayUserWorkspacePage.clickOnUserRaw(adminName);
     await DisplayUserWorkspacePage.reviewAccountRecoveryRequest(
       adminName,
       true
     );
+    await DisplayNotificationPage.successNotification.waitForExist(); 
+    await DisplayMainMenuPage.signOut();
+  });
+
+  it("When an account recovery is approved, notify the user.", async () => {
+    await SeleniumPage.checkSubjectContent(admin, "Admin(admin@passbolt.com) has approved your recovery request.")
+    await LoginPage.goToLogin();
+    await LoginPage.login(admin);
+    await DisplayMainMenuPage.switchAppIframe();
+    // We enable the notification again to check administrator response and disable user
+    await DisplayMainMenuPage.goToAdminstrationWorkspace();
+    await DisplayAdministrationMenuPage.goToEmailNotificationSection();
+    await DisplayAdministrationEmailNotificationPage.toggleAdministratorAccountRecoveryNotification();
+    await DisplayAdministrationEmailNotificationPage.toggleUserAccountRecoveryNotification();
     await DisplayMainMenuPage.signOut();
   });
 
@@ -106,6 +124,12 @@ describe("password workspace", () => {
       adminName,
       false
     );
+  });
+
+  it("When an administrator answered to an account recovery request, notify all the administrators." , async () => {
+    await SeleniumPage.checkSubjectContent(admin, "You have updated a recovery request to rejected.")
+    await SeleniumPage.goToApp();
+    await DisplayMainMenuPage.switchAppIframe();
   });
 
   it("As AD, I can rotate the organization key without changing the organization policy type", async () => {
@@ -131,12 +155,19 @@ describe("password workspace", () => {
       organizationPassphraseAlternative
     );
   });
+
+  it("When an account recovery policy is updated, notify the administrators.", async () => {
+    await SeleniumPage.checkSubjectContent(admin, "You have disabled the account recovery.")
+    await SeleniumPage.goToApp();
+    await DisplayMainMenuPage.switchAppIframe();
+  });
+
 });
 
 const requestAccountRecovery = async (admin) => {
   await LoginPage.clickOnLostPrivateKeyLink();
   await LoginPage.clickOnRecoverAccountButton();
   // Show last email and redirect for account recovery
-  await SeleniumPage.showLastEmailAndRedirect(admin);
   await RecoverAuthenticationPage.recoverByAccountRecoveryRequest(admin);
 };
+  

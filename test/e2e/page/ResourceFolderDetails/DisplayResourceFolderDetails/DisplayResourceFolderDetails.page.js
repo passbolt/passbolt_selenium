@@ -36,8 +36,8 @@ class DisplayResourceFolderDetailsPage {
    * e.g. to open share section
    */
   async openShareSection() {
-    await this.sidebarResource.waitForExist();
-    await this.shareSection.waitForClickable();
+    await this.sidebarResource.waitForExist({timeout: 15000});
+    await this.shareSection.waitForClickable({timeout: 15000});
     await this.shareSection.click();
   }
 

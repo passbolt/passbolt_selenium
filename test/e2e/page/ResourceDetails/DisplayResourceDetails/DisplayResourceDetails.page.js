@@ -27,8 +27,20 @@ class DisplayResourceDetailsPage {
     return $('.sharedwith.accordion.sidebar-section');
   }
 
+  get commentSection() {
+    return $('.comments.accordion.sidebar-section');
+  }
+
   get shareEditIcon() {
     return $('.sharedwith.accordion.sidebar-section .accordion-content .section-action');
+  }
+
+  get commentTextarea() {
+    return $('.comment textarea');
+  }
+
+  get saveCommentButton() {
+    return $('.comment .actions .button');
   }
 
   get shareList() {
@@ -47,6 +59,27 @@ class DisplayResourceDetailsPage {
     await this.sidebarResource.waitForExist();
     await this.shareSection.waitForClickable();
     await this.shareSection.click();
+  }
+
+  /**
+   * a method to encapsule automation code to interact with the page
+   * e.g. to open comments section
+   */
+  async openCommentsSection() {
+    await this.sidebarResource.waitForExist();
+    await this.commentSection.waitForClickable();
+    await this.commentSection.click();
+  }
+
+  /**
+   * a method to encapsule automation code to interact with the page
+   * e.g. to open comments section
+   */
+  async enterComment(comment) {
+    await this.commentTextarea.waitForExist();
+    await this.commentTextarea.setValue(comment);
+    await this.saveCommentButton.waitForClickable();
+    await this.saveCommentButton.click();
   }
 
   /**

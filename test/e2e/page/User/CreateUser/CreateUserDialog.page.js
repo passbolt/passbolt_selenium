@@ -12,6 +12,8 @@
  * @since         v3.0.0
  */
 
+const DisplayNotificationPage = require("../../Common/Notification/DisplayNotification.page");
+
 /**
  * sub page containing specific selectors and methods for a specific page
  */
@@ -44,11 +46,14 @@ class CreateUserDialogPage {
    * e.g. to create a new user
    */
   async createUser(firstname, lastname, username) {
+    // this is necessary to avoid any issue with notifications
+    await DisplayNotificationPage.closeAllNotifications();
     await this.inputFirstname.setValue(firstname);
     await this.inputLastname.setValue(lastname);
     await this.inputUsername.setValue(username);
     await this.submitButton.waitForClickable();
     await this.submitButton.click();
+    await DisplayNotificationPage.successNotification.waitForExist();
   }
 }
 
