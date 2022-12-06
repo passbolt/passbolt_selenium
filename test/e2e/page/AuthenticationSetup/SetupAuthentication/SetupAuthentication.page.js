@@ -40,7 +40,6 @@ class SetupAuthenticationPage {
     await this.container.waitForExist();
     // Show last email and redirect for account setup
     await SeleniumPage.showLastEmailAndRedirect(username);
-
     // Go to iframe setup setup
     await SeleniumPage.switchToIframe(this.iframeSelector);
 

@@ -50,6 +50,14 @@ class DisplayUserWorkspacePage {
   }
 
   /**
+   * return the option to select new group creation
+   */
+   get newGroupButton() {
+    return $(".dropdown-content.menu").$("=New group");
+  }
+
+
+  /**
    * return the user table
    */
   get userTable() {
@@ -158,6 +166,17 @@ class DisplayUserWorkspacePage {
     await this.createButton.click();
     await this.newUserButton.waitForClickable();
     await this.newUserButton.click();
+  }
+
+  /**
+   * a method to encapsule automation code to interact with the page
+   * e.g. open the group user option
+   */
+   async openCreateGroup() {
+    await this.createButton.waitForClickable();
+    await this.createButton.click();
+    await this.newGroupButton.waitForClickable();
+    await this.newGroupButton.click();
   }
 
   /**

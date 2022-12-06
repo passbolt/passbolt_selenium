@@ -13,6 +13,7 @@
  */
 
 const AdministrationActionsPage = require("../AdministrationActions/AdministrationActions.page");
+const DisplayNotificationPage = require('../../Common/Notification/DisplayNotification.page');
 
 /**
  * sub page containing specific selectors and methods for a specific page
@@ -47,15 +48,36 @@ class DisplayAdministrationEmailNotificationPage {
   }
 
   /**
+   * return the account recovery response notify when rejected
+   */
+  get accountRecoveryResponseRejectedRadio() {
+    return $("#account-recovery-response-user-rejected-toggle-button");
+  }
+
+  /**
    * a method to encapsule automation code to interact with the page
    * e.g. select mandatory policy on the screen
    */
-  async disableAdministratorNotification() {
-    await this.accountRecoveryRequestedRadio.waitForClickable();
+  async toggleAdministratorAccountRecoveryNotification() {
+    // this is necessary to avoid any issue with notifications
+    await DisplayNotificationPage.closeAllNotifications();
+    await this.accountRecoveryRequestedRadio.waitForClickable({timeout: 15000});
     await this.accountRecoveryRequestedRadio.click();
     await this.accountRecoveryResponseAdministratiorRadio.click();
     await this.accountRecoveryResponseAllAdministratorRadio.click();
     await AdministrationActionsPage.clickOnSaveSettings();
+    await DisplayNotificationPage.successNotification.waitForExist();
+  }
+
+  /**
+   * a method to encapsule automation code to interact with the page
+   * e.g. select mandatory policy on the screen fo user
+   */
+  async toggleUserAccountRecoveryNotification() {
+    await this.accountRecoveryResponseRejectedRadio.waitForClickable();
+    await this.accountRecoveryResponseRejectedRadio.click();
+    await AdministrationActionsPage.clickOnSaveSettings();
+    await DisplayNotificationPage.successNotification.waitForExist();
   }
 
   /**

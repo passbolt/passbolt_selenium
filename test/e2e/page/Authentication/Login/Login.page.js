@@ -81,6 +81,7 @@ class LoginPage {
    */
   async clickOnLostPrivateKeyLink() {
     // Go to iframe login
+    await browser.switchToParentFrame();
     await SeleniumPage.switchToIframe(this.iframeSelector);
     await this.lostMyPrivateKeyLink.waitForClickable();
     await this.lostMyPrivateKeyLink.click();

@@ -13,6 +13,7 @@
  */
 
 const PassphraseEntryDialogPage = require('../../AuthenticationPassphrase/InputPassphrase/InputPassphrase.page');
+const DisplayNotificationPage = require('../../Common/Notification/DisplayNotification.page');
 const GenerateResourcePasswordPage = require("../../ResourcePassword/GenerateResourcePassword/GenerateResourcePassword.page");
 
 /**
@@ -59,8 +60,12 @@ class EditResourcePage {
    * e.g. to edit a password
    */
   async editPassword(name, uri, username, password, description) {
+    // this is necessary to avoid any issue with notifications
+    await DisplayNotificationPage.closeAllNotifications();
     await this.editPasswordPage.waitForExist();
-    await this.inputName.setValue(name);
+    await this.inputName.clearValue();
+    await this.inputName.addValue(name);
+    const ressourceName = this.inputName.getValue();
     await this.inputUri.setValue(uri);
     await this.inputUsername.setValue(username);
     await this.inputPassword.waitForEnabled();
@@ -72,6 +77,8 @@ class EditResourcePage {
     await this.submitButton.waitForClickable();
     await this.submitButton.click();
     await PassphraseEntryDialogPage.entryPassphrase(username);
+    await DisplayNotificationPage.successNotification.waitForExist();
+    return ressourceName;
   }
 }
 
