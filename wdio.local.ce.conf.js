@@ -27,7 +27,6 @@ exports.config = {
     ],
     // Patterns to exclude.
     exclude: [
-      './test/e2e/specs/FoldersTree/FoldersTree.specs.js',
       './test/e2e/specs/AccountRecovery/AccountRecovery.specs.js',
     ],
     //
