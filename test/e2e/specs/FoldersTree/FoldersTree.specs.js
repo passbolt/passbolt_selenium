@@ -77,10 +77,16 @@ describe('password workspace', () => {
     await ShareDialogPage.shareResource('admin@passbolt.com', 'ada@passbolt.com');
   });
 
-  it('As LU I should share a folder', async() => {
+  it('As LU I should share a folder with a group', async() => {
     await FilterResourcesByFoldersPage.selectedFolderNamed('folderParent');
     await DisplayResourceFolderDetailsPage.openShareResource();
     await ShareDialogPage.shareResource('Accounting', 'ada@passbolt.com');
+  });
+
+  it('As LU I should share a folder with a user', async() => {
+    await FilterResourcesByFoldersPage.selectedFolderNamed('folderParent');
+    await DisplayResourceFolderDetailsPage.openShareResource();
+    await ShareDialogPage.shareResource('admin@passbolt.com', 'ada@passbolt.com');
   });
 
   it('As LU I should see my passwords share with admin user and accounting group', async() => {
@@ -94,12 +100,11 @@ describe('password workspace', () => {
     await DisplayResourceDetailsPage.getShareWithExist('Accounting');
   });
 
-
   it('When a folder is shared, notify the users who gain access to it', async() => {
-    await SeleniumPage.checkSubjectContent("admin@passbolt.com", "Ada shared a password with you")
+    await SeleniumPage.checkSubjectContent("admin@passbolt.com", "Ada shared a folder with you")
     await SeleniumPage.clickOnRedirection();
     await DisplayMainMenuPage.switchAppIframe();
-  })
+  });
 
   it('As LU I should recover admin account', async() => {
     await RecoverAuthenticationPage.recover('admin@passbolt.com', adminPrivateKey);

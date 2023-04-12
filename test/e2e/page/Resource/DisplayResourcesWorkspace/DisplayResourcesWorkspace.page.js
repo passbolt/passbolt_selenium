@@ -57,10 +57,8 @@ class DisplayResourcesWorkspacePage {
     await this.passwordWorkspace.waitForExist();
     await this.createButton.waitForClickable();
     await this.createButton.click();
-    if (browser.config.passbolt.edition === 'pro') {
-      await this.newPasswordButton.waitForClickable();
-      await this.newPasswordButton.click();
-    }
+    await this.newPasswordButton.waitForClickable();
+    await this.newPasswordButton.click();
   }
 
   /**
