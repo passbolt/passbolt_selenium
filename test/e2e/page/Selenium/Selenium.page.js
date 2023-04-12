@@ -97,7 +97,7 @@ class SeleniumPage {
    * Go to the application
    */
   goToApp() {
-    return browser.url("/app");
+    return browser.url("app");
   }
 
   /**

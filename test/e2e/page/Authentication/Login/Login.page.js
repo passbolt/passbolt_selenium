@@ -61,7 +61,7 @@ class LoginPage {
    * Go to the url
    */
   goToLogin() {
-    return browser.url("/auth/login");
+    return browser.url("auth/login");
   }
 
   /**
