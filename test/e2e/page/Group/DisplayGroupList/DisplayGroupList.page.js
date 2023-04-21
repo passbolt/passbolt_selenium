@@ -35,7 +35,7 @@ class DisplayGroupListPage {
   * return the three dots buttons
   */
   get buttonRowActions() {
-    return this.selectedGroup.$(".button");
+    return this.selectedGroup.$(".dropdown button");
   }
 
  /**
@@ -65,7 +65,7 @@ class DisplayGroupListPage {
   */
   async groupRow(groupName) {
     await this.groupList.waitForExist()
-    return this.groupList.$(`a[title='${groupName}']`);
+    return this.groupList.$(`button[title='${groupName}']`);
   }
 
  /**

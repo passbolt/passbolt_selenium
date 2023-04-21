@@ -40,12 +40,6 @@ class CreateGroupPage {
     return $("#group-name-input");
   }
 
-  /**
-   * return the selected autocomplete row
-   */
-   get inputGroupName() {
-    return $("#group-name-input");
-  }
 
   /**
    * return submit button

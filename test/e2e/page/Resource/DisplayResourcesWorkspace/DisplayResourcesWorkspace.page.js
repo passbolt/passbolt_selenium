@@ -26,7 +26,7 @@ class DisplayResourcesWorkspacePage {
   }
 
   get createButton() {
-    return $('.button.create.primary');
+    return $('button.create.primary');
   }
 
   get newPasswordButton() {
@@ -38,15 +38,15 @@ class DisplayResourcesWorkspacePage {
   }
 
   get editButton() {
-    return $('.header.third  .col2_3.actions-wrapper #edit_action a');
+    return $('.header.third  .col2_3.actions-wrapper #edit_action button');
   }
 
   get moreButton() {
-    return $('.header.third  .col2_3.actions-wrapper .dropdown a.button');
+    return $('.header.third  .col2_3.actions-wrapper .dropdown button');
   }
 
   get deleteButton() {
-    return $('.header.third  .col2_3.actions-wrapper .dropdown-content.menu #delete_action a');
+    return $('.header.third  .col2_3.actions-wrapper .dropdown-content.menu #delete_action button');
   }
 
   /**

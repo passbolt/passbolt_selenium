@@ -26,7 +26,7 @@ class DisplayResourcesListPage {
   }
 
   get secretResource() {
-    return $('.tableview-content.scroll tbody .cell-secret.m-cell.password div a');
+    return $('.tableview-content.scroll tbody .cell-secret.m-cell.password div button');
   }
 
   get firstResource() {

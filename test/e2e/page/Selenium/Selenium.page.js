@@ -111,16 +111,12 @@ class SeleniumPage {
    * Switch to iframe
    */
   async switchToIframe(cssSelector) {
-    const iframe = $(cssSelector);
-    await iframe.waitForExist({ timeout: 15000 });
+    // Switch to parent to avoid an issue on firefox
+    await browser.switchToParentFrame();
+    await $(cssSelector).waitForExist({ timeout: 15000 });
+    const iframe = await $(cssSelector);
     await iframe.waitForClickable({ timeout: 15000 });
-    // $(cssSelector) cannot be use for the switch iframe with the current version of wdio for no apparent reason.
-    await browser.pause(500);
-    const iframeWithFindElement = await browser.findElement(
-      "css selector",
-      cssSelector
-    );
-    await browser.switchToFrame(iframeWithFindElement);
+    await browser.switchToFrame(iframe);
   }
 }
 

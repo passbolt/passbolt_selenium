@@ -62,7 +62,7 @@ class AdministrationOrganizationRecoveryKeyPage {
    * return the submit button for generation key
    */
   get generateButton() {
-    return $(".submit-wrapper").$(".button.primary");
+    return $(".submit-wrapper").$("button.primary");
   }
 
   /**
@@ -85,7 +85,7 @@ class AdministrationOrganizationRecoveryKeyPage {
    * e.g. return the primary button to Apply organization pgq public key
    */
   get submitImportButton() {
-    return $(".submit-wrapper").$(".button.primary");
+    return $(".submit-wrapper").$("button.primary");
   }
 
   /**

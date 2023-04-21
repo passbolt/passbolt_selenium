@@ -40,7 +40,7 @@ class DisplayResourceDetailsPage {
   }
 
   get saveCommentButton() {
-    return $('.comment .actions .button');
+    return $('.comment .actions button');
   }
 
   get shareList() {

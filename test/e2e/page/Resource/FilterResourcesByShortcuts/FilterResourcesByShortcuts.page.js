@@ -24,7 +24,7 @@ class FilterResourcesByShortcutsPage {
   }
 
   get shareWithMe() {
-    return $('.navigation-secondary.navigation-shortcuts ul').$('=Shared with me');
+    return $('.navigation-secondary.navigation-shortcuts ul').$('span=Shared with me');
   }
 
   /**

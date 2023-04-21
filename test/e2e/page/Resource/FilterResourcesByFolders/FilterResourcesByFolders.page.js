@@ -20,23 +20,23 @@ class FilterResourcesByFoldersPage {
    * define selectors using getter methods
    */
   get firstFolder() {
-    return $('.folders-tree .folder-item .main-cell a');
+    return $('.folders-tree .folder-item .main-cell button');
   }
 
   get caretRightFolderSelected() {
-    return $('.folders-tree .row.selected .main-cell a .svg-icon.caret-right svg');
+    return $('.folders-tree .row.selected .main-cell button .svg-icon.caret-right svg');
   }
 
   getFolderNamed(name) {
-    return $('.folders-tree').$(`=${name}`);
+    return $('.folders-tree').$(`span=${name}`);
   }
 
   get renameFolder() {
-    return $('.contextual-menu').$('=Rename');
+    return $('.contextual-menu').$('span=Rename');
   }
 
   get deleteFolder() {
-    return $('.contextual-menu').$('=Delete');
+    return $('.contextual-menu').$('span=Delete');
   }
 
   /**

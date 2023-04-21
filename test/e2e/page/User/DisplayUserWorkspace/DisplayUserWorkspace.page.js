@@ -32,7 +32,7 @@ class DisplayUserWorkspacePage {
    * return  button to create user
    */
   get createButton() {
-    return $(".button.create.primary");
+    return $("button.create.primary");
   }
 
   /**
@@ -46,14 +46,14 @@ class DisplayUserWorkspacePage {
    * return the option to select new user creation
    */
   get newUserButton() {
-    return $(".dropdown-content.menu").$("=New user");
+    return $(".dropdown-content.menu").$("span=New user");
   }
 
   /**
    * return the option to select new group creation
    */
    get newGroupButton() {
-    return $(".dropdown-content.menu").$("=New group");
+    return $(".dropdown-content.menu").$("span=New group");
   }
 
 
@@ -89,7 +89,7 @@ class DisplayUserWorkspacePage {
    * return the account recovery button
    */
   get accountRecoveryReviewButton() {
-    return $(".pending-request-status .button");
+    return $(".pending-request-status button");
   }
 
   /**
@@ -138,7 +138,7 @@ class DisplayUserWorkspacePage {
    * return the breadcrumbs
    */
   get breadcrumbs() {
-    return $(".breadcrumbs .menu").$("a*=Search: Admin User");
+    return $(".breadcrumbs .menu").$("button*=Search: Admin User");
   }
 
   /**

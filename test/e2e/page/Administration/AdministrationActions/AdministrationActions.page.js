@@ -27,7 +27,7 @@ class AdministrationActionsPage {
    * return the save settings button
    */
   get saveSettingsButton() {
-    return this.actionsBar.$("=Save settings");
+    return this.actionsBar.$("span=Save settings");
   }
 
   /**

@@ -43,15 +43,6 @@ class RecoverAuthenticationPage {
 
   /**
    * a method to encapsule automation code to interact with the page
-   * e.g. to switch
-   */
-  async switchToRecoverIframe() {
-    // Go to iframe recover setup
-    await SeleniumPage.switchToIframe(this.iframeSelector);
-  }
-
-  /**
-   * a method to encapsule automation code to interact with the page
    * e.g. to recover using username and password
    */
   async recover(username, privateKey) {
