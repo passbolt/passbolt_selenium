@@ -50,11 +50,11 @@ class LoginPage {
    * return the lost private key link
    */
   get lostMyPrivateKeyLink() {
-    return $(".form-actions a");
+    return $(".form-actions button[type=\"button\"]");
   }
 
   get requestRecoverAccountButton() {
-    return $(".form-actions .button");
+    return $(".form-actions button.primary");
   }
 
   /**
@@ -69,8 +69,6 @@ class LoginPage {
    * e.g. to import gpg key
    */
   async login(passphrase) {
-    // Go to iframe login
-    await browser.switchToParentFrame();
     await SeleniumPage.switchToIframe(this.iframeSelector);
     await CheckPassphrasePage.enterPassphrase(passphrase);
   }
@@ -80,8 +78,6 @@ class LoginPage {
    * e.g. click on lost private key link to redirect to form
    */
   async clickOnLostPrivateKeyLink() {
-    // Go to iframe login
-    await browser.switchToParentFrame();
     await SeleniumPage.switchToIframe(this.iframeSelector);
     await this.lostMyPrivateKeyLink.waitForClickable();
     await this.lostMyPrivateKeyLink.click();

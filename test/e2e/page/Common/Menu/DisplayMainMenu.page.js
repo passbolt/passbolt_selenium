@@ -30,15 +30,15 @@ class DisplayMainMenuPage {
   }
 
   get userMenu() {
-    return $('.primary.navigation.top ul').$('=users');
+    return $('.primary.navigation.top ul').$('span=users');
   }
 
   get administrationMenu() {
-    return $('.primary.navigation.top ul').$('=administration');
+    return $('.primary.navigation.top ul').$('span=administration');
   }
 
   get signOutMenu() {
-    return $('.primary.navigation.top .right .main-cell a span');
+    return $('.primary.navigation.top .right .main-cell button span');
   }
 
   /**
@@ -46,8 +46,6 @@ class DisplayMainMenuPage {
    * e.g. to switch iframe
    */
   async switchAppIframe() {
-    // Switch to parent to avoid an issue on firefox
-    await browser.switchToParentFrame();
     await SeleniumPage.switchToIframe(this.appIframeSelector);
   }
 
@@ -58,8 +56,6 @@ class DisplayMainMenuPage {
   async signOut() {
     await this.signOutMenu.waitForClickable({timeout: 15000});
     await this.signOutMenu.click();
-    // Switch to parent to avoid an issue on firefox
-    await browser.switchToParentFrame();
   }
 
   /**

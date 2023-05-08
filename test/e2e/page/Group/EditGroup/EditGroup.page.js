@@ -40,13 +40,7 @@ class EditGroupPage {
   get inputGroupName() {
    return $("#group-name-input");
   }
- 
-  /**
-   * return the selected autocomplete row
-   */
-  get inputGroupName() {
-   return $("#group-name-input");
-  }
+
 
   /**
    * return the remove member button

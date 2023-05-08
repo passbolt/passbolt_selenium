@@ -15,9 +15,6 @@
 const AdministrationActionsPage = require("../AdministrationActions/AdministrationActions.page");
 const AdministrationOrganizationRecoveryKeyPage = require("./AdministrationOrganizationRecoveryKey.page");
 const PassphraseEntryDialogPage = require("../../AuthenticationPassphrase/InputPassphrase/InputPassphrase.page");
-const {
-  organizationPublicKey,
-} = require("../../Authentication/ImportGpgKey/ImportGpgOrganizationKey.data");
 
 /**
  * sub page containing specific selectors and methods for a specific page
@@ -58,18 +55,12 @@ class DisplayAdministrationAccountRecoveryPage {
     return this.recoveryKeyDetails.$(".table-info");
   }
 
-  /**
-   * return the account recovery section
-   */
-  get accountRecoverySection() {
-    return this.administrationMenu.$("#account_recovery_menu");
-  }
 
   /**
    * return the generate key button
    */
   get organizationRecoveryKeyButton() {
-    return this.recoveryKeyTable.$(".button.primary.medium");
+    return this.recoveryKeyTable.$("button.primary.medium");
   }
   /**
    * return the save settings button
@@ -84,7 +75,7 @@ class DisplayAdministrationAccountRecoveryPage {
   get dialogSubmitButton() {
     return this.dialogSaveConfirmation
       .$(".submit-wrapper")
-      .$(".button.primary");
+      .$("button.primary");
   }
 
   /**
