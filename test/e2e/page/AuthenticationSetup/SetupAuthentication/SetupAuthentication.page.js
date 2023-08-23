@@ -16,6 +16,7 @@ const SeleniumPage = require('../../Selenium/Selenium.page');
 const CreateGpgKeyPage = require('../../Authentication/CreateGpgKey/CreateGpgKey.page');
 const DownloadRecoveryKit = require('../../Authentication/DownloadRecoveryKit/DownloadRecoveryKit.page');
 const ChooseSecurityTokenPage = require('../../Authentication/ChooseSecurityToken/ChooseSecurityToken.page');
+const {templates} = require('../../../../../lib/emailTemplates');
 
 /**
  * sub page containing specific selectors and methods for a specific page
@@ -39,7 +40,7 @@ class SetupAuthenticationPage {
   async setup(username) {
     await this.container.waitForExist();
     // Show last email and redirect for account setup
-    await SeleniumPage.showLastEmailAndRedirect(username);
+    await SeleniumPage.showLastEmailAndRedirect(username, templates.register.AN.registered);
     // Go to iframe setup setup
     await SeleniumPage.switchToIframe(this.iframeSelector);
 

@@ -34,8 +34,6 @@ class DeleteResourcePage {
    * e.g. to delete a password
    */
   async deletePassword() {
-    // this is necessary to avoid any issue with notifications
-    await DisplayNotificationPage.closeAllNotifications();
     await this.deletePasswordPage.waitForExist();
     await this.submitButton.waitForClickable();
     await this.submitButton.click();

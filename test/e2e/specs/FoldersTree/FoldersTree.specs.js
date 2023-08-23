@@ -28,6 +28,7 @@ const CreateResourceFolderPage = require('../../page/ResourceFolder/CreateResour
 const RenameResourceFolderPage = require('../../page/ResourceFolder/RenameResourceFolder/RenameResourceFolder.page');
 const DeleteResourceFolderPage = require('../../page/ResourceFolder/DeleteResourceFolder/DeleteResourceFolder.page');
 const FilterResourcesByShortcutsPage = require('../../page/Resource/FilterResourcesByShortcuts/FilterResourcesByShortcuts.page');
+const {templates} = require('../../../../lib/emailTemplates');
 
 describe('password workspace', () => {
   // WARNING : execution order is very important
@@ -49,7 +50,7 @@ describe('password workspace', () => {
   });
 
   it('When a folder is created, notify its creator.', async() => {
-    await SeleniumPage.checkSubjectContent("ada@passbolt.com", "You have created a new folder")
+    await SeleniumPage.checkSubjectContent("ada@passbolt.com", "You have created a new folder", templates.folder.LU.created);
     await SeleniumPage.clickOnRedirection();
     await DisplayMainMenuPage.switchAppIframe();
   })
@@ -101,7 +102,7 @@ describe('password workspace', () => {
   });
 
   it('When a folder is shared, notify the users who gain access to it', async() => {
-    await SeleniumPage.checkSubjectContent("admin@passbolt.com", "Ada shared a folder with you")
+    await SeleniumPage.checkSubjectContent("admin@passbolt.com", "Ada shared a folder with you", templates.folder.LU.shared)
     await SeleniumPage.clickOnRedirection();
     await DisplayMainMenuPage.switchAppIframe();
   });
@@ -127,7 +128,7 @@ describe('password workspace', () => {
   });
 
   it('When a folder is updated, notify the users who have access to it.', async() => {
-    await SeleniumPage.checkSubjectContent("ada@passbolt.com", "updated the folder rename")
+    await SeleniumPage.checkSubjectContent("ada@passbolt.com", "Admin edited a folder", templates.folder.LU.updated)
     await SeleniumPage.clickOnRedirection();
     await DisplayMainMenuPage.switchAppIframe();
   })
@@ -138,7 +139,7 @@ describe('password workspace', () => {
   });
   
   it('When a folder is deleted, notify the users who had access to it.', async() => {
-    await SeleniumPage.checkSubjectContent("ada@passbolt.com", "deleted the folder Communication")
+    await SeleniumPage.checkSubjectContent("ada@passbolt.com", "Admin deleted a folder", templates.folder.LU.deleted)
     await SeleniumPage.clickOnRedirection();
     await DisplayMainMenuPage.switchAppIframe();
   })

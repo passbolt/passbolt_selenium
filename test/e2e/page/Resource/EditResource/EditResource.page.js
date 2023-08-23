@@ -60,8 +60,6 @@ class EditResourcePage {
    * e.g. to edit a password
    */
   async editPassword(name, uri, username, password, description) {
-    // this is necessary to avoid any issue with notifications
-    await DisplayNotificationPage.closeAllNotifications();
     await this.editPasswordPage.waitForExist();
     await this.inputName.clearValue();
     await this.inputName.addValue(name);

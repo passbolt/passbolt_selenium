@@ -23,6 +23,7 @@ const EditGroupPage = require('../../page/Group/EditGroup/EditGroup.page');
 const DeleteGroupPage = require('../../page/Group/DeleteGroup/DeleteGroup.page');
 const ShareDialogPage = require('../../page/Share/ShareDialog.page');
 const DisplayNotificationPage = require('../../page/Common/Notification/DisplayNotification.page');
+const {templates} = require('../../../../lib/emailTemplates');
 
 describe('groups three', () => {
   // WARNING : execution order is very important
@@ -48,19 +49,23 @@ describe('groups three', () => {
   });
 
   it("When users are added to a group, notify them.", async () => {
-    await SeleniumPage.checkSubjectContent("ada@passbolt.com", "Admin added you to the group A selenium group");
+    // this is necessary to avoid any issue with notifications
+    await DisplayNotificationPage.closeAllNotifications();
+    await SeleniumPage.checkSubjectContent("ada@passbolt.com", "Admin added you to the group A selenium group", templates.group.LU.groupUserAdded);
     await SeleniumPage.clickOnRedirection();
     await DisplayMainMenuPage.switchAppIframe();
     await DisplayMainMenuPage.goToUserWorkspace();
   });
 
   it('As AD, I can rename a group', async () => {
+    await DisplayNotificationPage.closeAllNotifications();
     await DisplayGroupListPage.editGroup(groupName);
     await EditGroupPage.renameGroup(renamedGroupName);
     await EditGroupPage.clickOnSubmitButton(adminUser);
   });
 
   it('As AD, I can add an user as group manager', async () => {
+    await DisplayNotificationPage.closeAllNotifications();
     await DisplayGroupListPage.editGroup(renamedGroupName);
     await EditGroupPage.addMember("jean@passbolt.com");
     await ShareDialogPage.setRole("Group manager")
@@ -68,17 +73,18 @@ describe('groups three', () => {
   });
 
   it('As AD, I can remove an user', async () => {
+    await DisplayNotificationPage.closeAllNotifications();
     await DisplayGroupListPage.editGroup(renamedGroupName);
     await EditGroupPage.removeMember("ada@passbolt.com");
     await EditGroupPage.clickOnSubmitButton(adminUser);
   });
 
   it('When users are removed from a group, notify them.', async () => {
-    await SeleniumPage.checkSubjectContent("ada@passbolt.com", "Admin removed you from the group #Selenium group")
+    await SeleniumPage.checkSubjectContent("ada@passbolt.com", "Admin removed you from the group #Selenium group", templates.group.LU.groupUserDeleted);
   });
 
   it('When members of a group change, notify the group manager(s)', async () => {
-    await SeleniumPage.checkSubjectContent("jean@passbolt.com", "Admin updated the group #Selenium group")
+    await SeleniumPage.checkSubjectContent("jean@passbolt.com", "Admin updated the group #Selenium group", templates.group.GM.groupUserUpdated);
     await SeleniumPage.clickOnRedirection();
     await DisplayMainMenuPage.switchAppIframe();
     await DisplayMainMenuPage.goToUserWorkspace();
@@ -91,19 +97,21 @@ describe('groups three', () => {
   });
 
   it("When user roles change in a group, notify the corresponding users. ", async () => {
-    await SeleniumPage.checkSubjectContent("jean@passbolt.com", "Admin updated your membership in the group #Selenium group")
+    await SeleniumPage.checkSubjectContent("jean@passbolt.com", "Admin updated your membership in the group #Selenium group", templates.group.LU.groupUserUpdated);
     await SeleniumPage.clickOnRedirection();
     await DisplayMainMenuPage.switchAppIframe();
     await DisplayMainMenuPage.goToUserWorkspace();
   });
 
   it('As AD, I can CRUD groups - Delete', async () => {
+    // this is necessary to avoid any issue with notifications
+    await DisplayNotificationPage.closeAllNotifications();
     await DisplayGroupListPage.deleteGroup(renamedGroupName);
     await DeleteGroupPage.validationDeletion();
   });
 
   it('When a group is deleted, notify the users who were member of it.', async () => {
-    await SeleniumPage.checkSubjectContent("jean@passbolt.com", "Admin deleted a group")
+    await SeleniumPage.checkSubjectContent("jean@passbolt.com", "Admin deleted a group", templates.group.LU.deleted);
     await SeleniumPage.clickOnRedirection();
     await DisplayMainMenuPage.switchAppIframe();
     await DisplayMainMenuPage.signOut();

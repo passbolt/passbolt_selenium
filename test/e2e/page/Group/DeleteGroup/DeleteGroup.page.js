@@ -38,8 +38,6 @@ class DeleteGroupPage {
    * e.g. to validate deletion of group
    */
    async validationDeletion() {
-    // this is necessary to avoid any issue with notifications
-    await DisplayNotificationPage.closeAllNotifications();
     await this.dialogDeleteContainer.waitForExist();
     await this.submitButton.waitForClickable();
     await this.submitButton.click();
