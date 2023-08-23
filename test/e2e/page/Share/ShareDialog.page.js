@@ -76,8 +76,6 @@ class ShareDialogPage {
    * e.g. to create a new password
    */
   async shareResource(username, passphrase, role) {
-    // this is necessary to avoid any issue with notifications
-    await DisplayNotificationPage.closeAllNotifications();
     await this.inputName.waitForClickable();
     await this.inputName.setValue(username);
     await AutoCompletePage.getAutocompleteItem(username).waitForExist();

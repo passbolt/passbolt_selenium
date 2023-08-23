@@ -35,6 +35,7 @@ const {
 const AdministrationActionsPage = require("../../page/Administration/AdministrationActions/AdministrationActions.page");
 const PassphraseEntryDialogPage = require("../../page/AuthenticationPassphrase/InputPassphrase/InputPassphrase.page");
 const DisplayNotificationPage = require("../../page/Common/Notification/DisplayNotification.page");
+const {templates} = require("../../../../lib/emailTemplates");
 
 describe("password workspace", () => {
   const admin = "admin@passbolt.com";
@@ -60,9 +61,6 @@ describe("password workspace", () => {
       organizationPublicKey
     );
     await PassphraseEntryDialogPage.entryPassphrase(admin);
-    // We disable admin email notifications to avoid a confusion into mails
-    await DisplayAdministrationMenuPage.goToEmailNotificationSection();
-    await DisplayAdministrationEmailNotificationPage.toggleAdministratorAccountRecoveryNotification();
     await DisplayMainMenuPage.signOut();
   });
 
@@ -97,15 +95,10 @@ describe("password workspace", () => {
   });
 
   it("When an account recovery is approved, notify the user.", async () => {
-    await SeleniumPage.checkSubjectContent(admin, "Admin(admin@passbolt.com) has approved your recovery request.")
+    await SeleniumPage.checkSubjectContent(admin, "Admin User (admin@passbolt.com) has approved your recovery request.", templates.accountRecovery.AN.approved)
     await LoginPage.goToLogin();
     await LoginPage.login(admin);
     await DisplayMainMenuPage.switchAppIframe();
-    // We enable the notification again to check administrator response and disable user
-    await DisplayMainMenuPage.goToAdminstrationWorkspace();
-    await DisplayAdministrationMenuPage.goToEmailNotificationSection();
-    await DisplayAdministrationEmailNotificationPage.toggleAdministratorAccountRecoveryNotification();
-    await DisplayAdministrationEmailNotificationPage.toggleUserAccountRecoveryNotification();
     await DisplayMainMenuPage.signOut();
   });
 
@@ -127,7 +120,7 @@ describe("password workspace", () => {
   });
 
   it("When an administrator answered to an account recovery request, notify all the administrators." , async () => {
-    await SeleniumPage.checkSubjectContent(admin, "You have updated a recovery request to rejected.")
+    await SeleniumPage.checkSubjectContent(admin, "You have updated a recovery request to rejected.", templates.accountRecovery.AD.responded);
     await SeleniumPage.goToApp();
     await DisplayMainMenuPage.switchAppIframe();
   });
@@ -157,7 +150,7 @@ describe("password workspace", () => {
   });
 
   it("When an account recovery policy is updated, notify the administrators.", async () => {
-    await SeleniumPage.checkSubjectContent(admin, "You have disabled the account recovery.")
+    await SeleniumPage.checkSubjectContent(admin, "You have disabled the account recovery.", templates.accountRecovery.AD.policyDisabled);
     await SeleniumPage.goToApp();
     await DisplayMainMenuPage.switchAppIframe();
   });

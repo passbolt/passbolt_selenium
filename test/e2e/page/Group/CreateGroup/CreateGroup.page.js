@@ -52,8 +52,6 @@ class CreateGroupPage {
    * return input for user name
    */
   async createGroup(groupName, user) {
-    // this is necessary to avoid any issue with notifications
-    await DisplayNotificationPage.closeAllNotifications();
     await this.inputGroupName.setValue(groupName);
     if(user) {
       await this.inputUserName.setValue(user)

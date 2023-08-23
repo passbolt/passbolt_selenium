@@ -46,8 +46,6 @@ class CreateUserDialogPage {
    * e.g. to create a new user
    */
   async createUser(firstname, lastname, username) {
-    // this is necessary to avoid any issue with notifications
-    await DisplayNotificationPage.closeAllNotifications();
     await this.inputFirstname.setValue(firstname);
     await this.inputLastname.setValue(lastname);
     await this.inputUsername.setValue(username);
