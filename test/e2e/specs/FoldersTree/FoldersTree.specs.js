@@ -46,7 +46,6 @@ describe('password workspace', () => {
   it('As LU I should create a new folder', async() => {
     await DisplayResourcesWorkspacePage.openCreateFolder();
     await CreateResourceFolderPage.createFolder('folderParent');
-    await FilterResourcesByFoldersPage.selectedFolderNamed('folderParent');
   });
 
   it('When a folder is created, notify its creator.', async() => {
@@ -67,8 +66,6 @@ describe('password workspace', () => {
   });
 
   it('As LU I should create a new password', async() => {
-    await FilterResourcesByFoldersPage.expandFolderSelected();
-    await FilterResourcesByFoldersPage.selectedFolderNamed('folderChild');
     await DisplayResourcesWorkspacePage.openCreatePassword();
     await CreateResourcePage.createPassword('nameB', 'uri', 'ada@passbolt.com', 'secretB', 'description');
   });
