@@ -56,9 +56,9 @@ class SeleniumPage {
    * a method to encapsule automation code to interact with the page
    * e.g. to show last email and go to the url
    */
-  async showLastEmailAndRedirect(username) {
+  async showLastEmailAndRedirect(username, emailType = "") {
     // force a wait to be sure the email has been received
-    await this.showLastEmail(username)
+    await this.showLastEmail(username, emailType)
     return this.clickOnRedirection();
   }
 
@@ -66,18 +66,19 @@ class SeleniumPage {
    * a method to encapsule automation code to interact with the page
    * e.g. to show last email 
    */
-  async showLastEmail(username) {
+  async showLastEmail(username, emailType = "") {
+    const url = `showLastEmail/${username}?filter[has-type]=${encodeURIComponent(emailType)}`;
     // force a wait to be sure the email has been received
     await browser.pause(1000);
-    await this.openUrl(`showLastEmail/${username}`);
+    await this.openUrl(url);
   }
 
   /**
    * a method to encapsule automation code to interact with the page
    * e.g. check the subject content
    */
-  async checkSubjectContent(user, text) {
-    await this.showLastEmail(user);
+  async checkSubjectContent(user, text, emailType = "") {
+    await this.showLastEmail(user, emailType);
     await this.emailSubject.waitForExist();
     const subject = await this.emailSubject.getText();
     expect(subject).toEqual(text)

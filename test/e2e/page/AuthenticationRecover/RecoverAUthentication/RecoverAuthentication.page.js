@@ -17,6 +17,7 @@ const ImportGpgKeyPage = require("../../Authentication/ImportGpgKey/ImportGpgKey
 const CheckPassphrasePage = require("../../Authentication/CheckPasphrase/CheckPassphrase.page");
 const ChooseSecurityTokenPage = require("../../Authentication/ChooseSecurityToken/ChooseSecurityToken.page");
 const CreateGpgKeyPage = require("../../Authentication/CreateGpgKey/CreateGpgKey.page");
+const {templates} = require("../../../../../lib/emailTemplates");
 
 /**
  * sub page containing specific selectors and methods for a specific page
@@ -54,7 +55,7 @@ class RecoverAuthenticationPage {
     await this.btnSubmit.click();
 
     // Show last email and redirect for account recover
-    await SeleniumPage.showLastEmailAndRedirect(username);
+    await SeleniumPage.showLastEmailAndRedirect(username, templates.recover.AN.requested);
 
     // Go to iframe recover setup
     await SeleniumPage.switchToIframe(this.iframeSelector);
@@ -75,7 +76,7 @@ class RecoverAuthenticationPage {
    */
   async recoverByAccountRecoveryRequest(username) {
     // Show last email and redirect for account recover
-    await SeleniumPage.checkSubjectContent(username, "You have initiated an account recovery!")
+    await SeleniumPage.checkSubjectContent(username, "You have initiated an account recovery!", templates.recover.AN.requested);
     await SeleniumPage.clickOnRedirection();
     
     // Go to iframe recover setup

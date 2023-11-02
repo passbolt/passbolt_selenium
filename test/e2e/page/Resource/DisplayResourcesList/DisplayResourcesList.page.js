@@ -26,15 +26,15 @@ class DisplayResourcesListPage {
   }
 
   get secretResource() {
-    return $('.tableview-content.scroll tbody .cell-secret.m-cell.password div button');
+    return $('.tableview-content tbody .cell-password div button');
   }
 
   get firstResource() {
-    return $('.tableview-content.scroll tbody .cell-name');
+    return $('.tableview-content tbody .cell-name');
   }
 
   getResourceNamed(name) {
-    return $('.tableview-content.scroll tbody .cell-name').$(`div=${name}`);
+    return $('.tableview-content tbody .cell-name').$(`div=${name}`);
   }
 
   /**

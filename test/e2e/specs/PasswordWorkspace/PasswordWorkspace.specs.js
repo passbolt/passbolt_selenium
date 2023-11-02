@@ -27,6 +27,8 @@ const SetupAuthenticationPage = require('../../page/AuthenticationSetup/SetupAut
 const CreateResourcePage = require('../../page/Resource/CreateResource/CreateResource.page');
 const EditResourcePage = require('../../page/Resource/EditResource/EditResource.page');
 const DeleteResourcePage = require('../../page/Resource/DeleteResource/DeleteResource.page');
+const {templates} = require('../../../../lib/emailTemplates');
+const DisplayNotificationPage = require('../../page/Common/Notification/DisplayNotification.page');
 
 describe('password workspace', () => {
   // WARNING : execution order is very important
@@ -37,84 +39,89 @@ describe('password workspace', () => {
     return SeleniumPage.resetInstanceDefault()
   });
 
-  it('As LU I should recover admin account', async () => {
+  it('As LU I should recover admin account', async() => {
     await RecoverAuthenticationPage.recover('admin@passbolt.com', adminPrivateKey);
     await DisplayMainMenuPage.switchAppIframe();
   });
 
-  it('As AD I should create a new user', async () => {
+  it('As AD I should create a new user', async() => {
+    // this is necessary to avoid any issue with notifications
+    await DisplayNotificationPage.closeAllNotifications();
     await DisplayMainMenuPage.goToUserWorkspace();
     await DisplayUserWorkspacePage.openCreateUser();
     await CreateUserDialogPage.createUser('firstname', 'lastname', 'test@passbolt.com');
     await DisplayMainMenuPage.signOut();
   });
 
-  it("When new users are invited to passbolt, notify them.", async () => { 
-    await SeleniumPage.checkSubjectContent("test@passbolt.com", "Admin just created an account for you on passbolt!")
+  it("When new users are invited to passbolt, notify them.", async() => {
+    await SeleniumPage.checkSubjectContent("test@passbolt.com", "Admin just created an account for you on passbolt!", templates.register.AN.registered)
     await SeleniumPage.clickOnRedirection();
   });
 
-  it('As U I should setup a new account', async () => {
+  it('As U I should setup a new account', async() => {
     await SetupAuthenticationPage.setup('test@passbolt.com');
     await DisplayMainMenuPage.switchAppIframe();
   });
-  
 
-  it('As LU I should create a new password', async () => {
+  it('As LU I should create a new password', async() => {
     await DisplayResourcesWorkspacePage.openCreatePassword();
     await CreateResourcePage.createPassword('name', 'uri', 'test@passbolt.com', 'secret', 'description');
   });
 
-  it('When a password is created, notify its creator. ', async() => {
-    await SeleniumPage.checkSubjectContent("test@passbolt.com", "You have saved a new password")
+  it('When a password is created, notify its creator.', async() => {
+    await SeleniumPage.checkSubjectContent("test@passbolt.com", "You have saved a new password", templates.resource.LU.created)
     await SeleniumPage.clickOnRedirection();
     await DisplayMainMenuPage.switchAppIframe();
   })
 
-  it('As LU I should copy the secret of my password', async () => {
+  it('As LU I should copy the secret of my password', async() => {
     await DisplayResourcesListPage.copySecretResource('test@passbolt.com');
     await FilterResourcesByTextPage.pasteClipBoardToVerify('secret');
   });
 
-  it('As LU I should share my password created', async () => {
+  it('As LU I should share my password created', async() => {
+    // this is necessary to avoid any issue with notifications
+    await DisplayNotificationPage.closeAllNotifications();
     await DisplayResourceDetailsPage.openShareResource();
     await ShareDialogPage.shareResource('admin@passbolt.com', 'test@passbolt.com');
   });
 
   it('When a password is shared, notify the users who gain access to it.', async() => {
-    await SeleniumPage.checkSubjectContent("admin@passbolt.com", "Firstname shared a password with you")
+    await SeleniumPage.checkSubjectContent("admin@passbolt.com", "firstname shared a password with you", templates.resource.LU.shared)
     await SeleniumPage.clickOnRedirection();
     await DisplayMainMenuPage.switchAppIframe();
   })
 
-  it('As LU I should edit my password', async () => {
+  it('As LU I should edit my password', async() => {
+    // this is necessary to avoid any issue with notifications
+    await DisplayNotificationPage.closeAllNotifications();
     await DisplayResourcesWorkspacePage.openEditPassword('test@passbolt.com');
     ressourceName = await EditResourcePage.editPassword('Updated', 'Updated', 'test@passbolt.com', 'Updated', 'Updated');
   });
 
-
   it('When a password is updated, notify the users who have access to it.', async() => {
-    const updatedSubject = `Firstname updated the password ${ressourceName}`;
-    await SeleniumPage.checkSubjectContent("admin@passbolt.com", updatedSubject);
-    await SeleniumPage.checkSubjectContent("test@passbolt.com", updatedSubject);
+    const updatedSubject = `firstname updated the password ${ressourceName}`;
+    await SeleniumPage.checkSubjectContent("admin@passbolt.com", updatedSubject, templates.resource.LU.updated);
+    await SeleniumPage.checkSubjectContent("test@passbolt.com", updatedSubject, templates.resource.LU.updated);
     await SeleniumPage.clickOnRedirection();
     await DisplayMainMenuPage.switchAppIframe();
   })
 
-  it('When a comment is posted on a password, notify the users who have access to this password.', async () => {
+  it('When a comment is posted on a password, notify the users who have access to this password.', async() => {
     //await DisplayResourcesListPage.selectedFirstResource();
     await DisplayResourceDetailsPage.openCommentsSection()
     await DisplayResourceDetailsPage.enterComment("Selenium test")
-    await DisplayMainMenuPage.switchAppIframe();
   });
 
-  it('As LU I should delete my password', async () => {
+  it('As LU I should delete my password', async() => {
+    // this is necessary to avoid any issue with notifications
+    await DisplayNotificationPage.closeAllNotifications();
     await DisplayResourcesWorkspacePage.openDeletePassword();
     await DeleteResourcePage.deletePassword();
   });
 
   it('When a password is deleted, notify its creator. ', async() => {
-    await SeleniumPage.checkSubjectContent("admin@passbolt.com", `Firstname deleted the password ${ressourceName}`)
+    await SeleniumPage.checkSubjectContent("admin@passbolt.com", `firstname deleted the password ${ressourceName}`, templates.resource.LU.deleted)
   })
 });
 

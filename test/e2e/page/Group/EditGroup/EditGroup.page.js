@@ -120,7 +120,6 @@ class EditGroupPage {
    * e.g. to click on the submit button
    */
   async clickOnSubmitButton(passphrase) {
-   await DisplayNotificationPage.closeAllNotifications();
    await this.submitButton.waitForClickable();
    await this.submitButton.click();
    await PassphraseEntryDialogPage.entryPassphrase(passphrase);
