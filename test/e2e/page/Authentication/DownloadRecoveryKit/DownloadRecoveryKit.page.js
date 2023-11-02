@@ -23,6 +23,14 @@ class DownloadRecoveryKitPage {
     return $('.generate-key-feedback');
   }
 
+  /**
+   *  get the checkbox
+   * @return {*}
+   */
+  get checkbox() {
+    return $('input[type="checkbox"]');
+  }
+
   get btnSubmit() {
     return $('button[type="submit"]');
   }
@@ -34,6 +42,8 @@ class DownloadRecoveryKitPage {
   async generateGpgKey() {
     // generate gpg key
     await this.downloadRecoveryKitPage.waitForExist();
+    await this.checkbox.waitForClickable();
+    await this.checkbox.click();
     await this.btnSubmit.waitForClickable();
     await this.btnSubmit.click();
   }
