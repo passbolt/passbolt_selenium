@@ -1,0 +1,14 @@
+linter:
+  stage: test
+  image: node:18
+  extends: .rules
+  script:
+    - npm ci
+    - npm run lint
+
+audit:
+  stage: test
+  image: node:18
+  extends: .rules
+  script:
+    - npm audit
