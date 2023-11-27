@@ -12,10 +12,6 @@
     "npm": ">=9.8.1"
   },
   "scripts": {
-    "configure": "npm run configure:chromedriver && npm run configure:edgedriver && npm run configure:geckodriver",
-    "configure:chromedriver": "npm explore chromedriver -- npm run install",
-    "configure:edgedriver": "npm explore edgedriver -- npm run install",
-    "configure:geckodriver": "npm explore geckodriver -- npm run postinstall",
     "lint": "npm run lint:lockfile",
     "lint:lockfile": "lockfile-lint --path package-lock.json --allowed-hosts npm --allowed-schemes \"https:\" --empty-hostname false"
   },
@@ -26,12 +22,7 @@
     "@wdio/mocha-framework": "^8.24.0",
     "@wdio/sauce-service": "^8.24.1",
     "@wdio/spec-reporter": "^8.24.0",
-    "chromedriver": "^119.0.0",
-    "geckodriver": "^4.2.1",
     "lockfile-lint": "^4.12.1",
-    "wdio-chromedriver-service": "^8.1.1",
-    "wdio-edgedriver-service": "^3.0.3",
-    "wdio-geckodriver-service": "^5.0.2",
     "webdriverio": "^8.24.1"
   }
 }

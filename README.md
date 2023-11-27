@@ -61,13 +61,12 @@ That is going to generate a folder file and a crx file respectively in dist/fire
 dist/chrome/passbolt-latest@passbolt.com.crx.
 
 The Webdriver configuration file uses variable environment PASSBOLT_BROWSER_EXTENSION_CHROME and PASSBOLT_BROWSER_EXTENSION_FIREFOX
-and PASSBOLT_BROWSER_BINARY_FIREFOX to specify the location of these files. So, they should properly defined into your environment such as
+to specify the location of these files. So, they should properly defined into your environment such as
 in an Unix-based platform:
 
 ```shell
 export PASSBOLT_BROWSER_EXTENSION_CHROME=<YOUR-CHROME-CRX-FILE-PATH>
 export PASSBOLT_BROWSER_EXTENSION_FIREFOX=<YOUR-FIREFOX-EXTENSION-FOLDER-PATH>
-export PASSBOLT_BROWSER_BINARY_FIREFOX=<YOUR-FIREFOX-NIGHTLY-BINARY-FILE-PATH>
 export BASE_URL_PRO=<YOUR-BASE-URL-PRO-EDITION>
 export BASE_URL_CE=<YOUR-BASE-URL-CE-EDITION>
 ```
@@ -78,13 +77,7 @@ After having browser extensions built, you can initialize the selenium tests. Yo
 
 ```shell
 npm i
-npm install --no-save msedgedriver --edgechromiumdriver_version=<LATEST-MICROSOFT-EDGE-VERSION>
 ```
-
-We need to run this specific command for Microsoft Edge each time an `npm install` is done as it will remove the driver otherwise. The reason is that there is no packages that is being updated on time with the latest version of Microsoft Edge and we need to run this command which allows us to specify the latests version.
-
-To find the latest version of the driver available, you can go on this page [Microsoft Edge web drivers](https://developer.microsoft.com/en-us/microsoft-edge/tools/webdriver/) and pick the version displayed (the entire version with all the numbers).
-
 
 Finally, run the test as follows for 'pro' or 'ce' edition :
 
