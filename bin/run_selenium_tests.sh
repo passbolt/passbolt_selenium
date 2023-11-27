@@ -18,14 +18,12 @@ do
         "Local PRO Version")
             isVariableSet PASSBOLT_BROWSER_EXTENSION_CHROME "Enter the path to the chrome browser extension:"
             isVariableSet PASSBOLT_BROWSER_EXTENSION_FIREFOX "Enter the path to the firefox browser extension:"
-            isVariableSet PASSBOLT_BROWSER_BINARY_FIREFOX "Enter the path to the binary firefox browser developer edition:"
             npx wdio wdio.local.pro.conf.js
             break
             ;;
         "Local CE Version")
             isVariableSet PASSBOLT_BROWSER_EXTENSION_CHROME "Enter the path to the chrome browser extension:"
             isVariableSet PASSBOLT_BROWSER_EXTENSION_FIREFOX "Enter the path to the firefox browser extension:"
-            isVariableSet PASSBOLT_BROWSER_BINARY_FIREFOX "Enter the path to the binary firefox browser developer edition:"
             npx wdio wdio.local.ce.conf.js
             break
             ;;

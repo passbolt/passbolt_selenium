@@ -58,6 +58,7 @@ exports.config = {
         maxInstances: 1,
         //
         browserName: 'chrome',
+        browserVersion: 'latest',
         acceptInsecureCerts: true,
       // If outputDir is provided WebdriverIO can capture driver session logs
         // it is possible to configure which logTypes to include/exclude.
@@ -70,14 +71,15 @@ exports.config = {
     }, {
       maxInstances: 1,
       browserName: 'firefox',
+      browserVersion: 'latest',
       acceptInsecureCerts: true,
       'moz:firefoxOptions': {
-        binary: process.env['PASSBOLT_BROWSER_BINARY_FIREFOX'], // binary of a nightly version with 'nightly' in path
         args: ['-width', '1600', '-height', '1080'],
         prefs: {'browser.helperApps.neverAsk.saveToDisk':   'text/anytext, text/plaintext'}} // not showing download prompt
     }, {
       maxInstances: 1,
-      browserName: 'MicrosoftEdge',
+      browserName: 'msedge',
+      browserVersion: 'stable',
       acceptInsecureCerts: true,
       'ms:edgeOptions': {
         extensions: [encode(process.env['PASSBOLT_BROWSER_EXTENSION_CHROME'])],
@@ -136,7 +138,7 @@ exports.config = {
     // Services take over a specific job you don't want to take care of. They enhance
     // your test setup with almost no effort. Unlike plugins, they don't add new
     // commands. Instead, they hook themselves up into the test process.
-    services: [['chromedriver'], ['edgedriver'], ['geckodriver'], ['firefox-profile',
+    services: [['firefox-profile',
       {'xpinstall.signatures.required': false,
         extensions: [process.env['PASSBOLT_BROWSER_EXTENSION_FIREFOX']], // path to .xpi file or path to unpacked Firefox extension
       }]],
