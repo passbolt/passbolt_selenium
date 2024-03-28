@@ -65,7 +65,7 @@ describe('password workspace', () => {
 
   it('As LU I should create a new password', async() => {
     await DisplayResourcesWorkspacePage.openCreatePassword();
-    await CreateResourcePage.createPassword('name', 'uri', 'test@passbolt.com', 'secret', 'description');
+    await CreateResourcePage.createPassword('name', 'uri', 'test@passbolt.com', 'RSS5j8AQrmZK3mAQqx', 'description');
   });
 
   it('When a password is created, notify its creator.', async() => {
