@@ -56,7 +56,7 @@ describe('password workspace', () => {
 
   it('As LU I should create a new password', async() => {
     await DisplayResourcesWorkspacePage.openCreatePassword();
-    await CreateResourcePage.createPassword('nameA', 'uri', 'ada@passbolt.com', 'secretA', 'description');
+    await CreateResourcePage.createPassword('nameA', 'uri', 'ada@passbolt.com', 'RSS5j8AQrmZK3mAQqx', 'description');
   });
 
   it('As LU I should create a subfolder folder', async() => {
@@ -67,7 +67,7 @@ describe('password workspace', () => {
 
   it('As LU I should create a new password', async() => {
     await DisplayResourcesWorkspacePage.openCreatePassword();
-    await CreateResourcePage.createPassword('nameB', 'uri', 'ada@passbolt.com', 'secretB', 'description');
+    await CreateResourcePage.createPassword('nameB', 'uri', 'ada@passbolt.com', 'RSS5j8AQrmZK3mAQqx', 'description');
   });
 
   it('As LU I should share a password', async() => {
