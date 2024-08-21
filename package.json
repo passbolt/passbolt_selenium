@@ -20,9 +20,11 @@
     "@wdio/firefox-profile-service": "^8.36.1",
     "@wdio/local-runner": "^8.36.1",
     "@wdio/mocha-framework": "^8.36.1",
-    "@wdio/sauce-service": "^8.36.1",
     "@wdio/spec-reporter": "^8.36.1",
     "lockfile-lint": "^4.13.2",
     "webdriverio": "^8.36.1"
+  },
+  "overrides": {
+    "ws": "8.17.1"
   }
 }

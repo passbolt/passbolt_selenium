@@ -45,7 +45,13 @@ You have to build a local version of Passbolt browser extension for all browsers
 checkout the Passbolt browser extension [repository](https://github.com/passbolt/passbolt_browser_extension) and go
 to the passbolt-browser-extension folder.
 
-For Chrome and Microsoft Edge, run the command:
+For Chrome, run the command: 
+
+```shell
+grunt build-chrome-mv3-debug
+```
+
+For Microsoft Edge, run the command:
 
 ```shell
 grunt build-chrome-debug
@@ -85,13 +91,22 @@ Finally, run the test as follows for 'pro' or 'ce' edition :
 npx wdio wdio.local.pro.conf.js
 npx wdio wdio.local.ce.conf.js
 ```
+
+notes: by default the folder and password creation email are disabled, you have to enable it to avoid the tests failing
+
 ### Running saucelabs
 
 You have to build a local version of Passbolt browser extension for both browsers. To do this, first you need to
 checkout the Passbolt browser extension [repository](https://github.com/passbolt/passbolt_browser_extension) and go
 to the passbolt-browser-extension folder.
 
-For Chrome, run the command:
+For Chrome, run the command: 
+
+```shell
+grunt build-chrome-mv3-debug
+```
+
+For Microsoft Edge, run the command:
 
 ```shell
 grunt build-chrome-debug
