@@ -100,8 +100,8 @@ describe('password workspace', () => {
   });
 
   it('When a password is updated, notify the users who have access to it.', async() => {
-    await SeleniumPage.checkSubjectContent("admin@passbolt.com", `firstname edited the password ${ressourceName}`, templates.resource.LU.updated);
-    await SeleniumPage.checkSubjectContent("test@passbolt.com", `You edited the password ${ressourceName}`, templates.resource.LU.updated);
+    await SeleniumPage.checkSubjectContent("admin@passbolt.com", `firstname edited the resource ${ressourceName}`, templates.resource.LU.updated);
+    await SeleniumPage.checkSubjectContent("test@passbolt.com", `You edited the resource ${ressourceName}`, templates.resource.LU.updated);
     await SeleniumPage.clickOnRedirection();
     await DisplayMainMenuPage.switchAppIframe();
   })
