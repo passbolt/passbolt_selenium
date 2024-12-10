@@ -153,7 +153,7 @@ class DisplayAdministrationAccountRecoveryPage {
       passphrase
     );
     await AdministrationOrganizationRecoveryKeyPage.submitImportButton.click();
-    await PassphraseEntryDialogPage.entryPassphrase("admin@passbolt.com");
+    await PassphraseEntryDialogPage.entryPassphrase("admin@passbolt.com", {abortConditionCallback: AdministrationOrganizationRecoveryKeyPage.inputPassphrase.isExisting});
   }
 }
 

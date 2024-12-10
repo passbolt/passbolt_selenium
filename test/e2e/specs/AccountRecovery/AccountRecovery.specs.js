@@ -60,7 +60,7 @@ describe("password workspace", () => {
     await DisplayAdministrationAccountRecoveryPage.importAccountRecoveryPublicKeyAndSave(
       organizationPublicKey
     );
-    await PassphraseEntryDialogPage.entryPassphrase(admin);
+    await PassphraseEntryDialogPage.entryPassphrase(admin, {abortConditionCallback: DisplayAdministrationAccountRecoveryPage.dialogSaveConfirmation.isExisting});
     await DisplayMainMenuPage.signOut();
   });
 

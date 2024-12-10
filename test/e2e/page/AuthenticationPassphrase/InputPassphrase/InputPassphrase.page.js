@@ -34,10 +34,23 @@ class InputPassphrasePage {
   /**
    * a method to encapsule automation code to interact with the page
    * e.g. to entry passphrase
+   * @param {string} username The user username
+   * @param {object} [options={}] The options
+   * @param {function} options.abortConditionCallback Abort the user passphrase request if the abort condition callback return true.
    */
-  async entryPassphrase(username) {
-    // Entry passphrase
-    await this.entryPassphrasePage.waitForExist(({timeout: 15000}));
+  async entryPassphrase(username, options = {}) {
+    let abortPassphraseRequest = false;
+    await browser.waitUntil(async () => {
+      if (options.abortConditionCallback) {
+        abortPassphraseRequest = await options.abortConditionCallback();
+      }
+      return abortPassphraseRequest || await this.entryPassphrasePage.isExisting();
+    }, {timeout: 15000});
+
+    if (abortPassphraseRequest) {
+      return;
+    }
+
     await this.inputPassphrase.setValue(username);
     await this.btnSubmit.waitForClickable();
     await this.btnSubmit.click();
