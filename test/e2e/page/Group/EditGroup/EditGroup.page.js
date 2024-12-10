@@ -122,7 +122,7 @@ class EditGroupPage {
   async clickOnSubmitButton(passphrase) {
    await this.submitButton.waitForClickable();
    await this.submitButton.click();
-   await PassphraseEntryDialogPage.entryPassphrase(passphrase);
+   await PassphraseEntryDialogPage.entryPassphrase(passphrase, {abortConditionCallback: this.groupList.isExisting});
    await DisplayNotificationPage.successNotification.waitForExist();
   }
 

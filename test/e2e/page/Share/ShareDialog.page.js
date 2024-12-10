@@ -85,7 +85,7 @@ class ShareDialogPage {
     }
     await this.submitButton.waitForClickable();
     await this.submitButton.click();
-    await PassphraseEntryDialogPage.entryPassphrase(passphrase);
+    await PassphraseEntryDialogPage.entryPassphrase(passphrase, {abortConditionCallback: this.shareResourcePage.isExisting});
     await DisplayNotificationPage.successNotification.waitForExist();
   }
 

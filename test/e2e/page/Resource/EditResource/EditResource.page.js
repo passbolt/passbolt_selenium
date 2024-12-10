@@ -74,7 +74,7 @@ class EditResourcePage {
     await GenerateResourcePasswordPage.generatePassword();
     await this.submitButton.waitForClickable();
     await this.submitButton.click();
-    await PassphraseEntryDialogPage.entryPassphrase(username);
+    await PassphraseEntryDialogPage.entryPassphrase(username, {abortConditionCallback: this.editPasswordPage.isExisting});
     await DisplayNotificationPage.successNotification.waitForExist();
     return ressourceName;
   }

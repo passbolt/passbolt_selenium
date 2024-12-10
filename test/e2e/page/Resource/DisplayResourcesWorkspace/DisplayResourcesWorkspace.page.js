@@ -12,6 +12,7 @@
  * @since         v3.0.0
  */
 
+const EditResourcePage = require('../EditResource/EditResource.page');
 const PassphraseEntryDialogPage = require('../../AuthenticationPassphrase/InputPassphrase/InputPassphrase.page');
 
 /**
@@ -30,7 +31,7 @@ class DisplayResourcesWorkspacePage {
   }
 
   get newPasswordButton() {
-    return $('.dropdown-content.menu #password_action');
+    return $('.dropdown-content.menu #password_action button');
   }
 
   get newFolderButton() {
@@ -57,6 +58,7 @@ class DisplayResourcesWorkspacePage {
     await this.passwordWorkspace.waitForExist();
     await this.createButton.waitForClickable();
     await this.createButton.click();
+    await this.newPasswordButton.waitForEnabled();
     await this.newPasswordButton.waitForClickable();
     await this.newPasswordButton.click();
   }
@@ -81,7 +83,7 @@ class DisplayResourcesWorkspacePage {
     await this.passwordWorkspace.waitForExist();
     await this.editButton.waitForClickable();
     await this.editButton.click();
-    await PassphraseEntryDialogPage.entryPassphrase(username);
+    await PassphraseEntryDialogPage.entryPassphrase(username, {abortConditionCallback: EditResourcePage.editPasswordPage.isExisting});
   }
 
   /**
