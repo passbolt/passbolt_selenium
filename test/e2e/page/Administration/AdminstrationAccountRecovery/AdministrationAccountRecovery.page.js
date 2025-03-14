@@ -60,7 +60,7 @@ class DisplayAdministrationAccountRecoveryPage {
    * return the generate key button
    */
   get organizationRecoveryKeyButton() {
-    return this.recoveryKeyTable.$("button.primary.medium");
+    return this.recoveryKeyTable.$("button.primary");
   }
   /**
    * return the save settings button

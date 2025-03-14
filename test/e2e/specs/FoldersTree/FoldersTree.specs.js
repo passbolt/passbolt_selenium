@@ -16,18 +16,18 @@ const {adaPrivateKey, adminPrivateKey} = require('../../page/Authentication/Impo
 const SeleniumPage = require('../../page/Selenium/Selenium.page');
 const RecoverAuthenticationPage = require('../../page/AuthenticationRecover/RecoverAUthentication/RecoverAuthentication.page');
 const ShareDialogPage = require('../../page/Share/ShareDialog.page');
-const DisplayMainMenuPage = require('../../page/Common/Menu/DisplayMainMenu.page');
+const DisplayMainMenuPage = require('../../page/Common/Menu/DisplayWorkspaceSwitcher.page');
 const DisplayResourcesWorkspacePage = require('../../page/Resource/DisplayResourcesWorkspace/DisplayResourcesWorkspace.page');
 const DisplayResourcesListPage = require('../../page/Resource/DisplayResourcesList/DisplayResourcesList.page');
 const DisplayResourceDetailsPage = require('../../page/ResourceDetails/DisplayResourceDetails/DisplayResourceDetails.page');
-const DisplayResourceFolderDetailsPage = require('../../page/ResourceFolderDetails/DisplayResourceFolderDetails/DisplayResourceFolderDetails.page');
+const DisplayFoldersListPage = require('../../page/ResourceFolder/DisplayFoldersList/DisplayFoldersList.page');
 const FilterResourcesByFoldersPage = require('../../page/Resource/FilterResourcesByFolders/FilterResourcesByFolders.page');
 const FilterResourcesByTextPage = require('../../page/Resource/FilterResourcesByText/FilterResourcesByText.page');
 const CreateResourcePage = require('../../page/Resource/CreateResource/CreateResource.page');
 const CreateResourceFolderPage = require('../../page/ResourceFolder/CreateResourceFolder/CreateResourceFolder.page');
 const RenameResourceFolderPage = require('../../page/ResourceFolder/RenameResourceFolder/RenameResourceFolder.page');
 const DeleteResourceFolderPage = require('../../page/ResourceFolder/DeleteResourceFolder/DeleteResourceFolder.page');
-const FilterResourcesByShortcutsPage = require('../../page/Resource/FilterResourcesByShortcuts/FilterResourcesByShortcuts.page');
+const DisplayResourceActionBarPage = require('../../page/Resource/DisplayResourceActionBar/DisplayResourceActionBar.page');
 const {templates} = require('../../../../lib/emailTemplates');
 
 describe('password workspace', () => {
@@ -71,19 +71,19 @@ describe('password workspace', () => {
   });
 
   it('As LU I should share a password', async() => {
-    await DisplayResourceDetailsPage.openShareResource();
+    await DisplayResourceActionBarPage.openShareResourceDialog();
     await ShareDialogPage.shareResource('admin@passbolt.com', 'ada@passbolt.com');
   });
 
   it('As LU I should share a folder with a group', async() => {
     await FilterResourcesByFoldersPage.selectedFolderNamed('folderParent');
-    await DisplayResourceFolderDetailsPage.openShareResource();
+    await DisplayFoldersListPage.openSelectedFolderShareDialog();
     await ShareDialogPage.shareResource('Accounting', 'ada@passbolt.com');
   });
 
   it('As LU I should share a folder with a user', async() => {
     await FilterResourcesByFoldersPage.selectedFolderNamed('folderParent');
-    await DisplayResourceFolderDetailsPage.openShareResource();
+    await DisplayFoldersListPage.openSelectedFolderShareDialog();
     await ShareDialogPage.shareResource('admin@passbolt.com', 'ada@passbolt.com');
   });
 
@@ -110,7 +110,7 @@ describe('password workspace', () => {
   });
 
   it('As LU I should filter my resource by shared with me', async() => {
-    await FilterResourcesByShortcutsPage.filterBySharedWithMe();
+    await DisplayResourceActionBarPage.filterBySharedWithMe();
     await DisplayResourcesListPage.selectedResourceNamed('nameB');
   });
 
