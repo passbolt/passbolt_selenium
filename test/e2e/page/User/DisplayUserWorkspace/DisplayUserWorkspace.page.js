@@ -22,13 +22,6 @@ const DisplayAdministrationAccountRecoveryPage = require("../../Administration/A
  */
 class DisplayUserWorkspacePage {
   /**
-   * define selectors using getter methods
-   */
-  get usersWorkspace() {
-    return $(".page.user");
-  }
-
-  /**
    * return  button to create user
    */
   get createButton() {
@@ -46,14 +39,14 @@ class DisplayUserWorkspacePage {
    * return the option to select new user creation
    */
   get newUserButton() {
-    return $(".dropdown-content.menu").$("span=New user");
+    return $(".dropdown-content.menu").$("span=User");
   }
 
   /**
    * return the option to select new group creation
    */
    get newGroupButton() {
-    return $(".dropdown-content.menu").$("span=New group");
+    return $(".dropdown-content.menu").$("span=Group");
   }
 
 
@@ -79,24 +72,10 @@ class DisplayUserWorkspacePage {
   }
 
   /**
-   * return the account recovery content
-   */
-  get accountRevoryContent() {
-    return $(".accordion-content");
-  }
-
-  /**
    * return the account recovery button
    */
   get accountRecoveryReviewButton() {
-    return $(".pending-request-status button");
-  }
-
-  /**
-   * return the account recovery review dialog
-   */
-  get accountRecoveryReviewDialog() {
-    return $(".review-account-recovery-dialog");
+    return $(".detailed-account-recovery button.review-request");
   }
 
   /**

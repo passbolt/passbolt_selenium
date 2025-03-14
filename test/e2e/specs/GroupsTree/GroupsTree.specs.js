@@ -12,7 +12,7 @@
  * @since         v3.8.3
  */
 
-const DisplayMainMenuPage = require('../../page/Common/Menu/DisplayMainMenu.page');
+const DisplayMainMenuPage = require('../../page/Common/Menu/DisplayWorkspaceSwitcher.page');
 const CreateGroupPage = require('../../page/Group/CreateGroup/CreateGroup.page');
 const DisplayGroupListPage = require('../../page/Group/DisplayGroupList/DisplayGroupList.page');
 const SeleniumPage = require('../../page/Selenium/Selenium.page');
@@ -24,6 +24,7 @@ const DeleteGroupPage = require('../../page/Group/DeleteGroup/DeleteGroup.page')
 const ShareDialogPage = require('../../page/Share/ShareDialog.page');
 const DisplayNotificationPage = require('../../page/Common/Notification/DisplayNotification.page');
 const {templates} = require('../../../../lib/emailTemplates');
+const DisplayUserProfileDropDownPage = require("../../page/Common/Menu/DisplayUserProfileDropDown.page");
 
 describe('groups three', () => {
   // WARNING : execution order is very important
@@ -43,7 +44,7 @@ describe('groups three', () => {
   });
 
   it('As AD, I can CRUD groups - Create', async () => {
-    await DisplayMainMenuPage.goToUserWorkspace();
+    await DisplayMainMenuPage.goToManageUsersAndGroupsWorkspace();
     await DisplayUserWorkspacePage.openCreateGroup();
     await CreateGroupPage.createGroup(groupName,"ada@passbolt.com", adminUser)
   });
@@ -54,7 +55,7 @@ describe('groups three', () => {
     await SeleniumPage.checkSubjectContent("ada@passbolt.com", "Admin added you to the group A selenium group", templates.group.LU.groupUserAdded);
     await SeleniumPage.clickOnRedirection();
     await DisplayMainMenuPage.switchAppIframe();
-    await DisplayMainMenuPage.goToUserWorkspace();
+    await DisplayMainMenuPage.goToManageUsersAndGroupsWorkspace();
   });
 
   it('As AD, I can rename a group', async () => {
@@ -87,7 +88,7 @@ describe('groups three', () => {
     await SeleniumPage.checkSubjectContent("jean@passbolt.com", "Admin updated the group #Selenium group", templates.group.GM.groupUserUpdated);
     await SeleniumPage.clickOnRedirection();
     await DisplayMainMenuPage.switchAppIframe();
-    await DisplayMainMenuPage.goToUserWorkspace();
+    await DisplayMainMenuPage.goToManageUsersAndGroupsWorkspace();
   });
 
   it('As AD, I can remove the permission for group manager', async () => {
@@ -100,7 +101,7 @@ describe('groups three', () => {
     await SeleniumPage.checkSubjectContent("jean@passbolt.com", "Admin updated your membership in the group #Selenium group", templates.group.LU.groupUserUpdated);
     await SeleniumPage.clickOnRedirection();
     await DisplayMainMenuPage.switchAppIframe();
-    await DisplayMainMenuPage.goToUserWorkspace();
+    await DisplayMainMenuPage.goToManageUsersAndGroupsWorkspace();
   });
 
   it('As AD, I can CRUD groups - Delete', async () => {
@@ -114,6 +115,6 @@ describe('groups three', () => {
     await SeleniumPage.checkSubjectContent("jean@passbolt.com", "Admin deleted a group", templates.group.LU.deleted);
     await SeleniumPage.clickOnRedirection();
     await DisplayMainMenuPage.switchAppIframe();
-    await DisplayMainMenuPage.signOut();
+    await DisplayUserProfileDropDownPage.signOut();
   });
 });

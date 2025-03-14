@@ -17,7 +17,7 @@ const SeleniumPage = require('../../page/Selenium/Selenium.page');
 const RecoverAuthenticationPage = require('../../page/AuthenticationRecover/RecoverAUthentication/RecoverAuthentication.page');
 const CreateUserDialogPage = require('../../page/User/CreateUser/CreateUserDialog.page');
 const ShareDialogPage = require('../../page/Share/ShareDialog.page');
-const DisplayMainMenuPage = require('../../page/Common/Menu/DisplayMainMenu.page');
+const DisplayMainMenuPage = require('../../page/Common/Menu/DisplayWorkspaceSwitcher.page');
 const DisplayResourcesWorkspacePage = require('../../page/Resource/DisplayResourcesWorkspace/DisplayResourcesWorkspace.page');
 const DisplayResourcesListPage = require('../../page/Resource/DisplayResourcesList/DisplayResourcesList.page');
 const DisplayResourceDetailsPage = require('../../page/ResourceDetails/DisplayResourceDetails/DisplayResourceDetails.page');
@@ -29,6 +29,8 @@ const EditResourcePage = require('../../page/Resource/EditResource/EditResource.
 const DeleteResourcePage = require('../../page/Resource/DeleteResource/DeleteResource.page');
 const {templates} = require('../../../../lib/emailTemplates');
 const DisplayNotificationPage = require('../../page/Common/Notification/DisplayNotification.page');
+const DisplayUserProfileDropDownPage = require("../../page/Common/Menu/DisplayUserProfileDropDown.page");
+const DisplayResourceActionBarPage = require("../../page/Resource/DisplayResourceActionBar/DisplayResourceActionBar.page");
 
 describe('password workspace', () => {
   // WARNING : execution order is very important
@@ -47,10 +49,10 @@ describe('password workspace', () => {
   it('As AD I should create a new user', async() => {
     // this is necessary to avoid any issue with notifications
     await DisplayNotificationPage.closeAllNotifications();
-    await DisplayMainMenuPage.goToUserWorkspace();
+    await DisplayMainMenuPage.goToManageUsersAndGroupsWorkspace();
     await DisplayUserWorkspacePage.openCreateUser();
     await CreateUserDialogPage.createUser('firstname', 'lastname', 'test@passbolt.com');
-    await DisplayMainMenuPage.signOut();
+    await DisplayUserProfileDropDownPage.signOut();
   });
 
   it("When new users are invited to passbolt, notify them.", async() => {
@@ -82,7 +84,7 @@ describe('password workspace', () => {
   it('As LU I should share my password created', async() => {
     // this is necessary to avoid any issue with notifications
     await DisplayNotificationPage.closeAllNotifications();
-    await DisplayResourceDetailsPage.openShareResource();
+    await DisplayResourceActionBarPage.openShareResourceDialog();
     await ShareDialogPage.shareResource('admin@passbolt.com', 'test@passbolt.com');
   });
 
@@ -95,7 +97,7 @@ describe('password workspace', () => {
   it('As LU I should edit my password', async() => {
     // this is necessary to avoid any issue with notifications
     await DisplayNotificationPage.closeAllNotifications();
-    await DisplayResourcesWorkspacePage.openEditPassword('test@passbolt.com');
+    await DisplayResourceActionBarPage.openEditResourceDialog('test@passbolt.com');
     ressourceName = await EditResourcePage.editPassword('Updated', 'Updated', 'test@passbolt.com', 'Updated', 'Updated');
   });
 
@@ -115,7 +117,7 @@ describe('password workspace', () => {
   it('As LU I should delete my password', async() => {
     // this is necessary to avoid any issue with notifications
     await DisplayNotificationPage.closeAllNotifications();
-    await DisplayResourcesWorkspacePage.openDeletePassword();
+    await DisplayResourceActionBarPage.openDeleteResourceDialog();
     await DeleteResourcePage.deletePassword();
   });
 

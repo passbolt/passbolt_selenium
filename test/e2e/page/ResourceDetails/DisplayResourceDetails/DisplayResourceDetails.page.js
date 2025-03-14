@@ -24,15 +24,11 @@ class DisplayResourceDetailsPage {
   }
 
   get shareSection() {
-    return $('.sharedwith.accordion.sidebar-section');
+    return $('.detailed-permission.accordion.sidebar-section');
   }
 
   get commentSection() {
-    return $('.comments.accordion.sidebar-section');
-  }
-
-  get shareEditIcon() {
-    return $('.sharedwith.accordion.sidebar-section .accordion-content .section-action');
+    return $('.detailed-comments.accordion.sidebar-section');
   }
 
   get commentTextarea() {
@@ -43,12 +39,8 @@ class DisplayResourceDetailsPage {
     return $('.comment .actions button');
   }
 
-  get shareList() {
-    return $('.sharedwith.accordion.sidebar-section .accordion-content .shared-with');
-  }
-
   getShareWithExist(name) {
-    return $('.sharedwith.accordion.sidebar-section .accordion-content .shared-with').$(`div=${name}`).waitForExist();
+    return this.shareSection.$('.accordion-content').$(`div=${name}`).waitForExist();
   }
 
   /**
@@ -80,16 +72,6 @@ class DisplayResourceDetailsPage {
     await this.commentTextarea.setValue(comment);
     await this.saveCommentButton.waitForClickable();
     await this.saveCommentButton.click();
-  }
-
-  /**
-   * a method to encapsule automation code to interact with the page
-   * e.g. to open share dialog
-   */
-  async openShareResource() {
-    await this.openShareSection();
-    await this.shareEditIcon.waitForClickable();
-    await this.shareEditIcon.click();
   }
 }
 
