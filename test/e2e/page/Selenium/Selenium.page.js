@@ -70,6 +70,7 @@ class SeleniumPage {
     const url = `showLastEmail/${username}?filter[has-type]=${encodeURIComponent(emailType)}`;
     // force a wait to be sure the email has been received
     await browser.pause(1000);
+    await this.switchToTopLevelFrame();
     await this.openUrl(url);
   }
 
@@ -91,13 +92,15 @@ class SeleniumPage {
   async clickOnRedirection() {
     await this.redirectButton.waitForExist();
     const url = await this.redirectButton.getAttribute("href");
+    await this.switchToTopLevelFrame();
     await browser.url(url);
   }
 
   /**
    * Go to the application
    */
-  goToApp() {
+  async goToApp() {
+    await this.switchToTopLevelFrame();
     return browser.url("app");
   }
 
@@ -109,15 +112,23 @@ class SeleniumPage {
   }
 
   /**
+   * Switch to top level frame
+   * @returns {Promise<void>}
+   */
+  async switchToTopLevelFrame() {
+    await browser.switchFrame(null);
+  }
+
+  /**
    * Switch to iframe
    */
   async switchToIframe(cssSelector) {
     // Switch to parent to avoid an issue on firefox
-    await browser.switchToParentFrame();
+    await this.switchToTopLevelFrame();
     await $(cssSelector).waitForExist({ timeout: 15000 });
     const iframe = await $(cssSelector);
     await iframe.waitForClickable({ timeout: 15000 });
-    await browser.switchToFrame(iframe);
+    await browser.switchFrame(iframe);
   }
 }
 
