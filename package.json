@@ -8,8 +8,8 @@
   "repository": "https://github.com/passbolt_selenium",
   "copyright": "Copyright 2023 Passbolt SA",
   "engines": {
-    "node": ">=18.20.0",
-    "npm": ">=9.8.1"
+    "node": ">=22.14.0",
+    "npm": ">=10.9.2"
   },
   "scripts": {
     "lint": "npm run lint:lockfile",

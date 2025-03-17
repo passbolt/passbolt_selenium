@@ -1,6 +1,6 @@
 linter:
   stage: test
-  image: node:18
+  image: node:22
   extends: .rules
   script:
     - npm ci
@@ -8,7 +8,7 @@ linter:
 
 audit:
   stage: test
-  image: node:18
+  image: node:22
   extends: .rules
   script:
     - npm audit
