@@ -12,9 +12,6 @@
  * @since         v5.0.0
  */
 
-const PassphraseEntryDialogPage = require("../../AuthenticationPassphrase/InputPassphrase/InputPassphrase.page");
-const EditResourcePage = require("../EditResource/EditResource.page");
-
 /**
  * sub page containing specific selectors and methods for a specific page
  */
@@ -83,7 +80,6 @@ class DisplayResourceActionBarPage {
     await this.editButton.waitForExist();
     await this.editButton.waitForClickable();
     await this.editButton.click();
-    await PassphraseEntryDialogPage.entryPassphrase(username, {abortConditionCallback: EditResourcePage.editPasswordPage.isExisting});
   }
 
   /**
