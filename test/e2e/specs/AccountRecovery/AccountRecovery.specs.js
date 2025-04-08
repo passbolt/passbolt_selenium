@@ -54,8 +54,8 @@ describe("password workspace", () => {
 
   it("As AD, I can enable account recovery", async () => {
     await DisplayMainMenuPage.goToOrganizationSettingsWorkspace();
-    await DisplayAdministrationMenuPage.goToAccountRecoverySection();
     await DisplayMainMenuPage.switchAppIframe();
+    await DisplayAdministrationMenuPage.goToAccountRecoverySection();
     await DisplayAdministrationAccountRecoveryPage.clickOnMandatoryPolicy();
     await DisplayAdministrationAccountRecoveryPage.clickOnRecoveryKeyAction();
     await DisplayAdministrationAccountRecoveryPage.importAccountRecoveryPublicKeyAndSave(
@@ -128,8 +128,8 @@ describe("password workspace", () => {
 
   it("As AD, I can rotate the organization key without changing the organization policy type", async () => {
     await DisplayMainMenuPage.goToOrganizationSettingsWorkspace();
-    await DisplayAdministrationMenuPage.goToAccountRecoverySection();
     await DisplayMainMenuPage.switchAppIframe();
+    await DisplayAdministrationMenuPage.goToAccountRecoverySection();
     await DisplayAdministrationAccountRecoveryPage.clickOnRecoveryKeyAction();
     await DisplayAdministrationAccountRecoveryPage.importAccountRecoveryPublicKeyAndSave(
       organizationPublicKeyAlternative
