@@ -13,6 +13,7 @@
  */
 
 const PassphraseEntryDialogPage = require('../../AuthenticationPassphrase/InputPassphrase/InputPassphrase.page');
+const DisplayNotificationPage = require("../../Common/Notification/DisplayNotification.page");
 
 /**
  * sub page containing specific selectors and methods for a specific page
@@ -45,7 +46,7 @@ class DisplayResourcesListPage {
     await this.gridPage.waitForExist();
     await this.secretResource.waitForClickable();
     await this.secretResource.click();
-    await PassphraseEntryDialogPage.entryPassphrase(username);
+    await PassphraseEntryDialogPage.entryPassphrase(username, {abortConditionCallback: DisplayNotificationPage.successNotification.isExisting});
   }
 
   /**

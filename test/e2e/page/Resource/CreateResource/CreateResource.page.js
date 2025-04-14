@@ -13,6 +13,7 @@
  */
 
 const PassphraseEntryDialogPage = require('../../AuthenticationPassphrase/InputPassphrase/InputPassphrase.page');
+const DisplayAdministrationAccountRecoveryPage = require("../../Administration/AdminstrationAccountRecovery/AdministrationAccountRecovery.page");
 
 /**
  * sub page containing specific selectors and methods for a specific page
@@ -22,31 +23,35 @@ class CreateResourcePage {
    * define selectors using getter methods
    */
   get createPasswordPage() {
-    return $('.create-password-dialog.dialog-wrapper');
+    return $('.create-resource.dialog-wrapper');
   }
 
   get inputName() {
-    return $('#create-password-form-name');
+    return $('#resource-name');
   }
 
   get inputUri() {
-    return $('#create-password-form-uri');
+    return $('#resource-uri');
   }
 
   get inputUsername() {
-    return $('#create-password-form-username');
+    return $('#resource-username');
   }
 
   get inputPassword() {
-    return $('#create-password-form-password');
+    return $('#resource-password');
   }
 
   get inputDescription() {
-    return $('#create-password-form-description');
+    return $('#resource-note');
   }
 
   get submitButton() {
     return $('button[type=submit]');
+  }
+
+  get secretNoteTab() {
+    return $('#secret-note-tab');
   }
 
   /**
@@ -59,10 +64,12 @@ class CreateResourcePage {
     await this.inputUri.setValue(uri);
     await this.inputUsername.setValue(username);
     await this.inputPassword.setValue(password);
+    await this.secretNoteTab.click()
+    await this.secretNoteTab.waitForClickable();
     await this.inputDescription.setValue(description);
     await this.submitButton.waitForClickable();
     await this.submitButton.click();
-    await PassphraseEntryDialogPage.entryPassphrase(username);
+    await PassphraseEntryDialogPage.entryPassphrase(username, {abortConditionCallback: this.createPasswordPage.isExisting});
   }
 }
 

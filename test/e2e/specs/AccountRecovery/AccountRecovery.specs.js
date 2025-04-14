@@ -17,7 +17,8 @@ const {
 } = require("../../page/Authentication/ImportGpgKey/ImportGpgKey.data");
 const SeleniumPage = require("../../page/Selenium/Selenium.page");
 const RecoverAuthenticationPage = require("../../page/AuthenticationRecover/RecoverAUthentication/RecoverAuthentication.page");
-const DisplayMainMenuPage = require("../../page/Common/Menu/DisplayMainMenu.page");
+const DisplayMainMenuPage = require("../../page/Common/Menu/DisplayWorkspaceSwitcher.page");
+const DisplayUserProfileDropDownPage = require("../../page/Common/Menu/DisplayUserProfileDropDown.page");
 const DisplayAdministrationMenuPage = require("../../page/Administration/AdministrationMenu/AdministrationMenu.page");
 const DisplayAdministrationAccountRecoveryPage = require("../../page/Administration/AdminstrationAccountRecovery/AdministrationAccountRecovery.page");
 const DisplayDisplayDialogAccountRecoryPolicyPage = require("../../page/Common/Dialog/DisplayDialogAccountRecoryPolicy.page");
@@ -52,16 +53,16 @@ describe("password workspace", () => {
   });
 
   it("As AD, I can enable account recovery", async () => {
-    await DisplayMainMenuPage.goToAdminstrationWorkspace();
-    await DisplayAdministrationMenuPage.goToAccountRecoverySection();
+    await DisplayMainMenuPage.goToOrganizationSettingsWorkspace();
     await DisplayMainMenuPage.switchAppIframe();
+    await DisplayAdministrationMenuPage.goToAccountRecoverySection();
     await DisplayAdministrationAccountRecoveryPage.clickOnMandatoryPolicy();
     await DisplayAdministrationAccountRecoveryPage.clickOnRecoveryKeyAction();
     await DisplayAdministrationAccountRecoveryPage.importAccountRecoveryPublicKeyAndSave(
       organizationPublicKey
     );
-    await PassphraseEntryDialogPage.entryPassphrase(admin);
-    await DisplayMainMenuPage.signOut();
+    await PassphraseEntryDialogPage.entryPassphrase(admin, {abortConditionCallback: DisplayAdministrationAccountRecoveryPage.dialogSaveConfirmation.isExisting});
+    await DisplayUserProfileDropDownPage.signOut();
   });
 
   it("As LU, I can manage my enrollment to account recovery", async () => {
@@ -69,7 +70,7 @@ describe("password workspace", () => {
     await DisplayMainMenuPage.switchAppIframe();
     await DisplayDisplayDialogAccountRecoryPolicyPage.clickOnContinueButton();
     await DisplayDisplayDialogAccountRecoryPolicyPage.clickOnSaveButton(admin);
-    await DisplayMainMenuPage.signOut();
+    await DisplayUserProfileDropDownPage.signOut();
   });
 
   it("As an user I can initiate an account recovery", async () => {
@@ -82,7 +83,7 @@ describe("password workspace", () => {
     await LoginPage.goToLogin();
     await LoginPage.login(admin);
     await DisplayMainMenuPage.switchAppIframe();
-    await DisplayMainMenuPage.goToUserWorkspace();
+    await DisplayMainMenuPage.goToManageUsersAndGroupsWorkspace();
     await DisplayMainMenuPage.switchAppIframe();
     await DisplayUserWorkspacePage.searchUser(adminName);
     await DisplayUserWorkspacePage.clickOnUserRaw(adminName);
@@ -90,8 +91,8 @@ describe("password workspace", () => {
       adminName,
       true
     );
-    await DisplayNotificationPage.successNotification.waitForExist(); 
-    await DisplayMainMenuPage.signOut();
+    await DisplayNotificationPage.successNotification.waitForExist();
+    await DisplayUserProfileDropDownPage.signOut();
   });
 
   it("When an account recovery is approved, notify the user.", async () => {
@@ -99,7 +100,7 @@ describe("password workspace", () => {
     await LoginPage.goToLogin();
     await LoginPage.login(admin);
     await DisplayMainMenuPage.switchAppIframe();
-    await DisplayMainMenuPage.signOut();
+    await DisplayUserProfileDropDownPage.signOut();
   });
 
   it("As an user I can initiate an account recovery a second time", async () => {
@@ -110,7 +111,7 @@ describe("password workspace", () => {
     await LoginPage.goToLogin();
     await LoginPage.login(admin);
     await DisplayMainMenuPage.switchAppIframe();
-    await DisplayMainMenuPage.goToUserWorkspace();
+    await DisplayMainMenuPage.goToManageUsersAndGroupsWorkspace();
     await DisplayUserWorkspacePage.searchUser(adminName);
     await DisplayUserWorkspacePage.clickOnUserRaw(adminName);
     await DisplayUserWorkspacePage.reviewAccountRecoveryRequest(
@@ -126,9 +127,9 @@ describe("password workspace", () => {
   });
 
   it("As AD, I can rotate the organization key without changing the organization policy type", async () => {
-    await DisplayMainMenuPage.goToAdminstrationWorkspace();
-    await DisplayAdministrationMenuPage.goToAccountRecoverySection();
+    await DisplayMainMenuPage.goToOrganizationSettingsWorkspace();
     await DisplayMainMenuPage.switchAppIframe();
+    await DisplayAdministrationMenuPage.goToAccountRecoverySection();
     await DisplayAdministrationAccountRecoveryPage.clickOnRecoveryKeyAction();
     await DisplayAdministrationAccountRecoveryPage.importAccountRecoveryPublicKeyAndSave(
       organizationPublicKeyAlternative

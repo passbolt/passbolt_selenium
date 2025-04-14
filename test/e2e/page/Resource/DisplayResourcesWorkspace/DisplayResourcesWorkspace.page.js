@@ -12,8 +12,6 @@
  * @since         v3.0.0
  */
 
-const PassphraseEntryDialogPage = require('../../AuthenticationPassphrase/InputPassphrase/InputPassphrase.page');
-
 /**
  * sub page containing specific selectors and methods for a specific page
  */
@@ -30,23 +28,11 @@ class DisplayResourcesWorkspacePage {
   }
 
   get newPasswordButton() {
-    return $('.dropdown-content.menu #password_action');
+    return $('.dropdown-content.menu button#password_action');
   }
 
   get newFolderButton() {
-    return $('.dropdown-content.menu #folder_action');
-  }
-
-  get editButton() {
-    return $('.header.third .col2_3.actions-wrapper #edit_action button');
-  }
-
-  get moreButton() {
-    return $('.header.third .col2_3.actions-wrapper .dropdown button');
-  }
-
-  get deleteButton() {
-    return $('.header.third .col2_3.actions-wrapper .dropdown-content.menu #delete_action button');
+    return $('.dropdown-content.menu button#folder_action');
   }
 
   /**
@@ -57,6 +43,7 @@ class DisplayResourcesWorkspacePage {
     await this.passwordWorkspace.waitForExist();
     await this.createButton.waitForClickable();
     await this.createButton.click();
+    await this.newPasswordButton.waitForEnabled();
     await this.newPasswordButton.waitForClickable();
     await this.newPasswordButton.click();
   }
@@ -71,29 +58,6 @@ class DisplayResourcesWorkspacePage {
     await this.createButton.click();
     await this.newFolderButton.waitForClickable();
     await this.newFolderButton.click();
-  }
-
-  /**
-   * a method to encapsule automation code to interact with the page
-   * e.g. to open edit password
-   */
-  async openEditPassword(username) {
-    await this.passwordWorkspace.waitForExist();
-    await this.editButton.waitForClickable();
-    await this.editButton.click();
-    await PassphraseEntryDialogPage.entryPassphrase(username);
-  }
-
-  /**
-   * a method to encapsule automation code to interact with the page
-   * e.g. to open delete password
-   */
-  async openDeletePassword() {
-    await this.passwordWorkspace.waitForExist();
-    await this.moreButton.waitForClickable();
-    await this.moreButton.click();
-    await this.deleteButton.waitForClickable();
-    await this.deleteButton.click();
   }
 }
 

@@ -20,14 +20,14 @@ class AdministrationActionsPage {
    * return the save settings button
    */
   get actionsBar() {
-    return $(".actions-wrapper li");
+    return $(".actions-wrapper");
   }
 
   /**
    * return the save settings button
    */
   get saveSettingsButton() {
-    return this.actionsBar.$("span=Save settings");
+    return this.actionsBar.$("span=Save");
   }
 
   /**

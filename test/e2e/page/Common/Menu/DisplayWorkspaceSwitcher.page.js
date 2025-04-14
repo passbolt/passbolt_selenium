@@ -17,7 +17,7 @@ const SeleniumPage = require('../../Selenium/Selenium.page');
 /**
  * sub page containing specific selectors and methods for a specific page
  */
-class DisplayMainMenuPage {
+class DisplayWorkspaceSwitcherPage {
   /**
    * define selectors using getter methods
    */
@@ -25,20 +25,16 @@ class DisplayMainMenuPage {
     return'#passbolt-iframe-app';
   }
 
-  get navigationPage() {
-    return $('.primary.navigation');
+  get workspaceSwitcher() {
+    return $('#workspace-switcher');
   }
 
-  get userMenu() {
-    return $('.primary.navigation.top ul').$('span=users');
+  get manageUsersAndGroupsMenuItem() {
+    return $('#workspace-switcher ul').$('span=Manage Users & Groups');
   }
 
-  get administrationMenu() {
-    return $('.primary.navigation.top ul').$('span=administration');
-  }
-
-  get signOutMenu() {
-    return $('.primary.navigation.top .right .main-cell button span');
+  get organizationSettingsMenuItem() {
+    return $('#workspace-switcher ul').$('span=Organisation Settings');
   }
 
   /**
@@ -51,33 +47,26 @@ class DisplayMainMenuPage {
 
   /**
    * a method to encapsule automation code to interact with the page
-   * e.g. to sign out the current user
-   */
-  async signOut() {
-    await this.signOutMenu.waitForClickable({timeout: 15000});
-    await this.signOutMenu.click();
-  }
-
-  /**
-   * a method to encapsule automation code to interact with the page
    * e.g. to go to the user workspace
    */
-  async goToUserWorkspace() {
-    await this.navigationPage.waitForExist();
-    await this.userMenu.waitForClickable();
-    await this.userMenu.click();
+  async goToManageUsersAndGroupsWorkspace() {
+    await this.workspaceSwitcher.waitForExist();
+    await this.workspaceSwitcher.click();
+    await this.manageUsersAndGroupsMenuItem.waitForExist();
+    await this.manageUsersAndGroupsMenuItem.click();
   }
 
   /**
    * a method to encapsule automation code to interact with the page
    * e.g. to go to the adminstration workspace
    */
-  async goToAdminstrationWorkspace() {
-    await this.navigationPage.waitForExist();
-    await this.administrationMenu.waitForClickable();
-    await this.administrationMenu.click();
+  async goToOrganizationSettingsWorkspace() {
+    await this.workspaceSwitcher.waitForExist();
+    await this.workspaceSwitcher.click();
+    await this.organizationSettingsMenuItem.waitForExist();
+    await this.organizationSettingsMenuItem.click();
     await browser.switchToParentFrame();
   }
 }
 
-module.exports = new DisplayMainMenuPage();
+module.exports = new DisplayWorkspaceSwitcherPage();

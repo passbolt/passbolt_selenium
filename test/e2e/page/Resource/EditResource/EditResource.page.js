@@ -24,37 +24,45 @@ class EditResourcePage {
    * define selectors using getter methods
    */
   get editPasswordPage() {
-    return $('.edit-password-dialog.dialog-wrapper');
+    return $('.edit-resource.dialog-wrapper');
   }
 
   get inputName() {
-    return $('#edit-password-form-name');
+    return $('#resource-name');
   }
 
   get inputUri() {
-    return $('#edit-password-form-uri');
+    return $('#resource-uri');
   }
 
   get inputUsername() {
-    return $('#edit-password-form-username');
+    return $('#resource-username');
   }
 
   get inputPassword() {
-    return $('#edit-password-form-password');
+    return $('#resource-password');
   }
 
   get openPasswordGenerator() {
-    return $('.edit-password-dialog.dialog-wrapper .password-generator');
+    return $('.additional-information .section-header');
   }
 
   get inputDescription() {
-    return $('#edit-password-form-description');
+    return $('#resource-note');
   }
 
   get submitButton() {
     return $('button[type=submit]');
   }
 
+  get secretNoteTab() {
+    return $('#secret-note-tab');
+  }
+
+  get generatePassword() {
+    return $('.password-generate.button-icon');
+  }
+  
   /**
    * a method to encapsule automation code to interact with the page
    * e.g. to edit a password
@@ -68,13 +76,15 @@ class EditResourcePage {
     await this.inputUsername.setValue(username);
     await this.inputPassword.waitForEnabled();
     await this.inputPassword.setValue(password);
-    await this.inputDescription.setValue(description);
     await this.openPasswordGenerator.waitForClickable();
     await this.openPasswordGenerator.click();
-    await GenerateResourcePasswordPage.generatePassword();
+    await this.generatePassword.click();
+    await this.secretNoteTab.click()
+    await this.secretNoteTab.waitForClickable();
+    await this.inputDescription.setValue(description);
     await this.submitButton.waitForClickable();
     await this.submitButton.click();
-    await PassphraseEntryDialogPage.entryPassphrase(username);
+    await PassphraseEntryDialogPage.entryPassphrase(username, {abortConditionCallback: this.editPasswordPage.isExisting});
     await DisplayNotificationPage.successNotification.waitForExist();
     return ressourceName;
   }

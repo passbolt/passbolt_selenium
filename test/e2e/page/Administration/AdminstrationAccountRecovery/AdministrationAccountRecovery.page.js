@@ -60,7 +60,7 @@ class DisplayAdministrationAccountRecoveryPage {
    * return the generate key button
    */
   get organizationRecoveryKeyButton() {
-    return this.recoveryKeyTable.$("button.primary.medium");
+    return this.recoveryKeyTable.$("button.primary");
   }
   /**
    * return the save settings button
@@ -153,7 +153,7 @@ class DisplayAdministrationAccountRecoveryPage {
       passphrase
     );
     await AdministrationOrganizationRecoveryKeyPage.submitImportButton.click();
-    await PassphraseEntryDialogPage.entryPassphrase("admin@passbolt.com");
+    await PassphraseEntryDialogPage.entryPassphrase("admin@passbolt.com", {abortConditionCallback: AdministrationOrganizationRecoveryKeyPage.inputPassphrase.isExisting});
   }
 }
 
