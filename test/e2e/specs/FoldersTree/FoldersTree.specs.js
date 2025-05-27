@@ -35,6 +35,7 @@ describe('password workspace', () => {
 
   after(async () => {
     // runs once after the last test in this block
+    await SeleniumPage.switchToTopLevelFrame();
     await SeleniumPage.resetInstanceDefault()
   });
 

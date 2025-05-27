@@ -36,8 +36,9 @@ describe('password workspace', () => {
   // WARNING : execution order is very important
   let ressourceName = null;
   
-  after(() => {
+  after(async() => {
     // runs once after the last test in this block
+    await SeleniumPage.switchToTopLevelFrame();
     return SeleniumPage.resetInstanceDefault()
   });
 

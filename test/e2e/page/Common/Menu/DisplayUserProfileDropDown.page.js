@@ -46,9 +46,11 @@ class DisplayUserProfileDropDownPage {
    * e.g. to sign out the current user
    */
   async signOut() {
-    await this.userProfileDropDownButton.waitForClickable();
-    await this.userProfileDropDownButton.click();
-    await this.signOutButton.waitForClickable();
+    await browser.waitUntil(async () => {
+      await this.userProfileDropDownButton.click();
+      return await this.signOutButton.isExisting();
+    }, {timeout: 15000});
+
     await this.signOutButton.click();
   }
 
@@ -57,9 +59,7 @@ class DisplayUserProfileDropDownPage {
    * e.g. to go to the user workspace
    */
   async goToManageUsersAndGroupsWorkspace() {
-    await this.workspaceSwitcher.waitForExist();
     await this.workspaceSwitcher.click();
-    await this.manageUsersAndGroupsMenuItem.waitForExist();
     await this.manageUsersAndGroupsMenuItem.click();
   }
 
@@ -68,9 +68,7 @@ class DisplayUserProfileDropDownPage {
    * e.g. to go to the adminstration workspace
    */
   async goToOrganizationSettingsWorkspace() {
-    await this.workspaceSwitcher.waitForExist();
     await this.workspaceSwitcher.click();
-    await this.organizationSettingsMenuItem.waitForExist();
     await this.organizationSettingsMenuItem.click();
     await browser.switchToParentFrame();
   }

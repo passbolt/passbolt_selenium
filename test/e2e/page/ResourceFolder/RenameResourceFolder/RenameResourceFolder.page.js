@@ -38,7 +38,6 @@ class RenameResourceFolderPage {
   async renameFolder(name) {
     await this.renameFolderPage.waitForExist();
     await this.inputName.setValue(name);
-    await this.submitButton.waitForClickable();
     await this.submitButton.click();
   }
 }

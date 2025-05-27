@@ -42,9 +42,7 @@ class DownloadRecoveryKitPage {
   async generateGpgKey() {
     // generate gpg key
     await this.downloadRecoveryKitPage.waitForExist();
-    await this.checkbox.waitForClickable();
     await this.checkbox.click();
-    await this.btnSubmit.waitForClickable();
     await this.btnSubmit.click();
   }
 }

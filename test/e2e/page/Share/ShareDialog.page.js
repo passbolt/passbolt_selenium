@@ -76,14 +76,11 @@ class ShareDialogPage {
    * e.g. to create a new password
    */
   async shareResource(username, passphrase, role) {
-    await this.inputName.waitForClickable();
     await this.inputName.setValue(username);
-    await AutoCompletePage.getAutocompleteItem(username).waitForExist();
     await AutoCompletePage.getAutocompleteItem(username).click();
     if(role) {
       await this.setRole(role)
     }
-    await this.submitButton.waitForClickable();
     await this.submitButton.click();
     await PassphraseEntryDialogPage.entryPassphrase(passphrase, {abortConditionCallback: this.shareResourcePage.isExisting});
     await DisplayNotificationPage.successNotification.waitForExist();

@@ -22,7 +22,6 @@ const DisplayUserProfileDropDownPage = require("../../page/Common/Menu/DisplayUs
 const DisplayAdministrationMenuPage = require("../../page/Administration/AdministrationMenu/AdministrationMenu.page");
 const DisplayAdministrationAccountRecoveryPage = require("../../page/Administration/AdminstrationAccountRecovery/AdministrationAccountRecovery.page");
 const DisplayDisplayDialogAccountRecoryPolicyPage = require("../../page/Common/Dialog/DisplayDialogAccountRecoryPolicy.page");
-const DisplayAdministrationEmailNotificationPage = require("../../page/Administration/AdministrationEmailNotification/AdministrationEmailNotification.page");
 const LoginPage = require("../../page/Authentication/Login/Login.page");
 const DisplayUserWorkspacePage = require("../../page/User/DisplayUserWorkspace/DisplayUserWorkspace.page");
 const {
@@ -38,12 +37,13 @@ const PassphraseEntryDialogPage = require("../../page/AuthenticationPassphrase/I
 const DisplayNotificationPage = require("../../page/Common/Notification/DisplayNotification.page");
 const {templates} = require("../../../../lib/emailTemplates");
 
-describe("password workspace", () => {
+describe("Account recovery", () => {
   const admin = "admin@passbolt.com";
   const adminName = "Admin User";
   // WARNING : execution order is very important
   after(async () => {
     // runs once after the last test in this blockx
+    await SeleniumPage.switchToTopLevelFrame();
     await SeleniumPage.resetInstanceDefault();
   });
 
@@ -155,7 +155,6 @@ describe("password workspace", () => {
     await SeleniumPage.goToApp();
     await DisplayMainMenuPage.switchAppIframe();
   });
-
 });
 
 const requestAccountRecovery = async (admin) => {

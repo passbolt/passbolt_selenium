@@ -39,7 +39,6 @@ class DeleteGroupPage {
    */
    async validationDeletion() {
     await this.dialogDeleteContainer.waitForExist();
-    await this.submitButton.waitForClickable();
     await this.submitButton.click();
     await DisplayNotificationPage.successNotification.waitForExist();
   }

@@ -76,13 +76,10 @@ class EditResourcePage {
     await this.inputUsername.setValue(username);
     await this.inputPassword.waitForEnabled();
     await this.inputPassword.setValue(password);
-    await this.openPasswordGenerator.waitForClickable();
     await this.openPasswordGenerator.click();
     await this.generatePassword.click();
     await this.secretNoteTab.click()
-    await this.secretNoteTab.waitForClickable();
     await this.inputDescription.setValue(description);
-    await this.submitButton.waitForClickable();
     await this.submitButton.click();
     await PassphraseEntryDialogPage.entryPassphrase(username, {abortConditionCallback: this.editPasswordPage.isExisting});
     await DisplayNotificationPage.successNotification.waitForExist();

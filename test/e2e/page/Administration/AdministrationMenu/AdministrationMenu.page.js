@@ -43,7 +43,6 @@ class DisplayAdministrationMenuPage {
    * e.g. to go to the account recovery section
    */
   async goToAccountRecoverySection() {
-    await this.accountRecoverySection.waitForClickable();
     await this.accountRecoverySection.click();
   }
 
@@ -52,7 +51,6 @@ class DisplayAdministrationMenuPage {
    * e.g. to go to the email notification section
    */
   async goToEmailNotificationSection() {
-    await this.emailNotificationSection.waitForClickable();
     await this.emailNotificationSection.click();
     await browser.switchToParentFrame();
     await DisplayAdministrationEmailNotificationPage.waitFormToBeLoaded();

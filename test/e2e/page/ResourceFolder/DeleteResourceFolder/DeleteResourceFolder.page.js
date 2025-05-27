@@ -33,7 +33,6 @@ class DeleteResourceFolderPage {
    */
   async deleteFolder() {
     await this.deleteFolderPage.waitForExist();
-    await this.submitButton.waitForClickable();
     await this.submitButton.click();
   }
 }

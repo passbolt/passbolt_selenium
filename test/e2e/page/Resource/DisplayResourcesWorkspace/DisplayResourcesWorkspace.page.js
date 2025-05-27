@@ -41,10 +41,7 @@ class DisplayResourcesWorkspacePage {
    */
   async openCreatePassword() {
     await this.passwordWorkspace.waitForExist();
-    await this.createButton.waitForClickable();
     await this.createButton.click();
-    await this.newPasswordButton.waitForEnabled();
-    await this.newPasswordButton.waitForClickable();
     await this.newPasswordButton.click();
   }
 
@@ -54,9 +51,7 @@ class DisplayResourcesWorkspacePage {
    */
   async openCreateFolder() {
     await this.passwordWorkspace.waitForExist();
-    await this.createButton.waitForClickable();
     await this.createButton.click();
-    await this.newFolderButton.waitForClickable();
     await this.newFolderButton.click();
   }
 }

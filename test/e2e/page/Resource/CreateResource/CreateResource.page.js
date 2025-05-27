@@ -65,9 +65,7 @@ class CreateResourcePage {
     await this.inputUsername.setValue(username);
     await this.inputPassword.setValue(password);
     await this.secretNoteTab.click()
-    await this.secretNoteTab.waitForClickable();
     await this.inputDescription.setValue(description);
-    await this.submitButton.waitForClickable();
     await this.submitButton.click();
     await PassphraseEntryDialogPage.entryPassphrase(username, {abortConditionCallback: this.createPasswordPage.isExisting});
   }

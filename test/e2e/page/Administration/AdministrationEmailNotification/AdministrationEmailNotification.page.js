@@ -61,7 +61,6 @@ class DisplayAdministrationEmailNotificationPage {
   async toggleAdministratorAccountRecoveryNotification() {
     // this is necessary to avoid any issue with notifications
     await DisplayNotificationPage.closeAllNotifications();
-    await this.accountRecoveryRequestedRadio.waitForClickable({timeout: 15000});
     await this.accountRecoveryRequestedRadio.click();
     await this.accountRecoveryResponseAdministratiorRadio.click();
     await this.accountRecoveryResponseAllAdministratorRadio.click();
@@ -74,7 +73,6 @@ class DisplayAdministrationEmailNotificationPage {
    * e.g. select mandatory policy on the screen fo user
    */
   async toggleUserAccountRecoveryNotification() {
-    await this.accountRecoveryResponseRejectedRadio.waitForClickable();
     await this.accountRecoveryResponseRejectedRadio.click();
     await AdministrationActionsPage.clickOnSaveSettings();
     await DisplayNotificationPage.successNotification.waitForExist();

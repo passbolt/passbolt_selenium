@@ -49,7 +49,6 @@ class DisplayResourceDetailsPage {
    */
   async openShareSection() {
     await this.sidebarResource.waitForExist();
-    await this.shareSection.waitForClickable();
     await this.shareSection.click();
   }
 
@@ -59,7 +58,6 @@ class DisplayResourceDetailsPage {
    */
   async openCommentsSection() {
     await this.sidebarResource.waitForExist();
-    await this.commentSection.waitForClickable();
     await this.commentSection.click();
   }
 
@@ -68,9 +66,7 @@ class DisplayResourceDetailsPage {
    * e.g. to open comments section
    */
   async enterComment(comment) {
-    await this.commentTextarea.waitForExist();
     await this.commentTextarea.setValue(comment);
-    await this.saveCommentButton.waitForClickable();
     await this.saveCommentButton.click();
   }
 }
