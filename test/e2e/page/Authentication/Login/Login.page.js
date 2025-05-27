@@ -61,7 +61,7 @@ class LoginPage {
    * Go to the url
    */
   async goToLogin() {
-    await SeleniumPage.switchToTopLevelFrame(); 
+    await SeleniumPage.switchToTopLevelFrame();
     return browser.url("auth/login");
   }
 

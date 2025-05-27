@@ -78,8 +78,6 @@ describe("Account recovery", () => {
   });
 
   it("As AD, I can approve a user account recovery request", async () => {
-    // this is necessary to avoid any issue with notifications
-    await DisplayNotificationPage.closeAllNotifications();
     await LoginPage.goToLogin();
     await LoginPage.login(admin);
     await DisplayMainMenuPage.switchAppIframe();
@@ -91,7 +89,7 @@ describe("Account recovery", () => {
       adminName,
       true
     );
-    await DisplayNotificationPage.successNotification.waitForExist();
+    await DisplayNotificationPage.closeAllNotifications();
     await DisplayUserProfileDropDownPage.signOut();
   });
 

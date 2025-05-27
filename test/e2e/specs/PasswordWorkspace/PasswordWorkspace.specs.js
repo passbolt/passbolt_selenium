@@ -45,11 +45,10 @@ describe('password workspace', () => {
   it('As LU I should recover admin account', async() => {
     await RecoverAuthenticationPage.recover('admin@passbolt.com', adminPrivateKey);
     await DisplayMainMenuPage.switchAppIframe();
+    await DisplayNotificationPage.closeAllNotifications();
   });
 
   it('As AD I should create a new user', async() => {
-    // this is necessary to avoid any issue with notifications
-    await DisplayNotificationPage.closeAllNotifications();
     await DisplayMainMenuPage.goToManageUsersAndGroupsWorkspace();
     await DisplayUserWorkspacePage.openCreateUser();
     await CreateUserDialogPage.createUser('firstname', 'lastname', 'test@passbolt.com');
@@ -79,12 +78,12 @@ describe('password workspace', () => {
 
   it('As LU I should copy the secret of my password', async() => {
     await DisplayResourcesListPage.copySecretResource('test@passbolt.com');
+    await DisplayNotificationPage.closeAllNotifications();
     await FilterResourcesByTextPage.pasteClipBoardToVerify('secret');
+    await DisplayNotificationPage.closeAllNotifications();
   });
 
   it('As LU I should share my password created', async() => {
-    // this is necessary to avoid any issue with notifications
-    await DisplayNotificationPage.closeAllNotifications();
     await DisplayResourceActionBarPage.openShareResourceDialog();
     await ShareDialogPage.shareResource('admin@passbolt.com', 'test@passbolt.com');
   });
@@ -93,11 +92,10 @@ describe('password workspace', () => {
     await SeleniumPage.checkSubjectContent("admin@passbolt.com", "firstname shared a password with you", templates.resource.LU.shared)
     await SeleniumPage.clickOnRedirection();
     await DisplayMainMenuPage.switchAppIframe();
+    await DisplayNotificationPage.closeAllNotifications();
   })
 
   it('As LU I should edit my password', async() => {
-    // this is necessary to avoid any issue with notifications
-    await DisplayNotificationPage.closeAllNotifications();
     await DisplayResourceActionBarPage.openEditResourceDialog('test@passbolt.com');
     ressourceName = await EditResourcePage.editPassword('Updated', 'Updated', 'test@passbolt.com', 'Updated', 'Updated');
   });
@@ -112,12 +110,11 @@ describe('password workspace', () => {
   it('When a comment is posted on a password, notify the users who have access to this password.', async() => {
     //await DisplayResourcesListPage.selectedFirstResource();
     await DisplayResourceDetailsPage.openCommentsSection()
-    await DisplayResourceDetailsPage.enterComment("Selenium test")
+    await DisplayResourceDetailsPage.enterComment("Selenium test");
+    await DisplayNotificationPage.closeAllNotifications();
   });
 
   it('As LU I should delete my password', async() => {
-    // this is necessary to avoid any issue with notifications
-    await DisplayNotificationPage.closeAllNotifications();
     await DisplayResourceActionBarPage.openDeleteResourceDialog();
     await DeleteResourcePage.deletePassword();
   });

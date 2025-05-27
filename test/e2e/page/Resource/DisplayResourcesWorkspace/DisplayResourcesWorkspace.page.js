@@ -28,11 +28,15 @@ class DisplayResourcesWorkspacePage {
   }
 
   get newPasswordButton() {
-    return $('.dropdown-content.menu button#password_action');
+    return $('#password_action');
   }
 
   get newFolderButton() {
-    return $('.dropdown-content.menu button#folder_action');
+    return $('#folder_action');
+  }
+
+  get createResourceDialog() {
+    return $('.create-resource.dialog-wrapper');
   }
 
   /**
@@ -42,7 +46,10 @@ class DisplayResourcesWorkspacePage {
   async openCreatePassword() {
     await this.passwordWorkspace.waitForExist();
     await this.createButton.click();
-    await this.newPasswordButton.click();
+    await browser.waitUntil(async() => {
+      await this.newPasswordButton.click();
+      return this.createResourceDialog.isExisting();
+    }, 15_000);
   }
 
   /**
