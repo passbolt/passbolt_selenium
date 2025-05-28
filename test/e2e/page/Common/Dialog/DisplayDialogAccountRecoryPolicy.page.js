@@ -44,7 +44,6 @@ class DisplayDisplayDialogAccountRecoryPolicyPage {
    */
   async clickOnContinueButton() {
     await this.recoveryAccountPolicyDialog.waitForExist();
-    await this.continueButton.waitForClickable();
     await this.continueButton.click();
   }
 
@@ -54,7 +53,6 @@ class DisplayDisplayDialogAccountRecoryPolicyPage {
    */
   async clickOnSaveButton(password) {
     await this.recoveryAccountPolicyDialog.waitForExist();
-    await this.saveButton.waitForClickable();
     await this.saveButton.click();
     await PassphraseEntryDialogPage.entryPassphrase(password);
   }

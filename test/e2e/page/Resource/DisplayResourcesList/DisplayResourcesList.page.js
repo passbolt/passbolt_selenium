@@ -44,7 +44,6 @@ class DisplayResourcesListPage {
    */
   async copySecretResource(username) {
     await this.gridPage.waitForExist();
-    await this.secretResource.waitForClickable();
     await this.secretResource.click();
     await PassphraseEntryDialogPage.entryPassphrase(username, {abortConditionCallback: DisplayNotificationPage.successNotification.isExisting});
   }
@@ -55,8 +54,6 @@ class DisplayResourcesListPage {
    */
   async selectedFirstResource() {
     await this.gridPage.waitForExist();
-    await this.firstResource.waitForExist();
-    await this.firstResource.waitForClickable();
     await this.firstResource.click();
   }
 
@@ -66,8 +63,6 @@ class DisplayResourcesListPage {
    */
   async selectedResourceNamed(name) {
     await this.gridPage.waitForExist();
-    await this.getResourceNamed(name).waitForExist();
-    await this.getResourceNamed(name).waitForClickable({timeout: 15000});
     await this.getResourceNamed(name).click();
   }
 }

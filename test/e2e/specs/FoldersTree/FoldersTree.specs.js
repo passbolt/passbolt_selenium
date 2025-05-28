@@ -29,12 +29,14 @@ const RenameResourceFolderPage = require('../../page/ResourceFolder/RenameResour
 const DeleteResourceFolderPage = require('../../page/ResourceFolder/DeleteResourceFolder/DeleteResourceFolder.page');
 const DisplayResourceActionBarPage = require('../../page/Resource/DisplayResourceActionBar/DisplayResourceActionBar.page');
 const {templates} = require('../../../../lib/emailTemplates');
+const DisplayNotificationPage = require('../../page/Common/Notification/DisplayNotification.page');
 
 describe('password workspace', () => {
   // WARNING : execution order is very important
 
   after(async () => {
     // runs once after the last test in this block
+    await SeleniumPage.switchToTopLevelFrame();
     await SeleniumPage.resetInstanceDefault()
   });
 
@@ -57,34 +59,40 @@ describe('password workspace', () => {
   it('As LU I should create a new password', async() => {
     await DisplayResourcesWorkspacePage.openCreatePassword();
     await CreateResourcePage.createPassword('nameA', 'uri', 'ada@passbolt.com', 'RSS5j8AQrmZK3mAQqx', 'description');
+    await DisplayNotificationPage.closeAllNotifications();
   });
 
   it('As LU I should create a subfolder folder', async() => {
     await FilterResourcesByFoldersPage.selectedFolderNamed('folderParent');
     await DisplayResourcesWorkspacePage.openCreateFolder();
     await CreateResourceFolderPage.createFolder('folderChild');
+    await DisplayNotificationPage.closeAllNotifications();
   });
 
-  it('As LU I should create a new password', async() => {
+  it('As LU I should create a new password for sharing', async() => {
     await DisplayResourcesWorkspacePage.openCreatePassword();
     await CreateResourcePage.createPassword('nameB', 'uri', 'ada@passbolt.com', 'RSS5j8AQrmZK3mAQqx', 'description');
+    await DisplayNotificationPage.closeAllNotifications();
   });
 
   it('As LU I should share a password', async() => {
     await DisplayResourceActionBarPage.openShareResourceDialog();
     await ShareDialogPage.shareResource('admin@passbolt.com', 'ada@passbolt.com');
+    await DisplayNotificationPage.closeAllNotifications();
   });
 
   it('As LU I should share a folder with a group', async() => {
     await FilterResourcesByFoldersPage.selectedFolderNamed('folderParent');
     await DisplayFoldersListPage.openSelectedFolderShareDialog();
     await ShareDialogPage.shareResource('Accounting', 'ada@passbolt.com');
+    await DisplayNotificationPage.closeAllNotifications();
   });
 
   it('As LU I should share a folder with a user', async() => {
     await FilterResourcesByFoldersPage.selectedFolderNamed('folderParent');
     await DisplayFoldersListPage.openSelectedFolderShareDialog();
     await ShareDialogPage.shareResource('admin@passbolt.com', 'ada@passbolt.com');
+    await DisplayNotificationPage.closeAllNotifications();
   });
 
   it('As LU I should see my passwords share with admin user and accounting group', async() => {
@@ -116,12 +124,15 @@ describe('password workspace', () => {
 
   it('As LU I should copy the secret of my password', async() => {
     await DisplayResourcesListPage.copySecretResource('admin@passbolt.com');
+    await DisplayNotificationPage.closeAllNotifications();
     await FilterResourcesByTextPage.pasteClipBoardToVerify('secretB');
+    await DisplayNotificationPage.closeAllNotifications();
   });
 
   it('As LU I should rename a folder', async() => {
     await FilterResourcesByFoldersPage.openRenameResourceFolder();
     await RenameResourceFolderPage.renameFolder('rename');
+    await DisplayNotificationPage.closeAllNotifications();
   });
 
   it('When a folder is updated, notify the users who have access to it.', async() => {

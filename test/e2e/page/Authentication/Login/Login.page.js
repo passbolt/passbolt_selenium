@@ -60,7 +60,8 @@ class LoginPage {
   /**
    * Go to the url
    */
-  goToLogin() {
+  async goToLogin() {
+    await SeleniumPage.switchToTopLevelFrame();
     return browser.url("auth/login");
   }
 
@@ -79,7 +80,6 @@ class LoginPage {
    */
   async clickOnLostPrivateKeyLink() {
     await SeleniumPage.switchToIframe(this.iframeSelector);
-    await this.lostMyPrivateKeyLink.waitForClickable();
     await this.lostMyPrivateKeyLink.click();
   }
 

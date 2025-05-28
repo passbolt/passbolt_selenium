@@ -83,7 +83,6 @@ class DisplayAdministrationAccountRecoveryPage {
    * e.g. select mandatory policy on the screen
    */
   async clickOnMandatoryPolicy() {
-    await this.mandatoryPolicy.waitForClickable();
     await this.mandatoryPolicy.click();
   }
 
@@ -92,12 +91,10 @@ class DisplayAdministrationAccountRecoveryPage {
    * e.g. select disable policy on the screen
    */
   async clickDisablePolicy() {
-    await this.disablePolicy.waitForClickable();
     await this.disablePolicy.click();
   }
 
   async clickOnDialogSubmitButton() {
-    await this.dialogSubmitButton.waitForClickable()
     await this.dialogSubmitButton.click()
   }
 
@@ -106,7 +103,6 @@ class DisplayAdministrationAccountRecoveryPage {
    * e.g. click on button to add a recovery key
    */
   async clickOnRecoveryKeyAction() {
-    await this.organizationRecoveryKeyButton.waitForClickable();
     await this.organizationRecoveryKeyButton.click();
   }
 

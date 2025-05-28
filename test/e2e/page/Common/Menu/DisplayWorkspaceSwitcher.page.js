@@ -50,9 +50,7 @@ class DisplayWorkspaceSwitcherPage {
    * e.g. to go to the user workspace
    */
   async goToManageUsersAndGroupsWorkspace() {
-    await this.workspaceSwitcher.waitForExist();
     await this.workspaceSwitcher.click();
-    await this.manageUsersAndGroupsMenuItem.waitForExist();
     await this.manageUsersAndGroupsMenuItem.click();
   }
 
@@ -61,9 +59,7 @@ class DisplayWorkspaceSwitcherPage {
    * e.g. to go to the adminstration workspace
    */
   async goToOrganizationSettingsWorkspace() {
-    await this.workspaceSwitcher.waitForExist();
     await this.workspaceSwitcher.click();
-    await this.organizationSettingsMenuItem.waitForExist();
     await this.organizationSettingsMenuItem.click();
     await browser.switchToParentFrame();
   }

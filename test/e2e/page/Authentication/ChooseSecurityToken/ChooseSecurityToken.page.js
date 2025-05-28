@@ -34,7 +34,6 @@ class ChooseSecurityTokenPage {
   async chooseSecurityToken() {
     // Choose security token
     await this.chooseSecurityTokenPage.waitForExist();
-    await this.btnSubmit.waitForClickable();
     await this.btnSubmit.click();
   }
 }

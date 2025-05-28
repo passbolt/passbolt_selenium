@@ -35,7 +35,6 @@ class AdministrationActionsPage {
    * e.g. save settings button
    */
   async clickOnSaveSettings() {
-    await this.saveSettingsButton.waitForClickable();
     await this.saveSettingsButton.click();
   }
 }

@@ -28,7 +28,6 @@ class FilterResourcesByTextPage {
    * e.g. to copy the secret of a resource in search
    */
   async pasteClipBoardToVerify(passwordToVerify) {
-    await this.inputSearch.waitForClickable();
     await this.inputSearch.click();
     const keyControl = this._getControlKey();
     await browser.keys([keyControl, 'v']);

@@ -55,10 +55,8 @@ class CreateGroupPage {
     await this.inputGroupName.setValue(groupName);
     if(user) {
       await this.inputUserName.setValue(user)
-      await AutoCompletePage.getAutocompleteItem(user).waitForExist();
       await AutoCompletePage.getAutocompleteItem(user).click();
     }
-    await this.submitButton.waitForClickable();
     await this.submitButton.click();
     await DisplayNotificationPage.successNotification.waitForExist();  
   }

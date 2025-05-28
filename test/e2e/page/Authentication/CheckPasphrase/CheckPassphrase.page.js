@@ -39,7 +39,6 @@ class CheckPassphrasePage {
     // Enter passphrase
     await this.checkPassphrasePage.waitForExist();
     await this.inputPassphrase.setValue(username);
-    await this.btnSubmit.waitForClickable();
     await this.btnSubmit.click();
   }
 }

@@ -13,7 +13,6 @@
  */
 
 const AutoCompletePage = require('../../Common/AutoComplete/AutoComplete.page');
-const DisplayNotificationPage = require('../../Common/Notification/DisplayNotification.page');
 const PassphraseEntryDialogPage = require("../../AuthenticationPassphrase/InputPassphrase/InputPassphrase.page");
 
  /**
@@ -40,7 +39,6 @@ class EditGroupPage {
   get inputGroupName() {
    return $("#group-name-input");
   }
-
 
   /**
    * return the remove member button
@@ -101,17 +99,14 @@ class EditGroupPage {
    */
   async addMember(user) {
    await this.inputUserName.setValue(user)
-   await AutoCompletePage.getAutocompleteItem(user).waitForExist();
    await AutoCompletePage.getAutocompleteItem(user).click();
   }
-
 
   /**
    * a method to encapsule automation code to interact with the page
    * e.g. remove an user to a group
    */
   async removeMember() {
-   await this.removeMemberButton.waitForClickable()
    await this.removeMemberButton.click()
   }
 
@@ -120,10 +115,16 @@ class EditGroupPage {
    * e.g. to click on the submit button
    */
   async clickOnSubmitButton(passphrase) {
-   await this.submitButton.waitForClickable();
    await this.submitButton.click();
    await PassphraseEntryDialogPage.entryPassphrase(passphrase, {abortConditionCallback: this.groupList.isExisting});
-   await DisplayNotificationPage.successNotification.waitForExist();
+  }
+
+  /**
+   * a method to encapsule automation code to interact with the page
+   * e.g. to click on the submit button
+   */
+  async submitGroupUpdateWithoutPasswordChecck() {
+   await this.submitButton.click();
   }
 
   /**
@@ -133,7 +134,6 @@ class EditGroupPage {
    async changeRole(index, role) {
     const permission = await this.userPermission(index);
     await permission.click();
-    await this.permissionItem(role).waitForClickable();
     await this.permissionItem(role).click();
   }
  }
