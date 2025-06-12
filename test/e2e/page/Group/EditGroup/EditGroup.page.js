@@ -123,7 +123,7 @@ class EditGroupPage {
    * a method to encapsule automation code to interact with the page
    * e.g. to click on the submit button
    */
-  async submitGroupUpdateWithoutPasswordChecck() {
+  async submitGroupUpdateWithoutPasswordCheck() {
    await this.submitButton.click();
   }
 
