@@ -31,7 +31,7 @@ const DisplayResourceActionBarPage = require('../../page/Resource/DisplayResourc
 const {templates} = require('../../../../lib/emailTemplates');
 const DisplayNotificationPage = require('../../page/Common/Notification/DisplayNotification.page');
 
-describe('password workspace', () => {
+describe('Folders', () => {
   // WARNING : execution order is very important
 
   after(async () => {
@@ -48,13 +48,10 @@ describe('password workspace', () => {
   it('As LU I should create a new folder', async() => {
     await DisplayResourcesWorkspacePage.openCreateFolder();
     await CreateResourceFolderPage.createFolder('folderParent');
-  });
-
-  it('When a folder is created, notify its creator.', async() => {
     await SeleniumPage.checkSubjectContent("ada@passbolt.com", "You have created a new folder", templates.folder.LU.created);
     await SeleniumPage.clickOnRedirection();
     await DisplayMainMenuPage.switchAppIframe();
-  })
+  });
 
   it('As LU I should create a new password', async() => {
     await DisplayResourcesWorkspacePage.openCreatePassword();
@@ -104,13 +101,11 @@ describe('password workspace', () => {
     await DisplayResourceDetailsPage.openShareSection();
     await DisplayResourceDetailsPage.getShareWithExist('Admin User (admin@passbolt.com)');
     await DisplayResourceDetailsPage.getShareWithExist('Accounting');
-  });
-
-  it('When a folder is shared, notify the users who gain access to it', async() => {
     await SeleniumPage.checkSubjectContent("admin@passbolt.com", "Ada shared a folder with you", templates.folder.LU.shared)
     await SeleniumPage.clickOnRedirection();
     await DisplayMainMenuPage.switchAppIframe();
   });
+
 
   it('As LU I should recover admin account', async() => {
     await RecoverAuthenticationPage.recover('admin@passbolt.com', adminPrivateKey);
@@ -133,22 +128,17 @@ describe('password workspace', () => {
     await FilterResourcesByFoldersPage.openRenameResourceFolder();
     await RenameResourceFolderPage.renameFolder('rename');
     await DisplayNotificationPage.closeAllNotifications();
-  });
-
-  it('When a folder is updated, notify the users who have access to it.', async() => {
     await SeleniumPage.checkSubjectContent("ada@passbolt.com", "Admin edited a folder", templates.folder.LU.updated)
     await SeleniumPage.clickOnRedirection();
     await DisplayMainMenuPage.switchAppIframe();
-  })
+  });
 
   it('As LU I should delete a folder', async() => {
     await FilterResourcesByFoldersPage.openDeleteResourceFolder();
     await DeleteResourceFolderPage.deleteFolder();
-  });
-  
-  it('When a folder is deleted, notify the users who had access to it.', async() => {
     await SeleniumPage.checkSubjectContent("ada@passbolt.com", "Admin deleted a folder", templates.folder.LU.deleted)
     await SeleniumPage.clickOnRedirection();
     await DisplayMainMenuPage.switchAppIframe();
-  })
+  });
+
 });
