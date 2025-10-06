@@ -51,7 +51,6 @@ class DisplayFoldersListPage {
    */
   async clickOnActionButton() {
     await this.selectedFolder.waitForExist();
-    await this.buttonRowActions.waitForClickable();
     await this.buttonRowActions.click();
     await this.contextualMenu.waitForExist();
   }
@@ -69,7 +68,6 @@ class DisplayFoldersListPage {
    */
   async openSelectedFolderShareDialog() {
     await this.clickOnActionButton();
-    await this.shareContextualMenuItem.waitForClickable();
     await this.shareContextualMenuItem.click();
   }
 }

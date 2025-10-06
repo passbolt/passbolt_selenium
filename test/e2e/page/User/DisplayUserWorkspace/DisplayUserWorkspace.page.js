@@ -141,9 +141,7 @@ class DisplayUserWorkspacePage {
    * e.g. to use the user workspace
    */
   async openCreateUser() {
-    await this.createButton.waitForClickable();
     await this.createButton.click();
-    await this.newUserButton.waitForClickable();
     await this.newUserButton.click();
   }
 
@@ -152,9 +150,7 @@ class DisplayUserWorkspacePage {
    * e.g. open the group user option
    */
    async openCreateGroup() {
-    await this.createButton.waitForClickable();
     await this.createButton.click();
-    await this.newGroupButton.waitForClickable();
     await this.newGroupButton.click();
   }
 
@@ -164,7 +160,6 @@ class DisplayUserWorkspacePage {
    */
   async clickOnUserRaw(user) {
     await this.userTable.waitForExist();
-    await this.userTableRaw(user).waitForClickable();
     await this.userTableRaw(user).click();
   }
 
@@ -174,7 +169,6 @@ class DisplayUserWorkspacePage {
    */
   async clickOnReviewAccountRecovery() {
     await this.accountRecoveryDetail.click();
-    await this.accountRecoveryReviewButton.waitForExist();
     await this.accountRecoveryReviewButton.click();
   }
 
@@ -183,7 +177,6 @@ class DisplayUserWorkspacePage {
    * e.g. to validate the account recovery request
    */
   async validateAccountRecoveryRequest() {
-    await this.accountRecoveryReviewValidateOption.waitForClickable();
     await this.accountRecoveryReviewValidateOption.click();
   }
 
@@ -192,7 +185,6 @@ class DisplayUserWorkspacePage {
    * e.g. to reject the account recovery request
    */
   async rejectAccountRecoveryRequest() {
-    await this.accountRecoveryReviewRejectOption.waitForClickable();
     await this.accountRecoveryReviewRejectOption.click();
   }
 
@@ -201,7 +193,6 @@ class DisplayUserWorkspacePage {
    * e.g. to submit the account recovery review
    */
   async submitReviewAccountRecovery() {
-    await this.submitButton.waitForClickable();
     await this.submitButton.click();
   }
 
@@ -210,7 +201,6 @@ class DisplayUserWorkspacePage {
    * e.g. sort by name
    */
   async sortByName() {
-    await this.cellName.waitForClickable();
     await this.cellName.click();
   }
 

@@ -33,7 +33,6 @@ class GenerateResourcePasswordPage {
    */
   async generatePassword() {
     await this.generateResourcePasswordPage.waitForExist();
-    await this.submitButton.waitForClickable();
     await this.submitButton.click();
   }
 }

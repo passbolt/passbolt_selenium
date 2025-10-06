@@ -35,7 +35,6 @@ class DeleteResourcePage {
    */
   async deletePassword() {
     await this.deletePasswordPage.waitForExist();
-    await this.submitButton.waitForClickable();
     await this.submitButton.click();
     await DisplayNotificationPage.successNotification.waitForExist();
   }

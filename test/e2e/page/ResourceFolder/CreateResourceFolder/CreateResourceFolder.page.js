@@ -38,7 +38,6 @@ class CreateResourceFolderPage {
   async createFolder(name) {
     await this.createFolderPage.waitForExist();
     await this.inputName.setValue(name);
-    await this.submitButton.waitForClickable();
     await this.submitButton.click();
   }
 }

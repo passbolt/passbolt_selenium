@@ -49,7 +49,6 @@ class CreateUserDialogPage {
     await this.inputFirstname.setValue(firstname);
     await this.inputLastname.setValue(lastname);
     await this.inputUsername.setValue(username);
-    await this.submitButton.waitForClickable();
     await this.submitButton.click();
     await DisplayNotificationPage.successNotification.waitForExist();
   }

@@ -51,8 +51,11 @@ class InputPassphrasePage {
       return;
     }
 
+    if (!(await this.entryPassphrasePage.isExisting())) {
+      return;
+    }
+
     await this.inputPassphrase.setValue(username);
-    await this.btnSubmit.waitForClickable();
     await this.btnSubmit.click();
   }
 }

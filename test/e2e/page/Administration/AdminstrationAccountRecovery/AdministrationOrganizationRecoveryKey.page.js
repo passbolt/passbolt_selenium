@@ -93,7 +93,6 @@ class AdministrationOrganizationRecoveryKeyPage {
    * e.g. click on apply button to save organization public pqp key
    */
   async clickOnApplyButton() {
-    await this.submitImportButton.waitForClickable();
     await this.submitImportButton.click();
   }
 
@@ -102,7 +101,6 @@ class AdministrationOrganizationRecoveryKeyPage {
    * e.g. fill input with organization pgp key
    */
   async fillInputOrganizationPgpKey(key) {
-    await this.textAreaOrganizationPgpKey.waitForExist();
     await this.textAreaOrganizationPgpKey.setValue(key, {wait:10000});
   }
 
@@ -111,7 +109,6 @@ class AdministrationOrganizationRecoveryKeyPage {
    * e.g. click on generate tab into generate account recovery key
    */
   async goToGenerateTab() {
-    await this.generateKeyTab.waitForClickable();
     await this.generateKeyTab.click();
   }
 
@@ -125,7 +122,6 @@ class AdministrationOrganizationRecoveryKeyPage {
     await this.inputName.setValue("Selenium Test");
     await this.inputEmail.setValue(email);
     await this.fillInputPassphrase(email);
-    await this.generateButton.waitForClickable();
     await this.generateButton.click();
   }
 
@@ -143,7 +139,6 @@ class AdministrationOrganizationRecoveryKeyPage {
    */
   async closeConfirmation() {
     await this.dialogDownloadComponent.waitForExist();
-    await this.confirmButton.waitForClickable();
     await this.confirmButton.click();
   }
 }

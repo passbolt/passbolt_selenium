@@ -16,13 +16,18 @@
     "lint:lockfile": "lockfile-lint --path package-lock.json --allowed-hosts npm --allowed-schemes \"https:\" --empty-hostname false"
   },
   "devDependencies": {
-    "@wdio/cli": "^9.12.0",
-    "@wdio/firefox-profile-service": "^9.10.1",
-    "@wdio/local-runner": "^9.12.0",
-    "@wdio/mocha-framework": "^9.11.0",
-    "@wdio/sauce-service": "^9.12.0",
-    "@wdio/spec-reporter": "^9.11.0",
+    "@wdio/cli": "^9.15.0",
+    "@wdio/firefox-profile-service": "^9.15.0",
+    "@wdio/local-runner": "^9.15.0",
+    "@wdio/mocha-framework": "^9.15.0",
+    "@wdio/sauce-service": "^9.15.0",
+    "@wdio/spec-reporter": "^9.15.0",
     "lockfile-lint": "^4.14.0",
-    "webdriverio": "^9.12.0"
+    "webdriverio": "^9.15.0",
+    "tar-fs": "^3.0.9",
+    "brace-expansion": "^4.0.1"
+  },
+  "dependencies": {
+    "lockfile-lint-api": "^5.9.2"
   }
 }

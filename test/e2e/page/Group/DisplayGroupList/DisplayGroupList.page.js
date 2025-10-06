@@ -84,7 +84,6 @@ class DisplayGroupListPage {
   */
   async clickOnActionButton() {
     await this.selectedGroup.waitForExist();
-    await this.buttonRowActions.waitForClickable();
     await this.buttonRowActions.click();
     await this.contextualMenu.waitForExist();
   }
@@ -95,7 +94,6 @@ class DisplayGroupListPage {
   */
   async clickOnDeleteButton() {
     await this.clickOnActionButton();
-    await this.deleteOption.waitForClickable();
     await this.deleteOption.click();
   }
 
@@ -105,7 +103,6 @@ class DisplayGroupListPage {
   */
   async clickOnEditButton() {
     await this.clickOnActionButton();
-    await this.editOption.waitForClickable();
     await this.editOption.click();
   }
 

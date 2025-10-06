@@ -39,7 +39,6 @@ class CreateGpgKeyPage {
     // Choose passphrase
     await this.createGpgKeyPage.waitForExist();
     await this.inputPassphrase.setValue(username);
-    await this.btnSubmit.waitForClickable();
     await this.btnSubmit.click();
   }
 }

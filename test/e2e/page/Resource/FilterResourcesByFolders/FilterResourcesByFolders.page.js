@@ -44,8 +44,6 @@ class FilterResourcesByFoldersPage {
    * e.g. to select a folder
    */
   async selectedFirstFolder() {
-    await this.firstFolder.waitForExist();
-    await this.firstFolder.waitForClickable();
     await this.firstFolder.click();
   }
 
@@ -54,8 +52,6 @@ class FilterResourcesByFoldersPage {
    * e.g. to select a folder
    */
   async selectedFolderNamed(name) {
-    await this.getFolderNamed(name).waitForExist();
-    await this.getFolderNamed(name).waitForClickable();
     await this.getFolderNamed(name).click();
   }
 
@@ -64,8 +60,6 @@ class FilterResourcesByFoldersPage {
    * e.g. to expand the selected folder
    */
   async expandFolderSelected() {
-    await this.caretRightFolderSelected.waitForExist();
-    await this.caretRightFolderSelected.waitForClickable();
     await this.caretRightFolderSelected.click();
   }
 
@@ -74,8 +68,6 @@ class FilterResourcesByFoldersPage {
    * e.g. to open folder contextual menu
    */
   async openFolderContextualMenu() {
-    await this.firstFolder.waitForExist();
-    await this.firstFolder.waitForClickable();
     await this.firstFolder.click({ button: 'right' });
   }
 
@@ -85,7 +77,6 @@ class FilterResourcesByFoldersPage {
    */
   async openRenameResourceFolder() {
     await this.openFolderContextualMenu();
-    await this.renameFolder.waitForClickable();
     await this.renameFolder.click();
   }
 
@@ -95,7 +86,6 @@ class FilterResourcesByFoldersPage {
    */
   async openDeleteResourceFolder() {
     await this.openFolderContextualMenu();
-    await this.deleteFolder.waitForClickable();
     await this.deleteFolder.click();
   }
 }

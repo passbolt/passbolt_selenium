@@ -13,7 +13,7 @@
  */
 
 const PassphraseEntryDialogPage = require('../../AuthenticationPassphrase/InputPassphrase/InputPassphrase.page');
-const DisplayAdministrationAccountRecoveryPage = require("../../Administration/AdminstrationAccountRecovery/AdministrationAccountRecovery.page");
+const DisplayNotificationPage = require('../../Common/Notification/DisplayNotification.page');
 
 /**
  * sub page containing specific selectors and methods for a specific page
@@ -65,9 +65,7 @@ class CreateResourcePage {
     await this.inputUsername.setValue(username);
     await this.inputPassword.setValue(password);
     await this.secretNoteTab.click()
-    await this.secretNoteTab.waitForClickable();
     await this.inputDescription.setValue(description);
-    await this.submitButton.waitForClickable();
     await this.submitButton.click();
     await PassphraseEntryDialogPage.entryPassphrase(username, {abortConditionCallback: this.createPasswordPage.isExisting});
   }

@@ -53,8 +53,6 @@ class DisplayResourceActionBarPage {
    */
   async openShareResourceDialog() {
     await this.actionBar.waitForExist();
-    await this.shareButton.waitForExist();
-    await this.shareButton.waitForClickable();
     await this.shareButton.click();
   }
 
@@ -64,10 +62,7 @@ class DisplayResourceActionBarPage {
    */
   async filterBySharedWithMe() {
     await this.filterBar.waitForExist();
-    await this.filterButton.waitForExist();
-    await this.filterButton.waitForClickable();
     await this.filterButton.click();
-    await this.filterBySharedWithMeItem.waitForExist();
     await this.filterBySharedWithMeItem.click();
   }
 
@@ -77,8 +72,6 @@ class DisplayResourceActionBarPage {
    */
   async openEditResourceDialog(username) {
     await this.actionBar.waitForExist();
-    await this.editButton.waitForExist();
-    await this.editButton.waitForClickable();
     await this.editButton.click();
   }
 
@@ -88,8 +81,6 @@ class DisplayResourceActionBarPage {
    */
   async openDeleteResourceDialog(username) {
     await this.actionBar.waitForExist();
-    await this.deleteButton.waitForExist();
-    await this.deleteButton.waitForClickable();
     await this.deleteButton.click();
   }
 

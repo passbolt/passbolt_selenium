@@ -51,7 +51,6 @@ class RecoverAuthenticationPage {
     // recover form
     await this.inputUsername.setValue(username);
     await this.inputAgreementTerms.click();
-    await this.btnSubmit.waitForClickable();
     await this.btnSubmit.click();
 
     // Show last email and redirect for account recover
