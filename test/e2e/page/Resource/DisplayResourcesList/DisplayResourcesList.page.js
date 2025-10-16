@@ -34,6 +34,22 @@ class DisplayResourcesListPage {
     return $('.tableview-content tbody .cell-name');
   }
 
+  get firstResourceFavorite() {
+    return $('.tableview-content tbody .cell-favorite');
+  }
+
+  async checkFavoriteStatus() {
+    const classes = await $('.tableview-content tbody .cell-favorite button').getAttribute('class');
+    // unfav means the button is checked
+    if (classes.includes('unfav'))
+      return false;
+    // fav means the button is unchecked
+    else if (classes.includes('fav'))
+      return true;
+    else
+      throw new Error('Favorite button not found');
+  }
+
   getResourceNamed(name) {
     return $('.tableview-content tbody .cell-name').$(`div=${name}`);
   }
@@ -64,6 +80,31 @@ class DisplayResourcesListPage {
   async selectedResourceNamed(name) {
     await this.gridPage.waitForExist();
     await this.getResourceNamed(name).click();
+  }
+
+  /**
+   * a method to encapsule automation code to interact with the page
+   * e.g. to mark a resource as favorite
+   */
+  async favoriteFirstResource() {
+    await this.gridPage.waitForExist();
+    await this.firstResourceFavorite.click();
+    await DisplayNotificationPage.successNotification.waitForExist();
+    const status = await this.checkFavoriteStatus();
+    expect(status).toBe(true);
+  }
+
+  /**
+   * a method to encapsule automation code to interact with the page
+   * e.g. to remove a resource from favorite
+   */
+  async unfavoriteFirstResource() {
+    await this.gridPage.waitForExist();
+    await this.firstResourceFavorite.click();
+    await DisplayNotificationPage.successNotification.waitForExist();
+    await browser.pause(500);
+    const status = await this.checkFavoriteStatus();
+    expect(status).toBe(false);
   }
 }
 
