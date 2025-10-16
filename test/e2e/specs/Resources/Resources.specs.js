@@ -61,7 +61,7 @@ describe('Resources', () => {
   it('As LU I should share my password created', async() => {
     await DisplayResourceActionBarPage.openShareResourceDialog();
     await ShareDialogPage.shareResource('admin@passbolt.com', 'ada@passbolt.com');
-    await SeleniumPage.checkSubjectContent("admin@passbolt.com", "Ada shared a resource with you", templates.resource.LU.shared)
+    await SeleniumPage.checkSubjectContent("admin@passbolt.com", "Ada shared a password with you", templates.resource.LU.shared)
     await SeleniumPage.clickOnRedirection();
     await DisplayMainMenuPage.switchAppIframe();
     await DisplayNotificationPage.closeAllNotifications();

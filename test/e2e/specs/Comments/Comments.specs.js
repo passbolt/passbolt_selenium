@@ -12,7 +12,7 @@
  * @since         v3.0.0
  */
 
-const {adminPrivateKey} = require('../../page/Authentication/ImportGpgKey/ImportGpgKey.data');
+const {adaPrivateKey} = require('../../page/Authentication/ImportGpgKey/ImportGpgKey.data');
 const SeleniumPage = require('../../page/Selenium/Selenium.page');
 const RecoverAuthenticationPage = require('../../page/AuthenticationRecover/RecoverAUthentication/RecoverAuthentication.page');
 const DisplayMainMenuPage = require('../../page/Common/Menu/DisplayWorkspaceSwitcher.page');
@@ -29,7 +29,7 @@ describe('Comments', () => {
   });
 
   it('As LU I should recover admin account', async() => {
-    await RecoverAuthenticationPage.recover('admin@passbolt.com', adminPrivateKey);
+    await RecoverAuthenticationPage.recover('ada@passbolt.com', adaPrivateKey);
     await DisplayMainMenuPage.switchAppIframe();
     await DisplayNotificationPage.closeAllNotifications();
   });
