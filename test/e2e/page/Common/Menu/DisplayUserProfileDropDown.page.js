@@ -22,11 +22,20 @@ class DisplayUserProfileDropDownPage {
    * define selectors using getter methods
    */
   get appIframeSelector() {
-    return'#passbolt-iframe-app';
+    return '#passbolt-iframe-app';
   }
 
   get userProfileDropDownButton() {
-    return $('.user.profile.dropdown');
+    return $('div.default-avatar');
+  }
+
+  get manageAccountButton() {
+    return $('.dropdown-content .manage-account');
+  }
+
+  async manageAccountButton_Click() {
+    await this.manageAccountButton.waitForClickable();
+    this.manageAccountButton.click();
   }
 
   get signOutButton() {
@@ -46,7 +55,7 @@ class DisplayUserProfileDropDownPage {
    * e.g. to sign out the current user
    */
   async signOut() {
-    await browser.waitUntil(async () => {
+    await browser.waitUntil(async() => {
       await this.userProfileDropDownButton.click();
       return await this.signOutButton.isExisting();
     }, {timeout: 15000});
