@@ -33,7 +33,7 @@ describe('Theme Page', () => {
   it('As LU, When I access Theme Menu Then I should see Default Theme Selected', async() => {
     await DisplayUserProfileDropDownPage.switchAppIframe();
     await DisplayUserProfileDropDownPage.userProfileDropDownButton.click();
-    await DisplayUserProfileDropDownPage.manageAccountButton_Click();
+    await DisplayUserProfileDropDownPage.manageAccountButton.click();
     await ThemeMenu.ThemeButton.click();
 
     await expect($('.panel.middle')).toMatchSnapshot();

@@ -26,20 +26,15 @@ class DisplayUserProfileDropDownPage {
   }
 
   get userProfileDropDownButton() {
-    return $('div.default-avatar');
+    return $('.user.profile.dropdown div.default-avatar');
   }
 
   get manageAccountButton() {
     return $('.dropdown-content .manage-account');
   }
 
-  async manageAccountButton_Click() {
-    await this.manageAccountButton.waitForClickable();
-    this.manageAccountButton.click();
-  }
-
   get signOutButton() {
-    return this.userProfileDropDownButton.$(".dropdown-content .sign-out");
+    return $(".dropdown-content .sign-out");
   }
 
   /**
@@ -55,31 +50,8 @@ class DisplayUserProfileDropDownPage {
    * e.g. to sign out the current user
    */
   async signOut() {
-    await browser.waitUntil(async() => {
-      await this.userProfileDropDownButton.click();
-      return await this.signOutButton.isExisting();
-    }, {timeout: 15000});
-
+    await this.userProfileDropDownButton.click();
     await this.signOutButton.click();
-  }
-
-  /**
-   * a method to encapsule automation code to interact with the page
-   * e.g. to go to the user workspace
-   */
-  async goToManageUsersAndGroupsWorkspace() {
-    await this.workspaceSwitcher.click();
-    await this.manageUsersAndGroupsMenuItem.click();
-  }
-
-  /**
-   * a method to encapsule automation code to interact with the page
-   * e.g. to go to the adminstration workspace
-   */
-  async goToOrganizationSettingsWorkspace() {
-    await this.workspaceSwitcher.click();
-    await this.organizationSettingsMenuItem.click();
-    await browser.switchToParentFrame();
   }
 }
 
