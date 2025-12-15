@@ -13,7 +13,6 @@
  */
 
 const PassphraseEntryDialogPage = require('../../AuthenticationPassphrase/InputPassphrase/InputPassphrase.page');
-const DisplayNotificationPage = require('../../Common/Notification/DisplayNotification.page');
 
 /**
  * sub page containing specific selectors and methods for a specific page
