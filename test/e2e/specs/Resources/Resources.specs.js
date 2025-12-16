@@ -67,6 +67,14 @@ describe('Resources', () => {
     await DisplayNotificationPage.closeAllNotifications();
   });
 
+  it('As LU I should add my password to favorites', async() => {
+    await DisplayResourcesListPage.favoriteFirstResource()
+  });
+
+  it('As LU I should remove my password from favorites', async() => {
+    await DisplayResourcesListPage.unfavoriteFirstResource()
+  });
+
   it('As LU I should edit my password', async() => {
     await DisplayResourceActionBarPage.openEditResourceDialog('ada@passbolt.com');
     ressourceName = await EditResourcePage.editPassword('Updated', 'Updated', 'ada@passbolt.com', 'Updated', 'Updated');
